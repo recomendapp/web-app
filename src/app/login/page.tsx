@@ -1,0 +1,43 @@
+import { LoginForm } from '@/app/login/LoginForm';
+import { siteConfig } from '@/config/site';
+import { useUser } from '@/hooks/user';
+import { Metadata } from 'next'
+import Image from 'next/image';
+import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Se connecter'
+}
+
+export default function Login() {
+
+  return (
+    <main className="container h-full relative flex flex-col items-center justify-center">
+        <div className="lg:p-8">
+            <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+                <div className='flex justify-center'>
+                    <Image src={siteConfig.logo.href} alt={siteConfig.logo.alt} width={150} height={150} />
+                </div>
+                <div className="flex flex-col space-y-2 text-center">
+                    <h1 className="text-2xl font-semibold tracking-tight">
+                        Se connecter
+                    </h1>
+                    {/* <p className="text-sm text-muted-foreground">
+                        Entrez votre adresse e-mail et votre mot de passe ci-dessous pour créer votre compte.
+                    </p> */}
+                </div>
+                <LoginForm />
+                <p className="px-8 text-center text-sm text-muted-foreground">
+                    Pas encore de compte ? {" "}
+                    <Link
+                        href="/signup"
+                        className="underline underline-offset-4 hover:text-primary"
+                    >
+                        S&apos;inscrire
+                    </Link>{" "}
+                </p>
+            </div>
+        </div>
+    </main>
+  );
+}

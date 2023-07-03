@@ -36,8 +36,12 @@
 
     --radius: 0.5rem;
 
+    /* NAVBAR */
+    --navbar-background-color: #1E1F25;
+
     /* HEIGHT */
-    --height-header: 24px;
+    --height-header: 64px;
+    --height-navbar: 70px;
   }
 
   .light {
@@ -84,7 +88,12 @@
   }
 }
 
-
+html, body {
+  /* position: fixed; */
+  touch-action: none;
+  /* -webkit-user-select: none; */
+  /* user-select: none; */
+}
 
 /* @tailwind base;
 @tailwind components;

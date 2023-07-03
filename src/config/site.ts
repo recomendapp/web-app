@@ -10,6 +10,10 @@ export const siteConfig = {
       href: "/",
     },
   ],
+  logo: {
+    href: "/paradisepictures_logo.svg",
+    alt: "Paradise Pictures Logo",
+  },
   links: {
     twitter: "https://twitter.com/xmesky",
     github: "https://github.com/xmesky",

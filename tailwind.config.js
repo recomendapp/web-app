@@ -49,6 +49,18 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "navbar": "var(--navbar-background-color)",
+
+      },
+      height: {
+        "header": "var(--height-header)",
+        "navbar": "var(--height-navbar)",
+      },
+      padding: {
+        'navbar': 'var(--height-navbar)',
+      },
+      margin: {
+        'navbar': 'var(--height-navbar)',
       },
       borderRadius: {
         lg: "var(--radius)",
