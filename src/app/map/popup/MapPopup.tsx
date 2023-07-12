@@ -10,7 +10,7 @@ import { AiFillHeart, AiOutlineHeart, AiFillEye, AiOutlineEyeInvisible } from 'r
 import PopupFullScreen from "./MapPopupFullScreen";
 import MapPopupSidebar from "./MapPopupSidebar";
 import { getMovieDetails } from "@/hooks/tmdb";
-import { useUser } from "@/hooks/user";
+import { useUser } from "@/context/user";
 
 
 export default function MapPopup(props: any) {

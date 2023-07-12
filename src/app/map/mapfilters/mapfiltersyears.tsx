@@ -9,7 +9,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
-import { useUser } from "@/hooks/user"
+import { useUser } from "@/context/user"
 import { Input } from "@/components/ui/input"
 
 

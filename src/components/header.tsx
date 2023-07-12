@@ -7,9 +7,10 @@ import {
     ChevronRight
 } from "lucide-react"
 
-import { UserNav } from "@/components/user/userNav"
+import { UserNav } from "@/components/userNav"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import SearchBar from "@/components/search/searchbar"
 
 
 interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -37,9 +38,7 @@ export function Header({ className }: HeaderProps) {
                 <div className=" h-full flex justify-center items-center w-full lg:hidden">
                     PARÆDISE
                 </div>
-                {pathname === '/search' && (
-                    <Input type="search" placeholder="Recherche" className="rounded-lg lg:rounded-full lg:w-[300px]" />
-                )}
+                <SearchBar />
             </div>
             <div className="hidden lg:block">
 

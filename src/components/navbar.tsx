@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils"
 
-import { useUser } from "@/hooks/user"
+import { useUser } from "@/context/user"
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import Link from "next/link";

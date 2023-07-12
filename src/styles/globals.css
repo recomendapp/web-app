@@ -5,6 +5,10 @@
 @layer base {
   :root {
     /* COLORS */
+    --accent-1: 44, 97%, 54%;
+    --accent-1-foreground: #000;
+    --accent-1-hover: 44, 97%, 40%;
+
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
 
@@ -25,6 +29,7 @@
 
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
+    --secondary-hover: 240 3.7% 20%;
 
     --accent: 240 3.7% 15.9%;
     --accent-foreground: ;
@@ -89,7 +94,7 @@
 }
 
 html, body {
-  /* position: fixed; */
+  position: fixed;
   touch-action: none;
   /* -webkit-user-select: none; */
   /* user-select: none; */

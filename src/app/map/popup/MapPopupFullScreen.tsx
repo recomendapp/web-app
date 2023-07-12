@@ -3,9 +3,9 @@ import React, { Fragment, useState, useMemo, useRef, useEffect, useContext } fro
 import Image from "next/image";
 
 // COMPONENTS
-import MovieRating from '../../movie/MovieRating'
-import MovieLike from "../../movie/MovieLike";
-import MovieWatch from "../../movie/MovieWatch";
+// import MovieRating from '../../movie/[movie]/MovieRating'
+// import MovieLike from "../../movie/[movie]/MovieLike";
+// import MovieWatch from "../../movie/[movie]/MovieWatch";
 
 // ICONS
 import { AiFillHeart, AiOutlineHeart, AiFillEye, AiOutlineEyeInvisible } from 'react-icons/ai'

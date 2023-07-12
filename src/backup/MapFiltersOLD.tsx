@@ -9,7 +9,7 @@ import styles from './MapFilters.module.css'
 // ICON
 import { AiOutlineReload } from 'react-icons/ai'
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
-import { useUser } from '@/hooks/user';
+import { useUser } from '@/context/user';
 import { Button } from '@/components/ui/button';
 import { ChevronRight, RotateCw } from 'lucide-react';
 

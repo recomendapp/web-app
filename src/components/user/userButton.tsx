@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Link from "next/link"
 
-import { useUser } from "@/hooks/user"
+import { useUser } from "@/context/user"
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface UserButtonProps extends React.HTMLAttributes<HTMLDivElement> {

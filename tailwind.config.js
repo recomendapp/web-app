@@ -21,6 +21,11 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        "accent-1": {
+          DEFAULT: "hsl(var(--accent-1))",
+          foreground: "var(--accent-1-foreground)",
+          hover: "hsl(var(--accent-1-hover))",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -28,6 +33,7 @@ module.exports = {
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+          hover: "hsl(var(--secondary-hover))", 
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",

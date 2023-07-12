@@ -1,21 +1,12 @@
 export async function getMovieDetails(movie: any, language: any) {
-    const movieDetails = await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/${movie}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}`);
-    const movieCredits = await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/${movie}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}`);
-    const movieLogo = await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/${movie}/images?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&include_image_language=${language.split("-")[0]}`);
+    const movieDetails = await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/${movie}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&append_to_response=credits`);
     const dataDetails = await movieDetails.json();
-    const dataCredits = await movieCredits.json();
-    const dataLogo = await movieLogo.json();
-    console.log('dataLogo',dataLogo)
-    return {
-        ...dataDetails,
-        ...dataCredits,
-        logo: dataLogo.logos[0] ? dataLogo.logos[0] : null,
-    }
+    return (dataDetails)
 };
 
 export async function getGenreList(language: any) {
     const genreList: any[] = [];
-    const response = await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL}/genre/movie/list?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL}genre/movie/list?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}`);
     const data = await response.json();
     await data.genres.map((genre: { name: any; }) => {
         genreList.push({
@@ -24,3 +15,20 @@ export async function getGenreList(language: any) {
     })
     return genreList;
 } 
+
+export async function useSearchMovies(query: string, language: any, page: number) {
+    const results = await (await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL}search/movie?query=${query}&include_adult=false&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}&append_to_response=credits`)).json();
+    const moviesWithCredits = await Promise.all(results.results.map(async (movie: any) => {
+        const credits = await (await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/${movie.id}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`)).json();
+        const directors = credits.crew.filter((member: any) => member.job === 'Director');
+        const movieWithCredits = {
+          ...movie,
+          credits: {
+            directors
+          }
+        };
+        return movieWithCredits;
+      }));
+    return moviesWithCredits
+
+}

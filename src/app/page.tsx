@@ -1,11 +1,10 @@
-"use client"
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export default function Home() {
-  const router = useRouter();
   return (
     <main className='p-4 h-full'>
       {/* TITLE */}
@@ -17,7 +16,7 @@ export default function Home() {
         <div className=' text-4xl'>
           LA CARTE
         </div>
-        <div onClick={() => router.push('/map')} className=' cursor-zoom-in h-[500px] w-[1000px] rounded-3xl overflow-hidden'>
+        <Link href={'/map'} className=' cursor-zoom-in h-[500px] w-[1000px] rounded-3xl overflow-hidden'>
           <Image 
               src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80"
               alt="Photo by Drew Beamer"
@@ -25,7 +24,7 @@ export default function Home() {
               width={1000}
               height={1000}
             />
-        </div>
+        </Link>
           
       </div>
     </main>

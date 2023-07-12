@@ -1,5 +1,5 @@
 import React from 'react'
-import { UserNav } from '@/components/user/userNav';
+import { UserNav } from '@/components/userNav';
 
 export default function Library() {
   return (

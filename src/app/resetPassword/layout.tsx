@@ -1,7 +1,7 @@
 "use client"
 
 import Loader from "@/components/loader";
-import { useUser } from "@/hooks/user"
+import { useUser } from "@/context/user"
 import { useRouter, useSearchParams } from "next/navigation";
 import { parse } from 'url'
 

@@ -3,9 +3,9 @@ import React, { Fragment, useState, useMemo, useRef, useEffect, useContext } fro
 import Image from "next/image";
 
 // COMPONENTS
-import MovieRating from '../../movie/MovieRating'
-import MovieLike from "../../movie/MovieLike";
-import MovieWatch from "../../movie/MovieWatch";
+// import MovieRating from '../../movie/[movie]/MovieRating'
+// import MovieLike from "../../movie/[movie]/MovieLike";
+// import MovieWatch from "../../movie/[movie]/MovieWatch";
 
 // STYLES
 import styles from './MapPopupSidebar.module.css'
@@ -14,6 +14,7 @@ import styles from './MapPopupSidebar.module.css'
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { X } from "lucide-react";
+import { MovieDetails } from "@/components/movie/MovieDetails";
 
 export default function MapPopupSidebar(props: any) {
 
@@ -67,39 +68,8 @@ export default function MapPopupSidebar(props: any) {
         >
             <X className="h-4 w-4" />
         </Button>
-        {/* BACKDROP */}
-        <div className={`${styles.backdrop}`}>
-          <AspectRatio ratio={16/9} className="">
-            <Image  
-              src={"https://image.tmdb.org/t/p/w500/"+selectedMovie.backdrop_path} 
-              alt={selectedMovie.title}
-              fill
-              className="object-cover"
-            />
-          </AspectRatio>
-        </div>
-        <div className="-mt-[150px] px-4">
-          <div className="flex items-end gap-4">
-            {/* POSTER */}
-            <div className="w-[150px] overflow-hidden rounded-lg z-10">
-              <AspectRatio ratio={2/3} className="-z-[1]">
-                <Image  
-                  src={"https://image.tmdb.org/t/p/w500/"+selectedMovie.poster_path} 
-                  alt={selectedMovie.title}
-                  fill
-                  className="object-cover"
-                />
-              </AspectRatio>
-            </div>
-            <div className="z-10">
-              {/* TITLE */}
-              <div>
-                {selectedMovie.title}
-              </div>
-            </div>
-          </div>
-
-        </div>
+        <MovieDetails movie={selectedMovie} />
+        
       </div>
     </div>
   );

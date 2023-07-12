@@ -15,7 +15,7 @@ import {
   Accordion
 } from "@/components/ui/accordion"
 
-import { useUser } from "@/hooks/user"
+import { useUser } from "@/context/user"
 import { getGenreList } from '@/hooks/tmdb';
 import { MapFiltersGenres } from "./mapfiltersgenres"
 import { MapFiltersYears } from "./mapfiltersyears"

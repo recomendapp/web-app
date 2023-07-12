@@ -3,31 +3,56 @@
 // import { useEffect, useState } from 'react'
 import { Metadata } from 'next'
 import { Skeleton } from '@/components/ui/skeleton';
+import FeaturedPlaylists from '@/components/FeaturedPlaylists';
+import SearchResultsUsers from '@/components/search/SearchResultsUsers';
+import SearchResultsMovies from '@/components/search/SearchResultsMovies';
 
-export const metadata: Metadata = {
-  title: 'Rechercher',
-  description: '...',
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  if(!searchParams?.q) {
+      return {
+          title: "Rechercher"
+      }
+  }
+  return {
+      title: `${searchParams.q} - Recherche`
+  }
+  
 }
 
-export default function Search() {
-  const skeleton = Array.from({ length: 20 }, (_, index) => (
-    <div key={index} className="flex items-center space-x-4">
-      <Skeleton className="h-12 w-12 rounded-full" />
-      <div className="space-y-2">
-        <Skeleton className="h-4 w-[50px]" />
-        <Skeleton className="h-4 w-[100px]" />
-      </div>
-    </div>
-  ));
-  const divs = Array.from({ length: 100 }, (_, index) => (
-    <div key={index} className="flex items-center space-x-4">
-        <div className="h-12 w-12 rounded-full bg-green-500" />
-        <div className="space-y-2">
-          <div className="h-4 w-[50px]">{index + 1}</div>
-          <div className="h-4 w-[100px]">identifiant:{index + 1}</div>
-        </div>
-    </div>
-  ));
+export default function Search({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams?: { [key: string]: string | undefined };
+}) {
+
+
+
+  // const skeleton = Array.from({ length: 20 }, (_, index) => (
+  //   <div key={index} className="flex items-center space-x-4">
+  //     <Skeleton className="h-12 w-12 rounded-full" />
+  //     <div className="space-y-2">
+  //       <Skeleton className="h-4 w-[50px]" />
+  //       <Skeleton className="h-4 w-[100px]" />
+  //     </div>
+  //   </div>
+  // ));
+  // const divs = Array.from({ length: 100 }, (_, index) => (
+  //   <div key={index} className="flex items-center space-x-4">
+  //       <div className="h-12 w-12 rounded-full bg-green-500" />
+  //       <div className="space-y-2">
+  //         <div className="h-4 w-[50px]">{index + 1}</div>
+  //         <div className="h-4 w-[100px]">identifiant:{index + 1}</div>
+  //       </div>
+  //   </div>
+  // ));
 
   // const [isLoading, setIsLoading ] = useState(true);
 
@@ -43,11 +68,14 @@ export default function Search() {
 
   return (
     <main className="p-4">
-      <div>Resultats :</div>
-      <div className="mx-10 grid grid-cols-1 lg:grid-cols-4 gap-5">
-        {divs}
-        {/* {isLoading ? <>{skeleton}</> : <>{divs}</>} */}
-      </div>
+      {searchParams?.q ? (
+        <div className='flex flex-col gap-2'>
+          <SearchResultsMovies query={searchParams?.q} />
+          <SearchResultsUsers query={searchParams?.q} />
+        </div>
+      ) : (
+        <FeaturedPlaylists />
+      )}
     </main>
   );
 }

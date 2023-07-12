@@ -5,7 +5,7 @@ import { Metadata } from 'next'
 import { usePathname, useSearchParams } from 'next/navigation';
 import { account } from '@/utils/appwrite';
 import { toast } from 'react-toastify';
-import { useUser } from '@/hooks/user';
+import { useUser } from '@/context/user';
 
 export const metadata: Metadata = {
   title: 'Vérifier Email',
