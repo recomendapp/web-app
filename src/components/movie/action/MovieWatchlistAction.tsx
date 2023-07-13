@@ -1,4 +1,4 @@
-import { AlertCircle, Heart } from "lucide-react";
+import { AlertCircle, Bookmark, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -17,15 +17,16 @@ const unlike = (userId: string, movieId: number) =>
     fetch(`/api/user/${userId}/movie/${movieId}/unlike`)
         .then((res) => res.json())
 
-interface MovieLikeActionProps extends React.HTMLAttributes<HTMLDivElement> {
+interface MovieWatchlistActionProps extends React.HTMLAttributes<HTMLDivElement> {
     userId: string,
     movieId: number,
-    isLiked: boolean | null,
-    handleLike: () => Promise<void>,
-    handleUnlike: () => Promise<void>
+    isWatchlisted: boolean | null,
+    handleWatchlist: () => Promise<void>,
+    handleUnwatchlist: () => Promise<void>,
+    isWatched: boolean | null
 }
 
-export function MovieLikeAction ({ userId, movieId, isLiked, handleLike, handleUnlike } : MovieLikeActionProps) {
+export function MovieWatchlistAction ({ userId, movieId, isWatchlisted, handleWatchlist, handleUnwatchlist, isWatched } : MovieWatchlistActionProps) {
     const router = useRouter()
 
     const [ isLoading, setIsLoading ] = useState(false)
@@ -39,14 +40,14 @@ export function MovieLikeAction ({ userId, movieId, isLiked, handleLike, handleU
                     <Button 
                         onClick={() => {
                             if (userId) {
-                                isLiked ? handleUnlike() : handleLike()
+                                isWatchlisted ? handleUnwatchlist() : handleWatchlist()
                             } else {
                                 router.push('/login')
                             }
                         }} 
                         disabled={(isLoading || isError) && true} 
                         size="icon" 
-                        variant={isLiked? "accent-1" : "accent-1-enabled"}
+                        variant={isWatchlisted? "accent-1" : "accent-1-enabled"}
                         className='rounded-full'
                     >
                         {isLoading ? (
@@ -56,15 +57,15 @@ export function MovieLikeAction ({ userId, movieId, isLiked, handleLike, handleU
                             <AlertCircle />
                         )
                         : (
-                            <Heart className={isLiked ? "fill-accent-1-foreground": "transparent"} />
+                            <Bookmark className={isWatchlisted ? "fill-accent-1-foreground": "transparent"} />
                         )}
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent side='bottom'>
-                {isLiked ? (
-                    <p>Retirer des coups de coeur</p>
+                {isWatched ? (
+                    <p>Envie de le revoir</p>
                 ) : (
-                    <p>Ajouter aux coups de coeur</p>
+                    <p>Envie de le voir</p>
                 )}
                 </TooltipContent>
             </Tooltip>

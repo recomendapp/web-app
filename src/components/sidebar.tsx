@@ -79,9 +79,11 @@ export function Sidebar({ className, skeleton}: SidebarProps) {
                         <ListMusic className="mr-2 h-4 w-4" />
                         Roadlists
                     </Button>
-                    <Button variant="ghost" className="w-full justify-start">
-                        <Bookmark className="mr-2 h-4 w-4" />
-                        Watchlist
+                    <Button variant="ghost" className="w-full justify-start" asChild>
+                        <Link href={"/collection/watchlist"}>
+                            <Bookmark className="mr-2 h-4 w-4" />
+                            Watchlist
+                        </Link>
                     </Button>
                     </div>
                 </div>

@@ -18,21 +18,50 @@ import {
   } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input";
 
-interface MovieRateActionProps extends React.HTMLAttributes<HTMLDivElement> {
-    userId: string,
-    movieId: number,
-    isRated: number | null,
-    handleRate: (rating: number) => Promise<void>,
-    handleUnrate: () => Promise<void>
-}
+// const getLike = (userId: string, movieId: number) => 
+//     fetch(`/api/user/${userId}/movie/${movieId}/getLike`)
+//         .then((res) => res.json())
+//         .then(LikeMovieSchema.parse)
 
-export function MovieRateAction ({ userId, movieId, isRated, handleRate, handleUnrate } : MovieRateActionProps) {
+export function MovieRateAction ({movieId, userId} : {movieId: number, userId: string}) {
     const router = useRouter()
 
     const [ ratingValue, setRatingValue ] = useState<number>(5)
 
-    const [ isLoading, setIsLoading ] = useState(false)
-    const [ isError, setIsError ] = useState(false)
+    const queryClient = useQueryClient()
+    const { data, isLoading, isError } = useQuery({
+        queryKey: ['user', userId, "movie", movieId, "rate"],
+        queryFn: () => useIsMovieRated(userId, movieId),
+        enabled: userId !== undefined && userId !== null && movieId !== undefined,
+        // staleTime: 30_000
+    })
+
+    useEffect(() => {
+        data?.rating && setRatingValue(data.rating)
+    }, [data])
+
+    const handleRateClick = async () => {
+        data && useRateMovie(userId, movieId, ratingValue, data)
+            .then((res) => {
+                if (res === 'ratedandwatched') {
+                    queryClient.invalidateQueries(['user', userId, "movie", movieId, "rate"])
+                    queryClient.invalidateQueries(['user', userId, "movie", movieId, "watch"])
+                } else {
+                    queryClient.invalidateQueries(['user', userId, "movie", movieId, "rate"])
+                }
+            })
+            .catch((error) => {
+                queryClient.invalidateQueries(['user', userId, "movie", movieId, "rate"])
+            })
+    }
+
+    const handleDeleteRating = async () => {
+        data && unrateMovie(data?.id)
+            .then(() => queryClient.invalidateQueries(['user', userId, "movie", movieId, "rate"]))
+            .catch((error) => {
+                queryClient.invalidateQueries(['user', userId, "movie", movieId, "rate"])
+            })
+    }
 
     return (
         <Dialog>
@@ -48,20 +77,20 @@ export function MovieRateAction ({ userId, movieId, isRated, handleRate, handleU
                                     }}
                                     disabled={(isLoading || isError) && true} 
                                     size="icon" 
-                                    variant={isRated ? "accent-1" : "accent-1-enabled"}
+                                    variant={data?.status ? "accent-1" : "accent-1-enabled"}
                                     className='rounded-full'
                                 >
-                                    {isLoading ? (
+                                    {isLoading || (!isLoading && !data && userId) ? (
                                         <Icons.spinner className="animate-spin" />
                                     ) : 
                                     isError ? (
                                         <AlertCircle />
                                     ) : 
-                                    isRated ? (
-                                        <div>{isRated}</div>
+                                    data?.rating ? (
+                                        <div>{data.rating}</div>
                                     ):
                                     (
-                                        <Star className={isRated ? "fill-accent-1-foreground": "transparent"} />
+                                        <Star className={data?.status ? "fill-accent-1-foreground": "transparent"} />
                                     )}
                                 </Button>
                             </DialogTrigger>
@@ -73,27 +102,27 @@ export function MovieRateAction ({ userId, movieId, isRated, handleRate, handleU
                                 }}
                                 disabled={(isLoading || isError) && true} 
                                 size="icon" 
-                                variant={isRated? "accent-1" : "accent-1-enabled"}
+                                variant={data?.status ? "accent-1" : "accent-1-enabled"}
                                 className='rounded-full'
                             >
-                                {isLoading ? (
+                                {isLoading || (!isLoading && !data && userId) ? (
                                     <Icons.spinner className="animate-spin" />
                                 ) : 
                                 isError ? (
                                     <AlertCircle />
                                 ) : 
-                                isRated ? (
-                                    <div>{isRated}</div>
+                                data?.rating ? (
+                                    <div>{data.rating}</div>
                                 ):
                                 (
-                                    <Star className={isRated? "fill-accent-1-foreground": "transparent"} />
+                                    <Star className={data?.status ? "fill-accent-1-foreground": "transparent"} />
                                 )}
                             </Button>
                         )}
                     </TooltipTrigger>
                     <TooltipContent side='bottom'>
-                    {isRated ? (
-                        <p>Modifier la note</p>
+                    {data?.status ? (
+                        <p>Retirer la note</p>
                     ) : (
                         <p>Ajouter une note</p>
                     )}
@@ -127,13 +156,13 @@ export function MovieRateAction ({ userId, movieId, isRated, handleRate, handleU
                     
                     </div>
                     <DialogFooter>
-                        {isRated && (
+                        {data?.rating && (
                             <DialogClose asChild>
-                                <Button variant="destructive" onClick={handleUnrate}>Supprimer la note</Button>
+                                <Button variant="destructive" onClick={handleDeleteRating}>Supprimer la note</Button>
                             </DialogClose>
                         )}
                         <DialogClose asChild>
-                            <Button onClick={() => handleRate(ratingValue)}>Enregistrer</Button>
+                            <Button onClick={handleRateClick}>Enregistrer</Button>
                         </DialogClose>
                     </DialogFooter>
             </DialogContent>

@@ -21,6 +21,7 @@ export function MovieActionCounter ({movie} : {movie: any}) {
     const [ movieLikedCounter, setMovieLikedCounter ] = useState<number | null>(movie ? movie.likes_count : null)
     const [ movieWatchedCounter, setMovieWatchedCounter ] = useState<number | null>(movie ? movie.watch_count : null)
     const [ movieRatedCounter, setMovieRatedCounter ] = useState<string | null>(movie ? movie.rating_count : null)
+    const [ movieWatchlistedCounter, setMovieWatchlistedCounter ] = useState<string | null>(movie ? movie.watchlist_count : null)
     const [ totalMovieRated, setTotalMovieRated ] = useState<number | null>(movie ? useTotalMovieRated(movie.rating_count) : null)
     const [ movieAverageRating, setMovieAverageRating ] = useState<number | null>(movie ? useMovieAverageRating(movie.rating_count) : null)
 
@@ -62,6 +63,7 @@ export function MovieActionCounter ({movie} : {movie: any}) {
                 setMovieLikedCounter(response.payload.likes_count)
                 setMovieWatchedCounter(response.payload.watch_count)
                 setMovieRatedCounter(response.payload.rating_count)
+                setMovieWatchlistedCounter(response.payload.watchlist_count)
 
             }    
         )
@@ -73,6 +75,7 @@ export function MovieActionCounter ({movie} : {movie: any}) {
             Rating: {totalMovieRated}
             Likes: {movieLikedCounter}
             Watch: {movieWatchedCounter}
+            Watchlist: {movieWatchlistedCounter}
         </div>
     )
 }

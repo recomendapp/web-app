@@ -13,33 +13,21 @@ import {
 import { format } from "date-fns"
 import { fr } from "date-fns/locale";
 
-interface MovieWatchedDateActionProps extends React.HTMLAttributes<HTMLDivElement> {
-    userId: string,
-    movieId: number,
-    date: Date | null,
-    handleUpdateDate: (date: Date) => Promise<void>,
-}
 
-
-export function MovieWatchDateAction ({ userId, movieId, date, handleUpdateDate} : MovieWatchedDateActionProps) {
+export function MovieWatchDateAction ({defaultDate, watchId, movieId, userId} : {defaultDate: Date, watchId: string, movieId: number, userId: string}) {
     const [ loading, setLoading ] = useState(false)
     // const [ date, setDate ] = useState(defaultDate);
+    const [ date, setDate ] = useState<Date | undefined>(new Date(defaultDate));
 
-    // const handleWatchDateClick = async (event: any) => {
-    //     setDate(event)
-    //     watchDate(watchId, event)
-    //         .then(() => {
-    //             // setRecoverServerOffset(!recoverServerOffset)
-    //         })
-    //         .catch((error) => {
-    //             throw error
-    //         })
-    // }
-
-    if (!date) {
-        return (
-            <></>
-        )
+    const handleWatchDateClick = async (event: any) => {
+        setDate(event)
+        watchDate(watchId, event)
+            .then(() => {
+                // setRecoverServerOffset(!recoverServerOffset)
+            })
+            .catch((error) => {
+                throw error
+            })
     }
 
     return (
@@ -68,7 +56,7 @@ export function MovieWatchDateAction ({ userId, movieId, date, handleUpdateDate}
                     locale={fr}
                     mode="single"
                     selected={date}
-                    onSelect={(e) => handleUpdateDate(e)}
+                    onSelect={handleWatchDateClick}
                     initialFocus
                     
                 />

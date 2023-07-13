@@ -48,13 +48,13 @@ export function Navbar({ className }: NavbarProps) {
             icon: Library,
             label: 'Bibliothèque',
             active: 
-                pathname.startsWith("/library") || 
+                pathname.startsWith("/collection") || 
                 pathname.startsWith("/login") || 
                 pathname.startsWith("/signup") || 
                 pathname.startsWith("/forgotPassword") ||
                 pathname.startsWith("/resetPassword") ||
                 pathname.startsWith("/verifyEmail"),
-            href: user ? '/library' : '/login',
+            href: user ? '/collection' : '/login',
         }
     ], [pathname, user])
 

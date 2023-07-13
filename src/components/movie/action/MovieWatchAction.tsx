@@ -19,55 +19,66 @@ import { MovieWatchDateAction } from "./MovieWatchDateAction";
 import { useQueryClient, useQuery } from 'react-query'
 import { useRouter } from "next/navigation";
 
+interface MovieWatchActionProps extends React.HTMLAttributes<HTMLDivElement> {
+    userId: string,
+    movieId: number,
+    isWatched: boolean | null,
+    handleWatch: () => Promise<void>,
+    handleUnwatch: () => Promise<void>
+}
 
-export function MovieWatchAction ({ movieId, userId } : { movieId: number, userId: string }) {
+
+export function MovieWatchAction ({ movieId, userId, isWatched, handleWatch, handleUnwatch } : MovieWatchActionProps) {
     const router = useRouter()
-    
-    const queryClient = useQueryClient()
-    const { data: watch, isLoading, isError } = useQuery({
-        queryKey: ['user', userId, "movie", movieId, "watch"],
-        queryFn: () => useIsMovieWatched(userId, movieId),
-        enabled: userId !== undefined && userId !== null && movieId !== undefined,
-        // staleTime: 30_000
-    })
 
-    const handleWatchClick = async () => {
-        watch && useWatchMovie(userId, movieId, watch)
-            .then((res) => {
-                if(res === 'watched') {
-                    queryClient.invalidateQueries(['user', userId, "movie", movieId, "watch"])
-                } else {
-                    queryClient.invalidateQueries(['user', userId, "movie", movieId, "watch"])
-                    queryClient.invalidateQueries(['user', userId, "movie", movieId, "like"])
-                    queryClient.invalidateQueries(['user', userId, "movie", movieId, "rate"])
-                }
-            })
-            .catch((error) => {
-                queryClient.invalidateQueries(['user', userId, "movie", movieId, "watch"])
-            })
-    }
+    const [ isLoading, setIsLoading ] = useState(false)
+    const [ isError, setIsError ] = useState(false)
 
     return (
-        <>
-            <AlertDialog>
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            {!watch?.status ? (
+        <AlertDialog>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        {!isWatched ? (
+                            <Button
+                            onClick={() => {
+                                if (userId) {
+                                    isWatched ? handleUnwatch() : handleWatch()
+                                } else {
+                                    router.push('/login')
+                                }
+                            }} 
+                                disabled={(isLoading || isError) && true}  
+                                size="icon"
+                                variant={isWatched ? "accent-1" : "accent-1-enabled"}
+                                className={`rounded-full`}
+                            >
+                                {isLoading ? (
+                                    <Icons.spinner className="animate-spin" />
+                                ) : 
+                                isError ? (
+                                    <AlertCircle />
+                                )
+                                : (
+                                    <Check />
+                                )}
+                            </Button>
+                        ) : (
+                            <AlertDialogTrigger disabled={!isWatched}>
                                 <Button
                                     onClick={() => {
                                         if(userId) {
-                                            !watch?.status && handleWatchClick();
+                                            !isWatched && handleWatch();
                                         } else {
                                             router.push('/login')
                                         }
                                     }}
-                                    disabled={(isLoading || isError) && true}  
+                                    disabled={(isLoading || isError) && true} 
                                     size="icon"
-                                    variant={watch?.status ? "accent-1" : "accent-1-enabled"}
+                                    variant={isWatched ? "accent-1" : "accent-1-enabled"}
                                     className={`rounded-full`}
                                 >
-                                    {isLoading || (!isLoading && !watch && userId) ? (
+                                    {isLoading ? (
                                         <Icons.spinner className="animate-spin" />
                                     ) : 
                                     isError ? (
@@ -77,59 +88,30 @@ export function MovieWatchAction ({ movieId, userId } : { movieId: number, userI
                                         <Check />
                                     )}
                                 </Button>
-                            ) : (
-                                <AlertDialogTrigger disabled={!watch.status}>
-                                    <Button
-                                        onClick={() => {
-                                            if(userId) {
-                                                !watch?.status && handleWatchClick();
-                                            } else {
-                                                router.push('/login')
-                                            }
-                                        }}
-                                        disabled={(isLoading || isError) && true} 
-                                        size="icon"
-                                        variant={watch.status ? "accent-1" : "accent-1-enabled"}
-                                        className={`rounded-full`}
-                                    >
-                                        {isLoading || (!isLoading && !watch && userId) ? (
-                                            <Icons.spinner className="animate-spin" />
-                                        ) : 
-                                        isError ? (
-                                            <AlertCircle />
-                                        )
-                                        : (
-                                            <Check />
-                                        )}
-                                    </Button>
-                                </AlertDialogTrigger>
-                            )}
-                        </TooltipTrigger>
-                        <TooltipContent side='bottom'>
-                        {watch?.status ? (
-                            <p>Retirer des films vus</p>
-                        ) : (
-                            <p>Marquer comme vu</p>
+                            </AlertDialogTrigger>
                         )}
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                    <AlertDialogTitle>Oula, tu es sûr ?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        Voulez-vous supprimer toutes vos actions effectuées sur cette oeuvre ?
-                    </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                    <AlertDialogAction onClick={handleWatchClick}  className="bg-destructive hover:bg-destructive/90 text-destructive-foreground" >Continuer</AlertDialogAction>
-                    <AlertDialogCancel>Annuler</AlertDialogCancel>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-            {watch?.status && (
-                <MovieWatchDateAction defaultDate={watch.date} watchId={watch.id} movieId={movieId} userId={userId} />
-            )}
-        </>
+                    </TooltipTrigger>
+                    <TooltipContent side='bottom'>
+                    {isWatched ? (
+                        <p>Retirer des films vus</p>
+                    ) : (
+                        <p>Marquer comme vu</p>
+                    )}
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                <AlertDialogTitle>Oula, tu es sûr ?</AlertDialogTitle>
+                <AlertDialogDescription>
+                    Voulez-vous supprimer toutes vos actions effectuées sur cette oeuvre ?
+                </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                <AlertDialogAction onClick={handleUnwatch}  className="bg-destructive hover:bg-destructive/90 text-destructive-foreground" >Continuer</AlertDialogAction>
+                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     )
 }
