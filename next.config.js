@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['image.tmdb.org', 'cloud.appwrite.io', "images.unsplash.com", "mosaic.scdn.co", "misc.scdn.co"]
+        domains: ['image.tmdb.org', 'cloud.appwrite.io', "images.unsplash.com", "mosaic.scdn.co", "misc.scdn.co", 'localhost']
     },
     async redirects() {
         return [

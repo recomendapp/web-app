@@ -16,17 +16,13 @@ export default function Ads() {
       }, []);
 
     return (
-        <div className="bg-background rounded-md">
-            ADS
-            <ins className="adsbygoogle"
-                style={{display: 'block'}}
+            <ins className="adsbygoogle overflow-hidden rounded-md"
                 data-ad-client="ca-pub-1380362797599640"
                 data-ad-slot="9520100200"
+                style={{ display: "block"}}
                 data-ad-format="auto"
                 data-full-width-responsive="true"
             >
-            </ins>
-        </div>
-        
+            </ins>     
     )
 }

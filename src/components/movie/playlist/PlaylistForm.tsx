@@ -22,8 +22,10 @@ import { Switch } from "@/components/ui/switch"
 
 import { toast } from "react-toastify"
 import { Textarea } from "@/components/ui/textarea"
-import { databases } from "@/utils/appwrite"
-import { Dispatch } from "react"
+import { databases, storage } from "@/utils/appwrite"
+import { Dispatch, useState } from "react"
+import PlaylistPictureUpload from "./PlaylistPictureUpload"
+import Compressor from "compressorjs"
 
 
 // This can come from your database or API.
@@ -37,6 +39,9 @@ interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
 
 
 export function PlaylistForm({ success, userId, movieId, playlist, setPlaylist } : PlaylistFormProps) {
+
+  const [ newPicture, setNewPicture ] = useState<File>()
+  const [isUploading, setIsUploading] = useState(false)
   
   const CreatePlaylistFormSchema = z.object({
     name: z
@@ -86,6 +91,9 @@ export function PlaylistForm({ success, userId, movieId, playlist, setPlaylist }
           "is_public": data.is_public,
         }
       )
+      if (newPicture) {
+        await uploadPlaylistPicture(newPicture, $id)
+      }
       if (movieId) {
         await databases.createDocument(
           String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS), 
@@ -98,7 +106,6 @@ export function PlaylistForm({ success, userId, movieId, playlist, setPlaylist }
           }
         )
       }
-
       toast.success("La playlist a été créé avec succès 👌")
       success()
       return
@@ -110,6 +117,9 @@ export function PlaylistForm({ success, userId, movieId, playlist, setPlaylist }
 
   async function updatePlaylist(data: CreatePlaylistFormValues) {
     try {
+      if (newPicture) {
+        await uploadPlaylistPicture(newPicture, playlist.$id, playlist.poster_path)
+      }
       const newPlaylist = await databases.updateDocument(
         String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS), 
         String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST),
@@ -120,6 +130,7 @@ export function PlaylistForm({ success, userId, movieId, playlist, setPlaylist }
           "is_public": data.is_public,
         }
       )
+      
       setPlaylist && setPlaylist(newPlaylist)
       toast.success("Les informations ont bien été enregistrée 👌")
       success()
@@ -130,67 +141,114 @@ export function PlaylistForm({ success, userId, movieId, playlist, setPlaylist }
     }
   }
 
+  const uploadPlaylistPicture = async (file: File, playlistId: string, oldPathToPlaylistPicture?: string) => {
+    try {
+      new Compressor(file, {      
+            quality: 1,
+            resize: "cover",
+            convertTypes: ['image/png', 'image/webp'],
+            convertSize: 10000,
+            width: 1000,
+            height: 1000,
+            success: async (compressedImage) => {
+                // RENAME IMAGE
+                const image = new File([compressedImage], String(playlistId + compressedImage.name.substring(file.name.lastIndexOf('.'), compressedImage.name.length)), {type: compressedImage.type})
+                // UPLOAD THE PLAYLIST PICTURE
+                const { $id } = await storage.createFile(
+                    String(process.env.NEXT_PUBLIC_APPWRITE_STORAGE_PLAYLISTS_POSTER), 
+                    'unique()', 
+                    image
+                )
+                // UPDATE PATH TO PLAYLIST PICTURE
+                await databases.updateDocument(
+                    String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS), 
+                    String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST), 
+                    playlistId, 
+                    {
+                        "poster_path": `${process.env.NEXT_PUBLIC_APPWRITE_END_POINT}/storage/buckets/${process.env.NEXT_PUBLIC_APPWRITE_STORAGE_PLAYLISTS_POSTER}/files/${$id}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`
+                    }
+                )
+
+                // DELETE OLD PLAYLIST PICTURE
+                if(oldPathToPlaylistPicture) {
+                  await storage.deleteFile(
+                      String(process.env.NEXT_PUBLIC_APPWRITE_STORAGE_PLAYLISTS_POSTER), 
+                      oldPathToPlaylistPicture.split('/').reverse()[1]
+                  );
+                }
+                return
+            },
+      });
+    } catch (error) {
+        console.log(error);
+    }
+  }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(playlist ? updatePlaylist : createPlaylist)} className="space-y-8">
-        <div className="grid gap-4 py-4">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nom</FormLabel>
-                <FormControl>
-                  <Input 
-                    {...field}
-                    id="name" 
-                    placeholder="Ajoutez un nom"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea 
-                    {...field}
-                    id="name" 
-                    placeholder="Ajoutez une description facultative"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="is_public"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Visibilité</FormLabel>
-                <FormControl className="flex items-center space-x-2">
-                  <div className="flex items-center space-x-2">
-                    <Switch 
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
+        <div className="grid gap-4 grid-cols-2 w-full">
+          <div className="py-4">
+            <PlaylistPictureUpload playlist={playlist} isUploading={isUploading} newPicture={newPicture} setNewPicture={setNewPicture}/>
+          </div>
+          <div className="grid gap-4 py-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nom</FormLabel>
+                  <FormControl>
+                    <Input 
+                      {...field}
+                      id="name" 
+                      placeholder="Ajoutez un nom"
                     />
-                    <Label htmlFor="airplane-mode">{field.value ? "Public" : "Privée"}</Label>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      {...field}
+                      id="name" 
+                      placeholder="Ajoutez une description facultative"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          
+            <FormField
+              control={form.control}
+              name="is_public"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Visibilité</FormLabel>
+                  <FormControl className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2">
+                      <Switch 
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                      <Label htmlFor="airplane-mode">{field.value ? "Public" : "Privée"}</Label>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            
+          </div>
         </div>
         <DialogFooter>
             <Button type="submit">{playlist ? "Sauvegarder" : "Créer"}</Button>

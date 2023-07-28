@@ -6,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import FeaturedPlaylists from '@/components/FeaturedPlaylists';
 import SearchResultsUsers from '@/components/search/SearchResultsUsers';
 import SearchResultsMovies from '@/components/search/SearchResultsMovies';
+import SearchResultsPlaylists from '@/components/search/SearchResultsPlaylists';
 
 export async function generateMetadata({
   params,
@@ -72,6 +73,7 @@ export default function Search({
         <div className='flex flex-col gap-2'>
           <SearchResultsMovies query={searchParams?.q} />
           <SearchResultsUsers query={searchParams?.q} />
+          <SearchResultsPlaylists query={searchParams?.q} />
         </div>
       ) : (
         <FeaturedPlaylists />

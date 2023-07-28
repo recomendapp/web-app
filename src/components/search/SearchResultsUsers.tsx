@@ -68,42 +68,10 @@ export default function SearchResultsUsers({ query } : { query: string | undefin
 
         )
     }
-
-
+    
     if(!loading && !results) {
         return null
     }
-
-    const fakeResults = [
-        {
-            username: 'teo',
-            avatar: 'https://static.vecteezy.com/ti/vecteur-libre/p3/5544718-profil-icone-design-vecteur-gratuit-vectoriel.jpg',
-        }, 
-        {
-            username: 'charles lalala tdgrg',
-            avatar: undefined,
-        },
-        {
-            username: 'moha',
-            avatar: 'https://static.vecteezy.com/ti/vecteur-libre/p3/5544718-profil-icone-design-vecteur-gratuit-vectoriel.jpg',
-        },
-        {
-            username: 'marouane',
-            avatar: 'https://static.vecteezy.com/ti/vecteur-libre/p3/5544718-profil-icone-design-vecteur-gratuit-vectoriel.jpg',
-        }, 
-        {
-            username: 'omar',
-            avatar: undefined
-        },
-        {
-            username: 'adrien',
-            avatar: 'https://static.vecteezy.com/ti/vecteur-libre/p3/5544718-profil-icone-design-vecteur-gratuit-vectoriel.jpg',
-        },
-        {
-            username: 'jackjackjackjac',
-            avatar: 'https://static.vecteezy.com/ti/vecteur-libre/p3/5544718-profil-icone-design-vecteur-gratuit-vectoriel.jpg',
-        }
-    ]
 
     const getInitiales = (username: any) => {
         const words = username.normalize('NFKC').toUpperCase().split(' ');

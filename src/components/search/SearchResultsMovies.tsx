@@ -46,9 +46,9 @@ export default function SearchResultsMovies({ query } : { query: string | undefi
                     <div className="flex justify-between items-end">
                         <Skeleton className="h-8 w-32" />
                     </div>
-                    <div className="flex bg-secondary h-full rounded-xl p-2 gap-2">
+                    <div className="flex bg-secondary h-full rounded-md p-2 gap-2">
                         {/* MOVIE COVER */}
-                        <Skeleton className="bg-background w-[200px] h-full rounded-lg" />
+                        <Skeleton className="bg-background w-[200px] h-full rounded-md" />
 
                         {/* NAME */}
                         <div className="flex flex-col justify-end">
@@ -68,11 +68,11 @@ export default function SearchResultsMovies({ query } : { query: string | undefi
                     {Array.from({length: 4}).map((item: any) => (
                         <div
                             key={item}
-                            className="text-sm flex justify-between pr-4 rounded-sm"
+                            className="text-sm flex justify-between p-2 rounded-md"
                         >
                             <div className="flex items-center gap-2">
                                 {/* MOVIE COVER */}
-                                <Skeleton className="h-[75px] w-[50px] rounded-sm" />
+                                <Skeleton className="h-[75px] w-[50px] rounded-md" />
                                 {/* MOVIE DATA */}
                                 <div className="flex flex-col gap-2">
                                     <Skeleton className="h-6 w-32" />
@@ -111,12 +111,12 @@ export default function SearchResultsMovies({ query } : { query: string | undefi
                 <Link 
                         key={results[0].title} 
                         href={'/movie/'+results[0].id}
-                        className="flex relative bg-secondary h-full hover:bg-secondary-hover rounded-xl p-2 gap-2"
+                        className="flex relative bg-secondary h-full hover:bg-secondary-hover rounded-md p-2 gap-2"
                     
                     >
                         <Badge className="absolute right-2 bg-accent-1 shadow-2xl">Film</Badge>
                         {/* MOVIE COVER */}
-                        <div className="w-[200px]">
+                        <div className="w-[250px]">
                             <AspectRatio ratio={2/3}>
                                 <ImageWithFallback 
                                     src={"https://image.tmdb.org/t/p/w500/"+results[0].poster_path} 
@@ -173,7 +173,7 @@ export default function SearchResultsMovies({ query } : { query: string | undefi
                         <Link 
                             key={item.id}
                             href={'/movie/'+item.id}
-                            className="text-sm flex justify-between pr-4 hover:bg-secondary rounded-sm"
+                            className="text-sm flex justify-between p-2 hover:bg-secondary rounded-md"
                         >
                             <div className="flex items-center gap-2">
                                 {/* MOVIE COVER */}

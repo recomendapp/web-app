@@ -33,26 +33,20 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { DialogTrigger } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { PlaylistButton } from '@/components/movie/playlist/PlaylistButton'
+import { useQuery, useQueryClient } from 'react-query'
+import handlePlaylists from '@/hooks/movie/playlist/handlePlaylists'
 
 export default function Guidelist() {
 
   const { user } = useUser()
 
-  const [ playlists, setPlaylists ] = useState<any>(null)
+  const { data: playlists, isLoading, isError } = useQuery({
+      queryKey: ['user', user?.$id, "playlists"],
+      queryFn: () => handlePlaylists(user.$id),
+      enabled: user.$id !== undefined && user.$id !== null,
+      // staleTime: 30_000
+  })
 
-  useEffect(() => {
-    user && databases.listDocuments(
-        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST),
-        [
-          Query.limit(25),
-          Query.equal('userId', user.$id)
-        ]
-      )
-      .then((response) => {
-        setPlaylists(response.documents)
-      })
-  }, [user])
 
   return (
     <main className='h-full flex flex-col gap-4 p-4'>

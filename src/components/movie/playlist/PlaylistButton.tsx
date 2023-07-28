@@ -10,6 +10,7 @@ import {
   
 import { Dispatch, useState } from "react"
 import { PlaylistForm } from "@/components/movie/playlist/PlaylistForm"
+import { useQueryClient } from "react-query"
 
 
 interface PlaylistButtonProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -20,20 +21,23 @@ interface PlaylistButtonProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function PlaylistButton({ children, userId, movieId, playlist, setPlaylist } : PlaylistButtonProps ) {
-    const [ PlaylistModalIsOpen, setPlaylistModalIsOpen] = useState(false)
+    const [ playlistModalIsOpen, setPlaylistModalIsOpen] = useState(false)
+
+    const queryClient = useQueryClient()
 
   return (
-    <Dialog open={PlaylistModalIsOpen} onOpenChange={setPlaylistModalIsOpen}>
+    <Dialog open={playlistModalIsOpen} onOpenChange={setPlaylistModalIsOpen}>
         <DialogTrigger asChild>
             {children}
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="">
             <DialogHeader>
                 <DialogTitle>{playlist ? "Modifier les informations" : "Créer une playlist"}</DialogTitle>
             </DialogHeader>
             <PlaylistForm 
                 success={() => {
                   setPlaylistModalIsOpen(false)
+                  queryClient.invalidateQueries(['user', userId, "playlists"])
                 }} 
                 userId={userId} 
                 movieId={movieId}

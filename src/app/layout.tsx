@@ -58,7 +58,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <UserProvider>
             <ReactQueryProvider>
               <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-                <div className="grid lg:p-2 lg:gap-2 lg:grid-cols-5 h-full">
+                <div className="grid p-2 lg:gap-2 lg:grid-cols-5 h-full">
                   <Sidebar className="" />
                   <div className="flex flex-col bg-background col-span-3 lg:col-span-4 overflow-y-auto rounded-md">
                     <Header />
