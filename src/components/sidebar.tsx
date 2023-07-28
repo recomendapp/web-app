@@ -23,6 +23,8 @@ import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { AspectRatio } from './ui/aspect-ratio'
 import { ImageWithFallback } from './ImageWithFallback'
+import Script from 'next/script'
+import Ads from '@/utils/adsense'
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
     skeleton?: boolean;
@@ -130,9 +132,7 @@ export function Sidebar({ className, skeleton}: SidebarProps) {
                         ))} */}
                     </ScrollArea>
                 </div>
-                <div className='bg-background rounded-md'>
-                    ADVERTISING
-                </div>
+                <Ads />
                 {/* <div className="py-2 ">
                     <h2 className="relative px-7 text-lg font-semibold tracking-tight">
                     Roadlists
