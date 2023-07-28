@@ -17,7 +17,7 @@ export async function getGenreList(language: any) {
     
 } 
 
-export async function useSearchMovies(query: string, language: any, page: number) {
+export async function handleSearchMovies(query: string, language: any, page: number) {
     const results = await (await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL}search/movie?query=${query}&include_adult=false&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}&append_to_response=credits`)).json();
     const moviesWithCredits = await Promise.all(results.results.map(async (movie: any) => {
         const credits = await (await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/${movie.id}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`)).json();

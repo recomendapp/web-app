@@ -1,7 +1,7 @@
 import { databases } from "@/utils/appwrite";
 import { Query } from "appwrite";
 
-export async function useIsUserFollowed(userId: string, followeeId: string) {
+export async function handleIsUserFollowed(userId: string, followeeId: string) {
     try {
         const response = await (await databases.listDocuments(
             String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
@@ -43,7 +43,7 @@ export async function useFollowUser(userId: string, followeeId: string, actualFo
 
 export async function followUser(userId: string, followeeId: string) {
     try {
-        const { status } = await useIsUserFollowed(userId, followeeId)
+        const { status } = await handleIsUserFollowed(userId, followeeId)
         if(status) return
         const {$id} = await databases.createDocument(
             String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS), 

@@ -21,6 +21,8 @@ export default function MapPopupSidebar(props: any) {
   const [recoverServerOffset, setRecoverServerOffset] = useState(false);
   const { selectedMovie, onClose } = props;
 
+  console.log("selectedMovie", selectedMovie)
+
   const [popupIsOpen, setPopupIsOpen] = useState(true)
   const popupSidebarRef = useRef<HTMLDivElement>(null);
   // const headerRef = useRef<HTMLDivElement>(null);  

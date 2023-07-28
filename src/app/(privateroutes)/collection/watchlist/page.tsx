@@ -70,7 +70,7 @@ export default function Watchlist() {
             <TableHead>Film</TableHead>
             <TableHead>Réalisateur</TableHead>
             <TableHead>Durée</TableHead>
-            <TableHead className="text-right">Date d'ajout</TableHead>
+            <TableHead className="text-right">Date d&apos;ajout</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

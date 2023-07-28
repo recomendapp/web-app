@@ -1,5 +1,5 @@
 "use client"
-import { useSearchMovies } from "@/hooks/tmdb"
+import { handleSearchMovies } from "@/hooks/tmdb"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import { Badge } from "../ui/badge"
@@ -17,7 +17,7 @@ export default function SearchResultsMovies({ query } : { query: string | undefi
     useEffect(() => {
         if (query) {
             setLoading(true)
-            useSearchMovies(query, "fr-FR", 1).then((response) => {
+            handleSearchMovies(query, "fr-FR", 1).then((response) => {
                 console.log('movie222', response)
                 if(response.length) {
                     setLoading(false)

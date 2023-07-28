@@ -1,8 +1,8 @@
 "use client"
-import { AlertCircle, CheckIcon, Heart, ListPlus } from "lucide-react";
+import { ListPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { databases } from "@/utils/appwrite";
 import { Query } from "appwrite";

@@ -85,7 +85,7 @@ export default function Guidelist() {
             <TableHead>Film</TableHead>
             <TableHead>Réalisateur</TableHead>
             <TableHead>Durée</TableHead>
-            <TableHead>Date d'ajout</TableHead>
+            <TableHead>Date d&apos;ajout</TableHead>
             <TableHead className="text-right">Ajouté par</TableHead>
           </TableRow>
         </TableHeader>

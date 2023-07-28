@@ -12,8 +12,6 @@ import useDebounce from '@/hooks/search/useDebounce';
 export default function SearchBar() {
     const router = useRouter();
     const pathname = usePathname();
-    if (pathname !== '/search') return null
-
     const searchParams = useSearchParams();
     const q = searchParams.get('q')
     const filter = searchParams.get('filter')

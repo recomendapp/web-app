@@ -1,9 +1,8 @@
 import { AlertCircle, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Icons } from "../../icons";
-import { useIsMovieWatched, useWatchMovie } from "@/hooks/action/movie/watch";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -15,8 +14,6 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
-import { MovieWatchDateAction } from "./MovieWatchDateAction";
-import { useQueryClient, useQuery } from 'react-query'
 import { useRouter } from "next/navigation";
 
 interface MovieWatchActionProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -12,11 +12,9 @@ import { fr } from "date-fns/locale";
 import { MovieActionCounter } from '../count/MovieActionCounter';
 import { MovieReview } from './MovieReview';
 
-export function MovieDetails({ movie, movieDocumentID } : { movie: any, movieDocumentID: any }) {
+export function MovieDetails({ movie } : { movie: any }) {
     const { user } = useUser();
-    console.log('user', user)
-    console.log('movie', movie)
-    
+
     return (
         <div className=' w-full'>
             {/* CONTAINER */}
@@ -107,13 +105,13 @@ export function MovieDetails({ movie, movieDocumentID } : { movie: any, movieDoc
                             <MovieAction movieId={movie.id} userId={user?.$id} />
                             <div>
                                 COUNTER
-                                <MovieActionCounter movie={movieDocumentID}/>
+                                <MovieActionCounter movieId={movie.id} />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <MovieReview movie={movie} movieDocumentID={movieDocumentID} />
+            <MovieReview movie={movie} />
         </div>
     )
 }

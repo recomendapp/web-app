@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { databases } from "@/utils/appwrite";
+import { databases, graphql } from "@/utils/appwrite";
 
 import { MovieLikeAction } from "./MovieLikeAction";
 import { MovieWatchAction } from "./MovieWatchAction";
@@ -7,10 +7,10 @@ import { MovieRateAction } from "./MovieRateAction";
 import { MovieWatchDateAction } from "./MovieWatchDateAction";
 
 import { 
-    useIsMovieLiked,
-    useIsMovieWatched, 
-    useIsMovieRated,
-    useIsMovieWatchlisted
+    handleIsMovieLiked,
+    handleIsMovieWatched,
+    handleIsMovieRated,
+    handleIsMovieWatchlisted
 } from "@/hooks/action/movie";
 import { MovieWatchlistAction } from "./MovieWatchlistAction";
 import { MoviePlaylistAction } from "./MoviePlaylistAction";
@@ -31,24 +31,24 @@ export function MovieAction( { movieId, userId } : { movieId: number, userId: st
 
     useEffect(() => {
         if(userId && movieId) {
-            
-            useIsMovieLiked(userId, movieId)
+            // init()
+            handleIsMovieLiked(userId, movieId)
                 .then((response) =>{
                     setIsLiked(response.status)
                     setIsLikedId(response.id)
                 })
-            useIsMovieWatched(userId, movieId)
+            handleIsMovieWatched(userId, movieId)
                 .then((response) => {
                     setIsWatched(response.status)
                     setIsWatchedId(response.id)
                     setWatchedDate(new Date(response.date))
                 })
-            useIsMovieRated(userId, movieId)
+            handleIsMovieRated(userId, movieId)
                 .then((response) => {
                     setIsRated(response.rating)
                     setIsRatedId(response.id)
                 })
-            useIsMovieWatchlisted(userId, movieId)
+            handleIsMovieWatchlisted(userId, movieId)
                 .then((response) => {
                     setIsWatchlisted(response.status)
                     setIsWatchlistedId(response.id)
@@ -56,6 +56,62 @@ export function MovieAction( { movieId, userId } : { movieId: number, userId: st
         }
     }, [userId, movieId])
 
+    const init = async () => {
+        const getLike = `
+            query likes {
+                databasesListDocuments(
+                    databaseId: "${String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS)}",
+                    collectionId: "${String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_LIKED)}",
+                    queries: ["equal('userId', ${userId})", "equal('movieId', ${movieId})"]
+                ) {
+                    total
+                    documents {
+                        _id
+                        _collectionId
+                        _databaseId
+                        _createdAt
+                        _updatedAt
+                        _permissions
+                        data
+                    }
+                }
+            }
+        `
+        const getWatch = `
+            query watch {
+                databasesListDocuments(
+                    databaseId: "${String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS)}",
+                    collectionId: "${String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_RATED)}",
+                    queries: ["equal('userId', ${userId})", "equal('movieId', ${movieId})"]
+                ) {
+                    total
+                    documents {
+                        _id
+                        _collectionId
+                        _databaseId
+                        _createdAt
+                        _updatedAt
+                        _permissions
+                        data
+                    }
+                }
+            }
+        `
+
+        try {
+            const q = await graphql.query([
+                {
+                    query: `
+                        ${getLike}
+                        `,
+                }
+            ])
+            console.log('graphql', q)
+            
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const reset = async () => {
         isLiked && await handleUnlike()

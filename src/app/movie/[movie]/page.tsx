@@ -26,17 +26,10 @@ export async function generateMetadata({ params }: { params: { movie: string } }
 
 export default async function Profile({ params }: { params: { movie: string } }) {
     const movie = await getMovieDetails(params.movie, 'fr-FR')
-    const movieDocumentID = await (await databases.listDocuments(
-        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE),
-        [
-            Query.equal('movieId', movie.id)
-        ]
-    )).documents[0];
 
     if (movie.success === false ) throw Error
     
     return (
-        <MovieDetails movie={movie} movieDocumentID={movieDocumentID}/>
+        <MovieDetails movie={movie}/>
     );
 }

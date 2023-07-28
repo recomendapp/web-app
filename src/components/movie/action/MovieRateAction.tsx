@@ -1,11 +1,9 @@
 import { AlertCircle, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Icons } from "../../icons";
-import { useQuery, useQueryClient } from 'react-query'
 import { useRouter } from "next/navigation";
-import { unrateMovie, useIsMovieRated, useRateMovie } from "@/hooks/action/movie/rate";
 import {
     Dialog,
     DialogClose,

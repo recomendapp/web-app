@@ -1,7 +1,7 @@
 import { databases } from "@/utils/appwrite";
 import { Query } from "appwrite";
 
-export async function useIsMovieLiked(userId: string, movieId: number) {
+export async function handleIsMovieLiked(userId: string, movieId: number) {
     try {
         const { documents } = await (await databases.listDocuments(
             String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
@@ -30,7 +30,7 @@ export async function useIsMovieLiked(userId: string, movieId: number) {
     }
 }
 
-export async function useIsMovieWatched(userId: string, movieId: number) {
+export async function handleIsMovieWatched(userId: string, movieId: number) {
     try {
         const { documents } = await (await databases.listDocuments(
             String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
@@ -63,7 +63,7 @@ export async function useIsMovieWatched(userId: string, movieId: number) {
     }
 }
 
-export async function useIsMovieRated(userId: string, movieId: number) {
+export async function handleIsMovieRated(userId: string, movieId: number) {
     try {
         const { documents } = await (await databases.listDocuments(
             String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
@@ -95,7 +95,7 @@ export async function useIsMovieRated(userId: string, movieId: number) {
     }
 }
 
-export async function useIsMovieWatchlisted(userId: string, movieId: number) {
+export async function handleIsMovieWatchlisted(userId: string, movieId: number) {
     try {
         const { documents } = await (await databases.listDocuments(
             String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),

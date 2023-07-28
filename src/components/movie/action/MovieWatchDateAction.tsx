@@ -1,9 +1,7 @@
-import { CalendarDays, Check } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useEffect, useState } from "react";
-import { Icons } from "../../icons";
-import { useIsMovieWatched, useWatchMovie, watchDate } from "@/hooks/action/movie/watch";
+import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar"
 import {
   Popover,
@@ -21,7 +19,7 @@ interface MovieWatchedDateActionProps extends React.HTMLAttributes<HTMLDivElemen
 }
 
 
-export function MovieWatchDateAction ({ userId, movieId, date, handleUpdateDate} : MovieWatchedDateActionProps) {
+export function MovieWatchDateAction ({ date, handleUpdateDate} : MovieWatchedDateActionProps) {
     const [ loading, setLoading ] = useState(false)
     // const [ date, setDate ] = useState(defaultDate);
 
@@ -68,7 +66,12 @@ export function MovieWatchDateAction ({ userId, movieId, date, handleUpdateDate}
                     locale={fr}
                     mode="single"
                     selected={date}
-                    onSelect={(e) => handleUpdateDate(e)}
+                    
+                    onSelect={(e) => {
+                        if(e) {
+                            handleUpdateDate(e)
+                        }
+                    }}
                     initialFocus
                     
                 />

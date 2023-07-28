@@ -1,4 +1,4 @@
-import { Client, Account, Databases, Functions, Storage, Query } from 'appwrite';
+import { Client, Account, Databases, Functions, Storage, Query, Graphql } from 'appwrite';
 
 export const client = new Client();
 
@@ -10,6 +10,9 @@ client
     .setEndpoint(String(process.env.NEXT_PUBLIC_APPWRITE_END_POINT))
     .setProject(String(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID))
 ;
+
+// GraphQL
+export const graphql = new Graphql(client);
 
 // Account
 export const account = new Account(client);

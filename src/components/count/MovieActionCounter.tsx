@@ -2,7 +2,6 @@ import { AlertCircle, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useEffect, useState } from "react";
-import { useIsMovieLiked, useLikeMovie } from "@/hooks/action/movie/like";
 import { Icons } from "../icons";
 import { LikeMovieSchema } from "@/schema/like.schema";
 import { useQuery, useQueryClient } from 'react-query'
@@ -16,17 +15,39 @@ import { MovieDetails } from "../movie/MovieDetails";
 //         .then((res) => res.json())
 //         .then(LikeMovieSchema.parse)
 
-export function MovieActionCounter ({movie} : {movie: any}) {
+export function MovieActionCounter ({movieId} : {movieId: string}) {
     const router = useRouter()
-    const [ movieLikedCounter, setMovieLikedCounter ] = useState<number | null>(movie ? movie.likes_count : null)
-    const [ movieWatchedCounter, setMovieWatchedCounter ] = useState<number | null>(movie ? movie.watch_count : null)
-    const [ movieRatedCounter, setMovieRatedCounter ] = useState<string | null>(movie ? movie.rating_count : null)
-    const [ movieWatchlistedCounter, setMovieWatchlistedCounter ] = useState<string | null>(movie ? movie.watchlist_count : null)
-    const [ totalMovieRated, setTotalMovieRated ] = useState<number | null>(movie ? useTotalMovieRated(movie.rating_count) : null)
-    const [ movieAverageRating, setMovieAverageRating ] = useState<number | null>(movie ? useMovieAverageRating(movie.rating_count) : null)
+
+    const [ movieLikedCounter, setMovieLikedCounter ] = useState<number | null>()
+    const [ movieWatchedCounter, setMovieWatchedCounter ] = useState<number | null>()
+    const [ movieRatedCounter, setMovieRatedCounter ] = useState<string | null>()
+    const [ movieWatchlistedCounter, setMovieWatchlistedCounter ] = useState<string | null>()
+    const [ totalMovieRated, setTotalMovieRated ] = useState<number | null>()
+    const [ movieAverageRating, setMovieAverageRating ] = useState<number | null>()
+
+    // INIT VALUE
+    useEffect(() => {
+        databases.listDocuments(
+            String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
+            String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE),
+            [
+                Query.equal('movieId', movieId)
+            ]
+        ).then((movie) => {
+            if(movie.total > 0) {
+                setMovieLikedCounter(movie.documents[0].likes_count)
+                setMovieWatchedCounter(movie.documents[0].watch_count)
+                setMovieRatedCounter(movie.documents[0].rating_count)
+                setMovieWatchlistedCounter(movie.documents[0].watchlist_count)
+                setTotalMovieRated(handleTotalMovieRated(movie.documents[0].rating_count))
+                setMovieAverageRating(handleMovieAverageRating(movie.documents[0].rating_count))
+            }
+        })
+        
+    }, [])
 
 
-    function useMovieAverageRating(rating_count: string) {
+    function handleMovieAverageRating(rating_count: string) {
         const ratingArray = JSON.parse(rating_count)
         let totalVotes = 0;
         let sumOfProducts = 0;
@@ -42,32 +63,28 @@ export function MovieActionCounter ({movie} : {movie: any}) {
         return totalVotes > 0 ? sumOfProducts / totalVotes : 0;
     }
 
-    function useTotalMovieRated(rating_count: string) {
+    function handleTotalMovieRated(rating_count: string) {
         const ratingArray = JSON.parse(rating_count)
         return Number(Object.values(ratingArray).reduce((accumulator: any, currentValue: any) => accumulator + currentValue, 0))
     }
 
-
-
-
-
     useEffect(() => {
-        movieRatedCounter && setTotalMovieRated(useTotalMovieRated(movieRatedCounter))
-        movieRatedCounter && setMovieAverageRating(useMovieAverageRating(movieRatedCounter))
+        movieRatedCounter && setTotalMovieRated(handleTotalMovieRated(movieRatedCounter))
+        movieRatedCounter && setMovieAverageRating(handleMovieAverageRating(movieRatedCounter))
     }, [movieRatedCounter])
 
-    useEffect(() => {
-        movie && client.subscribe(
-            `databases.${process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS}.collections.${process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE}.documents.${movie.$id}`,
-            (response: { payload: any }) => {
-                setMovieLikedCounter(response.payload.likes_count)
-                setMovieWatchedCounter(response.payload.watch_count)
-                setMovieRatedCounter(response.payload.rating_count)
-                setMovieWatchlistedCounter(response.payload.watchlist_count)
+    // useEffect(() => {
+    //     movieId && client.subscribe(
+    //         `databases.${process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS}.collections.${process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE}.documents.${movieId}`,
+    //         (response: { payload: any }) => {
+    //             setMovieLikedCounter(response.payload.likes_count)
+    //             setMovieWatchedCounter(response.payload.watch_count)
+    //             setMovieRatedCounter(response.payload.rating_count)
+    //             setMovieWatchlistedCounter(response.payload.watchlist_count)
 
-            }    
-        )
-    }, [])
+    //         }    
+    //     )
+    // }, [])
 
     return (
         <div>

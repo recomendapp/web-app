@@ -30,7 +30,6 @@ import {
 import { Loader2, PlusCircleIcon } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { CreatePlaylistButton } from '@/components/movie/playlist/CreatePlaylistButton'
 import { DialogTrigger } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { PlaylistButton } from '@/components/movie/playlist/PlaylistButton'

@@ -9,7 +9,7 @@ import { MovieAction } from './action/MovieAction';
 import { format } from "date-fns"
 import { fr } from "date-fns/locale";
 
-export function MovieReview({ movie, movieDocumentID } : { movie: any, movieDocumentID: any }) {
+export function MovieReview({ movie } : { movie: any }) {
     const { user } = useUser();
 
     
