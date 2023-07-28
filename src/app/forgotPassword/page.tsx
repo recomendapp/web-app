@@ -7,10 +7,10 @@ import { Metadata } from 'next'
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const metadata: Metadata = {
-  title: 'Se connecter',
-  description: '...',
-}
+// export const metadata: Metadata = {
+//   title: 'Se connecter',
+//   description: '...',
+// }
 
 export default function ForgotPassword() {
     const [ passwordRecoverySuccess, setPasswordRecoverySuccess] = useState(false)
@@ -28,7 +28,6 @@ export default function ForgotPassword() {
                         </h1>
 
                     </div>
-                    
                     <ForgotPasswordForm setPasswordRecoverySuccess={setPasswordRecoverySuccess} />
                 </div>
             </div>

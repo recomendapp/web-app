@@ -8,10 +8,10 @@ import { toast } from 'react-toastify';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ResetPasswordForm } from '@/app/resetPassword/ResetPasswordForm';
 
-export const metadata: Metadata = {
-  title: 'Vérifier Email',
-  description: '...',
-}
+// export const metadata: Metadata = {
+//   title: 'Vérifier Email',
+//   description: '...',
+// }
 
 export default function ResetPassword() {
     const searchParams = useSearchParams()

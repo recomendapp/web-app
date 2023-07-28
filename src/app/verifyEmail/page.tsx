@@ -7,10 +7,10 @@ import { account } from '@/utils/appwrite';
 import { toast } from 'react-toastify';
 import { useUser } from '@/context/user';
 
-export const metadata: Metadata = {
-  title: 'Vérifier Email',
-  description: '...',
-}
+// export const metadata: Metadata = {
+//   title: 'Vérifier Email',
+//   description: '...',
+// }
 
 export default function VerifyEmail() {
     const { userRefresh } = useUser()
