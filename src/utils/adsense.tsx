@@ -4,13 +4,16 @@ import { useEffect } from "react"
 
 export default function Ads() {
     useEffect(() => {
-        try {
-          // @ts-ignore
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (err) {
-          console.error(err);
+        var ads = document.getElementsByClassName('adsbygoogle').length;
+        for (var i = 0; i < ads; i++) {
+          try {
+            // @ts-ignore
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          } catch (error) {
+            console.error(error);
+          }
         }
-    }, []);
+      }, []);
 
     return (
         <div className="bg-background rounded-md">
