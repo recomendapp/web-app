@@ -14,6 +14,7 @@ export async function getGenreList(language: any) {
         })
     })
     return genreList;
+    
 } 
 
 export async function useSearchMovies(query: string, language: any, page: number) {

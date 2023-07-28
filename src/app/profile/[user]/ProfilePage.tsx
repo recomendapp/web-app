@@ -39,7 +39,7 @@ export default function ProfilePage({ userPage } : { userPage: any}) {
         <div className='container h-full relative flex flex-col items-center gap-4'>
              <div className='flex flex-col gap-y-4'>
                  <Avatar className="w-[200px] h-[200px]">
-                     <AvatarImage src={userPage.name} alt={userPage.name} />
+                     <AvatarImage src={userPage.avatar} alt={userPage.username} />
                      <AvatarFallback className='text-[100px]'>{userInitiales}</AvatarFallback>
                  </Avatar>
                  <div className='text-center'>

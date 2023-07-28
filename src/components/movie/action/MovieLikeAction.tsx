@@ -1,8 +1,7 @@
 import { AlertCircle, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useIsMovieLiked, useLikeMovie } from "@/hooks/action/movie/like";
+import { useState } from "react";
 import { Icons } from "../../icons";
 import { LikeMovieSchema } from "@/schema/like.schema";
 import { useQuery, useQueryClient } from 'react-query'

@@ -1,19 +1,24 @@
 import { checkUsernameExist, databases, getUserDetails } from '@/utils/appwrite'
 import { PlusCircle } from 'lucide-react'
 import PlaylistItems from './PlaylistItems'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import { AspectRatio } from '@/components/ui/aspect-ratio'
+import { ImageWithFallback } from '@/components/ImageWithFallback'
+import PlaylistDetails from '@/components/movie/playlist/PlaylistDetails'
 
 
-export async function generateMetadata({ params }: { params: { user: string } }) {
-    // const user = await getUserDetails(params.user)
-    // if(!user) {
-    //     return {
-    //         title: "Oups, utilisateur introuvable !"
-    //     }
-    // }
-    // return {
-    //     title: `@${user.username}`,
-    //     description: `This is the page of @${user.username}`
-    // }
+export async function generateMetadata({ params }: { params: { playlist: string } }) {
+    const playlist = await getPlaylistDetails(params.playlist)
+    if(!playlist) {
+        return {
+            title: "Oups, playlist introuvable !"
+        }
+    }
+    return {
+        title: `${playlist.title} - playlist by ${playlist.userId.username}`,
+        description: `${playlist.description}`
+    }
     
 }
 
@@ -31,7 +36,7 @@ async function getPlaylistDetails(id: string) {
 
 
 export default async function Playlist({ params }: { params: { playlist: string } }) {
-    const playlist = await getPlaylistDetails(params.playlist)
+    let playlist = await getPlaylistDetails(params.playlist)
 
     if(!playlist) {
         return (
@@ -42,12 +47,6 @@ export default async function Playlist({ params }: { params: { playlist: string 
     }
 
     return (
-        <div className='bg-red-500 p-4'>
-            <div>
-                Titre : {playlist.title}
-            </div>
-            <PlaylistItems playlist={playlist} />
-        </div>
-
+        <PlaylistDetails playlistServer={playlist}/>
     )
 }

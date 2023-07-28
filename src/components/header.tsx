@@ -23,7 +23,7 @@ export function Header({ className }: HeaderProps) {
     const pathname = usePathname()
 
     return (
-        <header className={cn("sticky top-0 z-[50] bg-background flex justify-between items-center border-b p-4 lg:h-header lg:border-b-0", className)}>
+        <header className={cn("sticky top-0 z-[50] flex justify-between items-center border-b p-4 lg:h-header lg:border-b-0", className)}>
             <div className="flex flex-col gap-4 w-full items-center lg:flex-row">
                 <div className="hidden gap-4 lg:flex">
                     {/* NAVIGATION BUTTON */}

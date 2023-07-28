@@ -14,6 +14,7 @@ import { Header } from '@/components/header'
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { ReactQueryProvider } from '@/utils/ReactQuery'
+import Script from 'next/script'
 
 export const metadata: Metadata = {
   title: {
@@ -40,19 +41,26 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1380362797599640"
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
+        />
+      </head>
       <body
           className={cn(
-            "h-screen w-screen flex flex-col bg-background font-sans antialiased",
+            "h-screen w-screen flex flex-col bg-black font-sans antialiased",
             fontSans.variable
           )}
         >
           <UserProvider>
             <ReactQueryProvider>
               <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-                <div className="grid lg:grid-cols-5 h-full">
-                  <Sidebar className="hidden border-r lg:block  " />
-                  <div className="flex flex-col col-span-3 lg:col-span-4 overflow-y-auto">
+                <div className="grid p-2 gap-2 lg:grid-cols-5 h-full">
+                  <Sidebar className="" />
+                  <div className="flex flex-col bg-background col-span-3 lg:col-span-4 overflow-y-auto rounded-md">
                     <Header />
                     <div className='flex-grow relative pb-[150px] lg:pb-0' >
                       {children}

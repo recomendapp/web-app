@@ -13,6 +13,9 @@ import {
     useIsMovieWatchlisted
 } from "@/hooks/action/movie";
 import { MovieWatchlistAction } from "./MovieWatchlistAction";
+import { MoviePlaylistAction } from "./MoviePlaylistAction";
+import { MovieSendAction } from "./MovieSendAction";
+import { Query } from "appwrite";
 
 
 export function MovieAction( { movieId, userId } : { movieId: number, userId: string }) {
@@ -28,6 +31,7 @@ export function MovieAction( { movieId, userId } : { movieId: number, userId: st
 
     useEffect(() => {
         if(userId && movieId) {
+            
             useIsMovieLiked(userId, movieId)
                 .then((response) =>{
                     setIsLiked(response.status)
@@ -105,6 +109,7 @@ export function MovieAction( { movieId, userId } : { movieId: number, userId: st
         setWatchedDate(new Date(date))
 
         isWatchlisted && await handleUnwatchlist()
+        await handleDeleteGuidelist()
 
         return
     }
@@ -223,6 +228,27 @@ export function MovieAction( { movieId, userId } : { movieId: number, userId: st
 
     }
 
+    const handleDeleteGuidelist = async () => {
+        const { documents } = await databases.listDocuments(
+            String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS), 
+            String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_GUIDELISTED), 
+            [
+                Query.equal("movieId", movieId),
+                Query.equal("userId", userId)
+            ]
+        )
+        if (documents.length > 0) {
+            await databases.deleteDocument(
+                String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS), 
+                String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_GUIDELISTED), 
+                documents[0].$id
+            )
+            return
+        } else {
+            return
+        }
+    }
+
     return (
         <div className="flex gap-4">
             <MovieRateAction 
@@ -253,6 +279,14 @@ export function MovieAction( { movieId, userId } : { movieId: number, userId: st
                 handleWatchlist={handleWatchlist}
                 handleUnwatchlist={handleUnwatchlist}
                 isWatched={isWatched}
+            />
+            <MoviePlaylistAction
+                userId={userId}
+                movieId={movieId}
+            />
+            <MovieSendAction
+                userId={userId}
+                movieId={movieId}
             />
             {isWatched && watchedDate && (
                 <MovieWatchDateAction 

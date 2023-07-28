@@ -34,6 +34,8 @@ import { useRouter } from "next/navigation"
 import {
   X
 } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import PictureUpload from "./pictureUpload"
 
 
 // This can come from your database or API.
@@ -125,6 +127,7 @@ export function ProfileForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <PictureUpload user={user} userRefresh={userRefresh}/>
         <FormField
           control={form.control}
           name="name"

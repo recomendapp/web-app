@@ -26,6 +26,7 @@ export function MovieDetails({ movie, movieDocumentID } : { movie: any, movieDoc
                     backgroundImage: `url('https://image.tmdb.org/t/p/original/${movie.backdrop_path}')`,
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
+                    height:"clamp(340px,30vh,400px)"
                 }}
             >
                 <div className='w-full h-full flex  p-4 items-center bg-gradient-to-t from-background to-[#000000bd] bg-opacity-75'>

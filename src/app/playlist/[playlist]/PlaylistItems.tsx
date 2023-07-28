@@ -23,7 +23,9 @@ export default function PlaylistItems({ playlist }: { playlist: any } ) {
 
     return (
         <div className='bg-red-500 p-4'>
-            {playlistItems && playlistItems[0].movieId}
+            {playlistItems && playlistItems.map((movie) => (
+                <div key={movie.$id}>{movie.movieId}</div>
+            ))}
         </div>
     )
 

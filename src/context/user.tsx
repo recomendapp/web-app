@@ -97,13 +97,6 @@ export const UserProvider = ({ children } : { children: any }) => {
             } else {
                 setUser(userRequest);
             }
-            // const userDetails = await databases.getDocument(String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS), String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER), userRequest.$id)
-            // setUser({
-            //     ...userRequest,
-            //     username: userDetails.username,
-            //     avatar: userDetails.avatar,
-            //     language: userDetails.language,
-            // })
         } catch (error) {
             throw error
         }
