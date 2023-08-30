@@ -1,17 +1,26 @@
-import Link from "next/link";
-import React, { Fragment, useState, useMemo, useRef, useEffect, useContext } from 'react';
-
+import Link from 'next/link';
+import React, {
+  Fragment,
+  useState,
+  useMemo,
+  useRef,
+  useEffect,
+  useContext,
+} from 'react';
 
 import { Popup } from 'react-map-gl';
 
-
 // ICONS
-import { AiFillHeart, AiOutlineHeart, AiFillEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-import PopupFullScreen from "./MapPopupFullScreen";
-import MapPopupSidebar from "./MapPopupSidebar";
-import { getMovieDetails } from "@/hooks/tmdb";
-import { useUser } from "@/context/user";
-
+import {
+  AiFillHeart,
+  AiOutlineHeart,
+  AiFillEye,
+  AiOutlineEyeInvisible,
+} from 'react-icons/ai';
+import PopupFullScreen from './MapPopupFullScreen';
+import MapPopupSidebar from './MapPopupSidebar';
+import { getMovieDetails } from '@/hooks/tmdb';
+import { useUser } from '@/context/user';
 
 export default function MapPopup(props: any) {
   const { selectedMovie } = props;
@@ -19,24 +28,25 @@ export default function MapPopup(props: any) {
   const { user } = useUser();
 
   const [recoverServerOffset, setRecoverServerOffset] = useState(false);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
-  console.log('POPUPPPP', selectedMovie)
+  console.log('POPUPPPP', selectedMovie);
 
-  const [ movieDetails, setMovieDetails] = useState<any>()
+  const [movieDetails, setMovieDetails] = useState<any>();
 
   useEffect(() => {
     getMovieDetails(selectedMovie.id, user ? user?.language : 'en-EN')
       .then((movieDetailsResponse) => {
-        setMovieDetails(movieDetailsResponse)
-        setIsLoading(false)
-      }).catch((error: any) => {
-        setIsLoading(false)
+        setMovieDetails(movieDetailsResponse);
+        setIsLoading(false);
       })
-  }, [selectedMovie])
+      .catch((error: any) => {
+        setIsLoading(false);
+      });
+  }, [selectedMovie]);
 
-  if(isLoading) {
-    return <></>
+  if (isLoading) {
+    return <></>;
   }
 
   return (
@@ -47,8 +57,6 @@ export default function MapPopup(props: any) {
       <MapPopupSidebar selectedMovie={movieDetails} onClose={props.onClose} />
       {/* <PopupFullScreen selectedMovie={movieDetails} onClose={props.onClose}  /> */}
     </>
-    
-
   );
 }
 

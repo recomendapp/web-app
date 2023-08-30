@@ -1,8 +1,8 @@
-"use client"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useFieldArray, useForm } from "react-hook-form"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
+'use client';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useFieldArray, useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -11,27 +11,26 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { toast } from "react-toastify"
-import { useUser } from "@/context/user"
-import { account, checkUsernameExist, databases } from "@/utils/appwrite"
-import { useRouter } from "next/navigation"
-
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { toast } from 'react-toastify';
+import { useUser } from '@/context/user';
+import { account, checkUsernameExist, databases } from '@/utils/appwrite';
+import { useRouter } from 'next/navigation';
 
 // This can come from your database or API.
 
-
 export function AccountForm() {
-
   const router = useRouter();
-  
+
   const { user, userRefresh } = useUser();
 
   const date = new Date();
 
-  const dateLastUsernameUpdate = user.usernameUpdate ? new Date(user.usernameUpdate) : new Date("01/01/1970");
-  
+  const dateLastUsernameUpdate = user.usernameUpdate
+    ? new Date(user.usernameUpdate)
+    : new Date('01/01/1970');
+
   const profileFormSchema = z.object({
     username: z
       .string()
@@ -42,52 +41,55 @@ export function AccountForm() {
         message: "Le nom d'utilisateur ne doit pas dépasser 15 caractères.",
       })
       .refine((value) => /^[a-zA-Z0-9_]*$/.test(value), {
-        message: "L'username ne doit contenir que des lettres, des chiffres et le symbole '_'.",
+        message:
+          "L'username ne doit contenir que des lettres, des chiffres et le symbole '_'.",
       })
-      .refine(async (value) => {
-        if (value === user.username ) {
-          return true
+      .refine(
+        async (value) => {
+          if (value === user.username) {
+            return true;
+          }
+          const isUsernameExist = await checkUsernameExist(value);
+          return !isUsernameExist;
+        },
+        {
+          message: "Cet username n'est pas disponible.",
         }
-        const isUsernameExist = await checkUsernameExist(value);
-        return !isUsernameExist; 
-      }, {
-        message: "Cet username n'est pas disponible."
-      }),
-    email: z
-      .string()
-      .email(),
-  })
+      ),
+    email: z.string().email(),
+  });
 
-  type ProfileFormValues = z.infer<typeof profileFormSchema>
+  type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
   const defaultValues: Partial<ProfileFormValues> = {
     username: user.username,
     email: user.email,
-  }
+  };
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
-    mode: "onChange",
-  })
+    mode: 'onChange',
+  });
 
   async function onSubmit(data: ProfileFormValues) {
     try {
       await databases.updateDocument(
         String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER), 
+        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER),
         user.$id,
         {
-          "username": data.username,
-          "usernameUpdate": user.username !== data.username ? date : null
+          username: data.username,
+          usernameUpdate: user.username !== data.username ? date : null,
         }
-      )
-      await userRefresh()
-      toast.success('Toutes les modifications ont été enregistrées avec succès 👌')
-
+      );
+      await userRefresh();
+      toast.success(
+        'Toutes les modifications ont été enregistrées avec succès 👌'
+      );
     } catch (error) {
-      await userRefresh()
-      toast.error('Une erreur s\'est produite 🤯')
+      await userRefresh();
+      toast.error("Une erreur s'est produite 🤯");
     }
   }
 
@@ -101,11 +103,23 @@ export function AccountForm() {
             <FormItem>
               <FormLabel>Nom d&apos;utilisateur</FormLabel>
               <FormControl>
-                <Input disabled={!user.emailVerification || (date.getTime() - dateLastUsernameUpdate.getTime()) / (1000 * 60 * 60 * 24) < 30 ? true : false}
-              placeholder={user.username} {...field} />
+                <Input
+                  disabled={
+                    !user.emailVerification ||
+                    (date.getTime() - dateLastUsernameUpdate.getTime()) /
+                      (1000 * 60 * 60 * 24) <
+                      30
+                      ? true
+                      : false
+                  }
+                  placeholder={user.username}
+                  {...field}
+                />
               </FormControl>
               <FormDescription className="text-justify">
-                Ceci est votre nom d&apos;utilisateur par lequel les autres personnes peuvent vous trouver et accéder à votre profil. Vous ne pouvez le modifier qu&apos;une fois tous les 30 jours.
+                Ceci est votre nom d&apos;utilisateur par lequel les autres
+                personnes peuvent vous trouver et accéder à votre profil. Vous
+                ne pouvez le modifier qu&apos;une fois tous les 30 jours.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -117,7 +131,10 @@ export function AccountForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                Adresse email {!user.emailVerification && (<span className="text-destructive">- non confirmée</span>)}
+                Adresse email{' '}
+                {!user.emailVerification && (
+                  <span className="text-destructive">- non confirmée</span>
+                )}
               </FormLabel>
               <FormControl>
                 <Input placeholder={user.email} {...field} disabled />
@@ -127,29 +144,35 @@ export function AccountForm() {
                   Pour modifier votre adresse email contactez nous.
                 </div>
                 {!user.emailVerification && (
-                  <Button 
+                  <Button
                     type="button"
-                    variant="destructive" 
+                    variant="destructive"
                     className="h-fit py-1 px-2"
-                    onClick={ async () => {
+                    onClick={async () => {
                       try {
-                        await account.createVerification(process.env.NEXT_PUBLIC_URL + '/verifyEmail')
-                        toast.success("Un email de confirmation a bien été envoyé 👌")
+                        await account.createVerification(
+                          process.env.NEXT_PUBLIC_URL + '/verifyEmail'
+                        );
+                        toast.success(
+                          'Un email de confirmation a bien été envoyé 👌'
+                        );
                       } catch {
-                        toast.error('Une erreur s\'est produite 🤯')
+                        toast.error("Une erreur s'est produite 🤯");
                       }
                     }}
                   >
                     Confirmer votre adresse email
-                  </Button> 
+                  </Button>
                 )}
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button disabled={!user.emailVerification ? true : false} type="submit">Enregistrer</Button>
+        <Button disabled={!user.emailVerification ? true : false} type="submit">
+          Enregistrer
+        </Button>
       </form>
     </Form>
-  )
+  );
 }

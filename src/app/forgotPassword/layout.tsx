@@ -1,34 +1,26 @@
-"use client"
+'use client';
 
-import Loader from "@/components/loader";
-import { useUser } from "@/context/user"
-import { useRouter } from "next/navigation";
+import Loader from '@/components/loader';
+import { useUser } from '@/context/user';
+import { useRouter } from 'next/navigation';
 
 interface LayoutProps {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
-  
+
 export default function Layout({ children }: LayoutProps) {
-    
-    const router = useRouter();
+  const router = useRouter();
 
-    const { user } = useUser();
+  const { user } = useUser();
 
-    if (user) {
-        router.push('/')
-    }
-    
+  if (user) {
+    router.push('/');
+  }
 
-    return (
-        <>
-            {user === null && (
-                <Loader />
-            )}
-            {user === false && (
-                <>
-                    {children}
-                </>
-            )}
-        </>
-    )
+  return (
+    <>
+      {user === null && <Loader />}
+      {user === false && <>{children}</>}
+    </>
+  );
 }

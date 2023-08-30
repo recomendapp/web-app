@@ -1,44 +1,32 @@
-"use client"
+'use client';
 
-import Loader from "@/components/loader";
-import { useUser } from "@/context/user"
-import { useRouter, useSearchParams } from "next/navigation";
-import { parse } from 'url'
+import Loader from '@/components/loader';
+import { useUser } from '@/context/user';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { parse } from 'url';
 
 interface LayoutResetPasswordProps {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
-  
-export default function LayoutResetPassword({ children }: LayoutResetPasswordProps) {
 
-    const searchParams = useSearchParams()
-    
-    const url = searchParams.toString()
+export default function LayoutResetPassword({
+  children,
+}: LayoutResetPasswordProps) {
+  const searchParams = useSearchParams();
 
-    const parsedUrl = parse(url, true)
+  const url = searchParams.toString();
 
-    const expire = new Date(parsedUrl.query.expire as string)
-    
-    const router = useRouter();
+  const parsedUrl = parse(url, true);
 
-    const { user } = useUser();
+  const expire = new Date(parsedUrl.query.expire as string);
 
-    
+  const router = useRouter();
 
-    // if (user) {
-    //     router.push('/')
-    // }
-    
+  const { user } = useUser();
 
-    return (
-        <>
-            {user === null || !expire ? (
-                <Loader />
-            ): (
-                <>
-                    {children}
-                </>
-            )}
-        </>
-    )
+  // if (user) {
+  //     router.push('/')
+  // }
+
+  return <>{user === null || !expire ? <Loader /> : <>{children}</>}</>;
 }

@@ -1,12 +1,12 @@
-"use client"
+'use client';
 
-import Link from "next/link"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useFieldArray, useForm } from "react-hook-form"
-import * as z from "zod"
+import Link from 'next/link';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useFieldArray, useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -15,105 +15,99 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 // import { toast } from "@/components/ui/use-toast"
-import { toast } from "react-toastify"
-import { useUser } from "@/context/user"
-import { account, checkUsernameExist, databases } from "@/utils/appwrite"
-import { useRouter } from "next/navigation"
+import { toast } from 'react-toastify';
+import { useUser } from '@/context/user';
+import { account, checkUsernameExist, databases } from '@/utils/appwrite';
+import { useRouter } from 'next/navigation';
 
-import {
-  X
-} from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import PictureUpload from "./pictureUpload"
-
+import { X } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import PictureUpload from './pictureUpload';
 
 // This can come from your database or API.
 
-
 export function ProfileForm() {
-  
   const { user, userRefresh } = useUser();
 
   const profileFormSchema = z.object({
     name: z
       .string()
       .min(1, {
-        message: "Le nom doit comporter au moins 1 caractère.",
+        message: 'Le nom doit comporter au moins 1 caractère.',
       })
       .max(50, {
-        message: "Le nom ne doit pas dépasser 50 caractères.",
+        message: 'Le nom ne doit pas dépasser 50 caractères.',
       })
       .regex(/^[a-zA-Z0-9\s\S]*$/),
     bio: z
       .string()
       .max(160, {
-        message: "La bio ne doit pas dépasser 160 caractères."
+        message: 'La bio ne doit pas dépasser 160 caractères.',
       })
       .optional(),
     urls: z
       .array(
         z.object({
-          value: z.string().url({ message: "Veuillez entrer une URL valide." }),
+          value: z.string().url({ message: 'Veuillez entrer une URL valide.' }),
         })
       )
       .optional(),
-  })
+  });
 
-  type ProfileFormValues = z.infer<typeof profileFormSchema>
+  type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
   const defaultValues: Partial<ProfileFormValues> = {
     name: user.name,
-    bio: user.bio ? user.bio : "",
-    urls: user.url
+    bio: user.bio ? user.bio : '',
+    urls: user.url,
     // urls: [
     //   { value: "https://shadcn.com" },
     //   { value: "http://twitter.com/shadcn" },
     // ],
-  }
+  };
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues,
-    mode: "onChange",
-  })
+    mode: 'onChange',
+  });
 
   const { fields, append, remove } = useFieldArray({
-    name: "urls",
+    name: 'urls',
     control: form.control,
-  })
+  });
 
   async function onSubmit(data: ProfileFormValues) {
-
-
     try {
-      user.name !== data.name && await account.updateName(data.name)
+      user.name !== data.name && (await account.updateName(data.name));
       await databases.updateDocument(
         String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER), 
+        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER),
         user.$id,
         {
-          "bio": data.bio,
+          bio: data.bio,
         }
-      )
-      await userRefresh()
-      toast.success('Toutes les modifications ont été enregistrées avec succès 👌')
-
+      );
+      await userRefresh();
+      toast.success(
+        'Toutes les modifications ont été enregistrées avec succès 👌'
+      );
     } catch (error) {
-      await userRefresh()
-      toast.error('Une erreur s\'est produite 🤯')
+      await userRefresh();
+      toast.error("Une erreur s'est produite 🤯");
     }
-    
+
     // toast({
     //   title: "You submitted the following values:",
     //   description: (
@@ -127,7 +121,7 @@ export function ProfileForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <PictureUpload user={user} userRefresh={userRefresh}/>
+        <PictureUpload user={user} userRefresh={userRefresh} />
         <FormField
           control={form.control}
           name="name"
@@ -135,10 +129,15 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel>Nom</FormLabel>
               <FormControl>
-                <Input disabled={!user.emailVerification ? true : false} placeholder={user.name} {...field} />
+                <Input
+                  disabled={!user.emailVerification ? true : false}
+                  placeholder={user.name}
+                  {...field}
+                />
               </FormControl>
               <FormDescription className="text-justify">
-                Il s&apos;agit du nom qui sera affiché sur votre profil et dans les emails.
+                Il s&apos;agit du nom qui sera affiché sur votre profil et dans
+                les emails.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -173,11 +172,12 @@ export function ProfileForm() {
               name={`urls.${index}.value`}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>
+                  <FormLabel className={cn(index !== 0 && 'sr-only')}>
                     URLs
                   </FormLabel>
-                  <FormDescription className={cn(index !== 0 && "sr-only ")}>
-                    Ajoutez des liens vers votre site web, blog ou profils sur les réseaux sociaux.
+                  <FormDescription className={cn(index !== 0 && 'sr-only ')}>
+                    Ajoutez des liens vers votre site web, blog ou profils sur
+                    les réseaux sociaux.
                   </FormDescription>
                   <FormControl>
                     <div className="flex items-center gap-4">
@@ -192,7 +192,7 @@ export function ProfileForm() {
                       </Button>
                     </div>
                   </FormControl>
-                  
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -204,13 +204,15 @@ export function ProfileForm() {
             variant="outline"
             size="sm"
             className="mt-2"
-            onClick={() => fields.length < 5 && append({ value: "" })}
+            onClick={() => fields.length < 5 && append({ value: '' })}
           >
-            {fields.length === 0 ? "Ajouter des liens" : "Ajouter un lien" }
+            {fields.length === 0 ? 'Ajouter des liens' : 'Ajouter un lien'}
           </Button>
         </div>
-        <Button disabled={!user.emailVerification ? true : false} type="submit">Enregistrer</Button>
+        <Button disabled={!user.emailVerification ? true : false} type="submit">
+          Enregistrer
+        </Button>
       </form>
     </Form>
-  )
+  );
 }

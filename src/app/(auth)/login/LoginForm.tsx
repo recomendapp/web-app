@@ -1,69 +1,69 @@
-"use client"
-import React, {useState} from "react"
-import Link from "next/link"
+'use client';
+import React, { useState } from 'react';
+import Link from 'next/link';
 
-import { cn } from "@/lib/utils"
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useUser } from "@/context/user"
-import { useRouter } from "next/navigation"
+import { cn } from '@/lib/utils';
+import { Icons } from '@/components/icons';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useUser } from '@/context/user';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { account } from "@/utils/appwrite"
+import { account } from '@/utils/appwrite';
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function LoginForm({ className, ...props }: LoginFormProps) {
+  const { login } = useUser();
 
-  const { login } = useUser()
+  const router = useRouter();
 
-  const router = useRouter()
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
-  
   const [userLogin, setUserLogin] = useState({
-    email: "",
-    password: ""
-  })
+    email: '',
+    password: '',
+  });
 
   async function onSubmit(event: React.SyntheticEvent) {
+    event.preventDefault();
 
-    event.preventDefault()
+    setIsLoading(true);
 
-    setIsLoading(true)
-
-    if(!userLogin.email || !userLogin.password) {
-      setIsLoading(false)
-      return
+    if (!userLogin.email || !userLogin.password) {
+      setIsLoading(false);
+      return;
     }
-    
+
     try {
-      await login(userLogin.email, userLogin.password).then((response) => {
-          router.push("/");
-      }).catch((error) => {
-          setIsLoading(false)
+      await login(userLogin.email, userLogin.password)
+        .then((response) => {
+          router.push('/');
+        })
+        .catch((error) => {
+          setIsLoading(false);
           toast.error('Email ou mot de passe incorrect 🤯');
-      })
+        });
     } catch (error) {
-      toast.error('Une erreur s\'est produite 🤯');
+      toast.error("Une erreur s'est produite 🤯");
     }
   }
 
   const loginOAuth2 = async (e: string) => {
     try {
-        await account.createOAuth2Session(
-            e,
-            process.env.NEXT_PUBLIC_URL,
-            process.env.NEXT_PUBLIC_URL+'/login'
-        );
+      await account.createOAuth2Session(
+        e,
+        process.env.NEXT_PUBLIC_URL,
+        process.env.NEXT_PUBLIC_URL + '/login'
+      );
     } catch (error) {
-        throw error;
+      throw error;
     }
-  }
+  };
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <div className={cn('grid gap-6', className)} {...props}>
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -81,9 +81,9 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
               disabled={isLoading}
               onChange={(e) => {
                 setUserLogin({
-                    ...userLogin,
-                    email: e.target.value
-                })
+                  ...userLogin,
+                  email: e.target.value,
+                });
               }}
               required
             />
@@ -100,9 +100,9 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
               disabled={isLoading}
               onChange={(e) => {
                 setUserLogin({
-                    ...userLogin,
-                    password: e.target.value
-                })
+                  ...userLogin,
+                  password: e.target.value,
+                });
               }}
               required
             />
@@ -111,13 +111,13 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-              Se connecter avec un e-mail
+            Se connecter avec un e-mail
           </Button>
           <Link
-              href="/forgotPassword"
-              className="text-right text-sm text-muted-foreground hover:text-primary"
+            href="/forgotPassword"
+            className="text-right text-sm text-muted-foreground hover:text-primary"
           >
-              Mot de passe oublié ?
+            Mot de passe oublié ?
           </Link>
         </div>
       </form>
@@ -131,14 +131,19 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
           </span>
         </div>
       </div>
-      <Button onClick={() => loginOAuth2('github')} variant="outline" type="button" disabled={isLoading}>
+      <Button
+        onClick={() => loginOAuth2('github')}
+        variant="outline"
+        type="button"
+        disabled={isLoading}
+      >
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
           <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "}
+        )}{' '}
         Github
       </Button>
     </div>
-  )
+  );
 }

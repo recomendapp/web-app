@@ -3,9 +3,9 @@
 //     status: boolean;
 // };
 
-import { z } from "zod";
+import { z } from 'zod';
 
 export const LikeMovieSchema = z.object({
-    id: z.string(),
-    status: z.boolean(),
-})
+  id: z.string(),
+  status: z.boolean(),
+});

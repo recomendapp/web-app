@@ -1,6 +1,6 @@
-"use client"
-import { Separator } from "@/components/ui/separator"
-import { ProfileForm } from "@/app/(privateroutes)/settings/profile/profileForm"
+'use client';
+import { Separator } from '@/components/ui/separator';
+import { ProfileForm } from '@/app/(privateroutes)/settings/profile/profileForm';
 
 export default function SettingsProfilePage() {
   return (
@@ -14,5 +14,5 @@ export default function SettingsProfilePage() {
       <Separator />
       <ProfileForm />
     </div>
-  )
+  );
 }

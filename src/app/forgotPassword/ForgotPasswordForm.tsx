@@ -1,59 +1,65 @@
-"use client"
-import React, {useState} from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+'use client';
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-import { cn } from "@/lib/utils"
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useUser } from "@/context/user"
+import { cn } from '@/lib/utils';
+import { Icons } from '@/components/icons';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useUser } from '@/context/user';
 import { toast } from 'react-toastify';
-import { account } from "@/utils/appwrite"
-
+import { account } from '@/utils/appwrite';
 
 interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  setPasswordRecoverySuccess: (success: boolean) => void,
+  setPasswordRecoverySuccess: (success: boolean) => void;
 }
 
-export function ForgotPasswordForm({ className, setPasswordRecoverySuccess, ...props }: ForgotPasswordFormProps) {
-  const { login } = useUser()
+export function ForgotPasswordForm({
+  className,
+  setPasswordRecoverySuccess,
+  ...props
+}: ForgotPasswordFormProps) {
+  const { login } = useUser();
 
-  const router = useRouter()
+  const router = useRouter();
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  
-  const [ userPasswordRecovery, setUserPasswordRecovery] = useState({
-    email: ""
-  })
+  const [userPasswordRecovery, setUserPasswordRecovery] = useState({
+    email: '',
+  });
 
   async function onSubmit(event: React.SyntheticEvent) {
+    event.preventDefault();
 
-    event.preventDefault()
+    setIsLoading(true);
 
-    setIsLoading(true)
-
-    if(!userPasswordRecovery.email) {
-      setIsLoading(false)
+    if (!userPasswordRecovery.email) {
+      setIsLoading(false);
       toast.error('Veuillez rentrer votre email 🤯');
-      return
-  }
-    
+      return;
+    }
+
     try {
-      await account.createRecovery(userPasswordRecovery.email, String(process.env.NEXT_PUBLIC_URL+'/resetPassword'))
-      setPasswordRecoverySuccess(true)
-      setIsLoading(false)
-      toast.success('Un e-mail de réinitialisation a bien été envoyé 👌')
+      await account.createRecovery(
+        userPasswordRecovery.email,
+        String(process.env.NEXT_PUBLIC_URL + '/resetPassword')
+      );
+      setPasswordRecoverySuccess(true);
+      setIsLoading(false);
+      toast.success('Un e-mail de réinitialisation a bien été envoyé 👌');
     } catch (error) {
-      toast.error('Désolé, mais nous ne pouvons pas trouver d\'utilisateur associé à cette adresse e-mail 🤯')
-      setIsLoading(false)
+      toast.error(
+        "Désolé, mais nous ne pouvons pas trouver d'utilisateur associé à cette adresse e-mail 🤯"
+      );
+      setIsLoading(false);
     }
   }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
+    <div className={cn('grid gap-6', className)} {...props}>
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -71,9 +77,9 @@ export function ForgotPasswordForm({ className, setPasswordRecoverySuccess, ...p
               disabled={isLoading}
               onChange={(e) => {
                 setUserPasswordRecovery({
-                    ...userPasswordRecovery,
-                    email: e.target.value
-                })
+                  ...userPasswordRecovery,
+                  email: e.target.value,
+                });
               }}
               required
             />
@@ -83,10 +89,10 @@ export function ForgotPasswordForm({ className, setPasswordRecoverySuccess, ...p
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-              Rénitialiser le mot de passe
+            Rénitialiser le mot de passe
           </Button>
         </div>
       </form>
     </div>
-  )
+  );
 }

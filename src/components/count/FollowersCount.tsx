@@ -1,11 +1,9 @@
-"use client"
+'use client';
 
-export default function FollowersCount({ followersCount } : { followersCount: number}) {
-
-    return (
-        <div>
-            {followersCount} followers
-        </div>
-             
-    )
+export default function FollowersCount({
+  followersCount,
+}: {
+  followersCount: number;
+}) {
+  return <div>{followersCount} followers</div>;
 }

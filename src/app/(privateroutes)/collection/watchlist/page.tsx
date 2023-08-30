@@ -1,9 +1,9 @@
-"use client"
-import { useUser } from '@/context/user'
-import { databases } from '@/utils/appwrite'
-import { Query } from 'appwrite'
-import { Models } from 'appwrite/types/models'
-import React, { useEffect, useState } from 'react'
+'use client';
+import { useUser } from '@/context/user';
+import { databases } from '@/utils/appwrite';
+import { Query } from 'appwrite';
+import { Models } from 'appwrite/types/models';
+import React, { useEffect, useState } from 'react';
 
 import {
   Table,
@@ -13,56 +13,58 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table';
 
-import { format } from "date-fns"
-import { fr } from "date-fns/locale";
-import { AspectRatio } from '@/components/ui/aspect-ratio'
-import { ImageWithFallback } from '@/components/ImageWithFallback'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { ImageWithFallback } from '@/components/ImageWithFallback';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function Watchlist() {
+  const { user } = useUser();
 
-  const { user } = useUser()
-
-  const [ watchlist, setWatchlist ] = useState<any>(null)
+  const [watchlist, setWatchlist] = useState<any>(null);
 
   useEffect(() => {
-    user && databases.listDocuments(
-        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_WATCHLISTED),
-        [
-          Query.limit(25),
-          Query.equal('userId', user.$id)
-        ]
-      )
-      .then((response) => {
-        getMovieDetails(response.documents)
-      })
-  }, [user])
+    user &&
+      databases
+        .listDocuments(
+          String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
+          String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_WATCHLISTED),
+          [Query.limit(25), Query.equal('userId', user.$id)]
+        )
+        .then((response) => {
+          getMovieDetails(response.documents);
+        });
+  }, [user]);
 
   const getMovieDetails = async (movieList: Models.Document[]) => {
-    const moviesWithDetails = await Promise.all(movieList.map(async (movie: any) => {
-      const details = await (await fetch(`${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/${movie.movieId}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${user.language}&append_to_response=credits`)).json();
-      const directors = details.credits.crew.filter((member: any) => member.job === 'Director');
-      const movieWithDetails = {
-        ...movie,
-        ...details,
-        directors,
+    const moviesWithDetails = await Promise.all(
+      movieList.map(async (movie: any) => {
+        const details = await (
+          await fetch(
+            `${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/${movie.movieId}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${user.language}&append_to_response=credits`
+          )
+        ).json();
+        const directors = details.credits.crew.filter(
+          (member: any) => member.job === 'Director'
+        );
+        const movieWithDetails = {
+          ...movie,
+          ...details,
+          directors,
+        };
+        return movieWithDetails;
+      })
+    );
+    setWatchlist(moviesWithDetails);
+  };
 
-      };
-      return movieWithDetails;
-    }));
-    setWatchlist(moviesWithDetails)
-  }
-
-    
   return (
-    <main className='h-full'>
-      <div>
-        WATCHLIST
-      </div>
+    <main className="h-full">
+      <div>WATCHLIST</div>
       <Table>
         {/* <TableCaption>Mes films à voir</TableCaption> */}
         <TableHeader>
@@ -74,54 +76,62 @@ export default function Watchlist() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {watchlist && watchlist.map((movie: any) => (
-            <TableRow key={movie.id}>
-              <Link href={"/movie/"+movie.id}>
-                <TableCell className="font-medium p-4 flex items-center gap-4">
-                  <div className="w-[30px]">
-                    <AspectRatio ratio={2/3}>
-                      <ImageWithFallback 
-                        src={"https://image.tmdb.org/t/p/w500/"+movie.poster_path} 
-                        alt={movie.title}
-                        fill
-                        className="rounded-md object-cover"
-                      />
-                    </AspectRatio>
-                  </div>
-                  {/* MOVIE DATA */}
-                  <div className="w-fit p-0 h-full text-base">
+          {watchlist &&
+            watchlist.map((movie: any) => (
+              <TableRow key={movie.id}>
+                <Link href={'/movie/' + movie.id}>
+                  <TableCell className="font-medium p-4 flex items-center gap-4">
+                    <div className="w-[30px]">
+                      <AspectRatio ratio={2 / 3}>
+                        <ImageWithFallback
+                          src={
+                            'https://image.tmdb.org/t/p/w500/' +
+                            movie.poster_path
+                          }
+                          alt={movie.title}
+                          fill
+                          className="rounded-md object-cover"
+                        />
+                      </AspectRatio>
+                    </div>
+                    {/* MOVIE DATA */}
+                    <div className="w-fit p-0 h-full text-base">
                       {movie.title}
-                  </div>
-              
-                </TableCell>
-              </Link>
-              <TableCell>
-                {movie.directors.length ? movie.directors.map((director: any, index: number) => (
-                    <span key={director.id}>
-                        <Button variant="link" className="w-fit p-0 h-full text-accent-1 font-normal italic" asChild>
-                            <Link href={`/person/${director.id}`}>
-                                {director.name}
-                            </Link>
+                    </div>
+                  </TableCell>
+                </Link>
+                <TableCell>
+                  {movie.directors.length ? (
+                    movie.directors.map((director: any, index: number) => (
+                      <span key={director.id}>
+                        <Button
+                          variant="link"
+                          className="w-fit p-0 h-full text-accent-1 font-normal italic"
+                          asChild
+                        >
+                          <Link href={`/person/${director.id}`}>
+                            {director.name}
+                          </Link>
                         </Button>
                         {index !== movie.directors.length - 1 && (
-                        <span>, </span>
+                          <span>, </span>
                         )}
-                    </span>
-                )) : (
+                      </span>
+                    ))
+                  ) : (
                     <span className="w-fit p-0 h-full text-accent-1 font-normal italic">
-                        Unknown
+                      Unknown
                     </span>
-                )}
-              </TableCell>
-              <TableCell>{movie.runtime}min</TableCell>
-              <TableCell className="text-right">{format(new Date(movie.$createdAt), "PPP", { locale: fr })}</TableCell>
-            </TableRow>
-          ))}
+                  )}
+                </TableCell>
+                <TableCell>{movie.runtime}min</TableCell>
+                <TableCell className="text-right">
+                  {format(new Date(movie.$createdAt), 'PPP', { locale: fr })}
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
-
-      
-
     </main>
-  )
+  );
 }

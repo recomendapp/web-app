@@ -1,22 +1,21 @@
-"use client"
+'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import mapboxgl, {  } from 'mapbox-gl';
+import mapboxgl from 'mapbox-gl';
 
 import MapPopup from './popup/MapPopup';
 
 // TMDB FUNCTION
-import { Icons } from '@/components/icons'
+import { Icons } from '@/components/icons';
 // import MapFilter from './mapfilters/MapFiltersOLD';
 import { MapFilters } from './mapfilters/mapfilters';
 import { Metadata } from 'next';
 
 export default function Map() {
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [isLoading, setIsLoading] = useState(true)
-
-  const mapContainer = useRef<any>("");
+  const mapContainer = useRef<any>('');
   const map = useRef<any>(null);
   const [viewport, setViewport] = useState<any>({
     longitude: 2.5,
@@ -30,60 +29,62 @@ export default function Map() {
       top: 0,
       bottom: 0,
       right: 0,
-      left: 0
+      left: 0,
     },
   });
   const [limitShowingMarkers, setLimitShowingMarkers] = useState(7);
 
   const [selectedMovie, setSelectedMovie] = useState<any>(null);
 
-  // SELECT MARKER 
+  // SELECT MARKER
   const handleSelectMovie = (marker: any) => {
-    console.log('CLICK SUR ', marker)
+    console.log('CLICK SUR ', marker);
     setSelectedMovie(marker); // DEFINE NEW SELECTED MOVIE
-  }
+  };
   // UNSELECT MARKER
   const handleUnselectMovie = () => {
-    console.log('UNSELECT')
+    console.log('UNSELECT');
     setSelectedMovie(null); // DELETE SELECTED MOVIE
-  }
-  
+  };
+
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
-    container: mapContainer.current,
-    style: 'mapbox://styles/loupqhc/clfe6uszy007x01rxt0epzrio',
-    accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
-    center: [viewport.longitude, viewport.latitude],
-    zoom: viewport.zoom,
-    maxZoom: viewport.maxZoom,
-    minZoom: viewport.minZoom
+      container: mapContainer.current,
+      style: 'mapbox://styles/loupqhc/clfe6uszy007x01rxt0epzrio',
+      accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN,
+      center: [viewport.longitude, viewport.latitude],
+      zoom: viewport.zoom,
+      maxZoom: viewport.maxZoom,
+      minZoom: viewport.minZoom,
     });
   });
 
   useEffect(() => {
     map.current.on('load', () => {
       // ADD SUBTITLE
-      map.current.addControl(new mapboxgl.AttributionControl({
-        customAttribution: 'Map design by Paradise Pictures'
-        }));
+      map.current.addControl(
+        new mapboxgl.AttributionControl({
+          customAttribution: 'Map design by Paradise Pictures',
+        })
+      );
 
       // ADD SOURCE
       map.current.addSource('markersooooo', {
         type: 'geojson',
-        data: 'movielist.geojson'
+        data: 'movielist.geojson',
       });
-  
+
       map.current.loadImage('profile-picture.jpg', (error: any, image: any) => {
         if (error) throw error;
         map.current.addImage('next', image);
       });
-      
+
       map.current.loadImage('test.jpg', (error: any, image: any) => {
         if (error) throw error;
         map.current.addImage('test', image);
       });
-  
+
       // ADDING MOVIES MARKERS
       map.current.addLayer({
         id: 'markers-layer',
@@ -94,19 +95,20 @@ export default function Map() {
           'text-field': ['get', 'Titre Film'],
           'text-size': 10,
           'text-anchor': 'left',
-          "text-offset": [1.5,0],
+          'text-offset': [1.5, 0],
           'icon-image': [
             'match',
             ['get', 'Genre'],
-            'Animation', 'test',
-            'next'
+            'Animation',
+            'test',
+            'next',
           ],
-          'icon-size': 0.05
+          'icon-size': 0.05,
         },
         paint: {
-          "text-color": 'yellow'
-        }
-      })
+          'text-color': 'yellow',
+        },
+      });
 
       // map.current.on('click', (e: any) => {
       //   handleUnselectMovie()
@@ -115,12 +117,12 @@ export default function Map() {
       // CLICK EVENT
       map.current.on('click', 'markers-layer', (e: any) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
-        const movieId = e.features[0].properties.id
+        const movieId = e.features[0].properties.id;
         const movieTitle = e.features[0].properties['Titre Film'];
         handleSelectMovie({
           id: movieId,
-          title: movieTitle
-        })
+          title: movieTitle,
+        });
         // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
         //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
         // }
@@ -130,9 +132,7 @@ export default function Map() {
         //   .addTo(map.current);
       });
 
-      
-
-        // Changez le curseur lorsqu'il survole le layer des markers
+      // Changez le curseur lorsqu'il survole le layer des markers
       map.current.on('mouseenter', 'markers-layer', () => {
         map.current.getCanvas().style.cursor = 'pointer';
       });
@@ -143,33 +143,32 @@ export default function Map() {
       });
 
       setTimeout(() => {
-        setIsLoading(false)
-      }, 1000)
-    })
-  }, [map.current])
-
-  
+        setIsLoading(false);
+      }, 1000);
+    });
+  }, [map.current]);
 
   return (
     <>
       {isLoading && (
-        <div className='bg-background absolute w-full h-full z-20 flex items-center justify-center'>
+        <div className="bg-background absolute w-full h-full z-20 flex items-center justify-center">
           <Icons.spinner className="animate-spin" />
         </div>
       )}
-      <div className='w-full h-full flex flex-col relative bg-blue-950 bg-opacity-20'>
+      <div className="w-full h-full flex flex-col relative bg-blue-950 bg-opacity-20">
         {/* HEADER MAP */}
-        <div className='absolute z-10  pt-4 px-4 gap-2  w-full pointer-events-none flex flex-col justify-between lg:flex-row'>
-          <div className='bg-green-500 pointer-events-auto'>
-            SEARCHBAR
-          </div>
-          <div className='flex justify-end pointer-events-auto'>
-            <MapFilters closePopupMovie={handleUnselectMovie} map={map.current} />
+        <div className="absolute z-10  pt-4 px-4 gap-2  w-full pointer-events-none flex flex-col justify-between lg:flex-row">
+          <div className="bg-green-500 pointer-events-auto">SEARCHBAR</div>
+          <div className="flex justify-end pointer-events-auto">
+            <MapFilters
+              closePopupMovie={handleUnselectMovie}
+              map={map.current}
+            />
           </div>
         </div>
         {selectedMovie && (
-          <MapPopup 
-            selectedMovie={selectedMovie} 
+          <MapPopup
+            selectedMovie={selectedMovie}
             onClose={handleUnselectMovie}
           />
         )}
@@ -177,5 +176,5 @@ export default function Map() {
         <div ref={mapContainer} className="map-container h-full w-full" />
       </div>
     </>
-  )
+  );
 }

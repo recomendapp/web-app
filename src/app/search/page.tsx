@@ -1,12 +1,14 @@
 // "use client"
 
 // import { useEffect, useState } from 'react'
-import { Metadata } from 'next'
+import { Metadata } from 'next';
 import { Skeleton } from '@/components/ui/skeleton';
-import FeaturedPlaylists from '@/components/FeaturedPlaylists';
+import FeaturedPlaylists from '@/components/movie/playlist/FeaturedPlaylists';
 import SearchResultsUsers from '@/components/search/SearchResultsUsers';
 import SearchResultsMovies from '@/components/search/SearchResultsMovies';
 import SearchResultsPlaylists from '@/components/search/SearchResultsPlaylists';
+import SearchFilters from '@/components/search/SearchFilters';
+import SearchBar from '@/components/search/searchbar';
 
 export async function generateMetadata({
   params,
@@ -15,15 +17,14 @@ export async function generateMetadata({
   params: { slug: string };
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  if(!searchParams?.q) {
-      return {
-          title: "Rechercher"
-      }
+  if (!searchParams?.q) {
+    return {
+      title: 'Rechercher',
+    };
   }
   return {
-      title: `${searchParams.q} - Recherche`
-  }
-  
+    title: `${searchParams.q} - Recherche`,
+  };
 }
 
 export default function Search({
@@ -33,9 +34,6 @@ export default function Search({
   params: { slug: string };
   searchParams?: { [key: string]: string | undefined };
 }) {
-
-
-
   // const skeleton = Array.from({ length: 20 }, (_, index) => (
   //   <div key={index} className="flex items-center space-x-4">
   //     <Skeleton className="h-12 w-12 rounded-full" />
@@ -69,8 +67,16 @@ export default function Search({
 
   return (
     <main className="p-4">
+      <div className="flex flex-col gap-4 pb-4 lg:hidden">
+        <div className="text-4xl font-bold">Recherche</div>
+        <SearchBar />
+      </div>
       {searchParams?.q ? (
-        <div className='flex flex-col gap-2'>
+        <div className="flex flex-col gap-2">
+          <SearchFilters
+            filter={searchParams?.filter}
+            query={searchParams?.q}
+          />
           <SearchResultsMovies query={searchParams?.q} />
           <SearchResultsUsers query={searchParams?.q} />
           <SearchResultsPlaylists query={searchParams?.q} />

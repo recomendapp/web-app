@@ -1,16 +1,12 @@
-import { Metadata } from "next"
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Map"
-}
+  title: 'Map',
+};
 interface MapLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function MapLayout({ children }: MapLayoutProps) {
-  return (
-    <>
-      {children}
-    </>
-  )
+  return <>{children}</>;
 }
