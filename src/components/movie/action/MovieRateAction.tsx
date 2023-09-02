@@ -51,7 +51,6 @@ export function MovieRateAction({
             {userId ? (
               <DialogTrigger asChild>
                 <Button
-                  // onClick={() => userId ? handleRateClick() : router.push('/login')}
                   onClick={() => {
                     !userId && router.push('/login');
                   }}
@@ -120,7 +119,7 @@ export function MovieRateAction({
                         </Label> */}
             <Input
               defaultValue={ratingValue}
-              min={0}
+              min={0.5}
               max={10}
               step={0.5}
               type="number"

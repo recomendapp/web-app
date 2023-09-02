@@ -5,17 +5,11 @@ import { MovieLikeAction } from './MovieLikeAction';
 import { MovieWatchAction } from './MovieWatchAction';
 import { MovieRateAction } from './MovieRateAction';
 import { MovieWatchDateAction } from './MovieWatchDateAction';
-
-import {
-  handleIsMovieLiked,
-  handleIsMovieWatched,
-  handleIsMovieRated,
-  handleIsMovieWatchlisted,
-} from '@/hooks/action/movie';
 import { MovieWatchlistAction } from './MovieWatchlistAction';
 import { MoviePlaylistAction } from './MoviePlaylistAction';
 import { MovieSendAction } from './MovieSendAction';
 import { Query } from 'appwrite';
+import { useQueryClient } from 'react-query';
 
 export function MovieAction({
   movieId,
@@ -25,20 +19,22 @@ export function MovieAction({
   userId: string;
 }) {
   const [isLiked, setIsLiked] = useState<boolean | null>(null);
-  const [isLikedId, setIsLikedId] = useState<string | null>(null); // APPWRITE DOCUMENT ID
+  const [isLikedId, setIsLikedId] = useState<string | null>(null);
   const [isWatched, setIsWatched] = useState<boolean | null>(null);
-  const [isWatchedId, setIsWatchedId] = useState<string | null>(null); // APPWRITE DOCUMENT ID
+  const [isWatchedId, setIsWatchedId] = useState<string | null>(null);
   const [watchedDate, setWatchedDate] = useState<Date | null>(null);
   const [isRated, setIsRated] = useState<number | null>(null);
-  const [isRatedId, setIsRatedId] = useState<string | null>(null); // APPWRITE DOCUMENT ID
+  const [isRatedId, setIsRatedId] = useState<string | null>(null);
   const [isWatchlisted, setIsWatchlisted] = useState<boolean | null>(null);
-  const [isWatchlistedId, setIsWatchlistedId] = useState<string | null>(null); // APPWRITE DOCUMENT ID
+  const [isWatchlistedId, setIsWatchlistedId] = useState<string | null>(null);
 
   useEffect(() => {
     if (userId && movieId) {
       init();
     }
   }, [userId, movieId]);
+
+  const queryClient = useQueryClient();
 
   const init = async () => {
     try {
@@ -114,37 +110,55 @@ export function MovieAction({
 
       // LIKE
       if (q.data.like.documents.length) {
+        queryClient.setQueryData(['movie', movieId, 'like', 'state'], true);
+        queryClient.setQueryData(['movie', movieId, 'like', 'id'], q.data.like.documents[0]._id);
         setIsLiked(true);
         setIsLikedId(q.data.like.documents[0]._id);
       } else {
+        queryClient.setQueryData(['movie', movieId, 'like', 'state'], false);
+        queryClient.setQueryData(['movie', movieId, 'like', 'id'], null);
         setIsLiked(false);
         setIsLikedId(null);
       }
       // WATCH
       if (q.data.watch.documents.length) {
+        queryClient.setQueryData(['movie', movieId, 'watch', 'state'], true);
+        queryClient.setQueryData(['movie', movieId, 'watch', 'id'], q.data.watch.documents[0]._id);
+        queryClient.setQueryData(['movie', movieId, 'watch', 'date'], new Date(JSON.parse(q.data.watch.documents[0].data).date));
         setIsWatched(true);
         setWatchedDate(
           new Date(JSON.parse(q.data.watch.documents[0].data).date)
         );
         setIsWatchedId(q.data.watch.documents[0]._id);
       } else {
+        queryClient.setQueryData(['movie', movieId, 'watch', 'state'], false);
+        queryClient.setQueryData(['movie', movieId, 'watch', 'id'], null);
+        queryClient.setQueryData(['movie', movieId, 'watch', 'date'], null);
         setIsWatched(false);
         setWatchedDate(null);
         setIsWatchedId(null);
       }
       // RATING
       if (q.data.rating.documents.length) {
+        queryClient.setQueryData(['movie', movieId, 'rating', 'value'], JSON.parse(q.data.rating.documents[0].data).rating);
+        queryClient.setQueryData(['movie', movieId, 'rating', 'id'], q.data.rating.documents[0]._id);
         setIsRated(JSON.parse(q.data.rating.documents[0].data).rating);
         setIsRatedId(q.data.rating.documents[0]._id);
       } else {
+        queryClient.setQueryData(['movie', movieId, 'rating', 'value'], null);
+        queryClient.setQueryData(['movie', movieId, 'rating', 'id'], null);
         setIsRated(null);
         setIsRatedId(null);
       }
       // WATCHLIST
       if (q.data.watchlist.documents.length) {
+        queryClient.setQueryData(['movie', movieId, 'watchlist', 'state'], true);
+        queryClient.setQueryData(['movie', movieId, 'watchlist', 'id'], q.data.watchlist.documents[0]._id);
         setIsWatchlisted(true);
         setIsWatchlistedId(q.data.watchlist.documents[0]._id);
       } else {
+        queryClient.setQueryData(['movie', movieId, 'watchlist', 'state'], false);
+        queryClient.setQueryData(['movie', movieId, 'watchlist', 'id'], null);
         setIsWatchlisted(false);
         setIsWatchlistedId(null);
       }
@@ -269,25 +283,20 @@ export function MovieAction({
   };
 
   const handleUpdateRate = async (ratingTMP: Number) => {
-    isRatedId &&
-      (await databases.deleteDocument(
+    if (isRatedId) {
+      const { $id, rating } = await databases.updateDocument(
         String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
         String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_RATED),
-        isRatedId
-      ));
-    const { $id, rating } = await databases.createDocument(
-      String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-      String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_RATED),
-      'unique()',
-      {
-        userId: userId,
-        movieId: movieId,
-        user: userId,
-        rating: ratingTMP,
-      }
-    );
-    setIsRated(rating);
-    setIsRatedId($id);
+        isRatedId,
+        {
+          prev_rating: isRated,
+          rating: ratingTMP
+        }
+      );
+  
+      setIsRated(rating);
+      setIsRatedId($id);
+    }
     return;
   };
 

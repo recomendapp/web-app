@@ -1,10 +1,10 @@
 'use client';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/ImageWithFallback';
-import { Button } from '../ui/button';
+import { Button } from '../../../../../components/ui/button';
 import Link from 'next/link';
 import { useUser } from '@/context/user';
-import { MovieAction } from './action/MovieAction';
+import { MovieAction } from '../../../../../components/movie/action/MovieAction';
 
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -12,71 +12,82 @@ import { databases } from '@/utils/appwrite';
 import { Query } from 'appwrite';
 import { useEffect, useState } from 'react';
 import { BarChart3, FileEdit, Heart, MessageSquare, Pencil, Repeat2, Share } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../../../../../components/ui/avatar';
 import { getInitiales } from '@/lib/utils';
 import { BsFillPatchCheckFill } from 'react-icons/bs';
-import { Textarea } from '../ui/textarea';
-import { Input } from '../ui/input';
+import { Textarea } from '../../../../../components/ui/textarea';
+import { Input } from '../../../../../components/ui/input';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../../../../../components/ui/select';
+import { MovieUserReview } from './MovieUserReview';
+import { useQuery } from 'react-query';
 
 export function MovieReview({ movie }: { movie: any }) {
   const { user } = useUser();
   const offset = 0;
 
-  const [ reviews, setReviews ] = useState<any>()
-  const [ userReview, setUserReview ] = useState<any>()
-  const [ isEdit, setIsEdit ] = useState(false);
+  // const [ reviews, setReviews ] = useState<any>()
+  const [ order, setOrder ] = useState("recommended");
 
-  useEffect(() => {
-    getReviews();
-    getUserReview();
-  }, [movie])
+  // useEffect(() => {
+  //   getReviews();
+  // }, [movie, order])
+
+  const { data: reviews, isLoading, error } = useQuery(['movie', movie.id, 'reviews', order], () => getReviews());
 
   const getReviews = async () => {
     const payload = [
       Query.equal("movieId", movie.id),
       Query.limit(10),
-      Query.offset(offset),
-      Query.orderAsc("views_count")
+      Query.offset(offset)
     ]
-    if (user) {
-      payload.push( Query.notEqual("userId", user.$id))
+    switch (order) {
+      case "recommended":
+        payload.push(Query.orderDesc("views_count"));
+        break;
+      case "recent":
+        payload.push(Query.orderDesc("$updatedAt"));
+        break;
+      case "rating-desc":
+        payload.push(Query.orderDesc("movie_rating"));
+        break;
+      case "rating-asc":
+        payload.push(Query.orderAsc("movie_rating"));
+        break;
     }
     const { documents } = await databases.listDocuments(
       String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
       String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_REVIEW),
       payload
     );
-    setReviews(documents);
+
+    return (documents)
   };
 
-  const getUserReview = async () => {
-    const { documents } = await databases.listDocuments(
-      String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-      String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_REVIEW),
-      [
-        Query.equal("movieId", movie.id),
-        Query.equal("userId", user.$id),
-      ]
-    );
-    setUserReview(documents[0]);
-  };
+  if (error)
+    return <div>Error</div>
+
+  if (!reviews)
+    return <div>Loading</div>
 
   return (
     <div className="w-full flex flex-col gap-4">
-      {/* USER */}
-      {/* {user && userReview && 
-        <MovieReviewItem movieId={movie.id} review={userReview} user={setIsEdit}/>
-      }
-      {user && !userReview &&  
-        <MovieReviewEdit movieId={movie.id} review={userReview} user={user} />
-      } */}
       <div className='flex justify-between'>
-        <div className='bg-blue-500 rounded-full px-4 py-1 flex gap-2 items-center'>
-          <FileEdit />
-          Ma critique
-        </div>
-        <div>
+        <MovieUserReview movie={movie} />
+        <div className='flex flex-1 justify-end gap-2 items-center'>
           Trier par
+          <Select onValueChange={setOrder} defaultValue={order}>
+            <SelectTrigger className="w-fit">
+              <SelectValue  placeholder="Langue" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                  <SelectItem value={"recommended"}>Recommandées</SelectItem>
+                  <SelectItem value={"recent"}>Récentes</SelectItem>
+                  <SelectItem value={"rating-desc"}>Notes décroissantes</SelectItem>
+                  <SelectItem value={"rating-asc"}>Notes croissantes</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       {/* ALL */}
@@ -128,35 +139,47 @@ export function MovieReviewEdit({ movieId, review, user } : { movieId: number, r
 }
 
 export function MovieReviewItem({ movieId, review, user }: { movieId: number, review: any, user: any}) {
-
+  console.log('review', review)
   return (
     <Link key={movieId} href={`/movie/${movieId}/review/${review.$id}`} className='h-fit w-full bg-accent-1-foreground p-4 rounded-md flex flex-col gap-4'>
       {/* USER */}
-      <Link href={'/@' + review.user.username} className='flex gap-2 justify-between'>
-        
-        <div className='flex gap-2 w-fit'>
-          <Avatar className="w-[50px] h-[50px]">
-            <AvatarImage src={review.user.avatar} alt={review.user.username} />
-            <AvatarFallback className="text-[25px]">
-              {getInitiales(review.user)}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex justify-center items-center gap-1">
-            <span className='hover:underline'>
-              {review.user.username}
-            </span>
-            {review.user.verify && <BsFillPatchCheckFill fill="#1D9BF0" size={16} />}
-            <span className=' text-muted-foreground'>
-              @{review.user.username}
-            </span>
-          </div>
+      <div  className='flex gap-2 justify-between'>
+          <Link href={'/@' + review.user.username} className='flex gap-2 w-fit '>
+            <Avatar className="w-[50px] h-[50px]">
+              <AvatarImage src={review.user.avatar} alt={review.user.username} />
+              <AvatarFallback className="text-[25px]">
+                {getInitiales(review.user)}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex justify-center items-center gap-1">
+              <span className='hover:underline'>
+                {review.user.username}
+              </span>
+              {review.user.verify && <BsFillPatchCheckFill fill="#1D9BF0" size={16} />}
+              <span className=' text-muted-foreground'>
+                @{review.user.username}
+              </span>
+            </div>
+          </Link>
+        {/* EXTRA DATA */}
+        <div className='flex items-center  gap-2'>
+          {review.movie_rating && 
+            <div className='border p-1'>
+              {review.movie_rating}
+            </div>
+          }
+          {review.movie_liked && 
+            <div>
+              <Heart fill='white' />
+            </div>
+          }
         </div>
         {/* EDIT BUTTON */}
-        {user && (review.user.$id == user.$id) && <Button onClick={(e) => {
+        {/* {user && (review.user.$id == user.$id) && <Button onClick={(e) => {
           e.preventDefault();
           // setIsEdit(true)
-        }} variant={"ghost"}><Pencil size={"icon"} /></Button>}
-      </Link>
+        }} variant={"ghost"}><Pencil size={"icon"} /></Button>} */}
+      </div>
       {/* REVIEW */}
       <div className='flex flex-col gap-4'>
         {/* TITLE */}

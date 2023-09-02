@@ -118,8 +118,8 @@ export function MovieActionCounter({ movieId }: { movieId: string }) {
         <Bookmark className='inline' fill='white' size={20}/>
         {movieWatchlistedCounter ? movieWatchlistedCounter : 0}
       </span>
-      {/* Rating: {totalMovieRated}
-      Likes: {movieLikedCounter}
+      Rating: {movieAverageRating}
+      {/* Likes: {movieLikedCounter}
       Watch: {movieWatchedCounter}
       Watchlist: {movieWatchlistedCounter} */}
     </div>

@@ -45,11 +45,28 @@ export default async function Playlist({
 }: {
   params: { playlist: string };
 }) {
-  let playlist = await getPlaylistDetails(params.playlist);
+  const playlist = await getPlaylistDetails(params.playlist);
 
   if (!playlist) {
-    return <div>NOT FOUND</div>;
+    return <NotFound />;
   }
 
   return <PlaylistDetails playlistServer={playlist} />;
+}
+
+export function NotFound() {
+  return (
+    <main 
+      className="bg-white w-full h-full flex justify-center items-center"
+      style={{
+        backgroundImage: `url('https://s.ltrbxd.com/static/img/errors/not-found-2.f67937bb.jpg')`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      <div className='text-4xl font-bold'>
+        Oups, cette playlist n'existe pas !
+      </div>
+    </main>
+  )
 }

@@ -15,7 +15,7 @@ import {
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { MovieActionCounter } from '../../../components/count/MovieActionCounter';
-import { MovieReview } from '../../../components/movie/MovieReview';
+import { MovieReview } from '../../movie/[movie]/reviews/assets/MovieReview';
 import { PersonFollowButton } from '@/components/button/PersonFollowButton';
 import TMP from '@/components/TMP';
 

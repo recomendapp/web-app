@@ -37,7 +37,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { MovieActionCounter } from '@/components/count/MovieActionCounter';
-import { MovieReview } from '@/components/movie/MovieReview';
+import { MovieReview } from './reviews/assets/MovieReview'
 import Image from 'next/image';
 import { Play, PlayCircle, PlayCircleIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -173,10 +173,6 @@ function TrailerButton({
 }) {
   const [ selectedTrailer, setSelectedTailer ] = useState<string>(trailer.results.toReversed()[0].key);
   
-  // useEffect(() => {
-  //   setSelectedTailer()
-  // }, trailer)
-  
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -190,7 +186,7 @@ function TrailerButton({
           <DialogTitle>Trailer</DialogTitle>
           <Select onValueChange={setSelectedTailer} defaultValue={selectedTrailer}>
             <SelectTrigger className="w-fit">
-              <SelectValue  placeholder="Langue" />
+              <SelectValue placeholder="Langue" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -212,6 +208,7 @@ function MovieTabs({
 } : {
   movie: any
 }) {
+  
   return (
     <Tabs defaultValue="description" className=" w-full px-4 pb-4">
         <TabsList className='w-full rounded-full'>

@@ -33,7 +33,7 @@ export function PlaylistButton({
   return (
     <Dialog open={playlistModalIsOpen} onOpenChange={setPlaylistModalIsOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="">
+      <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>
             {playlist ? 'Modifier les informations' : 'Créer une playlist'}

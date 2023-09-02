@@ -9,6 +9,7 @@ const nextConfig = {
       'mosaic.scdn.co',
       'misc.scdn.co',
       'localhost',
+      's.ltrbxd.com'
     ],
   },
   async redirects() {

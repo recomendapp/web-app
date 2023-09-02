@@ -7,11 +7,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { databases } from '@/utils/appwrite';
-import { Query } from 'appwrite';
-import { Models } from 'appwrite/types/models';
 
 import {
   Command,
@@ -28,25 +25,15 @@ import {
 } from '@/components/ui/popover';
 
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-
 import { toast } from 'react-toastify';
 
-import Loader from '@/components/loader';
-
 import { DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { Textarea } from '@/components/ui/textarea';
 import { PlaylistButton } from '@/components/movie/playlist/PlaylistButton';
+import handlePlaylists from '@/hooks/movie/playlist/handlePlaylists';
+import { useQuery } from 'react-query';
 
 interface MoviePlaylistActionProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -58,35 +45,43 @@ export function MoviePlaylistAction({
   userId,
   movieId,
 }: MoviePlaylistActionProps) {
-  const router = useRouter();
 
-  const [playlist, setPlaylist] = useState<Models.Document[]>();
+  // const [playlist, setPlaylist] = useState<Models.Document[]>();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [isError, setIsError] = useState(false);
 
   const [open, setOpen] = useState(false);
-  const [createPlaylistModalIsOpen, setCreatePlaylistModalIsOpen] =
-    useState(false);
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    userId &&
-      movieId &&
-      databases
-        .listDocuments(
-          String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-          String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST),
-          [Query.equal('userId', userId)]
-        )
-        .then((response) => {
-          console.log('respnose', response.documents);
-          setPlaylist(response.documents);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-  }, [userId, movieId]);
+  // useEffect(() => {
+  //   userId &&
+  //     movieId &&
+  //     databases
+  //       .listDocuments(
+  //         String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
+  //         String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST),
+  //         [Query.equal('userId', userId)]
+  //       )
+  //       .then((response) => {
+  //         console.log('respnose', response.documents);
+  //         setPlaylist(response.documents);
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+  // }, [userId, movieId]);
+
+  const {
+    data: playlists,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['user', userId, 'playlists'],
+    queryFn: () => handlePlaylists(userId),
+    enabled: userId !== undefined && userId !== null,
+    // staleTime: 30_000
+  });
 
   const handleAddToPlaylist = async (id: string, title: string) => {
     try {
@@ -156,7 +151,7 @@ export function MoviePlaylistAction({
               </DialogTrigger>
               <DropdownMenuSeparator />
               <CommandGroup>
-                {playlist?.map((item) => (
+                {playlists?.map((item) => (
                   <CommandItem
                     key={item.$id}
                     onSelect={() => {

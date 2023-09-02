@@ -74,7 +74,6 @@ export function Sidebar({
     queryKey: ['user', user?.$id, 'playlists'],
     queryFn: () => handlePlaylists(user.$id),
     enabled: user?.$id !== undefined && user?.$id !== null,
-    // staleTime: 30_000
   });
 
   const pathname = usePathname();

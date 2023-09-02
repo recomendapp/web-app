@@ -17,3 +17,19 @@ export const getInitiales = (user: any) => {
   }
   return initials;
 };
+
+export function convertDuration(duration: number) {
+  const hours = Math.floor(duration / 60);
+  const remainingMinutes = duration % 60;
+
+  return `${hours}h${remainingMinutes}`;
+}
+
+export function convertDate(date: string) {
+  const parts = date.split('-');
+  const year = parts[0];
+  const month = parts[1];
+  const day = parts[2];
+
+  return `${day}/${month}/${year}`;
+}
