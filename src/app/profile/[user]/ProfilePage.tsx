@@ -12,7 +12,7 @@ import { useUser } from '@/context/user';
 import { useEffect, useState } from 'react';
 import { BadgeCheck } from 'lucide-react';
 import { BsFillPatchCheckFill } from 'react-icons/bs';
-import { getInitiales } from '@/lib/utils';
+import { getInitiales } from '@/lib/utils/utils';
 
 export default function ProfilePage({ userPage }: { userPage: any }) {
   const { user } = useUser();

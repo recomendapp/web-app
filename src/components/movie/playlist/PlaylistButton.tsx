@@ -8,31 +8,33 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-import { Dispatch, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { PlaylistForm } from '@/components/movie/playlist/PlaylistForm';
 import { useQueryClient } from 'react-query';
+import { Models } from 'appwrite';
 
-interface PlaylistButtonProps extends React.HTMLAttributes<HTMLDivElement> {
+interface PlaylistButtonProps {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   userId: string;
   movieId?: number;
-  playlist?: any;
-  setPlaylist?: Dispatch<any>;
+  playlist?: Models.Document;
+  setPlaylist?: Dispatch<SetStateAction<Models.Document>>;
 }
 
 export function PlaylistButton({
-  children,
+  open,
+  setOpen,
   userId,
   movieId,
   playlist,
   setPlaylist,
 }: PlaylistButtonProps) {
-  const [playlistModalIsOpen, setPlaylistModalIsOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
   return (
-    <Dialog open={playlistModalIsOpen} onOpenChange={setPlaylistModalIsOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>
@@ -41,7 +43,7 @@ export function PlaylistButton({
         </DialogHeader>
         <PlaylistForm
           success={() => {
-            setPlaylistModalIsOpen(false);
+            setOpen(false);
             queryClient.invalidateQueries(['user', userId, 'playlists']);
           }}
           userId={userId}

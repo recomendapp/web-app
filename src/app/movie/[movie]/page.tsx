@@ -26,12 +26,12 @@ export default async function Movie({ params }: { params: { movie: string } }) {
   if (movie.success === false) throw Error;
 
   return (
-    <div>
+    <main>
       <MovieHeader movie={movie} />
       <div className='px-4 pb-4'>
         <MovieNavbar focus={"description"} movieId={movie.id} />
         <MovieDescription movie={movie} />
       </div>
-    </div>
+    </main>
   )
 }

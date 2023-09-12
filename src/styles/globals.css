@@ -5,15 +5,19 @@
 @layer base {
   :root {
     /* COLORS */
-    --accent-1: 44, 97%, 54%;
+    --accent-1: #FFE974;
     --accent-1-foreground: #000;
     --accent-1-hover: 44, 97%, 40%;
 
-    --background: 0 0% 7%;
+    --like: #f788d2;
+    --like-foreground: #000000;
+    --like-hover: #f32fb2;
+
+    --background: #000000;
     --foreground: 0 100% 100%;
 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: #0e0e0e;
+    --muted-foreground: #929292;
 
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
@@ -28,9 +32,8 @@
     --primary-subued: 0 0% 65%;
     --primary-foreground: 240 5.9% 10%;
 
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --secondary-hover: 240 3.7% 20%;
+    --secondary: #0e0e0e;
+    --secondary-foreground: #fff;
 
     --accent: 240 3.7% 15.9%;
     --accent-foreground: ;
@@ -44,6 +47,10 @@
 
     /* NAVBAR */
     --navbar-background-color: #000000;
+
+    /* SCROLLBAR */
+    --scrollbar: #858585;
+    --scrollbar-hover: #383838;
 
     /* HEIGHT */
     --height-header: 64px;
@@ -101,6 +108,28 @@ body {
   /* -webkit-user-select: none; */
   /* user-select: none; */
 }
+
+/* Scroll bar stylings */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--lightestgrey); 
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar); 
+    /* border-radius: 5px; */
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-hover); 
+  }
 
 /* @tailwind base;
 @tailwind components;

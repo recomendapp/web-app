@@ -5,7 +5,7 @@ import { ImageWithFallback } from '@/components/ImageWithFallback';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useUser } from '@/context/user';
-import { MovieAction } from '@/components/movie/action/MovieAction';
+import { MovieAction } from '@/components/movie/action/MovieAction/MovieAction';
 import {
   Tooltip,
   TooltipContent,
@@ -37,7 +37,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { MovieActionCounter } from '@/components/count/MovieActionCounter';
-import { MovieReview } from './reviews/assets/MovieReview'
+import { MovieReview } from './reviews/assets/MovieReviews'
 import Image from 'next/image';
 import { Play, PlayCircle, PlayCircleIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';

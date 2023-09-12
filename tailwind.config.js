@@ -24,12 +24,17 @@ module.exports = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
+        background: 'var(--background)',
         foreground: 'hsl(var(--foreground))',
         'accent-1': {
-          DEFAULT: 'hsl(var(--accent-1))',
+          DEFAULT: 'var(--accent-1)',
           foreground: 'var(--accent-1-foreground)',
           hover: 'hsl(var(--accent-1-hover))',
+        },
+        'like': {
+          DEFAULT: 'var(--like)',
+          foreground: 'var(--like-foreground)',
+          hover: 'var(--like-hover)',
         },
         primary: {
           DEFAULT: 'hsl(var(--primary))',
@@ -37,17 +42,16 @@ module.exports = {
           foreground: 'hsl(var(--primary-foreground))',
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-          hover: 'hsl(var(--secondary-hover))',
+          DEFAULT: 'var(--secondary)',
+          foreground: 'var(--secondary-foreground)',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
         },
         muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
+          DEFAULT: 'var(--muted)',
+          foreground: 'var(--muted-foreground)',
         },
         accent: {
           DEFAULT: 'hsl(var(--accent))',
@@ -62,6 +66,9 @@ module.exports = {
           foreground: 'hsl(var(--card-foreground))',
         },
         navbar: 'var(--navbar-background-color)',
+      },
+      fontSize: {
+        clamp: "clamp(1rem, 5vw, 3rem)",
       },
       height: {
         header: 'var(--height-header)',
@@ -92,7 +99,55 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            '--tw-prose-body': '#fff',
+            '--tw-prose-headings': 'var(--accent-1)',
+            '--tw-prose-lead': '#fff',
+            '--tw-prose-links': '#fff',
+            '--tw-prose-bold': '#fff',
+            '--tw-prose-counters': '#fff',
+            '--tw-prose-bullets': '#fff',
+            '--tw-prose-hr': '#fff',
+            '--tw-prose-quotes': '#fff',
+            '--tw-prose-quote-borders': '#fff',
+            '--tw-prose-captions': '#fff',
+            '--tw-prose-code': '#fff',
+            '--tw-prose-pre-code': '#fff',
+            '--tw-prose-pre-bg': '#fff',
+            '--tw-prose-th-borders': '#fff',
+            '--tw-prose-td-borders': '#fff',
+            '--tw-prose-invert-body': '#000',
+            '--tw-prose-invert-headings': '#000',
+            '--tw-prose-invert-lead': '#000',
+            '--tw-prose-invert-links': '#000',
+            '--tw-prose-invert-bold': '#000',
+            '--tw-prose-invert-counters': '#000',
+            '--tw-prose-invert-bullets': '#000',
+            '--tw-prose-invert-hr': '#000',
+            '--tw-prose-invert-quotes': '#000',
+            '--tw-prose-invert-quote-borders': '#000',
+            '--tw-prose-invert-captions': '#000',
+            '--tw-prose-invert-code': '#000',
+            '--tw-prose-invert-pre-code': '#000',
+            '--tw-prose-invert-pre-bg': 'rgb(0 0 0 / 50%)',
+            '--tw-prose-invert-th-borders': '#000',
+            '--tw-prose-invert-td-borders': '#000',
+            // color: '#333',
+            // a: {
+            //   color: '#3182ce',
+            //   '&:hover': {
+            //     color: '#2c5282',
+            //   },
+            // },
+          },
+        },
+      },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('@tailwindcss/typography')
+  ],
 };

@@ -144,7 +144,7 @@ function CastPoster({
         </div>
         {/* NAME */}
         <div>{person.name}</div>
-        <div className='text-accent-1 italic text-sm'>{person.character}</div>
+        <div className='text-accent-1 italic text-sm text-center'>{person.character}</div>
       </Link>
     )
   }

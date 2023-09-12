@@ -1,13 +1,13 @@
 import '@/styles/globals.css';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { fontSans } from '@/lib/fonts';
 
 import { UserProvider, useUser } from '@/context/user';
 
 import { ThemeProvider } from '@/components/theme-provider';
-import { Sidebar } from '@/components/sidebar';
+import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { Navbar } from '@/components/navbar';
 import { Header } from '@/components/header';
 
@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ReactQueryProvider } from '@/utils/ReactQuery';
 import Script from 'next/script';
 import MainContent from '@/components/layouts/MainContent';
+import { ApolloClientProvider } from '@/utils/apollo';
 
 export const metadata: Metadata = {
   title: {
@@ -42,37 +43,31 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1380362797599640"
-          crossOrigin="anonymous"
-          strategy="lazyOnload"
-        />
-      </head>
       <body
         className={cn(
-          'h-screen w-screen flex flex-col bg-black font-sans antialiased',
+          'h-screen w-screen flex flex-col bg-[#080808] font-sans antialiased',
           fontSans.variable
         )}
       >
-        <UserProvider>
-          <ReactQueryProvider>
-            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-              <MainContent>{children}</MainContent>
-              <Navbar className=" z-[50] fixed w-full bottom-0 lg:hidden h-navbar" />
-              <ToastContainer
-                position="top-center"
-                theme="colored"
-                autoClose={3000}
-                hideProgressBar={false}
-                pauseOnHover={false}
-                draggable
-                closeOnClick
-              />
-            </ThemeProvider>
-          </ReactQueryProvider>
-        </UserProvider>
+        <ApolloClientProvider>
+          <UserProvider>
+            <ReactQueryProvider>
+              <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+                <MainContent>{children}</MainContent>
+                <Navbar className=" z-[50] fixed w-full bottom-0 lg:hidden h-navbar" />
+                <ToastContainer
+                  position="top-center"
+                  theme="dark"
+                  autoClose={3000}
+                  hideProgressBar={false}
+                  pauseOnHover={false}
+                  draggable
+                  closeOnClick
+                />
+              </ThemeProvider>
+            </ReactQueryProvider>
+          </UserProvider>
+        </ApolloClientProvider>
       </body>
     </html>
   );

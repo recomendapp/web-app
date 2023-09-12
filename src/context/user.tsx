@@ -2,9 +2,10 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { account, databases } from '@/utils/appwrite';
+import { User } from '@/types/type.user';
 
 export interface UserState {
-  user: any;
+  user: User;
   userLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;

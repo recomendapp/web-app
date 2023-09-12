@@ -18,6 +18,8 @@ client
   .setEndpoint(String(process.env.NEXT_PUBLIC_APPWRITE_END_POINT))
   .setProject(String(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID));
 
+
+
 // GraphQL
 export const graphql = new Graphql(client);
 

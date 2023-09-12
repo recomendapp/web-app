@@ -1,7 +1,7 @@
 'use client';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { ScrollArea } from '../ui/scroll-area';
-import { Sidebar } from '../sidebar';
+import { Sidebar } from '../Sidebar/Sidebar';
 import { Header } from '../header';
 import { useEffect, useState } from 'react';
 
@@ -78,9 +78,9 @@ export default function MainContent({ children, className }: MainContentProps) {
         className="hidden lg:block w-2 h-full cursor-col-resize"
         onMouseDown={onMouseDown}
       />
-      <div className="flex flex-col bg-background col-span-3 lg:col-span-4 overflow-y-auto rounded-md h-full w-full">
+      <div className="flex flex-col bg-background col-span-3 lg:col-span-4 overflow-y-auto overflow-x-hidden rounded-md h-full w-full">
         <Header />
-        <div className="flex-grow relative pb-[150px] lg:pb-0 h-full">
+        <div className="flex-grow relative lg:pb-0 h-full">
           {children}
         </div>
       </div>

@@ -193,6 +193,15 @@ export function PlaylistForm({
             ),
             { type: compressedImage.type }
           );
+          
+          // DELETE OLD PLAYLIST PICTURE
+          if (oldPathToPlaylistPicture) {
+            await storage.deleteFile(
+              String(process.env.NEXT_PUBLIC_APPWRITE_STORAGE_PLAYLISTS_POSTER),
+              oldPathToPlaylistPicture.split('/').reverse()[1]
+            );
+          }
+
           // UPLOAD THE PLAYLIST PICTURE
           const { $id } = await storage.createFile(
             String(process.env.NEXT_PUBLIC_APPWRITE_STORAGE_PLAYLISTS_POSTER),
@@ -208,14 +217,6 @@ export function PlaylistForm({
               poster_path: `${process.env.NEXT_PUBLIC_APPWRITE_END_POINT}/storage/buckets/${process.env.NEXT_PUBLIC_APPWRITE_STORAGE_PLAYLISTS_POSTER}/files/${$id}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`,
             }
           );
-
-          // DELETE OLD PLAYLIST PICTURE
-          if (oldPathToPlaylistPicture) {
-            await storage.deleteFile(
-              String(process.env.NEXT_PUBLIC_APPWRITE_STORAGE_PLAYLISTS_POSTER),
-              oldPathToPlaylistPicture.split('/').reverse()[1]
-            );
-          }
           return;
         },
       });

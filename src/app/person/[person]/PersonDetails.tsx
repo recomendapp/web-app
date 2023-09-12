@@ -4,7 +4,7 @@ import { ImageWithFallback } from '@/components/ImageWithFallback';
 import { Button } from '../../../components/ui/button';
 import Link from 'next/link';
 import { useUser } from '@/context/user';
-import { MovieAction } from '../../../components/movie/action/MovieAction';
+import { MovieAction } from '../../../components/movie/action/MovieAction/MovieAction';
 import {
   Tooltip,
   TooltipContent,
@@ -15,7 +15,7 @@ import {
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { MovieActionCounter } from '../../../components/count/MovieActionCounter';
-import { MovieReview } from '../../movie/[movie]/reviews/assets/MovieReview';
+import { MovieReview } from '../../movie/[movie]/reviews/assets/MovieReviews';
 import { PersonFollowButton } from '@/components/button/PersonFollowButton';
 import TMP from '@/components/TMP';
 

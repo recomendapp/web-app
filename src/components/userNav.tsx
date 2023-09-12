@@ -20,7 +20,7 @@ import Link from 'next/link';
 import { useUser } from '@/context/user';
 import { Skeleton } from '@/components/ui/skeleton';
 import Novu from '@/utils/novu';
-import { getInitiales } from '@/lib/utils';
+import { getInitiales } from '@/lib/utils/utils';
 
 interface UserNavProps extends React.HTMLAttributes<HTMLDivElement> {
   skeleton?: boolean;
@@ -51,7 +51,7 @@ export function UserNav({ skeleton }: UserNavProps) {
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
               <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback>{getInitiales(user)}</AvatarFallback>
+              <AvatarFallback>{getInitiales(user.username)}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>

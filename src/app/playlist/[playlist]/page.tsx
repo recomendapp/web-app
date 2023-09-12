@@ -1,22 +1,17 @@
 import {
-  checkUsernameExist,
   databases,
-  getUserDetails,
 } from '@/utils/appwrite';
-import { PlusCircle } from 'lucide-react';
-import PlaylistItems from './PlaylistItems';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { ImageWithFallback } from '@/components/ImageWithFallback';
 import PlaylistDetails from '@/components/movie/playlist/PlaylistDetails';
+import { handleGetPlaylist } from '@/api/movie/movie_playlist';
 
 export async function generateMetadata({
   params,
 }: {
   params: { playlist: string };
 }) {
-  const playlist = await getPlaylistDetails(params.playlist);
+  const playlist = await handleGetPlaylist(params.playlist);
+  // const movies = await getMovieDetails();
+
   if (!playlist) {
     return {
       title: 'Oups, playlist introuvable !',
@@ -28,30 +23,24 @@ export async function generateMetadata({
   };
 }
 
-async function getPlaylistDetails(id: string) {
-  try {
-    return await databases.getDocument(
-      String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-      String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST),
-      id
-    );
-  } catch (error) {
-    return;
-  }
-}
-
 export default async function Playlist({
   params,
 }: {
   params: { playlist: string };
 }) {
-  const playlist = await getPlaylistDetails(params.playlist);
+  const playlist = await handleGetPlaylist(params.playlist);
 
   if (!playlist) {
-    return <NotFound />;
+    throw Error();
+    // return <NotFound />;
   }
 
-  return <PlaylistDetails playlistServer={playlist} />;
+  return (
+    <div className='w-full h-full flex flex-col justify-center items-center'>
+      <PlaylistDetails playlistServer={playlist} />
+    </div>
+
+  )
 }
 
 export function NotFound() {
@@ -65,7 +54,7 @@ export function NotFound() {
       }}
     >
       <div className='text-4xl font-bold'>
-        Oups, cette playlist n'existe pas !
+        Oups, playlist introuvable !
       </div>
     </main>
   )
