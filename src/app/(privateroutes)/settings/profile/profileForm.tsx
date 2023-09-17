@@ -27,8 +27,8 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 // import { toast } from "@/components/ui/use-toast"
 import { toast } from 'react-toastify';
-import { useUser } from '@/context/user';
-import { account, checkUsernameExist, databases } from '@/utils/appwrite';
+import { useUser } from '@/context/UserProvider';
+import { account, checkUsernameExist, databases } from '@/db/appwrite';
 import { useRouter } from 'next/navigation';
 
 import { X } from 'lucide-react';
@@ -41,7 +41,7 @@ export function ProfileForm() {
   const { user, userRefresh } = useUser();
 
   const profileFormSchema = z.object({
-    name: z
+    full_name: z
       .string()
       .min(1, {
         message: 'Le nom doit comporter au moins 1 caractère.',
@@ -56,21 +56,27 @@ export function ProfileForm() {
         message: 'La bio ne doit pas dépasser 160 caractères.',
       })
       .optional(),
-    urls: z
-      .array(
-        z.object({
-          value: z.string().url({ message: 'Veuillez entrer une URL valide.' }),
-        })
-      )
+    link: z.
+      string()
+      .url({ 
+        message: 'Veuillez entrer une URL valide.'
+      })
       .optional(),
+    // urls: z
+    //   .array(
+    //     z.object({
+    //       value: z.string().url({ message: 'Veuillez entrer une URL valide.' }),
+    //     })
+    //   )
+    //   .optional(),
   });
 
   type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
   const defaultValues: Partial<ProfileFormValues> = {
-    name: user.name,
+    full_name: user.full_name,
     bio: user.bio ? user.bio : '',
-    urls: user.url,
+    link: user.link,
     // urls: [
     //   { value: "https://shadcn.com" },
     //   { value: "http://twitter.com/shadcn" },
@@ -83,20 +89,17 @@ export function ProfileForm() {
     mode: 'onChange',
   });
 
-  const { fields, append, remove } = useFieldArray({
-    name: 'urls',
-    control: form.control,
-  });
-
   async function onSubmit(data: ProfileFormValues) {
     try {
-      user.name !== data.name && (await account.updateName(data.name));
+      await account.updateName(data.full_name);
       await databases.updateDocument(
         String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
         String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER),
         user.$id,
         {
+          full_name: data.full_name,
           bio: data.bio,
+          link: data.link
         }
       );
       await userRefresh();
@@ -124,14 +127,14 @@ export function ProfileForm() {
         <PictureUpload user={user} userRefresh={userRefresh} />
         <FormField
           control={form.control}
-          name="name"
+          name="full_name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nom</FormLabel>
               <FormControl>
                 <Input
                   disabled={!user.emailVerification ? true : false}
-                  placeholder={user.name}
+                  placeholder={user.full_name}
                   {...field}
                 />
               </FormControl>
@@ -164,51 +167,37 @@ export function ProfileForm() {
             </FormItem>
           )}
         />
-        <div>
-          {fields.map((field, index) => (
-            <FormField
-              control={form.control}
-              key={field.id}
-              name={`urls.${index}.value`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={cn(index !== 0 && 'sr-only')}>
-                    URLs
-                  </FormLabel>
-                  <FormDescription className={cn(index !== 0 && 'sr-only ')}>
-                    Ajoutez des liens vers votre site web, blog ou profils sur
-                    les réseaux sociaux.
-                  </FormDescription>
-                  <FormControl>
-                    <div className="flex items-center gap-4">
-                      <Input {...field} />
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className=" rounded-full"
-                        onClick={() => remove(index)}
-                      >
-                        <X />
-                      </Button>
-                    </div>
-                  </FormControl>
+        <FormField
+          control={form.control}
+          name={"link"}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                URL
+              </FormLabel>
+              <FormControl>
+                <Input
+                type='url'
+                placeholder='https://examples.com'
+                  {...field}
+                />
+                {/* <div className="flex items-center gap-4">
+                  <Input {...field} />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className=" rounded-full"
+                    onClick={() => remove(index)}
+                  >
+                    <X />
+                  </Button>
+                </div> */}
+              </FormControl>
 
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-          <Button
-            disabled={!user.emailVerification ? true : false}
-            type="button"
-            variant="outline"
-            size="sm"
-            className="mt-2"
-            onClick={() => fields.length < 5 && append({ value: '' })}
-          >
-            {fields.length === 0 ? 'Ajouter des liens' : 'Ajouter un lien'}
-          </Button>
-        </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <Button disabled={!user.emailVerification ? true : false} type="submit">
           Enregistrer
         </Button>

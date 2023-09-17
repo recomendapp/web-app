@@ -1,0 +1,59 @@
+'use client';
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+
+import { Dispatch, SetStateAction, useState } from 'react';
+import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
+import { useQueryClient } from 'react-query';
+import { Models } from 'appwrite';
+
+interface PlaylistButtonProps {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  userId: string;
+  movieId?: number;
+  playlist?: Models.Document;
+  setPlaylist?: Dispatch<SetStateAction<Models.Document>>;
+}
+
+export function PlaylistButton({
+  open,
+  setOpen,
+  userId,
+  movieId,
+  playlist,
+  setPlaylist,
+}: PlaylistButtonProps) {
+
+  
+
+  const queryClient = useQueryClient();
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>
+            {playlist ? 'Modifier les informations' : 'Créer une playlist'}
+          </DialogTitle>
+        </DialogHeader>
+        <PlaylistForm
+          success={() => {
+            setOpen(false);
+            queryClient.invalidateQueries(['collection', 'playlists']);
+          }}
+          userId={userId}
+          movieId={movieId}
+          playlist={playlist}
+          setPlaylist={setPlaylist}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+}

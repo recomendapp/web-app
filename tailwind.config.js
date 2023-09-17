@@ -24,7 +24,10 @@ module.exports = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        background: 'var(--background)',
+        background: {
+          DEFAULT: 'var(--background)',
+          border: 'var(--background-border)',
+        },
         foreground: 'hsl(var(--foreground))',
         'accent-1': {
           DEFAULT: 'var(--accent-1)',
@@ -69,6 +72,7 @@ module.exports = {
       },
       fontSize: {
         clamp: "clamp(1rem, 5vw, 3rem)",
+        "clamp-title": "clamp(1rem, 5vw, 3rem)",
       },
       height: {
         header: 'var(--height-header)',

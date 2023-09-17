@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { Metadata } from 'next';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { account } from '@/utils/appwrite';
+import { account } from '@/db/appwrite';
 import { toast } from 'react-toastify';
-import { useUser } from '@/context/user';
+import { useUser } from '@/context/UserProvider';
 
 // export const metadata: Metadata = {
 //   title: 'Vérifier Email',
@@ -53,7 +53,7 @@ export default function VerifyEmail() {
             theme: 'colored',
           });
         });
-  }, [userId, secret]);
+  }, [userId, secret, userRefresh]);
 
   return (
     <main className="container h-full relative flex flex-col items-center justify-center">

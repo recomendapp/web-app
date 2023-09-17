@@ -8,9 +8,9 @@ import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useUser } from '@/context/user';
+import { useUser } from '@/context/UserProvider';
 import { toast } from 'react-toastify';
-import { account } from '@/utils/appwrite';
+import { account } from '@/db/appwrite';
 
 interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
   setPasswordRecoverySuccess: (success: boolean) => void;

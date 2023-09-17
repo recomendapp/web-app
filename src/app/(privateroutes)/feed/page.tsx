@@ -1,7 +1,7 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { useUser } from '@/context/user';
-import { databases } from '@/utils/appwrite';
+import { useUser } from '@/context/UserProvider';
+import { databases } from '@/db/appwrite';
 import { Models, Query } from 'appwrite';
 import React, { useEffect, useState } from 'react';
 
@@ -13,14 +13,9 @@ export default function Feed() {
   const [feed, setFeed] = useState<any>();
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    user && init();
-  }, [user]);
-
   async function init() {
     getFollowing()
       .then(async (res) => {
-        console.log('FEED', res);
         setFollowing(res);
         getFeed(res);
       })
@@ -28,6 +23,10 @@ export default function Feed() {
         console.error(error);
       });
   }
+
+  useEffect(() => {
+    user && init();
+  }, [user]);
 
   async function getFeed(followingList: Models.Document[], offset?: string) {
     const { documents: lastLikes } = await databases.listDocuments(

@@ -12,7 +12,7 @@ import {
 
 import { Accordion } from '@/components/ui/accordion';
 
-import { useUser } from '@/context/user';
+import { useUser } from '@/context/UserProvider';
 import { getGenreList } from '@/hooks/tmdb';
 import { MapFiltersGenres } from './mapfiltersgenres';
 import { MapFiltersYears } from './mapfiltersyears';

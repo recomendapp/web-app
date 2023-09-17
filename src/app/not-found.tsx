@@ -1,5 +1,5 @@
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { useUser } from '@/context/user';
+import { useUser } from '@/context/UserProvider';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -17,7 +17,7 @@ export default function NotFound() {
       }}
     >
       <div className='text-4xl font-bold'>
-        Oups, cette page n'existe pas...
+        Oups, cette page n&apos;existe pas...
       </div>
     </main>
   );

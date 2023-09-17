@@ -9,7 +9,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 
-import { useUser } from '@/context/user';
+import { useUser } from '@/context/UserProvider';
 import { Input } from '@/components/ui/input';
 
 export function MapFiltersYears(props: any) {
@@ -33,7 +33,7 @@ export function MapFiltersYears(props: any) {
     } else {
       map && map.setFilter('markers-layer', null);
     }
-  }, [activeGenres]);
+  }, [activeGenres, map]);
 
   function handleGenreClick(genre: string | number) {
     const newActiveGenres = { ...activeGenres };

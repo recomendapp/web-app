@@ -4,6 +4,7 @@ export interface User extends Models.Document {
     userId: string,
     username: string,
     usernameUpdate: string,
+    full_name: string,
     avatar: string,
     bio: string,
     followers_count: number,
@@ -11,4 +12,6 @@ export interface User extends Models.Document {
     friends_count: number,
     verify: boolean,
     language: string,
+    badge: string,
+    link: string,
 }

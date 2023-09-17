@@ -146,7 +146,7 @@ export default function Map() {
         setIsLoading(false);
       }, 1000);
     });
-  }, [map.current]);
+  }, [map.current, limitShowingMarkers]);
 
   return (
     <>

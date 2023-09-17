@@ -20,7 +20,7 @@ import {
 import PopupFullScreen from './MapPopupFullScreen';
 import MapPopupSidebar from './MapPopupSidebar';
 import { getMovieDetails } from '@/hooks/tmdb';
-import { useUser } from '@/context/user';
+import { useUser } from '@/context/UserProvider';
 
 export default function MapPopup(props: any) {
   const { selectedMovie } = props;
@@ -43,7 +43,7 @@ export default function MapPopup(props: any) {
       .catch((error: any) => {
         setIsLoading(false);
       });
-  }, [selectedMovie]);
+  }, [selectedMovie, user]);
 
   if (isLoading) {
     return <></>;

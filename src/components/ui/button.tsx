@@ -25,7 +25,7 @@ const buttonVariants = cva(
         'accent-1-hover':
           'bg-accent-1 text-accent-1-foreground hover:bg-accent-1-hover',
         rating: 'text-foreground hover:text-accent-1',
-        'rating-enabled' : 'border-2 border-accent-1 text-accent-1 hover:text-accent-1-foreground hover:bg-accent-1',
+        'rating-enabled' : 'border-2 border-accent-1 text-accent-1 hover:text-accent-1-foreground hover:bg-accent-1 bg-background',
         share: 'text-destructive-foreground hover:bg-blue-500/10 hover:text-blue-300 rounded-full'
       },
       size: {

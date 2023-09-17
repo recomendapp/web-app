@@ -1,14 +1,14 @@
 "use client"
 
 import { getReviewFromUser } from "@/api/movie/movie_review";
-import Tiptap from "@/components/Editor/Editor";
-import Loader from "@/components/loader";
-import { useUser } from "@/context/user";
+import Tiptap from "@/components/modules/Editor/Editor";
+import Loader from "@/components/elements/Loader/Loader";
+import { useUser } from "@/context/UserProvider";
 import { JSONContent } from "@tiptap/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import CreateReviewForm from "../../../../../../components/movie/review/form/CreateReviewFrom";
+import CreateReviewForm from "../../../../../../components/modules/MovieReview/form/CreateReviewFrom";
 
 export default function CreateReview({ params }: { params: { movie: string } }) {
 

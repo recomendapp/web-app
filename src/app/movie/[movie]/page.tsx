@@ -2,6 +2,7 @@ import { getMovieDetails } from '@/hooks/tmdb';
 import MovieHeader from './assets/MovieHeader';
 import MovieDescription from './assets/MovieDescription';
 import MovieNavbar from './assets/MovieNavbar';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata({
   params,
@@ -9,7 +10,7 @@ export async function generateMetadata({
   params: { movie: string };
 }) {
   const movie = await getMovieDetails(params.movie, 'fr-FR');
-  if (movie.success === false) {
+  if (!movie) {
     return {
       title: 'Oups, film introuvable !',
     };
@@ -23,7 +24,7 @@ export async function generateMetadata({
 export default async function Movie({ params }: { params: { movie: string } }) {
   const movie = await getMovieDetails(params.movie, 'fr-FR');
 
-  if (movie.success === false) throw Error;
+  if (!movie) notFound();
 
   return (
     <main>

@@ -1,27 +1,12 @@
 import { Metadata } from 'next';
 
 import { Separator } from '@/components/ui/separator';
-import { SettingsNav } from '@/app/(privateroutes)/settings/settingsNav';
+import { SettingsNav } from '@/components/elements/SettingsNav/SettingsNav';
 
 export const metadata: Metadata = {
   title: 'Settings',
   description: 'Advanced form example using react-hook-form and Zod.',
 };
-
-const settingsNavItems = [
-  {
-    title: 'Profil',
-    href: '/settings/profile',
-  },
-  {
-    title: 'Compte',
-    href: '/settings/account',
-  },
-  {
-    title: 'Sécurité',
-    href: '/settings/security',
-  },
-];
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
@@ -39,7 +24,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
       {/* <Separator className="my-6" /> */}
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
         <aside className="-mx-4 lg:w-1/5">
-          <SettingsNav items={settingsNavItems} />
+          <SettingsNav />
         </aside>
         <div className="flex-1 lg:max-w-2xl">{children}</div>
       </div>

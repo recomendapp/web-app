@@ -14,8 +14,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { toast } from 'react-toastify';
-import { useUser } from '@/context/user';
-import { account, checkUsernameExist, databases } from '@/utils/appwrite';
+import { useUser } from '@/context/UserProvider';
+import { account, checkUsernameExist, databases } from '@/db/appwrite';
 import { useRouter } from 'next/navigation';
 
 // This can come from your database or API.

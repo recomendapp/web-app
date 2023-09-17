@@ -27,8 +27,8 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 // import { toast } from "@/components/ui/use-toast"
 import { toast } from 'react-toastify';
-import { useUser } from '@/context/user';
-import { account } from '@/utils/appwrite';
+import { useUser } from '@/context/UserProvider';
+import { account } from '@/db/appwrite';
 import { useRouter } from 'next/navigation';
 
 // This can come from your database or API.

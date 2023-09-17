@@ -1,7 +1,7 @@
 'use client';
 
-import Loader from '@/components/loader';
-import { useUser } from '@/context/user';
+import Loader from '@/components/elements/Loader/Loader';
+import { useUser } from '@/context/UserProvider';
 import { useRouter } from 'next/navigation';
 
 interface LayoutProps {

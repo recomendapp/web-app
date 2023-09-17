@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { MovieActionCounter } from "@/components/count/MovieActionCounter";
-import { useUser } from "@/context/user";
-import { MovieAction } from "@/components/movie/action/MovieAction/MovieAction";
+import { MovieActionCounter } from "@/components/elements/Movie/MovieActionCounter";
+import { useUser } from "@/context/UserProvider";
+import { MovieAction } from "@/components/modules/MovieAction/MovieAction";
 import YoutubeEmbed from "@/components/tools/Youtube";
 
 // UI
-import { ImageWithFallback } from "@/components/ImageWithFallback";
+import { ImageWithFallback } from "@/components/elements/Tools/ImageWithFallback";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
@@ -37,8 +37,8 @@ import { ConvertHoursMinutes } from "@/lib/utils/utils";
 // ICONS
 import { Play } from "lucide-react";
 import { useQuery } from "react-query";
-import { DateOnlyYearTooltip } from "@/components/utils/date/Date";
-import MoviePoster from "@/components/movie/ui/MoviePoster";
+import { DateOnlyYearTooltip } from "@/components/elements/Date/Date";
+import MoviePoster from "@/components/elements/Movie/MoviePoster";
 
 
 export default function MovieHeader({ movie, small } : { movie: any, small?: boolean }) {

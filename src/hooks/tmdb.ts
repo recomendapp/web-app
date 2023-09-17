@@ -1,15 +1,19 @@
 export async function getMovieDetails(movie: string, language: string) {
-  const movieDetails = await (await fetch(
-    `${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/${movie}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&append_to_response=credits,videos`
-  )).json();
-  const directors = movieDetails.credits.crew.filter(
-    (member: any) => member.job === 'Director'
-  );
-  const dataDetails = {
-    ...movieDetails,
-    directors
-  };
-  return dataDetails;
+  try {
+    const movieDetails = await (await fetch(
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/${movie}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&append_to_response=credits,videos`
+    )).json();
+    const directors = movieDetails.credits.crew.filter(
+      (member: any) => member.job === 'Director'
+    );
+    const dataDetails = {
+      ...movieDetails,
+      directors
+    };
+    return dataDetails;
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 export async function getPersonDetails(person: string, language: string) {

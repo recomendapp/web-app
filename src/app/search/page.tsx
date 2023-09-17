@@ -3,12 +3,12 @@
 // import { useEffect, useState } from 'react'
 import { Metadata } from 'next';
 import { Skeleton } from '@/components/ui/skeleton';
-import FeaturedPlaylists from '@/components/movie/playlist/FeaturedPlaylists';
-import SearchResultsUsers from '@/components/search/SearchResultsUsers';
-import SearchResultsMovies from '@/components/search/SearchResultsMovies';
-import SearchResultsPlaylists from '@/components/search/SearchResultsPlaylists';
-import SearchFilters from '@/components/search/SearchFilters';
-import SearchBar from '@/components/search/searchbar';
+import FeaturedPlaylists from '@/components/modules/MoviePlaylist/FeaturedPlaylists';
+import SearchResultsUsers from '@/components/modules/Search/SearchResultsUsers';
+import SearchResultsMovies from '@/components/modules/Search/SearchResultsMovies';
+import SearchResultsPlaylists from '@/components/modules/Search/SearchResultsPlaylists';
+import SearchFilters from '@/components/modules/Search/SearchFilters';
+import SearchBar from '@/components/modules/Search/SearchBar';
 
 export async function generateMetadata({
   params,

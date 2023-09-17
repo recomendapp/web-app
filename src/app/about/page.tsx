@@ -1,6 +1,6 @@
 import { LoginForm } from '@/app/(auth)/login/LoginForm';
 import { siteConfig } from '@/config/site';
-import { useUser } from '@/context/user';
+import { useUser } from '@/context/UserProvider';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';

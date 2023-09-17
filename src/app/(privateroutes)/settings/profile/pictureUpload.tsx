@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { databases, storage } from '@/utils/appwrite';
+import { databases, storage } from '@/db/appwrite';
 import Compressor from 'compressorjs';
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';

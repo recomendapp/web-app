@@ -1,8 +1,8 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: 'Paradise Pictures',
-  description: 'BEautiful web movie app !',
+  name: 'RECOMEND',
+  description: 'Beautiful web movie app !',
   mainNav: [
     {
       title: 'Accueil',
@@ -10,9 +10,10 @@ export const siteConfig = {
     },
   ],
   logo: {
-    href: '/paradisepictures_logo.svg',
-    alt: 'Paradise Pictures Logo',
+    href: '/recomend-logo.svg',
+    alt: 'Recomend Logo',
   },
+  icon: 'R.',
   links: {
     twitter: 'https://twitter.com/xmesky',
     github: 'https://github.com/xmesky',

@@ -1,7 +1,8 @@
 import { getReview } from '@/api/movie/movie_review';
 import { getMovieDetails } from '@/hooks/tmdb';
-import MovieVerticalCard from '@/components/movie/MovieVerticalCard';
-import MovieReviewForm from '@/components/movie/review/form/MovieReviewForm';
+import MovieVerticalCard from '@/components/elements/Movie/MovieVerticalCard';
+import MovieReviewForm from '@/components/modules/MovieReview/form/MovieReviewForm';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata({
     params,
@@ -9,7 +10,7 @@ export async function generateMetadata({
     params: { movie: string, review: string };
 }) {
     const movie = await getMovieDetails(params.movie, 'fr-FR');
-    if (movie.success === false) {
+    if (!movie) {
         return {
         title: 'Oups, film introuvable !',
         };
@@ -30,9 +31,7 @@ export default async function Review({ params }: { params: { movie: string, revi
     const movie = await getMovieDetails(params.movie, 'fr-FR');
     const review = await getReview(params.review);
 
-    if (!review) {
-        return <NotFound />;
-    }
+    if (!review) notFound();
 
     return (
         <main className='flex flex-col lg:grid lg:grid-cols-6 p-4 gap-4'>
@@ -43,20 +42,3 @@ export default async function Review({ params }: { params: { movie: string, revi
         </main>
     )
 }
-
-export function NotFound() {
-    return (
-      <main 
-        className="bg-white w-full h-full flex justify-center items-center"
-        style={{
-          backgroundImage: `url('https://s.ltrbxd.com/static/img/errors/not-found-2.f67937bb.jpg')`,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        <div className='text-4xl font-bold'>
-          Oups, cette critique n'existe pas !
-        </div>
-      </main>
-    )
-  }

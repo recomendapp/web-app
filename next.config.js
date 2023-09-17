@@ -25,8 +25,8 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/@:user',
-        destination: '/profile/:user',
+        source: '/@:username',
+        destination: '/user/:username',
       },
     ];
   },

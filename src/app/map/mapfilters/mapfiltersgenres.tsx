@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/accordion';
 
 import Link from 'next/link';
-import { useUser } from '@/context/user';
+import { useUser } from '@/context/UserProvider';
 import { getGenreList } from '@/hooks/tmdb';
 
 interface MapFilterProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -43,7 +43,7 @@ export function MapFiltersGenres(props: any) {
     } else {
       map && map.setFilter('markers-layer', null);
     }
-  }, [activeGenres]);
+  }, [activeGenres, map]);
 
   function handleGenreClick(genre: string | number) {
     const newActiveGenres = { ...activeGenres };

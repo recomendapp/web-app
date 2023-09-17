@@ -1,10 +1,10 @@
 'use client';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { ImageWithFallback } from '@/components/ImageWithFallback';
+import { ImageWithFallback } from '@/components/elements/Tools/ImageWithFallback';
 import { Button } from '../../../components/ui/button';
 import Link from 'next/link';
-import { useUser } from '@/context/user';
-import { MovieAction } from '../../../components/movie/action/MovieAction/MovieAction';
+import { useUser } from '@/context/UserProvider';
+import { MovieAction } from '../../../components/modules/MovieAction/MovieAction';
 import {
   Tooltip,
   TooltipContent,
@@ -14,10 +14,9 @@ import {
 
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { MovieActionCounter } from '../../../components/count/MovieActionCounter';
+import { MovieActionCounter } from '../../../components/elements/Movie/MovieActionCounter';
 import { MovieReview } from '../../movie/[movie]/reviews/assets/MovieReviews';
-import { PersonFollowButton } from '@/components/button/PersonFollowButton';
-import TMP from '@/components/TMP';
+import { PersonFollowButton } from '@/components/elements/ButtonFollowPerson/PersonFollowButton';
 
 export function PersonDetails({ person }: { person: any }) {
   const { user } = useUser();

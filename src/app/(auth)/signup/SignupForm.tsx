@@ -28,8 +28,8 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 // import { toast } from "@/components/ui/use-toast"
 import { toast } from 'react-toastify';
-import { useUser } from '@/context/user';
-import { account, checkUsernameExist, databases } from '@/utils/appwrite';
+import { useUser } from '@/context/UserProvider';
+import { account, checkUsernameExist, databases } from '@/db/appwrite';
 import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/icons';
 

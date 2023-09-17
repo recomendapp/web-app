@@ -21,7 +21,7 @@ import styles from './MapPopupSidebar.module.css';
 import { Button } from '@/components/ui/button';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { X } from 'lucide-react';
-import { MovieDetails } from '@/app/movie/[movie]/MovieDetails';
+// import { MovieDetails } from '@/app/movie/[movie]/MovieDetails';
 
 export default function MapPopupSidebar(props: any) {
   const [recoverServerOffset, setRecoverServerOffset] = useState(false);
@@ -74,7 +74,7 @@ export default function MapPopupSidebar(props: any) {
         >
           <X className="h-4 w-4" />
         </Button>
-        <MovieDetails movie={selectedMovie} />
+        {/* <MovieDetails movie={selectedMovie} /> */}
       </div>
     </div>
   );

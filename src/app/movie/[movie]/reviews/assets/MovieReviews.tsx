@@ -1,31 +1,16 @@
 'use client';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { ImageWithFallback } from '@/components/ImageWithFallback';
-import { Button } from '../../../../../components/ui/button';
 import Link from 'next/link';
-import { useUser } from '@/context/user';
-import { MovieAction } from '../../../../../components/movie/action/MovieAction/MovieAction';
+import { useUser } from '@/context/UserProvider';
 
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import { databases } from '@/utils/appwrite';
-import { Models, Query } from 'appwrite';
-import { useEffect, useState } from 'react';
-import { BarChart3, FileEdit, Heart, MessageSquare, Pencil, Repeat2, Share } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '../../../../../components/ui/avatar';
-import { getInitiales } from '@/lib/utils/utils';
-import { BsFillPatchCheckFill } from 'react-icons/bs';
-import { Textarea } from '../../../../../components/ui/textarea';
-import { Input } from '../../../../../components/ui/input';
+import { Models } from 'appwrite';
+import { useState } from 'react';
+import { FileEdit } from 'lucide-react';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../../../../../components/ui/select';
-import { MovieUserReview } from './MovieUserReview';
 import { useQuery } from 'react-query';
 import { getReviewFromUser, getReviews } from '@/api/movie/movie_review';
-import MovieReviewOverview from '@/components/movie/review/MovieReviewOverview';
+import MovieReviewOverview from '@/components/modules/MovieReview/MovieReviewOverview';
 
 export function MovieReview({ movie }: { movie: any }) {
-  
-  const { user } = useUser();
 
   const [ order, setOrder ] = useState("recommended");
 
@@ -77,7 +62,6 @@ export function MovieReview({ movie }: { movie: any }) {
 export function MyReviewButton({ movie } : { movie: any }) {
 
   const { user } = useUser();
-  const offset = 0;
 
   const {
     data: userReview,
