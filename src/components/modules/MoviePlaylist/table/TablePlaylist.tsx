@@ -48,8 +48,12 @@ declare module '@tanstack/react-table' {
   }
 }
 
+interface DataExtended extends Models.Document {
+  id: number,
+}
+
 interface DataTableProps {
-  playlist: Models.Document[]
+  playlist: DataExtended[]
   playlistMetadata: Models.Document
 }
 

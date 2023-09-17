@@ -2,7 +2,11 @@ import { databases } from "@/db/appwrite";
 import { arrayMove } from "@dnd-kit/sortable";
 import { Models } from "appwrite";
 
-export const changeMovieRank = async (data: Models.Document[], fromIndex: number, toIndex: number) => {
+interface DataExtended extends Models.Document {
+    id: number,
+}
+
+export const changeMovieRank = async (data: DataExtended[], fromIndex: number, toIndex: number) => {
     try {
         const isDown = fromIndex < toIndex;
         const fromItem = data[fromIndex]
@@ -83,7 +87,7 @@ export const changeMovieRank = async (data: Models.Document[], fromIndex: number
 
 }
 
-const resetRank = async (data: Models.Document[], fromIndex: number, toIndex: number) => {
+const resetRank = async (data: DataExtended[], fromIndex: number, toIndex: number) => {
     let newData = arrayMove(
         data,
         fromIndex,

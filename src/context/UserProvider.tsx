@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { account, databases } from '@/db/appwrite';
-import { User } from '@/types/type.user';
 
 export interface UserState {
   user: any;
@@ -53,13 +52,6 @@ export const UserProvider = ({ children }: { children: any }) => {
         setUser({
           ...userRequest,
           ...userDetails
-          // username: userDetails.username,
-          // usernameUpdate: userDetails.usernameUpdate,
-          // avatar: userDetails.avatar,
-          // language: userDetails.language,
-          // bio: userDetails.bio,
-          // url: userDetails.url,
-          // verify: userDetails.verify
         });
       } else {
         setUser(userRequest);
@@ -81,27 +73,16 @@ export const UserProvider = ({ children }: { children: any }) => {
       const userRequest = await account.get();
       let userDetails;
 
-      try {
-        userDetails = await databases.getDocument(
-          String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-          String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER),
-          userRequest.$id
-        );
-      } catch (error) {
-        console.log('No user details found');
-      }
+      userDetails = await databases.getDocument(
+        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
+        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER),
+        userRequest.$id
+      );
 
       if (userDetails) {
         setUser({
           ...userRequest,
           ...userDetails
-          // username: userDetails.username,
-          // usernameUpdate: userDetails.usernameUpdate,
-          // avatar: userDetails.avatar,
-          // language: userDetails.language,
-          // bio: userDetails.bio,
-          // url: userDetails.url,
-          // verify: userDetails.verify
         });
       } else {
         setUser(userRequest);
@@ -151,13 +132,6 @@ export const UserProvider = ({ children }: { children: any }) => {
       setUser({
         ...userRequest,
         ...userDetails
-        // username: userDetails.username,
-        // usernameUpdate: userDetails.usernameUpdate,
-        // avatar: userDetails.avatar,
-        // language: userDetails.language,
-        // bio: userDetails.bio,
-        // url: userDetails.url,
-        // verify: userDetails.verify
       });
     } catch (error) {
       throw error;
