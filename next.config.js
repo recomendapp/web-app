@@ -28,6 +28,18 @@ const nextConfig = {
         source: '/@:username',
         destination: '/user/:username',
       },
+      {
+        source: '/@:username/playlists',
+        destination: '/user/:username/playlists',
+      },
+      {
+        source: '/@:username/films',
+        destination: '/user/:username/films',
+      },
+      {
+        source: '/@:username/stats',
+        destination: '/user/:username/stats',
+      },
     ];
   },
 };

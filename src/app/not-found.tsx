@@ -1,8 +1,3 @@
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { useUser } from '@/context/UserProvider';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React from 'react';
 
 export default function NotFound() {

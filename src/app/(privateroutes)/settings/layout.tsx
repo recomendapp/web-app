@@ -5,7 +5,7 @@ import { SettingsNav } from '@/components/elements/SettingsNav/SettingsNav';
 
 export const metadata: Metadata = {
   title: 'Settings',
-  description: 'Advanced form example using react-hook-form and Zod.',
+  description: 'Recomend\'s settings',
 };
 
 interface SettingsLayoutProps {

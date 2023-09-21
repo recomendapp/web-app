@@ -44,62 +44,82 @@ export default function MovieCard({
     if (displayMode == 'grid')
     {
         return (
-        <TooltipProvider delayDuration={0}>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
-                        <Link href={`/movie/${movie.id}`} className="w-full">
-                            <MoviePoster poster_path={'https://image.tmdb.org/t/p/original/' + movie.poster_path} alt={movie.title}/>
-                        </Link>
-                        {(isRated || isReviewed || isLiked) && <div className="flex flex-col items-center gap-1 absolute right-0 top-[10%] bg-background p-1 rounded-l-md">
-                            {isRated && 
-                                <p
-                                    className={`h-5 w-6 rounded-sm flex items-center justify-center
-                                    text-background bg-accent-1
-                                    font-bold text-sm
-                                    `}
-                                >
-                                    {rating}
-                                </p>
-                            }
-                            {isLiked && 
-                                <Heart
-                                    width={15}
-                                    className={`text-like fill-like`}
-                                />
-                            }
-                            {isReviewed &&
-                                <Button variant={'action'} className="p-0 h-fit" asChild>
-                                    <Link href={`/movie/${movie.id}/review/${review}`}>
-                                        <Text width={20} className='fill-foreground'/>
-                                    </Link>
-                                </Button>
-                            }
-                        </div>}
-                        <div className="hidden absolute top-3/4 group-hover:flex w-full justify-center pointer-events-none">
-                            <div className="bg-background rounded-md w-fit pointer-events-auto">
-                                <MovieAction movieId={movie?.id} watch watchlist dropdown/>
+            <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
+                            <Link href={`/movie/${movie.id}`} className="w-full">
+                                <MoviePoster poster_path={'https://image.tmdb.org/t/p/original/' + movie.poster_path} alt={movie.title}/>
+                            </Link>
+                            {(isRated || isReviewed || isLiked) && <div className="flex flex-col items-center gap-1 absolute right-0 top-[10%] bg-background p-1 rounded-l-md">
+                                {isRated && 
+                                    <p
+                                        className={`h-5 w-6 rounded-sm flex items-center justify-center
+                                        text-background bg-accent-1
+                                        font-bold text-sm
+                                        `}
+                                    >
+                                        {rating}
+                                    </p>
+                                }
+                                {isLiked && 
+                                    <Heart
+                                        width={15}
+                                        className={`text-like fill-like`}
+                                    />
+                                }
+                                {isReviewed &&
+                                    <Button variant={'action'} className="p-0 h-fit" asChild>
+                                        <Link href={`/movie/${movie.id}/review/${review}`}>
+                                            <Text width={20} className='fill-foreground'/>
+                                        </Link>
+                                    </Button>
+                                }
+                            </div>}
+                            <div className="hidden absolute top-3/4 group-hover:flex w-full justify-center pointer-events-none">
+                                <div className="bg-background rounded-md w-fit pointer-events-auto">
+                                    <MovieAction movieId={movie?.id} watch watchlist dropdown/>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                    <p>{movie.title} ({getYear(new Date(movie.release_date))})</p>
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>{movie.title} ({getYear(new Date(movie.release_date))})</p>
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
         )
     }
 
 
     return (
-        <Link href={`/movie/${movie.id}`} className="flex gap-4 items-center">
-            <MoviePoster width={90} poster_path={'https://image.tmdb.org/t/p/original/' + movie.poster_path} alt={movie.title}/>
+        <Link href={`/movie/${movie.id}`} className="relative flex gap-4 items-center">
+            <MoviePoster width={100} poster_path={'https://image.tmdb.org/t/p/original/' + movie.poster_path} alt={movie.title}/>
             <div className="w-full block">
+                {/* ACTIONS */}
+                <div className="absolute top-0 flex items-center gap-2">
+                    {isRated && 
+                        <p
+                            className={`h-5 w-6 rounded-sm flex items-center justify-center
+                            text-background bg-accent-1
+                            font-bold text-sm
+                            `}
+                        >
+                            {rating}
+                        </p>
+                    }
+                    {isLiked && 
+                        <Heart
+                            width={15}
+                            className={`text-like fill-like`}
+                        />
+                    }
+                </div>
                 {/* TITLE */}
                 <h2 className="text-xl font-bold line-clamp-2">
                     {movie.title}
                 </h2>
+                    
                 
                 {/* DATE / GENRES / RUNTIME */}
                 <div className="line-clamp-1">

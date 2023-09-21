@@ -2,8 +2,16 @@ import { databases } from "@/db/appwrite";
 import { getMovieDetails } from "@/hooks/tmdb";
 import { Query } from "appwrite";
 
-export default async function getMovies(userId: string, page: number, numberOfResult: number, language: string = 'en') {
+export default async function getMovies(userId: string, page: number, numberOfResult: number, sort: string, language: string = 'fr') {
     try {
+        switch (sort) {
+            case 'added-asc':
+                
+                break;
+            case 'added-desc':
+                
+        }
+
         const { total, documents } = await databases.listDocuments(
             String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
             String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_WATCHED),
@@ -14,6 +22,9 @@ export default async function getMovies(userId: string, page: number, numberOfRe
             ]
         );
 
+        if (!total)
+            return null;
+        
         const movies = await Promise.all(
             documents.map(async (movie: any) => {
                 const movieDetails = await getMovieDetails(movie.movieId, language)

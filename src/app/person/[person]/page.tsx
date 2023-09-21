@@ -8,6 +8,7 @@ import { Metadata } from 'next';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { PersonFollowButton } from '@/components/elements/ButtonFollowPerson/PersonFollowButton';
 import { PersonDetails } from './PersonDetails';
+import NotFound from '@/app/not-found';
 // import MovieDetails from '../../src/components/movie/MovieDetails';
 
 export async function generateMetadata({
@@ -35,7 +36,7 @@ export default async function Person({
   params: { person: string };
 }) {
   const person = await getPersonDetails(params.person, 'fr-FR');
-  if (person.success === false) throw Error;
+  if (person.success === false) throw NotFound();
 
   return <PersonDetails person={person} />;
 }

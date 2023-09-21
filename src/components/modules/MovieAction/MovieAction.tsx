@@ -11,6 +11,9 @@ import { useUser } from '@/context/UserProvider';
 import { handleGetLike } from './_components/MovieLikeAction/_queries/movie-action-like';
 import { handleGetWatch } from './_components/MovieWatchAction/_queries/movie-action-watch';
 import { handleGetWatchlist } from './_components/MovieWatchlistAction/_queries/movie-action-watchlist';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { Button } from '@/components/ui/button';
+import { MovieActionDropdownMenu } from './_components/MovieActionDropdownMenu/MovieActionDropdownMenu';
 
 export function MovieAction({
   movieId,
@@ -71,7 +74,6 @@ export function MovieAction({
         {(all || watch) && <MovieWatchAction movieId={movieId} />}
         {(all || watchlist) && <MovieWatchlistAction movieId={movieId} />}
         {(all || watchDate) && <MovieWatchDateAction movieId={movieId} />}
-        {/* )} */}
       </div>
       <div className='flex gap-2'>
         {(all || playlist) && <MoviePlaylistAction movieId={movieId} />}
@@ -80,12 +82,4 @@ export function MovieAction({
       </div>
     </div>
   );
-}
-
-export function MovieActionDropdownMenu({ movieId } : { movieId: number }) {
-  return (
-    <div>
-
-    </div>
-  )
 }
