@@ -1,4 +1,4 @@
-import { databases } from "@/db/appwrite";
+import { databases } from "@/lib/appwrite";
 import { arrayMove } from "@dnd-kit/sortable";
 import { Models } from "appwrite";
 

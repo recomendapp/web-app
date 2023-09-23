@@ -44,10 +44,7 @@ export function PlaylistButton({
           </DialogTitle>
         </DialogHeader>
         <PlaylistForm
-          success={() => {
-            setOpen(false);
-            queryClient.invalidateQueries(['collection', 'playlists']);
-          }}
+          success={() => setOpen(false)}
           userId={userId}
           movieId={movieId}
           playlist={playlist}

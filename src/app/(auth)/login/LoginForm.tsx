@@ -7,15 +7,14 @@ import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useUser } from '@/context/UserProvider';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { account } from '@/db/appwrite';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function LoginForm({ className, ...props }: LoginFormProps) {
-  const { login } = useUser();
+  const { login } = useAuth();
 
   const router = useRouter();
 
@@ -43,24 +42,12 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
         })
         .catch((error) => {
           setIsLoading(false);
-          toast.error('Email ou mot de passe incorrect 🤯');
+          toast.error('Email ou mot de passe incorrect');
         });
     } catch (error) {
-      toast.error("Une erreur s'est produite 🤯");
+      toast.error("Une erreur s'est produite");
     }
   }
-
-  const loginOAuth2 = async (e: string) => {
-    try {
-      await account.createOAuth2Session(
-        e,
-        process.env.NEXT_PUBLIC_URL,
-        process.env.NEXT_PUBLIC_URL + '/login'
-      );
-    } catch (error) {
-      throw error;
-    }
-  };
 
   return (
     <div className={cn('grid gap-6', className)} {...props}>
@@ -131,7 +118,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
           </span>
         </div>
       </div>
-      <Button
+      {/* <Button
         onClick={() => loginOAuth2('github')}
         variant="outline"
         type="button"
@@ -143,7 +130,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
           <Icons.gitHub className="mr-2 h-4 w-4" />
         )}{' '}
         Github
-      </Button>
+      </Button> */}
     </div>
   );
 }

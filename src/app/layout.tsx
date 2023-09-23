@@ -4,7 +4,7 @@ import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils/utils';
 import { fontSans } from '@/lib/fonts';
 
-import { UserProvider } from '@/context/UserProvider';
+// import { UserProvider } from '@/context/UserProvider';
 
 import NextTopLoader from 'nextjs-toploader';
 
@@ -17,6 +17,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ReactQueryProvider } from '@/context/ReactQueryProvider';
 import { ApolloClientProvider } from '@/context/ApolloClientProvider';
+import { AuthProvider } from '@/context/AuthContext/AuthProvider';
 
 export const metadata: Metadata = {
   title: {
@@ -50,7 +51,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}
       >
         <ApolloClientProvider>
-          <UserProvider>
+          <AuthProvider>
+          {/* <UserProvider> */}
             <ReactQueryProvider>
               <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
                 <NextTopLoader 
@@ -68,7 +70,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                     </div>
                   </div>
                 </div>
-                <Navbar className=" z-[50] fixed w-full bottom-0 lg:hidden h-navbar" />
+                {/* <Navbar className=" z-[50] fixed w-full bottom-0 lg:hidden h-navbar" /> */}
                 <ToastContainer
                   position="top-center"
                   theme="dark"
@@ -80,7 +82,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 />
               </ThemeProvider>
             </ReactQueryProvider>
-          </UserProvider>
+          </AuthProvider>
+          {/* </UserProvider> */}
         </ApolloClientProvider>
       </body>
     </html>

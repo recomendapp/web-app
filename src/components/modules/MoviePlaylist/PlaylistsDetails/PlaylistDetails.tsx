@@ -2,66 +2,59 @@
 
 import { ImageWithFallback } from '@/components/elements/Tools/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { useUser } from '@/context/UserProvider';
-import { Loader2 } from 'lucide-react';
 import { PlaylistButton } from '@/components/modules/MoviePlaylist/PlaylistButton';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Models } from 'appwrite';
 import { TablePlaylist } from '@/components/modules/MoviePlaylist/table/TablePlaylist';
-import { useQuery } from 'react-query';
 import { handleGetPlaylistItems } from '@/components/modules/MovieAction/_components/MoviePlaylistAction/_queries/movie-action-playlist';
 import { User } from '@/types/type.user';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
+import Loader from '@/components/elements/Loader/Loader';
+import { useQuery } from '@apollo/client';
+import PLAYLIST_DETAILS_QUERY from './queries/PlaylistDetailsQuery';
 
 export default function PlaylistDetails({
-  playlistServer,
+  playlistId,
 }: {
-  playlistServer: Models.Document;
+  playlistId: string;
 }) {
-  const { user } = useUser();
-  const [ playlistMetadata, setPlaylistMetadata] = useState(playlistServer);
+  const { user } = useAuth();
 
-  const {
-    data: playlist,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['playlist', playlistServer.$id],
-    queryFn: () => handleGetPlaylistItems(playlistServer.$id, user),
-    enabled: (user?.$id !== undefined && user?.$id !== null) && (playlistServer?.$id !== undefined && playlistServer?.$id !== null),
+  const { data: playlistQuery } = useQuery(PLAYLIST_DETAILS_QUERY, {
+    variables: {
+      id: playlistId,
+    }
   });
 
-  if (!user) {
-    return <Loader2 />;
-  }
+  const playlist = playlistQuery?.playlistCollection.edges[0]?.node;
+  // const [ playlistMetadata, setPlaylistMetadata] = useState(playlistServer);
 
-  if (!playlistServer.is_public && user.$id !== playlistServer.userId.$id) {
-    throw Error;
+
+  if (!user) {
+    return <Loader />;
   }
 
   return (
     <main className="h-full w-full">
       <PlaylistHeader
         user={user}
-        playlistMetadata={playlistMetadata}
-        setPlaylistMetadata={setPlaylistMetadata}
-        data={playlist}
+        playlistDetails={playlist}
+        // data={playlist}
       />
-      <div className='p-4'>
+      {/* <div className='p-4'>
         {playlist && <TablePlaylist playlist={playlist} playlistMetadata={playlistMetadata} />}
-      </div>
+      </div> */}
     </main>
   )
 }
 
 export function PlaylistHeader({
   user,
-  playlistMetadata,
-  setPlaylistMetadata,
+  playlistDetails,
   data 
 } : {
   user: User,
-  playlistMetadata: Models.Document,
-  setPlaylistMetadata: Dispatch<SetStateAction<Models.Document>>
+  playlistDetails: any,
   data?: any[]
 }) {
 
@@ -90,36 +83,35 @@ export function PlaylistHeader({
         }}
       >
         <div className="w-full h-full flex gap-4 p-4 items-center bg-gradient-to-t from-background to-[#000000bd] bg-opacity-75">
-          <div className="w-[200px] shadow-md cursor-pointer" onClick={() => playlistMetadata.userId.$id == user.$id && setOpen(true)}>
+          <div className="w-[200px] shadow-md cursor-pointer" onClick={() => playlistDetails.user_id == user.id && setOpen(true)}>
               <AspectRatio ratio={1 / 1}>
                 <ImageWithFallback
-                  src={playlistMetadata.poster_path ? playlistMetadata.poster_path : ''}
-                  alt={playlistMetadata.title}
+                  src={playlistDetails?.poster_url ?? ""}
+                  alt={playlistDetails?.title}
                   fill
                   className="rounded-md object-cover"
                 />
               </AspectRatio>
             </div>
-            <div className='flex flex-col gap-2 cursor-pointer' onClick={() => playlistMetadata.userId.$id == user.$id && setOpen(true)}>
+            <div className='flex flex-col gap-2 cursor-pointer' onClick={() => playlistDetails.user_id == user.id && setOpen(true)}>
               <p>
-                {playlistMetadata.is_public ? "Playlist publique" : "Playlist privée"}
+                {playlistDetails?.is_public ? "Playlist publique" : "Playlist privée"}
               </p>
               <h2 className='text-clamp font-bold text-accent-1'>
-                {playlistMetadata.title}
+                {playlistDetails?.title}
                 </h2>
               <p>
-                {playlistMetadata.description}
+                {playlistDetails?.description}
               </p>
-              <p className='text-muted-foreground'>{playlistMetadata.items_count} film{playlistMetadata.items_count > 1 && 's'}</p>
+              <p className='text-muted-foreground'>{playlistDetails?.items_count ?? 0} film{playlistDetails?.items_count > 1 && 's'}</p>
             </div>
         </div>
       </div>
       <PlaylistButton
         open={open}
         setOpen={setOpen}
-        userId={user.$id}
-        playlist={playlistMetadata}
-        setPlaylist={setPlaylistMetadata}
+        userId={user.id}
+        playlist={playlistDetails}
       />
     </>
   )

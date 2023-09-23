@@ -18,14 +18,24 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 // import { toast } from "@/components/ui/use-toast"
 import { toast } from 'react-toastify';
-import { useUser } from '@/context/UserProvider';
-import { account, databases } from '@/db/appwrite';
 import PictureUpload from './pictureUpload';
-
-// This can come from your database or API.
+import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useMutation } from '@apollo/client';
+import UPDATE_PROFILE_MUTATION from './mutations/updateProfileMutation';
+import { Icons } from '@/components/icons';
+import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
+import Compressor from 'compressorjs';
+import compressPicture from '@/lib/utils/compressPicture';
 
 export function ProfileForm() {
-  const { user, userRefresh } = useUser();
+  const { user } = useAuth();
+  const [ loading, setLoading ] = useState(false);
+
+  const [ updateProfile ] = useMutation(UPDATE_PROFILE_MUTATION);
+
+  const [ newAvatar, setNewAvatar ] = useState<File>();
+  const [ isUploading, setIsUploading ] = useState(false);
 
   const profileFormSchema = z.object({
     full_name: z
@@ -43,7 +53,7 @@ export function ProfileForm() {
         message: 'La bio ne doit pas dépasser 150 caractères.',
       })
       .optional(),
-    link: z.
+    website: z.
       string()
       .url({ 
         message: 'Veuillez entrer une URL valide.'
@@ -54,9 +64,9 @@ export function ProfileForm() {
   type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
   const defaultValues: Partial<ProfileFormValues> = {
-    full_name: user.full_name,
-    bio: user.bio ? user.bio : '',
-    link: user.link,
+    full_name: user?.full_name,
+    bio: user?.bio,
+    website: user?.website,
   };
 
   const form = useForm<ProfileFormValues>({
@@ -67,31 +77,63 @@ export function ProfileForm() {
 
   async function onSubmit(data: ProfileFormValues) {
     try {
-      await account.updateName(data.full_name);
-      await databases.updateDocument(
-        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER),
-        user.$id,
-        {
-          full_name: data.full_name,
-          bio: data.bio,
-          link: data.link
-        }
-      );
-      await userRefresh();
-      toast.success(
-        'Toutes les modifications ont été enregistrées avec succès 👌'
-      );
-    } catch (error) {
-      await userRefresh();
-      toast.error("Une erreur s'est produite 🤯");
+      if (!user)
+        return
+
+      setLoading(true);
+
+      const payload: Record<string, any> = {
+        id: user?.id,
+        full_name: data.full_name,
+        bio: data.bio,
+        website: data.website
+      }
+      if (newAvatar) {
+        const newAvatarUrl = await uploadAvatar(newAvatar, user.id);
+        payload.avatar_url = newAvatarUrl
+      }
+
+      const { errors } = await updateProfile({
+        variables: payload
+      });
+      if (errors) throw errors;
+      toast.success('Enregistré');   
+    } catch(error) {
+      toast.error("Une erreur s'est produite");
+    } finally {
+      setLoading(false);
     }
   }
+
+  async function uploadAvatar(file: File, userId: string) {
+    try {
+      const fileExt = file.name.split('.').pop()
+      const filePath = `${userId}-${Math.random()}.${fileExt}`
+
+      const avatarCompressed = await compressPicture(file, filePath, 400, 400);
+
+      let { error } = await supabase.storage.from('avatars').upload(filePath, avatarCompressed)
+      
+      if (error) throw error;
+
+      return (`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/avatars/${filePath}`);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  if (!user)
+    return null
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <PictureUpload user={user} userRefresh={userRefresh} />
+        <PictureUpload
+          user={user}
+          isUploading={isUploading}
+          newAvatar={newAvatar}
+          setNewAvatar={setNewAvatar}
+        />
         <FormField
           control={form.control}
           name="full_name"
@@ -99,12 +141,11 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel className='flex justify-between gap-4'>
                 <p>Nom</p>
-                <p className=''>{field.value.length} / 50</p>
+                <p className=''>{field?.value?.length ?? 0} / 50</p>
               </FormLabel>
               <FormControl>
                 <Input
-                  disabled={!user.emailVerification ? true : false}
-                  placeholder={user.full_name}
+                  placeholder="Nom"
                   {...field}
                 />
               </FormControl>
@@ -123,13 +164,12 @@ export function ProfileForm() {
             <FormItem>
               <FormLabel className='flex justify-between gap-4'>
                 <p>Bio</p>
-                <p>{field?.value?.length} / 150</p>
+                <p>{field?.value?.length ?? 0} / 150</p>
               </FormLabel>
               <FormControl>
                 <Textarea
-                  disabled={!user.emailVerification ? true : false}
                   placeholder="Dites-nous un peu à votre sujet."
-                  className="resize-none"
+                  className="resize-none h-32"
                   {...field}
                 />
               </FormControl>
@@ -139,7 +179,7 @@ export function ProfileForm() {
         />
         <FormField
           control={form.control}
-          name={"link"}
+          name={"website"}
           render={({ field }) => (
             <FormItem>
               <FormLabel>
@@ -147,7 +187,7 @@ export function ProfileForm() {
               </FormLabel>
               <FormControl>
                 <Input
-                type='url'
+                type='text'
                 placeholder='https://examples.com'
                   {...field}
                 />
@@ -168,8 +208,11 @@ export function ProfileForm() {
             </FormItem>
           )}
         />
-        <Button disabled={!user.emailVerification ? true : false} type="submit">
-          Enregistrer
+        <Button type="submit" disabled={loading}>
+            {loading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Enregistrer
         </Button>
       </form>
     </Form>

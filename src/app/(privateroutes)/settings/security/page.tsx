@@ -1,6 +1,6 @@
 'use client';
 import { Separator } from '@/components/ui/separator';
-import { SecurityForm } from '@/app/(privateroutes)/settings/security/securityForm';
+import { SecurityForm } from '@/components/modules/UserSettings/UserSettingsSecurity/securityForm';
 
 export default function SettingsSecurityPage() {
   return (

@@ -1,5 +1,5 @@
 'use client';
-import { account, databases } from '@/db/appwrite';
+import { account, databases } from '@/lib/appwrite';
 import { Models, Query } from 'appwrite';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '../../ui/skeleton';

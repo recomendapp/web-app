@@ -1,11 +1,12 @@
 import { Models } from "appwrite";
+import { User as UserSupabase } from "@supabase/supabase-js";
 
-export interface User extends Models.Document {
-    userId: string,
+export interface User {
+    id: string,
     username: string,
-    usernameUpdate: string,
+    username_updated_at: string,
     full_name: string,
-    avatar: string,
+    avatar_url: string,
     bio: string,
     followers_count: number,
     following_count: number,
@@ -13,5 +14,5 @@ export interface User extends Models.Document {
     verify: boolean,
     language: string,
     badge: string,
-    link: string,
+    website: string,
 }

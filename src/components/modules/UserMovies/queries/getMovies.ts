@@ -1,4 +1,4 @@
-import { databases } from "@/db/appwrite";
+import { databases } from "@/lib/appwrite";
 import { getMovieDetails } from "@/hooks/tmdb";
 import { Query } from "appwrite";
 

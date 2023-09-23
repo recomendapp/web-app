@@ -1,4 +1,4 @@
-import { databases } from "@/db/appwrite";
+import { databases } from "@/lib/appwrite";
 import { Query } from "appwrite";
 
 export default async function getPlaylistsFromUserId(userId: string, page: number, numberOfResult: number, sort: string) {

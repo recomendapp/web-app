@@ -8,13 +8,13 @@ import { Dispatch } from 'react';
 export default function PlaylistPictureUpload({
   playlist,
   isUploading,
-  newPicture,
-  setNewPicture,
+  newPoster,
+  setNewPoster,
 }: {
   playlist: any;
   isUploading: boolean;
-  newPicture: File | undefined;
-  setNewPicture: Dispatch<any>;
+  newPoster: File | undefined;
+  setNewPoster: Dispatch<any>;
 }) {
   return (
     <label className="flex w-full h-full items-center overflow-hidden relative cursor-pointer">
@@ -29,13 +29,9 @@ export default function PlaylistPictureUpload({
           )}
           <ImageWithFallback
             src={
-              newPicture
-                ? URL.createObjectURL(newPicture)
-                : playlist
-                ? playlist.poster_path
-                  ? playlist.poster_path
-                  : ''
-                : ''
+              newPoster ? URL.createObjectURL(newPoster)
+              :
+              playlist.poster_url ?? ''
             }
             alt={playlist ? playlist.title : ''}
             fill
@@ -49,7 +45,7 @@ export default function PlaylistPictureUpload({
         accept=".jpg,.png,.jpeg,.webp"
         max="2097152"
         onChange={(e) => {
-          e.target.files && setNewPicture(e.target.files[0]);
+          e.target.files && setNewPoster(e.target.files[0]);
         }}
         className="hidden"
       />

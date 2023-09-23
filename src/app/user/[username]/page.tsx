@@ -1,21 +1,23 @@
-import { UserFollowButton } from '@/components/elements/ButtonFollowUser/UserFollowButton';
-import ModalSettingsUser from '@/components/elements/ModalSettingsUser/ModalSettingsUser';
-import UserAvatar from '@/components/elements/UserAvatar/UserAvatar';
-import UserHeader from '@/components/modules/UserHeader/UserHeader';
+import ProfilePlaylists from '@/components/modules/ProfilePlaylists/ProfilePlaylists';
 import UserMovies from '@/components/modules/UserMovies/UserMovies';
-import UserPlaylists from '@/components/modules/UserPlaylists/UserPlaylists';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { getUserDetails } from '@/db/appwrite';
+import { getClient } from '@/lib/ApolloClient';
+// import { getUserDetails } from '@/lib/appwrite';
 import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
+
+import PROFILE_DETAILS_QUERY from '@/components/modules/ProfileDetails/queries/ProfileQuery'
 
 export async function generateMetadata({
   params,
 }: {
   params: { username: string };
 }) {
-  const user = await getUserDetails(params.username);
+  const user = await (await getClient().query({
+    query: PROFILE_DETAILS_QUERY,
+    variables: {
+    username: params.username
+    }
+  })).data?.userCollection?.edges[0]?.node;
   if (!user) {
     return {
       title: 'Oups, utilisateur introuvable !',
@@ -28,12 +30,18 @@ export async function generateMetadata({
 }
 
 export default async function UserPage({ params } : { params: { username: string } }) {
-  const user = await getUserDetails(params.username);
+  const user = await (await getClient().query({
+    query: PROFILE_DETAILS_QUERY,
+    variables: {
+    username: params.username
+    }
+  })).data?.userCollection?.edges[0]?.node;
+
   if (!user) notFound();
 
   return (
     <Fragment>
-      <UserPlaylists user={user} horizontal />
+      <ProfilePlaylists user={user} horizontal />
       <UserMovies userId={user.$id} horizontal />
     </Fragment>
   );

@@ -1,4 +1,4 @@
-import { databases } from '@/db/appwrite';
+import { databases } from '@/lib/appwrite';
 import { Query } from 'appwrite';
 import { NextResponse } from 'next/server';
 

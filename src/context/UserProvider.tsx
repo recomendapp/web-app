@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { account, databases } from '@/db/appwrite';
+import { account, databases } from '@/lib/appwrite';
 
 export interface UserState {
   user: any;

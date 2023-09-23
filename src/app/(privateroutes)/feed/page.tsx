@@ -1,7 +1,7 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/context/UserProvider';
-import { databases } from '@/db/appwrite';
+import { databases } from '@/lib/appwrite';
 import { Models, Query } from 'appwrite';
 import React, { useEffect, useState } from 'react';
 

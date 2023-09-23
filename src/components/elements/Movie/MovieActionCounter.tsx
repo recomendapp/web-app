@@ -1,7 +1,7 @@
 import { Bookmark, Heart, Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { databases } from '@/db/appwrite';
+import { databases } from '@/lib/appwrite';
 import { Query } from 'appwrite';
 
 export function MovieActionCounter({ movieId }: { movieId: string }) {

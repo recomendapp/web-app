@@ -1,6 +1,6 @@
 import { getMovieDetails } from "@/hooks/tmdb";
 import { User } from "@/types/type.user";
-import { databases } from "@/db/appwrite";
+import { databases } from "@/lib/appwrite";
 import { Models, Query } from "appwrite";
 import { QueryClient } from "react-query";
 

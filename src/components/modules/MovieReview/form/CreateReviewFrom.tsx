@@ -3,7 +3,7 @@
 import Tiptap from "@/components/modules/Editor/Editor";
 import { isLiked, isRated } from "@/types/movie/type.movie_action";
 import { User } from "@/types/type.user";
-import { databases } from "@/db/appwrite";
+import { databases } from "@/lib/appwrite";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { JSONContent } from "@tiptap/react";
 import { useRouter } from "next/navigation";

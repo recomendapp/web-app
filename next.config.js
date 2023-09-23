@@ -2,6 +2,7 @@
 const nextConfig = {
   images: {
     domains: [
+      'huecemdnsnivsvwhkiqz.supabase.co',
       'image.tmdb.org',
       'images.justwatch.com',
       'cloud.appwrite.io',

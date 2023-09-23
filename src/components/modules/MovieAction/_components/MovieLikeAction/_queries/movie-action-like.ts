@@ -1,4 +1,4 @@
-import { databases } from "@/db/appwrite";
+import { databases } from "@/lib/appwrite";
 import { QueryClient } from "react-query";
 import { handleWatch } from "@/components/modules/MovieAction/_components/MovieWatchAction/_queries/movie-action-watch";
 import { Query } from "appwrite";

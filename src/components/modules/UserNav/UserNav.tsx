@@ -21,15 +21,19 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Novu from '@/context/NovuProvider';
 import { getInitiales } from '@/lib/utils/utils';
 import { ThemeToggle } from '@/context/ThemeProvider/ThemeToggle';
+import { gql, useQuery } from '@apollo/client';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 interface UserNavProps extends React.HTMLAttributes<HTMLDivElement> {
   skeleton?: boolean;
 }
 
-export function UserNav({ skeleton }: UserNavProps) {
-  const { user, userLoading, logout } = useUser();
 
-  if (user === null) {
+export function UserNav({ skeleton }: UserNavProps) {
+
+  const { user, loading, logout } = useAuth();
+
+  if (loading && !user) {
     return <Skeleton className="h-8 w-8 rounded-full" />;
   }
 
@@ -45,13 +49,11 @@ export function UserNav({ skeleton }: UserNavProps) {
 
   return (
     <div className="flex items-center gap-4">
-      {/* <ThemeToggle /> */}
-      <Novu userId={user.$id} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={user.avatar} alt={user.name} />
+              <AvatarImage src={user.avatar_url} alt={user.username} />
               <AvatarFallback>{getInitiales(user.full_name)}</AvatarFallback>
             </Avatar>
           </Button>

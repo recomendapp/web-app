@@ -1,4 +1,4 @@
-import { databases } from '@/db/appwrite';
+import { databases } from '@/lib/appwrite';
 import { Query } from 'appwrite';
 
 export async function handleIsMovieLiked(userId: string, movieId: number) {

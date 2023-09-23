@@ -29,7 +29,7 @@ import { Textarea } from '@/components/ui/textarea';
 // import { toast } from "@/components/ui/use-toast"
 import { toast } from 'react-toastify';
 import { useUser } from '@/context/UserProvider';
-import { account, checkUsernameExist, databases } from '@/db/appwrite';
+import { account, checkUsernameExist, databases } from '@/lib/appwrite';
 import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/icons';
 

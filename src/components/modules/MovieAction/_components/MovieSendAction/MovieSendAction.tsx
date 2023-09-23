@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/tooltip';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { databases } from '@/db/appwrite';
+import { databases } from '@/lib/appwrite';
 import { Query } from 'appwrite';
 import { Models } from 'appwrite/types/models';
 

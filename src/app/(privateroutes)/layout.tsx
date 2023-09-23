@@ -1,7 +1,7 @@
 'use client';
 
 import Loader from '@/components/elements/Loader/Loader';
-import { useUser } from '@/context/UserProvider';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { useRouter } from 'next/navigation';
 
 interface ProtectedLayoutProps {
@@ -11,16 +11,16 @@ interface ProtectedLayoutProps {
 export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
   const router = useRouter();
 
-  const { user } = useUser();
+  const { loading, user, session } = useAuth();
 
-  if (user === false) {
+  if (!loading && !session) {
     router.push('/login');
   }
 
   return (
     <>
-      {user === null && <Loader />}
-      {user && <>{children}</>}
+      {loading && <Loader />}
+      {!loading && user && <>{children}</>}
     </>
   );
 }

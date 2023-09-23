@@ -15,20 +15,27 @@ import {
 import { Input } from '@/components/ui/input';
 import { toast } from 'react-toastify';
 import { useUser } from '@/context/UserProvider';
-import { account, checkUsernameExist, databases } from '@/db/appwrite';
+import { account, databases } from '@/lib/appwrite';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { supabase } from '@/lib/supabase';
+import { useMutation } from '@apollo/client';
+import UPDATE_ACCOUNT_MUTATION from './mutations/updateAccountMutation';
+import { Icons } from '@/components/icons';
 
 // This can come from your database or API.
 
 export function AccountForm() {
   const router = useRouter();
 
-  const { user, userRefresh } = useUser();
+  const { user, userRefresh, session } = useAuth();
+
+  const [ updateProfile, { data, loading, error } ] = useMutation(UPDATE_ACCOUNT_MUTATION);
 
   const date = new Date();
 
-  const dateLastUsernameUpdate = user.usernameUpdate
-    ? new Date(user.usernameUpdate)
+  const dateLastUsernameUpdate = user?.username_updated_at
+    ? new Date(user.username_updated_at)
     : new Date('01/01/1970');
 
   const profileFormSchema = z.object({
@@ -46,7 +53,7 @@ export function AccountForm() {
       })
       .refine(
         async (value) => {
-          if (value === user.username) {
+          if (value === user?.username) {
             return true;
           }
           const isUsernameExist = await checkUsernameExist(value);
@@ -62,8 +69,8 @@ export function AccountForm() {
   type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
   const defaultValues: Partial<ProfileFormValues> = {
-    username: user.username,
-    email: user.email,
+    username: user?.username,
+    email: session?.user.email,
   };
 
   const form = useForm<ProfileFormValues>({
@@ -74,22 +81,17 @@ export function AccountForm() {
 
   async function onSubmit(data: ProfileFormValues) {
     try {
-      await databases.updateDocument(
-        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER),
-        user.$id,
-        {
+      await updateProfile({
+        variables: {
+          id: user?.id,
           username: data.username,
-          usernameUpdate: user.username !== data.username ? date : null,
+          username_updated_at: user?.username !== data.username ? date : null
         }
-      );
-      await userRefresh();
-      toast.success(
-        'Toutes les modifications ont été enregistrées avec succès 👌'
-      );
+      });
+      if (error) throw error;
+      toast.success('Enregistré');  
     } catch (error) {
-      await userRefresh();
-      toast.error("Une erreur s'est produite 🤯");
+      toast.error("Une erreur s'est produite");
     }
   }
 
@@ -105,14 +107,13 @@ export function AccountForm() {
               <FormControl>
                 <Input
                   disabled={
-                    !user.emailVerification ||
                     (date.getTime() - dateLastUsernameUpdate.getTime()) /
                       (1000 * 60 * 60 * 24) <
                       30
                       ? true
                       : false
                   }
-                  placeholder={user.username}
+                  placeholder={"Nom d'utilisateur"}
                   {...field}
                 />
               </FormControl>
@@ -132,47 +133,37 @@ export function AccountForm() {
             <FormItem>
               <FormLabel>
                 Adresse email{' '}
-                {!user.emailVerification && (
-                  <span className="text-destructive">- non confirmée</span>
-                )}
               </FormLabel>
               <FormControl>
-                <Input placeholder={user.email} {...field} disabled />
+                <Input placeholder={"Adresse mail"} {...field} disabled />
               </FormControl>
               <FormDescription className="flex flex-col md:flex-row w-full justify-between gap-4">
                 <div className="text-justify">
                   Pour modifier votre adresse email contactez nous.
                 </div>
-                {!user.emailVerification && (
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    className="h-fit py-1 px-2"
-                    onClick={async () => {
-                      try {
-                        await account.createVerification(
-                          process.env.NEXT_PUBLIC_URL + '/verifyEmail'
-                        );
-                        toast.success(
-                          'Un email de confirmation a bien été envoyé 👌'
-                        );
-                      } catch {
-                        toast.error("Une erreur s'est produite 🤯");
-                      }
-                    }}
-                  >
-                    Confirmer votre adresse email
-                  </Button>
-                )}
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button disabled={!user.emailVerification ? true : false} type="submit">
-          Enregistrer
+        <Button type="submit" disabled={loading}>
+            {loading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Enregistrer
         </Button>
       </form>
     </Form>
   );
+}
+
+
+export async function checkUsernameExist(username: string) {
+  const { data, error } = await supabase.from('user').select('*').eq('username', username)
+  if (error) throw error;
+  if (data?.length) {
+    return true;
+  } else {
+    return false;
+  }
 }

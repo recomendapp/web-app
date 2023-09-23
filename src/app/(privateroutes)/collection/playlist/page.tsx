@@ -1,6 +1,6 @@
 'use client';
 import { useUser } from '@/context/UserProvider';
-import { databases } from '@/db/appwrite';
+import { databases } from '@/lib/appwrite';
 import { Query } from 'appwrite';
 import { Models } from 'appwrite/types/models';
 import React, { useEffect, useState } from 'react';

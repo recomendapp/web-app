@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useState } from 'react';
-import { databases } from '@/db/appwrite';
+import { databases } from '@/lib/appwrite';
 
 import {
   Command,

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Metadata } from 'next';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { account } from '@/db/appwrite';
+import { account } from '@/lib/appwrite';
 import { toast } from 'react-toastify';
 import { useUser } from '@/context/UserProvider';
 

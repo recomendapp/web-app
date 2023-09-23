@@ -1,5 +1,5 @@
-import UserPlaylists from "@/components/modules/UserPlaylists/UserPlaylists"
-import { getUserDetails } from "@/db/appwrite";
+import ProfilePlaylists from "@/components/modules/ProfilePlaylists/ProfilePlaylists";
+import { getUserDetails } from "@/lib/appwrite";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({
@@ -27,6 +27,6 @@ export default async function Playlists({
     const user = await getUserDetails(params.username);
      if (!user) notFound();
     return (
-        <UserPlaylists user={user} />
+        <ProfilePlaylists user={user} />
     )
 }

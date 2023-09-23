@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useUser } from "@/context/UserProvider";
-import { databases } from "@/db/appwrite";
+import { databases } from "@/lib/appwrite";
 import { Column, Row, Table } from "@tanstack/react-table";
 import { Models } from "appwrite";
 import { Check, Cross, FileEdit, X } from "lucide-react";

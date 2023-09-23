@@ -20,11 +20,18 @@ import { Switch } from '@/components/ui/switch';
 
 import { toast } from 'react-toastify';
 import { Textarea } from '@/components/ui/textarea';
-import { databases, storage } from '@/db/appwrite';
+import { databases, storage } from '@/lib/appwrite';
 import { Dispatch, useState } from 'react';
 import PlaylistPictureUpload from '../_components/PlaylistPictureUpload';
 import Compressor from 'compressorjs';
 import { usePathname, useRouter } from 'next/navigation';
+import { useMutation } from '@apollo/client';
+
+import CREATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/createPlaylistMutation'
+import UPDATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/updatePlaylistMutation'
+import USER_PLAYLISTS_QUERY from '@/components/modules/UserPlaylists/queries/userPlaylistsQuery';
+import compressPicture from '@/lib/utils/compressPicture';
+import { supabase } from '@/lib/supabase';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -41,13 +48,41 @@ export function PlaylistForm({
   playlist,
   setPlaylist,
 }: PlaylistFormProps) {
-  const [newPicture, setNewPicture] = useState<File>();
-  const [isUploading, setIsUploading] = useState(false);
+  
   const router = useRouter();
   const pathname = usePathname();
 
+  const [ loading, setLoading ] = useState(false);
+
+  const [ newPoster, setNewPoster ] = useState<File>();
+  const [isUploading, setIsUploading] = useState(false);
+  
+  const [ createPlaylist ] = useMutation(CREATE_PLAYLIST_MUTATION, {
+   refetchQueries: [{ query: USER_PLAYLISTS_QUERY}]
+    // update(cache, { data }) {
+    //   const playlistData = cache.readQuery<any>({
+    //     query: USER_PLAYLISTS_QUERY,
+    //     variables: { id: userId }
+    //   })
+    //   console.log('test', playlistData)
+    //   cache.writeQuery({
+    //     query: USER_PLAYLISTS_QUERY,
+    //     variables: { id: userId },
+    //     data: {
+    //       playlistCollection: [
+    //         ...playlistData.playlistCollection,
+    //         { node: data.insertIntoplaylistCollection.records[0], __typename: 'playlistEdge' },
+    //       ]
+    //     }
+    //   })
+    // }
+  });
+
+  const [ updatePlaylist ] = useMutation(UPDATE_PLAYLIST_MUTATION);
+  
+
   const CreatePlaylistFormSchema = z.object({
-    name: z
+    title: z
       .string()
       .min(1, {
         message: 'Le nom est obligatoire',
@@ -68,7 +103,7 @@ export function PlaylistForm({
   type CreatePlaylistFormValues = z.infer<typeof CreatePlaylistFormSchema>;
 
   const defaultValues: Partial<CreatePlaylistFormValues> = {
-    name: playlist ? playlist.title : '',
+    title: playlist ? playlist.title : '',
     description: playlist ? playlist.description : '',
     is_public: playlist ? playlist.is_public : true,
   };
@@ -79,70 +114,50 @@ export function PlaylistForm({
     mode: 'onChange',
   });
 
-  async function createPlaylist(data: CreatePlaylistFormValues) {
+  async function handleCeatePlaylist(data: CreatePlaylistFormValues) {
     try {
-      const { $id } = await databases.createDocument(
-        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST),
-        'unique()',
-        {
-          title: data.name,
+      setLoading(true);
+      const { errors } = await createPlaylist({
+        variables: {
+          user_id: userId,
+          title: data.title,
           description: data.description,
-          userId: userId,
           is_public: data.is_public,
         }
-      );
-      if (newPicture) {
-        await uploadPlaylistPicture(newPicture, $id);
-      }
-      if (movieId) {
-        await databases.createDocument(
-          String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-          String(
-            process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST_ITEM
-          ),
-          'unique()',
-          {
-            movieId: movieId,
-            playlistId: $id,
-            playlist: $id,
-            user: userId,
-          }
-        );
-      }
-      toast.success('La playlist a été créé avec succès 👌');
+      })
+      if (errors) throw errors;
+      toast.success('Enregistré');
       success();
-      return;
-    } catch (error: any) {
-      toast.error("Une erreur s'est produite 🤯");
+    } catch (error) {
+      toast.error("Une erreur s'est produite");
+    } finally {
+      setLoading(false);
     }
   }
 
-  async function updatePlaylist(data: CreatePlaylistFormValues) {
+  async function handleUpdatePlaylist(data: CreatePlaylistFormValues) {
     try {
-      if (newPicture) {
-        await uploadPlaylistPicture(
-          newPicture,
-          playlist.$id,
-          playlist.poster_path
-        );
+      setLoading(true);
+      const payload: Record<string, any> = {
+        id: playlist.id,
+        title: data.title,
+        description: data.description,
       }
-      const newPlaylist = await databases.updateDocument(
-        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST),
-        playlist.$id,
-        {
-          title: data.name,
-          description: data.description,
-          is_public: data.is_public,
-        }
-      );
-      setPlaylist && setPlaylist(newPlaylist);
-      toast.success('Les informations ont bien été enregistrée 👌');
+      if (newPoster) {
+        const newPosterUrl = await uploadPoster(newPoster, playlist.id);
+        payload.poster_url = newPosterUrl
+      }
+      const { errors } = await updatePlaylist({
+        variables: payload
+      })
+      if (errors) return errors;
+      toast.success('Enregistré');
       success();
-      return;
-    } catch (error: any) {
-      toast.error("Une erreur s'est produite 🤯");
+    } catch (error) {
+      console.log(error)
+      toast.error("Une erreur s'est produite");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -159,76 +174,35 @@ export function PlaylistForm({
           playlist.$id
         ));
       if (playlist && pathname == '/playlist/' + playlist.$id) router.push('/');
-      toast.success('La playlist a bien été supprimée 👌');
+      toast.success('Enregistré');  
       success();
       return;
     } catch (error: any) {
-      toast.error("Une erreur s'est produite 🤯");
+      toast.error("Une erreur s'est produite");
     }
   }
 
-  const uploadPlaylistPicture = async (
-    file: File,
-    playlistId: string,
-    oldPathToPlaylistPicture?: string
-  ) => {
+  async function uploadPoster(file: File, playlistId: string) {
     try {
-      new Compressor(file, {
-        quality: 1,
-        resize: 'cover',
-        convertTypes: ['image/png', 'image/webp'],
-        convertSize: 10000,
-        width: 1000,
-        height: 1000,
-        success: async (compressedImage) => {
-          // RENAME IMAGE
-          const image = new File(
-            [compressedImage],
-            String(
-              playlistId +
-                compressedImage.name.substring(
-                  file.name.lastIndexOf('.'),
-                  compressedImage.name.length
-                )
-            ),
-            { type: compressedImage.type }
-          );
-          
-          // DELETE OLD PLAYLIST PICTURE
-          if (oldPathToPlaylistPicture) {
-            await storage.deleteFile(
-              String(process.env.NEXT_PUBLIC_APPWRITE_STORAGE_PLAYLISTS_POSTER),
-              oldPathToPlaylistPicture.split('/').reverse()[1]
-            );
-          }
+      const fileExt = file.name.split('.').pop()
+      const filePath = `${playlistId}-${Math.random()}.${fileExt}`
 
-          // UPLOAD THE PLAYLIST PICTURE
-          const { $id } = await storage.createFile(
-            String(process.env.NEXT_PUBLIC_APPWRITE_STORAGE_PLAYLISTS_POSTER),
-            playlistId,
-            image
-          );
-          // UPDATE PATH TO PLAYLIST PICTURE
-          await databases.updateDocument(
-            String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-            String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST),
-            playlistId,
-            {
-              poster_path: `${process.env.NEXT_PUBLIC_APPWRITE_END_POINT}/storage/buckets/${process.env.NEXT_PUBLIC_APPWRITE_STORAGE_PLAYLISTS_POSTER}/files/${$id}/view?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID}`,
-            }
-          );
-          return;
-        },
-      });
+      const posterCompressed = await compressPicture(file, filePath, 400, 400);
+
+      let { error } = await supabase.storage.from('playlist_posters').upload(filePath, posterCompressed)
+      
+      if (error) throw error;
+
+      return (`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/playlist_posters/${filePath}`);
     } catch (error) {
-      console.log(error);
+      throw error;
     }
-  };
+  }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(playlist ? updatePlaylist : createPlaylist)}
+        onSubmit={form.handleSubmit(playlist ? handleUpdatePlaylist : handleCeatePlaylist)}
         className="space-y-8"
       >
         <div className="grid gap-4 grid-cols-2 w-full">
@@ -236,19 +210,19 @@ export function PlaylistForm({
             <PlaylistPictureUpload
               playlist={playlist}
               isUploading={isUploading}
-              newPicture={newPicture}
-              setNewPicture={setNewPicture}
+              newPoster={newPoster}
+              setNewPoster={setNewPoster}
             />
           </div>
           <div className="grid gap-4 py-4">
             <FormField
               control={form.control}
-              name="name"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nom</FormLabel>
                   <FormControl>
-                    <Input {...field} id="name" placeholder="Ajoutez un nom" />
+                    <Input {...field} id="title" placeholder="Ajoutez un nom" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -265,6 +239,7 @@ export function PlaylistForm({
                       {...field}
                       id="name"
                       placeholder="Ajoutez une description facultative"
+                      className='resize-none h-32'
                     />
                   </FormControl>
                   <FormMessage />

@@ -25,37 +25,63 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AspectRatio } from '../../ui/aspect-ratio';
 import { ImageWithFallback } from '../../elements/Tools/ImageWithFallback';
-import { useQuery } from 'react-query';
 import { useUser } from '@/context/UserProvider';
 import handlePlaylists from '@/hooks/movie/playlist/handlePlaylists';
 import { PlaylistButton } from '../MoviePlaylist/PlaylistButton';
 import { DialogTrigger } from '../../ui/dialog';
 import { siteConfig } from '@/config/site';
 import Image from 'next/image';
+import { gql, useQuery } from '@apollo/client';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { UserPlaylists } from '../UserPlaylists/UserPlaylists';
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   skeleton?: boolean;
 }
 
+const PROFILE_QUERY = gql`
+  query ProfileQuery($id: UUID!) {
+    userCollection(filter: { id: {eq: $id}}) {
+      edges {
+        node {
+          id
+          username
+          full_name
+          bio
+          avatar_url
+        }
+      }
+    }
+  }
+`
+
 export function Sidebar({
   className,
 }: SidebarProps) {
-  const { user } = useUser();
+  // const { user } = useUser();
 
   const sidebarRef = createRef<HTMLDivElement>();
+  const { user, userRefresh } = useAuth();
+
+  const { data: profileQuery, loading: profileLoading} = useQuery(PROFILE_QUERY, {
+    variables: { userId: user?.id },
+    skip: !user
+  });
+
+  const profile = profileQuery?.userCollection?.edges?.[0].node;
 
   const [ open, setOpen ] = useState(false);
   const [ sidebarExpanded, setSidebarExpanded ] = useState(true);
 
-  const {
-    data: playlists,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['collection', 'playlists'],
-    queryFn: () => handlePlaylists(user.$id),
-    enabled: user?.$id !== undefined && user?.$id !== null,
-  });
+  // const {
+  //   data: playlists,
+  //   isLoading,
+  //   isError,
+  // } = useQuery({
+  //   queryKey: ['collection', 'playlists'],
+  //   queryFn: () => handlePlaylists(user.$id),
+  //   enabled: user?.$id !== undefined && user?.$id !== null,
+  // });
 
   const pathname = usePathname();
   const mainRoutes = useMemo(
@@ -191,11 +217,11 @@ export function Sidebar({
               >
                 <Plus />
               </Button>
-              <PlaylistButton open={open} setOpen={setOpen} userId={user.$id} />
+              <PlaylistButton open={open} setOpen={setOpen} userId={user.id} />
             </>
           )}
         </div>
-        <ScrollArea className="h-full w-full">
+         <ScrollArea className="h-full w-full">
           {collectionRoutes.map((item) => (
             <Button
               key={item.label}
@@ -214,47 +240,15 @@ export function Sidebar({
                     />
                   </AspectRatio>
                 </div>
-                {/* <item.icon className="mr-2 h-4 w-4" /> */}
                 {sidebarExpanded && item.label}
               </Link>
             </Button>
           ))}
-          {playlists &&
-            playlists.map((item) => (
-              <Button
-                key={item.title}
-                variant={
-                  pathname === `/playlist/${item.$id}` ? 'secondary' : 'ghost'
-                }
-                className={`justify-start p-2`}
-                asChild
-              >
-                <Link
-                  href={'/playlist/' + item.$id}
-                  className="h-fit w-full flex gap-4"
-                >
-                  <div className={`w-12 shadow-2xl`}>
-                    <AspectRatio ratio={1 / 1}>
-                      <ImageWithFallback
-                        src={item.poster_path ? item.poster_path : ''}
-                        alt={item.title}
-                        fill
-                        className="rounded-md object-cover"
-                      />
-                    </AspectRatio>
-                  </div>
-                  {/* <item.icon className="mr-2 h-4 w-4" /> */}
-                  {sidebarExpanded && (
-                    <div>
-                      <div className='line-clamp-1'>{item.title}</div>
-                      <div>{item.items_count} films</div>
-                    </div>
-                  )}
-                </Link>
-              </Button>
-            ))}
-          {/* {lol()} */}
+          <UserPlaylists sidebarExpanded={sidebarExpanded} />
         </ScrollArea>
+      </div>
+      <div>
+        {profile?.bio}
       </div>
       {/* <div className="bg-background rounded-md p-2">
                     <Ads />

@@ -1,11 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -17,29 +15,18 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 // import { toast } from "@/components/ui/use-toast"
 import { toast } from 'react-toastify';
-import { useUser } from '@/context/UserProvider';
-import { account } from '@/db/appwrite';
-import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { supabase } from '@/lib/supabase';
 
 // This can come from your database or API.
 
 export function SecurityForm() {
-  const router = useRouter();
-
-  const { user, userRefresh } = useUser();
+  const { user, userRefresh } = useAuth();
 
   const profileFormSchema = z.object({
-    password: z.string(),
+    // password: z.string(),
     newpassword: z
       .string()
       .min(8, {
@@ -58,7 +45,7 @@ export function SecurityForm() {
   type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
   const defaultValues: Partial<ProfileFormValues> = {
-    password: '',
+    // password: '',
     newpassword: '',
     confirmnewpassword: '',
   };
@@ -79,24 +66,20 @@ export function SecurityForm() {
       });
       return;
     }
-
     try {
-      await account.updatePassword(data.newpassword, data.password);
-      toast.success('Nouveau mot de passe enregistré avec succès 👌');
+      const { error } = await supabase.auth.updateUser({ password: data.newpassword });
+      if (error) throw error;
+      toast.success('Enregistré');  
       form.reset();
     } catch (error) {
-      console.log('error', error);
-      form.setError('password', {
-        message: 'Le mot de passe que vous avez saisi est incorrect.',
-      });
-      // toast.error('Une erreur s\'est produite 🤯')
+      toast.error("Une erreur s'est produite");
     }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
+        {/* <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
@@ -106,7 +89,6 @@ export function SecurityForm() {
                 <Input
                   type="password"
                   autoComplete="current-password"
-                  disabled={!user.emailVerification ? true : false}
                   placeholder={'Mot de passe actuel'}
                   {...field}
                 />
@@ -115,7 +97,7 @@ export function SecurityForm() {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         <FormField
           control={form.control}
           name="newpassword"
@@ -126,7 +108,6 @@ export function SecurityForm() {
                 <Input
                   type="password"
                   autoComplete="new-password"
-                  disabled={!user.emailVerification ? true : false}
                   placeholder={'Nouveau mot de passe'}
                   {...field}
                 />
@@ -146,7 +127,6 @@ export function SecurityForm() {
                 <Input
                   type="password"
                   autoComplete="new-password"
-                  disabled={!user.emailVerification ? true : false}
                   placeholder={'Confirmer le nouveau mot de passe'}
                   {...field}
                 />
@@ -156,7 +136,7 @@ export function SecurityForm() {
             </FormItem>
           )}
         />
-        <Button disabled={!user.emailVerification ? true : false} type="submit">
+        <Button type="submit">
           Enregistrer
         </Button>
       </form>

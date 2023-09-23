@@ -1,15 +1,17 @@
+"use client"
 import { LoginForm } from '@/app/(auth)/login/LoginForm';
 import { siteConfig } from '@/config/site';
-import { useUser } from '@/context/UserProvider';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 
 export const metadata: Metadata = {
   title: 'Se connecter',
 };
 
 export default function Login() {
+
   return (
     <main className="container h-full relative flex flex-col items-center justify-center">
       <div className="lg:p-8">

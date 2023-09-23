@@ -1,4 +1,4 @@
-import { databases } from "@/db/appwrite";
+import { databases } from "@/lib/appwrite";
 import { Query } from "appwrite";
 import { handleWatch } from "../../MovieWatchAction/_queries/movie-action-watch";
 import { isRated, isWatched } from "@/types/movie/type.movie_action";

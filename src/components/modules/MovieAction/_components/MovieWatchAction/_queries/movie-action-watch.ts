@@ -1,5 +1,5 @@
 import { isLiked, isRated, isWatched, isWatchlisted } from "@/types/movie/type.movie_action";
-import { databases } from "@/db/appwrite";
+import { databases } from "@/lib/appwrite";
 import { Models, Query } from "appwrite";
 import { QueryClient } from "react-query";
 import { handleDeleteReview } from "@/api/movie//movie_review";

@@ -1,37 +1,52 @@
-"use client"
+'use client';
 
+import React, { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
 import {
     ApolloClient,
     InMemoryCache,
     ApolloProvider
 } from "@apollo/client";
-
-import {
-    BatchHttpLink
-} from "@apollo/client/link/batch-http";
+import { BatchHttpLink } from "@apollo/client/link/batch-http";
 
 const link = new BatchHttpLink({
-    uri: `${String(process.env.NEXT_PUBLIC_APPWRITE_END_POINT)}/graphql/`,
-    batchInterval: 10,
+    uri: `${String(process.env.NEXT_PUBLIC_SUPABASE_URL)}/graphql/v1`,
     headers: {
-        "X-Appwrite-Project": String(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID),
+        "apiKey": String(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
     },
+    batchInterval: 10,
 });
 
-export const ApolloClientProvider = ({
+export function ApolloClientProvider ({
     children,
 } : {
     children: React.ReactNode;
-}) => {
+}) {
+    const [header, setHeader] = useState<any>({
+        "apiKey": String(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
+    })
+
+    useEffect(() => {
+        supabase.auth.getSession()
+            .then(({data: { session }}) => {
+                if (session?.access_token)
+                {
+                    setHeader({
+                        ...header,
+                        "authorization": `Bearer ${session.access_token}`,
+                    })
+                }
+            })
+    }, [])
+
     const client = new ApolloClient({
-        // uri: `${String(process.env.NEXT_PUBLIC_APPWRITE_END_POINT)}/graphql/`,
-        // headers: {
-        //     "X-Appwrite-Project": String(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID),
-        // },
-        link: link,
+        // link,
+        uri: `${String(process.env.NEXT_PUBLIC_SUPABASE_URL)}/graphql/v1`,
+        headers: header,
         cache: new InMemoryCache(),
-        
-    });
+        connectToDevTools: true,
+    })
+
     return (
         <ApolloProvider client={client}>
             {children}
