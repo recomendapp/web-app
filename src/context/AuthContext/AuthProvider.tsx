@@ -59,6 +59,7 @@ export const AuthProvider = ({ children } : { children: any }) => {
     skip: session == null
   });
   const user = data?.userCollection?.edges[0]?.node;
+  console.log(session?.access_token)
 
   const init = async () => {
     const setData = async () => {

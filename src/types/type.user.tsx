@@ -15,4 +15,5 @@ export interface User {
     language: string,
     badge: string,
     website: string,
+    favorite_color: string,
 }

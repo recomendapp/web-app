@@ -34,6 +34,7 @@ import Image from 'next/image';
 import { gql, useQuery } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { UserPlaylists } from '../UserPlaylists/UserPlaylists';
+import { Box } from '@/components/elements/Box/Box';
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   skeleton?: boolean;
@@ -147,8 +148,8 @@ export function Sidebar({
         className
       )}
     >
-      <div
-        className={`flex items-center py-2 bg-background rounded-sm
+      <Box
+        className={`
           ${!sidebarExpanded && 'justify-center'}
         `}
       >
@@ -165,7 +166,7 @@ export function Sidebar({
           />
           {/* <h2 className='text-4xl font-bold text-accent-1'>{sidebarExpanded ? siteConfig.logo : siteConfig.icon}</h2> */}
         </Link>
-      </div>
+      </Box>
       <div
         className={`flex flex-col gap-1 py-2 bg-background rounded-md ${
           sidebarExpanded ? 'px-3' : 'px-1  items-center'
@@ -247,42 +248,6 @@ export function Sidebar({
           <UserPlaylists sidebarExpanded={sidebarExpanded} />
         </ScrollArea>
       </div>
-      <div>
-        {profile?.bio}
-      </div>
-      {/* <div className="bg-background rounded-md p-2">
-                    <Ads />
-                </div> */}
-      {/* <div className="py-2 ">
-                    <h2 className="relative px-7 text-lg font-semibold tracking-tight">
-                    Roadlists
-                    </h2>
-                    <ScrollArea className="h-[250px] px-1">
-                    <div className="space-y-1 p-2">
-                        <Button
-                            variant="ghost"
-                            className="w-full justify-start font-normal"
-                        >
-                            <ListMusic className="mr-2 h-4 w-4" />
-                            salut
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            className="w-full justify-start font-normal"
-                        >
-                            <ListMusic className="mr-2 h-4 w-4" />
-                            salut
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            className="w-full justify-start font-normal"
-                        >
-                            <ListMusic className="mr-2 h-4 w-4" />
-                            salut
-                        </Button>
-                    </div>
-                    </ScrollArea>
-                </div>*/}
       <div className="flex justify-center items-center px-3 py-2 bg-background rounded-sm">
         <Link
           href={'/about'}

@@ -32,7 +32,7 @@ export default function MovieCardSmall({ movie } : { movie:any }) {
                 
                 {/* DATE / GENRES / RUNTIME */}
                 <div className="line-clamp-1">
-                    {movie.credits.crew
+                    {movie?.credits?.crew
                         .filter(
                             (member: any) => member.job === 'Director'
                         )

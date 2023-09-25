@@ -12,13 +12,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { useAuth } from "@/context/AuthContext/AuthProvider"
 import { useUser } from "@/context/UserProvider"
 import { Settings } from "lucide-react"
 
 export default function ModalSettingsUser({ userId } : { userId: string }) {
-    const { user } = useUser();
+    const { user } = useAuth();
 
-    if (!user || user.$id != userId)
+    if (!user || user.id != userId)
         return null
 
     return (

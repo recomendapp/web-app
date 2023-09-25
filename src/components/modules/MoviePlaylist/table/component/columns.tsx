@@ -9,8 +9,9 @@ import { ConvertHoursMinutes } from "@/lib/utils/utils"
 import { Clock } from "lucide-react"
 import MovieCardSmall from "@/components/elements/Movie/MovieCardSmall"
 import { DataComment } from "./data-table-comment"
+import { PlaylistItem } from "@/types/type.playlist"
 
-export const columns: ColumnDef<Models.Document>[] = [
+export const columns: ColumnDef<any>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -30,7 +31,7 @@ export const columns: ColumnDef<Models.Document>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Film" />
     ),
-    cell: ({ row }) => <MovieCardSmall movie={row.original}/>,
+    cell: ({ row }) => <MovieCardSmall movie={row.original.item.film}/>,
     enableHiding: false,
   },
   {
@@ -41,7 +42,7 @@ export const columns: ColumnDef<Models.Document>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date"/>
     ),
-    cell: ({ row }) => <div><DateOnlyYearTooltip date={row.original.release_date} /> </div>,
+    cell: ({ row }) => <div><DateOnlyYearTooltip date={row.original.item.film.release_date} /> </div>,
   },
   {
     accessorKey: "runtime",
@@ -51,7 +52,7 @@ export const columns: ColumnDef<Models.Document>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} Icon={Clock} />
     ),
-    cell: ({ row }) => <p>{ConvertHoursMinutes(row.original.runtime)}</p>
+    cell: ({ row }) => <p>{ConvertHoursMinutes(row.original.item.film?.runtime)}</p>
   },
   {
     accessorKey: "comment",
@@ -61,12 +62,12 @@ export const columns: ColumnDef<Models.Document>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Commentaire"/>
     ),
-    cell: ({ row, table, column }) => <DataComment data={row.original} table={table} row={row} column={column}/>,
+    cell: ({ row, table, column }) => <DataComment data={row.original.item} table={table} row={row} column={column}/>,
     enableSorting: false,
   },
   {
     id: "actions",
-    cell: ({ row, table, column }) => <DataTableRowActions table={table} row={row} column={column} />,
+    cell: ({ row, table, column }) => <DataTableRowActions data={row.original.item} table={table} row={row} column={column} />,
   },
 ]
 

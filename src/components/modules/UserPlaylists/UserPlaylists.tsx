@@ -30,24 +30,24 @@ export function UserPlaylists({ sidebarExpanded } : { sidebarExpanded: boolean})
 
     return (
         <Fragment>
-            {playlists.map(({ node: item } : { node: Playlist}) => (
+            {playlists.map(({ playlist } : { playlist: Playlist}) => (
                     <Button
-                        key={item.title}
+                        key={playlist.title}
                         variant={
-                        pathname === `/playlist/${item.id}` ? 'secondary' : 'ghost'
+                        pathname === `/playlist/${playlist.id}` ? 'secondary' : 'ghost'
                         }
                         className={`justify-start p-2`}
                         asChild
                     >
                         <Link
-                            href={'/playlist/' + item.id}
+                            href={'/playlist/' + playlist.id}
                             className="h-fit w-full flex gap-4"
                         >
                         <div className={`w-12 shadow-2xl`}>
                             <AspectRatio ratio={1 / 1}>
                                 <ImageWithFallback
-                                    src={item.poster_url ?? ''}
-                                    alt={item.title}
+                                    src={playlist.poster_url ?? ''}
+                                    alt={playlist.title}
                                     fill
                                     className="rounded-md object-cover"
                                 />
@@ -55,7 +55,7 @@ export function UserPlaylists({ sidebarExpanded } : { sidebarExpanded: boolean})
                         </div>
                         {sidebarExpanded && (
                             <div>
-                            <div className='line-clamp-1'>{item.title}</div>
+                            <div className='line-clamp-1'>{playlist.title}</div>
                             {/* <div>{item.items_count} films</div> */}
                             </div>
                         )}

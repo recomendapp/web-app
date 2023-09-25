@@ -136,14 +136,14 @@ export default function MovieHeader({ movie, small } : { movie: any, small?: boo
                   </div>
                   <div className='flex items-center gap-2'>
                       <MovieActionCounter movieId={movie.id} />
-                      {movie.videos.results.length && <MovieTrailerButton trailer={movie.videos} />}
+                      {/* {movie.videos.results.length && <MovieTrailerButton trailer={movie.videos} />} */}
                   </div>
                   </div>
               </div>
               </div>
           </div>
           <div className='px-4 pb-4'>
-              <MovieAction movieId={movie.id} all />
+              <MovieAction filmId={movie.id} all />
           </div>
       </div>
   )
@@ -156,7 +156,7 @@ export function MovieTrailerButton({
   } : {
     trailer: any
   }) {
-    const [ selectedTrailer, setSelectedTailer ] = useState<string>(trailer.results.toReversed()[0].key);
+    const [ selectedTrailer, setSelectedTailer ] = useState<string>(trailer.results.toReversed[0].key);
     
     return (
       <Dialog>

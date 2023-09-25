@@ -1,14 +1,44 @@
+"use client"
+
 import { UserFollowButton } from "@/components/elements/ButtonFollowUser/UserFollowButton"
 import ModalSettingsUser from "@/components/elements/ModalSettingsUser/ModalSettingsUser"
 import UserAvatar from "@/components/elements/UserAvatar/UserAvatar"
 import { Button } from "@/components/ui/button"
+import { useQuery } from "@apollo/client"
 import { BarChart, LinkIcon } from "lucide-react"
 import Link from "next/link"
 import { BsFillPatchCheckFill } from "react-icons/bs"
+import PROFILE_QUERY from "../ProfileDetails/queries/ProfileQuery"
+import { User } from "@/types/type.user"
+import hexToRgb from "@/lib/utils/hexToRgb"
 
-export default function UserHeader({ user } : { user: any }) {
+export default function ({ username } : { username: string }) {
+
+    const { data: userQuery, loading } = useQuery(PROFILE_QUERY, {
+        variables: {
+            username: username
+        }
+    })
+
+    const user: User = userQuery?.userCollection?.edges[0]?.node;
+
+    console.log('uxer', user?.favorite_color)
+
+    if (loading)
+        return null
+
+    if (!loading && !userQuery)
+        return null
+
     return (
-        <div className={`flex flex-col gap-4 p-4 bg-gradient-to-b from-[#468f]/40 to-background`}>
+        <div 
+            className={`
+            flex flex-col gap-4 p-4 
+            `}
+            style={{
+                background: `linear-gradient(to bottom, ${hexToRgb(user.favorite_color, 0.4)}, black)`,
+            }}
+        >
             <div className='flex gap-4'>
                 <UserAvatar className='h-20 w-20 lg:h-[150px] lg:w-[150px]' user={user} />
                 <section className='flex flex-col gap-2 w-full'>
@@ -30,7 +60,7 @@ export default function UserHeader({ user } : { user: any }) {
                                 <BarChart />
                                 </Link>
                             </Button>
-                            <ModalSettingsUser userId={user.$id} />
+                            <ModalSettingsUser userId={user.id} />
                         </div>
                     </div>
                     <div className='flex justify-between'>
@@ -38,10 +68,10 @@ export default function UserHeader({ user } : { user: any }) {
                         <div>
                             {user.badge && <p className='text-accent-1 italic'>{user.badge}</p>}
                             {user.bio && <p>{user.bio}</p>}
-                            {user.link && <Link href={user.link} className='flex gap-2 items-center' target='_blank'><LinkIcon width={15}/>{user.link.replace(/(^\w+:|^)\/\//, '')}</Link>}
+                            {user.website && <Link href={user.website} className='flex gap-2 items-center' target='_blank'><LinkIcon width={15}/>{user.website.replace(/(^\w+:|^)\/\//, '')}</Link>}
                         </div>
                         {/* ACTION BUTTON */}
-                        <UserFollowButton followeeId={user.$id} />
+                        <UserFollowButton followeeId={user.id} />
                     </div>
                 </section>
             </div>

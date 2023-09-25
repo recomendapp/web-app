@@ -22,16 +22,18 @@ import { toast } from 'react-toastify';
 import { Textarea } from '@/components/ui/textarea';
 import { databases, storage } from '@/lib/appwrite';
 import { Dispatch, useState } from 'react';
-import PlaylistPictureUpload from '../_components/PlaylistPictureUpload';
+import PlaylistPictureUpload from '../components/PlaylistPictureUpload';
 import Compressor from 'compressorjs';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMutation } from '@apollo/client';
 
 import CREATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/createPlaylistMutation'
 import UPDATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/updatePlaylistMutation'
+import DELETE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/deletePlaylistMutation';
 import USER_PLAYLISTS_QUERY from '@/components/modules/UserPlaylists/queries/userPlaylistsQuery';
 import compressPicture from '@/lib/utils/compressPicture';
 import { supabase } from '@/lib/supabase';
+import { Icons } from '@/components/icons';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -57,7 +59,7 @@ export function PlaylistForm({
   const [ newPoster, setNewPoster ] = useState<File>();
   const [isUploading, setIsUploading] = useState(false);
   
-  const [ createPlaylist ] = useMutation(CREATE_PLAYLIST_MUTATION, {
+  const [ createPlaylistMutation ] = useMutation(CREATE_PLAYLIST_MUTATION, {
    refetchQueries: [{ query: USER_PLAYLISTS_QUERY}]
     // update(cache, { data }) {
     //   const playlistData = cache.readQuery<any>({
@@ -78,7 +80,10 @@ export function PlaylistForm({
     // }
   });
 
-  const [ updatePlaylist ] = useMutation(UPDATE_PLAYLIST_MUTATION);
+  const [ updatePlaylistMutation ] = useMutation(UPDATE_PLAYLIST_MUTATION);
+  const [ deletePlaylistMutation ] = useMutation(DELETE_PLAYLIST_MUTATION, {
+    refetchQueries: [{ query: USER_PLAYLISTS_QUERY}]
+  });
   
 
   const CreatePlaylistFormSchema = z.object({
@@ -103,9 +108,9 @@ export function PlaylistForm({
   type CreatePlaylistFormValues = z.infer<typeof CreatePlaylistFormSchema>;
 
   const defaultValues: Partial<CreatePlaylistFormValues> = {
-    title: playlist ? playlist.title : '',
-    description: playlist ? playlist.description : '',
-    is_public: playlist ? playlist.is_public : true,
+    title: playlist?.title ?? '',
+    description: playlist?.description ?? '',
+    is_public: playlist?.is_public ?? true,
   };
 
   const form = useForm<CreatePlaylistFormValues>({
@@ -117,7 +122,7 @@ export function PlaylistForm({
   async function handleCeatePlaylist(data: CreatePlaylistFormValues) {
     try {
       setLoading(true);
-      const { errors } = await createPlaylist({
+      const { data: createOutput, errors } = await createPlaylistMutation({
         variables: {
           user_id: userId,
           title: data.title,
@@ -125,10 +130,24 @@ export function PlaylistForm({
           is_public: data.is_public,
         }
       })
-      if (errors) throw errors;
+      if (errors || !createOutput) throw errors;
+      console.log('data', createOutput)
+      if (newPoster) {
+        const newPlaylistId =  createOutput?.insertIntoplaylistCollection?.records[0]?.id;
+        const newPosterUrl = await uploadPoster(newPoster, newPlaylistId);
+        await updatePlaylistMutation({
+          variables: {
+            id: newPlaylistId,
+            poster_url: newPosterUrl
+          }
+        })
+      }
+
+
       toast.success('Enregistré');
       success();
     } catch (error) {
+      console.log(error)
       toast.error("Une erreur s'est produite");
     } finally {
       setLoading(false);
@@ -142,12 +161,13 @@ export function PlaylistForm({
         id: playlist.id,
         title: data.title,
         description: data.description,
+        is_public: data.is_public,
       }
       if (newPoster) {
         const newPosterUrl = await uploadPoster(newPoster, playlist.id);
-        payload.poster_url = newPosterUrl
+        payload.poster_url = newPosterUrl;
       }
-      const { errors } = await updatePlaylist({
+      const { errors } = await updatePlaylistMutation({
         variables: payload
       })
       if (errors) return errors;
@@ -161,24 +181,23 @@ export function PlaylistForm({
     }
   }
 
-  async function deletePlaylist() {
+  async function handleDeletePlaylist() {
     try {
-      await databases.deleteDocument(
-        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST),
-        playlist.$id
-      );
-      playlist.poster_path &&
-        (await storage.deleteFile(
-          String(process.env.NEXT_PUBLIC_APPWRITE_STORAGE_PLAYLISTS_POSTER),
-          playlist.$id
-        ));
-      if (playlist && pathname == '/playlist/' + playlist.$id) router.push('/');
-      toast.success('Enregistré');  
-      success();
-      return;
-    } catch (error: any) {
+      setLoading(true);
+      const { errors } = await deletePlaylistMutation({
+        variables: {
+          id: playlist.id
+        }
+      })
+      if (errors) return errors;
+      toast.success('Supprimé');
+      if (playlist && pathname == '/playlist/' + playlist.id) router.push('/'); 
+      else success();
+    } catch (error) {
+      console.log(error)
       toast.error("Une erreur s'est produite");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -273,14 +292,23 @@ export function PlaylistForm({
         <DialogFooter>
           {playlist && (
             <Button
+              disabled={loading}
               type="button"
               variant={'destructive'}
-              onClick={deletePlaylist}
+              onClick={handleDeletePlaylist}
             >
               Supprimer
             </Button>
           )}
-          <Button type="submit">{playlist ? 'Sauvegarder' : 'Créer'}</Button>
+          <Button
+            disabled={loading}
+            type="submit"
+          >
+            {loading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            {playlist ? 'Sauvegarder' : 'Créer'}
+          </Button>
         </DialogFooter>
       </form>
     </Form>

@@ -6,18 +6,15 @@ import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 
 import PROFILE_DETAILS_QUERY from '@/components/modules/ProfileDetails/queries/ProfileQuery'
+import { supabase } from '@/lib/supabase';
 
 export async function generateMetadata({
   params,
 }: {
   params: { username: string };
 }) {
-  const user = await (await getClient().query({
-    query: PROFILE_DETAILS_QUERY,
-    variables: {
-    username: params.username
-    }
-  })).data?.userCollection?.edges[0]?.node;
+  const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
+
   if (!user) {
     return {
       title: 'Oups, utilisateur introuvable !',
@@ -30,19 +27,14 @@ export async function generateMetadata({
 }
 
 export default async function UserPage({ params } : { params: { username: string } }) {
-  const user = await (await getClient().query({
-    query: PROFILE_DETAILS_QUERY,
-    variables: {
-    username: params.username
-    }
-  })).data?.userCollection?.edges[0]?.node;
+  const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
 
   if (!user) notFound();
 
   return (
     <Fragment>
       <ProfilePlaylists user={user} horizontal />
-      <UserMovies userId={user.$id} horizontal />
+      {/* <UserMovies userId={user.$id} horizontal /> */}
     </Fragment>
   );
 }

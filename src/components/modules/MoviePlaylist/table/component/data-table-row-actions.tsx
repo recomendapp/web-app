@@ -29,29 +29,29 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Dispatch, SetStateAction, useState } from "react"
 import ButtonShare from "@/components/elements/ButtonShare/ButtonShare"
 import UserCard from "@/components/elements/UserCard/UserCard"
-import { useUser } from "@/context/UserProvider"
 import { DataComment } from "./data-table-comment"
-import { handleDeletePlaylistItemFromId } from "@/components/modules/MovieAction/_components/MoviePlaylistAction/_queries/movie-action-playlist"
+import { PlaylistItem } from "@/types/type.playlist"
+import { useAuth } from "@/context/AuthContext/AuthProvider"
+import { Film } from "@/types/type.film"
 
 
 interface DataTableRowActionsProps {
-  table: Table<Models.Document>,
-  row: Row<Models.Document>,
-  column: Column<Models.Document, unknown>,
+  table: Table<PlaylistItem>,
+  row: Row<PlaylistItem>,
+  column: Column<PlaylistItem, unknown>,
+  data: PlaylistItem,
 }
 
 export function DataTableRowActions({
   row,
   table,
-  column
+  column,
+  data
 }: DataTableRowActionsProps) {
 
-  const { user } = useUser();
+  const { user } = useAuth();
   const [ openShowDirectors, setOpenShowDirectors ] = useState(false);
   const [ openComment, setOpenComment ] = useState(false);
-  const queryClient = useQueryClient();
-
-  const data = row.original;
 
   return (
     <>
@@ -72,17 +72,15 @@ export function DataTableRowActions({
         </div>
 
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem asChild><Link href={`/movie/${data.id}`}>Voir le film</Link></DropdownMenuItem>
-          <ShowDirectorsButton data={data} setOpen={setOpenShowDirectors} />
-          { data.user.$id == user.$id ? <DropdownMenuItem onClick={() => setOpenComment(true)}>{data.comment ? "Voir le commentaire" : "Ajouter un commentaire"}</DropdownMenuItem>
-          : data.comment && <DropdownMenuItem onClick={() => setOpenComment(true)}></DropdownMenuItem>}
+          <DropdownMenuItem asChild><Link href={`/film/${data.film?.id}`}>Voir le film</Link></DropdownMenuItem>
+          <ShowDirectorsButton film={data.film} setOpen={setOpenShowDirectors} />
+          { data.user?.id == user?.id ? <DropdownMenuItem onClick={() => setOpenComment(true)}>{data.comment ? "Voir le commentaire" : "Ajouter un commentaire"}</DropdownMenuItem>
+          : data.comment && <DropdownMenuItem onClick={() => setOpenComment(true)}>Voir le commentaire</DropdownMenuItem>}
           <DropdownMenuSeparator />
-          <DropdownMenuItem><ButtonShare url={`${process.env.NEXT_PUBLIC_URL}/movie/${data.id}`}/></DropdownMenuItem>
-          {data.user.$id == user.$id && 
+          <DropdownMenuItem><ButtonShare url={`${process.env.NEXT_PUBLIC_URL}/film/${data.film?.id}`}/></DropdownMenuItem>
+          {data.user?.id == user?.id && 
             <DropdownMenuItem onClick={async () => {
-              await handleDeletePlaylistItemFromId(data.$id, data.id, queryClient);
-              const playlist = queryClient.getQueryData(['playlist', data.playlistId]) as Models.Document;
-              playlist && queryClient.setQueryData(['playlist', data.playlistId], playlist.filter((movie: any) => movie.movieId != data.id))
+              // await handleDeletePlaylistItemFromId(data.id, data.id, queryClient);
             }}>
               Delete
               <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
@@ -90,7 +88,7 @@ export function DataTableRowActions({
           }
         </DropdownMenuContent>
       </DropdownMenu>
-      <ShowDirectorsModal data={data} open={openShowDirectors} setOpen={setOpenShowDirectors}/>
+      <ShowDirectorsModal film={data.film} open={openShowDirectors} setOpen={setOpenShowDirectors}/>
       <ShowCommentModal
         table={table}
         row={row}
@@ -103,18 +101,18 @@ export function DataTableRowActions({
   )
 }
 
-export function ShowDirectorsButton({ data, setOpen } : { data: any, setOpen: Dispatch<SetStateAction<boolean>> }) {
-  if (!data.directors){
+export function ShowDirectorsButton({ film, setOpen } : { film: Film, setOpen: Dispatch<SetStateAction<boolean>> }) {
+  if (!film.directors){
     return (
       <DropdownMenuItem asChild>
         <p>Unknow</p>
       </DropdownMenuItem>
     )
   }
-  if (data.directors.length == 1) {
+  if (film.directors.length == 1) {
     return (
       <DropdownMenuItem asChild>
-        <Link href={`/person/${data.directors[0].id}`}>Voir le réalisateur</Link>
+        <Link href={`/person/${film.directors[0].id}`}>Voir le réalisateur</Link>
       </DropdownMenuItem>
     )
   }
@@ -125,7 +123,7 @@ export function ShowDirectorsButton({ data, setOpen } : { data: any, setOpen: Di
   )
 }
 
-export function ShowDirectorsModal({ data, open, setOpen } : { data: any, open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) {
+export function ShowDirectorsModal({ film, open, setOpen } : { film: Film, open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-5xl bg-black">
@@ -133,7 +131,7 @@ export function ShowDirectorsModal({ data, open, setOpen } : { data: any, open: 
           <DialogTitle className='text-center'>Réalisateur</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4">
-          {data.directors.map((director: any) => (
+          {film.directors?.map((director: any) => (
             <Button key={director.id} variant={'ghost'} asChild>
               <Link href={`/person/${director.id}`}>{director.name}</Link>
             </Button>
@@ -152,10 +150,10 @@ export function ShowCommentModal({
   open,
   setOpen
 } : {
-  table: Table<Models.Document>,
-  row: Row<Models.Document>,
-  column: Column<Models.Document, unknown>,
-  data: Models.Document,
+  table: Table<PlaylistItem>,
+  row: Row<PlaylistItem>,
+  column: Column<PlaylistItem, unknown>,
+  data: PlaylistItem,
   open: boolean,
   setOpen: Dispatch<SetStateAction<boolean>>
 }) {

@@ -3,22 +3,26 @@
 import { ImageWithFallback } from '@/components/elements/Tools/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { PlaylistButton } from '@/components/modules/MoviePlaylist/PlaylistButton';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { Models } from 'appwrite';
-import { TablePlaylist } from '@/components/modules/MoviePlaylist/table/TablePlaylist';
-import { handleGetPlaylistItems } from '@/components/modules/MovieAction/_components/MoviePlaylistAction/_queries/movie-action-playlist';
+import { useEffect, useState } from 'react';
 import { User } from '@/types/type.user';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 import Loader from '@/components/elements/Loader/Loader';
 import { useQuery } from '@apollo/client';
-import PLAYLIST_DETAILS_QUERY from './queries/PlaylistDetailsQuery';
+import { TablePlaylist } from '@/components/modules/MoviePlaylist/table/TablePlaylist';
+import { Playlist, PlaylistItem } from '@/types/type.playlist';
+import { Film } from '@/types/type.film';
+import { getMovieDetails } from '@/hooks/tmdb';
+
+import PLAYLIST_DETAILS_QUERY from '@/components/modules/MoviePlaylist/PlaylistDetails/queries/playlistDetailsQuery';
 
 export default function PlaylistDetails({
   playlistId,
 }: {
   playlistId: string;
 }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  const [ playlistItems, setPlaylistItems ] = useState<{item: PlaylistItem}[]>();
 
   const { data: playlistQuery } = useQuery(PLAYLIST_DETAILS_QUERY, {
     variables: {
@@ -26,38 +30,59 @@ export default function PlaylistDetails({
     }
   });
 
-  const playlist = playlistQuery?.playlistCollection.edges[0]?.node;
-  // const [ playlistMetadata, setPlaylistMetadata] = useState(playlistServer);
+  const playlist: Playlist = playlistQuery?.playlistCollection.edges[0]?.playlist;
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      if (playlist?.playlist_item?.edges) {
+        const updatedPlaylistItems = await Promise.all(playlist?.playlist_item?.edges.map(async (item, index) => {
+          const option = { ...item }
+          if (item.item.film_id) {
+            const film = await getMovieDetails(item.item.film_id, 'fr');
+            option.item = { ...item.item, film };
+          }
+          // if (item.item.film_id) {
+          //   const film = await getMovieDetails(item.item.film_id, 'fr');
+          //   item.item.film = film;
+          // }
+          return option;
+        }));
+  
+        setPlaylistItems(updatedPlaylistItems);
+      }
+    };
+  
+    fetchData();
+  }, [playlist])
 
+  console.log('movie', playlistItems)
 
-  if (!user) {
+  if (loading) {
     return <Loader />;
   }
 
   return (
     <main className="h-full w-full">
       <PlaylistHeader
-        user={user}
         playlistDetails={playlist}
         // data={playlist}
       />
-      {/* <div className='p-4'>
-        {playlist && <TablePlaylist playlist={playlist} playlistMetadata={playlistMetadata} />}
-      </div> */}
+      <div className='p-4'>
+        {playlistItems && <TablePlaylist playlist={playlistItems} userId={playlist?.user_id} />}
+      </div>
     </main>
   )
 }
 
 export function PlaylistHeader({
-  user,
   playlistDetails,
   data 
 } : {
-  user: User,
   playlistDetails: any,
   data?: any[]
 }) {
 
+  const { user } = useAuth();
   const [ open, setOpen ] = useState(false);
 
   const randomBackdrop = (object: any[]) => {
@@ -83,7 +108,7 @@ export function PlaylistHeader({
         }}
       >
         <div className="w-full h-full flex gap-4 p-4 items-center bg-gradient-to-t from-background to-[#000000bd] bg-opacity-75">
-          <div className="w-[200px] shadow-md cursor-pointer" onClick={() => playlistDetails.user_id == user.id && setOpen(true)}>
+          <div className="w-[200px] shadow-md cursor-pointer" onClick={() => playlistDetails.user_id == user?.id && setOpen(true)}>
               <AspectRatio ratio={1 / 1}>
                 <ImageWithFallback
                   src={playlistDetails?.poster_url ?? ""}
@@ -93,7 +118,7 @@ export function PlaylistHeader({
                 />
               </AspectRatio>
             </div>
-            <div className='flex flex-col gap-2 cursor-pointer' onClick={() => playlistDetails.user_id == user.id && setOpen(true)}>
+            <div className='flex flex-col gap-2 cursor-pointer' onClick={() => playlistDetails.user_id == user?.id && setOpen(true)}>
               <p>
                 {playlistDetails?.is_public ? "Playlist publique" : "Playlist privée"}
               </p>
@@ -107,12 +132,12 @@ export function PlaylistHeader({
             </div>
         </div>
       </div>
-      <PlaylistButton
+      { user && <PlaylistButton
         open={open}
         setOpen={setOpen}
-        userId={user.id}
+        userId={user?.id}
         playlist={playlistDetails}
-      />
+      /> }
     </>
   )
 }

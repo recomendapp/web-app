@@ -105,6 +105,23 @@ export function ProfileForm() {
     }
   }
 
+  async function deleteAvatar() {
+    try {
+      const { errors } = await updateProfile({
+        variables: {
+          avatar_url: '',
+        }
+      });
+      if (errors) throw errors;
+      toast.success('Enregistré');  
+    } catch(error) {
+      console.log(error)
+      toast.error("Une erreur s'est produite");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function uploadAvatar(file: File, userId: string) {
     try {
       const fileExt = file.name.split('.').pop()
@@ -128,12 +145,17 @@ export function ProfileForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <PictureUpload
-          user={user}
-          isUploading={isUploading}
-          newAvatar={newAvatar}
-          setNewAvatar={setNewAvatar}
-        />
+        <div className='flex gap-4 items-center'>
+          <PictureUpload
+            user={user}
+            isUploading={isUploading}
+            newAvatar={newAvatar}
+            setNewAvatar={setNewAvatar}
+          />
+          {user.avatar_url && <Button variant={'destructive'} onClick={deleteAvatar}>
+            Supprimer
+          </Button>}
+        </div>
         <FormField
           control={form.control}
           name="full_name"

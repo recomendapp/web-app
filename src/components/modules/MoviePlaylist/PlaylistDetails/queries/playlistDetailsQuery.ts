@@ -5,7 +5,7 @@ export default gql`
     query PlaylistDetailsQuery($id: BigInt!) {
         playlistCollection(filter: { id: {eq: $id}}) {
             edges {
-                node {
+                playlist: node {
                     ...Playlist
                 }
             }

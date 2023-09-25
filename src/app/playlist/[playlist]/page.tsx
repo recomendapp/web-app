@@ -1,29 +1,21 @@
-import PlaylistDetails from '@/components/modules/MoviePlaylist/PlaylistsDetails/PlaylistDetails';
-import { handleGetPlaylist } from '@/components/modules/MovieAction/_components/MoviePlaylistAction/_queries/movie-action-playlist';
 import { notFound } from 'next/navigation';
-import { getClient } from '@/lib/ApolloClient';
+import { supabase } from '@/lib/supabase';
 
-import PLAYLIST_DETAILS_QUERY from '@/components/modules/MoviePlaylist/PlaylistsDetails/queries/PlaylistDetailsQuery'
+import PlaylistDetails from '@/components/modules/MoviePlaylist/PlaylistDetails/PlaylistDetails';
 
 export async function generateMetadata({
   params,
 }: {
   params: { playlist: string };
 }) {
-  const playlist = await (await getClient().query({
-    query: PLAYLIST_DETAILS_QUERY,
-    variables: {
-      id: params.playlist
-    }
-  })).data?.playlistCollection?.edges[0]?.node;
-
+  const { data: playlist } = await supabase.from('playlist').select('*, user(username)').eq('id', params.playlist).single();
   if (!playlist) {
     return {
       title: 'Oups, playlist introuvable !',
     };
   }
   return {
-    title: `${playlist.title} - playlist by {playlist.userId.username}`,
+    title: `${playlist.title} - playlist by @${playlist.user.username}`,
     description: `${playlist.description}`,
   };
 }
@@ -33,12 +25,7 @@ export default async function Playlist({
 }: {
   params: { playlist: string };
 }) {
-  const playlist = await (await getClient().query({
-    query: PLAYLIST_DETAILS_QUERY,
-    variables: {
-      id: params.playlist
-    }
-  })).data?.playlistCollection?.edges[0]?.node;
+  const { data: playlist } = await supabase.from('playlist').select('*').eq('id', params.playlist).single();
 
   if (!playlist) notFound();
 

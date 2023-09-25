@@ -5,7 +5,7 @@ export default gql`
     query UserPlaylistsQuery($id: UUID!) {
         playlistCollection(filter: { user_id: { eq: $id }}) {
             edges {
-                node {
+                playlist: node {
                     ...Playlist
                 }
             }

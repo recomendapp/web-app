@@ -30,39 +30,37 @@ import { DataTablePagination } from "./component/data-table-pagination"
 import { DataTableToolbar } from "./component/data-table-toolbar"
 
 import { columns } from "./component/columns"
-import { Models } from "appwrite"
 import { useMediaQuery } from "react-responsive"
 
 import { DndContext, DragEndEvent, UniqueIdentifier, closestCenter, useDraggable } from '@dnd-kit/core';
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from "@dnd-kit/utilities"
-import { useUser } from "@/context/UserProvider"
 import { changeMovieRank } from "./_queries/changeMovieRank"
+import { useAuth } from "@/context/AuthContext/AuthProvider"
+import { PlaylistItem } from "@/types/type.playlist"
 
 declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
-    updateComment: (rowIndex: number, columnId: string, value: string) => void
+    updateComment: (rowIndex: number, value: string) => void
   }
   interface ColumnMeta<TData extends RowData, TValue> {
     displayName: string
   }
 }
 
-interface DataExtended extends Models.Document {
-  id: number,
-}
+
 
 interface DataTableProps {
-  playlist: DataExtended[]
-  playlistMetadata: Models.Document
+  playlist: { item: PlaylistItem; }[],
+  userId: string
 }
 
 export function TablePlaylist({
   playlist,
-  playlistMetadata,
+  userId,
 }: DataTableProps) {
 
-  const { user } = useUser();
+  const { user } = useAuth();
 
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
@@ -74,10 +72,16 @@ export function TablePlaylist({
   const [data, setData] = React.useState(playlist);
 
   React.useEffect(() => {
-    playlistMetadata.userId.$id == user.$id && setisDraggingDisabled(false)
-  }, [playlistMetadata, user])
+    playlist && setData(playlist)
+  }, [playlist])
 
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  React.useEffect(() => {
+    userId == user?.id && setisDraggingDisabled(false)
+  }, [userId, user])
+
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  
+  const [ filtering, setFiltering ] = React.useState('');
 
   const table = useReactTable({
     data,
@@ -87,7 +91,9 @@ export function TablePlaylist({
       columnVisibility,
       rowSelection,
       columnFilters,
+      globalFilter: filtering,
     },
+    onGlobalFilterChange: setFiltering,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -100,18 +106,18 @@ export function TablePlaylist({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     meta: {
-      updateComment: (rowIndex: number, columnId: string, value: string) => {
-        setData((old) =>
-          old.map((row, index) => {
-            if (index === rowIndex) {
-              return {
-                ...old[rowIndex],
-                ["comment"]: value,
-              };
-            }
-            return row;
-          })
-        );
+      updateComment: (rowIndex: number, value: string) => {
+        // setData((old) =>
+        //   old.map((row, index) => {
+        //     if (index === rowIndex) {
+        //       return {
+        //         ...old[rowIndex],
+        //         ["comment"]: value,
+        //       };
+        //     }
+        //     return row;
+        //   })
+        // );
       },
     }
   })
@@ -140,12 +146,12 @@ export function TablePlaylist({
   }, [isMobile, table]);
 
   const onDragEnd = async (event: DragEndEvent) => {
-    const {active, over} = event;
+    // const {active, over} = event;
 
-    const newData = await changeMovieRank(data, Number(active.id), Number(over?.id))
+    // const newData = await changeMovieRank(data, Number(active.id), Number(over?.id))
     
-    if (newData)
-      setData(newData)
+    // if (newData)
+    //   setData(newData)
   }
 
   return (
@@ -198,7 +204,7 @@ export function TablePlaylist({
   )
 }
 
-const SortableRow = ({ row, isDraggingDisabled } : { row: Row<Models.Document>, isDraggingDisabled: boolean }) => {
+const SortableRow = ({ row, isDraggingDisabled } : { row: Row<PlaylistItem>, isDraggingDisabled: boolean }) => {
 
   const {
     attributes,

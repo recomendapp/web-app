@@ -20,7 +20,7 @@ export default function SearchResultsMovies({
   useEffect(() => {
     if (query) {
       setLoading(true);
-      handleSearchMovies(query, 'fr-FR', 1)
+      handleSearchMovies(query, 'en', 1)
         .then((response) => {
           console.log('movie222', response);
           if (response.length) {

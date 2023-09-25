@@ -18,39 +18,102 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { useQuery, useQueryClient } from 'react-query';
-import { handleGetRating, handleRate, handleUnrate } from '@/components/modules/MovieAction/_components/MovieRatingAction/queries/movie-action-rating';
-import { useUser } from '@/context/UserProvider';
+
+import { FilmAction } from '@/types/type.film';
+import { ApolloError, useMutation } from '@apollo/client';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
+
+import FILM_ACTION_QUERY from '@/components/modules/MovieAction/queries/filmActionQuery';
+import INSERT_FILM_ACTION_MUTATION from '@/components/modules/MovieAction/mutations/insertFilmActionMutation';
+import UPDATE_FILM_ACTION_MUTATION from '@/components/modules/MovieAction/mutations/updateFilmActionMutation';
+import { toast } from 'react-toastify';
 
 interface MovieRatingActionProps extends React.HTMLAttributes<HTMLDivElement> {
-  movieId: any;
+  filmId: string;
+  filmAction: FilmAction;
+  loading: boolean;
+  error: ApolloError | undefined;
 }
 
 export function MovieRatingAction({
-  movieId,
+  filmId,
+  filmAction,
+  loading,
+  error,
 }: MovieRatingActionProps) {
 
-  const { user } = useUser();
-
-  const queryClient = useQueryClient();
-
-  const [ratingValue, setRatingValue] = useState<number>(0);
-
-  const {
-    data: isRated,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['movie', movieId, 'rating'],
-    queryFn: () => handleGetRating(user.$id, movieId),
-    enabled: user?.$id !== undefined && user?.$id !== null,
-  });
-
-  useEffect(() => {
-    setRatingValue(isRated?.rating)
-  }, [isRated])
+  const { user } = useAuth();
 
   const router = useRouter();
+
+  const [ratingValue, setRatingValue] = useState<number>(filmAction?.rating);
+
+  // useEffect(() => {
+  //   setRatingValue(filmAction.rating)
+  // }, [filmAction.rating])
+
+  const [ updateFilmActionMutation ] = useMutation(UPDATE_FILM_ACTION_MUTATION);
+  const [ insertFilmActionMutation, { error: errorAddingFilmAction} ] = useMutation(INSERT_FILM_ACTION_MUTATION, {
+    update: (store, { data }) => {
+      const filmActionData = store.readQuery<{ film_actionCollection: { edges: [{ action: FilmAction}]}}>({
+        query: FILM_ACTION_QUERY,
+        variables: {
+          film_id: filmId,
+          user_id: user?.id,
+        },
+      })
+      store.writeQuery({
+        query: FILM_ACTION_QUERY,
+        variables: {
+          film_id: filmId,
+          user_id: user?.id,
+        },
+        data: {
+          film_actionCollection: {
+            edges: [
+              ...filmActionData!.film_actionCollection.edges,
+              { action: data.insertIntofilm_actionCollection.records[0] }
+            ]
+          }
+        }
+      })
+    },
+  });
+
+  const handleRate = async () => {
+    try {
+      const mutationToUse = filmAction ? updateFilmActionMutation : insertFilmActionMutation;
+      const { errors } = await mutationToUse({
+        variables: {
+          film_id: filmId,
+          user_id: user?.id,
+          is_watched: true,
+          rating: ratingValue,
+          is_watchlisted: false,
+        }
+      });
+      if (errors) throw error;
+      toast.success('Note enregistrée');
+    } catch {
+      toast.error('Une erreur s\'est produite');
+    }
+  }
+  const handleUnrate = async () => {
+    try {
+      const { errors } = await updateFilmActionMutation({
+        variables: {
+          film_id: filmId,
+          user_id: user?.id,
+          rating: null,
+        }
+      });
+      if (errors) throw error;
+      toast.success('Note supprimée');
+    } catch {
+      toast.error('Une erreur s\'est produite');
+    }
+  }
+
 
   if (!user) {
     return (
@@ -59,13 +122,13 @@ export function MovieRatingAction({
           <TooltipTrigger asChild>
                 <Button
                   onClick={() => router.push('/login')}
-                  disabled={(isLoading || isError ) && true}
+                  disabled={(loading || error ) && true}
                   size="rating"
                   variant={'rating'}
                 >
-                  {isLoading ? (
+                  {loading ? (
                     <Icons.spinner className="animate-spin" />
-                  ) : isError ? (
+                  ) : error ? (
                     <AlertCircle />
                   ) : (
                     <Star />
@@ -88,17 +151,17 @@ export function MovieRatingAction({
             {/* {userId ? ( */}
               <DialogTrigger asChild>
                 <Button
-                  disabled={(isLoading || isError ) && true}
+                  disabled={(loading || error ) && true}
                   size="rating"
-                  variant={isRated?.state ? 'rating-enabled' : 'rating'}
+                  variant={filmAction?.rating ? 'rating-enabled' : 'rating'}
                 >
-                  {isLoading ? (
+                  {loading ? (
                     <Icons.spinner className="animate-spin" />
-                  ) : isError ? (
+                  ) : error ? (
                     <AlertCircle />
-                  ) : isRated?.state ? (
+                  ) : filmAction?.rating ? (
                     <p className='font-bold text-lg'>
-                      {isRated.rating}
+                      {filmAction?.rating}
                     </p>
                   ) : (
                     <Star />
@@ -107,7 +170,7 @@ export function MovieRatingAction({
               </DialogTrigger>
           </TooltipTrigger>
           <TooltipContent side="bottom">
-            {isRated?.state ? <p>Modifier la note</p> : <p>Ajouter une note</p>}
+            {filmAction?.rating ? <p>Modifier la note</p> : <p>Ajouter une note</p>}
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -118,9 +181,6 @@ export function MovieRatingAction({
             <Star size={80} className='text-accent-1 fill-accent-1'/>
           </div>
           <DialogTitle className='text-center pt-4'>NOTER</DialogTitle>
-          {/* <DialogDescription>
-              {movie}
-          </DialogDescription> */}
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="flex">
@@ -129,11 +189,11 @@ export function MovieRatingAction({
         </div>
         <DialogFooter className='flex flex-col justify-center'>
           <DialogClose asChild>
-            <Button onClick={() => handleRate(user.$id, isRated ? isRated : null, movieId, queryClient, ratingValue)}>Enregistrer</Button>
+            <Button onClick={() => handleRate()}>Enregistrer</Button>
           </DialogClose>
-          {isRated && isRated.id && (
+          {filmAction?.rating && (
             <DialogClose asChild>
-              <Button variant="destructive" onClick={() => handleUnrate(isRated, movieId, queryClient)}>
+              <Button variant="destructive" onClick={() => handleUnrate()}>
                 Supprimer la note
               </Button>
             </DialogClose>

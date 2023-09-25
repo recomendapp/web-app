@@ -31,9 +31,9 @@ export default function PlaylistPictureUpload({
             src={
               newPoster ? URL.createObjectURL(newPoster)
               :
-              playlist.poster_url ?? ''
+              playlist?.poster_url ?? ''
             }
-            alt={playlist ? playlist.title : ''}
+            alt={playlist?.title ?? ''}
             fill
             className="rounded-md object-cover"
           />

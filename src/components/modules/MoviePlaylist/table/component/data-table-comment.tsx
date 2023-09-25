@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/context/AuthContext/AuthProvider";
 import { useUser } from "@/context/UserProvider";
 import { databases } from "@/lib/appwrite";
+import { PlaylistItem } from "@/types/type.playlist";
 import { Column, Row, Table } from "@tanstack/react-table";
-import { Models } from "appwrite";
 import { Check, Cross, FileEdit, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
@@ -14,20 +15,20 @@ export function DataComment({
     row,
     column,
 } : {
-    data: Models.Document,
-    table: Table<Models.Document>,
-    row: Row<Models.Document>,
-    column: Column<Models.Document, unknown>,
+    data: PlaylistItem,
+    table: Table<PlaylistItem>,
+    row: Row<PlaylistItem>,
+    column: Column<PlaylistItem, unknown>,
 }) {
 
-    const { user } = useUser();
+    const { user } = useAuth();
     const [ backup, setBackup ] = useState("");
     const [ comment, setComment ] = useState("");
     const [ edit, setEdit ] = useState(false);
 
     useEffect(() => {
-        setComment(data.comment ? data.comment : "")
-        setBackup(data.comment ? data.comment : "")
+        setComment(data.comment ?? '')
+        setBackup( data.comment ?? '')
     }, [data])
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -46,8 +47,8 @@ export function DataComment({
             return ;
         }
         try {
-            await handleUpdateComment(data.$id, comment);
-            table.options.meta?.updateComment(row.index, column.id, comment);
+            await handleUpdateComment(data.id, comment);
+            table.options.meta?.updateComment(row.index, comment);
             setBackup(comment);
             toast.success("Le commentaire a été mis à jour");
             setEdit(false);
@@ -69,13 +70,18 @@ export function DataComment({
                 onChange={(e) => setComment(e.target.value.replace(/\s+/g, ' ').trimStart())}
                 value={comment}
                 readOnly={!edit}
-                placeholder={data.user.$id == user.$id ? "Ajouter un commentaire..." : ""}
+                placeholder={data.user?.id == user?.id ? "Ajouter un commentaire..." : ""}
                 maxLength={180}
-                className={`w-full h-fit border-none outline-none focus-visible:ring-0 overflow-hidden resize-none
+                className={`
+                    w-full
+                    h-fit
+                    border-none
+                    overflow-hidden
+                    resize-none
                     ${!edit && 'line-clamp-5'}
                 `}
             />
-            {data.user.$id == user.$id && 
+            {data.user?.id == user?.id && 
             <div className="flex gap-2">
                 {edit ? 
                     <>
@@ -112,14 +118,14 @@ export function DataComment({
 
 const handleUpdateComment = async (id: string, comment: string) => {
     try {
-        const { $id, rating } = await databases.updateDocument(
-            String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-            String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST_ITEM),
-            id,
-            {
-                comment: comment
-            }
-        );
+        // const { $id, rating } = await databases.updateDocument(
+        //     String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
+        //     String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST_ITEM),
+        //     id,
+        //     {
+        //         comment: comment
+        //     }
+        // );
     } catch (error) {
         console.error(error);
     }

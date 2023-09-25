@@ -1,7 +1,6 @@
 import '@/styles/globals.css';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
-import { cn } from '@/lib/utils/utils';
 import { fontSans } from '@/lib/fonts';
 
 // import { UserProvider } from '@/context/UserProvider';
@@ -18,6 +17,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ReactQueryProvider } from '@/context/ReactQueryProvider';
 import { ApolloClientProvider } from '@/context/ApolloClientProvider';
 import { AuthProvider } from '@/context/AuthContext/AuthProvider';
+
+import { cn } from "@/lib/utils/utils";
+import { Box } from '@/components/elements/Box/Box';
 
 export const metadata: Metadata = {
   title: {
@@ -61,16 +63,25 @@ export default function RootLayout({ children }: RootLayoutProps) {
                   color='#FFE974'
                   height={2}
                 />
-                <div className="flex items-start h-full gap-2 lg:p-2">
+                {/* <div className="flex items-start h-full gap-2 lg:p-2"> */}
+                <div
+                  className={`
+                    flex
+                    h-[calc(100%-135px)]
+                    gap-2
+                    lg:p-2
+                    lg:h-full
+                  `}
+                >
                   <Sidebar />
-                  <div className="flex flex-col bg-background col-span-3 lg:col-span-4 overflow-y-auto overflow-x-hidden rounded-md h-full w-full">
+                  <Box className='h-full overflow-y-auto'>
                     <Header />
                     <div className="flex-grow relative lg:pb-0 h-full">
                       {children}
                     </div>
-                  </div>
+                  </Box>
                 </div>
-                {/* <Navbar className=" z-[50] fixed w-full bottom-0 lg:hidden h-navbar" /> */}
+                <Navbar className=" z-[50] fixed w-full bottom-0 lg:hidden h-navbar" />
                 <ToastContainer
                   position="top-center"
                   theme="dark"

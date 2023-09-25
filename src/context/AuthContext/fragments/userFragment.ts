@@ -11,5 +11,6 @@ export default gql`
         avatar_url
         website
         language
+        favorite_color
     }
 `
