@@ -31,7 +31,6 @@ import { handleDeleteGuidelistFromId } from "@/api/movie/movie_guidelist"
 import { Dispatch, SetStateAction, useState } from "react"
 import ButtonShare from "@/components/elements/ButtonShare/ButtonShare"
 import UserCard from "@/components/elements/UserCard/UserCard"
-import { handleUnwatchlist } from "@/components/modules/MovieAction/_components/MovieWatchlistAction/_queries/movie-action-watchlist"
 import { MovieAction } from "@/components/modules/MovieAction/MovieAction"
 
 interface DataTableRowActionsProps {

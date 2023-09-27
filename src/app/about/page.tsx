@@ -1,4 +1,4 @@
-import { LoginForm } from '@/app/(auth)/login/LoginForm';
+import { LoginForm } from '@/components/modules/Auth/Login/LoginForm';
 import { siteConfig } from '@/config/site';
 import { useUser } from '@/context/UserProvider';
 import { Metadata } from 'next';

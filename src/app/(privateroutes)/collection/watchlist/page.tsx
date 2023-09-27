@@ -2,29 +2,28 @@
 import { useUser } from '@/context/UserProvider';
 import { TableWatchlist } from '@/components/modules/MovieWatchlist/table/TableWatchlist';
 import { useQuery } from 'react-query';
-import { handleGetWatchlist } from '@/api/movie/movie_watchlist';
 
 export default function Watchlist() {
-  const { user } = useUser();
+  // const { user } = useUser();
 
-  const {
-    data: watchlist,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['collection', 'watchlist'],
-    queryFn: () => handleGetWatchlist(user),
-    enabled: user?.$id !== undefined && user?.$id !== null,
-  });
+  // const {
+  //   data: watchlist,
+  //   isLoading,
+  //   isError,
+  // } = useQuery({
+  //   queryKey: ['collection', 'watchlist'],
+  //   queryFn: () => handleGetWatchlist(user),
+  //   enabled: user?.$id !== undefined && user?.$id !== null,
+  // });
 
-  return (
-    <main className="h-full">
-      <WatchlistHeader data={watchlist} />
-      <div className='p-4'>
-        {watchlist && <TableWatchlist data={watchlist} />}
-      </div>
-    </main>
-  );
+  // return (
+  //   <main className="h-full">
+  //     <WatchlistHeader data={watchlist} />
+  //     <div className='p-4'>
+  //       {watchlist && <TableWatchlist data={watchlist} />}
+  //     </div>
+  //   </main>
+  // );
 }
 
 const WatchlistHeader = ({ data } : { data?: any[] }) => {

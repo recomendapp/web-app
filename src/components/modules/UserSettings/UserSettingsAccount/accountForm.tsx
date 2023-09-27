@@ -18,7 +18,7 @@ import { useUser } from '@/context/UserProvider';
 import { account, databases } from '@/lib/appwrite';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase/supabase';
 import { useMutation } from '@apollo/client';
 import UPDATE_ACCOUNT_MUTATION from './mutations/updateAccountMutation';
 import { Icons } from '@/components/icons';
@@ -103,7 +103,10 @@ export function AccountForm() {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nom d&apos;utilisateur</FormLabel>
+              <FormLabel className='flex justify-between gap-4'>
+                <p>Nom d&apos;utilisateur</p>
+                <p className=''>{field?.value?.length ?? 0} / 15</p>
+              </FormLabel>
               <FormControl>
                 <Input
                   disabled={

@@ -1,31 +1,12 @@
 'use client';
 import { useUser } from '@/context/UserProvider';
-import { databases } from '@/lib/appwrite';
-import { Query } from 'appwrite';
-import { Models } from 'appwrite/types/models';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/elements/Tools/ImageWithFallback';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, Plus, PlusCircleIcon } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { DialogTrigger } from '@/components/ui/dialog';
+import { Loader2, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { PlaylistButton } from '@/components/modules/MoviePlaylist/PlaylistButton';
 import { useQuery, useQueryClient } from 'react-query';

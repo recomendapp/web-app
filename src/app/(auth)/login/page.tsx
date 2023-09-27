@@ -1,10 +1,9 @@
 "use client"
-import { LoginForm } from '@/app/(auth)/login/LoginForm';
+import { LoginForm } from '@/components/modules/Auth/Login/LoginForm';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
 
 export const metadata: Metadata = {
   title: 'Se connecter',
@@ -28,9 +27,6 @@ export default function Login() {
             <h1 className="text-2xl font-semibold tracking-tight">
               Se connecter
             </h1>
-            {/* <p className="text-sm text-muted-foreground">
-                        Entrez votre adresse e-mail et votre mot de passe ci-dessous pour créer votre compte.
-                    </p> */}
           </div>
           <LoginForm />
           <p className="px-8 text-center text-sm text-muted-foreground">

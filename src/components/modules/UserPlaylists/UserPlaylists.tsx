@@ -13,17 +13,20 @@ import Loader from "@/components/elements/Loader/Loader";
 export function UserPlaylists({ sidebarExpanded } : { sidebarExpanded: boolean}) {
     const pathname = usePathname();
     const { user } = useAuth();
-    const { data: getUserPlaylists, loading, error } = useQuery(USER_PLAYLISTS_QUERY, {
-        variables: { userId: user?.id },
+    const { data: userPlaylistsQuery, loading, error } = useQuery(USER_PLAYLISTS_QUERY, {
+        variables: {
+            user_id: user?.id,
+            order: { "updated_at": "DescNullsFirst"}
+        },
         skip: !user
     });
-    const playlists = getUserPlaylists?.playlistCollection?.edges;
+    const playlists = userPlaylistsQuery?.playlistCollection?.edges;
+
+    if (loading)
+        return <Loader />
 
     if (!user)
         return null
-
-    if (loading && !playlists)
-        return <Loader />
     
     if (!loading && !playlists)
         return null
@@ -31,36 +34,36 @@ export function UserPlaylists({ sidebarExpanded } : { sidebarExpanded: boolean})
     return (
         <Fragment>
             {playlists.map(({ playlist } : { playlist: Playlist}) => (
-                    <Button
-                        key={playlist.title}
-                        variant={
-                        pathname === `/playlist/${playlist.id}` ? 'secondary' : 'ghost'
-                        }
-                        className={`justify-start p-2`}
-                        asChild
+                <Button
+                    key={playlist.title}
+                    variant={
+                    pathname === `/playlist/${playlist.id}` ? 'secondary' : 'ghost'
+                    }
+                    className={`justify-start p-2`}
+                    asChild
+                >
+                    <Link
+                        href={'/playlist/' + playlist.id}
+                        className="h-fit w-full flex gap-4"
                     >
-                        <Link
-                            href={'/playlist/' + playlist.id}
-                            className="h-fit w-full flex gap-4"
-                        >
-                        <div className={`w-12 shadow-2xl`}>
-                            <AspectRatio ratio={1 / 1}>
-                                <ImageWithFallback
-                                    src={playlist.poster_url ?? ''}
-                                    alt={playlist.title}
-                                    fill
-                                    className="rounded-md object-cover"
-                                />
-                            </AspectRatio>
+                    <div className={`w-12 shadow-2xl`}>
+                        <AspectRatio ratio={1 / 1}>
+                            <ImageWithFallback
+                                src={playlist.poster_url ?? ''}
+                                alt={playlist.title}
+                                fill
+                                className="rounded-md object-cover"
+                            />
+                        </AspectRatio>
+                    </div>
+                    {sidebarExpanded && (
+                        <div>
+                        <div className='line-clamp-1'>{playlist.title}</div>
+                        {/* <div>{item.items_count} films</div> */}
                         </div>
-                        {sidebarExpanded && (
-                            <div>
-                            <div className='line-clamp-1'>{playlist.title}</div>
-                            {/* <div>{item.items_count} films</div> */}
-                            </div>
-                        )}
-                        </Link>
-                    </Button>
+                    )}
+                    </Link>
+                </Button>
             ))}
         </Fragment>
     )

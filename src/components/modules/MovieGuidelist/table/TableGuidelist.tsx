@@ -31,6 +31,7 @@ import { DataTableToolbar } from "./component/data-table-toolbar"
 import { columns } from "./component/columns"
 import { Models } from "appwrite"
 import { useMediaQuery } from "react-responsive"
+import { Guidelist } from "@/types/type.guidelist"
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -39,7 +40,7 @@ declare module '@tanstack/react-table' {
 }
 
 interface DataTableProps {
-  data: Models.Document[];
+  data: { item: Guidelist; }[],
 }
 
 export function TableGuidelist({

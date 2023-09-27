@@ -40,22 +40,6 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   skeleton?: boolean;
 }
 
-const PROFILE_QUERY = gql`
-  query ProfileQuery($id: UUID!) {
-    userCollection(filter: { id: {eq: $id}}) {
-      edges {
-        node {
-          id
-          username
-          full_name
-          bio
-          avatar_url
-        }
-      }
-    }
-  }
-`
-
 export function Sidebar({
   className,
 }: SidebarProps) {
@@ -63,13 +47,6 @@ export function Sidebar({
 
   const sidebarRef = createRef<HTMLDivElement>();
   const { user, userRefresh } = useAuth();
-
-  const { data: profileQuery, loading: profileLoading} = useQuery(PROFILE_QUERY, {
-    variables: { userId: user?.id },
-    skip: !user
-  });
-
-  const profile = profileQuery?.userCollection?.edges?.[0].node;
 
   const [ open, setOpen ] = useState(false);
   const [ sidebarExpanded, setSidebarExpanded ] = useState(true);

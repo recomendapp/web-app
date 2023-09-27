@@ -1,20 +1,17 @@
 import ProfilePlaylists from '@/components/modules/ProfilePlaylists/ProfilePlaylists';
-import UserMovies from '@/components/modules/UserMovies/UserMovies';
-import { getClient } from '@/lib/ApolloClient';
-// import { getUserDetails } from '@/lib/appwrite';
-import { notFound } from 'next/navigation';
+import ProfileFilms from '@/components/modules/ProfileFilms/ProfileFilms';
 import { Fragment } from 'react';
-
-import PROFILE_DETAILS_QUERY from '@/components/modules/ProfileDetails/queries/ProfileQuery'
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase/supabase';
+import { getUserDetails } from '@/lib/appwrite';
+import { supabaseServer } from '@/lib/supabase/supabase-server';
 
 export async function generateMetadata({
   params,
 }: {
   params: { username: string };
 }) {
-  const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
-
+  const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
+  // const user = await getUserDetails(params.username);
   if (!user) {
     return {
       title: 'Oups, utilisateur introuvable !',
@@ -27,14 +24,12 @@ export async function generateMetadata({
 }
 
 export default async function UserPage({ params } : { params: { username: string } }) {
-  const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
-
-  if (!user) notFound();
+  const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
 
   return (
     <Fragment>
-      <ProfilePlaylists user={user} horizontal />
-      {/* <UserMovies userId={user.$id} horizontal /> */}
+      <ProfilePlaylists profile={user} horizontal />
+      <ProfileFilms profile={user} horizontal />
     </Fragment>
   );
 }

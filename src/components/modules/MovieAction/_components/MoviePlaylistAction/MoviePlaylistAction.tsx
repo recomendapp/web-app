@@ -33,73 +33,83 @@ import { toast } from 'react-toastify';
 import { DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { PlaylistButton } from '@/components/modules/MoviePlaylist/PlaylistButton';
 import handlePlaylists from '@/hooks/movie/playlist/handlePlaylists';
-import { useQuery, useQueryClient } from 'react-query';
 import { useUser } from '@/context/UserProvider';
 import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import { Query } from 'appwrite';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
 
-interface MoviePlaylistActionProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  movieId: number;
+import USER_PLAYLISTS_QUERY from '@/components/modules/UserPlaylists/queries/userPlaylistsQuery'
+import { useMutation, useQuery } from '@apollo/client';
+import { Playlist } from '@/types/type.playlist';
+import { Skeleton } from '@/components/ui/skeleton';
+
+import INSERT_PLAYLIST_ITEM_MUATION from '@/components/modules/MovieAction/_components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
+import { GraphQLError } from 'graphql';
+
+interface MoviePlaylistActionProps {
+  filmId: string;
 }
 
 export function MoviePlaylistAction({
-  movieId,
+  filmId,
 }: MoviePlaylistActionProps) {
 
-  const { user } = useUser();
-  const queryClient = useQueryClient();
+  const { user, loading: userLoading } = useAuth();
   const router = useRouter();
-
   const [open, setOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [search, setSearch] = useState('');
 
-  const {
-    data: playlists,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['user', user?.$id, 'playlists'],
-    queryFn: () => handlePlaylists(user.$id),
-    enabled: user?.$id !== undefined && user?.$id !== null,
-    // staleTime: 30_000
+  const { data: userPlaylistsQuery, loading, error } = useQuery(USER_PLAYLISTS_QUERY, {
+    variables: {
+        user_id: user?.id
+    },
+    skip: !user
   });
+  const playlists: [ { playlist: Playlist } ] = userPlaylistsQuery?.playlistCollection?.edges;
 
-  const handleAddToPlaylist = async (id: string, title: string) => {
+  const [ insertPlaylistItemMutation, { error: errorInsertPlaylistItem} ] = useMutation(INSERT_PLAYLIST_ITEM_MUATION, {
+    // update: (store, { data }) => {
+    //   const filmActionData = store.readQuery<{ film_actionCollection: { edges: [{ action: FilmAction}]}}>({
+    //     query: FILM_ACTION_QUERY,
+    //     variables: {
+    //       film_id: filmId,
+    //       user_id: user?.id,
+    //     },
+    //   })
+    //   store.writeQuery({
+    //     query: FILM_ACTION_QUERY,
+    //     variables: {
+    //       film_id: filmId,
+    //       user_id: user?.id,
+    //     },
+    //     data: {
+    //       film_actionCollection: {
+    //         edges: [
+    //           ...filmActionData!.film_actionCollection.edges,
+    //           { action: data.insertIntofilm_actionCollection.records[0] }
+    //         ]
+    //       }
+    //     }
+    //   })
+    // },
+  });
+  const handleAddToPlaylist = async (playlist: Playlist) => {
     try {
-      const { documents } = await databases.listDocuments(
-        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST_ITEM),
-        [
-          Query.orderDesc("rank"),
-          Query.limit(1)
-        ]
-      )
-      await databases.createDocument(
-        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_PLAYLIST_ITEM),
-        'unique()',
-        {
-          movieId: movieId,
-          playlistId: id,
-          playlist: id,
-          user: user.$id,
-          rank: documents.length ? (documents[0].rank + 100) : 100
+      await insertPlaylistItemMutation({
+        variables: {
+          playlist_id: playlist.id,
+          film_id: filmId,
+          user_id: user?.id,
+          rank: String(Number(playlist.items_count) + 1)
         }
-      );
-      queryClient.invalidateQueries(['playlist', id])
-      toast.success('Ajouté à ' + title);
-      return;
-    } catch (error: any) {
-      if (error.response.code === 409) {
-        toast.error('La playlist contient déjà cet élément');
-      } else {
-        toast.error("Une erreru s'est produite");
-      }
+      });
+      toast.success(`Ajouté à ${playlist.title}`);
+    } catch (error) {
+      toast.error('Une erreur s\'est produite');
     }
-  };
+  }
 
   if (!user) {
     return (
@@ -108,18 +118,11 @@ export function MoviePlaylistAction({
           <TooltipTrigger asChild>
               <Button
                 onClick={() => router.push('/login')}
-                disabled={(isLoading || isError) && true}
                 size="icon"
                 variant={'action'}
                 className="rounded-full"
               >
-                {isLoading ? (
-                  <Icons.spinner className="animate-spin" />
-                ) : isError ? (
-                  <AlertCircle />
-                ) : (
-                  <ListPlus />
-                )}
+                <ListPlus />
               </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">
@@ -138,7 +141,7 @@ export function MoviePlaylistAction({
             <TooltipTrigger asChild>
               <PopoverTrigger asChild>
                 <Button
-                  disabled={(isLoading || isError) && true}
+                  disabled={(loading || error) && true}
                   size="icon"
                   variant={'action'}
                   className="rounded-full"
@@ -173,15 +176,15 @@ export function MoviePlaylistAction({
                 </CommandGroup>
               <DropdownMenuSeparator />
               <CommandGroup>
-                {playlists?.map((item) => (
+                {playlists?.map(({ playlist } : { playlist: Playlist}) => (
                   <CommandItem
-                    key={item.$id}
+                    key={playlist.id}
                     onSelect={() => {
-                      item.items_count < 5000  ? handleAddToPlaylist(item.$id, item.title) : toast.error("La playlist est déjà remplie (5000 films)")
+                      Number(playlist.items_count) < 5000  ? handleAddToPlaylist(playlist) : toast.error("La playlist est déjà remplie (5000 films)")
                       setOpen(false);
                     }}
                   >
-                    {item.title}
+                    {playlist.title}
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -190,7 +193,7 @@ export function MoviePlaylistAction({
           </Command>
         </PopoverContent>
       </Popover>
-      <PlaylistButton open={openDialog} setOpen={(setOpenDialog)} userId={user?.$id} movieId={movieId} />
+      <PlaylistButton open={openDialog} setOpen={(setOpenDialog)} userId={user?.id} filmId={filmId} />
     </>
   );
 }

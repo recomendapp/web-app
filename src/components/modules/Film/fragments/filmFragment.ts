@@ -2,8 +2,10 @@ import { gql } from "@apollo/client";
 
 export default gql`
     fragment Film on film {
-        id
-        created_at
+        id,
+        title,
+        release_date
+        poster_path: poster_url
     }
 `
 

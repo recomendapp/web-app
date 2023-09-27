@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input';
 // import { toast } from "@/components/ui/use-toast"
 import { toast } from 'react-toastify';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase/supabase';
 
 // This can come from your database or API.
 

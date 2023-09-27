@@ -1,6 +1,3 @@
-import { Models } from "appwrite";
-import { User as UserSupabase } from "@supabase/supabase-js";
-
 export interface User {
     id: string,
     username: string,
@@ -8,12 +5,25 @@ export interface User {
     full_name: string,
     avatar_url: string,
     bio: string,
-    followers_count: number,
-    following_count: number,
-    friends_count: number,
     verify: boolean,
     language: string,
     badge: string,
     website: string,
     favorite_color: string,
+    followers_count: string,
+    following_count: string,
+    friends_count: string,
+}
+
+export interface Follower {
+    followee_id: string,
+    followee: User,
+    follower_id: string,
+    follower: User,
+}
+
+export interface Friend {
+    friend_id: string,
+    friend: User,
+    user_id: string,
 }

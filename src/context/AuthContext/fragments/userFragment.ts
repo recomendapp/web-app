@@ -12,5 +12,8 @@ export default gql`
         website
         language
         favorite_color
+        followers_count
+        following_count
+        friends_count
     }
 `

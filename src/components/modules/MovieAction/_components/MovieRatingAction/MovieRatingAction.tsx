@@ -27,6 +27,7 @@ import FILM_ACTION_QUERY from '@/components/modules/MovieAction/queries/filmActi
 import INSERT_FILM_ACTION_MUTATION from '@/components/modules/MovieAction/mutations/insertFilmActionMutation';
 import UPDATE_FILM_ACTION_MUTATION from '@/components/modules/MovieAction/mutations/updateFilmActionMutation';
 import { toast } from 'react-toastify';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface MovieRatingActionProps extends React.HTMLAttributes<HTMLDivElement> {
   filmId: string;
@@ -42,7 +43,7 @@ export function MovieRatingAction({
   error,
 }: MovieRatingActionProps) {
 
-  const { user } = useAuth();
+  const { user, loading: userLoading } = useAuth();
 
   const router = useRouter();
 
@@ -113,6 +114,9 @@ export function MovieRatingAction({
       toast.error('Une erreur s\'est produite');
     }
   }
+
+  // if (userLoading && !user)
+  //   return <Skeleton className='w-8 h-8 rounded-full' />
 
 
   if (!user) {

@@ -30,10 +30,11 @@ import { handleDeleteGuidelistFromId } from "@/api/movie/movie_guidelist"
 import { Dispatch, SetStateAction, useState } from "react"
 import ButtonShare from "@/components/elements/ButtonShare/ButtonShare"
 import UserCard from "@/components/elements/UserCard/UserCard"
+import { PlaylistItem } from "@/types/type.playlist"
 
 
 interface DataTableRowActionsProps {
-  row: Row<Models.Document>
+  row: Row<PlaylistItem>,
 }
 
 export function DataTableRowActions({
@@ -51,7 +52,7 @@ export function DataTableRowActions({
       <DropdownMenu>
         <div className="flex gap-2 items-center justify-end">
           <div className="hidden lg:invisible lg:group-hover:visible lg:flex items-center gap-2">
-          <MovieAction movieId={data.id} rating like />
+          <MovieAction filmId={data.film_id} rating like />
           </div>
             <DropdownMenuTrigger asChild>
               <Button
@@ -65,33 +66,19 @@ export function DataTableRowActions({
         </div>
 
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem asChild><Link href={`/movie/${data.id}`}>Voir le film</Link></DropdownMenuItem>
-          <ShowDirectorsButton data={data} setOpen={setOpenShowDirectors} />
+          <DropdownMenuItem asChild><Link href={`/film/${data.film_id}`}>Voir le film</Link></DropdownMenuItem>
+          <ShowDirectorsButton data={data.film} setOpen={setOpenShowDirectors} />
           {data.comment && <DropdownMenuItem onClick={() => setOpenComment(true)}>Voir le commentaire</DropdownMenuItem>}
-          {/* <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>*/}
-          {/* <DropdownMenuSub>
-            <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              <DropdownMenuRadioGroup value={data.label}>
-                {labels.map((label) => (
-                  <DropdownMenuRadioItem key={label.value} value={label.value}>
-                    {label.label}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuSubContent>
-          </DropdownMenuSub> */}
           <DropdownMenuSeparator />
-          <DropdownMenuItem><ButtonShare url={`${process.env.NEXT_PUBLIC_URL}/movie/${data.id}`}/></DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleDeleteGuidelistFromId(data.$id, data.id, queryClient)}>
+          <DropdownMenuItem><ButtonShare url={`${location.origin}/film/${data.id}`}/></DropdownMenuItem>
+          {/* <DropdownMenuItem onClick={() => handleDeleteGuidelistFromId(data.$id, data.id, queryClient)}>
             Delete
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
-      <ShowDirectorsModal data={data} open={openShowDirectors} setOpen={setOpenShowDirectors}/>
-      <ShowCommentModal data={data} open={openComment} setOpen={setOpenComment}/>
+      {/* <ShowDirectorsModal data={data} open={openShowDirectors} setOpen={setOpenShowDirectors}/>
+      <ShowCommentModal data={data} open={openComment} setOpen={setOpenComment}/> */}
     </>
   )
 }

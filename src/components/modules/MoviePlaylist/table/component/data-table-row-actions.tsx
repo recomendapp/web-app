@@ -58,7 +58,7 @@ export function DataTableRowActions({
       <DropdownMenu>
         <div className="flex gap-2 items-center justify-end">
           <div className="hidden lg:invisible lg:group-hover:visible lg:flex items-center gap-2">
-            <MovieAction movieId={data.id} rating like />
+            <MovieAction filmId={data.film_id} rating like />
           </div>
             <DropdownMenuTrigger asChild>
               <Button
@@ -72,7 +72,7 @@ export function DataTableRowActions({
         </div>
 
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem asChild><Link href={`/film/${data.film?.id}`}>Voir le film</Link></DropdownMenuItem>
+          <DropdownMenuItem asChild><Link href={`/film/${data.film.id}`}>Voir le film</Link></DropdownMenuItem>
           <ShowDirectorsButton film={data.film} setOpen={setOpenShowDirectors} />
           { data.user?.id == user?.id ? <DropdownMenuItem onClick={() => setOpenComment(true)}>{data.comment ? "Voir le commentaire" : "Ajouter un commentaire"}</DropdownMenuItem>
           : data.comment && <DropdownMenuItem onClick={() => setOpenComment(true)}>Voir le commentaire</DropdownMenuItem>}

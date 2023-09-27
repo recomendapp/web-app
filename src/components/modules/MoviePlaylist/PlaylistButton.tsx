@@ -17,7 +17,7 @@ interface PlaylistButtonProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   userId: string;
-  movieId?: number;
+  filmId?: string;
   playlist?: Models.Document;
   setPlaylist?: Dispatch<SetStateAction<Models.Document>>;
 }
@@ -26,7 +26,7 @@ export function PlaylistButton({
   open,
   setOpen,
   userId,
-  movieId,
+  filmId,
   playlist,
   setPlaylist,
 }: PlaylistButtonProps) {
@@ -46,7 +46,7 @@ export function PlaylistButton({
         <PlaylistForm
           success={() => setOpen(false)}
           userId={userId}
-          movieId={movieId}
+          filmId={filmId}
           playlist={playlist}
           setPlaylist={setPlaylist}
         />

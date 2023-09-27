@@ -5,7 +5,6 @@ import { Checkbox } from "@/components/ui/checkbox"
 
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
-import { Models } from "appwrite"
 import { DateOnlyYearTooltip } from "@/components/elements/Date/Date"
 import Link from "next/link"
 import { ConvertHoursMinutes } from "@/lib/utils/utils"
@@ -14,7 +13,7 @@ import MoviePoster from "@/components/elements/Movie/MoviePoster"
 import { Clock } from "lucide-react"
 import MovieCardSmall from "@/components/elements/Movie/MovieCardSmall"
 
-export const columns: ColumnDef<Models.Document>[] = [
+export const columns: ColumnDef<any>[] = [
   {
     accessorKey: "title",
     meta: {
@@ -23,7 +22,7 @@ export const columns: ColumnDef<Models.Document>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Film" />
     ),
-    cell: ({ row }) => <MovieCardSmall movie={row.original}/>,
+    cell: ({ row }) => <MovieCardSmall movie={row.original.item.film}/>,
     enableHiding: false,
   },
   {
@@ -34,7 +33,7 @@ export const columns: ColumnDef<Models.Document>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date"/>
     ),
-    cell: ({ row }) => <div><DateOnlyYearTooltip date={row.original.release_date} /> </div>,
+    cell: ({ row }) => <DateOnlyYearTooltip date={row.original.item.film.release_date} />,
   },
   {
     accessorKey: "runtime",
@@ -44,7 +43,7 @@ export const columns: ColumnDef<Models.Document>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} Icon={Clock} />
     ),
-    cell: ({ row }) => <p>{ConvertHoursMinutes(row.original.runtime)}</p>
+    cell: ({ row }) => <p>{ConvertHoursMinutes(row.original.item.film?.runtime)}</p>
   },
   {
     accessorKey: "comment",
@@ -54,7 +53,7 @@ export const columns: ColumnDef<Models.Document>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Commentaire"/>
     ),
-    cell: ({ row }) => <div className='max-w-[500px] text-justify italic line-clamp-5'>{row.original.comment}</div>,
+    cell: ({ row }) => <div className='max-w-[500px] text-justify italic line-clamp-5'>{row.original.item.comment}</div>,
     enableSorting: false,
   },
   {
@@ -65,7 +64,7 @@ export const columns: ColumnDef<Models.Document>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Ajouté par" className="justify-end hidden lg:block"/>
     ),
-    cell: ({ row }) => <div className="flex justify-end lg:block"><UserCard user={row.original.by} icon/></div>,
+    cell: ({ row }) => <div className="flex justify-end lg:block"><UserCard user={row.original.item.user} icon/></div>,
     enableHiding: false,
   },
   {

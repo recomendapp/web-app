@@ -76,9 +76,9 @@ export function MovieLikeAction({
           is_watchlisted: false,
         }
       });
-      if (errors) throw error;
+      if (errors) throw errors;
       toast.success('Ajouté à vos coups de coeur');
-    } catch {
+    } catch (errors) {
       toast.error('Une erreur s\'est produite');
     }
   }
@@ -92,9 +92,9 @@ export function MovieLikeAction({
           is_liked: false,
         }
       });
-      if (errors) throw error;
+      if (errors) throw errors;
       toast.success('Supprimé de vos coups de coeur');
-    } catch {
+    } catch (errors) {
       toast.error('Une erreur s\'est produite');
     }
   }

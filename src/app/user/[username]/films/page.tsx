@@ -1,5 +1,6 @@
-import UserMovies from "@/components/modules/UserMovies/UserMovies";
+import ProfileFilm from "@/components/modules/ProfileFilms/ProfileFilms";
 import { getUserDetails } from "@/lib/appwrite";
+import { supabase } from "@/lib/supabase/supabase";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({
@@ -7,7 +8,8 @@ export async function generateMetadata({
   }: {
     params: { username: string };
   }) {
-    const user = await getUserDetails(params.username);
+    const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
+
     if (!user) {
       return {
         title: 'Oups, utilisateur introuvable !',
@@ -24,9 +26,9 @@ export default async function Films({
   } : {
     params: { username: string };
   }) {
-    const user = await getUserDetails(params.username);
-     if (!user) notFound();
+    const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
+
     return (
-      <UserMovies userId={user.$id} />
+      <ProfileFilm profile={user} />
     )
 }

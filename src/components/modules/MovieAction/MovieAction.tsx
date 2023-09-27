@@ -47,8 +47,7 @@ export function MovieAction({
     skip: !user
   })
 
-  console.log('filmActionQuery', filmActionQuery)
-
+  console.log('filmAction', filmActionQuery)
   // isRated
   // const { data: isRated } = useQuery({
   //   queryKey: ['movie', movieId, 'rating'],
@@ -76,7 +75,7 @@ export function MovieAction({
 
   return (
     <div className="flex justify-between gap-2">
-      <div className='flex gap-2 overflow-x-auto'>
+      <div className='flex gap-2 overflow-x-auto items-center'>
         {(all || rating) && 
           <MovieRatingAction
             filmId={filmId}
@@ -111,11 +110,18 @@ export function MovieAction({
         }
         {/* {(all || watchDate) && <MovieWatchDateAction movieId={movieId} />} */}
       </div>
-      {/* <div className='flex gap-2'>
-        {(all || playlist) && <MoviePlaylistAction movieId={movieId} />}
-        {(all || send) && <MovieSendAction movieId={movieId} />}
-        {dropdown && <MovieActionDropdownMenu movieId={movieId} />}
-      </div> */}
+      <div className='flex gap-2 items-center'>
+        {(all || playlist) && 
+          <MoviePlaylistAction
+            filmId={filmId}
+          />
+        }
+        {(all || send) &&
+          <MovieSendAction
+          filmId={filmId}
+          />}
+        {/* {dropdown && <MovieActionDropdownMenu movieId={movieId} />} */}
+      </div>
     </div>
   );
 }

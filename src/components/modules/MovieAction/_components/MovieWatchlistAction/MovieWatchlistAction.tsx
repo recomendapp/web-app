@@ -65,28 +65,30 @@ export function MovieWatchlistAction({
     },
   });
   const [ deleteFilmActionMutation, { error: errorDeletingWatch } ] = useMutation(DELETE_FILM_ACTION_MUTATION, {
-    update: (store, { data }) => {
-      const filmActionData = store.readQuery<{ film_actionCollection: { edges: [{ action: FilmAction}]}}>({
-        query: FILM_ACTION_QUERY,
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-        },
-      })
-      store.writeQuery({
-        query: FILM_ACTION_QUERY,
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-        },
-        data: {
-          film_actionCollection: {
-            edges: filmActionData!.film_actionCollection.edges.filter(edge => {
-                edge.action.film_id !== data.deleteFromfilm_actionCollection.records[0]
-            })
-          }
-        }
-      })
+    update: (cache, { data }) => {
+      // cache.evict({ id: `${data.deleteFromfilm_actionCollection.records[0].__typename}:${data.deleteFromfilm_actionCollection.records[0].id}` });
+
+      // const filmActionData = store.readQuery<{ film_actionCollection: { edges: [{ action: FilmAction}]}}>({
+      //   query: FILM_ACTION_QUERY,
+      //   variables: {
+      //     film_id: filmId,
+      //     user_id: user?.id,
+      //   },
+      // })
+      // store.writeQuery({
+      //   query: FILM_ACTION_QUERY,
+      //   variables: {
+      //     film_id: filmId,
+      //     user_id: user?.id,
+      //   },
+      //   data: {
+      //     film_actionCollection: {
+      //       edges: filmActionData!.film_actionCollection.edges.filter(edge => {
+      //           edge.action.film_id !== data.deleteFromfilm_actionCollection.records[0]
+      //       })
+      //     }
+      //   }
+      // })
     },
   });
   

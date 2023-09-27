@@ -24,7 +24,7 @@ import { useMutation } from '@apollo/client';
 import UPDATE_PROFILE_MUTATION from './mutations/updateProfileMutation';
 import { Icons } from '@/components/icons';
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase/supabase';
 import Compressor from 'compressorjs';
 import compressPicture from '@/lib/utils/compressPicture';
 
@@ -65,8 +65,8 @@ export function ProfileForm() {
 
   const defaultValues: Partial<ProfileFormValues> = {
     full_name: user?.full_name,
-    bio: user?.bio,
-    website: user?.website,
+    bio: user?.bio ?? undefined,
+    website: user?.website ?? undefined,
   };
 
   const form = useForm<ProfileFormValues>({

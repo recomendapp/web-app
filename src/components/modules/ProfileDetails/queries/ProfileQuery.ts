@@ -5,7 +5,7 @@ export default gql`
     query ProfileQuery($username: String!) {
         userCollection(filter: { username: {eq: $username}}) {
         edges {
-            node {
+            user: node {
             ...User
             }
         }

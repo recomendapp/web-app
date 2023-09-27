@@ -77,6 +77,7 @@ export function MovieWatchAction({
   });
   const [ deleteFilmActionMutation, { error: errorDeletingWatch } ] = useMutation(DELETE_FILM_ACTION_MUTATION, {
     update: (store, { data }) => {
+      // cache.evict({ id: `${data.deleteFromfilm_actionCollection.records[0].__typename}:${data.deleteFromfilm_actionCollection.records[0].id}` });
       const filmActionData = store.readQuery<{ film_actionCollection: { edges: [{ action: FilmAction}]}}>({
         query: FILM_ACTION_QUERY,
         variables: {
@@ -112,9 +113,9 @@ export function MovieWatchAction({
           is_watchlisted: false,
         }
       });
-      if (errors) throw error;
+      if (errors) throw errors;
       toast.success('Ajouté à vos films vus');
-    } catch {
+    } catch (errors) {
       toast.error('Une erreur s\'est produite');
     }
   }
@@ -133,7 +134,7 @@ export function MovieWatchAction({
       });
       if (errors) throw errors;
       toast.success('Supprimé de vos films vus');
-    } catch (error) {
+    } catch (errors) {
       toast.error('Une erreur s\'est produite');
     }
   }

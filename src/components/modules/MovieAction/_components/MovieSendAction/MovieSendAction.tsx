@@ -31,62 +31,53 @@ import { toast } from 'react-toastify';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/context/UserProvider';
 import { Icons } from '@/components/icons';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useMutation, useQuery } from '@apollo/client';
+import USER_FRIENDS_QUERY from './queries/userFriendsQuery';
+import { Friend, User } from '@/types/type.user';
+import { Skeleton } from '@/components/ui/skeleton';
 
-interface MovieSendActionProps extends React.HTMLAttributes<HTMLDivElement> {
-  movieId: number;
+import INSERT_GUIDELIST_MUTATION from '@/components/modules/MovieAction/_components/MovieSendAction/mutations/insertGuidelistMutation'
+
+interface MovieSendActionProps {
+  filmId: string;
 }
 
-export function MovieSendAction({ movieId }: MovieSendActionProps) {
+export function MovieSendAction({ filmId }: MovieSendActionProps) {
 
-  const { user } = useUser();
+  const { user, loading: userLoading } = useAuth();
 
   const router = useRouter();
-
-  const [friends, setFriends] = useState<Models.Document[]>();
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    user?.$id &&
-      movieId &&
-      databases
-        .listDocuments(
-          String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-          String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_FRIENDS),
-          [Query.equal('userId', user.$id)]
-        )
-        .then((response) => {
-          setFriends(response.documents);
-        })
-        .catch((error) => {});
-  }, [user?.$id, movieId]);
+  const { data: userFriendsQuery, loading, error } = useQuery(USER_FRIENDS_QUERY, {
+    variables: {
+        user_id: user?.id
+    },
+    skip: !user
+  });
+  const friends: [ { friend: Friend } ] = userFriendsQuery?.friendCollection?.edges;
 
-  const handleSendToFriend = async (friend: any, title: string) => {
+  const [ insertGuidelistMutation, { error: errorInsertGuidelist} ] = useMutation(INSERT_GUIDELIST_MUTATION)
+
+  const handleSendToFriend = async (friend: User) => {
     try {
-      await databases.createDocument(
-        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_GUIDELISTED),
-        'unique()',
-        {
-          movieId: movieId,
-          userId: friend.$id,
-          by: user.$id,
+      await insertGuidelistMutation({
+        variables: {
+          film_id: filmId,
+          receiver_user_id: friend.id,
+          sender_user_id: user?.id,
+          comment: null,
         }
-      );
-      toast.success('Envoyé à ' + friend.username);
-      return;
-    } catch (error: any) {
-      if (error.response.code === 409) {
-        toast.error(friend.username + ' a déjà cet élément dans sa guidelist');
-      } else {
-        toast.error("Une erreur s'est produite");
-      }
+      });
+      toast.success(`Envoyé à ${friend.full_name}`);
+    } catch (error) {
+      console.log(error)
+      toast.error('Une erreur s\'est produite');
     }
-  };
+  }
 
   if (!user) {
     return (
@@ -95,14 +86,14 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
           <TooltipTrigger asChild>
             <Button
               onClick={() => router.push('/login')}
-              disabled={(isLoading || isError) && true}
+              disabled={(loading || error) && true}
               size="icon"
               variant={'action'}
               className="rounded-full"
             >
-              {isLoading ? (
+              {loading ? (
                 <Icons.spinner className="animate-spin" />
-              ) : isError ? (
+              ) : error ? (
                 <AlertCircle />
               ) : (
                 <Send />
@@ -124,7 +115,7 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
           <TooltipTrigger asChild>
             <PopoverTrigger asChild>
               <Button
-                disabled={(isLoading || isError) && true}
+                disabled={(loading || error) && true}
                 size="icon"
                 variant={'action'}
                 className="rounded-full"
@@ -146,11 +137,11 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
           />
           <CommandList>
             <CommandGroup>
-              {friends?.map((item) => (
+              {friends?.map(({ friend } : { friend: Friend}) => (
                 <CommandItem
-                  key={item.friend.$i}
+                  key={friend.friend_id}
                   onSelect={() => {
-                    handleSendToFriend(item.friend, item.title);
+                    handleSendToFriend(friend.friend);
                     setOpen(false);
                   }}
                   className="flex items-center gap-2"
@@ -158,14 +149,14 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
                   {/* AVATAR */}
                   <Avatar className="h-[30px] w-[30px] shadow-2xl">
                     <AvatarImage
-                      src={item.friend.avatar}
-                      alt={item.friend.username}
+                      src={friend.friend.avatar_url}
+                      alt={friend.friend.username}
                     />
                     <AvatarFallback className="text-primary bg-background text-[10px]">
-                      {getInitiales(item.friend.username)}
+                      {getInitiales(friend.friend.username)}
                     </AvatarFallback>
                   </Avatar>
-                  {item.friend.username}
+                  {friend.friend.username}
                 </CommandItem>
               ))}
             </CommandGroup>

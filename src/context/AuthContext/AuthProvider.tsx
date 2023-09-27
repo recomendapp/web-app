@@ -1,8 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Session } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
+import { Provider, Session } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase/supabase';
 import { gql, useQuery } from '@apollo/client';
 import { User } from '@/types/type.user';
 import USER_FRAGMENT from './fragments/userFragment';
@@ -19,6 +19,7 @@ export interface UserState {
     username: string,
     password: string
   ) => Promise<void>;
+  loginOAuth2: (provider: Provider) => Promise<void>;
   userRefresh: () => Promise<void>;
 }
 
@@ -29,14 +30,15 @@ const defaultState: UserState = {
   login: async () => {},
   logout: async () => {},
   signup: async () => {},
+  loginOAuth2: async () => {},
   userRefresh: async () => {},
 };
 
-const PROFILE_QUERY = gql`
-  query ProfileQuery($id: UUID!) {
-    userCollection(filter: { id: {eq: $id}}) {
+const USER_QUERY = gql`
+  query UserQuery($user_id: UUID!) {
+    userCollection(filter: { id: {eq: $user_id}}) {
       edges {
-        node {
+        user: node {
           ...User
         }
       }
@@ -54,12 +56,13 @@ export const AuthProvider = ({ children } : { children: any }) => {
   const [ session, setSession ] = useState<Session | null>();
   const [ sessionLoading, setSessionLoading ] = useState(true);
   const [ loading, setLoading ] = useState(true);
-  const { data, loading: userLoading } = useQuery(PROFILE_QUERY, {
-    variables: { userId: session?.user?.id },
-    skip: session == null
+  const { data, loading: userLoading } = useQuery(USER_QUERY, {
+    variables: {
+      user_id: session?.user.id
+    },
+    skip: session?.user?.id == null || session?.user?.id == undefined
   });
-  const user = data?.userCollection?.edges[0]?.node;
-  console.log(session?.access_token)
+  const user = data?.userCollection?.edges[0]?.user;
 
   const init = async () => {
     const setData = async () => {
@@ -78,13 +81,8 @@ export const AuthProvider = ({ children } : { children: any }) => {
         setData();
       } else {
         setSession(null);
-        // setUser(null);
-        // setLoading(false);
         setSessionLoading(false);
       }
-      // setSession(session);
-      // setUser(session?.user);
-      // setLoading(false);
     });
 
     setData();
@@ -129,12 +127,21 @@ export const AuthProvider = ({ children } : { children: any }) => {
         password: password,
         options: {
           data: {
-            name: name,
+            full_name: name,
             username: username,
           }
         }
       },
     )
+    if (error) throw error;
+  };
+
+  const loginOAuth2 = async (
+    provider: Provider
+  ) => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: provider
+    })
     if (error) throw error;
   };
 
@@ -145,7 +152,7 @@ export const AuthProvider = ({ children } : { children: any }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, session, loading, login, logout, signup, userRefresh }}
+      value={{ user, session, loading, login, logout, signup, loginOAuth2, userRefresh }}
     >
       {children}
     </AuthContext.Provider>

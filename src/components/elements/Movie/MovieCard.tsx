@@ -19,9 +19,10 @@ import { DateOnlyYearTooltip } from "@/components/elements/Date/Date";
 import MoviePoster from "@/components/elements/Movie/MoviePoster";
 import { AlignJustify, Heart, Quote, Text } from "lucide-react";
 import { MovieAction } from "@/components/modules/MovieAction/MovieAction";
+import { Film } from "@/types/type.film";
 
 interface MovieCardProps {
-    movie: any;
+    film: Film;
     displayMode?: string,
     isLiked?: boolean,
     isRated?: boolean,
@@ -32,7 +33,7 @@ interface MovieCardProps {
 }
 
 export default function MovieCard({
-    movie,
+    film,
     displayMode,
     isLiked,
     isRated,
@@ -47,9 +48,9 @@ export default function MovieCard({
             <TooltipProvider delayDuration={0}>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
-                            <Link href={`/movie/${movie.id}`} className="w-full">
-                                <MoviePoster poster_path={'https://image.tmdb.org/t/p/original/' + movie.poster_path} alt={movie.title}/>
+                        <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md w-48 h-48 bg-red-500">
+                            <Link href={`/film/${film.id}`} className="w-full">
+                                <MoviePoster poster_path={'https://image.tmdb.org/t/p/original/' + film.poster_path} alt={film.title}/>
                             </Link>
                             {(isRated || isReviewed || isLiked) && <div className="flex flex-col items-center gap-1 absolute right-0 top-[10%] bg-background p-1 rounded-l-md">
                                 {isRated && 
@@ -70,7 +71,7 @@ export default function MovieCard({
                                 }
                                 {isReviewed &&
                                     <Button variant={'action'} className="p-0 h-fit" asChild>
-                                        <Link href={`/movie/${movie.id}/review/${review}`}>
+                                        <Link href={`/film/${film.id}/review/${review}`}>
                                             <Text width={20} className='fill-foreground'/>
                                         </Link>
                                     </Button>
@@ -78,13 +79,13 @@ export default function MovieCard({
                             </div>}
                             <div className="hidden absolute top-3/4 group-hover:flex w-full justify-center pointer-events-none">
                                 <div className="bg-background rounded-md w-fit pointer-events-auto">
-                                    <MovieAction movieId={movie?.id} watch watchlist dropdown/>
+                                    <MovieAction filmId={film?.id} watch watchlist dropdown/>
                                 </div>
                             </div>
                         </div>
                     </TooltipTrigger>
                     <TooltipContent>
-                        <p>{movie.title} ({getYear(new Date(movie.release_date))})</p>
+                        <p>{film.title} ({getYear(new Date(film.release_date))})</p>
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
@@ -93,8 +94,8 @@ export default function MovieCard({
 
 
     return (
-        <Link href={`/movie/${movie.id}`} className="relative flex gap-4 items-center">
-            <MoviePoster width={100} poster_path={'https://image.tmdb.org/t/p/original/' + movie.poster_path} alt={movie.title}/>
+        <Link href={`/film/${film.id}`} className="relative flex gap-4 items-center">
+            <MoviePoster width={100} poster_path={'https://image.tmdb.org/t/p/original/' + film.poster_path} alt={film.title}/>
             <div className="w-full block">
                 {/* ACTIONS */}
                 <div className="absolute top-0 flex items-center gap-2">
@@ -117,18 +118,18 @@ export default function MovieCard({
                 </div>
                 {/* TITLE */}
                 <h2 className="text-xl font-bold line-clamp-2">
-                    {movie.title}
+                    {film.title}
                 </h2>
                     
                 
                 {/* DATE / GENRES / RUNTIME */}
-                <div className="line-clamp-1">
-                    {movie.credits.crew
+                {/* <div className="line-clamp-1">
+                    {film.credits.crew
                         .filter(
                             (member: any) => member.job === 'Director'
                         )
                         .length ? (
-                            movie.credits.crew
+                            film.credits.crew
                                 .filter((member: any) => member.job === 'Director')
                                 .map((director: any, index: number) => (
                                 <span key={director.id}>
@@ -152,10 +153,10 @@ export default function MovieCard({
                             <span className="w-fit p-0 h-full font-bold">Unknown</span>
                         )
                     }         
-                </div>
+                </div> */}
 
                 {/* DATE */}
-                <p className="lg:hidden"><DateOnlyYearTooltip date={movie.release_date}/></p>
+                <p className="lg:hidden"><DateOnlyYearTooltip date={film.release_date}/></p>
             </div>
         </Link>
     )

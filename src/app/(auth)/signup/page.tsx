@@ -1,4 +1,4 @@
-import { SignupForm } from '@/app/(auth)/signup/SignupForm';
+import { SignupForm } from '@/components/modules/Auth/Signup/SignupForm';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 import Image from 'next/image';
@@ -25,9 +25,6 @@ export default function Signup() {
             <h1 className="text-2xl font-semibold tracking-tight">
               Créer un compte
             </h1>
-            <p className="text-sm text-muted-foreground">
-              Enter your email below to create your account
-            </p>
           </div>
           <SignupForm />
           <p className="px-8 text-center text-sm text-muted-foreground">

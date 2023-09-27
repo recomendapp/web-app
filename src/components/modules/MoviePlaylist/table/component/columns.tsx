@@ -42,7 +42,7 @@ export const columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date"/>
     ),
-    cell: ({ row }) => <div><DateOnlyYearTooltip date={row.original.item.film.release_date} /> </div>,
+    cell: ({ row }) => <DateOnlyYearTooltip date={row.original.item.film.release_date} />
   },
   {
     accessorKey: "runtime",
