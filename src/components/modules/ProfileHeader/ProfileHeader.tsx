@@ -13,7 +13,7 @@ import { User } from "@/types/type.user"
 import hexToRgb from "@/lib/utils/hexToRgb"
 import { notFound } from "next/navigation"
 
-export default function ({ profile } : { profile: User }) {
+export default function ProfileHeader({ profile } : { profile: User }) {
 
     // const { data: profileQuery, loading } = useQuery(PROFILE_QUERY, {
     //     variables: {
@@ -46,10 +46,12 @@ export default function ({ profile } : { profile: User }) {
                         </Link>
                         <div className='flex items-center gap-2'>
                             <Button variant={'action'}>
-                                {profile.followers_count} followers
+                                {/* {profile.followers_count} */}
+                                followers
                             </Button>
                             <Button variant={'action'}>
-                                {profile.following_count} suivi(e)s
+                                {/* {profile.following_count} */}
+                                suivi(e)s
                             </Button>
                             <Button variant={'action'} asChild>
                                 <Link href={`/@${profile.username}/stats`}>

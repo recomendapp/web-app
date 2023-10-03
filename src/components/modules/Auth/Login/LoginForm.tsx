@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { AuthError, Provider } from '@supabase/supabase-js';
 
 interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -28,24 +29,32 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
 
-    setIsLoading(true);
-
     if (!userLogin.email || !userLogin.password) {
-      setIsLoading(false);
       return;
     }
 
     try {
+      setIsLoading(true);
       await login(userLogin.email, userLogin.password)
-        .then((response) => {
-          router.push('/');
-        })
-        .catch((error) => {
-          setIsLoading(false);
-          toast.error('Email ou mot de passe incorrect');
-        });
+    } catch (error: any) {
+      if (error.status == 400)
+        toast.error('Email ou mot de passe incorrect');
+      else
+        toast.error("Une erreur s'est produite");
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  async function handleLoginOAuth2(provider: Provider) {
+    try {
+      setIsLoading(true);
+      await loginOAuth2(provider);
+
     } catch (error) {
       toast.error("Une erreur s'est produite");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -119,7 +128,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
         </div>
       </div>
       <Button
-        onClick={() => loginOAuth2('github')}
+        onClick={() => handleLoginOAuth2('github')}
         variant="outline"
         type="button"
         disabled={isLoading}

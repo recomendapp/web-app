@@ -30,7 +30,6 @@ export function ForgotPasswordForm({
   });
 
   async function onSubmit(event: React.SyntheticEvent) {
-    console.log('ok')
     event.preventDefault();
 
     setIsLoading(true);
@@ -43,7 +42,8 @@ export function ForgotPasswordForm({
 
     try {
       await supabase.auth.resetPasswordForEmail(userPasswordRecovery.email, {
-        redirectTo: `${location.origin}/settings/security`,
+        redirectTo: `${location.origin}/auth/resetPassword`,
+        // redirectTo: `${location.origin}/settings/security`,
       })
       setPasswordRecoverySuccess(true);
       setIsLoading(false);

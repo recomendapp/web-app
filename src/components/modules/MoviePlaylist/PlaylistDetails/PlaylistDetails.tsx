@@ -55,8 +55,6 @@ export default function PlaylistDetails({
     fetchData();
   }, [playlist])
 
-  console.log('movie', playlistItems)
-
   if (loading) {
     return <Loader />;
   }
@@ -65,7 +63,7 @@ export default function PlaylistDetails({
     <main className="h-full w-full">
       <PlaylistHeader
         playlistDetails={playlist}
-        // data={playlist}
+        data={playlistItems}
       />
       <div className='p-4'>
         {playlistItems && <TablePlaylist playlist={playlistItems} userId={playlist?.user_id} />}
@@ -86,21 +84,19 @@ export function PlaylistHeader({
   const [ open, setOpen ] = useState(false);
 
   const randomBackdrop = (object: any[]) => {
-    const itemsWithBackdrop = object.filter((item: any) => item.backdrop_path); 
+    const itemsWithBackdrop = object.filter((item: any) => item.item.film.backdrop_path); 
     
     if (itemsWithBackdrop.length === 0)
       return null;
 
     const randomIndex = Math.floor(Math.random() * itemsWithBackdrop.length);
-    
-    return (itemsWithBackdrop[randomIndex].backdrop_path);
+    return (itemsWithBackdrop[randomIndex].item.film.backdrop_path);
   }
-
   return (
     <>
       <div 
         style={{
-          backgroundImage: `${data ? `url('https://image.tmdb.org/t/p/original/${randomBackdrop(data)}` : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')"}`,
+          backgroundImage: `${data?.length ? `url('https://image.tmdb.org/t/p/original/${randomBackdrop(data)}` : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')"}`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: `${data ? 'top' : 'center'}`,

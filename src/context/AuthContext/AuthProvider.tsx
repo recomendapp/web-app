@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase/supabase';
 import { gql, useQuery } from '@apollo/client';
 import { User } from '@/types/type.user';
 import USER_FRAGMENT from './fragments/userFragment';
+import { useRouter } from 'next/navigation';
 
 export interface UserState {
   user: User | null | undefined;
@@ -52,6 +53,7 @@ const AuthContext = createContext<UserState>(defaultState);
 
 // create the provider component
 export const AuthProvider = ({ children } : { children: any }) => {
+  const router = useRouter();
   // const [ user, setUser ] = useState<User | null | undefined>();
   const [ session, setSession ] = useState<Session | null>();
   const [ sessionLoading, setSessionLoading ] = useState(true);
@@ -104,15 +106,17 @@ export const AuthProvider = ({ children } : { children: any }) => {
   const login = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
-      password
+      password,
     })
     if (error) throw error;
+    router.refresh();
   };
 
   const logout = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
     setSession(null);
+    router.refresh();
   };
 
   const signup = async (
@@ -126,11 +130,12 @@ export const AuthProvider = ({ children } : { children: any }) => {
         email: email,
         password: password,
         options: {
+          emailRedirectTo: `${location.origin}/auth/callback`,
           data: {
             full_name: name,
             username: username,
           }
-        }
+        },
       },
     )
     if (error) throw error;
@@ -140,7 +145,10 @@ export const AuthProvider = ({ children } : { children: any }) => {
     provider: Provider
   ) => {
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: provider
+      provider: provider,
+      options: {
+        redirectTo: `${location.origin}/auth/callback`,
+      }
     })
     if (error) throw error;
   };

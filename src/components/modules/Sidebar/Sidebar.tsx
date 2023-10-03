@@ -127,6 +127,7 @@ export function Sidebar({
     >
       <Box
         className={`
+          flex
           ${!sidebarExpanded && 'justify-center'}
         `}
       >
@@ -135,9 +136,9 @@ export function Sidebar({
             src={
               sidebarExpanded
                 ? siteConfig.logo.href
-                : siteConfig.logo.href
+                : siteConfig.icon.href
             }
-            alt={'Paradise Pictures Logo'}
+            alt={siteConfig.logo.alt}
             width={50}
             height={50}
           />

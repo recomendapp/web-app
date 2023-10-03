@@ -1,26 +1,21 @@
-'use client';
-
-import Loader from '@/components/elements/Loader/Loader';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
-import { useRouter } from 'next/navigation';
+import { supabaseServer } from '@/lib/supabase/supabase-server';
+import { redirect } from 'next/navigation';
+import { Fragment } from 'react';
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
 }
 
-export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
-  const router = useRouter();
+export default async function ProtectedLayout({ children }: ProtectedLayoutProps) {
+  const { data: { session } } = await supabaseServer.auth.getSession();
 
-  const { loading, user, session } = useAuth();
-
-  if (!loading && !session) {
-    router.push('/login');
+  if (!session) {
+    redirect('/login');
   }
 
   return (
-    <>
-      {loading && <Loader />}
-      {!loading && user && <>{children}</>}
-    </>
+    <Fragment>
+      {children}
+    </Fragment>
   );
 }

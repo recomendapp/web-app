@@ -22,6 +22,8 @@ import { supabase } from '@/lib/supabase/supabase';
 import { useMutation } from '@apollo/client';
 import UPDATE_ACCOUNT_MUTATION from './mutations/updateAccountMutation';
 import { Icons } from '@/components/icons';
+import { useEffect } from 'react';
+import Loader from '@/components/elements/Loader/Loader';
 
 // This can come from your database or API.
 
@@ -79,6 +81,13 @@ export function AccountForm() {
     mode: 'onChange',
   });
 
+  useEffect(() => {
+    user && form.reset({
+      username: user?.username,
+      email: session?.user.email,
+    })
+  }, [user])
+
   async function onSubmit(data: ProfileFormValues) {
     try {
       await updateProfile({
@@ -94,6 +103,9 @@ export function AccountForm() {
       toast.error("Une erreur s'est produite");
     }
   }
+
+  if (!user)
+    return <Loader />
 
   return (
     <Form {...form}>

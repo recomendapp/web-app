@@ -38,32 +38,32 @@ export function ProfileFollowButton({
 
   const [ deleteFollowerMutation, { error: errorDeletingFollower } ] = useMutation(DELETE_FOLLOWER_MUTATION, {
     update: (store) => {
-      const profileData = store.readQuery<{ userCollection: { edges: [{ user: User}]}}>({
-        query: PROFILE_QUERY,
-        variables: {
-          username: profile.username
-        },
-      })
-      const newFollowerCount = String(Number(profileData?.userCollection.edges[0].user.followers_count) - 1)
+    //   const profileData = store.readQuery<{ userCollection: { edges: [{ user: User}]}}>({
+    //     query: PROFILE_QUERY,
+    //     variables: {
+    //       username: profile.username
+    //     },
+    //   })
+    //   const newFollowerCount = String(Number(profileData?.userCollection.edges[0].user.followers_count) - 1)
 
-      store.writeQuery({
-        query: PROFILE_QUERY,
-        variables: {
-          username: profile.username
-        },
-        data: {
-          userCollection: {
-            edges: [
-              {
-                user: {
-                  ...profileData!.userCollection.edges[0].user,
-                  followers_count: newFollowerCount
-                }
-              }
-            ]
-          }
-        }
-      })
+    //   store.writeQuery({
+    //     query: PROFILE_QUERY,
+    //     variables: {
+    //       username: profile.username
+    //     },
+    //     data: {
+    //       userCollection: {
+    //         edges: [
+    //           {
+    //             user: {
+    //               ...profileData!.userCollection.edges[0].user,
+    //               followers_count: newFollowerCount
+    //             }
+    //           }
+    //         ]
+    //       }
+    //     }
+    //   })
       // UPDATE FOLLOWING STATE
       store.writeQuery({
         query: FOLLOWER_QUERY,
@@ -81,31 +81,32 @@ export function ProfileFollowButton({
   });
   const [ insertFollowerMutation, { error: errorAddingFollower} ] = useMutation(INSERT_FOLLOWER_MUTATION, {
     update: (store, { data }) => {
-      const profileData = store.readQuery<{ userCollection: { edges: [{ user: User}]}}>({
-        query: PROFILE_QUERY,
-        variables: {
-          username: profile.username
-        },
-      })
-      const newFollowerCount = String(Number(profileData?.userCollection.edges[0].user.followers_count) + 1)
-      store.writeQuery({
-        query: PROFILE_QUERY,
-        variables: {
-          username: profile.username
-        },
-        data: {
-          userCollection: {
-            edges: [
-              {
-                user: {
-                  ...profileData!.userCollection.edges[0].user,
-                  followers_count: newFollowerCount
-                }
-              }
-            ]
-          }
-        }
-      })
+      // const profileData = store.readQuery<{ userCollection: { edges: [{ user: User}]}}>({
+      //   query: PROFILE_QUERY,
+      //   variables: {
+      //     username: profile.username
+      //   },
+      // })
+      // console.log('profileData', profileData)
+      // const newFollowerCount = String(Number(profileData?.userCollection.edges[0].user.followers_count) + 1)
+      // store.writeQuery({
+      //   query: PROFILE_QUERY,
+      //   variables: {
+      //     username: profile.username
+      //   },
+      //   data: {
+      //     userCollection: {
+      //       edges: [
+      //         {
+      //           user: {
+      //             ...profileData!.userCollection.edges[0].user,
+      //             followers_count: newFollowerCount
+      //           }
+      //         }
+      //       ]
+      //     }
+      //   }
+      // })
 
       // UPDATE FOLLOWING STATE
       store.writeQuery({

@@ -16,29 +16,7 @@ export default function SearchResultsUsers({
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState<Models.Document[] | null>(null);
 
-  useEffect(() => {
-    if (query) {
-      setLoading(true);
-      databases
-        .listDocuments(
-          String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-          String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_USER),
-          [Query.search('username', query)]
-        )
-        .then((response) => {
-          if (response.total > 0) {
-            setLoading(false);
-            setResults(response.documents);
-          } else {
-            setLoading(false);
-            setResults(null);
-          }
-        })
-        .catch((error) => {
-          console.log('error:', error);
-        });
-    }
-  }, [query]);
+
 
   if (loading) {
     return (

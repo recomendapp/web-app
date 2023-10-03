@@ -12,6 +12,7 @@ export default gql`
         film_actionCollection(
             filter: {
                 user_id: { eq: $user_id }
+                is_watched: { eq: true }
             }
             orderBy: $order
             first: $first

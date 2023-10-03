@@ -80,7 +80,7 @@ export default function ProfileFilms({
         )
     }
 
-    if (!films)
+    if (!films?.length)
         return (null)
 
     if (horizontal)
@@ -123,13 +123,15 @@ export default function ProfileFilms({
                 <ScrollArea className="pb-4">
                     <div className="flex gap-4">
                         {films.map(({ film_action } : { film_action: FilmAction}) => (
-                            <MovieCard
-                                film={film_action.film}
-                                displayMode={displayMode}
-                                isLiked={film_action.is_liked}
-                                rating={film_action.rating}
-                                review={film_action.review_id}
-                            />
+                            <div key={film_action.id} className="w-48">
+                                <MovieCard
+                                    film={film_action.film}
+                                    displayMode={displayMode}
+                                    isLiked={film_action.is_liked}
+                                    rating={film_action.rating}
+                                    review={film_action.review_id}
+                                />
+                            </div>
                         ))}
                         {pageInfo.hasNextPage && 
                             <div className="w-24 flex items-center justify-center">

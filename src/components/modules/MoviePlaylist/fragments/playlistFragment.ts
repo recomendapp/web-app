@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-
 import USER_FRAGMENT from "@/context/AuthContext/fragments/userFragment";
 import PLAYLIST_ITEM_FRAGMENT from "@/components/modules/MoviePlaylist/fragments/playlistItemFragment";
 

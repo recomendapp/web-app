@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: 'RECOMEND',
+  name: 'Recomend',
   description: 'Beautiful web movie app !',
   mainNav: [
     {
@@ -10,10 +10,13 @@ export const siteConfig = {
     },
   ],
   logo: {
-    href: '/recomend-logo.svg',
+    href: '/recomend_icon.svg',
     alt: 'Recomend Logo',
   },
-  icon: 'R.',
+  icon: {
+    href: '/recomend_icon.svg',
+    alt: 'Recomend Logo',
+  },
   links: {
     twitter: 'https://twitter.com/xmesky',
     github: 'https://github.com/xmesky',

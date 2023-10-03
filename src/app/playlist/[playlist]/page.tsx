@@ -1,14 +1,13 @@
 import { notFound } from 'next/navigation';
-import { supabase } from '@/lib/supabase/supabase';
-
 import PlaylistDetails from '@/components/modules/MoviePlaylist/PlaylistDetails/PlaylistDetails';
+import { supabaseServer } from '@/lib/supabase/supabase-server';
 
 export async function generateMetadata({
   params,
 }: {
   params: { playlist: string };
 }) {
-  const { data: playlist } = await supabase.from('playlist').select('*, user(username)').eq('id', params.playlist).single();
+  const { data: playlist } = await supabaseServer.from('playlist').select('*, user(username)').eq('id', params.playlist).single();
   if (!playlist) {
     return {
       title: 'Oups, playlist introuvable !',
@@ -25,7 +24,7 @@ export default async function Playlist({
 }: {
   params: { playlist: string };
 }) {
-  const { data: playlist } = await supabase.from('playlist').select('*').eq('id', params.playlist).single();
+  const { data: playlist } = await supabaseServer.from('playlist').select('*').eq('id', params.playlist).single();
 
   if (!playlist) notFound();
 

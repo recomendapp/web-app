@@ -44,7 +44,6 @@ export default function ProfilePlaylists({
 
     useEffect(() => {
         if (inView && pageInfo?.hasNextPage) {
-            console.log('fetchMore')
             fetchMore({
                 variables: {
                     user_id: profile.id,
@@ -67,7 +66,7 @@ export default function ProfilePlaylists({
         }
     }, [inView, pageInfo])
 
-    if (!playlists)
+    if (!playlists?.length)
         return (null)
 
     if (horizontal)

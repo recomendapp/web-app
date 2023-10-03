@@ -2,14 +2,14 @@
 import { handleSearchMovies } from '@/hooks/tmdb';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { Badge } from '../../ui/badge';
+import { Badge } from '../../../ui/badge';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '../../ui/skeleton';
-import { ImageWithFallback } from '../../elements/Tools/ImageWithFallback';
-import { AspectRatio } from '../../ui/aspect-ratio';
+import { Skeleton } from '../../../ui/skeleton';
+import { ImageWithFallback } from '../../../elements/Tools/ImageWithFallback';
+import { AspectRatio } from '../../../ui/aspect-ratio';
 
-export default function SearchResultsMovies({
+export default function SearchFilmsSmall({
   query,
 }: {
   query: string | undefined;
@@ -36,10 +36,6 @@ export default function SearchResultsMovies({
         });
     }
   }, [query]);
-
-  useEffect(() => {
-    console.log('results', results);
-  }, [results]);
 
   if (loading) {
     return (
@@ -105,7 +101,7 @@ export default function SearchResultsMovies({
         </div>
         <Link
           key={results[0].title}
-          href={'/movie/' + results[0].id}
+          href={'/film/' + results[0].id}
           className="flex relative bg-secondary h-full hover:bg-secondary-hover rounded-md p-2 gap-2"
         >
           <Badge className="absolute right-2 bg-accent-1 shadow-2xl">
@@ -174,7 +170,7 @@ export default function SearchResultsMovies({
           {results.slice(1, 5).map((item: any) => (
             <Link
               key={item.id}
-              href={'/movie/' + item.id}
+              href={'/film/' + item.id}
               className="text-sm flex justify-between p-2 hover:bg-secondary rounded-md"
             >
               <div className="flex items-center gap-2">

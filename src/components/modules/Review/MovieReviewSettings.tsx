@@ -1,4 +1,3 @@
-import { handleDeleteReview } from '@/api/movie/movie_review'
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -11,7 +10,9 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
+import { useAuth } from '@/context/AuthContext/AuthProvider'
 import { useUser } from '@/context/UserProvider'
+import { Review } from '@/types/type.review'
 import { Models } from 'appwrite'
 import { MoreHorizontal, MoreVertical, Trash, Trash2 } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -22,10 +23,10 @@ import { toast } from 'react-toastify'
 export function MovieReviewSettings({
     review 
 } : {
-    review: Models.Document
+    review: Review
 }) {
 
-    const { user } = useUser();
+    const { user } = useAuth();
     const pathname = usePathname();
     const router = useRouter();
     const queryClient = useQueryClient();
@@ -42,12 +43,12 @@ export function MovieReviewSettings({
                 </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                {(!user || user.$id != review.userId) && <DropdownMenuItem 
+                {(!user || user.id != review.user_id) && <DropdownMenuItem 
                     onSelect={() => setIsOpen(true)}
                 >
                     Signaler la critique
                 </DropdownMenuItem>}
-                { user && user.$id == review.userId && 
+                { user && user.id == review.user_id && 
                     <DropdownMenuItem
                         onSelect={() => setShowDeleteDialog(true)}
                         className="text-red-600 gap-2"
@@ -105,10 +106,10 @@ export function MovieReviewSettings({
                     <Button
                     variant="destructive"
                     onClick={() => {
-                        handleDeleteReview(review.$id, user.$id, review.movieId, queryClient)
-                        if (pathname == `/movie/${review.movieId}/review/${review.$id}`)
-                            router.push(`/movie/${review.movieId}`);
-                        setShowDeleteDialog(false)
+                        // handleDeleteReview(review.$id, user.$id, review.movieId, queryClient)
+                        // if (pathname == `/movie/${review.movieId}/review/${review.$id}`)
+                        //     router.push(`/movie/${review.movieId}`);
+                        // setShowDeleteDialog(false)
                         // toast({
                         //     message: "This preset has been deleted.",
                         // })

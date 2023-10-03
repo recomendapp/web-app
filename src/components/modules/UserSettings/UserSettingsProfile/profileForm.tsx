@@ -23,13 +23,14 @@ import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { useMutation } from '@apollo/client';
 import UPDATE_PROFILE_MUTATION from './mutations/updateProfileMutation';
 import { Icons } from '@/components/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase/supabase';
 import Compressor from 'compressorjs';
 import compressPicture from '@/lib/utils/compressPicture';
+import Loader from '@/components/elements/Loader/Loader';
 
 export function ProfileForm() {
-  const { user } = useAuth();
+  const { user, loading: userLoading } = useAuth();
   const [ loading, setLoading ] = useState(false);
 
   const [ updateProfile ] = useMutation(UPDATE_PROFILE_MUTATION);
@@ -74,6 +75,14 @@ export function ProfileForm() {
     defaultValues,
     mode: 'onChange',
   });
+
+  useEffect(() => {
+    user && form.reset({
+      full_name: user.full_name,
+      bio: user?.bio ?? undefined,
+      website: user?.website ?? undefined,
+    })
+  }, [user])
 
   async function onSubmit(data: ProfileFormValues) {
     try {
@@ -140,7 +149,7 @@ export function ProfileForm() {
   }
 
   if (!user)
-    return null
+    return <Loader />
 
   return (
     <Form {...form}>

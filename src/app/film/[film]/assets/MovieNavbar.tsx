@@ -24,17 +24,17 @@ export default function MovieNavbar ({ focus, movieId } : { focus: string, movie
         {
         label: 'Description',
         active: focus === 'description',
-        href: `/movie/${movieId}`,
+        href: `/film/${movieId}`,
         },
         {
         label: 'Critiques',
         active: focus === 'reviews',
-        href: `/movie/${movieId}/reviews`,
+        href: `/film/${movieId}/reviews`,
         },
         {
         label: 'Playlists',
         active: focus === 'playlists',
-        href: `/movie/${movieId}/playlists`,
+        href: `/film/${movieId}/playlists`,
         }
     ];
 

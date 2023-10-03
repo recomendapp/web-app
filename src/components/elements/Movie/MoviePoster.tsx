@@ -1,7 +1,8 @@
 import { ImageWithFallback } from "@/components/elements/Tools/ImageWithFallback";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
-export default function MoviePoster({ width, poster_path, alt } : { width?: number, poster_path: string, alt: string }) {
+export default function MoviePoster({ width, poster_path, alt } : { width?: number, poster_path: string | null, alt: string }) {
+    console.log('poster', poster_path)
     return (
         <div 
             className={`

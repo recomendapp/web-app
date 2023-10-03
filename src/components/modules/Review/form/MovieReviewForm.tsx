@@ -13,7 +13,6 @@ import { useUser } from "@/context/UserProvider";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "react-toastify";
-import { handleUpdateReview } from "@/api/movie/movie_review";
 import { Icons } from "@/components/icons";
 import { useQueryClient } from "react-query";
 
@@ -32,36 +31,33 @@ export default function MovieReviewForm({ review } : MovieReviewFormProps) {
   const [ editable, setEditable ] = useState(false);
 
   const updateReview = async () => {
-    setIsLoading(true);
-
+    
     if (title == review.title && JSON.stringify(body) == review.body) {
       setEditable(false);
-      setIsLoading(false);
       return
     }
-
+    
     if (!title || !/[a-zA-Z0-9]/.test(title))
     {
       toast.error("Le titre est obligatoire");
-      setIsLoading(false);
       return
     }
-
+    
     if (!body || (body?.content?.length == 1 && !body.content[0].content?.length))
     {
       toast.error("La critique est obligatoire");
-      setIsLoading(false);
       return
     }
-
+    
     try {
+      setIsLoading(true);
       await handleUpdateReview(review.$id, title.trim(), JSON.stringify(body));
-      queryClient.invalidateQueries(['movie', review.movieId, 'reviews']);
       toast.success("Les modifications ont bien été enregistrées");
       setEditable(false);
-      setIsLoading(false);
     } catch (error) {
       toast.error("Une erreur s'est produite")
+    } finally {
+      setIsLoading(false);
     }
   }
 

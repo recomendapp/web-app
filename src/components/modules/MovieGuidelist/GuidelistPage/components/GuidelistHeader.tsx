@@ -13,7 +13,7 @@ export function GuidelistHeader ({ data } : { data?: any[] }) {
     return (
       <div
         style={{
-          backgroundImage: `${data ? `url('https://image.tmdb.org/t/p/original/${randomBackdrop(data)}` : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')"}`,
+          backgroundImage: `${data?.length ? `url('https://image.tmdb.org/t/p/original/${randomBackdrop(data)}` : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')"}`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: `${data ? 'top' : 'center'}`,

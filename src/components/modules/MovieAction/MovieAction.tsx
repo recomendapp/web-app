@@ -10,7 +10,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Button } from '@/components/ui/button';
 import { MovieActionDropdownMenu } from './_components/MovieActionDropdownMenu/MovieActionDropdownMenu';
 import { useQuery } from '@apollo/client';
-import FILM_ACTION_QUERY from './queries/filmActionQuery';
+import FILM_ACTION_QUERY from '@/components/modules/MovieAction/queries/filmActionQuery';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 export function MovieAction({
@@ -48,30 +48,6 @@ export function MovieAction({
   })
 
   console.log('filmAction', filmActionQuery)
-  // isRated
-  // const { data: isRated } = useQuery({
-  //   queryKey: ['movie', movieId, 'rating'],
-  //   queryFn: () => handleGetRating(user.$id, movieId),
-  //   enabled: user?.$id !== undefined && user?.$id !== null,
-  // });
-  // // isLiked
-  // const { data: isLiked } = useQuery({
-  //   queryKey: ['movie', movieId, 'like'],
-  //   queryFn: () => handleGetLike(user.$id, movieId),
-  //   enabled: user?.$id !== undefined && user?.$id !== null,
-  // });
-  // // isWatched
-  // const { data: isWatched } = useQuery({
-  //   queryKey: ['movie', movieId, 'watch'],
-  //   queryFn: () => handleGetWatch(user.$id, movieId),
-  //   enabled: user?.$id !== undefined && user?.$id !== null,
-  // });
-  // // isWatchlisted
-  // const { data: isWatchlisted } = useQuery({
-  //   queryKey: ['movie', movieId, 'watchlist'],
-  //   queryFn: () => handleGetWatchlist(user.$id, movieId),
-  //   enabled: user?.$id !== undefined && user?.$id !== null,
-  // });  
 
   return (
     <div className="flex justify-between gap-2">

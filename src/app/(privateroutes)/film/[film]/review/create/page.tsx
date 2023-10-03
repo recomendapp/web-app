@@ -3,42 +3,36 @@ import Tiptap from "@/components/modules/Editor/Editor";
 import Loader from "@/components/elements/Loader/Loader";
 import { useUser } from "@/context/UserProvider";
 import { JSONContent } from "@tiptap/react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
-import { useQuery } from "react-query";
-import CreateReviewForm from "../../../../../../components/modules/MovieReview/form/CreateReviewFrom";
+import CreateReviewForm from "../../../../../../components/modules/Review/form/CreateReviewFrom";
+import { useAuth } from "@/context/AuthContext/AuthProvider";
+import { useQuery } from "@apollo/client";
+import USER_REVIEW_QUERY from "@/components/modules/Review/queries/userReviewQuery";
 
 export default function CreateReview({ params }: { params: { film: string } }) {
 
-    // const { user } = useUser();
+    const { user } = useAuth();
 
-    // const router = useRouter();
+    const { data: userReviewQuery, loading } = useQuery(USER_REVIEW_QUERY, {
+        variables: {
+            fim_id: params.film,
+            user_id: user?.id
+        },
+        skip: !user?.id
+    })
+    const review = userReviewQuery?.reviewCollection?.edges[0]?.review
 
-    // const movieId = params.movie;
+    if (!user || loading) {
+        return <Loader />
+    }
 
-    // const {
-    //     data: userReview,
-    //     isLoading,
-    //     isError,
-    // } = useQuery({
-    //     queryKey: ['movie', movieId, 'review', user?.$id],
-    //     queryFn: () => getReviewFromUser(user?.$id, Number(movieId)),
-    //     enabled: user?.$id !== undefined && user?.$id !== null,
-    // });
-
-    // if(userReview)
-    // {
-    //     router.push(`/movie/${movieId}/review/${userReview.$id}`);
-    //     return ;
-    // }
+    if(review)
+        redirect(`/film/${params.film}/review/${user.username}`);
     
-    // if (isLoading) {
-    //     return <Loader />
-    // }
-
-    // return (
-    //     <div className="p-4">
-    //         <CreateReviewForm movieId={Number(movieId)} user={user}/>
-    //     </div>
-    // )
+    return (
+        <div className="p-4">
+            <CreateReviewForm filmId={params.film} user={user}/>
+        </div>
+    )
 }

@@ -25,9 +25,7 @@ interface MovieCardProps {
     film: Film;
     displayMode?: string,
     isLiked?: boolean,
-    isRated?: boolean,
     rating?: number,
-    isReviewed?: boolean,
     review?: string,
 
 }
@@ -36,11 +34,11 @@ export default function MovieCard({
     film,
     displayMode,
     isLiked,
-    isRated,
     rating,
-    isReviewed,
     review
 } : MovieCardProps) {
+
+    console.log('film', film)
 
     if (displayMode == 'grid')
     {
@@ -48,12 +46,12 @@ export default function MovieCard({
             <TooltipProvider delayDuration={0}>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md w-48 h-48 bg-red-500">
+                        <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
                             <Link href={`/film/${film.id}`} className="w-full">
-                                <MoviePoster poster_path={'https://image.tmdb.org/t/p/original/' + film.poster_path} alt={film.title}/>
+                                <MoviePoster poster_path={film.poster_path} alt={film.title}/>
                             </Link>
-                            {(isRated || isReviewed || isLiked) && <div className="flex flex-col items-center gap-1 absolute right-0 top-[10%] bg-background p-1 rounded-l-md">
-                                {isRated && 
+                            {(rating || review || isLiked) && <div className="flex flex-col items-center gap-1 absolute right-0 top-[10%] bg-background p-1 rounded-l-md">
+                                {rating && 
                                     <p
                                         className={`h-5 w-6 rounded-sm flex items-center justify-center
                                         text-background bg-accent-1
@@ -69,7 +67,7 @@ export default function MovieCard({
                                         className={`text-like fill-like`}
                                     />
                                 }
-                                {isReviewed &&
+                                {review &&
                                     <Button variant={'action'} className="p-0 h-fit" asChild>
                                         <Link href={`/film/${film.id}/review/${review}`}>
                                             <Text width={20} className='fill-foreground'/>

@@ -16,15 +16,16 @@ import { JSONContent } from "@tiptap/react";
 // UI
 import { Button } from "@/components/ui/button";
 import { MovieReviewSettings } from "./MovieReviewSettings";
+import { Review } from "@/types/type.review";
 
-export default function MovieReviewOverview({ review }: { review: Models.Document}) {
+export default function MovieReviewOverview({ review }: { review: Review}) {
     return (
       // <Link href={`/movie/${review.movieId}/review/${review.$id}`} className="relative">
       <div className="relative">  
         {/* RATING */}
         <div className="absolute bg-background border-2 border-accent-1 rounded-xl h-10 w-12 flex justify-center items-center">
           <p className="text-accent-1 font-bold text-lg">
-            {review.movie_rating}
+            {review.film_action.rating}
           </p>
         </div>
         <div className=" pt-2 pl-5">
@@ -37,7 +38,7 @@ export default function MovieReviewOverview({ review }: { review: Models.Documen
                     {review.title}
                 </p>}
                 <div className="flex items-center gap-2">
-                  {review.movie_liked && <Heart className="text-like fill-like"/>}
+                  {review.film_action.is_liked && <Heart className="text-like fill-like"/>}
                   <MovieReviewSettings review={review} />
                 </div>
               </div>
@@ -48,7 +49,7 @@ export default function MovieReviewOverview({ review }: { review: Models.Documen
             </div>
             {/* LINK */}
             <Button variant="link" asChild className="w-fit p-0 font-bold">
-              <Link href={`/movie/${review.movieId}/review/${review.$id}`}>
+              <Link href={`/film/${review.film_id}/review/${review.user.username}`}>
                 Lire la critique
               </Link>
             </Button>
@@ -65,7 +66,7 @@ export default function MovieReviewOverview({ review }: { review: Models.Documen
                   <BarChart3 color="#03fcf0"/>
                   {review.views_count ? review.views_count : 0}
                 </span>
-                <ButtonShare url={`${process.env.NEXT_PUBLIC_URL}/movie/${review.movieId}/review/${review.$id}`} icon />
+                <ButtonShare url={`${location.origin}/film/${review.film_id}/review/${review.user.username}`} icon />
               </div>
               {/* AUTHOR */}
               <UserCard user={review.user}/>

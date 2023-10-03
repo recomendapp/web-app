@@ -27,66 +27,72 @@ import { Icons } from "@/components/icons";
 import { MovieAction } from "@/components/modules/MovieAction/MovieAction";
 import { Divide } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
+import { useMutation, useQuery } from "@apollo/client";
+import { useAuth } from "@/context/AuthContext/AuthProvider";
+import { FilmAction } from "@/types/type.film";
+import FILM_ACTION_QUERY from "@/components/modules/MovieAction/queries/filmActionQuery";
+import INSERT_REVIEW_MUTATION from "@/components/modules/Review/mutations/insertReviewMutation";
 
-export default function CreateReviewForm({ movieId, user } : { movieId: number, user: User }) {
-    
-    const [isLoading, setIsLoading] = useState(false);
-    const queryClient = useQueryClient();
+export default function CreateReviewForm({ filmId, user } : { filmId: string, user: User }) {
+
+  const { data: filmActionQuery, loading: filmActionLoading, error } = useQuery(FILM_ACTION_QUERY, {
+    variables: {
+      film_id: filmId,
+      user_id: user?.id,
+    },
+    skip: !user
+  })
+  const filmAction: FilmAction = filmActionQuery?.film_actionCollection?.edges[0]?.action;
+
+  const [ insertReviewMutation, { error: errorAddingReview } ] = useMutation(INSERT_REVIEW_MUTATION, {
+    // update: (store, { data }) => {
+    // },
+  });
+    const [ loading, setLoading ] = useState(false);
     const router = useRouter();
 
     const [ body, setBody ] = useState<JSONContent>();
     const [ title, setTitle ] = useState<string>("");
 
     async function createReview() {
-
-        setIsLoading(true);
     
-        const isRated = queryClient.getQueryData(['movie', movieId, 'rating']) as isRated;
-        const isLiked = queryClient.getQueryData(['movie', movieId, 'like']) as isLiked;
-        if (!isRated?.state)
+        if (!filmAction.rating)
         {
             toast.error("Vous devez noter ce film pour ajouter une critique");
-            setIsLoading(false);
             return
         }
 
         if (!title || !/[a-zA-Z0-9]/.test(title))
         {
           toast.error("Le titre est obligatoire");
-          setIsLoading(false);
           return
         }
 
         if (!body || (body?.content?.length == 1 && !body.content[0].content?.length))
         {
           toast.error("La critique est obligatoire");
-          setIsLoading(false);
           return
         }
     
         try {
-          const { $id } = await databases.createDocument(
-            String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-            String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE_REVIEW),
-            'unique()',
-            {
-                movieId: movieId,
-                userId: user.$id,
-                user: user.$id,
-                title: title ? title.trim() : `Critique par ${user.username}`,
-                body: JSON.stringify(body),
-                movie_liked: isLiked.state,
-                movie_rating: isRated.rating
+          setLoading(true);
+          await insertReviewMutation({
+            variables: {
+              film_id: filmId,
+              user_id: user.id,
+              title: title ? title.trim() : `Critique par ${user.username}`,
+              body: JSON.stringify(body),
+              action_id: filmAction.id,
             }
-          );
+          })
           toast.success(
             'Votre critique a été publié avec succès'
           );
-          setIsLoading(false);
-          router.push(`/movie/${movieId}/review/${$id}`);
+          router.push(`/movie/${filmId}/review/${user.username}`);
         } catch (error) {
           toast.error("Une erreur s'est produite");
-          setIsLoading(false);
+        } finally {
+          setLoading(false)
         }
       }
 
@@ -98,13 +104,13 @@ export default function CreateReviewForm({ movieId, user } : { movieId: number, 
             <div className="flex gap-4 justify-between items-center">
               {/* TITLE */}
               <ReviewTitle title={title} setTitle={setTitle}/>
-              <MovieAction movieId={movieId} rating like/>
+              <MovieAction filmId={filmId} rating like/>
             </div>
             {/* BODY */}
             <Tiptap setBody={setBody}/>
             {/* SUBMIT */}
-            <Button disabled={isLoading} onClick={createReview}>
-                {isLoading && (
+            <Button disabled={loading} onClick={createReview}>
+                {loading && (
                     <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
                 Enregistrer
@@ -114,7 +120,12 @@ export default function CreateReviewForm({ movieId, user } : { movieId: number, 
     )
 }
 
-export function ReviewTitle({ title, setTitle} : { title: string, setTitle: Dispatch<SetStateAction<string>> }) {
+export function ReviewTitle({
+  title, setTitle}
+: {
+  title: string,
+  setTitle: Dispatch<SetStateAction<string>> 
+}) {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {

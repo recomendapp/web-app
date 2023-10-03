@@ -5,10 +5,11 @@ import { Metadata } from 'next';
 import { Skeleton } from '@/components/ui/skeleton';
 import FeaturedPlaylists from '@/components/modules/MoviePlaylist/FeaturedPlaylists';
 import SearchResultsUsers from '@/components/modules/Search/SearchResultsUsers';
-import SearchResultsMovies from '@/components/modules/Search/SearchResultsMovies';
-import SearchResultsPlaylists from '@/components/modules/Search/SearchResultsPlaylists';
+import SearchFilms from '@/components/modules/Search/SearchFilms/SearchFilms';
+import SearchPlaylists from '@/components/modules/Search/SearchPlaylists/SearchPlaylists';
 import SearchFilters from '@/components/modules/Search/SearchFilters';
 import SearchBar from '@/components/modules/Search/SearchBar';
+import SearchFilmsFull from '@/components/modules/Search/SearchFilms/SearchFilmsFull';
 
 export async function generateMetadata({
   params,
@@ -32,7 +33,10 @@ export default function Search({
   searchParams,
 }: {
   params: { slug: string };
-  searchParams?: { [key: string]: string | undefined };
+  searchParams?: {
+    q: string | undefined,
+    filter: string | undefined
+  };
 }) {
   // const skeleton = Array.from({ length: 20 }, (_, index) => (
   //   <div key={index} className="flex items-center space-x-4">
@@ -64,26 +68,38 @@ export default function Search({
   //     clearTimeout(timer);
   //   };
   // }, []);
-
-  return (
-    <main className="p-4">
-      <div className="flex flex-col gap-4 pb-4 lg:hidden">
-        <div className="text-4xl font-bold">Recherche</div>
-        <SearchBar />
-      </div>
-      {searchParams?.q ? (
-        <div className="flex flex-col gap-2">
-          <SearchFilters
-            filter={searchParams?.filter}
+  if (searchParams?.q ||searchParams?.filter)
+    return (
+      <div className="flex flex-col gap-2">
+        <SearchFilters
+          filter={searchParams.filter}
+          query={searchParams.q}
+        />
+        {(!searchParams.filter || searchParams.filter === "films") &&
+          <SearchFilms
+            query={searchParams?.q}
+            filter={searchParams.filter}
+          />
+        }
+        {(!searchParams.filter || searchParams.filter === "users") &&
+          <SearchResultsUsers
+            query={searchParams?.q}
+            // filter={searchParams.filter}
+            />
+        }
+        {(!searchParams.filter || searchParams.filter === "playlists") &&
+          <SearchPlaylists
+            query={searchParams?.q}
+            filter={searchParams.filter}
+          />
+        }
+        {searchParams.filter === "films" &&
+          <SearchFilmsFull
             query={searchParams?.q}
           />
-          <SearchResultsMovies query={searchParams?.q} />
-          <SearchResultsUsers query={searchParams?.q} />
-          <SearchResultsPlaylists query={searchParams?.q} />
-        </div>
-      ) : (
-        <FeaturedPlaylists />
-      )}
-    </main>
-  );
+        }
+      </div>
+    )
+
+  return <FeaturedPlaylists />
 }

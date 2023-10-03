@@ -1,20 +1,17 @@
-'use client';
+
 import { cn } from '@/lib/utils/utils';
-import { usePathname, useRouter } from 'next/navigation';
-
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-
-import { UserNav } from '@/components/modules/UserNav/UserNav';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import SearchBar from '@/components/modules/Search/SearchBar';
+import NavigationButton from '../NavigationButton/NavigationButton';
+import { supabaseServer } from '@/lib/supabase/supabase-server';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { UserNav } from '../UserNav/UserNav';
+import HeaderLeftSide from './HeaderLeftSide';
 
 interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function Header({ className }: HeaderProps) {
-  const router = useRouter();
-
-  const pathname = usePathname();
+export async function Header({ className }: HeaderProps) {
+  const { data: { session } } = await supabaseServer.auth.getSession();
 
   return (
     <header
@@ -24,33 +21,18 @@ export function Header({ className }: HeaderProps) {
       )}
     >
       <div className="flex flex-col gap-4 w-full items-center lg:flex-row">
-        <div className="hidden gap-4 lg:flex">
-          {/* NAVIGATION BUTTON */}
-          <Button
-            onClick={router.back}
-            variant="ghost"
-            size="icon"
-            className="rounded-full"
-          >
-            <ChevronLeft />
-          </Button>
-          <Button
-            onClick={router.forward}
-            variant="ghost"
-            size="icon"
-            className="rounded-full"
-          >
-            <ChevronRight />
-          </Button>
-          {/* PAGE TITLE */}
-        </div>
-        {/* <div className=" h-full flex justify-center items-center w-full lg:hidden">
-                    PARÆDISE
-                </div> */}
-        {pathname === '/search' && <SearchBar />}
+        <HeaderLeftSide />
       </div>
       <div className="hidden lg:block">
-        <UserNav />
+        { !session ?
+          <Button asChild>
+            <Link href={'/login'} className="whitespace-nowrap">
+              Se connecter
+            </Link>
+          </Button> 
+        :
+          <UserNav />
+        }
       </div>
     </header>
   );

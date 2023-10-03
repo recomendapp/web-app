@@ -14,13 +14,8 @@ export default function SearchFilters({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [searchFilter, setSearchFilter] = useState<any>();
+  const [searchFilter, setSearchFilter] = useState<string | undefined>(filter);
 
-  // INIT SEARCHFILTER IF EXIST ON URL
-  useEffect(() => {
-    console.log('FILTER:', filter);
-    filter && setSearchFilter(filter);
-  }, [filter]);
 
   const selectSearchFilter = (filter: string) => {
     if (searchFilter === filter) {
@@ -41,6 +36,7 @@ export default function SearchFilters({
         queryString += `${query ? '&' : ''}filter=${filter}`;
       }
       const url = queryString ? `${pathname}?${queryString}` : pathname;
+      console.log('url', url)
       url && router.push(url);
     }
   };
@@ -54,9 +50,9 @@ export default function SearchFilters({
         Tout
       </Button>
       <Button
-        variant={searchFilter == 'movies' ? 'accent-1' : 'secondary'}
+        variant={searchFilter == 'films' ? 'accent-1' : 'secondary'}
         className={`rounded-md`}
-        onClick={() => selectSearchFilter('movies')}
+        onClick={() => selectSearchFilter('films')}
       >
         Films
       </Button>
