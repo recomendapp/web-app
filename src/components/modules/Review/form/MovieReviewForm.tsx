@@ -1,9 +1,9 @@
 "use client"
 
 import { JSONContent, generateHTML } from "@tiptap/react";
-import { EDITOR_EXTENSIONS } from "../../Editor/EditorExtensions";
+import { EDITOR_EXTENSIONS } from "../../../Editor/EditorExtensions";
 import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
-import Tiptap from "../../Editor/Editor";
+import Tiptap from "../../../Editor/Editor";
 import { MovieReviewSettings } from "../MovieReviewSettings";
 import { Models } from "appwrite";
 import UserCard from "@/components/elements/UserCard/UserCard";

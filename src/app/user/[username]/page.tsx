@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
-import ProfilePlaylists from '@/components/modules/ProfilePlaylists/ProfilePlaylists';
-import ProfileFilms from '@/components/modules/ProfileFilms/ProfileFilms';
+import ProfilePlaylists from '@/components/Profile/ProfilePlaylists/ProfilePlaylists';
+import ProfileFilms from '@/components/Profile/ProfileFilms/ProfileFilms';
 import { supabaseServer } from '@/lib/supabase/supabase-server';
-import ProfileFavoriteFilms from '@/components/modules/ProfileFavoriteFilms/ProfileFavoriteFilms';
+import ProfileFavoriteFilms from '@/components/Profile/ProfileFavoriteFilms/ProfileFavoriteFilms';
 
 export async function generateMetadata({
   params,

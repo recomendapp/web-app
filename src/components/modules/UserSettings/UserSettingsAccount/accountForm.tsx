@@ -1,6 +1,6 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,8 +14,6 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { toast } from 'react-toastify';
-import { useUser } from '@/context/UserProvider';
-import { account, databases } from '@/lib/appwrite';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { supabase } from '@/lib/supabase/supabase';

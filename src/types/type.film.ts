@@ -15,6 +15,7 @@ export interface FilmAction {
     user: User,
     is_liked: boolean,
     is_watched: boolean,
+    watched_date: string,
     rating: number,
     is_watchlisted: boolean,
     review_id: string,

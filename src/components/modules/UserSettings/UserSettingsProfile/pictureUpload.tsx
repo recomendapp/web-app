@@ -1,15 +1,10 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { databases, storage } from '@/lib/appwrite';
-import { supabase } from '@/lib/supabase/supabase';
 import { getInitiales } from '@/lib/utils/utils';
 import { User } from '@/types/type.user';
-import Compressor from 'compressorjs';
 import { Loader2 } from 'lucide-react';
-import Image from 'next/image';
-import { Dispatch, useState } from 'react';
-import { toast } from 'react-toastify';
+import { Dispatch } from 'react';
 
 export default function PictureUpload({
   user,

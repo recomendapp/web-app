@@ -13,7 +13,7 @@ import { User } from "@/types/type.user";
 import { useAuth } from "@/context/AuthContext/AuthProvider";
 import { useQuery } from "@apollo/client";
 import { FilmAction } from "@/types/type.film";
-import PROFILE_FILM_QUERY from "@/components/modules/ProfileFilms/queries/profileFilmsQuery";
+import PROFILE_FILM_QUERY from "@/components/Profile/ProfileFilms/queries/profileFilmsQuery";
 
 interface UserMoviesProps {
     profile: User;

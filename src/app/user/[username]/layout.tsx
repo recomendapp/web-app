@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import ProfileHeader from "@/components/modules/ProfileHeader/ProfileHeader";
+import ProfileHeader from "@/components/Profile/ProfileHeader/ProfileHeader";
 import { supabaseServer } from "@/lib/supabase/supabase-server";
 
 

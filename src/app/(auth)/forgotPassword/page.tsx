@@ -1,20 +1,16 @@
-'use client';
-
-import { useState } from 'react';
 import { ForgotPasswordForm } from '@/components/modules/Auth/ForgotPassword/ForgotPasswordForm';
 import { siteConfig } from '@/config/site';
 import Image from 'next/image';
+import { Metadata } from 'next';
 
-// export const metadata: Metadata = {
-//   title: 'Se connecter',
-//   description: '...',
-// }
+export const metadata: Metadata = {
+  title: 'Mot de passe oublié',
+  description: '...',
+}
 
 export default function ForgotPassword() {
-  const [passwordRecoverySuccess, setPasswordRecoverySuccess] = useState(false);
   return (
     <main className="container h-full relative flex flex-col items-center justify-center">
-      {!passwordRecoverySuccess ? (
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex justify-center">
@@ -30,16 +26,9 @@ export default function ForgotPassword() {
                 Réinitialiser le mot de passe
               </h1>
             </div>
-            <ForgotPasswordForm
-              setPasswordRecoverySuccess={setPasswordRecoverySuccess}
-            />
+            <ForgotPasswordForm />
           </div>
         </div>
-      ) : (
-        <div className="lg:p-8">
-          Un e-mail de réinitialisation a bien été envoyé 👌
-        </div>
-      )}
     </main>
   );
 }

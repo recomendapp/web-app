@@ -1,7 +1,6 @@
 'use client';
 import React, {
   createRef,
-  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -25,13 +24,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AspectRatio } from '../../ui/aspect-ratio';
 import { ImageWithFallback } from '../../elements/Tools/ImageWithFallback';
-import { useUser } from '@/context/UserProvider';
-import handlePlaylists from '@/hooks/movie/playlist/handlePlaylists';
 import { PlaylistButton } from '../MoviePlaylist/PlaylistButton';
-import { DialogTrigger } from '../../ui/dialog';
 import { siteConfig } from '@/config/site';
 import Image from 'next/image';
-import { gql, useQuery } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { UserPlaylists } from '../UserPlaylists/UserPlaylists';
 import { Box } from '@/components/elements/Box/Box';
@@ -245,6 +240,5 @@ export function Sidebar({
         </Button>
       </div>
     </nav>
-    // </nav>
   );
 }

@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import FILM_FRAGMENT from "@/components/modules/Film/fragments/filmFragment";
+import FILM_FRAGMENT from "@/components/Film/fragments/filmFragment";
 import USER_FRAGMENT from "@/context/AuthContext/fragments/userFragment";
 
 export default gql`
@@ -16,6 +16,7 @@ export default gql`
         }
         is_liked
         is_watched
+        watched_date
         rating
         is_watchlisted
         review_id

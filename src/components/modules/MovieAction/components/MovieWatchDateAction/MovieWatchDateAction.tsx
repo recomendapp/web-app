@@ -6,7 +6,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
@@ -15,35 +14,33 @@ import {
 } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { useQuery, useQueryClient } from 'react-query';
-import { handleGetWatch, handleUpdateDate } from '@/components/modules/MovieAction/_components/MovieWatchAction/_queries/movie-action-watch';
-import { useUser } from '@/context/UserProvider';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
 
-interface MovieWatchedDateActionProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  movieId: number;
+import UPDATE_FILM_ACTION_MUTATION from '@/components/modules/MovieAction/mutations/updateFilmActionMutation';
+import { ApolloError, useMutation } from '@apollo/client';
+import { FilmAction } from '@/types/type.film';
+
+
+interface MovieWatchedDateActionProps extends React.HTMLAttributes<HTMLDivElement> {
+    filmId: string;
+    filmAction: FilmAction;
+    loading: boolean;
+    error: ApolloError | undefined;
 }
 
 export function MovieWatchDateAction({
-  movieId
+  filmId,
+  filmAction,
+  loading,
+  error,
 }: MovieWatchedDateActionProps) {
 
-  const { user } = useUser();
+  const { user } = useAuth();
 
-  const queryClient = useQueryClient();
+  const [ updateFilmActionMutation ] = useMutation(UPDATE_FILM_ACTION_MUTATION);
 
-  const {
-    data: isWatched,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['movie', movieId, 'watch'],
-    queryFn: () => handleGetWatch(user.$id, movieId),
-    enabled: user?.$id !== undefined && user?.$id !== null,
-  });
-
-  if (!isWatched || !isWatched.date || !user) {
-    return <></>;
+  if (!filmAction?.is_watched || !filmAction?.watched_date || !user) {
+    return null;
   }
 
   return (
@@ -53,14 +50,14 @@ export function MovieWatchDateAction({
           <TooltipTrigger asChild>
             <PopoverTrigger asChild>
               <Button
-                disabled={isLoading}
+                disabled={loading}
                 variant="action"
                 className={`rounded-full flex gap-4`}
               >
                 <CalendarDays />
                 <div className='hidden sm:block'>
-                  {isWatched.date ? (
-                    format(isWatched.date, 'PPP', { locale: fr })
+                  {filmAction.watched_date ? (
+                    format(new Date(filmAction.watched_date), 'PPP', { locale: fr })
                   ) : (
                     <span>Pick a date</span>
                   )}
@@ -77,10 +74,16 @@ export function MovieWatchDateAction({
         <Calendar
           locale={fr}
           mode="single"
-          selected={isWatched.date}
-          onSelect={(e) => {
-            if (e) {
-              handleUpdateDate(e, isWatched, movieId, queryClient);
+          selected={new Date(filmAction.watched_date)}
+          onSelect={(date) => {
+            if (date) {
+              updateFilmActionMutation({
+                variables: {
+                  film_id: filmId,
+                  user_id: user?.id,
+                  watched_date: date
+                }
+              });
             }
           }}
           initialFocus

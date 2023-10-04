@@ -9,8 +9,8 @@ import NextTopLoader from 'nextjs-toploader';
 
 import { ThemeProvider } from '@/context/ThemeProvider/ThemeProvider';
 import { Sidebar } from '@/components/modules/Sidebar/Sidebar';
-import { Navbar } from '@/components/modules/Navbar/Navbar';
-import { Header } from '@/components/modules/Header/Header';
+import { Navbar } from '@/components/Navbar/Navbar';
+import { Header } from '@/components/Header/Header';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

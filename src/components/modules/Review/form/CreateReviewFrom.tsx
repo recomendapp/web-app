@@ -1,6 +1,6 @@
 "use client"
 
-import Tiptap from "@/components/modules/Editor/Editor";
+import Tiptap from "@/components/Editor/Editor";
 import { User } from "@/types/type.user";
 import { JSONContent } from "@tiptap/react";
 import { useRouter } from "next/navigation";

@@ -33,7 +33,7 @@ import CREATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mu
 import UPDATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/updatePlaylistMutation'
 import DELETE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/deletePlaylistMutation';
 import USER_PLAYLISTS_QUERY from '@/components/modules/UserPlaylists/queries/userPlaylistsQuery';
-import INSERT_PLAYLIST_ITEM_MUATION from '@/components/modules/MovieAction/_components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
+import INSERT_PLAYLIST_ITEM_MUATION from '@/components/modules/MovieAction/components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;

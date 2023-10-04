@@ -1,11 +1,10 @@
 "use client"
 
-import { ProfileFollowButton } from "@/components/modules/ProfileFollowButton/ProfileFollowButton"
-import ModalSettingsUser from "@/components/elements/ModalSettingsUser/ModalSettingsUser"
+import { ProfileFollowButton } from "@/components/Profile/ProfileFollowButton/ProfileFollowButton"
 import UserAvatar from "@/components/elements/UserAvatar/UserAvatar"
 import { Button } from "@/components/ui/button"
 import { useQuery } from "@apollo/client"
-import { BarChart, LinkIcon } from "lucide-react"
+import { BarChart, LinkIcon, Settings } from "lucide-react"
 import Link from "next/link"
 import { BsFillPatchCheckFill } from "react-icons/bs"
 import PROFILE_QUERY from "../ProfileDetails/queries/ProfileQuery"
@@ -58,7 +57,11 @@ export default function ProfileHeader({ profile } : { profile: User }) {
                                 <BarChart />
                                 </Link>
                             </Button>
-                            <ModalSettingsUser userId={profile.id} />
+                            <Button variant={'action'} asChild>
+                                <Link href={'/settings/profile'}>
+                                    <Settings />
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                     <div className='flex justify-between h-full'>

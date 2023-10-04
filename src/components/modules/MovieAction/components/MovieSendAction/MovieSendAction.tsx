@@ -35,7 +35,7 @@ import USER_FRIENDS_QUERY from './queries/userFriendsQuery';
 import { Friend, User } from '@/types/type.user';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import INSERT_GUIDELIST_MUTATION from '@/components/modules/MovieAction/_components/MovieSendAction/mutations/insertGuidelistMutation'
+import INSERT_GUIDELIST_MUTATION from '@/components/modules/MovieAction/components/MovieSendAction/mutations/insertGuidelistMutation'
 
 interface MovieSendActionProps {
   filmId: string;
@@ -72,7 +72,6 @@ export function MovieSendAction({ filmId }: MovieSendActionProps) {
       });
       toast.success(`Envoyé à ${friend.full_name}`);
     } catch (error) {
-      console.log(error)
       toast.error('Une erreur s\'est produite');
     }
   }

@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import FOLLOWER_FRAGMENT from "@/components/modules/ProfileFollowButton/fragments/followerFragment";
+import FOLLOWER_FRAGMENT from "@/components/Profile/ProfileFollowButton/fragments/followerFragment";
 
 export default gql`
     query FollowerQuery(

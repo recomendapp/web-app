@@ -19,10 +19,10 @@ import './Editor.css'
 import * as Icons from 'lucide-react'
 
 // UI
-import { Button } from '../../ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
-import { Label } from '../../ui/label';
-import { Input } from '../../ui/input';
+import { Button } from '../ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
 import { EDITOR_EXTENSIONS } from './EditorExtensions';
 
 interface TiptapProps {

@@ -1,20 +1,12 @@
 'use client';
-import { account, databases } from '@/lib/appwrite';
-import { Models, Query } from 'appwrite';
-import { useEffect, useState } from 'react';
 import { Skeleton } from '../../../ui/skeleton';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '../../../ui/button';
-import { AspectRatio } from '../../../ui/aspect-ratio';
-import { ImageWithFallback } from '../../../elements/Tools/ImageWithFallback';
 import { useQuery } from '@apollo/client';
 import SEARCH_PLAYLIST_QUERY from './queries/searchPlaylistsQuery';
 import { Playlist } from '@/types/type.playlist';
 import MoviePlaylistCard from '@/components/elements/MoviePlaylist/MoviePlaylistCard';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { usePathname, useRouter } from 'next/navigation';
 
 
 export default function SearchPlaylistsSmall({
@@ -22,8 +14,6 @@ export default function SearchPlaylistsSmall({
 }: {
   query: string | undefined;
 }) {
-
-  const router = useRouter();
 
   const numberOfResult = 8;
 

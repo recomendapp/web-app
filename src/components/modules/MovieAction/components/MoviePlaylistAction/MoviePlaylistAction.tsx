@@ -39,7 +39,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Playlist } from '@/types/type.playlist';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import INSERT_PLAYLIST_ITEM_MUATION from '@/components/modules/MovieAction/_components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
+import INSERT_PLAYLIST_ITEM_MUATION from '@/components/modules/MovieAction/components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
 
 interface MoviePlaylistActionProps {
   filmId: string;

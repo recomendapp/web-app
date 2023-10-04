@@ -1,6 +1,6 @@
 import USER_FRAGMENT from "@/context/AuthContext/fragments/userFragment";
 import { gql } from "@apollo/client";
-import FILM_FRAGMENT from "@/components/modules/Film/fragments/filmFragment";
+import FILM_FRAGMENT from "@/components/Film/fragments/filmFragment";
 
 export default gql`
     fragment PlaylistItem on playlist_item {

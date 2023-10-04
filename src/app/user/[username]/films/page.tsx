@@ -1,4 +1,4 @@
-import ProfileFilm from "@/components/modules/ProfileFilms/ProfileFilms";
+import ProfileFilm from "@/components/Profile/ProfileFilms/ProfileFilms";
 import { supabaseServer } from "@/lib/supabase/supabase-server";
 
 export async function generateMetadata({

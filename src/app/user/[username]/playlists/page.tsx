@@ -1,4 +1,4 @@
-import ProfilePlaylists from "@/components/modules/ProfilePlaylists/ProfilePlaylists";
+import ProfilePlaylists from "@/components/Profile/ProfilePlaylists/ProfilePlaylists";
 import { supabaseServer } from "@/lib/supabase/supabase-server";
 
 export async function generateMetadata({

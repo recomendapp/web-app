@@ -20,7 +20,7 @@ export function PersonFollowButton({
 
   async function handleIsPersonFollowed(userId: string, personId: number) {
     try {
-      
+      console.log('ok')
     } catch (error) {
       return {
         id: '',
@@ -39,6 +39,7 @@ export function PersonFollowButton({
 
   async function unfollowPerson() {
     try {
+      console.log('ok')
     } catch (error) {
       console.error('error:', error);
     }

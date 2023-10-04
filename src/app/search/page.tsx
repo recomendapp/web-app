@@ -1,10 +1,5 @@
-// "use client"
 
-// import { useEffect, useState } from 'react'
-import { Metadata } from 'next';
-import { Skeleton } from '@/components/ui/skeleton';
 import FeaturedPlaylists from '@/components/modules/MoviePlaylist/FeaturedPlaylists';
-import SearchResultsUsers from '@/components/modules/Search/SearchResultsUsers';
 import SearchFilmsSmall from '@/components/modules/Search/SearchFilms/SearchFilmsSmall';
 import SearchPlaylistsSmall from '@/components/modules/Search/SearchPlaylists/SearchPlaylistsSmall';
 import { Fragment } from 'react';
@@ -40,7 +35,6 @@ export default function Search({
           <SearchFilmsSmall query={searchParams.q} />
           <SearchPlaylistsSmall query={searchParams.q} />
           <SearchUsersSmall query={searchParams.q} />
-          {/* <SearchResultsUsers query={searchParams.q} /> */}
       </Fragment>
     )
 

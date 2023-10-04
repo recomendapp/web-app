@@ -9,17 +9,14 @@ import {
 } from "@/components/ui/tooltip";
 
 // DATE
-import { format, getYear } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { ImageWithFallback } from "@/components/elements/Tools/ImageWithFallback"
+import { getYear } from 'date-fns';
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { DateOnlyYearTooltip } from "@/components/elements/Date/Date";
 import MoviePoster from "@/components/elements/Movie/MoviePoster";
-import { AlignJustify, Heart, Quote, Text } from "lucide-react";
+import { Heart, Text } from "lucide-react";
 import { MovieAction } from "@/components/modules/MovieAction/MovieAction";
-import { Film, FilmAction } from "@/types/type.film";
+import { FilmAction } from "@/types/type.film";
 import { getMovieDetails } from "@/lib/tmdb";
 import { useQuery } from "react-query";
 
@@ -107,7 +104,7 @@ export default function MovieCard({
             <div className="w-full block">
                 {/* ACTIONS */}
                 <div className="absolute top-0 flex items-center gap-2">
-                    {film_action.rating && 
+                    {film_action?.rating && 
                         <p
                             className={`h-5 w-6 rounded-sm flex items-center justify-center
                             text-background bg-accent-1
@@ -117,7 +114,7 @@ export default function MovieCard({
                             {film_action.rating}
                         </p>
                     }
-                    {film_action.is_liked && 
+                    {film_action?.is_liked && 
                         <Heart
                             width={15}
                             className={`text-like fill-like`}

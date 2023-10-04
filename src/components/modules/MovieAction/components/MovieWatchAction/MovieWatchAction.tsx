@@ -1,4 +1,4 @@
-import { AlertCircle, Check, CheckCircle2 } from 'lucide-react';
+import { AlertCircle, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -19,8 +19,6 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
-import { useQuery, useQueryClient } from 'react-query';
-import { useUser } from '@/context/UserProvider';
 import { FilmAction } from '@/types/type.film';
 import { ApolloError, useMutation } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
@@ -114,7 +112,6 @@ export function MovieWatchAction({
         }
       });
       if (errors) throw errors;
-      toast.success('Ajouté à vos films vus');
     } catch (errors) {
       toast.error('Une erreur s\'est produite');
     }
@@ -133,7 +130,7 @@ export function MovieWatchAction({
         }
       });
       if (errors) throw errors;
-      toast.success('Supprimé de vos films vus');
+      toast.success('Supprimé de vos films');
     } catch (errors) {
       toast.error('Une erreur s\'est produite');
     }

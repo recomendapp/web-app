@@ -1,5 +1,4 @@
 'use client';
-import { useUser } from '@/context/UserProvider';
 import { TableWatchlist } from '@/components/modules/MovieWatchlist/table/TableWatchlist';
 import { useQuery } from 'react-query';
 

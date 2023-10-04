@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/context/AuthContext/AuthProvider";
-import { useUser } from "@/context/UserProvider";
-import { databases } from "@/lib/appwrite";
 import { PlaylistItem } from "@/types/type.playlist";
 import { Column, Row, Table } from "@tanstack/react-table";
 import { Check, Cross, FileEdit, X } from "lucide-react";

@@ -179,7 +179,7 @@ export function TablePlaylist({
           </TableHeader>
           <TableBody>
             <DndContext collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-              <SortableContext items={data} strategy={verticalListSortingStrategy}>
+              <SortableContext items={data.map((item) => ({ id: item.item.id }))} strategy={verticalListSortingStrategy}>
                 {table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
                     <SortableRow key={row.id} row={row} isDraggingDisabled={isDraggingDisabled} />

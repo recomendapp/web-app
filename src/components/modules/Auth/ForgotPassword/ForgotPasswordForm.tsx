@@ -1,25 +1,18 @@
 'use client';
 import React, { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-
 import { cn } from '@/lib/utils/utils';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useUser } from '@/context/UserProvider';
 import { toast } from 'react-toastify';
-import { account } from '@/lib/appwrite';
 import { supabase } from '@/lib/supabase/supabase';
 
 interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  setPasswordRecoverySuccess: (success: boolean) => void;
 }
 
 export function ForgotPasswordForm({
   className,
-  setPasswordRecoverySuccess,
   ...props
 }: ForgotPasswordFormProps) {
 
@@ -43,9 +36,7 @@ export function ForgotPasswordForm({
     try {
       await supabase.auth.resetPasswordForEmail(userPasswordRecovery.email, {
         redirectTo: `${location.origin}/auth/resetPassword`,
-        // redirectTo: `${location.origin}/settings/security`,
       })
-      setPasswordRecoverySuccess(true);
       setIsLoading(false);
       toast.success('Demande envoyé');
     } catch (error) {

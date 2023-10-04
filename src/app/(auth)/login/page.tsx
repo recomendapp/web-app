@@ -1,4 +1,3 @@
-"use client"
 import { LoginForm } from '@/components/modules/Auth/Login/LoginForm';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';

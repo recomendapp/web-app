@@ -26,7 +26,6 @@ import { useQueryClient } from "react-query"
 
 // ICONS
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
-import { handleDeleteGuidelistFromId } from "@/api/movie/movie_guidelist"
 import { Dispatch, SetStateAction, useState } from "react"
 import ButtonShare from "@/components/elements/ButtonShare/ButtonShare"
 import UserCard from "@/components/elements/UserCard/UserCard"

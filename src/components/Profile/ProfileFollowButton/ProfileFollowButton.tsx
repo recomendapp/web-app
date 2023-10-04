@@ -1,20 +1,15 @@
 'use client';
 
 import { Button } from '../../ui/button';
-import { databases } from '@/lib/appwrite';
-import { Query } from 'appwrite';
-import { useEffect, useState } from 'react';
-import { useUser } from '@/context/UserProvider';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client';
-
-import DELETE_FOLLOWER_MUTATION from '@/components/modules/ProfileFollowButton/mutations/deleteFollowerMutation'
-import INSERT_FOLLOWER_MUTATION from '@/components/modules/ProfileFollowButton/mutations/insertFollowerMutation'
-import FOLLOWER_QUERY from '@/components/modules/ProfileFollowButton/queries/followerQuery'
-import PROFILE_QUERY from "@/components/modules/ProfileDetails/queries/ProfileQuery"
-import { Follower, User } from '@/types/type.user';
+import { User } from '@/types/type.user';
 import { Skeleton } from '@/components/ui/skeleton';
+
+import DELETE_FOLLOWER_MUTATION from '@/components/Profile/ProfileFollowButton/mutations/deleteFollowerMutation'
+import INSERT_FOLLOWER_MUTATION from '@/components/Profile/ProfileFollowButton/mutations/insertFollowerMutation'
+import FOLLOWER_QUERY from '@/components/Profile/ProfileFollowButton/queries/followerQuery'
 
 interface UserFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   profile: User;

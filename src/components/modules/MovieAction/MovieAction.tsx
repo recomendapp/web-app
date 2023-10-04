@@ -1,14 +1,10 @@
-import { MovieLikeAction } from './_components/MovieLikeAction/MovieLikeAction';
-import { MovieWatchAction } from './_components/MovieWatchAction/MovieWatchAction';
-import { MovieRatingAction } from './_components/MovieRatingAction/MovieRatingAction';
-import { MovieWatchDateAction } from './_components/MovieWatchDateAction/MovieWatchDateAction';
-import { MovieWatchlistAction } from './_components/MovieWatchlistAction/MovieWatchlistAction';
-import { MoviePlaylistAction } from './_components/MoviePlaylistAction/MoviePlaylistAction';
-import { MovieSendAction } from './_components/MovieSendAction/MovieSendAction';
-import { useUser } from '@/context/UserProvider';
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { Button } from '@/components/ui/button';
-import { MovieActionDropdownMenu } from './_components/MovieActionDropdownMenu/MovieActionDropdownMenu';
+import { MovieLikeAction } from './components/MovieLikeAction/MovieLikeAction';
+import { MovieWatchAction } from './components/MovieWatchAction/MovieWatchAction';
+import { MovieRatingAction } from './components/MovieRatingAction/MovieRatingAction';
+import { MovieWatchDateAction } from './components/MovieWatchDateAction/MovieWatchDateAction';
+import { MovieWatchlistAction } from './components/MovieWatchlistAction/MovieWatchlistAction';
+import { MoviePlaylistAction } from './components/MoviePlaylistAction/MoviePlaylistAction';
+import { MovieSendAction } from './components/MovieSendAction/MovieSendAction';
 import { useQuery } from '@apollo/client';
 import FILM_ACTION_QUERY from '@/components/modules/MovieAction/queries/filmActionQuery';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
@@ -84,7 +80,14 @@ export function MovieAction({
             error={error}
           />
         }
-        {/* {(all || watchDate) && <MovieWatchDateAction movieId={movieId} />} */}
+        {(all || watchDate) &&
+          <MovieWatchDateAction
+            filmId={filmId}
+            filmAction={filmActionQuery?.film_actionCollection?.edges[0]?.action}
+            loading={loading}
+            error={error}
+          />
+        }
       </div>
       <div className='flex gap-2 items-center'>
         {(all || playlist) && 

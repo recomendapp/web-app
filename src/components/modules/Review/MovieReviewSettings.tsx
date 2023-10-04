@@ -5,20 +5,16 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { useAuth } from '@/context/AuthContext/AuthProvider'
-import { useUser } from '@/context/UserProvider'
 import { Review } from '@/types/type.review'
-import { Models } from 'appwrite'
-import { MoreHorizontal, MoreVertical, Trash, Trash2 } from 'lucide-react'
+import { MoreHorizontal, Trash2 } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useQueryClient } from 'react-query'
-import { toast } from 'react-toastify'
 
 export function MovieReviewSettings({
     review 

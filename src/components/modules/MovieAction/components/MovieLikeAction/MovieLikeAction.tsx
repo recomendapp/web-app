@@ -8,8 +8,6 @@ import {
 } from '@/components/ui/tooltip';
 import { Icons } from '../../../../icons';
 import { useRouter } from 'next/navigation';
-import { useQuery, useQueryClient } from 'react-query';
-import { useUser } from '@/context/UserProvider';
 import { ApolloError, useMutation } from '@apollo/client';
 import { FilmAction } from '@/types/type.film';
 import { toast } from 'react-toastify';
@@ -77,7 +75,6 @@ export function MovieLikeAction({
         }
       });
       if (errors) throw errors;
-      toast.success('Ajouté à vos coups de coeur');
     } catch (errors) {
       toast.error('Une erreur s\'est produite');
     }
@@ -93,7 +90,6 @@ export function MovieLikeAction({
         }
       });
       if (errors) throw errors;
-      toast.success('Supprimé de vos coups de coeur');
     } catch (errors) {
       toast.error('Une erreur s\'est produite');
     }
