@@ -3,9 +3,7 @@
 import { useState } from 'react';
 import { ForgotPasswordForm } from '@/components/modules/Auth/ForgotPassword/ForgotPasswordForm';
 import { siteConfig } from '@/config/site';
-import { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 
 // export const metadata: Metadata = {
 //   title: 'Se connecter',

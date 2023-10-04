@@ -8,7 +8,7 @@ import { Guidelist } from "@/types/type.guidelist";
 import { useEffect, useState } from "react";
 
 import GUIDELIST_QUERY from '@/components/modules/MovieGuidelist/queries/guidelistQuery'
-import { getMovieDetails } from "@/hooks/tmdb";
+import { getMovieDetails } from "@/lib/tmdb";
 
 export function GuidelistPage() {
     const { user } = useAuth();

@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/accordion';
 
 import Link from 'next/link';
-import { getGenreList } from '@/hooks/tmdb';
+import { getGenreList } from '@/lib/tmdb';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 interface MapFilterProps extends React.HTMLAttributes<HTMLDivElement> {

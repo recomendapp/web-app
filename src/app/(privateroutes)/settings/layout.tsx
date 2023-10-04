@@ -1,6 +1,4 @@
 import { Metadata } from 'next';
-
-import { Separator } from '@/components/ui/separator';
 import { SettingsNav } from '@/components/elements/SettingsNav/SettingsNav';
 
 export const metadata: Metadata = {

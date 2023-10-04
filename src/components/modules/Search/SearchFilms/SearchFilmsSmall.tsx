@@ -1,5 +1,5 @@
 'use client';
-import { handleSearchMovies } from '@/hooks/tmdb';
+import { handleSearchMovies } from '@/lib/tmdb';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { Badge } from '../../../ui/badge';
@@ -22,7 +22,6 @@ export default function SearchFilmsSmall({
       setLoading(true);
       handleSearchMovies(query, 'en', 1)
         .then((response) => {
-          console.log('movie222', response);
           if (response.length) {
             setLoading(false);
             setResults(response);
@@ -156,14 +155,17 @@ export default function SearchFilmsSmall({
         </Link>
       </div>
       {/* MOVIE RESULTS */}
-      <div className="flex flex-col gap-2 ">
+      {results.length > 1 && <div className="flex flex-col gap-2 ">
         <div className="flex justify-between items-end">
           <div className="text-2xl font-bold">Films</div>
           {/* <div>
                         Tout afficher
                     </div> */}
-          <Button variant="link" className="p-0 h-full">
-            Tout afficher
+          <Button variant="link" className="p-0 h-full" asChild>
+            <Link href={`/search/films?q=${query}`}>
+              Tout afficher
+            </Link>
+            
           </Button>
         </div>
         <div className="flex flex-col gap-2">
@@ -226,7 +228,7 @@ export default function SearchFilmsSmall({
             </Link>
           ))}
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

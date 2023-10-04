@@ -7,12 +7,12 @@ import { Dispatch } from 'react';
 
 export default function PlaylistPictureUpload({
   playlist,
-  isUploading,
+  loading,
   newPoster,
   setNewPoster,
 }: {
   playlist: any;
-  isUploading: boolean;
+  loading: boolean;
   newPoster: File | undefined;
   setNewPoster: Dispatch<any>;
 }) {
@@ -20,7 +20,7 @@ export default function PlaylistPictureUpload({
     <label className="flex w-full h-full items-center overflow-hidden relative cursor-pointer">
       <div className="w-full shadow-2xl">
         <AspectRatio ratio={1 / 1}>
-          {isUploading && (
+          {loading && (
             <div className="absolute z-[1] w-full h-full flex items-center justify-center bg-black/80">
               <div className=" object-cover">
                 <Loader2 className="animate-spin" />
@@ -40,7 +40,7 @@ export default function PlaylistPictureUpload({
         </AspectRatio>
       </div>
       <input
-        disabled={isUploading}
+        disabled={loading}
         type="file"
         accept=".jpg,.png,.jpeg,.webp"
         max="2097152"

@@ -13,7 +13,7 @@ interface MoviePlaylistCardProps extends React.HTMLAttributes<HTMLElement> {
 
 export default function MoviePlaylistCard({ className, playlist } : MoviePlaylistCardProps) {
     return (
-    <Link href={`/playlist/${playlist.id}`} className={cn("flex flex-col gap-2 bg-muted rounded-md p-2", className)}>
+    <Link href={`/playlist/${playlist.id}`} className={cn("flex flex-col gap-2 bg-muted hover:bg-muted-hover rounded-md p-2", className)}>
         <div className={`w-full shadow-2xl`}>
             <AspectRatio ratio={1 / 1}>
                 <ImageWithFallback

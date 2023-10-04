@@ -23,9 +23,32 @@ interface UserCardProps
     extends React.HTMLAttributes<HTMLDivElement> {
     user: User;
     icon?: boolean
+    full?: boolean
 }
 
-export default function UserCard({ user, className, icon } : UserCardProps) {
+export default function UserCard({
+    user,
+    className,
+    icon,
+    full = false
+} : UserCardProps) {
+
+    if (full)
+        return (
+            <Link
+                key={user.username}
+                href={'/@' + user.username}
+                className="flex flex-col items-center bg-muted hover:bg-muted-hover h-full rounded-xl p-2 gap-2 transition"
+            >
+                <UserAvatar className="w-[150px] h-[150px]" user={user} />
+                <div className="text-center">
+                    <p>{user.full_name}</p>
+                    <p className="text-muted-foreground">@{user.username}</p>
+                </div>
+                
+            </Link>
+        )
+
     return (
         <HoverCard >
             <HoverCardTrigger asChild>

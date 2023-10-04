@@ -1,4 +1,4 @@
-import { getMovieDetails } from '@/hooks/tmdb';
+import { getMovieDetails } from '@/lib/tmdb';
 import MovieHeader from '../assets/MovieHeader';
 import MovieNavbar from '../assets/MovieNavbar';
 import { MovieReview } from '../../../../components/modules/Review/Reviews/MovieReviews';

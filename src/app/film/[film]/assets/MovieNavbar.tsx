@@ -1,23 +1,6 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
-
-// UI
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { ImageWithFallback } from "@/components/elements/Tools/ImageWithFallback"
-import { Button } from "@/components/ui/button"
-
 
 export default function MovieNavbar ({ focus, movieId } : { focus: string, movieId: string }) {
     const routes = [

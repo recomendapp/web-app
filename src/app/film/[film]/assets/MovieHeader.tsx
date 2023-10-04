@@ -15,7 +15,6 @@ import {
     Dialog,
     DialogContent,
     DialogHeader,
-    DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
 import {
@@ -35,16 +34,12 @@ import { ConvertHoursMinutes } from "@/lib/utils/utils";
 
 // ICONS
 import { Play } from "lucide-react";
-import { useQuery } from "react-query";
 import { DateOnlyYearTooltip } from "@/components/elements/Date/Date";
 import MoviePoster from "@/components/elements/Movie/MoviePoster";
 import { useAuth } from "@/context/AuthContext/AuthProvider";
 
 
 export default function MovieHeader({ movie, small } : { movie: any, small?: boolean }) {
-
-  const { user } = useAuth();
-
   if (small) {
     return <MovieHeaderSmall movie={movie} />
   }

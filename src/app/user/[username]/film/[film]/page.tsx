@@ -1,4 +1,4 @@
-import { getMovieDetails } from '@/hooks/tmdb';
+import { getMovieDetails } from '@/lib/tmdb';
 import MovieVerticalCard from '@/components/elements/Movie/MovieVerticalCard';
 import MovieReviewForm from '@/components/modules/Review/form/MovieReviewForm';
 import { notFound } from 'next/navigation';

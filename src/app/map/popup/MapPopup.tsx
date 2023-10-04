@@ -19,7 +19,7 @@ import {
 } from 'react-icons/ai';
 import PopupFullScreen from './MapPopupFullScreen';
 import MapPopupSidebar from './MapPopupSidebar';
-import { getMovieDetails } from '@/hooks/tmdb';
+import { getMovieDetails } from '@/lib/tmdb';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 export default function MapPopup(props: any) {

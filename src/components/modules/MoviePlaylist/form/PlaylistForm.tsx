@@ -20,22 +20,20 @@ import { Switch } from '@/components/ui/switch';
 
 import { toast } from 'react-toastify';
 import { Textarea } from '@/components/ui/textarea';
-import { databases, storage } from '@/lib/appwrite';
 import { Dispatch, useState } from 'react';
 import PlaylistPictureUpload from '../components/PlaylistPictureUpload';
-import Compressor from 'compressorjs';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMutation } from '@apollo/client';
 
+import compressPicture from '@/lib/utils/compressPicture';
+import { supabase } from '@/lib/supabase/supabase';
+import { Icons } from '@/components/icons';
+import { Playlist } from '@/types/type.playlist';
 import CREATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/createPlaylistMutation'
 import UPDATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/updatePlaylistMutation'
 import DELETE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/deletePlaylistMutation';
 import USER_PLAYLISTS_QUERY from '@/components/modules/UserPlaylists/queries/userPlaylistsQuery';
 import INSERT_PLAYLIST_ITEM_MUATION from '@/components/modules/MovieAction/_components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
-import compressPicture from '@/lib/utils/compressPicture';
-import { supabase } from '@/lib/supabase/supabase';
-import { Icons } from '@/components/icons';
-import { Playlist } from '@/types/type.playlist';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -59,7 +57,6 @@ export function PlaylistForm({
   const [ loading, setLoading ] = useState(false);
 
   const [ newPoster, setNewPoster ] = useState<File>();
-  const [isUploading, setIsUploading] = useState(false);
   
   const [ createPlaylistMutation ] = useMutation(CREATE_PLAYLIST_MUTATION, {
    update: (store, { data }) => {
@@ -259,7 +256,7 @@ export function PlaylistForm({
           <div className="py-4">
             <PlaylistPictureUpload
               playlist={playlist}
-              isUploading={isUploading}
+              loading={loading}
               newPoster={newPoster}
               setNewPoster={setNewPoster}
             />

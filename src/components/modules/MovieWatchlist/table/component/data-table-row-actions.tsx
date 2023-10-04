@@ -3,8 +3,6 @@
 import { Models } from "appwrite"
 import Link from "next/link"
 import { Row } from "@tanstack/react-table"
-import { MovieLikeAction } from "@/components/modules/MovieAction/_components/MovieLikeAction/MovieLikeAction"
-import { MovieRatingAction } from "@/components/modules/MovieAction/_components/MovieRatingAction/MovieRatingAction"
 
 // UI
 import { Button } from "@/components/ui/button"
@@ -27,7 +25,6 @@ import { useQueryClient } from "react-query"
 
 // ICONS
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
-import { handleDeleteGuidelistFromId } from "@/api/movie/movie_guidelist"
 import { Dispatch, SetStateAction, useState } from "react"
 import ButtonShare from "@/components/elements/ButtonShare/ButtonShare"
 import UserCard from "@/components/elements/UserCard/UserCard"
@@ -51,7 +48,7 @@ export function DataTableRowActions({
       <DropdownMenu>
         <div className="flex gap-2 items-center justify-end">
           <div className="hidden lg:invisible lg:group-hover:visible lg:flex items-center gap-2">
-            <MovieAction movieId={data.id} rating like />
+            <MovieAction filmId={data.id} rating like />
           </div>
             <DropdownMenuTrigger asChild>
               <Button
@@ -70,7 +67,7 @@ export function DataTableRowActions({
           <DropdownMenuSeparator />
           <DropdownMenuItem><ButtonShare url={`${process.env.NEXT_PUBLIC_URL}/movie/${data.id}`}/></DropdownMenuItem>
           <DropdownMenuItem onClick={() => {
-            handleUnwatchlist(data.$id, data.id, queryClient)
+            // handleUnwatchlist(data.$id, data.id, queryClient)
             const watchlist = queryClient.getQueryData(['collection', 'watchlist']) as Models.Document;
             watchlist && queryClient.setQueryData(['collection', 'watchlist'], watchlist.filter((movie: any) => movie.movieId != data.id))
           }}>

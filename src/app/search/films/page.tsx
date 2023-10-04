@@ -1,0 +1,30 @@
+import SearchFilmsFull from "@/components/modules/Search/SearchFilms/SearchFilmsFull";
+import { redirect } from "next/navigation";
+
+export async function generateMetadata({
+    searchParams,
+  }: {
+    searchParams: {
+      q: string | undefined,
+    };
+  }) {
+    return {
+      title: `${searchParams.q} - Films`,
+    };
+}
+
+export default function SearchFilms({
+    searchParams
+} : {
+    searchParams?: {
+        q: string,
+    }
+}) {
+    if (!searchParams?.q)
+        redirect('/search')
+    return (
+        <SearchFilmsFull
+            query={searchParams?.q}
+        />
+    )
+}

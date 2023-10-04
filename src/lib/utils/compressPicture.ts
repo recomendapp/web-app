@@ -1,6 +1,6 @@
 import Compressor from "compressorjs";
 
-export default (file: File, filePath: string, width: number, height: number): Promise<File> => {
+export default function compressPicture(file: File, filePath: string, width: number, height: number): Promise<File> {
     return new Promise((resolve, reject) => {
       new Compressor(file, {
         quality: 1,

@@ -8,8 +8,6 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,

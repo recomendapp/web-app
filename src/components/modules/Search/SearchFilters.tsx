@@ -2,44 +2,50 @@
 
 // CSS
 import { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '../../ui/button';
 
-export default function SearchFilters({
-  filter,
-  query,
-}: {
-  filter: string | undefined;
-  query: string | undefined;
-}) {
+export default function SearchFilters() {
   const router = useRouter();
   const pathname = usePathname();
-  const [searchFilter, setSearchFilter] = useState<string | undefined>(filter);
+  const searchParams = useSearchParams()
+  const searchQuery = searchParams.get('q')
+  const [searchFilter, setSearchFilter] = useState<string | undefined>(getInitialFilter());
 
-
-  const selectSearchFilter = (filter: string) => {
-    if (searchFilter === filter) {
-      setSearchFilter('');
-      let queryString = '';
-      if (query) {
-        queryString += `q=${query}`;
-      }
-      const url = queryString ? `${pathname}?${queryString}` : pathname;
-      url && router.push(url);
-    } else {
-      setSearchFilter(filter);
-      let queryString = '';
-      if (query) {
-        queryString += `q=${query}`;
-      }
-      if (filter !== '') {
-        queryString += `${query ? '&' : ''}filter=${filter}`;
-      }
-      const url = queryString ? `${pathname}?${queryString}` : pathname;
-      console.log('url', url)
-      url && router.push(url);
+  function selectSearchFilter(filter: string) {
+    const segments = pathname.split('/');
+    segments[2] = filter;
+    const updatedPathname = segments.join('/');
+    const queryParams = new URLSearchParams();
+    if (searchQuery) {
+      queryParams.set('q', searchQuery);
     }
-  };
+    const queryString = queryParams.toString();
+    const url = queryString ? `${updatedPathname}?${queryString}` : updatedPathname;
+    console.log('url', url)
+    router.push(url);
+  }
+
+  function getInitialFilter() {
+    const segments = pathname.split('/');
+    if (segments.length > 2) {
+      const filter = segments[2];
+      if (['films', 'playlists', 'users'].includes(filter)) {
+        return filter;
+      }
+    }
+    return undefined;
+  }
+
+  useEffect(() => {
+    setSearchFilter(getInitialFilter());
+  }, [pathname]);
+
+  if (!searchQuery)
+    return null
+
+    console.log('searchQuery', searchQuery)
+
   return (
     <div className="flex gap-4 pb-2">
       <Button

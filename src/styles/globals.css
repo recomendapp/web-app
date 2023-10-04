@@ -18,6 +18,7 @@
     --foreground: 0 100% 100%;
 
     --muted: #0e0e0e;
+    --muted-hover: #141414;
     --muted-foreground: #929292;
 
     --popover: 240 10% 3.9%;

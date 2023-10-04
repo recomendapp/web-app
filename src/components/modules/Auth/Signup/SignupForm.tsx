@@ -17,13 +17,11 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { toast } from 'react-toastify';
-import { useUser } from '@/context/UserProvider';
 import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import checkUsernameExist from '@/components/modules/Auth/hooks/checkUsernameExist';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 
-// This can come from your database or API.
 
 export function SignupForm() {
   const router = useRouter();
@@ -129,7 +127,7 @@ export function SignupForm() {
           );
           router.push('/login');
         } catch (error) {
-          toast.error("Une erreur s\'est produite")
+          toast.error("Une erreur s'est produite")
         } finally {
           setIsLoading(false);
         }

@@ -1,9 +1,4 @@
-import { LoginForm } from '@/components/modules/Auth/Login/LoginForm';
-import { siteConfig } from '@/config/site';
-import { useUser } from '@/context/UserProvider';
 import { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'À propos',

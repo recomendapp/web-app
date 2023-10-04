@@ -12,14 +12,10 @@ import {
 
 import { Accordion } from '@/components/ui/accordion';
 
-import { getGenreList } from '@/hooks/tmdb';
+import { getGenreList } from '@/lib/tmdb';
 import { MapFiltersGenres } from './mapfiltersgenres';
 import { MapFiltersYears } from './mapfiltersyears';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
-
-interface MapFilterProps extends React.HTMLAttributes<HTMLDivElement> {
-  skeleton?: boolean;
-}
 
 export function MapFilters(props: any) {
   const { user } = useAuth();

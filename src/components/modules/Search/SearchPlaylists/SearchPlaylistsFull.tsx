@@ -1,14 +1,6 @@
 'use client';
-import { account, databases } from '@/lib/appwrite';
-import { Models, Query } from 'appwrite';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '../../../ui/skeleton';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import Link from 'next/link';
-import { Button } from '../../../ui/button';
-import { AspectRatio } from '../../../ui/aspect-ratio';
-import { ImageWithFallback } from '../../../elements/Tools/ImageWithFallback';
 import { useInView } from 'react-intersection-observer';
 import { Playlist } from '@/types/type.playlist';
 import { useQuery } from '@apollo/client';
@@ -102,8 +94,12 @@ export default function SearchPlaylistsFull({
   //   );
   // }
 
-  if (!loading && !playlists) {
-    return null;
+  if (!loading && !playlists.length) {
+    return (
+      <div>
+        Aucun résultat.
+      </div>
+    )
   }
 
   return (

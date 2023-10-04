@@ -11,7 +11,7 @@ import { useQuery } from '@apollo/client';
 import { TablePlaylist } from '@/components/modules/MoviePlaylist/table/TablePlaylist';
 import { Playlist, PlaylistItem } from '@/types/type.playlist';
 import { Film } from '@/types/type.film';
-import { getMovieDetails } from '@/hooks/tmdb';
+import { getMovieDetails } from '@/lib/tmdb';
 
 import PLAYLIST_DETAILS_QUERY from '@/components/modules/MoviePlaylist/PlaylistDetails/queries/playlistDetailsQuery';
 

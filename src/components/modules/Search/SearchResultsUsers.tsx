@@ -1,6 +1,4 @@
 'use client';
-import { account, databases } from '@/lib/appwrite';
-import { Models, Query } from 'appwrite';
 import { useEffect, useState } from 'react';
 import { Skeleton } from '../../ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -14,7 +12,7 @@ export default function SearchResultsUsers({
   query: string | undefined;
 }) {
   const [loading, setLoading] = useState(true);
-  const [results, setResults] = useState<Models.Document[] | null>(null);
+  const [results, setResults] = useState<any | null>(null);
 
 
 

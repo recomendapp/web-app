@@ -20,7 +20,7 @@ import MoviePoster from "@/components/elements/Movie/MoviePoster";
 import { AlignJustify, Heart, Quote, Text } from "lucide-react";
 import { MovieAction } from "@/components/modules/MovieAction/MovieAction";
 import { Film, FilmAction } from "@/types/type.film";
-import { getMovieDetails } from "@/hooks/tmdb";
+import { getMovieDetails } from "@/lib/tmdb";
 import { useQuery } from "react-query";
 
 interface MovieCardProps {
