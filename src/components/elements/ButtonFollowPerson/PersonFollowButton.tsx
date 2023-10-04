@@ -2,7 +2,6 @@
 
 import { useQuery, useQueryClient } from 'react-query';
 import { Button } from '../../ui/button';
-import { databases } from '@/lib/appwrite';
 import { Query } from 'appwrite';
 import { useEffect, useState } from 'react';
 

@@ -33,10 +33,6 @@ export default async function Review({ params }: { params: { film: string, usern
     const { data: review } = await supabaseServer.from('review').select('*, user!inner(*)').eq('user.username', params.username).single();
     if (!review) notFound();
 
-    // const review = await getReview(params.review);
-
-    // if (!review) notFound();
-
     return (
         <main className='flex flex-col lg:grid lg:grid-cols-6 p-4 gap-4'>
             <MovieVerticalCard movie={film} />

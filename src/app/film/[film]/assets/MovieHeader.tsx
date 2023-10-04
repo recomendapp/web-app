@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { MovieActionCounter } from "@/components/elements/Movie/MovieActionCounter";
-import { useUser } from "@/context/UserProvider";
 import { MovieAction } from "@/components/modules/MovieAction/MovieAction";
 import YoutubeEmbed from "@/components/tools/Youtube";
 
@@ -39,11 +38,12 @@ import { Play } from "lucide-react";
 import { useQuery } from "react-query";
 import { DateOnlyYearTooltip } from "@/components/elements/Date/Date";
 import MoviePoster from "@/components/elements/Movie/MoviePoster";
+import { useAuth } from "@/context/AuthContext/AuthProvider";
 
 
 export default function MovieHeader({ movie, small } : { movie: any, small?: boolean }) {
 
-  const { user } = useUser();
+  const { user } = useAuth();
 
   if (small) {
     return <MovieHeaderSmall movie={movie} />

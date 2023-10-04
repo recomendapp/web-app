@@ -1,5 +1,4 @@
-import UserPlaylists from "@/components/modules/UserPlaylists/ProfilePlaylists"
-import { getUserDetails } from "@/lib/appwrite";
+
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({

@@ -41,6 +41,10 @@ const nextConfig = {
         source: '/@:username/stats',
         destination: '/user/:username/stats',
       },
+      {
+        source: '/@:username/film/:film',
+        destination: '/user/:username/film/:film',
+      },
     ];
   },
 };

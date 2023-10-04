@@ -1,7 +1,6 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/context/UserProvider";
 import { Fragment, useEffect, useState } from "react";
 import { LayoutGrid, List, Plus } from "lucide-react";
 import MovieCard from "@/components/elements/Movie/MovieCard";
@@ -34,7 +33,7 @@ export default function ProfileFilms({
 
     const { ref, inView } = useInView();
 
-    const numberOfResult = 8;
+    const numberOfResult = 10;
 
     const { data: profileFilmsQuery, loading, error, fetchMore } = useQuery(PROFILE_FILM_QUERY, {
         variables: {
@@ -50,7 +49,6 @@ export default function ProfileFilms({
 
     useEffect(() => {
         if (inView && pageInfo?.hasNextPage) {
-            console.log('fetchMore')
             fetchMore({
                 variables: {
                     user_id: profile.id,
@@ -88,63 +86,26 @@ export default function ProfileFilms({
             <div className="flex flex-col gap-2">
                 <div className="flex justify-between gap-4 items-center">
                     <Link href={`/@${profile?.username}/films`}>
-                        <h3 className="font-semibold text-xl text-accent-1">Films</h3>
+                        <h3 className="font-semibold text-xl text-accent-1">Dernières activités</h3>
                     </Link>
-                    <div className="flex gap-2">
-                        <Button variant={'link'} asChild>
-                            <Link href={`/@${profile?.username}/films`}>
-                                Tout afficher
-                            </Link>
-                        </Button>
-
-                        <Select onValueChange={setOrder} defaultValue={order}>
-                            <SelectTrigger className="w-fit">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent align="end">
-                                <SelectGroup>
-                                    <SelectLabel>Date</SelectLabel>
-                                    <SelectItem value={"recent"}>Ajouté récemment</SelectItem>
-                                    <SelectItem value={"added-desc"}>Ajouté anciennement</SelectItem>
-                                </SelectGroup>
-                                <SelectSeparator />
-                                <SelectGroup>
-                                    <SelectLabel>Notes</SelectLabel>
-                                    <SelectItem value={"rating-desc"}>Notes décroissantes</SelectItem>
-                                    <SelectItem value={"rating-asc"}>Notes croissantes</SelectItem>
-                                </SelectGroup>
-                                <SelectSeparator />
-                                <SelectItem value={"rating-desc"}>Notes décroissantes</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
+                    <Button variant={'link'} asChild>
+                        <Link href={`/@${profile?.username}/films`}>
+                            Tout afficher
+                        </Link>
+                    </Button>
                     
                 </div>
                 <ScrollArea className="pb-4">
-                    <div className="flex gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-4  md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-10 gap-4">
                         {films.map(({ film_action } : { film_action: FilmAction}) => (
-                            <div key={film_action.id} className="w-48">
+                            <div key={film_action.id} className="">
                                 <MovieCard
-                                    film={film_action.film}
+                                    filmId={film_action.film_id}
                                     displayMode={displayMode}
-                                    isLiked={film_action.is_liked}
-                                    rating={film_action.rating}
-                                    review={film_action.review_id}
+                                    film_action={film_action}
                                 />
                             </div>
                         ))}
-                        {pageInfo.hasNextPage && 
-                            <div className="w-24 flex items-center justify-center">
-                                <Button variant={'ghost'} size={'icon'} className="rounded-full" asChild>
-                                    <Link href={`/@${profile?.username}/playlists`}>
-                                        <Plus />
-                                    </Link>
-                                </Button>
-                            </div>
-                        }
-                        {/* {playlists.slice(0, numberOfResult).map((playlist: Models.Document) => (
-                            <MoviePlaylistCard key={playlist.$id} playlist={playlist} className={'w-48'}/>
-                        ))} */}
                     </div>
                     <ScrollBar orientation="horizontal" />
                 </ScrollArea>
@@ -192,11 +153,9 @@ export default function ProfileFilms({
                 {films.map(({ film_action } : { film_action: FilmAction}, index) => (
                     <div key={film_action.id} ref={index === films.length - 1 ? ref : undefined}>
                         <MovieCard
-                            film={film_action.film}
+                            filmId={film_action.film_id}
                             displayMode={displayMode}
-                            isLiked={film_action.is_liked}
-                            rating={film_action.rating}
-                            review={film_action.review_id}
+                            film_action={film_action}
                         />
                     </div>
                 ))}

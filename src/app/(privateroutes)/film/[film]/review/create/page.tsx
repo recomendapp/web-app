@@ -28,7 +28,7 @@ export default function CreateReview({ params }: { params: { film: string } }) {
     }
 
     if(review)
-        redirect(`/film/${params.film}/review/${user.username}`);
+        redirect(`/@${user.username}/film/${params.film}`);
     
     return (
         <div className="p-4">

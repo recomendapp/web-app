@@ -20,12 +20,12 @@ import {
 import PopupFullScreen from './MapPopupFullScreen';
 import MapPopupSidebar from './MapPopupSidebar';
 import { getMovieDetails } from '@/hooks/tmdb';
-import { useUser } from '@/context/UserProvider';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 export default function MapPopup(props: any) {
   const { selectedMovie } = props;
 
-  const { user } = useUser();
+  const { user } = useAuth();
 
   const [recoverServerOffset, setRecoverServerOffset] = useState(false);
   const [isLoading, setIsLoading] = useState(true);

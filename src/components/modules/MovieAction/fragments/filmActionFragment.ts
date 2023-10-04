@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 import FILM_FRAGMENT from "@/components/modules/Film/fragments/filmFragment";
+import USER_FRAGMENT from "@/context/AuthContext/fragments/userFragment";
 
 export default gql`
     fragment FilmAction on film_action {
@@ -10,6 +11,9 @@ export default gql`
             ...Film
         }
         user_id
+        user {
+            ...User
+        }
         is_liked
         is_watched
         rating
@@ -17,4 +21,5 @@ export default gql`
         review_id
     }
     ${FILM_FRAGMENT}
+    ${USER_FRAGMENT}
 `

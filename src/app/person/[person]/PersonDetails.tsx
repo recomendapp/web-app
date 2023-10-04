@@ -3,7 +3,6 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/elements/Tools/ImageWithFallback';
 import { Button } from '../../../components/ui/button';
 import Link from 'next/link';
-import { useUser } from '@/context/UserProvider';
 import { MovieAction } from '../../../components/modules/MovieAction/MovieAction';
 import {
   Tooltip,
@@ -15,11 +14,11 @@ import {
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { MovieActionCounter } from '../../../components/elements/Movie/MovieActionCounter';
-import { MovieReview } from '../../movie/[movie]/reviews/assets/MovieReviews';
 import { PersonFollowButton } from '@/components/elements/ButtonFollowPerson/PersonFollowButton';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 export function PersonDetails({ person }: { person: any }) {
-  const { user } = useUser();
+  const { user } = useAuth();
 
   return (
     <div className=" w-full">
@@ -33,7 +32,7 @@ export function PersonDetails({ person }: { person: any }) {
           height: 'clamp(340px,30vh,400px)',
         }}
       >
-        {user && <PersonFollowButton userId={user?.$id} personId={person.id} />}
+        {user && <PersonFollowButton userId={user?.id} personId={person.id} />}
       </div>
     </div>
   );

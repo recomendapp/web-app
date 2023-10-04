@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/tooltip';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { databases } from '@/lib/appwrite';
 import { Query } from 'appwrite';
 import { Models } from 'appwrite/types/models';
 
@@ -29,7 +28,6 @@ import {
 import { cn, getInitiales } from '@/lib/utils/utils';
 import { toast } from 'react-toastify';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useUser } from '@/context/UserProvider';
 import { Icons } from '@/components/icons';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { useMutation, useQuery } from '@apollo/client';

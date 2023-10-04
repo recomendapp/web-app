@@ -2,7 +2,6 @@
 
 import { cn } from '@/lib/utils/utils';
 
-import { useUser } from '@/context/UserProvider';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 import Link from 'next/link';
@@ -17,11 +16,12 @@ import {
   Radio,
   User,
 } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function Navbar({ className }: NavbarProps) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const pathname = usePathname();
   const routes = useMemo(
     () => [

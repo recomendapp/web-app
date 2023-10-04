@@ -9,26 +9,30 @@ import { Models } from "appwrite";
 import UserCard from "@/components/elements/UserCard/UserCard";
 import { FileEdit } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@/context/UserProvider";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "react-toastify";
 import { Icons } from "@/components/icons";
-import { useQueryClient } from "react-query";
+import { useAuth } from "@/context/AuthContext/AuthProvider";
+import { Review } from "@/types/type.review";
+import { useMutation } from "@apollo/client";
+
+import UPDATE_REVIEW_MUTATION from '@/components/modules/Review/mutations/updateReviewMutation'
 
 interface MovieReviewFormProps {
-  review: Models.Document;
+  review: Review;
 }
 
 export default function MovieReviewForm({ review } : MovieReviewFormProps) {
 
-  const { user } = useUser();
-  const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [ title, setTitle ] = useState(review.title);
   const [ body, setBody ] = useState<JSONContent>(JSON.parse(review.body));
   const [ isLoading, setIsLoading ] = useState(false);
 
   const [ editable, setEditable ] = useState(false);
+
+  const [ updateReviewMutation ] = useMutation(UPDATE_REVIEW_MUTATION);
 
   const updateReview = async () => {
     
@@ -51,7 +55,14 @@ export default function MovieReviewForm({ review } : MovieReviewFormProps) {
     
     try {
       setIsLoading(true);
-      await handleUpdateReview(review.$id, title.trim(), JSON.stringify(body));
+      await updateReviewMutation({
+        variables: {
+          id: review.id,
+          title: title.trim(),
+          body: JSON.stringify(body)
+        }
+      })
+      // await handleUpdateReview(review.$id, title.trim(), JSON.stringify(body));
       toast.success("Les modifications ont bien été enregistrées");
       setEditable(false);
     } catch (error) {
@@ -67,7 +78,7 @@ export default function MovieReviewForm({ review } : MovieReviewFormProps) {
       <div className="w-full flex flex-col justify-center items-center bg-background">
         {/* SETTINGS */}
         <div className='flex justify-end w-full gap-2'>
-            {review.user.$id == user?.$id && 
+            {review.user.id == user?.id && 
               <Button variant={'ghost'} size={'sm'} onClick={() => setEditable(true)}>
                 <span className="sr-only">Modifier</span>
                 <FileEdit />

@@ -8,7 +8,6 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useState } from 'react';
-import { databases } from '@/lib/appwrite';
 
 import {
   Command,
@@ -32,11 +31,7 @@ import { toast } from 'react-toastify';
 
 import { DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
 import { PlaylistButton } from '@/components/modules/MoviePlaylist/PlaylistButton';
-import handlePlaylists from '@/hooks/movie/playlist/handlePlaylists';
-import { useUser } from '@/context/UserProvider';
 import { useRouter } from 'next/navigation';
-import { Icons } from '@/components/icons';
-import { Query } from 'appwrite';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 import USER_PLAYLISTS_QUERY from '@/components/modules/UserPlaylists/queries/userPlaylistsQuery'
@@ -45,7 +40,6 @@ import { Playlist } from '@/types/type.playlist';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import INSERT_PLAYLIST_ITEM_MUATION from '@/components/modules/MovieAction/_components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
-import { GraphQLError } from 'graphql';
 
 interface MoviePlaylistActionProps {
   filmId: string;
@@ -102,11 +96,12 @@ export function MoviePlaylistAction({
           playlist_id: playlist.id,
           film_id: filmId,
           user_id: user?.id,
-          rank: String(Number(playlist.items_count) + 1)
+          rank: Number(playlist.items_count) + 1
         }
       });
       toast.success(`Ajouté à ${playlist.title}`);
     } catch (error) {
+      console.log(error)
       toast.error('Une erreur s\'est produite');
     }
   }

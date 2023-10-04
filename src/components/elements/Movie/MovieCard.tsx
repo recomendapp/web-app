@@ -19,26 +19,36 @@ import { DateOnlyYearTooltip } from "@/components/elements/Date/Date";
 import MoviePoster from "@/components/elements/Movie/MoviePoster";
 import { AlignJustify, Heart, Quote, Text } from "lucide-react";
 import { MovieAction } from "@/components/modules/MovieAction/MovieAction";
-import { Film } from "@/types/type.film";
+import { Film, FilmAction } from "@/types/type.film";
+import { getMovieDetails } from "@/hooks/tmdb";
+import { useQuery } from "react-query";
 
 interface MovieCardProps {
-    film: Film;
+    filmId: string;
     displayMode?: string,
-    isLiked?: boolean,
-    rating?: number,
-    review?: string,
+    film_action?: FilmAction
 
 }
 
 export default function MovieCard({
-    film,
+    filmId,
     displayMode,
-    isLiked,
-    rating,
-    review
+    film_action
 } : MovieCardProps) {
 
-    console.log('film', film)
+    const {
+        data: film,
+        isLoading,
+      } = useQuery({
+        queryKey: ['film', filmId],
+        queryFn: () => getMovieDetails(filmId, 'en'),
+        enabled: filmId !== undefined && filmId !== null,
+    });
+
+    if (!film)
+        return null
+
+    
 
     if (displayMode == 'grid')
     {
@@ -47,29 +57,29 @@ export default function MovieCard({
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
-                            <Link href={`/film/${film.id}`} className="w-full">
+                            <Link href={`/film/${filmId}`} className="w-full">
                                 <MoviePoster poster_path={film.poster_path} alt={film.title}/>
                             </Link>
-                            {(rating || review || isLiked) && <div className="flex flex-col items-center gap-1 absolute right-0 top-[10%] bg-background p-1 rounded-l-md">
-                                {rating && 
+                            {(film_action?.rating || film_action?.review_id || film_action?.is_liked) && <div className="flex flex-col items-center gap-1 absolute right-0 top-[10%] bg-background p-1 rounded-l-md">
+                                {film_action?.rating && 
                                     <p
                                         className={`h-5 w-6 rounded-sm flex items-center justify-center
                                         text-background bg-accent-1
                                         font-bold text-sm
                                         `}
                                     >
-                                        {rating}
+                                        {film_action?.rating}
                                     </p>
                                 }
-                                {isLiked && 
+                                {film_action?.is_liked && 
                                     <Heart
                                         width={15}
                                         className={`text-like fill-like`}
                                     />
                                 }
-                                {review &&
+                                {film_action?.review_id &&
                                     <Button variant={'action'} className="p-0 h-fit" asChild>
-                                        <Link href={`/film/${film.id}/review/${review}`}>
+                                        <Link href={`/@${film_action?.user.username}/film/${film.id}`}>
                                             <Text width={20} className='fill-foreground'/>
                                         </Link>
                                     </Button>
@@ -77,7 +87,7 @@ export default function MovieCard({
                             </div>}
                             <div className="hidden absolute top-3/4 group-hover:flex w-full justify-center pointer-events-none">
                                 <div className="bg-background rounded-md w-fit pointer-events-auto">
-                                    <MovieAction filmId={film?.id} watch watchlist dropdown/>
+                                    <MovieAction filmId={filmId} watch watchlist dropdown/>
                                 </div>
                             </div>
                         </div>
@@ -97,17 +107,17 @@ export default function MovieCard({
             <div className="w-full block">
                 {/* ACTIONS */}
                 <div className="absolute top-0 flex items-center gap-2">
-                    {isRated && 
+                    {film_action.rating && 
                         <p
                             className={`h-5 w-6 rounded-sm flex items-center justify-center
                             text-background bg-accent-1
                             font-bold text-sm
                             `}
                         >
-                            {rating}
+                            {film_action.rating}
                         </p>
                     }
-                    {isLiked && 
+                    {film_action.is_liked && 
                         <Heart
                             width={15}
                             className={`text-like fill-like`}

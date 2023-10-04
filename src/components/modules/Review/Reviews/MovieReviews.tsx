@@ -103,7 +103,7 @@ export function MyReviewButton({ filmId } : { filmId: string }) {
     )
 
   return (
-    <Link href={`/film/${filmId}/review/${userReview?.user.username}`} className="bg-blue-500 rounded-full px-4 py-1 flex gap-2 items-center">
+    <Link href={`/@${userReview?.user.username}/film/${filmId}`} className="bg-blue-500 rounded-full px-4 py-1 flex gap-2 items-center">
       <FileEdit />
       Voir ma critique
     </Link>

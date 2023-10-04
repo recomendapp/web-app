@@ -1,8 +1,6 @@
 import { Bookmark, Heart, Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { databases } from '@/lib/appwrite';
-import { Query } from 'appwrite';
 
 export function MovieActionCounter({ movieId }: { movieId: string }) {
   const router = useRouter();
@@ -19,28 +17,28 @@ export function MovieActionCounter({ movieId }: { movieId: string }) {
   const [movieAverageRating, setMovieAverageRating] = useState<number | null>();
 
   // INIT VALUE
-  useEffect(() => {
-    databases
-      .listDocuments(
-        String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
-        String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE),
-        [Query.equal('movieId', movieId)]
-      )
-      .then((movie) => {
-        if (movie.total > 0) {
-          setMovieLikedCounter(movie.documents[0].likes_count);
-          setMovieWatchedCounter(movie.documents[0].watch_count);
-          setMovieRatedCounter(movie.documents[0].rating_count);
-          setMovieWatchlistedCounter(movie.documents[0].watchlist_count);
-          setTotalMovieRated(
-            handleTotalMovieRated(movie.documents[0].rating_count)
-          );
-          setMovieAverageRating(
-            handleMovieAverageRating(movie.documents[0].rating_count)
-          );
-        }
-      });
-  }, [movieId]);
+  // useEffect(() => {
+  //   databases
+  //     .listDocuments(
+  //       String(process.env.NEXT_PUBLIC_APPWRITE_DATABASE_USERS),
+  //       String(process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_MOVIE),
+  //       [Query.equal('movieId', movieId)]
+  //     )
+  //     .then((movie) => {
+  //       if (movie.total > 0) {
+  //         setMovieLikedCounter(movie.documents[0].likes_count);
+  //         setMovieWatchedCounter(movie.documents[0].watch_count);
+  //         setMovieRatedCounter(movie.documents[0].rating_count);
+  //         setMovieWatchlistedCounter(movie.documents[0].watchlist_count);
+  //         setTotalMovieRated(
+  //           handleTotalMovieRated(movie.documents[0].rating_count)
+  //         );
+  //         setMovieAverageRating(
+  //           handleMovieAverageRating(movie.documents[0].rating_count)
+  //         );
+  //       }
+  //     });
+  // }, [movieId]);
 
   function handleMovieAverageRating(rating_count: string) {
     const ratingArray = JSON.parse(rating_count);

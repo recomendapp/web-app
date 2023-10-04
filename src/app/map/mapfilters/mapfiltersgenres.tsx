@@ -12,15 +12,15 @@ import {
 } from '@/components/ui/accordion';
 
 import Link from 'next/link';
-import { useUser } from '@/context/UserProvider';
 import { getGenreList } from '@/hooks/tmdb';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 interface MapFilterProps extends React.HTMLAttributes<HTMLDivElement> {
   skeleton?: boolean;
 }
 
 export function MapFiltersGenres(props: any) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const {
     closePopupMovie,
     map,

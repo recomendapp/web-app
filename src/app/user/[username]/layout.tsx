@@ -1,5 +1,5 @@
-import ProfileHeader from "@/components/modules/ProfileHeader/ProfileHeader";
 import { notFound } from "next/navigation";
+import ProfileHeader from "@/components/modules/ProfileHeader/ProfileHeader";
 import { supabaseServer } from "@/lib/supabase/supabase-server";
 
 
@@ -8,7 +8,10 @@ interface UserLayoutProps {
     children: React.ReactNode;
 }
 
-export default async function UserLayout({ params, children } : UserLayoutProps) {
+export default async function UserLayout({
+    params,
+    children
+} : UserLayoutProps) {
     const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
 
     if (!user) notFound();

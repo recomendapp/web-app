@@ -12,17 +12,17 @@ import {
 
 import { Accordion } from '@/components/ui/accordion';
 
-import { useUser } from '@/context/UserProvider';
 import { getGenreList } from '@/hooks/tmdb';
 import { MapFiltersGenres } from './mapfiltersgenres';
 import { MapFiltersYears } from './mapfiltersyears';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 interface MapFilterProps extends React.HTMLAttributes<HTMLDivElement> {
   skeleton?: boolean;
 }
 
 export function MapFilters(props: any) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const { closePopupMovie, map } = props;
   const [genreList, setGenreList] = useState<any[]>([]);
   const [activeGenres, setActiveGenres] = useState<Record<string, boolean>>({});

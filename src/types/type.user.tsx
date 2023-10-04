@@ -10,6 +10,7 @@ export interface User {
     badge: string,
     website: string,
     favorite_color: string,
+    favorite_films: string[],
     followers_count: string,
     following_count: string,
     friends_count: string,

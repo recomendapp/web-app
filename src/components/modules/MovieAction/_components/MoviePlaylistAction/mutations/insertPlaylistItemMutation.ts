@@ -7,7 +7,7 @@ export default gql `
     $film_id: BigInt!
     $user_id: UUID!
     $comment: String
-    $rank: BigInt
+    $rank: Int!
   ) {
     insertIntoplaylist_itemCollection(
       objects: {

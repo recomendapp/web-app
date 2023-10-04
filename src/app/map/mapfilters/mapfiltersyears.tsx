@@ -9,11 +9,11 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 
-import { useUser } from '@/context/UserProvider';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 export function MapFiltersYears(props: any) {
-  const { user } = useUser();
+  const { user } = useAuth();
   const {
     closePopupMovie,
     map,

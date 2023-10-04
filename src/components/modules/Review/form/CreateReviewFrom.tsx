@@ -1,31 +1,14 @@
 "use client"
 
 import Tiptap from "@/components/modules/Editor/Editor";
-import { isLiked, isRated } from "@/types/movie/type.movie_action";
 import { User } from "@/types/type.user";
-import { databases } from "@/lib/appwrite";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { JSONContent } from "@tiptap/react";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { useQueryClient } from "react-query";
 import { toast } from "react-toastify";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { MovieAction } from "@/components/modules/MovieAction/MovieAction";
-import { Divide } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { useMutation, useQuery } from "@apollo/client";
 import { useAuth } from "@/context/AuthContext/AuthProvider";
