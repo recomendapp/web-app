@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Fragment, useEffect, useState } from "react";
 import { LayoutGrid, List, Plus } from "lucide-react";
-import MovieCard from "@/components/elements/Movie/MovieCard";
-import Loader from "@/components/elements/Loader/Loader";
+import MovieCard from "@/components/Film/MovieCard";
+import Loader from "@/components/Loader/Loader";
 import { useInView } from 'react-intersection-observer';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Link from "next/link";

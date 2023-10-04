@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { getPersonDetails } from '@/lib/tmdb';
 import { Metadata } from 'next';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { PersonFollowButton } from '@/components/elements/ButtonFollowPerson/PersonFollowButton';
+import { PersonFollowButton } from '@/components/Person/ButtonFollowPerson/PersonFollowButton';
 import { PersonDetails } from './PersonDetails';
 import NotFound from '@/app/not-found';
 // import MovieDetails from '../../src/components/movie/MovieDetails';

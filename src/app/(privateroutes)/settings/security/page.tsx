@@ -1,6 +1,6 @@
 'use client';
 import { Separator } from '@/components/ui/separator';
-import { SecurityForm } from '@/components/modules/UserSettings/UserSettingsSecurity/securityForm';
+import { SecurityForm } from '@/components/User/UserSettings/UserSettingsSecurity/securityForm';
 import { siteConfig } from '@/config/site';
 
 export default function SettingsSecurityPage() {

@@ -1,9 +1,9 @@
 'use client';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { ImageWithFallback } from '@/components/elements/Tools/ImageWithFallback';
+import { ImageWithFallback } from '@/components/tools/ImageWithFallback';
 import { Button } from '../../../components/ui/button';
 import Link from 'next/link';
-import { MovieAction } from '../../../components/modules/MovieAction/MovieAction';
+import { MovieAction } from '../../../components/Film/FilmAction/MovieAction';
 import {
   Tooltip,
   TooltipContent,
@@ -13,8 +13,8 @@ import {
 
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { MovieActionCounter } from '../../../components/elements/Movie/MovieActionCounter';
-import { PersonFollowButton } from '@/components/elements/ButtonFollowPerson/PersonFollowButton';
+import { MovieActionCounter } from '../../../components/Film/MovieActionCounter';
+import { PersonFollowButton } from '@/components/Person/ButtonFollowPerson/PersonFollowButton';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 export function PersonDetails({ person }: { person: any }) {

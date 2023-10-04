@@ -6,13 +6,13 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
 import { Models } from "appwrite"
-import { DateOnlyYearTooltip } from "@/components/elements/Date/Date"
+import { DateOnlyYearTooltip } from "@/components/tools/Date"
 import Link from "next/link"
 import { ConvertHoursMinutes } from "@/lib/utils/utils"
-import UserCard from "@/components/elements/UserCard/UserCard"
-import MoviePoster from "@/components/elements/Movie/MoviePoster"
+import UserCard from "@/components/User/UserCard/UserCard"
+import MoviePoster from "@/components/Film/MoviePoster"
 import { Clock } from "lucide-react"
-import MovieCardSmall from "@/components/elements/Movie/MovieCardSmall"
+import MovieCardSmall from "@/components/Film/MovieCardSmall"
 
 export const columns: ColumnDef<Models.Document>[] = [
   {

@@ -1,3 +1,5 @@
+"use server"
+
 import { supabaseServer } from '@/lib/supabase/supabase-server';
 import { redirect } from 'next/navigation';
 import { Fragment } from 'react';

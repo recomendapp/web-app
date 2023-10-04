@@ -26,9 +26,9 @@ import { useQueryClient } from "react-query"
 // ICONS
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Dispatch, SetStateAction, useState } from "react"
-import ButtonShare from "@/components/elements/ButtonShare/ButtonShare"
-import UserCard from "@/components/elements/UserCard/UserCard"
-import { MovieAction } from "@/components/modules/MovieAction/MovieAction"
+import ButtonShare from "@/components/tools/ButtonShare"
+import UserCard from "@/components/User/UserCard/UserCard"
+import { MovieAction } from "@/components/Film/FilmAction/MovieAction"
 
 interface DataTableRowActionsProps {
   row: Row<Models.Document>

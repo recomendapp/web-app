@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { MovieActionCounter } from "@/components/elements/Movie/MovieActionCounter";
-import { MovieAction } from "@/components/modules/MovieAction/MovieAction";
+import { MovieActionCounter } from "@/components/Film/MovieActionCounter";
+import { MovieAction } from "@/components/Film/FilmAction/MovieAction";
 import YoutubeEmbed from "@/components/tools/Youtube";
 
 // UI
-import { ImageWithFallback } from "@/components/elements/Tools/ImageWithFallback";
+import { ImageWithFallback } from "@/components/tools/ImageWithFallback";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
@@ -34,8 +34,8 @@ import { ConvertHoursMinutes } from "@/lib/utils/utils";
 
 // ICONS
 import { Play } from "lucide-react";
-import { DateOnlyYearTooltip } from "@/components/elements/Date/Date";
-import MoviePoster from "@/components/elements/Movie/MoviePoster";
+import { DateOnlyYearTooltip } from "@/components/tools/Date";
+import MoviePoster from "@/components/Film/MoviePoster";
 import { useAuth } from "@/context/AuthContext/AuthProvider";
 
 

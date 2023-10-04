@@ -1,6 +1,6 @@
 'use client';
 import { Separator } from '@/components/ui/separator';
-import { AccountForm } from '@/components/modules/UserSettings/UserSettingsAccount/accountForm';
+import { AccountForm } from '@/components/User/UserSettings/UserSettingsAccount/accountForm';
 
 export default function SettingsAccountPage() {
   return (

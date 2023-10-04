@@ -1,4 +1,4 @@
-import { ForgotPasswordForm } from '@/components/modules/Auth/ForgotPassword/ForgotPasswordForm';
+import { ForgotPasswordForm } from '@/components/Auth/ForgotPassword/ForgotPasswordForm';
 import { siteConfig } from '@/config/site';
 import Image from 'next/image';
 import { Metadata } from 'next';

@@ -1,10 +1,10 @@
 "use client"
-import Loader from "@/components/elements/Loader/Loader";
+import Loader from "@/components/Loader/Loader";
 import { redirect } from "next/navigation";
-import CreateReviewForm from "../../../../../../components/modules/Review/form/CreateReviewFrom";
+import CreateReviewForm from "../../../../../../components/Review/form/CreateReviewFrom";
 import { useAuth } from "@/context/AuthContext/AuthProvider";
 import { useQuery } from "@apollo/client";
-import USER_REVIEW_QUERY from "@/components/modules/Review/queries/userReviewQuery";
+import USER_REVIEW_QUERY from "@/components/Review/queries/userReviewQuery";
 
 export default function CreateReview({ params }: { params: { film: string } }) {
 

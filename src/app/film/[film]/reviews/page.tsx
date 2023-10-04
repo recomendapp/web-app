@@ -1,7 +1,7 @@
 import { getMovieDetails } from '@/lib/tmdb';
 import MovieHeader from '../assets/MovieHeader';
 import MovieNavbar from '../assets/MovieNavbar';
-import { MovieReview } from '../../../../components/modules/Review/Reviews/MovieReviews';
+import { MovieReview } from '../../../../components/Review/Reviews/MovieReviews';
 import { notFound } from 'next/navigation';
 
 export async function generateMetadata({

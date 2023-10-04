@@ -1,12 +1,12 @@
 'use client';
 
-import { ImageWithFallback } from '@/components/elements/Tools/ImageWithFallback';
+import { ImageWithFallback } from '@/components/tools/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { PlaylistButton } from '@/components/modules/MoviePlaylist/PlaylistButton';
 import { useEffect, useState } from 'react';
 import { User } from '@/types/type.user';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
-import Loader from '@/components/elements/Loader/Loader';
+import Loader from '@/components/Loader/Loader';
 import { useQuery } from '@apollo/client';
 import { TablePlaylist } from '@/components/modules/MoviePlaylist/table/TablePlaylist';
 import { Playlist, PlaylistItem } from '@/types/type.playlist';

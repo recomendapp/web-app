@@ -8,7 +8,7 @@ import { fontSans } from '@/lib/fonts';
 import NextTopLoader from 'nextjs-toploader';
 
 import { ThemeProvider } from '@/context/ThemeProvider/ThemeProvider';
-import { Sidebar } from '@/components/modules/Sidebar/Sidebar';
+import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { Navbar } from '@/components/Navbar/Navbar';
 import { Header } from '@/components/Header/Header';
 
@@ -19,7 +19,7 @@ import { ApolloClientProvider } from '@/context/ApolloClientProvider';
 import { AuthProvider } from '@/context/AuthContext/AuthProvider';
 
 import { cn } from "@/lib/utils/utils";
-import { Box } from '@/components/elements/Box/Box';
+import { Box } from '@/components/Box/Box';
 
 export const metadata: Metadata = {
   title: {

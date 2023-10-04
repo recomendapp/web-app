@@ -1,4 +1,4 @@
-import SearchPlaylistsFull from "@/components/modules/Search/SearchPlaylists/SearchPlaylistsFull";
+import SearchPlaylistsFull from "@/components/Search/SearchPlaylists/SearchPlaylistsFull";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata({

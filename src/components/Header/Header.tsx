@@ -1,16 +1,16 @@
+"use server"
 
 import { cn } from '@/lib/utils/utils';
-import SearchBar from '@/components/modules/Search/SearchBar';
-import NavigationButton from '../modules/NavigationButton/NavigationButton';
 import { supabaseServer } from '@/lib/supabase/supabase-server';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { UserNav } from '../modules/UserNav/UserNav';
+import { UserNav } from '../User/UserNav/UserNav';
 import HeaderLeftSide from './HeaderLeftSide';
 
 interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export async function Header({ className }: HeaderProps) {
+
   const { data: { session } } = await supabaseServer.auth.getSession();
 
   return (

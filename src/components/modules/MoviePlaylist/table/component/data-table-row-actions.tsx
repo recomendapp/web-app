@@ -3,7 +3,7 @@
 import { Models } from "appwrite"
 import Link from "next/link"
 import { Column, Row, Table } from "@tanstack/react-table"
-import { MovieAction } from "@/components/modules/MovieAction/MovieAction"
+import { MovieAction } from "@/components/Film/FilmAction/MovieAction"
 
 // UI
 import { Button } from "@/components/ui/button"
@@ -27,8 +27,8 @@ import { useQueryClient } from "react-query"
 // ICONS
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Dispatch, SetStateAction, useState } from "react"
-import ButtonShare from "@/components/elements/ButtonShare/ButtonShare"
-import UserCard from "@/components/elements/UserCard/UserCard"
+import ButtonShare from "@/components/tools/ButtonShare"
+import UserCard from "@/components/User/UserCard/UserCard"
 import { DataComment } from "./data-table-comment"
 import { PlaylistItem } from "@/types/type.playlist"
 import { useAuth } from "@/context/AuthContext/AuthProvider"

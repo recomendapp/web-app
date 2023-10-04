@@ -1,6 +1,6 @@
 'use client';
 import { Separator } from '@/components/ui/separator';
-import { ProfileForm } from '@/components/modules/UserSettings/UserSettingsProfile/profileForm';
+import { ProfileForm } from '@/components/User/UserSettings/UserSettingsProfile/profileForm';
 
 export default function SettingsProfilePage() {
   return (

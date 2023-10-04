@@ -1,5 +1,5 @@
-import SearchFilters from '@/components/modules/Search/SearchFilters';
-import SearchBar from '@/components/modules/Search/SearchBar';
+import SearchFilters from '@/components/Search/SearchFilters';
+import SearchBar from '@/components/Search/SearchBar';
 
 export default function Search({
     children

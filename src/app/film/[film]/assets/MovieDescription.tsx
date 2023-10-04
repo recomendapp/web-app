@@ -13,7 +13,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { ImageWithFallback } from "@/components/elements/Tools/ImageWithFallback"
+import { ImageWithFallback } from "@/components/tools/ImageWithFallback"
 import { Button } from "@/components/ui/button"
 
 

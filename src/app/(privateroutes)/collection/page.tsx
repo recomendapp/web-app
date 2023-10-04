@@ -1,4 +1,4 @@
-import { UserNav } from '@/components/modules/UserNav/UserNav';
+import { UserNav } from '@/components/User/UserNav/UserNav';
 import React from 'react';
 
 export default function Collection() {

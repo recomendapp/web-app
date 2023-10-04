@@ -1,6 +1,6 @@
 "use client"
 
-import MovieCard from "@/components/elements/Movie/MovieCard";
+import MovieCard from "@/components/Film/MovieCard";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useAuth } from "@/context/AuthContext/AuthProvider";

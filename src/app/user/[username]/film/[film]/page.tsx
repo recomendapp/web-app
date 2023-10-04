@@ -1,6 +1,6 @@
 import { getMovieDetails } from '@/lib/tmdb';
-import MovieVerticalCard from '@/components/elements/Movie/MovieVerticalCard';
-import MovieReviewForm from '@/components/modules/Review/form/MovieReviewForm';
+import MovieVerticalCard from '@/components/Film/MovieVerticalCard';
+import MovieReviewForm from '@/components/Review/form/MovieReviewForm';
 import { notFound } from 'next/navigation';
 import { supabaseServer } from '@/lib/supabase/supabase-server';
 

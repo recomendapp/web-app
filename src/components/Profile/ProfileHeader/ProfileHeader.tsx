@@ -1,7 +1,7 @@
 "use client"
 
 import { ProfileFollowButton } from "@/components/Profile/ProfileFollowButton/ProfileFollowButton"
-import UserAvatar from "@/components/elements/UserAvatar/UserAvatar"
+import UserAvatar from "@/components/User/UserAvatar/UserAvatar"
 import { Button } from "@/components/ui/button"
 import { useQuery } from "@apollo/client"
 import { BarChart, LinkIcon, Settings } from "lucide-react"

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import SearchUsersFull from "@/components/modules/Search/SearchUsers/SearchUsersFull";
+import SearchUsersFull from "@/components/Search/SearchUsers/SearchUsersFull";
 
 export async function generateMetadata({
     searchParams,

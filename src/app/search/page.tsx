@@ -1,9 +1,9 @@
 
 import FeaturedPlaylists from '@/components/modules/MoviePlaylist/FeaturedPlaylists';
-import SearchFilmsSmall from '@/components/modules/Search/SearchFilms/SearchFilmsSmall';
-import SearchPlaylistsSmall from '@/components/modules/Search/SearchPlaylists/SearchPlaylistsSmall';
+import SearchFilmsSmall from '@/components/Search/SearchFilms/SearchFilmsSmall';
+import SearchPlaylistsSmall from '@/components/Search/SearchPlaylists/SearchPlaylistsSmall';
 import { Fragment } from 'react';
-import SearchUsersSmall from '@/components/modules/Search/SearchUsers/SearchUsersSmall';
+import SearchUsersSmall from '@/components/Search/SearchUsers/SearchUsersSmall';
 
 export async function generateMetadata({
   searchParams,

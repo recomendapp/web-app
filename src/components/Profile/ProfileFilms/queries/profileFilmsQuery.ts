@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 import PLAYLIST_FRAGMENT from '@/components/modules/MoviePlaylist/fragments/playlistFragment'
-import FILM_ACTION_FRAGMENT from "@/components/modules/MovieAction/fragments/filmActionFragment";
+import FILM_ACTION_FRAGMENT from "@/components/Film/FilmAction/fragments/filmActionFragment";
 
 export default gql`
     query ProfileFilms(

@@ -1,6 +1,6 @@
 "use client"
 
-import MoviePlaylistCard from "@/components/elements/MoviePlaylist/MoviePlaylistCard";
+import MoviePlaylistCard from "@/components/Playlist/MoviePlaylist/MoviePlaylistCard";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,7 +9,7 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 import { useQuery } from "@apollo/client";
-import USER_PLAYLISTS_QUERY from "@/components/modules/UserPlaylists/queries/userPlaylistsQuery";
+import USER_PLAYLISTS_QUERY from "@/components/User/UserPlaylists/queries/userPlaylistsQuery";
 import { User } from "@/types/type.user";
 import { Playlist } from "@/types/type.playlist";
 
