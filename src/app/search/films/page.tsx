@@ -20,6 +20,7 @@ export default function SearchFilms({
         q: string,
     }
 }) {
+  console.log('yooooo')
     if (!searchParams?.q)
         redirect('/search')
     return (

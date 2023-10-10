@@ -94,7 +94,7 @@ export default function SearchPlaylistsFull({
   //   );
   // }
 
-  if (!loading && !playlists.length) {
+  if (!loading && !playlists?.length) {
     return (
       <div>
         Aucun résultat.

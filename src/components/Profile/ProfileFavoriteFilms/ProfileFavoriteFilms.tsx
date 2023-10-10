@@ -24,7 +24,7 @@ export default function ProfileFavoriteFilms({
         <div className="flex flex-col gap-2">
             <h3 className="font-semibold text-xl text-accent-1">Films favoris</h3>
             <ScrollArea className="pb-4">
-                <div className="grid grid-cols-2 sm:grid-cols-4  md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-10 gap-4">
+                <div className="grid grid-cols-4  md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-10 gap-4">
                     {profile?.favorite_films?.map((filmId: string) => (
                         <div key={filmId} className="">
                             <MovieCard

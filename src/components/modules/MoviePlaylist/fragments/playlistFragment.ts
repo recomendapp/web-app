@@ -15,7 +15,10 @@ export default gql`
         is_public
         poster_url
         items_count
-        playlist_item: playlist_itemCollection(filter: { playlist_id: { eq: $id }}) {
+        playlist_item: playlist_itemCollection(
+            filter: { playlist_id: { eq: $id }}
+            orderBy: { rank: AscNullsLast }
+        ) {
             edges {
                 item: node {
                     ...PlaylistItem

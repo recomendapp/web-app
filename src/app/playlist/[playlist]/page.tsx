@@ -1,12 +1,13 @@
 import { notFound } from 'next/navigation';
 import PlaylistDetails from '@/components/modules/MoviePlaylist/PlaylistDetails/PlaylistDetails';
-import { supabaseServer } from '@/lib/supabase/supabase-server';
+import { createServerClient } from '@/lib/supabase/supabase-server';
 
 export async function generateMetadata({
   params,
 }: {
   params: { playlist: string };
 }) {
+  const supabaseServer = createServerClient();
   const { data: playlist } = await supabaseServer.from('playlist').select('*, user(username)').eq('id', params.playlist).single();
   if (!playlist) {
     return {
@@ -24,6 +25,7 @@ export default async function Playlist({
 }: {
   params: { playlist: string };
 }) {
+  const supabaseServer = createServerClient();
   const { data: playlist } = await supabaseServer.from('playlist').select('*').eq('id', params.playlist).single();
 
   if (!playlist) notFound();

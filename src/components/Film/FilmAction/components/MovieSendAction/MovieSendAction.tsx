@@ -31,7 +31,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Icons } from '@/components/icons';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { useMutation, useQuery } from '@apollo/client';
-import USER_FRIENDS_QUERY from './queries/userFriendsQuery';
+import USER_FRIENDS_QUERY from '../../../../Friends/queries/userFriendsQuery';
 import { Friend, User } from '@/types/type.user';
 import { Skeleton } from '@/components/ui/skeleton';
 

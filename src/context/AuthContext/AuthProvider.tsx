@@ -52,7 +52,11 @@ const USER_QUERY = gql`
 const AuthContext = createContext<UserState>(defaultState);
 
 // create the provider component
-export const AuthProvider = ({ children } : { children: any }) => {
+export const AuthProvider = ({
+  children
+} : {
+  children: React.ReactNode;
+}) => {
   const router = useRouter();
   // const [ user, setUser ] = useState<User | null | undefined>();
   const [ session, setSession ] = useState<Session | null>();

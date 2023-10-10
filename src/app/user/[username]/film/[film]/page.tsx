@@ -2,7 +2,7 @@ import { getMovieDetails } from '@/lib/tmdb';
 import MovieVerticalCard from '@/components/Film/MovieVerticalCard';
 import MovieReviewForm from '@/components/Review/form/MovieReviewForm';
 import { notFound } from 'next/navigation';
-import { supabaseServer } from '@/lib/supabase/supabase-server';
+import { createServerClient } from '@/lib/supabase/supabase-server';
 
 export async function generateMetadata({
     params,
@@ -15,8 +15,10 @@ export async function generateMetadata({
         title: 'Oups, film introuvable !',
         };
     }
+    const supabaseServer = createServerClient()
+
     const { data: review } = await supabaseServer.from('review').select('*, user!inner(*)').eq('user.username', params.username).single();
-    console.log('reviewf', review)
+
     if (!review) {
         return {
             title: 'Oups, critique introuvable !',
@@ -30,6 +32,9 @@ export async function generateMetadata({
 
 export default async function Review({ params }: { params: { film: string, username: string } }) {
     const film = await getMovieDetails(params.film, 'fr-FR');
+
+    const supabaseServer = createServerClient()
+
     const { data: review } = await supabaseServer.from('review').select('*, user!inner(*)').eq('user.username', params.username).single();
     if (!review) notFound();
 

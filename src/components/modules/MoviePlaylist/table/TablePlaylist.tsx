@@ -35,13 +35,19 @@ import { useMediaQuery } from "react-responsive"
 import { DndContext, DragEndEvent, UniqueIdentifier, closestCenter, useDraggable } from '@dnd-kit/core';
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from "@dnd-kit/utilities"
-import { changeMovieRank } from "./_queries/changeMovieRank"
 import { useAuth } from "@/context/AuthContext/AuthProvider"
 import { PlaylistItem } from "@/types/type.playlist"
+import { range } from "lodash"
+import { useMutation } from "@apollo/client"
+
+import { supabase } from "@/lib/supabase/supabase"
+
+import DELETE_PLAYLIST_ITEM_MUTATION from "@/components/modules/MoviePlaylist/mutations/deletePlaylistItemMutation"
 
 declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
-    updateComment: (rowIndex: number, value: string) => void
+    updateComment: (rowIndex: number, value: string) => void,
+    deleteItem: (itemToDelete: PlaylistItem) => void
   }
   interface ColumnMeta<TData extends RowData, TValue> {
     displayName: string
@@ -59,6 +65,9 @@ export function TablePlaylist({
   playlist,
   userId,
 }: DataTableProps) {
+
+  const [ deletePlaylistItemMutation ] = useMutation(DELETE_PLAYLIST_ITEM_MUTATION);
+
 
   const { user } = useAuth();
 
@@ -80,7 +89,7 @@ export function TablePlaylist({
   }, [userId, user])
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  
+
   const [ filtering, setFiltering ] = React.useState('');
 
   const table = useReactTable({
@@ -106,19 +115,48 @@ export function TablePlaylist({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     meta: {
-      updateComment: (rowIndex: number, value: string) => {
-        // setData((old) =>
-        //   old.map((row, index) => {
-        //     if (index === rowIndex) {
-        //       return {
-        //         ...old[rowIndex],
-        //         ["comment"]: value,
-        //       };
-        //     }
-        //     return row;
-        //   })
-        // );
+      updateComment: async (rowIndex: number, value: string) => {
+        setData((old) =>
+          old.map((row, index) => {
+            if (index === rowIndex) {
+              // Accédez à la propriété `item` de l'objet row
+              return {
+                ...row,
+                item: {
+                  ...row.item,
+                  comment: value,
+                },
+              };
+            }
+            return row;
+          })
+        );
       },
+      deleteItem: async (itemToDelete: PlaylistItem) => {
+        const updatedData = data.filter((item) => item.item.id !== itemToDelete.id);
+      
+        // Utiliser Promise.all pour attendre toutes les mises à jour asynchrones
+        const updatePromises = updatedData.map(async (film) => {
+          if (parseInt(film.item.rank) > parseInt(itemToDelete.rank)) {
+            // Décrémenter le rank des éléments supérieurs
+            film.item.rank = String(parseInt(film.item.rank) - 1);
+      
+            // Mettre à jour le rank dans la base de données ou le backend si nécessaire
+            // Exemple d'utilisation avec supabase :
+            await supabase
+              .from('playlist_item')
+              .update({ rank: film.item.rank })
+              .eq('id', film.item.id);
+          }
+          return film;
+        });
+      
+        // Attendre toutes les mises à jour avant de mettre à jour state
+        const updatedItems = await Promise.all(updatePromises);
+      
+        // Mettre à jour state avec les données mises à jour
+        setData(updatedItems);
+      }
     }
   })
 
@@ -146,14 +184,73 @@ export function TablePlaylist({
   }, [isMobile, table]);
 
   const onDragEnd = async (event: DragEndEvent) => {
-    // const {active, over} = event;
+    try {
+      const {active, over} = event;
 
-    // const newData = await changeMovieRank(data, Number(active.id), Number(over?.id))
-    
-    // if (newData)
-    //   setData(newData)
+      if(active.id === over?.id || !active || !over)
+        return
+
+      const isDown = Number(active.id) < Number(over.id);    
+      let affectedRange: number[];
+      if (isDown)
+        affectedRange = range(Number(active.id), Number(over.id) + 1);
+      else
+          affectedRange = range(Number(over.id), Number(active.id));
+  
+      const reOrderedPlaylist = data.map(async (film) => {
+          if (film.item.rank === active.id) {
+            console.log('condition 1', film);
+            film.item.rank = String(over.id);
+            await supabase
+              .from('playlist_item')
+              .update({ rank: film.item.rank })
+              .eq('id', film.item.id)
+            return film;
+          } else if (affectedRange.includes(Number(film.item.rank))) {
+            if (isDown) {
+              console.log('condition 2.1', film);
+              film.item.rank = String(Number(film.item.rank) - 1);
+              await supabase
+                .from('playlist_item')
+                .update({ rank: film.item.rank })
+                .eq('id', film.item.id)
+              return film;
+            } else {
+              console.log('condition 2.2', film);
+              film.item.rank = String(Number(film.item.rank) + 1);
+              await supabase
+                .from('playlist_item')
+                .update({ rank: film.item.rank })
+                .eq('id', film.item.id)
+              return film;
+            }
+          } else {
+            console.log('condition 3', film);
+            return film;
+          }
+      })
+
+      const updatedPlaylist = await Promise.all(reOrderedPlaylist);
+
+      updatedPlaylist.sort((a, b) => {
+        const rankA = parseInt(a.item.rank);
+        const rankB = parseInt(b.item.rank);
+      
+        if (rankA < rankB) {
+          return -1;
+        } else if (rankA > rankB) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+
+      setData(updatedPlaylist)
+    } catch (error) {
+      console.log(error)
+    }
   }
-
+  console.log('data', data)
   return (
     <div className="flex flex-col gap-2">
       <DataTableToolbar table={table} />

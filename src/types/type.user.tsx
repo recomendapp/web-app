@@ -1,3 +1,5 @@
+import { Subscription } from "@/types/type.stripe";
+
 export interface User {
     id: string,
     username: string,
@@ -14,6 +16,7 @@ export interface User {
     followers_count: string,
     following_count: string,
     friends_count: string,
+    subscription: { edges: [ { node: Subscription } ] }
 }
 
 export interface Follower {

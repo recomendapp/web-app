@@ -46,7 +46,7 @@ export function UserPlaylists({ sidebarExpanded } : { sidebarExpanded: boolean})
                         href={'/playlist/' + playlist.id}
                         className="h-fit w-full flex gap-4"
                     >
-                    <div className={`w-12 shadow-2xl`}>
+                    <div className={`w-12 shadow-2xl shrink-0`}>
                         <AspectRatio ratio={1 / 1}>
                             <ImageWithFallback
                                 src={playlist.poster_url ?? ''}
@@ -58,8 +58,8 @@ export function UserPlaylists({ sidebarExpanded } : { sidebarExpanded: boolean})
                     </div>
                     {sidebarExpanded && (
                         <div>
-                        <div className='line-clamp-1'>{playlist.title}</div>
-                        {/* <div>{item.items_count} films</div> */}
+                            <p className='line-clamp-1'>{playlist.title}</p>
+                            <p>{playlist.items_count} films</p>
                         </div>
                     )}
                     </Link>

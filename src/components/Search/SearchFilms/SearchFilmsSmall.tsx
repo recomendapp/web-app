@@ -177,7 +177,7 @@ export default function SearchFilmsSmall({
             >
               <div className="flex items-center gap-2">
                 {/* MOVIE COVER */}
-                <div className="w-[50px]">
+                <div className="w-[50px] shrink-0">
                   <AspectRatio ratio={2 / 3}>
                     <ImageWithFallback
                       src={
@@ -191,10 +191,10 @@ export default function SearchFilmsSmall({
                 </div>
                 {/* MOVIE DATA */}
                 <div className="flex flex-col">
-                  <Button variant="link" className="w-fit p-0 h-full text-base">
+                  <Button variant="link" className="w-fit p-0 h-full text-base line-clamp-1">
                     {item.title}
                   </Button>
-                  <div>
+                  <div className='line-clamp-1'>
                     {item.credits.directors.length ? (
                       item.credits.directors.map(
                         (director: any, index: number) => (

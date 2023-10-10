@@ -3,8 +3,6 @@ import { Skeleton } from '../../ui/skeleton';
 import Link from 'next/link';
 import { Button } from '../../ui/button';
 import { useQuery } from '@apollo/client';
-import { Playlist } from '@/types/type.playlist';
-import MoviePlaylistCard from '@/components/Playlist/MoviePlaylist/MoviePlaylistCard';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { User } from '@/types/type.user';
 

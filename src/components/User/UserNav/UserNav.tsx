@@ -1,6 +1,6 @@
 'use client';
 
-import { LogOut, Settings, User } from 'lucide-react';
+import { LogOut, Settings, Sparkles, User, Users } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,17 +18,40 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Novu from '@/context/NovuProvider';
 import { getInitiales } from '@/lib/utils/utils';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useRightSidebar } from '@/context/RightSidebarContext/RightSidebarContext';
+import FriendsList from '@/components/Friends/FriendsLists';
 
 export function UserNav() {
 
   const { user, loading, logout } = useAuth();
+
+  const { isOpen: isOpenSidebar, openPanel, closePanel, setPanelContent, panelTitle, setPanelTitle } = useRightSidebar();
 
   if (!user) {
     return <Skeleton className="h-8 w-8 rounded-full" />;
   }
 
   return (
-    <div className="flex items-center gap-4">
+    <nav className='flex items-center gap-4'>
+      <Button
+        variant="ghost"
+        size={'icon'}
+        className="rounded-full"
+        onClick={() => {
+          if (isOpenSidebar && panelTitle != 'Amis') {
+            setPanelTitle('Amis')
+            setPanelContent(<FriendsList />)
+          } else if (isOpenSidebar) {
+            closePanel();
+          } else {
+            setPanelTitle('Amis')
+            setPanelContent(<FriendsList />)
+            openPanel()
+          }
+        }}
+      >
+        <Users />
+      </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -53,14 +76,21 @@ export function UserNav() {
               <Link href={'/@' + user?.username}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Profil</span>
-                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
               </Link>
             </DropdownMenuItem>
+            {!user?.subscription?.edges?.length && <DropdownMenuItem asChild>
+              <Link href={'/upgrade'} className='text-accent-1'>
+                <Sparkles className="mr-2 h-4 w-4" />
+                <span>Upgrade to Premium</span>
+                {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+              </Link>
+            </DropdownMenuItem>}
             <DropdownMenuItem asChild>
               <Link href={'/settings/profile'}>
                 <Settings className="mr-2 h-4 w-4" />
                 <span>Paramètres</span>
-                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
               </Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
@@ -68,10 +98,10 @@ export function UserNav() {
           <DropdownMenuItem onClick={logout}>
             <LogOut className="mr-2 h-4 w-4" />
             <span>Déconnexion</span>
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+            {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </nav>
   );
 }

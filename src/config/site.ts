@@ -21,4 +21,11 @@ export const siteConfig = {
     twitter: 'https://twitter.com/xmesky',
     github: 'https://github.com/xmesky',
   },
+  colors: [
+    "#eb4034",
+    "#34cfeb",
+    "#ebc034",
+    "#ad00ab",
+    
+  ]
 };

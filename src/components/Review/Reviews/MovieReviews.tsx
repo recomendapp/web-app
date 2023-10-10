@@ -16,16 +16,17 @@ import USER_REVIEW_QUERY from '@/components/Review/queries/userReviewQuery'
 
 export function MovieReview({ filmId }: { filmId: string }) {
 
-  const [ order, setOrder ] = useState("recommended");
+  const [ order, setOrder ] = useState("recent");
 
   const numberOfResult = 8;
 
   const { data: reviewsQuery, loading, error, fetchMore, networkStatus } = useQuery(REVIEWS_QUERY, {
     variables: {
-        order: order === 'recommended' ? {"likes_count": "DescNullsLast"}
-          : order === 'recent ' ? { "updated_at": "DescNullsFirst"}
-          : { "updated_at": "DescNullsFirst"},
-        first: numberOfResult,
+      film_id: filmId,
+      order: order === 'recommended' ? {"likes_count": "DescNullsLast"}
+        : order === 'recent ' ? { "updated_at": "DescNullsFirst"}
+        : { "updated_at": "DescNullsFirst"},
+      first: numberOfResult,
     },
     skip: !filmId
   })
@@ -38,9 +39,9 @@ export function MovieReview({ filmId }: { filmId: string }) {
 
   if (!reviews)
     return
-  console.log('reviews', reviews)
+
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full h-full flex flex-col gap-4">
       <div className='flex flex-col gap-4 justify-between lg:flex-row'>
         {/* <MovieUserReview movie={movie} /> */}
         <MyReviewButton filmId={filmId} />
@@ -52,8 +53,8 @@ export function MovieReview({ filmId }: { filmId: string }) {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                  <SelectItem value={"recommended"}>Recommandées</SelectItem>
                   <SelectItem value={"recent"}>Récentes</SelectItem>
+                  <SelectItem value={"recommended"}>Recommandées</SelectItem>
                   <SelectItem value={"rating-desc"}>Notes décroissantes</SelectItem>
                   <SelectItem value={"rating-asc"}>Notes croissantes</SelectItem>
               </SelectGroup>
@@ -62,7 +63,7 @@ export function MovieReview({ filmId }: { filmId: string }) {
         </div>
       </div>
       {/* ALL */}
-      {reviews.length ? <div className='flex flex-col lg:grid lg:grid-cols-2 gap-4'>
+      {reviews.length ? <div className='flex flex-col gap-4'>
         {reviews.map(({ review } : { review: Review}) => (
           <MovieReviewOverview key={review.id} review={review} />
         ))}

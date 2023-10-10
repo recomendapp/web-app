@@ -17,63 +17,79 @@ import { JSONContent } from "@tiptap/react";
 import { Button } from "@/components/ui/button";
 import { MovieReviewSettings } from "./MovieReviewSettings";
 import { Review } from "@/types/type.review";
+import ReviewUser from "./ReviewUser";
 
-export default function MovieReviewOverview({ review }: { review: Review}) {
-    return (
-      // <Link href={`/movie/${review.movieId}/review/${review.$id}`} className="relative">
-      <div className="relative">  
-        {/* RATING */}
-        <div className="absolute bg-background border-2 border-accent-1 rounded-xl h-10 w-12 flex justify-center items-center">
-          <p className="text-accent-1 font-bold text-lg">
-            {review.film_action.rating}
-          </p>
-        </div>
-        <div className=" pt-2 pl-5">
-          <div className='border-2 w-full bg-accent-1-foreground transition px-10 py-4 rounded-3xl flex flex-col'>
-            {/* REVIEW */}
-            <div className="flex flex-col gap-2">
-              {/* TITLE */}
-              <div className="flex items-center justify-between gap-4">
-                {review.title && <p className='text-xl font-semibold text-accent-1 truncate'>
-                    {review.title}
-                </p>}
-                <div className="flex items-center gap-2">
-                  {review.film_action.is_liked && <Heart className="text-like fill-like"/>}
-                  <MovieReviewSettings review={review} />
-                </div>
-              </div>
-              {/* BODY */}
-              <div className='h-[85px] overflow-hidden'>
-                <Overview data={JSON.parse(review.body)} />
-              </div>
-            </div>
-            {/* LINK */}
-            <Button variant="link" asChild className="w-fit p-0 font-bold">
-              <Link href={`/film/${review.film_id}/review/${review.user.username}`}>
-                Lire la critique
-              </Link>
-            </Button>
+export default function MovieReviewOverview({
+  review
+}: {
+  review: Review
+}) {
 
-            {/* FOOTER */}
-            <div className="flex justify-between">
-              {/* REACTIONS */}
-              <div className=" flex items-center gap-4">
-                <span className='flex items-center gap-1'>
-                  <Heart className="text-like" />
-                  {review.likes_count ? review.likes_count : 0}
-                </span>
-                <span className='flex items-center gap-1'>
-                  <BarChart3 color="#03fcf0"/>
-                  {review.views_count ? review.views_count : 0}
-                </span>
-                <ButtonShare url={`${location.origin}/film/${review.film_id}/review/${review.user.username}`} icon />
-              </div>
-              {/* AUTHOR */}
-              <UserCard user={review.user}/>
-            </div>
+
+  return (
+    <Link
+      href={`/@${review.user.username}/film/${review.film_id}`}
+      className="w-full bg-muted px-4 py-2 transition rounded-3xl flex gap-4 justify-between"
+    >
+      <div className="flex flex-col gap-2">
+        <p className='font-semibold truncate'>
+          {review.title}
+        </p>
+        <div className="flex gap-4 items-center">
+          <UserCard user={review.user}/>
+          <div className="text-muted-foreground flex items-center gap-2">
+            <Heart size={13} className="fill-muted-foreground"/>
+            <span>{review.likes_count}</span>
           </div>
         </div>
+        {/* BODY */}
+        <div className='overflow-hidden text-sm'>
+          <Overview data={JSON.parse(review.body)} />
+        </div>
       </div>
+      <div className="grid grid-cols-1 grid-rows-3 gap-4 shrink-0">
+        <div className="flex justify-center items-start">
+          <MovieReviewSettings review={review} />
+        </div>
+        <div className="flex justify-center items-center">
+          <ReviewUser rating={review.film_action.rating}/>
+        </div>
+        <div className="flex justify-center items-end">
+          <Heart />
+        </div>
+      </div>
+    </Link>
+  )
+
+
+    return (
+      // <Link href={`/movie/${review.movieId}/review/${review.$id}`} className="relative">
+      <Link href={`/@${review.user.username}/film/${review.film_id}`}  className='w-full bg-muted px-4 py-2 transition rounded-3xl flex flex-col'>
+        {/* REVIEW */}
+        <div className="flex flex-col gap-2">
+          {/* TITLE */}
+          <div className="flex items-center justify-between gap-4">
+            {review.title && <p className='text-xl font-semibold truncate'>
+                {review.title}
+            </p>}
+            <MovieReviewSettings review={review} />
+          </div>
+          {/* AUTHOR */}
+          <div className="flex gap-4 items-center">
+            <UserCard user={review.user}/>
+            <div className="text-muted-foreground flex items-center gap-2">
+              <Heart size={13} className="fill-muted-foreground"/>
+              <span>{review.likes_count}</span>
+            </div>
+          </div>
+          {/* BODY */}
+          <div className='h-[85px] overflow-hidden'>
+            <Overview data={JSON.parse(review.body)} />
+          </div>
+        </div>
+        {/* LINK */}
+        
+      </Link>
     )
   }
 

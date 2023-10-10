@@ -29,9 +29,9 @@ import compressPicture from '@/lib/utils/compressPicture';
 import { supabase } from '@/lib/supabase/supabase';
 import { Icons } from '@/components/icons';
 import { Playlist } from '@/types/type.playlist';
-import CREATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/createPlaylistMutation'
-import UPDATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/updatePlaylistMutation'
-import DELETE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/deletePlaylistMutation';
+import CREATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/mutations/createPlaylistMutation'
+import UPDATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/mutations/updatePlaylistMutation'
+import DELETE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/mutations/deletePlaylistMutation';
 import USER_PLAYLISTS_QUERY from '@/components/User/UserPlaylists/queries/userPlaylistsQuery';
 import INSERT_PLAYLIST_ITEM_MUATION from '@/components/Film/FilmAction/components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
 

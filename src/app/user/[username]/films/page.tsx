@@ -1,11 +1,13 @@
 import ProfileFilm from "@/components/Profile/ProfileFilms/ProfileFilms";
-import { supabaseServer } from "@/lib/supabase/supabase-server";
+import { createServerClient } from "@/lib/supabase/supabase-server";
 
 export async function generateMetadata({
     params,
   }: {
     params: { username: string };
   }) {
+    const supabaseServer = createServerClient()
+
     const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
 
     if (!user) {
@@ -24,6 +26,8 @@ export default async function Films({
   } : {
     params: { username: string };
   }) {
+    const supabaseServer = createServerClient()
+
     const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
 
     return (

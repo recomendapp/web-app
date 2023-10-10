@@ -31,7 +31,7 @@ export default function ProfileHeader({ profile } : { profile: User }) {
             flex flex-col gap-4 p-4 
             `}
             style={{
-                background: `linear-gradient(to bottom, ${hexToRgb(profile?.favorite_color, 0.4)}, black)`,
+                background: `linear-gradient(to bottom, ${hexToRgb(profile?.favorite_color, 0.4)}, var(--background))`,
             }}
         >
             <div className='flex gap-4'>

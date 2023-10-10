@@ -15,7 +15,6 @@ export default function SearchBar({ className }: SearchBarProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const q = searchParams.get('q');
-  const filter = searchParams.get('filter');
 
   const [searchQuery, setSearchQuery] = useState<any>(q);
   const [isSearching, setIsSearching] = useState<any>(false);
@@ -40,12 +39,9 @@ export default function SearchBar({ className }: SearchBarProps) {
     if (searchQuery) {
       queryString += `q=${searchQuery}`;
     }
-    if (filter) {
-      queryString += `${searchQuery ? '&' : ''}filter=${filter}`;
-    }
     const url = queryString ? `${pathname}?${queryString}` : pathname;
     url && router.push(url);
-  }, [debouncedSearchTerm, filter, pathname, router, searchQuery]);
+  }, [debouncedSearchTerm]);
 
   return (
     <div

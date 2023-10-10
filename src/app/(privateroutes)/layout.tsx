@@ -1,6 +1,4 @@
-"use server"
-
-import { supabaseServer } from '@/lib/supabase/supabase-server';
+import { createServerClient } from '@/lib/supabase/supabase-server';
 import { redirect } from 'next/navigation';
 import { Fragment } from 'react';
 
@@ -9,6 +7,7 @@ interface ProtectedLayoutProps {
 }
 
 export default async function ProtectedLayout({ children }: ProtectedLayoutProps) {
+  const supabaseServer = createServerClient()
   const { data: { session } } = await supabaseServer.auth.getSession();
 
   if (!session) {

@@ -43,8 +43,6 @@ export function MovieAction({
     skip: !user
   })
 
-  console.log('filmAction', filmActionQuery)
-
   return (
     <div className="flex justify-between gap-2">
       <div className='flex gap-2 overflow-x-auto items-center'>

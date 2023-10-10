@@ -64,7 +64,17 @@ export function MoviePlaylistAction({
   const playlists: [ { playlist: Playlist } ] = userPlaylistsQuery?.playlistCollection?.edges;
 
   const [ insertPlaylistItemMutation, { error: errorInsertPlaylistItem} ] = useMutation(INSERT_PLAYLIST_ITEM_MUATION, {
-    // update: (store, { data }) => {
+    refetchQueries: [{
+      query: USER_PLAYLISTS_QUERY
+    }],
+    // update: (cache, { data }) => {
+    //   cache.modify({
+    //     id: cache.identify(`playlist:${data.id}`),
+    //     fields: {
+
+    //     }
+    //   )}
+    // }
     //   const filmActionData = store.readQuery<{ film_actionCollection: { edges: [{ action: FilmAction}]}}>({
     //     query: FILM_ACTION_QUERY,
     //     variables: {
@@ -96,7 +106,7 @@ export function MoviePlaylistAction({
           playlist_id: playlist.id,
           film_id: filmId,
           user_id: user?.id,
-          rank: Number(playlist.items_count) + 1
+          rank: Number(playlist.items_count)
         }
       });
       toast.success(`Ajouté à ${playlist.title}`);

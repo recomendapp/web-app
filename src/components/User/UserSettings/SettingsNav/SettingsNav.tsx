@@ -22,6 +22,10 @@ export function SettingsNav({ className, ...props }: SidebarNavProps) {
       href: '/settings/account',
     },
     {
+      title: 'Abonnement',
+      href: '/settings/subscription',
+    },
+    {
       title: 'Sécurité',
       href: '/settings/security',
     },

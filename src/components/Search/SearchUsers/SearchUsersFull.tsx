@@ -76,7 +76,7 @@ export default function SearchUsersFull({
     );
   }
 
-  if (!loading && !users.length) {
+  if (!loading && !users?.length) {
     return (
       <div>
         Aucun résultat.

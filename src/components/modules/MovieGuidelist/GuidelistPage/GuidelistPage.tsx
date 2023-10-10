@@ -19,7 +19,8 @@ export function GuidelistPage() {
     const { data: guidelistQuery, loading, error } = useQuery(GUIDELIST_QUERY, {
         variables: {
             user_id: user?.id
-        }
+        },
+        skip: !user
     });
     const guidelist: [ { item: Guidelist } ] = guidelistQuery?.guidelistCollection?.edges;
 

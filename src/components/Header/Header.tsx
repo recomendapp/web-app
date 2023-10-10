@@ -1,7 +1,5 @@
-"use server"
-
 import { cn } from '@/lib/utils/utils';
-import { supabaseServer } from '@/lib/supabase/supabase-server';
+import { createServerClient } from '@/lib/supabase/supabase-server';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { UserNav } from '../User/UserNav/UserNav';
@@ -10,6 +8,8 @@ import HeaderLeftSide from './HeaderLeftSide';
 interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export async function Header({ className }: HeaderProps) {
+  
+  const supabaseServer = createServerClient();
 
   const { data: { session } } = await supabaseServer.auth.getSession();
 

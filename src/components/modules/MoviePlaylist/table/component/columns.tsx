@@ -24,7 +24,7 @@ export const columns: ColumnDef<any>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "title",
+    accessorKey: "item.film.title",
     meta: {
       displayName: "Film"
     },
@@ -35,7 +35,7 @@ export const columns: ColumnDef<any>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "release_date",
+    accessorKey: "item.film.release_date",
     meta: {
       displayName: "Date"
     },
@@ -45,7 +45,7 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ row }) => <DateOnlyYearTooltip date={row.original.item.film.release_date} />
   },
   {
-    accessorKey: "runtime",
+    accessorKey: "item.film.runtime",
     meta: {
       displayName: "Durée"
     },

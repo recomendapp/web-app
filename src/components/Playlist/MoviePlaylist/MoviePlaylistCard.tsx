@@ -17,10 +17,11 @@ export default function MoviePlaylistCard({ className, playlist } : MoviePlaylis
         <div className={`w-full shadow-2xl`}>
             <AspectRatio ratio={1 / 1}>
                 <ImageWithFallback
-                src={playlist.poster_url ?? ''}
-                alt={playlist.title}
-                fill
-                className="rounded-md object-cover"
+                    src={playlist.poster_url ?? ''}
+                    alt={playlist.title}
+                    fill
+                    className="rounded-md object-cover"
+                    type="playlist"
                 />
             </AspectRatio>
         </div>

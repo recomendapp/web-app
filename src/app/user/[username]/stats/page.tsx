@@ -1,5 +1,5 @@
 
-import { supabaseServer } from "@/lib/supabase/supabase-server";
+import { createServerClient } from "@/lib/supabase/supabase-server";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({
@@ -7,6 +7,8 @@ export async function generateMetadata({
   }: {
     params: { username: string };
   }) {
+    const supabaseServer = createServerClient()
+
     const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
 
     if (!user) {
@@ -25,6 +27,8 @@ export default async function Stats({
   } : {
     params: { username: string };
   }) {
+    const supabaseServer = createServerClient()
+
     const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
 
     return (

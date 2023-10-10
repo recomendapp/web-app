@@ -11,7 +11,6 @@ import { Icons } from '../../../../icons';
 import { useRouter } from 'next/navigation';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -27,6 +26,7 @@ import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQu
 import INSERT_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/insertFilmActionMutation';
 import UPDATE_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/updateFilmActionMutation';
 import { toast } from 'react-toastify';
+import { DialogClose } from '@radix-ui/react-dialog';
 
 interface MovieRatingActionProps extends React.HTMLAttributes<HTMLDivElement> {
   filmId: string;

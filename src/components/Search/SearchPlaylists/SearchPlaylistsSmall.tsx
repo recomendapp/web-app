@@ -58,7 +58,7 @@ export default function SearchPlaylistsSmall({
     );
   }
 
-  if (!loading && !playlists.length)
+  if (!loading && !playlists?.length)
     return null;
 
   return (

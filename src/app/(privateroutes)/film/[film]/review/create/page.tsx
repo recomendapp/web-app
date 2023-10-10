@@ -1,27 +1,34 @@
-"use client"
-import Loader from "@/components/Loader/Loader";
 import { redirect } from "next/navigation";
 import CreateReviewForm from "../../../../../../components/Review/form/CreateReviewFrom";
-import { useAuth } from "@/context/AuthContext/AuthProvider";
-import { useQuery } from "@apollo/client";
-import USER_REVIEW_QUERY from "@/components/Review/queries/userReviewQuery";
+import { createServerClient } from "@/lib/supabase/supabase-server";
+import { getMovieDetails } from "@/lib/tmdb";
 
-export default function CreateReview({ params }: { params: { film: string } }) {
-
-    const { user } = useAuth();
-
-    const { data: userReviewQuery, loading } = useQuery(USER_REVIEW_QUERY, {
-        variables: {
-            fim_id: params.film,
-            user_id: user?.id
-        },
-        skip: !user?.id
-    })
-    const review = userReviewQuery?.reviewCollection?.edges[0]?.review
-
-    if (!user || loading) {
-        return <Loader />
+export async function generateMetadata({
+    params,
+}: {
+    params: { film: string };
+}) {
+    const film = await getMovieDetails(params.film, 'fr-FR');
+    if (!film) {
+        return {
+        title: 'Oups, film introuvable !',
+        };
     }
+
+    return {
+        title: `Ajouter une critique pour ${film.title}`,
+    };
+}
+
+export default async function CreateReview({ params }: { params: { film: string } }) {
+
+    const supabaseServer = createServerClient()
+
+    const { data: { session } } = await supabaseServer.auth.getSession();
+
+    const { data: review } = await supabaseServer.from('review').select('*').eq('user_id', session?.user.id).eq('film_id', params.film).single();
+    
+    const { data: user } = await supabaseServer.from('user').select('*').eq('id', session?.user.id).single();
 
     if(review)
         redirect(`/@${user.username}/film/${params.film}`);

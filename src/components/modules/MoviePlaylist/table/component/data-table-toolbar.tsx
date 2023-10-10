@@ -17,16 +17,15 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
 
   const isFiltered = table.getState().columnFilters.length > 0
-  console.log('ok', table.getColumn('title')?.getFilterValue())
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex flex-1 items-center gap-2">
         <Input
           placeholder={"Rechercher dans la playlist..."}
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value, )
-          }
+          value={(table.getColumn("item_film.title")?.getFilterValue() as string) ?? ""}
+          onChange={(event) => {
+            table.getColumn("item_film.title")?.setFilterValue(event.target.value, )
+          }}
           className="h-8 w-full lg:w-[250px]"
         />
         {isFiltered && (

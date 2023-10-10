@@ -11,6 +11,7 @@ interface ImageWithFallbackProps extends React.HTMLAttributes<HTMLDivElement> {
   fill: boolean | undefined;
   width?: number | `${number}` | undefined;
   height?: number | `${number}` | undefined;
+  type?: string | undefined;
 }
 
 export const ImageWithFallback = ({
@@ -19,6 +20,7 @@ export const ImageWithFallback = ({
   fill,
   width,
   height,
+  type = 'default',
   className,
   ...rest
 }: ImageWithFallbackProps) => {
@@ -28,6 +30,17 @@ export const ImageWithFallback = ({
     setImgSrc(src);
   }, [src]);
 
+  const selectedFallbackImage = fallbackImage
+    // : type === 'playlist' ? fallbackPlaylist
+    // : type === 'film' && fallbackFilm
+
+  // let selectedFallbackImage = fallbackImage;
+  // if (type === 'playlist') {
+  //   selectedFallbackImage = fallbackImagePlaylist;
+  // } else if (type === 'film') {
+  //   selectedFallbackImage = fallbackImageFilm;
+  // }
+
   return (
     <Image
       alt={alt}
@@ -35,9 +48,11 @@ export const ImageWithFallback = ({
       width={width}
       fill={fill}
       src={imgSrc}
+      // className={cn('transition-opacity opacity-0 duration-700', className)}
       className={cn('', className)}
+      // onLoadingComplete={(image) => image.classList.remove("opacity-0")}
       onError={() => {
-        setImgSrc(fallbackImage);
+        setImgSrc(selectedFallbackImage);
       }}
     />
   );

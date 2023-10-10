@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import ProfilePlaylists from '@/components/Profile/ProfilePlaylists/ProfilePlaylists';
 import ProfileFilms from '@/components/Profile/ProfileFilms/ProfileFilms';
-import { supabaseServer } from '@/lib/supabase/supabase-server';
+import { createServerClient } from '@/lib/supabase/supabase-server';
 import ProfileFavoriteFilms from '@/components/Profile/ProfileFavoriteFilms/ProfileFavoriteFilms';
 
 export async function generateMetadata({
@@ -9,6 +9,8 @@ export async function generateMetadata({
 }: {
   params: { username: string };
 }) {
+  const supabaseServer = createServerClient()
+
   const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
   if (!user) {
     return {
@@ -22,6 +24,8 @@ export async function generateMetadata({
 }
 
 export default async function UserPage({ params } : { params: { username: string } }) {
+  const supabaseServer = createServerClient()
+
   const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
 
   return (

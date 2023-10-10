@@ -33,7 +33,11 @@ import { DataComment } from "./data-table-comment"
 import { PlaylistItem } from "@/types/type.playlist"
 import { useAuth } from "@/context/AuthContext/AuthProvider"
 import { Film } from "@/types/type.film"
+import { useMutation } from "@apollo/client"
 
+import DELETE_PLAYLIST_ITEM_MUTATION from "@/components/modules/MoviePlaylist/mutations/deletePlaylistItemMutation"
+import PLAYLIST_DETAILS_QUERY from '@/components/modules/MoviePlaylist/PlaylistDetails/queries/playlistDetailsQuery';
+import USER_PLAYLISTS_QUERY from '@/components/User/UserPlaylists/queries/userPlaylistsQuery'
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItem>,
@@ -52,6 +56,61 @@ export function DataTableRowActions({
   const { user } = useAuth();
   const [ openShowDirectors, setOpenShowDirectors ] = useState(false);
   const [ openComment, setOpenComment ] = useState(false);
+
+  const [deletePlaylistItemMutation] = useMutation(DELETE_PLAYLIST_ITEM_MUTATION, {
+    refetchQueries: [
+      {
+        query: USER_PLAYLISTS_QUERY
+      },
+      {
+        query: PLAYLIST_DETAILS_QUERY
+      }
+    ]
+    // update: (cache, { data }) => { 
+    //   console.log('dataMutation', data)
+    //   // Lisez les données actuelles depuis le cache
+    //   const { playlistCollection } = cache.readQuery<any>({
+    //     query: PLAYLIST_DETAILS_QUERY,
+    //     variables: {
+    //       id: data.deleteFromplaylist_itemCollection.records[0].playlist_id,
+    //     },
+    //   });
+  
+    //   // Supprimez l'élément de playlist_item.edges en filtrant par ID
+    //   if (playlistCollection && playlistCollection.edges.length > 0) {
+    //     const updatedEdges = playlistCollection.edges[0].playlist.playlist_item.edges.filter(
+    //       (edge: any) => edge.item.id !== data.deleteFromplaylist_itemCollection.records[0].id // Remplacez itemToDeleteId par l'ID de l'élément à supprimer
+    //     );
+    //       console.log('playlistCollection', playlistCollection)
+    //     console.log('updatedEdges', updatedEdges)
+  
+    //     // Mettez à jour les données dans le cache avec la nouvelle liste d'edges
+    //     cache.writeQuery({
+    //       query: PLAYLIST_DETAILS_QUERY,
+    //       variables: {
+    //         id: data.playlist_id,
+    //       },
+    //       data: {
+    //         playlistCollection: {
+    //           ...playlistCollection,
+    //           edges: [
+    //             {
+    //               ...playlistCollection.edges[0],
+    //               playlist: {
+    //                 ...playlistCollection.edges[0].playlist,
+    //                 playlist_item: {
+    //                   // ...playlistCollection.edges[0].playlist.playlist_item,
+    //                   edges: updatedEdges,
+    //                 },
+    //               },
+    //             },
+    //           ],
+    //         },
+    //       },
+    //     });
+    //   }
+    // },
+  });
 
   return (
     <>
@@ -80,6 +139,12 @@ export function DataTableRowActions({
           <DropdownMenuItem><ButtonShare url={`${process.env.NEXT_PUBLIC_URL}/film/${data.film?.id}`}/></DropdownMenuItem>
           {data.user?.id == user?.id && 
             <DropdownMenuItem onClick={async () => {
+              await deletePlaylistItemMutation({
+                variables: {
+                  id: data.id
+                }
+              })
+              await table.options.meta?.deleteItem(data);
               // await handleDeletePlaylistItemFromId(data.id, data.id, queryClient);
             }}>
               Delete

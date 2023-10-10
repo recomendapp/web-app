@@ -20,6 +20,8 @@ import { AuthProvider } from '@/context/AuthContext/AuthProvider';
 
 import { cn } from "@/lib/utils/utils";
 import { Box } from '@/components/Box/Box';
+import Provider from '@/context/Provider';
+import RightSidebar from '@/components/RightSidebar/RightSidebar';
 
 export const metadata: Metadata = {
   title: {
@@ -52,50 +54,28 @@ export default function RootLayout({ children }: RootLayoutProps) {
           fontSans.variable
         )}
       >
-        <ApolloClientProvider>
-          <AuthProvider>
-          {/* <UserProvider> */}
-            <ReactQueryProvider>
-              <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-                <NextTopLoader 
-                  showSpinner={false}
-                  easing='ease'
-                  color='#FFE974'
-                  height={2}
-                />
-                {/* <div className="flex items-start h-full gap-2 lg:p-2"> */}
-                <div
-                  className={`
-                    flex
-                    h-[calc(100%-135px)]
-                    gap-2
-                    lg:p-2
-                    lg:h-full
-                  `}
-                >
-                  <Sidebar />
-                  <Box className='h-full overflow-y-auto'>
-                    <Header />
-                    <div className="flex-grow relative lg:pb-0 h-full">
-                      {children}
-                    </div>
-                  </Box>
-                </div>
-                <Navbar className=" z-[50] fixed w-full bottom-0 lg:hidden h-navbar" />
-                <ToastContainer
-                  position="top-center"
-                  theme="dark"
-                  autoClose={3000}
-                  hideProgressBar={false}
-                  pauseOnHover={false}
-                  draggable
-                  closeOnClick
-                />
-              </ThemeProvider>
-            </ReactQueryProvider>
-          </AuthProvider>
-          {/* </UserProvider> */}
-        </ApolloClientProvider>
+        <Provider>
+          {/* <div className="flex items-start h-full gap-2 lg:p-2"> */}
+          <div
+            className={`
+              flex
+              h-[calc(100%-135px)]
+              gap-2
+              lg:p-2
+              lg:h-full
+            `}
+          >
+            <Sidebar />
+            <Box className='h-full overflow-y-auto'>
+              <Header />
+              <div className="flex-grow relative lg:pb-0 h-full">
+                {children}
+              </div>
+            </Box>
+            <RightSidebar />
+          </div>
+          <Navbar className=" z-[50] fixed w-full bottom-0 lg:hidden h-navbar" />
+        </Provider>
       </body>
     </html>
   );

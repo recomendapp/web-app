@@ -114,7 +114,7 @@ export function Sidebar({
     <nav
       ref={sidebarRef}
       className={cn(
-        `transition-all hidden lg:flex flex-col gap-2 h-full overflow-hidden
+        `transition-all hidden lg:flex flex-col gap-2 h-full overflow-hidden shrink-0
         ${sidebarExpanded ? 'w-[300px]' : 'w-[80px]'}
         `,
         className

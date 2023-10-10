@@ -2,10 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/context/AuthContext/AuthProvider";
 import { PlaylistItem } from "@/types/type.playlist";
+import { useMutation } from "@apollo/client";
 import { Column, Row, Table } from "@tanstack/react-table";
 import { Check, Cross, FileEdit, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+
+import UPDATE_PLAYLIST_ITEM_MUTATION from '@/components/modules/MoviePlaylist/mutations/updatePlaylistItemMutation'
+import { supabase } from "@/lib/supabase/supabase";
 
 export function DataComment({
     data,
@@ -22,7 +26,7 @@ export function DataComment({
     const { user } = useAuth();
     const [ backup, setBackup ] = useState("");
     const [ comment, setComment ] = useState("");
-    const [ edit, setEdit ] = useState(false);
+    const [ edit, setEdit ] = useState(false);  
 
     useEffect(() => {
         setComment(data.comment ?? '')
@@ -45,13 +49,16 @@ export function DataComment({
             return ;
         }
         try {
-            await handleUpdateComment(data.id, comment);
+            await supabase
+                .from('playlist_item')
+                .update({ comment: comment })
+                .eq('id', data.id)
             table.options.meta?.updateComment(row.index, comment);
             setBackup(comment);
             toast.success("Le commentaire a été mis à jour");
             setEdit(false);
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
         
       }

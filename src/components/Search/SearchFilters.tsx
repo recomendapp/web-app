@@ -1,9 +1,9 @@
 'use client';
-
-// CSS
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Button } from '../ui/button';
+
+// UI
+import { Button } from '@/components/ui/button';
 
 export default function SearchFilters() {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function SearchFilters() {
     }
     const queryString = queryParams.toString();
     const url = queryString ? `${updatedPathname}?${queryString}` : updatedPathname;
-    console.log('url', url)
+    
     router.push(url);
   }
 
@@ -43,8 +43,6 @@ export default function SearchFilters() {
 
   if (!searchQuery)
     return null
-
-    console.log('searchQuery', searchQuery)
 
   return (
     <div className="flex gap-4 pb-2">
