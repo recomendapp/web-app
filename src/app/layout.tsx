@@ -22,6 +22,7 @@ import { cn } from "@/lib/utils/utils";
 import { Box } from '@/components/Box/Box';
 import Provider from '@/context/Provider';
 import RightSidebar from '@/components/RightSidebar/RightSidebar';
+import Layout from '@/components/Layout/Layout';
 
 export const metadata: Metadata = {
   title: {
@@ -65,14 +66,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
               lg:h-full
             `}
           >
-            <Sidebar />
-            <Box className='h-full overflow-y-auto'>
-              <Header />
-              <div className="flex-grow relative lg:pb-0 h-full">
-                {children}
-              </div>
-            </Box>
-            <RightSidebar />
+            <Layout>
+              {children}
+            </Layout>
           </div>
           <Navbar className=" z-[50] fixed w-full bottom-0 lg:hidden h-navbar" />
         </Provider>

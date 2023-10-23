@@ -68,6 +68,7 @@ export default function SearchBar({ className }: SearchBarProps) {
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={handleOnFocus}
           onBlur={handleOutFocus}
+          autoFocus
         />
       </form>
     </div>

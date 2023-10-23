@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import ProfileHeader from "@/components/Profile/ProfileHeader/ProfileHeader";
 import { createServerClient } from "@/lib/supabase/supabase-server";
-import { Fragment } from "react";
 
 
 interface UserLayoutProps {
@@ -19,8 +18,10 @@ export default async function UserLayout({
     if (!user) notFound();
 
     return (
-        <Fragment>
-            {children}
-        </Fragment>
+        <main>
+            <div className='p-4 flex flex-col gap-4'>
+                {children}
+            </div>
+        </main>
     )
 }

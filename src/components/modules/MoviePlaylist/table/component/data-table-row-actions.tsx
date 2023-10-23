@@ -63,7 +63,10 @@ export function DataTableRowActions({
         query: USER_PLAYLISTS_QUERY
       },
       {
-        query: PLAYLIST_DETAILS_QUERY
+        query: PLAYLIST_DETAILS_QUERY,
+        variables: {
+          id: data.playlist_id
+        }
       }
     ]
     // update: (cache, { data }) => { 
@@ -136,7 +139,7 @@ export function DataTableRowActions({
           { data.user?.id == user?.id ? <DropdownMenuItem onClick={() => setOpenComment(true)}>{data.comment ? "Voir le commentaire" : "Ajouter un commentaire"}</DropdownMenuItem>
           : data.comment && <DropdownMenuItem onClick={() => setOpenComment(true)}>Voir le commentaire</DropdownMenuItem>}
           <DropdownMenuSeparator />
-          <DropdownMenuItem><ButtonShare url={`${process.env.NEXT_PUBLIC_URL}/film/${data.film?.id}`}/></DropdownMenuItem>
+          <DropdownMenuItem><ButtonShare url={`${location.origin}/film/${data.film?.id}`}/></DropdownMenuItem>
           {data.user?.id == user?.id && 
             <DropdownMenuItem onClick={async () => {
               await deletePlaylistItemMutation({
@@ -148,7 +151,6 @@ export function DataTableRowActions({
               // await handleDeletePlaylistItemFromId(data.id, data.id, queryClient);
             }}>
               Delete
-              <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
             </DropdownMenuItem>
           }
         </DropdownMenuContent>

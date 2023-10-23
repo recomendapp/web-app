@@ -15,7 +15,7 @@ import MovieCardSmall from "@/components/Film/MovieCardSmall"
 
 export const columns: ColumnDef<any>[] = [
   {
-    accessorKey: "title",
+    accessorKey: "item.film.title",
     meta: {
       displayName: "Film"
     },
@@ -26,7 +26,7 @@ export const columns: ColumnDef<any>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "release_date",
+    accessorKey: "item.film.release_date",
     meta: {
       displayName: "Date"
     },
@@ -36,7 +36,7 @@ export const columns: ColumnDef<any>[] = [
     cell: ({ row }) => <DateOnlyYearTooltip date={row.original.item.film.release_date} />,
   },
   {
-    accessorKey: "runtime",
+    accessorKey: "item.film.runtime",
     meta: {
       displayName: "Durée"
     },
@@ -64,12 +64,12 @@ export const columns: ColumnDef<any>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Ajouté par" className="justify-end hidden lg:block"/>
     ),
-    cell: ({ row }) => <div className="flex justify-end lg:block"><UserCard user={row.original.item.user} icon/></div>,
+    cell: ({ row }) => <div className="flex justify-end lg:block"><UserCard user={row.original.item.sender_user} icon/></div>,
     enableHiding: false,
   },
   {
     id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row, table, column }) => <DataTableRowActions data={row.original.item} table={table} row={row} column={column} />,
   },
 ]
 

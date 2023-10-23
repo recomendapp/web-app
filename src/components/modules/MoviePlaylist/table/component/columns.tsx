@@ -3,13 +3,11 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
-import { Models } from "appwrite"
 import { DateOnlyYearTooltip } from "@/components/tools/Date"
 import { ConvertHoursMinutes } from "@/lib/utils/utils"
 import { Clock } from "lucide-react"
 import MovieCardSmall from "@/components/Film/MovieCardSmall"
 import { DataComment } from "./data-table-comment"
-import { PlaylistItem } from "@/types/type.playlist"
 
 export const columns: ColumnDef<any>[] = [
   {

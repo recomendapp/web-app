@@ -85,6 +85,10 @@ export function DataComment({
                     resize-none
                     ${!edit && 'line-clamp-5'}
                 `}
+                onClick={() => {
+                    if (!comment)
+                    setEdit(true)
+                }}
             />
             {data.user?.id == user?.id && 
             <div className="flex gap-2">

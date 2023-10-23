@@ -17,8 +17,8 @@ export default function Signup() {
             <Image
               src={siteConfig.logo.href}
               alt={siteConfig.logo.alt}
-              width={150}
-              height={150}
+              width={400}
+              height={400}
             />
           </div>
           <div className="flex flex-col space-y-2 text-center">

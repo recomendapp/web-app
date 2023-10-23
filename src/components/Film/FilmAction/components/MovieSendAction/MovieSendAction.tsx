@@ -7,25 +7,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Query } from 'appwrite';
-import { Models } from 'appwrite/types/models';
 
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { cn, getInitiales } from '@/lib/utils/utils';
 import { toast } from 'react-toastify';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Icons } from '@/components/icons';
@@ -36,6 +20,9 @@ import { Friend, User } from '@/types/type.user';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import INSERT_GUIDELIST_MUTATION from '@/components/Film/FilmAction/components/MovieSendAction/mutations/insertGuidelistMutation'
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import SendForm from './SendForm';
 
 interface MovieSendActionProps {
   filmId: string;
@@ -106,61 +93,70 @@ export function MovieSendAction({ filmId }: MovieSendActionProps) {
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
+    {/* <Popover open={open} onOpenChange={setOpen}> */}
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <PopoverTrigger asChild>
-              <Button
-                disabled={(loading || error) && true}
-                size="icon"
-                variant={'action'}
-                className="rounded-full"
-              >
-                <Send />
-              </Button>
-            </PopoverTrigger>
+            <Button
+              disabled={(loading || error) && true}
+              size="icon"
+              variant={'action'}
+              className="rounded-full"
+              onClick={() => setOpen(true)}
+            >
+              <Send />
+            </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">Envoyer à un(e) ami</TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      <PopoverContent className="w-[300px] p-0" align="end">
-        <Command>
-          <CommandInput
-            value={search}
-            onValueChange={setSearch}
-            placeholder="Rechercher un(e) ami(e)..."
-            className="h-9"
-          />
-          <CommandList>
-            <CommandGroup>
-              {friends?.map(({ friend } : { friend: Friend}) => (
-                <CommandItem
-                  key={friend.friend_id}
-                  onSelect={() => {
-                    handleSendToFriend(friend.friend);
-                    setOpen(false);
-                  }}
-                  className="flex items-center gap-2"
-                >
-                  {/* AVATAR */}
-                  <Avatar className="h-[30px] w-[30px] shadow-2xl">
-                    <AvatarImage
-                      src={friend.friend.avatar_url}
-                      alt={friend.friend.username}
-                    />
-                    <AvatarFallback className="text-primary bg-background text-[10px]">
-                      {getInitiales(friend.friend.username)}
-                    </AvatarFallback>
-                  </Avatar>
-                  {friend.friend.username}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-            <CommandEmpty>Aucun ami(e) trouvé(e).</CommandEmpty>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+      <DialogContent className="max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>
+            Envoyer à
+          </DialogTitle>
+        </DialogHeader>
+        <SendForm user={user} filmId={filmId} friends={friends} setOpen={setOpen}/>
+      </DialogContent>
+    </Dialog>
+    //   <PopoverContent className="w-[300px] p-0" align="end">
+    //     <Command>
+    //       <CommandInput
+    //         value={search}
+    //         onValueChange={setSearch}
+    //         placeholder="Rechercher un(e) ami(e)..."
+    //         className="h-9"
+    //       />
+    //       <CommandList>
+    //         <CommandGroup>
+    //           {friends?.map(({ friend } : { friend: Friend}) => (
+    //             <CommandItem
+    //               key={friend.friend_id}
+    //               onSelect={() => {
+    //                 handleSendToFriend(friend.friend);
+    //                 setOpen(false);
+    //               }}
+    //               className="flex items-center gap-2"
+    //             >
+    //               {/* AVATAR */}
+    //               <Avatar className="h-[30px] w-[30px] shadow-2xl">
+    //                 <AvatarImage
+    //                   src={friend.friend.avatar_url}
+    //                   alt={friend.friend.username}
+    //                 />
+    //                 <AvatarFallback className="text-primary bg-background text-[10px]">
+    //                   {getInitiales(friend.friend.username)}
+    //                 </AvatarFallback>
+    //               </Avatar>
+    //               {friend.friend.username}
+    //             </CommandItem>
+    //           ))}
+    //         </CommandGroup>
+    //         <CommandEmpty>Aucun ami(e) trouvé(e).</CommandEmpty>
+    //       </CommandList>
+    //     </Command>
+    //   </PopoverContent>
+    // </Popover>
   );
 }

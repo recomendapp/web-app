@@ -26,23 +26,19 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import { DataTablePagination } from "./component/data-table-pagination"
 import { DataTableToolbar } from "./component/data-table-toolbar"
 
 import { columns } from "./component/columns"
 import { useMediaQuery } from "react-responsive"
 
 import { DndContext, DragEndEvent, UniqueIdentifier, closestCenter, useDraggable } from '@dnd-kit/core';
-import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from "@dnd-kit/utilities"
 import { useAuth } from "@/context/AuthContext/AuthProvider"
 import { PlaylistItem } from "@/types/type.playlist"
 import { range } from "lodash"
-import { useMutation } from "@apollo/client"
 
 import { supabase } from "@/lib/supabase/supabase"
-
-import DELETE_PLAYLIST_ITEM_MUTATION from "@/components/modules/MoviePlaylist/mutations/deletePlaylistItemMutation"
 
 declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
@@ -65,9 +61,6 @@ export function TablePlaylist({
   playlist,
   userId,
 }: DataTableProps) {
-
-  const [ deletePlaylistItemMutation ] = useMutation(DELETE_PLAYLIST_ITEM_MUTATION);
-
 
   const { user } = useAuth();
 

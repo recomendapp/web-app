@@ -31,10 +31,6 @@ export function PlaylistButton({
   setPlaylist,
 }: PlaylistButtonProps) {
 
-  
-
-  const queryClient = useQueryClient();
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-3xl">

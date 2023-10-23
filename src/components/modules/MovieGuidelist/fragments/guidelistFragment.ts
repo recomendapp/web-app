@@ -12,7 +12,7 @@ export default gql`
         receiver_user_id
         sender_user_id
         comment
-        user {
+        sender_user: user {
             ...User
         }
     }

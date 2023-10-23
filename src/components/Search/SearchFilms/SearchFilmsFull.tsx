@@ -35,7 +35,7 @@ export default function SearchFilmsFull({
         return results?.length == numberOfResult ? pages.length + 1 : undefined  
     },
     enabled: query !== undefined && query !== null,
-});
+  });
 
 useEffect(() => {
   if (inView && hasNextPage)

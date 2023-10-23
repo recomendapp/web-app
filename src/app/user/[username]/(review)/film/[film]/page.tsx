@@ -35,7 +35,7 @@ export default async function Review({ params }: { params: { film: string, usern
 
     const supabaseServer = createServerClient()
 
-    const { data: review } = await supabaseServer.from('review').select('*, user!inner(*)').eq('user.username', params.username).single();
+    const { data: review } = await supabaseServer.from('review').select('*, user!inner(*)').eq('user.username', params.username).eq('film_id', params.film).single();
     if (!review) notFound();
 
     return (

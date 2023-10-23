@@ -57,7 +57,8 @@ export function MoviePlaylistAction({
 
   const { data: userPlaylistsQuery, loading, error } = useQuery(USER_PLAYLISTS_QUERY, {
     variables: {
-        user_id: user?.id
+        user_id: user?.id,
+        order: { "updated_at": "DescNullsFirst"}
     },
     skip: !user
   });
@@ -65,7 +66,11 @@ export function MoviePlaylistAction({
 
   const [ insertPlaylistItemMutation, { error: errorInsertPlaylistItem} ] = useMutation(INSERT_PLAYLIST_ITEM_MUATION, {
     refetchQueries: [{
-      query: USER_PLAYLISTS_QUERY
+      query: USER_PLAYLISTS_QUERY,
+      variables: {
+        user_id: user?.id,
+        order: { "updated_at": "DescNullsFirst"}
+      }
     }],
     // update: (cache, { data }) => {
     //   cache.modify({

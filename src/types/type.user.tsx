@@ -27,6 +27,7 @@ export interface Follower {
 }
 
 export interface Friend {
+    id: string,
     friend_id: string,
     friend: User,
     user_id: string,

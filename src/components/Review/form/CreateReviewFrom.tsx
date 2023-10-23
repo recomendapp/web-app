@@ -68,10 +68,8 @@ export default function CreateReviewForm({ filmId, user } : { filmId: string, us
               action_id: filmAction.id,
             }
           })
-          toast.success(
-            'Votre critique a été publié avec succès'
-          );
-          router.push(`/movie/${filmId}/review/${user.username}`);
+          toast.success('Votre critique a été publié avec succès');
+          router.push(`/@${user.username}/film/${filmId}`);
         } catch (error) {
           toast.error("Une erreur s'est produite");
         } finally {

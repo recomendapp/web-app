@@ -14,41 +14,41 @@ import MoviePoster from "@/components/Film/MoviePoster"
 import { Clock } from "lucide-react"
 import MovieCardSmall from "@/components/Film/MovieCardSmall"
 
-export const columns: ColumnDef<Models.Document>[] = [
+export const columns: ColumnDef<any>[] = [
   {
-    accessorKey: "title",
+    accessorKey: "item.film.title",
     meta: {
       displayName: "Film"
     },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Film" />
     ),
-    cell: ({ row }) => <MovieCardSmall movie={row.original}/>,
+    cell: ({ row }) => <MovieCardSmall movie={row.original.item.film}/>,
     enableHiding: false,
   },
   {
-    accessorKey: "release_date",
+    accessorKey: "item.film.release_date",
     meta: {
       displayName: "Date"
     },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date"/>
     ),
-    cell: ({ row }) => <div><DateOnlyYearTooltip date={row.original.release_date} /> </div>,
+    cell: ({ row }) => <DateOnlyYearTooltip date={row.original.item.film.release_date} />,
   },
   {
-    accessorKey: "runtime",
+    accessorKey: "item.film.runtime",
     meta: {
       displayName: "Durée"
     },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} Icon={Clock} />
     ),
-    cell: ({ row }) => <p>{ConvertHoursMinutes(row.original.runtime)}</p>
+    cell: ({ row }) => <p>{ConvertHoursMinutes(row.original.item.film?.runtime)}</p>
   },
   {
     id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row, table, column }) => <DataTableRowActions data={row.original.item} table={table} row={row} column={column} />,
   },
 ]
 

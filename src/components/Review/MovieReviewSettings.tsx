@@ -11,10 +11,15 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { useAuth } from '@/context/AuthContext/AuthProvider'
 import { Review } from '@/types/type.review'
+import { useMutation } from '@apollo/client'
 import { MoreHorizontal, Trash2 } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useQueryClient } from 'react-query'
+
+import DELETE_GUIDELIST_MUTATION from '@/components/Review/mutations/deleteReviewMutation'
+import GUIDELIST_QUERY from '@/components/modules/MovieGuidelist/queries/guidelistQuery'
+import { toast } from 'react-toastify'
 
 export function MovieReviewSettings({
     review 
@@ -23,11 +28,23 @@ export function MovieReviewSettings({
 }) {
 
     const { user } = useAuth();
+
+    const [deleteGuidelistMutation] = useMutation(DELETE_GUIDELIST_MUTATION, {
+        refetchQueries: [
+          {
+            query: GUIDELIST_QUERY,
+            variables: {
+                user_id: user?.id
+            }
+          }
+        ]
+    });
+
     const pathname = usePathname();
     const router = useRouter();
     const queryClient = useQueryClient();
-    const [open, setIsOpen] = useState(false)
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+    const [open, setIsOpen] = useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     return (
          <>
@@ -101,14 +118,17 @@ export function MovieReviewSettings({
                     <AlertDialogCancel>Annuler</AlertDialogCancel>
                     <Button
                     variant="destructive"
-                    onClick={() => {
+                    onClick={async () => {
+                        await deleteGuidelistMutation({
+                            variables: {
+                                id: review.id
+                            }
+                        })
                         // handleDeleteReview(review.$id, user.$id, review.movieId, queryClient)
-                        // if (pathname == `/movie/${review.movieId}/review/${review.$id}`)
-                        //     router.push(`/movie/${review.movieId}`);
-                        // setShowDeleteDialog(false)
-                        // toast({
-                        //     message: "This preset has been deleted.",
-                        // })
+                        setShowDeleteDialog(false);
+                        if (pathname == `/@${user?.username}/film/${review.film_id}`)
+                            router.push(`/film/${review.film_id}`);
+                        toast.success("Critique supprimée");
                     }}
                     >
                     Supprimer

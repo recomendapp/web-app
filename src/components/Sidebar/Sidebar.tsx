@@ -134,8 +134,8 @@ export function Sidebar({
                 : siteConfig.icon.href
             }
             alt={siteConfig.logo.alt}
-            width={50}
-            height={50}
+            width={sidebarExpanded ? 400 : 50}
+            height={sidebarExpanded ? 400 : 50}
           />
           {/* <h2 className='text-4xl font-bold text-accent-1'>{sidebarExpanded ? siteConfig.logo : siteConfig.icon}</h2> */}
         </Link>
@@ -195,7 +195,11 @@ export function Sidebar({
             </>
           )}
         </div>
-         <ScrollArea className="h-full w-full">
+        <ScrollArea
+          className={`h-full w-full
+            ${sidebarExpanded && 'pr-4'}
+          `}
+        >
           {collectionRoutes.map((item) => (
             <Button
               key={item.label}

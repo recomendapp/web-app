@@ -10,7 +10,7 @@ export const siteConfig = {
     },
   ],
   logo: {
-    href: '/recomend_icon.svg',
+    href: '/recomend_logo.svg',
     alt: 'Recomend Logo',
   },
   icon: {

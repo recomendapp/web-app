@@ -1,8 +1,8 @@
 "use client"
 
-import { Models } from "appwrite"
 import Link from "next/link"
-import { Row } from "@tanstack/react-table"
+import { Column, Row, Table } from "@tanstack/react-table"
+import { MovieAction } from "@/components/Film/FilmAction/MovieAction"
 
 // UI
 import { Button } from "@/components/ui/button"
@@ -21,34 +21,79 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { useQueryClient } from "react-query"
 
 // ICONS
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Dispatch, SetStateAction, useState } from "react"
 import ButtonShare from "@/components/tools/ButtonShare"
 import UserCard from "@/components/User/UserCard/UserCard"
-import { MovieAction } from "@/components/Film/FilmAction/MovieAction"
+import { PlaylistItem } from "@/types/type.playlist"
+import { Film, FilmAction } from "@/types/type.film"
+import { useMutation } from "@apollo/client"
+import { useAuth } from "@/context/AuthContext/AuthProvider"
+
+import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQuery';
+import DELETE_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/deleteFilmActionMutation';
+import UPDATE_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/updateFilmActionMutation';
+import WATCHLIST_QUERY from "@/components/modules/MovieWatchlist/queries/watchlistQuery"
 
 interface DataTableRowActionsProps {
-  row: Row<Models.Document>
+  table: Table<FilmAction>,
+  row: Row<FilmAction>,
+  column: Column<FilmAction, unknown>,
+  data: FilmAction,
 }
 
 export function DataTableRowActions({
   row,
+  table,
+  column,
+  data
 }: DataTableRowActionsProps) {
 
+  const { user } = useAuth();
   const [ openShowDirectors, setOpenShowDirectors ] = useState(false);
-  const queryClient = useQueryClient();
-
-  const data = row.original;
-
+  const [ updateFilmActionMutation ] = useMutation(UPDATE_FILM_ACTION_MUTATION, {
+    refetchQueries: [
+      {
+        query: WATCHLIST_QUERY,
+        variables: {
+          user_id: user?.id
+        },
+      }
+    ]
+  });
+  const [ deleteFilmActionMutation, { error: errorDeletingWatch } ] = useMutation(DELETE_FILM_ACTION_MUTATION, {
+    update: (store) => {
+      store.writeQuery({
+        query: FILM_ACTION_QUERY,
+        variables: {
+          film_id: data.film_id,
+          user_id: user?.id,
+        },
+        data: {
+          film_actionCollection: {
+            edges: []
+          }
+        }
+      })
+    },
+    refetchQueries: [
+      {
+        query: WATCHLIST_QUERY,
+        variables: {
+          user_id: user?.id
+        },
+      }
+    ]
+  });
+  
   return (
     <>
       <DropdownMenu>
         <div className="flex gap-2 items-center justify-end">
           <div className="hidden lg:invisible lg:group-hover:visible lg:flex items-center gap-2">
-            <MovieAction filmId={data.id} rating like />
+          <MovieAction filmId={data.film_id} rating like />
           </div>
             <DropdownMenuTrigger asChild>
               <Button
@@ -62,37 +107,43 @@ export function DataTableRowActions({
         </div>
 
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem asChild><Link href={`/movie/${data.id}`}>Voir le film</Link></DropdownMenuItem>
-          <ShowDirectorsButton data={data} setOpen={setOpenShowDirectors} />
+          <DropdownMenuItem asChild><Link href={`/film/${data.film_id}`}>Voir le film</Link></DropdownMenuItem>
+          <ShowDirectorsButton film={data.film} setOpen={setOpenShowDirectors} />
           <DropdownMenuSeparator />
-          <DropdownMenuItem><ButtonShare url={`${process.env.NEXT_PUBLIC_URL}/movie/${data.id}`}/></DropdownMenuItem>
-          <DropdownMenuItem onClick={() => {
-            // handleUnwatchlist(data.$id, data.id, queryClient)
-            const watchlist = queryClient.getQueryData(['collection', 'watchlist']) as Models.Document;
-            watchlist && queryClient.setQueryData(['collection', 'watchlist'], watchlist.filter((movie: any) => movie.movieId != data.id))
-          }}>
+          <DropdownMenuItem><ButtonShare url={`${location.origin}/film/${data.film?.id}`}/></DropdownMenuItem>
+          <DropdownMenuItem 
+            onClick={async () => {
+              const mutationToUse = (!data.is_liked && !data.is_watched && !data.rating) ? deleteFilmActionMutation : updateFilmActionMutation;
+              const { errors } = await mutationToUse({
+                variables: {
+                  film_id: data.film_id,
+                  user_id: user?.id,
+                  is_watchlisted: false,
+                }
+              });
+            }}
+          >
             Delete
-            <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <ShowDirectorsModal data={data} open={openShowDirectors} setOpen={setOpenShowDirectors}/>
+      <ShowDirectorsModal film={data.film} open={openShowDirectors} setOpen={setOpenShowDirectors}/>
     </>
   )
 }
 
-export function ShowDirectorsButton({ data, setOpen } : { data: any, setOpen: Dispatch<SetStateAction<boolean>> }) {
-  if (!data.directors){
+export function ShowDirectorsButton({ film, setOpen } : { film: Film, setOpen: Dispatch<SetStateAction<boolean>> }) {
+  if (!film?.directors){
     return (
       <DropdownMenuItem asChild>
         <p>Unknow</p>
       </DropdownMenuItem>
     )
   }
-  if (data.directors.length == 1) {
+  if (film.directors.length == 1) {
     return (
       <DropdownMenuItem asChild>
-        <Link href={`/person/${data.directors[0].id}`}>Voir le réalisateur</Link>
+        <Link href={`/person/${film.directors[0].id}`}>Voir le réalisateur</Link>
       </DropdownMenuItem>
     )
   }
@@ -103,7 +154,7 @@ export function ShowDirectorsButton({ data, setOpen } : { data: any, setOpen: Di
   )
 }
 
-export function ShowDirectorsModal({ data, open, setOpen } : { data: any, open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) {
+export function ShowDirectorsModal({ film, open, setOpen } : { film: Film, open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-5xl bg-black">
@@ -111,7 +162,7 @@ export function ShowDirectorsModal({ data, open, setOpen } : { data: any, open: 
           <DialogTitle className='text-center'>Réalisateur</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4">
-          {data.directors.map((director: any) => (
+          {film.directors?.map((director: any) => (
             <Button key={director.id} variant={'ghost'} asChild>
               <Link href={`/person/${director.id}`}>{director.name}</Link>
             </Button>

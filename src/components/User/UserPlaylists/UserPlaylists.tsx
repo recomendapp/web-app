@@ -10,7 +10,13 @@ import USER_PLAYLISTS_QUERY from '@/components/User/UserPlaylists/queries/userPl
 import { Playlist } from "@/types/type.playlist";
 import Loader from "@/components/Loader/Loader";
 
-export function UserPlaylists({ sidebarExpanded } : { sidebarExpanded: boolean}) {
+export function UserPlaylists({
+    sidebarExpanded,
+    grid = false
+} : {
+    sidebarExpanded: boolean,
+    grid?: boolean,
+}) {
     const pathname = usePathname();
     const { user } = useAuth();
     const { data: userPlaylistsQuery, loading, error } = useQuery(USER_PLAYLISTS_QUERY, {
@@ -31,6 +37,42 @@ export function UserPlaylists({ sidebarExpanded } : { sidebarExpanded: boolean})
     if (!loading && !playlists)
         return null
 
+    if (grid)
+    {
+        return (
+            <Fragment>
+                {playlists.map(({ playlist } : { playlist: Playlist}) => (
+                    <Button
+                        key={playlist.title}
+                        variant={
+                        pathname === `/playlist/${playlist.id}` ? 'secondary' : 'ghost'
+                        }
+                        className={`justify-start p-2`}
+                        asChild
+                    >
+                        <Link
+                            href={'/playlist/' + playlist.id}
+                            className="h-fit w-full flex flex-col gap-2"
+                        >
+                            <div className={`w-full shadow-2xl shrink-0`}>
+                                <AspectRatio ratio={1 / 1}>
+                                    <ImageWithFallback
+                                        src={playlist.poster_url ?? ''}
+                                        alt={playlist.title}
+                                        fill
+                                        className="rounded-md object-cover"
+                                    />
+                                </AspectRatio>
+                            </div>
+                            <section>
+                                {playlist.title}
+                            </section>
+                        </Link>
+                    </Button>
+                ))}
+            </Fragment>
+        )
+    }
     return (
         <Fragment>
             {playlists.map(({ playlist } : { playlist: Playlist}) => (
