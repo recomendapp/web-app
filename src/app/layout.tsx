@@ -64,7 +64,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <div
             className={`
               flex
-              h-[calc(100%-80px)]
+              h-[calc(100%-(var(--height-navbar)))]
               gap-2
               lg:p-2
               lg:h-full
