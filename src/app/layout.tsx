@@ -40,6 +40,10 @@ export const metadata: Metadata = {
     maximumScale: 1,
     userScalable: false,
   },
+  manifest: '/manifest.webmanifest',
+  icons: {
+    apple: '/icons/icon-512x512.png',
+  },
 };
 
 interface RootLayoutProps {
@@ -60,7 +64,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <div
             className={`
               flex
-              h-[calc(100%-135px)]
+              h-[calc(100%-80px)]
               gap-2
               lg:p-2
               lg:h-full

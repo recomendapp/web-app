@@ -136,8 +136,8 @@ export function Sidebar({
             alt={siteConfig.logo.alt}
             width={sidebarExpanded ? 400 : 50}
             height={sidebarExpanded ? 400 : 50}
+            priority
           />
-          {/* <h2 className='text-4xl font-bold text-accent-1'>{sidebarExpanded ? siteConfig.logo : siteConfig.icon}</h2> */}
         </Link>
       </Box>
       <div
@@ -162,6 +162,7 @@ export function Sidebar({
           </Link>
         ))}
       </div>
+      {/* COLLECTION */}
       <div
         className={`flex flex-col gap-4 py-2 bg-background rounded-md overflow-hidden h-full ${
           sidebarExpanded ? 'px-3' : 'px-1 items-center'
@@ -225,6 +226,7 @@ export function Sidebar({
           <UserPlaylists sidebarExpanded={sidebarExpanded} />
         </ScrollArea>
       </div>
+      {/* ABOUT */}
       <div className="flex justify-center items-center px-3 py-2 bg-background rounded-sm">
         <Link
           href={'/about'}

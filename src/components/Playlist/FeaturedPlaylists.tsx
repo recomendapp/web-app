@@ -29,7 +29,7 @@ export default function FeaturedPlaylists() {
   });
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-10 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
       {featuredPlaylists?.data && featuredPlaylists?.data.map((playlist: Playlist) => (
         <MoviePlaylistCard key={playlist.id} playlist={playlist}/>
       ))}
