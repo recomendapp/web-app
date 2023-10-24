@@ -47,7 +47,7 @@ export function Collection() {
                             />
                         </AspectRatio>
                     </div>
-                    <section>
+                    <section className=" line-clamp-1">
                         {item.label}
                     </section>
                 </Link>

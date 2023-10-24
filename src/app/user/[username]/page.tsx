@@ -3,6 +3,8 @@ import ProfilePlaylists from '@/components/Profile/ProfilePlaylists/ProfilePlayl
 import ProfileFilms from '@/components/Profile/ProfileFilms/ProfileFilms';
 import { createServerClient } from '@/lib/supabase/supabase-server';
 import ProfileFavoriteFilms from '@/components/Profile/ProfileFavoriteFilms/ProfileFavoriteFilms';
+import ProfileHeader from '@/components/Profile/ProfileHeader/ProfileHeader';
+import ProfileNavbar from '@/components/Profile/ProfileNavbar/ProfileNavbar';
 
 export async function generateMetadata({
   params,
@@ -29,10 +31,13 @@ export default async function UserPage({ params } : { params: { username: string
   const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
 
   return (
-    <Fragment>
-      <ProfileFavoriteFilms profile={user} />
-      {/* <ProfilePlaylists profile={user} horizontal /> */}
-      <ProfileFilms profile={user} horizontal />
-    </Fragment>
+    <main>
+        <ProfileHeader profile={user}/>
+        <div className='px-4 flex justify-center'><ProfileNavbar profile={user} /></div>
+        <div className='p-4 flex flex-col gap-4'>
+          <ProfileFavoriteFilms profile={user} />
+          <ProfileFilms profile={user} horizontal />
+        </div>
+    </main>
   );
 }

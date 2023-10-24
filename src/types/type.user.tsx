@@ -6,6 +6,7 @@ export interface User {
     username_updated_at: string,
     full_name: string,
     avatar_url: string,
+    background_url: string,
     bio: string,
     verify: boolean,
     language: string,
@@ -16,7 +17,8 @@ export interface User {
     followers_count: string,
     following_count: string,
     friends_count: string,
-    subscription: { edges: [ { node: Subscription } ] }
+    subscription: { edges: [ { node: Subscription } ] },
+    verified: boolean,
 }
 
 export interface Follower {

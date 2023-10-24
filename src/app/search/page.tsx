@@ -1,5 +1,5 @@
 
-import FeaturedPlaylists from '@/components/Playlist/FeaturedPlaylists';
+import FeaturedPlaylists from '@/components/Playlist/FeaturedPlaylists/FeaturedPlaylists';
 import SearchFilmsSmall from '@/components/Search/SearchFilms/SearchFilmsSmall';
 import SearchPlaylistsSmall from '@/components/Search/SearchPlaylists/SearchPlaylistsSmall';
 import { Fragment } from 'react';

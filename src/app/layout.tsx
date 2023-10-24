@@ -23,6 +23,7 @@ import { Box } from '@/components/Box/Box';
 import Provider from '@/context/Provider';
 import RightSidebar from '@/components/RightSidebar/RightSidebar';
 import Layout from '@/components/Layout/Layout';
+import HelloNerd from '@/components/Console/HelloNerd';
 
 export const metadata: Metadata = {
   title: {
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           fontSans.variable
         )}
       >
+        <HelloNerd />
         <Provider>
           {/* <div className="flex items-start h-full gap-2 lg:p-2"> */}
           <div

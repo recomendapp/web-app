@@ -47,9 +47,9 @@ export function AccountForm() {
       .max(15, {
         message: "Le nom d'utilisateur ne doit pas dépasser 15 caractères.",
       })
-      .refine((value) => /^[a-zA-Z0-9_]*$/.test(value), {
+      .refine((value) => /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{2,14}$/.test(value), {
         message:
-          "L'username ne doit contenir que des lettres, des chiffres et le symbole '_'.",
+          "L'username ne doit contenir que des lettres, des chiffres et les symbole '_' et '.'",
       })
       .refine(
         async (value) => {

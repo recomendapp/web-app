@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import ProfileHeader from "@/components/Profile/ProfileHeader/ProfileHeader";
 import { createServerClient } from "@/lib/supabase/supabase-server";
+import ProfileNavbar from "@/components/Profile/ProfileNavbar/ProfileNavbar";
 
 
 interface UserLayoutProps {
@@ -19,7 +19,7 @@ export default async function UserLayout({
 
     return (
         <main>
-            <ProfileHeader profile={user}/>
+            <div className='px-4 pt-4 lg:pt-0 flex justify-center'><ProfileNavbar profile={user} withProfile className="w-full sticky top-0"/></div>
             <div className='p-4 flex flex-col gap-4'>
                 {children}
             </div>

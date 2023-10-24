@@ -89,7 +89,6 @@ export function MyReviewButton({ filmId } : { filmId: string }) {
     skip: !user?.id
   })
   const userReview = userReviewQuery?.reviewCollection?.edges[0]?.review;
-  console.log('userReview', userReview)
 
 
   if (!user || loading)

@@ -11,7 +11,7 @@ export default function Dashboard() {
             <Loader />
         )
     return (
-        <main>
+        <main className="p-4">
             {user && <div className="text-4xl font-bold">Bonjour {user.full_name}</div>}
         </main>
     )

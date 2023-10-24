@@ -1,5 +1,3 @@
-"use client"
-
 import { ProfileFollowButton } from "@/components/Profile/ProfileFollowButton/ProfileFollowButton"
 import UserAvatar from "@/components/User/UserAvatar/UserAvatar"
 import { Button } from "@/components/ui/button"
@@ -11,9 +9,13 @@ import PROFILE_QUERY from "../ProfileDetails/queries/ProfileQuery"
 import { User } from "@/types/type.user"
 import hexToRgb from "@/lib/utils/hexToRgb"
 import { notFound } from "next/navigation"
+import { createServerClient } from "@/lib/supabase/supabase-server"
+import { HeaderBox } from "@/components/Box/HeaderBox"
+import ProfileNavbar from "../ProfileNavbar/ProfileNavbar"
 
-export default function ProfileHeader({ profile } : { profile: User }) {
-
+export default async function ProfileHeader({ profile } : { profile: User }) {
+    const supabaseServer = createServerClient()
+    const { data: { user } } = await supabaseServer.auth.getUser();
     // const { data: profileQuery, loading } = useQuery(PROFILE_QUERY, {
     //     variables: {
     //         username: username
@@ -24,6 +26,86 @@ export default function ProfileHeader({ profile } : { profile: User }) {
 
     // if (!loading && !profile)
     //     notFound()
+
+    return (
+        <HeaderBox
+            height='fit-content'
+            backgroundImage={profile.background_url}
+            className="flex-col md:items-start md:flex-row gap-4"
+        >
+            <div className="flex gap-4 items-start justify-between w-full md:w-fit">
+                <UserAvatar className=' h-20 w-20 sm:h-36 sm:w-36 md:h-48 md:w-48 lg:h-[200px] lg:w-[200px]' user={profile} />
+                <div className="flex flex-col gap-2 items-end">
+                    <div className='flex items-center md:hidden'>
+                        <Button variant={'action'}>
+                            {/* {profile.followers_count} */}
+                            followers
+                        </Button>
+                        <Button variant={'action'}>
+                            {/* {profile.following_count} */}
+                            suivi(e)s
+                        </Button>
+                        <Button variant={'action'} asChild>
+                            <Link href={`/@${profile.username}/stats`}>
+                            <BarChart />
+                            </Link>
+                        </Button>
+                        {user?.id == profile.id &&
+                            <Button variant={'action'} asChild>
+                                <Link href={'/settings/profile'}>
+                                    <Settings />
+                                </Link>
+                            </Button>
+                        }
+                    </div>
+                    <ProfileFollowButton profile={profile} className="md:hidden"/>
+                </div>
+            </div>
+            <div className='flex flex-col gap-2 w-full'>
+                {/* SECTION 1 */}
+                <section className='flex items-center justify-between gap-2'>
+                    <Link href={`/@${profile.username}`} className='flex items-center gap-2'>
+                        <h2 className='text-xl font-semibold'>{profile.full_name}</h2>
+                        {profile.verified && <BsFillPatchCheckFill fill="#1D9BF0" size={16} />}
+                        <span className='text-muted-foreground'>@{profile.username}</span>
+                    </Link>
+                    <div className='hidden md:flex items-center gap-2'>
+                        <Button variant={'action'} className="hidden sm:block">
+                            {/* {profile.followers_count} */}
+                            followers
+                        </Button>
+                        <Button variant={'action'}>
+                            {/* {profile.following_count} */}
+                            suivi(e)s
+                        </Button>
+                        <Button variant={'action'} asChild>
+                            <Link href={`/@${profile.username}/stats`}>
+                            <BarChart />
+                            </Link>
+                        </Button>
+                        {user?.id == profile.id &&
+                            <Button variant={'action'} asChild>
+                                <Link href={'/settings/profile'}>
+                                    <Settings />
+                                </Link>
+                            </Button>
+                        }
+                    </div>
+                </section>
+                {/* SECTION 2 */}
+                <section className='flex justify-between h-full'>
+                    {/* PROFILE EXTRADATA */}
+                    <div>
+                        {profile.badge && <p className='text-accent-1 italic'>{profile.badge}</p>}
+                        {profile.bio && <p className="text-justify max-w-lg">{profile.bio}</p>}
+                        {profile.website && <Link href={profile.website} className='flex gap-2 items-center' target='_blank'><LinkIcon width={15}/>{profile.website.replace(/(^\w+:|^)\/\//, '')}</Link>}
+                    </div>
+                    {/* ACTION BUTTON */}
+                    <ProfileFollowButton profile={profile} className="hidden md:flex"/>
+                </section>
+            </div>
+        </HeaderBox>
+    )
 
     return (
         <div 
@@ -57,11 +139,13 @@ export default function ProfileHeader({ profile } : { profile: User }) {
                                 <BarChart />
                                 </Link>
                             </Button>
-                            <Button variant={'action'} asChild>
-                                <Link href={'/settings/profile'}>
-                                    <Settings />
-                                </Link>
-                            </Button>
+                            {user?.id == profile.id &&
+                                <Button variant={'action'} asChild>
+                                    <Link href={'/settings/profile'}>
+                                        <Settings />
+                                    </Link>
+                                </Button>
+                            }
                         </div>
                     </div>
                     <div className='flex justify-between h-full'>
@@ -76,7 +160,6 @@ export default function ProfileHeader({ profile } : { profile: User }) {
                     </div>
                 </section>
             </div>
-        {/* <UserStats userId={profile.$id} /> */}
         </div>
     )
   }

@@ -243,7 +243,6 @@ export function TablePlaylist({
       console.log(error)
     }
   }
-  console.log('data', data)
   return (
     <div className="flex flex-col gap-2">
       <DataTableToolbar table={table} />

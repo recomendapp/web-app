@@ -14,9 +14,6 @@ export default gql`
         user {
             ...User
         }
-        film {
-            ...Film
-        }
     }
     ${USER_FRAGMENT}
     ${FILM_FRAGMENT}

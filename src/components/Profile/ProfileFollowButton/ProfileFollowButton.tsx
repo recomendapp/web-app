@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import DELETE_FOLLOWER_MUTATION from '@/components/Profile/ProfileFollowButton/mutations/deleteFollowerMutation'
 import INSERT_FOLLOWER_MUTATION from '@/components/Profile/ProfileFollowButton/mutations/insertFollowerMutation'
 import FOLLOWER_QUERY from '@/components/Profile/ProfileFollowButton/queries/followerQuery'
+import { cn } from '@/lib/utils/utils';
 
 interface UserFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   profile: User;
@@ -155,7 +156,7 @@ export function ProfileFollowButton({
     return null;
 
   return (
-    <div className='flex items-center'>
+    <div className={cn('flex items-center', className)}>
       {loading ? 
         <Skeleton className="h-10 w-16 rounded-full" />
       :

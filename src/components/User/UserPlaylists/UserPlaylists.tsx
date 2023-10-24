@@ -64,7 +64,7 @@ export function UserPlaylists({
                                     />
                                 </AspectRatio>
                             </div>
-                            <section>
+                            <section className="line-clamp-1">
                                 {playlist.title}
                             </section>
                         </Link>

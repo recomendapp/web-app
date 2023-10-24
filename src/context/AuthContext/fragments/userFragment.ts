@@ -10,12 +10,14 @@ export default gql`
         full_name
         bio
         avatar_url
+        background_url
         website
         language
         favorite_color
         followers_count
         following_count
         friends_count
+        verified
         subscription: subscriptionsCollection(
             filter: {
               user_id: { eq: $user_id }

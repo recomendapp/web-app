@@ -17,7 +17,7 @@ export default function ProfileFavoriteFilms({
 
     const { user } = useAuth();
 
-    if (!profile?.favorite_films?.length && profile.id != user?.id)
+    if (!profile?.favorite_films?.length)
         return null
 
     return (
@@ -33,11 +33,6 @@ export default function ProfileFavoriteFilms({
                             />
                         </div>
                     ))}
-                    {(profile.favorite_films?.length < 4) &&
-                        <div className="w-full h-full flex items-center justify-center bg-muted rounded-md">
-                            <Plus />
-                        </div>
-                    }
                 </div>
                 <ScrollBar orientation="horizontal" />
             </ScrollArea>

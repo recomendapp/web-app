@@ -9,7 +9,7 @@ export async function generateMetadata({
 }: {
   params: { film: string };
 }) {
-  const film = await getMovieDetails(params.film, 'en');
+  const film = await getMovieDetails(params.film, 'fr');
   if (!film) {
     return {
       title: 'Oups, film introuvable !',
@@ -22,7 +22,7 @@ export async function generateMetadata({
 }
 
 export default async function Reviews({ params }: { params: { film: string } }) {
-  const film = await getMovieDetails(params.film, 'en');
+  const film = await getMovieDetails(params.film, 'fr');
 
   if (!film) notFound();
 

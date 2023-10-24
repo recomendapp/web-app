@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Plus,
   Compass,
+  Info,
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils/utils';
@@ -230,10 +231,11 @@ export function Sidebar({
       <div className="flex justify-center items-center px-3 py-2 bg-background rounded-sm">
         <Link
           href={'/about'}
-          className={` overflow-hidden transition-all
+          className={` overflow-hidden transition-all flex gap-2
               ${sidebarExpanded ? ' w-full px-3 py-2' : 'w-0'}
           `}
         >
+          <Info />
           À propos
         </Link>
         <Button

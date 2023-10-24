@@ -7,9 +7,6 @@ export default gql`
         id
         created_at
         film_id
-        film {
-            ...Film
-        }
         user_id
         user {
             ...User

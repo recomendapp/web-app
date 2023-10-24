@@ -2,7 +2,7 @@
 
 import { supabase } from "@/lib/supabase/supabase";
 import { useInfiniteQuery, useQuery } from "react-query";
-import MoviePlaylistCard from "./MoviePlaylist/MoviePlaylistCard";
+import MoviePlaylistCard from "../MoviePlaylist/MoviePlaylistCard";
 import { Playlist } from "@/types/type.playlist";
 
 export default function FeaturedPlaylists() {
