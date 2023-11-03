@@ -31,12 +31,12 @@ export default async function ProfileHeader({ profile } : { profile: User }) {
         <HeaderBox
             height='fit-content'
             backgroundImage={profile.background_url}
-            className="flex-col md:items-start md:flex-row gap-4"
+            className="flex-col @lg:items-start @lg:flex-row gap-4"
         >
-            <div className="flex gap-4 items-start justify-between w-full md:w-fit">
-                <UserAvatar className=' h-20 w-20 sm:h-36 sm:w-36 md:h-48 md:w-48 lg:h-[200px] lg:w-[200px]' user={profile} />
+            <div className="flex gap-4 items-start justify-between w-full @lg:w-fit">
+                <UserAvatar className=' h-20 w-20 @md:h-36 @md:w-36 @5xl:h-48 @5xl:w-48' user={profile} />
                 <div className="flex flex-col gap-2 items-end">
-                    <div className='flex items-center md:hidden'>
+                    <div className='flex items-center @lg:hidden'>
                         <Button variant={'action'}>
                             {/* {profile.followers_count} */}
                             followers
@@ -44,11 +44,6 @@ export default async function ProfileHeader({ profile } : { profile: User }) {
                         <Button variant={'action'}>
                             {/* {profile.following_count} */}
                             suivi(e)s
-                        </Button>
-                        <Button variant={'action'} asChild>
-                            <Link href={`/@${profile.username}/stats`}>
-                            <BarChart />
-                            </Link>
                         </Button>
                         {user?.id == profile.id &&
                             <Button variant={'action'} asChild>
@@ -58,7 +53,7 @@ export default async function ProfileHeader({ profile } : { profile: User }) {
                             </Button>
                         }
                     </div>
-                    <ProfileFollowButton profile={profile} className="md:hidden"/>
+                    <ProfileFollowButton profile={profile} className="@lg:hidden"/>
                 </div>
             </div>
             <div className='flex flex-col gap-2 w-full'>
@@ -69,7 +64,7 @@ export default async function ProfileHeader({ profile } : { profile: User }) {
                         {profile.verified && <BsFillPatchCheckFill fill="#1D9BF0" size={16} />}
                         <span className='text-muted-foreground'>@{profile.username}</span>
                     </Link>
-                    <div className='hidden md:flex items-center gap-2'>
+                    <div className='hidden @lg:flex items-center gap-2'>
                         <Button variant={'action'} className="hidden sm:block">
                             {/* {profile.followers_count} */}
                             followers
@@ -77,11 +72,6 @@ export default async function ProfileHeader({ profile } : { profile: User }) {
                         <Button variant={'action'}>
                             {/* {profile.following_count} */}
                             suivi(e)s
-                        </Button>
-                        <Button variant={'action'} asChild>
-                            <Link href={`/@${profile.username}/stats`}>
-                            <BarChart />
-                            </Link>
                         </Button>
                         {user?.id == profile.id &&
                             <Button variant={'action'} asChild>
@@ -101,7 +91,7 @@ export default async function ProfileHeader({ profile } : { profile: User }) {
                         {profile.website && <Link href={profile.website} className='flex gap-2 items-center' target='_blank'><LinkIcon width={15}/>{profile.website.replace(/(^\w+:|^)\/\//, '')}</Link>}
                     </div>
                     {/* ACTION BUTTON */}
-                    <ProfileFollowButton profile={profile} className="hidden md:flex"/>
+                    <ProfileFollowButton profile={profile} className="hidden @md:flex"/>
                 </section>
             </div>
         </HeaderBox>

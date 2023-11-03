@@ -9,23 +9,23 @@ export default gql`
         $after: Cursor!
     ) {
         reviewCollection(
-        filter: {
-            film_id: { eq: $film_id }
-        }
-        first: $first
-        after: $after
-        ) {
-        pageInfo {
-            hasNextPage
-            hasPreviousPage
-            endCursor
-        }
-        edges {
-            cursor
-            review: node {
-                ...Review
+            filter: {
+                film_id: { eq: $film_id }
             }
-        }
+            first: $first
+            after: $after
+        ) {
+            pageInfo {
+                hasNextPage
+                hasPreviousPage
+                endCursor
+            }
+            edges {
+                cursor
+                review: node {
+                    ...Review
+                }
+            }
         }
     }
     ${REVIEW_FRAGMENT}

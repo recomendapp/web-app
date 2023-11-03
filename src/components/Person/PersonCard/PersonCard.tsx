@@ -1,6 +1,6 @@
 import { Models } from "appwrite";
 import Link from "next/link";
-import { getInitiales } from "@/lib/utils/utils";
+import { getInitiales } from "@/lib/utils";
 
 // UI
 import {

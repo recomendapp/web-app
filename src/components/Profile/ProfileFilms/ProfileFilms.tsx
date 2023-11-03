@@ -2,118 +2,84 @@
 
 import { Button } from "@/components/ui/button";
 import { Fragment, useEffect, useState } from "react";
-import { LayoutGrid, List, Plus } from "lucide-react";
-import MovieCard from "@/components/Film/MovieCard";
+import { LayoutGrid, List } from "lucide-react";
+import MovieCard from "@/components/Film/Card/MovieCard";
 import Loader from "@/components/Loader/Loader";
 import { useInView } from 'react-intersection-observer';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
-import Link from "next/link";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { User } from "@/types/type.user";
-import { useAuth } from "@/context/AuthContext/AuthProvider";
-import { useQuery } from "@apollo/client";
-import { FilmAction } from "@/types/type.film";
-import PROFILE_FILM_QUERY from "@/components/Profile/ProfileFilms/queries/profileFilmsQuery";
+import { useInfiniteQuery } from "react-query";
+import { supabase } from "@/lib/supabase/supabase";
 
 interface UserMoviesProps {
     profile: User;
-    horizontal?: boolean;
-    limit?: boolean;
 }
 
 export default function ProfileFilms({
     profile,
-    horizontal = false,
-    limit,
 } : UserMoviesProps) {
 
-    const [ order, setOrder ] = useState("recent")
+    const [ order, setOrder ] = useState("watch-desc")
 
-    const [ displayMode, setDisplayMode ] = useState('grid');
+    const [ displayMode, setDisplayMode ] = useState<"grid" | "row">('grid');
 
     const { ref, inView } = useInView();
 
-    const numberOfResult = 10;
+    const numberOfResult = 20;
+  
+    const {
+        data: films,
+        isLoading: loading,
+        fetchNextPage,
+        isFetchingNextPage,
+        hasNextPage,
+        } = useInfiniteQuery({
+        queryKey: ['user', profile.id, 'films', order],
+        queryFn: async ({ pageParam = 1 }) => {
+            let from = (pageParam - 1) * numberOfResult;
+            let to = from - 1 + numberOfResult;
+            let column;
+            let ascending;
 
-    const { data: profileFilmsQuery, loading, error, fetchMore } = useQuery(PROFILE_FILM_QUERY, {
-        variables: {
-            user_id: profile?.id,
-            order: order == 'recent' ? { "updated_at": "DescNullsLast"} : { "likes_count": "DescNullsLast"},
-            first: numberOfResult,
+            const [tablePart, orderPart] = order.split('-');
+
+            if (tablePart === "like") {
+                column = 'created_at';
+            } else if (tablePart == "rating") {
+                column = 'rating';
+            } else {
+                column = 'date';
+            }
+
+            if (orderPart === "desc")
+                ascending = false;
+            else
+                ascending = true;
+
+            const { data } = await supabase
+                .from('user_movie_activity')
+                .select('*, user(*), review(*)')
+                .eq('user_id', profile.id)
+                .range(from, to)
+                .order(column, { ascending });
+
+            return (data);
         },
-        skip: !profile
-    })
-    const films: [ { film_action: FilmAction }] = profileFilmsQuery?.film_actionCollection?.edges;
-    const pageInfo: { hasNextPage: boolean, endCursor: string,} = profileFilmsQuery?.film_actionCollection?.pageInfo;
-
-
+        getNextPageParam: (data, pages) => {
+            return data?.length == numberOfResult ? pages.length + 1 : undefined  
+        },
+    });
+    
     useEffect(() => {
-        if (inView && pageInfo?.hasNextPage) {
-            fetchMore({
-                variables: {
-                    user_id: profile.id,
-                    order: order == 'recent' ? { "updated_at": "DescNullsFirst"} : { "likes_count": "DescNullsLast"},
-                    first: numberOfResult,
-                    after: pageInfo?.endCursor
-                },
-                updateQuery: (previousResult, { fetchMoreResult }) => {
-                    return {
-                      film_actionCollection: {
-                        edges: [
-                            ...previousResult.film_actionCollection.edges,
-                            ...fetchMoreResult.film_actionCollection.edges,
-                        ],
-                        pageInfo: fetchMoreResult.film_actionCollection.pageInfo
-                      }
-                    };
-                  }
-            });
-        }
-    }, [inView, pageInfo])
+        if (inView && hasNextPage)
+            fetchNextPage();
+    }, [inView, hasNextPage])
 
     if (loading)
-    {
-        return (
+        return 
             <div>Loading</div>
-        )
-    }
-
-    if (!films?.length)
-        return (null)
-
-    if (horizontal)
-        return (
-            <div className="flex flex-col gap-2">
-                <div className="flex justify-between gap-4 items-center">
-                    <Link href={`/@${profile?.username}/films`}>
-                        <h3 className="font-semibold text-xl text-accent-1">Dernières activités</h3>
-                    </Link>
-                    <Button variant={'link'} asChild>
-                        <Link href={`/@${profile?.username}/films`}>
-                            Tout afficher
-                        </Link>
-                    </Button>
-                    
-                </div>
-                <ScrollArea className="pb-4">
-                    <div className="grid grid-cols-2 sm:grid-cols-4  md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-10 gap-4">
-                        {films.map(({ film_action } : { film_action: FilmAction}) => (
-                            <div key={film_action.id} className="">
-                                <MovieCard
-                                    filmId={film_action.film_id}
-                                    displayMode={displayMode}
-                                    film_action={film_action}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                    <ScrollBar orientation="horizontal" />
-                </ScrollArea>
-            </div>
-        )
-
     return (
-        <div className="flex flex-col gap-2">
+        <div className="@container flex flex-col gap-2">
             <div className="flex justify-between gap-4 items-center">
                 <h3 className="font-semibold text-xl text-accent-1">Films</h3>
                 <div className="flex gap-2">
@@ -123,9 +89,9 @@ export default function ProfileFilms({
                         </SelectTrigger>
                         <SelectContent align="end">
                             <SelectGroup>
-                                <SelectLabel>Date</SelectLabel>
-                                <SelectItem value={"recent"}>Ajouté récemment</SelectItem>
-                                <SelectItem value={"added-desc"}>Ajouté anciennement</SelectItem>
+                                <SelectLabel>Vus</SelectLabel>
+                                <SelectItem value={"watch-desc"}>Plus récents</SelectItem>
+                                <SelectItem value={"watch-asc"}>Plus anciens</SelectItem>
                             </SelectGroup>
                             <SelectSeparator />
                             <SelectGroup>
@@ -134,7 +100,12 @@ export default function ProfileFilms({
                                 <SelectItem value={"rating-asc"}>Notes croissantes</SelectItem>
                             </SelectGroup>
                             <SelectSeparator />
-                            <SelectItem value={"rating-desc"}>Notes décroissantes</SelectItem>
+                            <SelectGroup>
+                                <SelectLabel>Coups de coeur</SelectLabel>
+                                <SelectItem value={"like-desc"}>Plus récents</SelectItem>
+                                <SelectItem value={"like-asc"}>Plus anciens</SelectItem>
+                            </SelectGroup>
+                            {/* <SelectItem value={"rating-desc"}>Notes décroissantes</SelectItem> */}
                         </SelectContent>
                     </Select>
                     <Button variant={'ghost'} onClick={() => setDisplayMode(displayMode == 'grid' ? 'row' : 'grid')}>
@@ -146,21 +117,35 @@ export default function ProfileFilms({
                     </Button>
                 </div>    
             </div>
-            <div className={` gap-4
-                ${displayMode == 'row' ? 'flex flex-col gap-4' : 'grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-8'}
-            `}
-            >
-                {films.map(({ film_action } : { film_action: FilmAction}, index) => (
-                    <div key={film_action.id} ref={index === films.length - 1 ? ref : undefined}>
-                        <MovieCard
-                            filmId={film_action.film_id}
-                            displayMode={displayMode}
-                            film_action={film_action}
-                        />
+            {films?.pages[0]?.length ?
+                <>
+                    <div className={` gap-1
+                        ${displayMode == 'row' ? 'flex flex-col' : 'grid grid-cols-3 @md:grid-cols-4 @2xl:grid-cols-6 @5xl:grid-cols-8'}
+                    `}
+                    >
+                        {films?.pages.map((page, i) => (
+                            <Fragment key={i}>
+                                {page?.map((film: any, index) => (
+                                    <div key={film.id}
+                                        {...(i === films.pages.length - 1 && index === page.length - 1
+                                            ? { ref: ref }
+                                            : {})}
+                                    >
+                                        <MovieCard
+                                            filmId={film.film_id}
+                                            displayMode={displayMode}
+                                            movieActivity={film}
+                                        />
+                                    </div>
+                                ))}
+                            </Fragment>
+                        ))}
                     </div>
-                ))}
-            </div>
-            {loading && <Loader />}
+                    {(loading || isFetchingNextPage) && <Loader />}
+                </>
+            :
+                <p className="text-center font-semibold">Aucun film.</p>
+            }  
         </div>
     )
 }

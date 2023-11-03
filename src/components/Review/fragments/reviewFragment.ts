@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 import USER_FRAGMENT from "@/context/AuthContext/fragments/userFragment";
-import FILM_ACTION_FRAGMENT from "@/components/Film/FilmAction/fragments/filmActionFragment";
+import FILM_RATING_FRAGMENT from "@/components/Film/FilmAction/fragments/filmRatingFragment";
 
 export default gql`
     fragment Review on review {
@@ -16,11 +16,11 @@ export default gql`
         likes_count
         comments_count
         views_count
-        action_id
-        film_action {
-            ...FilmAction
+        film_rating_id
+        film_rating {
+            ...FilmRating
         }
     }
     ${USER_FRAGMENT}
-    ${FILM_ACTION_FRAGMENT}
+    ${FILM_RATING_FRAGMENT}
 `

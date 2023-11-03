@@ -6,7 +6,7 @@ import { Playlist } from '@/types/type.playlist';
 import { useQuery } from '@apollo/client';
 import SEARCH_PLAYLIST_QUERY from './queries/searchPlaylistsQuery';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import MoviePlaylistCard from '@/components/Playlist/MoviePlaylist/MoviePlaylistCard';
+import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
 
 export default function SearchPlaylistsFull({
   query,

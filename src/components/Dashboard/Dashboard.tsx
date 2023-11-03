@@ -2,9 +2,12 @@
 
 import { useAuth } from "@/context/AuthContext/AuthProvider"
 import Loader from "@/components/Loader/Loader";
+import { useTranslations } from "next-intl";
+import PreviewWatchlist from "@/components/Dashboard/components/previewWatchlist";
 
 export default function Dashboard() {
     const { user, loading } = useAuth();
+    const t = useTranslations('word');
 
     if (!user || loading)
         return (
@@ -12,7 +15,8 @@ export default function Dashboard() {
         )
     return (
         <main className="p-4">
-            {user && <div className="text-4xl font-bold">Bonjour {user.full_name}</div>}
+            <div className="text-4xl font-bold">{t('hello')} {user.full_name}</div>
+            <PreviewWatchlist />
         </main>
     )
 }

@@ -1,6 +1,6 @@
 //* Import tailwind-merge for combining Tailwind CSS classes.
 
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 
 //* Define the props interface for the Box component.
 interface BoxProps {
@@ -18,7 +18,7 @@ export const HeaderBox: React.FC<BoxProps> = ({
 }) => {
   return (
     <div
-        className="bg-background"
+        className="bg-background @container"
         style={{
           backgroundImage: `url('${backgroundImage}')`,
           backgroundSize: 'cover',

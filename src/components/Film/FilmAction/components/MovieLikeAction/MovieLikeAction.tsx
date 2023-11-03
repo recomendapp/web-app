@@ -8,73 +8,81 @@ import {
 } from '@/components/ui/tooltip';
 import { Icons } from '../../../../icons';
 import { useRouter } from 'next/navigation';
-import { ApolloError, useMutation } from '@apollo/client';
 import { FilmAction } from '@/types/type.film';
 import { toast } from 'react-toastify';
-import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQuery';
-import INSERT_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/insertFilmActionMutation';
-import UPDATE_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/updateFilmActionMutation';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { supabase } from '@/lib/supabase/supabase';
+
+import INSERT_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/insertMovieActivityMutation'
+import UPDATE_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/updateMovieActivityMutation'
 
 interface MovieLikeActionProps extends React.HTMLAttributes<HTMLDivElement> {
   filmId: string;
-  filmAction: FilmAction;
-  loading: boolean;
-  error: ApolloError | undefined;
 }
 
 export function MovieLikeAction({
   filmId,
-  filmAction,
-  loading,
-  error,
 }: MovieLikeActionProps) {
 
   const { user } = useAuth();
 
   const router = useRouter();
 
-  const [ updateFilmActionMutation ] = useMutation(UPDATE_FILM_ACTION_MUTATION);
-  const [ insertFilmActionMutation, { error: errorAddingFilmAction} ] = useMutation(INSERT_FILM_ACTION_MUTATION, {
-    update: (store, { data }) => {
-      const filmActionData = store.readQuery<{ film_actionCollection: { edges: [{ action: FilmAction}]}}>({
-        query: FILM_ACTION_QUERY,
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-        },
-      })
-      store.writeQuery({
-        query: FILM_ACTION_QUERY,
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-        },
-        data: {
-          film_actionCollection: {
-            edges: [
-              ...filmActionData!.film_actionCollection.edges,
-              { action: data.insertIntofilm_actionCollection.records[0] }
-            ]
-          }
-        }
-      })
+  const queryClient = useQueryClient();
+
+  const {
+    data: activity,
+    isLoading: loading,
+    isError: error
+  } = useQuery({
+    queryKey: ['user', user?.id, 'film', filmId, 'activity'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('user_movie_activity')
+        .select(`*, review(*)`)
+        .eq('film_id', filmId)
+        .eq('user_id', user?.id)
+        .single()
+      return (data)
     },
+    enabled: user?.id !== undefined && user?.id !== null,
   });
+
+  const {
+    mutateAsync: insertActivityMutation,
+  } = useMutation(INSERT_ACTIVITY_MUTATION, {
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(['user', user?.id, 'film', filmId, 'activity'], data)
+    }
+  })
+
+  const {
+    mutateAsync: updateActivityMutation,
+  } = useMutation(UPDATE_ACTIVITY_MUTATION, {
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(['user', user?.id, 'film', filmId, 'activity'], data)
+    }
+  })
 
   const handleLike = async () => {
     try {
-      const mutationToUse = filmAction ? updateFilmActionMutation : insertFilmActionMutation;
-      const { errors } = await mutationToUse({
-        variables: {
+      if (activity) {
+        user?.id && await updateActivityMutation({
+          film_id: filmId,
+          user_id: user?.id,
+          data: {
+            is_liked: true
+          },
+        })
+      } else {
+        user?.id && await insertActivityMutation({
+          queryClient: queryClient,
           film_id: filmId,
           user_id: user?.id,
           is_liked: true,
-          is_watched: true,
-          is_watchlisted: false,
-        }
-      });
-      if (errors) throw errors;
+        })
+      }
     } catch (errors) {
       toast.error('Une erreur s\'est produite');
     }
@@ -82,14 +90,13 @@ export function MovieLikeAction({
 
   const handleUnlike = async () => {
     try {
-      const { errors } = await updateFilmActionMutation({
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-          is_liked: false,
-        }
-      });
-      if (errors) throw errors;
+      user?.id && await updateActivityMutation({
+        film_id: filmId,
+        user_id: user?.id,
+        data: {
+          is_liked: false
+        },
+      })
     } catch (errors) {
       toast.error('Une erreur s\'est produite');
     }
@@ -133,7 +140,7 @@ export function MovieLikeAction({
         <TooltipTrigger asChild>
           <Button
             onClick={() => {
-              filmAction?.is_liked ?
+              activity?.is_liked ?
                 handleUnlike()
               :
                 handleLike()
@@ -151,14 +158,14 @@ export function MovieLikeAction({
               <Heart
                 className={`
                   transition hover:text-like
-                  ${filmAction?.is_liked && 'text-like fill-like'}
+                  ${activity?.is_liked && 'text-like fill-like'}
                 `}
               />
             )}
           </Button>
         </TooltipTrigger>
         <TooltipContent side="bottom">
-          {filmAction?.is_liked ? (
+          {activity?.is_liked ? (
             <p>Retirer des coups de coeur</p>
           ) : (
             <p>Ajouter aux coups de coeur</p>

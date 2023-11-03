@@ -1,5 +1,5 @@
 'use client';
-import { AlertCircle, ListPlus } from 'lucide-react';
+import { ListPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -23,21 +23,13 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-import {
-  DialogTrigger,
-} from '@/components/ui/dialog';
-
 import { toast } from 'react-toastify';
-
-import { DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { PlaylistButton } from '@/components/modules/MoviePlaylist/PlaylistButton';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 
 import USER_PLAYLISTS_QUERY from '@/components/User/UserPlaylists/queries/userPlaylistsQuery'
 import { useMutation, useQuery } from '@apollo/client';
 import { Playlist } from '@/types/type.playlist';
-import { Skeleton } from '@/components/ui/skeleton';
 
 import INSERT_PLAYLIST_ITEM_MUATION from '@/components/Film/FilmAction/components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
 
@@ -52,7 +44,7 @@ export function MoviePlaylistAction({
   const { user, loading: userLoading } = useAuth();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
+  // const [openDialog, setOpenDialog] = useState(false);
   const [search, setSearch] = useState('');
 
   const { data: userPlaylistsQuery, loading, error } = useQuery(USER_PLAYLISTS_QUERY, {
@@ -111,7 +103,7 @@ export function MoviePlaylistAction({
           playlist_id: playlist.id,
           film_id: filmId,
           user_id: user?.id,
-          rank: Number(playlist.items_count)
+          rank: null,
         }
       });
       toast.success(`Ajouté à ${playlist.title}`);
@@ -174,7 +166,7 @@ export function MoviePlaylistAction({
               className="h-9"
             />
             <CommandList>
-                <CommandGroup>
+                {/* <CommandGroup>
                   <CommandItem
                     onSelect={() => {
                       setOpen(false);
@@ -184,7 +176,7 @@ export function MoviePlaylistAction({
                     Créer une playlist
                   </CommandItem>
                 </CommandGroup>
-              <DropdownMenuSeparator />
+              <DropdownMenuSeparator /> */}
               <CommandGroup>
                 {playlists?.map(({ playlist } : { playlist: Playlist}) => (
                   <CommandItem
@@ -203,7 +195,7 @@ export function MoviePlaylistAction({
           </Command>
         </PopoverContent>
       </Popover>
-      <PlaylistButton open={openDialog} setOpen={(setOpenDialog)} userId={user?.id} filmId={filmId} />
+      {/* <PlaylistButton open={openDialog} setOpen={(setOpenDialog)} userId={user?.id} filmId={filmId} /> */}
     </>
   );
 }

@@ -36,8 +36,9 @@ import { Film } from "@/types/type.film"
 import { useMutation } from "@apollo/client"
 
 import DELETE_PLAYLIST_ITEM_MUTATION from "@/components/modules/MoviePlaylist/mutations/deletePlaylistItemMutation"
-import PLAYLIST_DETAILS_QUERY from '@/components/modules/MoviePlaylist/PlaylistDetails/queries/playlistDetailsQuery';
+import PLAYLIST_DETAILS_QUERY from '@/components/Playlist/FilmPlaylist/PlaylistDetails/queries/playlistDetailsQuery';
 import USER_PLAYLISTS_QUERY from '@/components/User/UserPlaylists/queries/userPlaylistsQuery'
+import { toast } from "react-toastify"
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItem>,
@@ -136,19 +137,24 @@ export function DataTableRowActions({
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem asChild><Link href={`/film/${data.film.id}`}>Voir le film</Link></DropdownMenuItem>
           <ShowDirectorsButton film={data.film} setOpen={setOpenShowDirectors} />
-          { data.user?.id == user?.id ? <DropdownMenuItem onClick={() => setOpenComment(true)}>{data.comment ? "Voir le commentaire" : "Ajouter un commentaire"}</DropdownMenuItem>
+          { table.options.meta?.canEdit() ? <DropdownMenuItem onClick={() => setOpenComment(true)}>{data.comment ? "Voir le commentaire" : "Ajouter un commentaire"}</DropdownMenuItem>
           : data.comment && <DropdownMenuItem onClick={() => setOpenComment(true)}>Voir le commentaire</DropdownMenuItem>}
           <DropdownMenuSeparator />
           <DropdownMenuItem><ButtonShare url={`${location.origin}/film/${data.film?.id}`}/></DropdownMenuItem>
-          {data.user?.id == user?.id && 
+          {table.options.meta?.canEdit() &&
             <DropdownMenuItem onClick={async () => {
-              await deletePlaylistItemMutation({
-                variables: {
-                  id: data.id
-                }
-              })
-              await table.options.meta?.deleteItem(data);
-              // await handleDeletePlaylistItemFromId(data.id, data.id, queryClient);
+              try {
+                const {data: response } = await deletePlaylistItemMutation({
+                  variables: {
+                    id: data.id
+                  }
+                })
+                if (!response?.deleteFromplaylist_itemCollection?.affectedCount) throw Error
+                // table.options.meta?.deleteItem(data);
+              } catch (error) {
+                toast.error('Une erreur s\'est produite');
+              }
+              
             }}>
               Delete
             </DropdownMenuItem>

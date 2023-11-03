@@ -8,108 +8,155 @@ import {
 } from '@/components/ui/tooltip';
 import { Icons } from '../../../../icons';
 import { useRouter } from 'next/navigation';
-import { FilmAction } from '@/types/type.film';
-import { ApolloError, useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { supabase } from '@/lib/supabase/supabase';
 
-import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQuery';
-import INSERT_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/insertFilmActionMutation';
-import DELETE_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/deleteFilmActionMutation';
-import UPDATE_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/updateFilmActionMutation';
+import DELETE_WATCHLIST_MUTATION from '@/components/Film/FilmAction/components/MovieWatchlistAction/mutations/deleteWatchlistMutation'
+import INSERT_WATCHLIST_MUTATION from '@/components/Film/FilmAction/components/MovieWatchlistAction/mutations/insertWatchlistMutation'
 
 
 interface MovieWatchlistActionProps extends React.HTMLAttributes<HTMLDivElement> {
   filmId: string;
-  filmAction: FilmAction;
-  loading: boolean;
-  error: ApolloError | undefined;
+  // filmAction: FilmAction;
+  // loading: boolean;
+  // error: ApolloError | undefined;
 }
 
 export function MovieWatchlistAction({
   filmId,
-  filmAction,
-  loading,
-  error,
+  // filmAction,
+  // loading,
+  // error,
 }: MovieWatchlistActionProps) {
 
   const { user } = useAuth();
 
   const router = useRouter();
 
-  const [ updateFilmActionMutation ] = useMutation(UPDATE_FILM_ACTION_MUTATION);
-  const [ insertFilmActionMutation, { error: errorAddingWatch } ] = useMutation(INSERT_FILM_ACTION_MUTATION, {
-    update: (store, { data }) => {
-      const filmActionData = store.readQuery<{ film_actionCollection: { edges: [{ action: FilmAction}]}}>({
-        query: FILM_ACTION_QUERY,
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-        },
-      })
-      store.writeQuery({
-        query: FILM_ACTION_QUERY,
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-        },
-        data: {
-          film_actionCollection: {
-            edges: [
-              ...filmActionData!.film_actionCollection.edges,
-              { action: data.insertIntofilm_actionCollection.records[0] }
-            ]
-          }
-        }
-      })
+  const queryClient = useQueryClient();
+
+  const {
+    data: activity,
+    isLoading: activityLoading,
+    isError: activityError,
+  } = useQuery({
+    queryKey: ['user', user?.id, 'film', filmId, 'activity'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('user_movie_activity')
+        .select(`*, review(*)`)
+        .eq('film_id', filmId)
+        .eq('user_id', user?.id)
+        .single()
+      return (data)
     },
+    enabled: user?.id !== undefined && user?.id !== null,
   });
-  const [ deleteFilmActionMutation, { error: errorDeletingWatch } ] = useMutation(DELETE_FILM_ACTION_MUTATION, {
-    update: (store, { data }) => {
-      store.writeQuery({
-        query: FILM_ACTION_QUERY,
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-        },
-        data: {
-          film_actionCollection: {
-            edges: []
-          }
-        }
-      })
+
+  const {
+    data: isWatchlisted,
+    isLoading: loading,
+    isError: error
+  } = useQuery({
+    queryKey: ['user', user?.id, 'film', filmId, 'watchlist'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('user_movie_watchlist')
+        .select('*')
+        .eq('film_id', filmId)
+        .eq('user_id', user?.id)
+        .single()
+      return (data)
     },
+    enabled: user?.id !== undefined && user?.id !== null,
   });
+
+  const {
+    mutateAsync: deleteWatchlistMutation,
+  } = useMutation(DELETE_WATCHLIST_MUTATION, {
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(['user', user?.id, 'film', filmId, 'watchlist'], data)
+    }
+  })
+
+  const {
+    mutateAsync: insertWatchlistMutation,
+  } = useMutation(INSERT_WATCHLIST_MUTATION, {
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(['user', user?.id, 'film', filmId, 'watchlist'], data)
+    }
+  })
+
+  // const [ insertFilmWatchlistMutation, { error: errorInsertFilmWatchlist } ] = useMutation(INSERT_FILM_WATCHLIST_MUTATION, {
+  //   update: (store, { data }) => {
+  //     const filmActionData = store.readQuery<FilmAction>({
+  //       query: FILM_ACTION_QUERY,
+  //       variables: {
+  //         film_id: filmId,
+  //         user_id: user?.id,
+  //       },
+  //     })
+  //     store.writeQuery({
+  //       query: FILM_ACTION_QUERY,
+  //       variables: {
+  //         film_id: filmId,
+  //         user_id: user?.id,
+  //       },
+  //       data: {
+  //         ...filmActionData,
+  //         watchlist: {
+  //           edges: {
+  //             ...data.insertIntofilm_watchlistCollection.records
+  //           }
+  //         }
+  //       }
+  //     })
+  //   },
+  // });
+  // const [ deleteFilmWatchlistMutation, { error: errorDeleteFilmWatchlist } ] = useMutation(DELETE_FILM_WATCHLIST_MUTATION, {
+  //   update: (store, { data }) => {
+  //     const filmActionData = store.readQuery<FilmAction>({
+  //       query: FILM_ACTION_QUERY,
+  //       variables: {
+  //         film_id: filmId,
+  //         user_id: user?.id,
+  //       },
+  //     })
+  //     store.writeQuery({
+  //       query: FILM_ACTION_QUERY,
+  //       variables: {
+  //         film_id: filmId,
+  //         user_id: user?.id,
+  //       },
+  //       data: {
+  //         ...filmActionData,
+  //         watchlist: {
+  //           edges: []
+  //         }
+  //       }
+  //     })
+  //   },
+  // });
   
   const handleWatchlist = async () => {
     try {
-      const mutationToUse = filmAction ? updateFilmActionMutation : insertFilmActionMutation;
-      const { errors } = await mutationToUse({
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-          is_watchlisted: true,
-        }
-      });
-      if (errors) throw error;
-      toast.success('Ajouté à vos films à voir');
-    } catch {
+      user?.id && await insertWatchlistMutation({
+        film_id: filmId,
+        user_id: user?.id
+      })
+    } catch (errors) {
       toast.error('Une erreur s\'est produite');
     }
   }
   const handleUnwatchlist = async () => {
     try {
-      const mutationToUse = (!filmAction.is_liked && !filmAction.is_watched && !filmAction.rating) ? deleteFilmActionMutation : updateFilmActionMutation;
-      const { errors } = await mutationToUse({
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-          is_watchlisted: false,
-        }
-      });
-      if (errors) throw errors;
-      toast.success('Supprimé de vos films à voir');
-    } catch (error) {
+      user?.id && await deleteWatchlistMutation({
+        film_id: filmId,
+        user_id: user?.id
+      })
+    } catch (errors) {
       toast.error('Une erreur s\'est produite');
     }
   }
@@ -149,7 +196,7 @@ export function MovieWatchlistAction({
         <TooltipTrigger asChild>
           <Button
             onClick={() => {
-              filmAction?.is_watchlisted ?
+              isWatchlisted ?
                 handleUnwatchlist()
               :
                 handleWatchlist();
@@ -164,19 +211,19 @@ export function MovieWatchlistAction({
             ) : error ? (
               <AlertCircle />
             ) : (
-              <Bookmark className={`${filmAction?.is_watchlisted && 'fill-foreground'}`}/>
+              <Bookmark className={`${isWatchlisted && 'fill-foreground'}`}/>
             )}
           </Button>
         </TooltipTrigger>
         <TooltipContent side="bottom">
-        {filmAction?.is_watched ? (
-          filmAction?.is_watchlisted ? (
+        {activity ? (
+          isWatchlisted ? (
             <p>Supprimer des films à revoir</p>
           ) : (
             <p>Envie de le revoir</p>
           )
         ) : (
-          filmAction?.is_watchlisted ? (
+          isWatchlisted ? (
             <p>Supprimer des films à voir</p>
           ) : (
             <p>Envie de le voir</p>

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '../../ui/skeleton';
 import { ImageWithFallback } from '../../tools/ImageWithFallback';
 import { AspectRatio } from '../../ui/aspect-ratio';
+import { useLocale } from 'next-intl';
 
 export default function SearchFilmsSmall({
   query,
@@ -16,11 +17,12 @@ export default function SearchFilmsSmall({
 }) {
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState<any>(null);
+  const locale = useLocale();
 
   useEffect(() => {
     if (query) {
       setLoading(true);
-      handleSearchMovies(query, 'en', 1)
+      handleSearchMovies(query, locale, 1)
         .then((response) => {
           if (response.length) {
             setLoading(false);
@@ -38,7 +40,7 @@ export default function SearchFilmsSmall({
 
   if (loading) {
     return (
-      <div className=" w-full grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className=" w-full grid grid-cols-1 @lg:grid-cols-2 gap-4">
         {/* MEILLEUR RESULTAT */}
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-end">
@@ -92,7 +94,7 @@ export default function SearchFilmsSmall({
   }
 
   return (
-    <div className=" w-full grid grid-cols-1 lg:grid-cols-2 gap-2">
+    <div className=" w-full grid grid-cols-1 @4xl:grid-cols-2 gap-2">
       {/* MEILLEUR RESULTAT */}
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-end">
@@ -101,13 +103,13 @@ export default function SearchFilmsSmall({
         <Link
           key={results[0].title}
           href={'/film/' + results[0].id}
-          className="flex relative bg-secondary h-full hover:bg-secondary-hover rounded-md p-2 gap-2"
+          className="flex flex-col @md:flex-row relative bg-secondary h-full hover:bg-secondary-hover rounded-md p-2 gap-2"
         >
-          <Badge className="absolute right-2 bg-accent-1 shadow-2xl">
+          <Badge className="z-[1] absolute top-4 right-4 shadow-2xl">
             Film
           </Badge>
           {/* MOVIE COVER */}
-          <div className="w-[250px]">
+          <div className="w-full @sm:w-[250px] shrink-0">
             <AspectRatio ratio={2 / 3}>
               <ImageWithFallback
                 src={
@@ -123,22 +125,19 @@ export default function SearchFilmsSmall({
           {/* NAME */}
           <div className="flex flex-col justify-end">
             {/* MOVIE TITLE */}
-            <div className="text-2xl font-bold">{results[0].title}</div>
+            <div className="text-2xl font-bold line-clamp-2 break-all overflow-hidden">{results[0].title}</div>
             {/* MOVIE DIRECTOR */}
-            <div>
+            <div className='line-clamp-2'>
               {results[0].credits.directors.length ? (
                 results[0].credits.directors.map(
                   (director: any, index: number) => (
                     <span key={director.id}>
-                      <Button
-                        variant="link"
-                        className="w-fit p-0 h-full text-accent-1 font-normal italic"
-                        asChild
+                      <Link
+                        href={`/person/${director.id}`}
+                        className="w-fit p-0 h-full text-accent-1 font-normal italic hover:underline underline-offset-4"
                       >
-                        <Link href={`/person/${director.id}`}>
-                          {director.name}
-                        </Link>
-                      </Button>
+                        {director.name}
+                      </Link>
                       {index !== results[0].credits.directors.length - 1 && (
                         <span>, </span>
                       )}
@@ -158,14 +157,10 @@ export default function SearchFilmsSmall({
       {results.length > 1 && <div className="flex flex-col gap-2 ">
         <div className="flex justify-between items-end">
           <div className="text-2xl font-bold">Films</div>
-          {/* <div>
-                        Tout afficher
-                    </div> */}
           <Button variant="link" className="p-0 h-full" asChild>
             <Link href={`/search/films?q=${query}`}>
               Tout afficher
             </Link>
-            
           </Button>
         </div>
         <div className="flex flex-col gap-2">
@@ -191,23 +186,20 @@ export default function SearchFilmsSmall({
                 </div>
                 {/* MOVIE DATA */}
                 <div className="flex flex-col">
-                  <Button variant="link" className="w-fit p-0 h-full text-base line-clamp-1">
+                  <p className='font-bold line-clamp-2 break-all overflow-hidden'>
                     {item.title}
-                  </Button>
-                  <div className='line-clamp-1'>
+                  </p>
+                  <div className='line-clamp-2'>
                     {item.credits.directors.length ? (
                       item.credits.directors.map(
                         (director: any, index: number) => (
                           <span key={director.id}>
-                            <Button
-                              variant="link"
-                              className="w-fit p-0 h-full text-accent-1 font-normal italic"
-                              asChild
+                            <Link
+                              href={`/person/${director.id}`}
+                              className="w-fit p-0 h-full text-accent-1 font-normal italic hover:underline underline-offset-4"
                             >
-                              <Link href={`/person/${director.id}`}>
-                                {director.name}
-                              </Link>
-                            </Button>
+                              {director.name}
+                            </Link>
                             {index !== item.credits.directors.length - 1 && (
                               <span>, </span>
                             )}

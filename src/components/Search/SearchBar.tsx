@@ -6,7 +6,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 // ICON
 import { BiSearch } from 'react-icons/bi';
 import useDebounce from '@/hooks/search/useDebounce';
-import { cn } from '@/lib/utils/utils';
+import { cn } from '@/lib/utils';
 
 interface SearchBarProps extends React.HTMLAttributes<HTMLDivElement> {}
 

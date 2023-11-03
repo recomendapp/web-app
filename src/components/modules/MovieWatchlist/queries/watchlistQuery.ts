@@ -1,20 +1,19 @@
 import { gql } from "@apollo/client";
-import FILM_ACTION_FRAGMENT from "@/components/Film/FilmAction/fragments/filmActionFragment";
+import FILM_WATCHLIST_FRAGMENT from "@/components/Film/FilmAction/fragments/filmWatchlistFragment";
 
 export default gql`
     query Watchlist($user_id: UUID!){
-        film_actionCollection(
+        watchlist: user_movie_watchlistCollection(
             filter: {
                 user_id: { eq: $user_id }
-                is_watchlisted: { eq: true }
             }
         ) {
             edges {
                 item: node {
-                    ...FilmAction
+                    ...FilmWatchlist
                 }
             }
         }
     }
-    ${FILM_ACTION_FRAGMENT}
+    ${FILM_WATCHLIST_FRAGMENT}
 `

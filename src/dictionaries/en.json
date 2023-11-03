@@ -1,0 +1,70 @@
+{
+  "word": {
+    "hello": "Hello"
+  },
+  "about": {
+    "about": {
+      "label": "About",
+      "marquee": "NOTHING MORE EXCITING IN YOUR LIFE THAN LOOKING AT 'ABOUT' PAGES ON THE INTERNET?"
+    }
+  },
+  "sidebar": {
+    "routes": {
+      "home": "Home",
+      "explore": "Explore",
+      "feed": "Feed",
+      "search": "Search"
+    }
+  },
+  "settings": {
+    "label": "Settings",
+    "description": "Manage your account settings.",
+    "profile": {
+      "label": "Profile",
+      "description": "This is how others will see you on the site.",
+      "avatar": {
+        "label": "Avatar",
+        "delete": "Delete"
+      },
+      "name": {
+        "label": "Name",
+        "description": "This is the name that will be displayed on your profile and in emails."
+      },
+      "bio": {
+        "label": "Bio",
+        "description": ""
+      },
+      "url": {
+        "label": "URL",
+        "description": ""
+      }
+    },
+    "account": {
+      "label": "Account",
+      "description": "Update your account settings."
+    },
+    "appearance": {
+      "label": "Appearance",
+      "description": "Customize the appearance of the app. Automatically switch between day and night themes.",
+      "update_preferences": "Update preferences",
+      "language": {
+        "label": "Language",
+        "description": "Choose language - Changes will be applied after restarting the app"
+      },
+      "theme": {
+        "label": "Theme",
+        "description": "Select the theme for the interface.",
+        "options": {
+          "light": "Light",
+          "dark": "Dark"
+        }
+      }
+    },
+    "subscription": {
+      "label": "Subscription"
+    },
+    "security": {
+      "label": "Security"
+    }
+  }
+}

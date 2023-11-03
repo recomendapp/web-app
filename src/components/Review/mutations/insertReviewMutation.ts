@@ -7,14 +7,14 @@ export default gql `
     $user_id: UUID!
     $title: String!
     $body: String!
-    $action_id: BigInt!
+    $film_rating_id: BigInt!
   ) {
     insertIntoreviewCollection(objects: {
       film_id: $film_id
       user_id: $user_id
       title: $title
       body: $body
-      action_id: $action_id
+      film_rating_id: $film_rating_id
     }) {
       records {
         ...Review

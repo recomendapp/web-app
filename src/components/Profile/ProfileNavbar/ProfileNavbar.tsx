@@ -1,6 +1,6 @@
 "use client"
 import UserCard from "@/components/User/UserCard/UserCard";
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import { User } from "@/types/type.user";
 import { Share } from "lucide-react";
 import Link from "next/link";

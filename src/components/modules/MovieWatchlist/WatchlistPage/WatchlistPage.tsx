@@ -9,12 +9,14 @@ import { useEffect, useState } from "react";
 
 import WATCHLIST_QUERY from '@/components/modules/MovieWatchlist/queries/watchlistQuery'
 import { getMovieDetails } from "@/lib/tmdb";
-import { FilmAction } from "@/types/type.film";
+import { FilmAction, FilmWatchlist } from "@/types/type.film";
+import { useLocale } from "next-intl";
 
 export function WatchlistPage() {
+    const locale = useLocale();
     const { user } = useAuth();
 
-    const [ watchlistItem, setWatchlistItem ] = useState<{item: FilmAction}[]>();
+    const [ watchlistItem, setWatchlistItem ] = useState<{ item: FilmWatchlist } []>();
 
 
     const { data: watchlistQuery, loading, error } = useQuery(WATCHLIST_QUERY, {
@@ -23,7 +25,7 @@ export function WatchlistPage() {
         },
         skip: !user
     });
-    const watchlist: [ { item: FilmAction } ] = watchlistQuery?.film_actionCollection?.edges;
+    const watchlist: [ { item: FilmWatchlist } ] = watchlistQuery?.watchlist?.edges;
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,7 +33,7 @@ export function WatchlistPage() {
             const updatedGuidelistItems = await Promise.all(watchlist?.map(async (item, index) => {
               const option = { ...item }
               if (item.item.film_id) {
-                const film = await getMovieDetails(item.item.film_id, 'fr');
+                const film = await getMovieDetails(item.item.film_id, locale);
                 option.item = { ...item.item, film };
               }
               return option;

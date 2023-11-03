@@ -20,118 +20,85 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
 import { FilmAction } from '@/types/type.film';
-import { ApolloError, useMutation } from '@apollo/client';
+// import { ApolloError, useMutation } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { toast } from 'react-toastify';
-import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQuery';
-import INSERT_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/insertFilmActionMutation';
-import DELETE_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/deleteFilmActionMutation';
-import UPDATE_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/updateFilmActionMutation';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { supabase } from '@/lib/supabase/supabase';
+
+import DELETE_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/deleteMovieActivtyMutation'
+import INSERT_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/insertMovieActivityMutation'
 
 interface MovieWatchActionProps extends React.HTMLAttributes<HTMLDivElement> {
   filmId: string;
-  filmAction: FilmAction;
-  loading: boolean;
-  error: ApolloError | undefined;
 }
 
 export function MovieWatchAction({
   filmId,
-  filmAction,
-  loading,
-  error,
 }: MovieWatchActionProps) {
 
   const { user } = useAuth();
 
   const router = useRouter();
 
-  const [ updateFilmActionMutation ] = useMutation(UPDATE_FILM_ACTION_MUTATION);
-  const [ insertFilmActionMutation, { error: errorAddingWatch } ] = useMutation(INSERT_FILM_ACTION_MUTATION, {
-    update: (store, { data }) => {
-      const filmActionData = store.readQuery<{ film_actionCollection: { edges: [{ action: FilmAction}]}}>({
-        query: FILM_ACTION_QUERY,
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-        },
-      })
-      store.writeQuery({
-        query: FILM_ACTION_QUERY,
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-        },
-        data: {
-          film_actionCollection: {
-            edges: [
-              ...filmActionData!.film_actionCollection.edges,
-              { action: data.insertIntofilm_actionCollection.records[0] }
-            ]
-          }
-        }
-      })
+  const queryClient = useQueryClient();
+
+  const {
+    data: activity,
+    isLoading: loading,
+    isError: error
+  } = useQuery({
+    queryKey: ['user', user?.id, 'film', filmId, 'activity'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('user_movie_activity')
+        .select(`*, review(*)`)
+        .eq('film_id', filmId)
+        .eq('user_id', user?.id)
+        .single()
+      if (error) throw error;
+      return (data)
     },
+    enabled: user?.id !== undefined && user?.id !== null,
   });
-  const [ deleteFilmActionMutation, { error: errorDeletingWatch } ] = useMutation(DELETE_FILM_ACTION_MUTATION, {
-    update: (store, { data }) => {
-      // cache.evict({ id: `${data.deleteFromfilm_actionCollection.records[0].__typename}:${data.deleteFromfilm_actionCollection.records[0].id}` });
-      const filmActionData = store.readQuery<{ film_actionCollection: { edges: [{ action: FilmAction}]}}>({
-        query: FILM_ACTION_QUERY,
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-        },
-      })
-      store.writeQuery({
-        query: FILM_ACTION_QUERY,
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-        },
-        data: {
-          film_actionCollection: {
-            edges: filmActionData!.film_actionCollection.edges.filter(edge => {
-                edge.action.film_id !== data.deleteFromfilm_actionCollection.records[0]
-            })
-          }
-        }
-      })
-    },
-  });
+
+  const {
+    mutateAsync: deleteActivityMutation,
+  } = useMutation(DELETE_ACTIVITY_MUTATION, {
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(['user', user?.id, 'film', filmId, 'activity'], data)
+    }
+  })
+
+  const {
+    mutateAsync: insertActivityMutation,
+  } = useMutation(INSERT_ACTIVITY_MUTATION, {
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(['user', user?.id, 'film', filmId, 'activity'], data)
+    }
+  })
+
 
   const handleWatch = async () => {
     try {
-      const mutationToUse = filmAction ? updateFilmActionMutation : insertFilmActionMutation;
-      const { errors } = await mutationToUse({
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-          is_watched: true,
-          is_watchlisted: false,
-        }
-      });
-      if (errors) throw errors;
+      user?.id && await insertActivityMutation({
+        queryClient: queryClient,
+        film_id: filmId,
+        user_id: user?.id
+      })
     } catch (errors) {
+      console.log(errors)
       toast.error('Une erreur s\'est produite');
     }
   }
   const handleUnwatch = async () => {
     try {
-      const mutationToUse = filmAction.is_watchlisted ? updateFilmActionMutation : deleteFilmActionMutation;
-      const { errors } = await mutationToUse({
-        variables: {
-          film_id: filmId,
-          user_id: user?.id,
-          is_liked: false,
-          is_watched: false,
-          rating: null,
-          review_id: null,
-        }
-      });
-      if (errors) throw errors;
-      toast.success('Supprimé de vos films');
+      user?.id && await deleteActivityMutation({
+        film_id: filmId,
+        user_id: user?.id
+      })
     } catch (errors) {
+      console.log(errors)
       toast.error('Une erreur s\'est produite');
     }
   }
@@ -174,9 +141,9 @@ export function MovieWatchAction({
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            {!filmAction?.is_watched ? (
+            {!activity ? (
               <Button
-                onClick={() => !filmAction?.is_watched && handleWatch()}
+                onClick={() => !activity && handleWatch()}
                 disabled={(loading || error) && true}
                 size="icon"
                 variant={'action'}
@@ -190,7 +157,7 @@ export function MovieWatchAction({
                   <div 
                       className={`
                         transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[2px]
-                        ${filmAction?.is_watched && 'bg-blue-500 border-blue-500'}
+                        ${activity && 'bg-blue-500 border-blue-500'}
                       `}
                     >
                       <Check size={16} />
@@ -198,7 +165,7 @@ export function MovieWatchAction({
                 )}
               </Button>
             ) : (
-              <AlertDialogTrigger disabled={!filmAction?.is_watched}>
+              <AlertDialogTrigger disabled={!activity}>
                 <Button
                   disabled={(loading || error) && true}
                   size="icon"
@@ -213,7 +180,7 @@ export function MovieWatchAction({
                     <div 
                       className={`
                         border-2 hover:border-blue-500 rounded-full p-[2px]
-                        ${filmAction?.is_watched && 'bg-blue-500 border-blue-500'}
+                        ${activity && 'bg-blue-500 border-blue-500'}
                       `}
                     >
                       <Check size={16} />
@@ -224,7 +191,7 @@ export function MovieWatchAction({
             )}
           </TooltipTrigger>
           <TooltipContent side="bottom">
-            {filmAction?.is_watched ? <p>Retirer des films vus</p> : <p>Marquer comme vu</p>}
+            {activity ? <p>Retirer des films vus</p> : <p>Marquer comme vu</p>}
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -239,7 +206,7 @@ export function MovieWatchAction({
         <AlertDialogFooter className='gap-2'>
           <AlertDialogCancel>Annuler</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => filmAction?.is_watched && handleUnwatch()}
+            onClick={() => activity && handleUnwatch()}
             className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
           >
             Continuer

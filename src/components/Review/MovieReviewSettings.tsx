@@ -15,11 +15,13 @@ import { useMutation } from '@apollo/client'
 import { MoreHorizontal, Trash2 } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { useQueryClient } from 'react-query'
 
-import DELETE_GUIDELIST_MUTATION from '@/components/Review/mutations/deleteReviewMutation'
-import GUIDELIST_QUERY from '@/components/modules/MovieGuidelist/queries/guidelistQuery'
+import DELETE_REVIEW_MUTATION from '@/components/Review/mutations/deleteReviewMutation'
+import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQuery';
+
 import { toast } from 'react-toastify'
+import { FilmAction } from '@/types/type.film'
+import { supabase } from '@/lib/supabase/supabase'
 
 export function MovieReviewSettings({
     review 
@@ -29,20 +31,33 @@ export function MovieReviewSettings({
 
     const { user } = useAuth();
 
-    const [deleteGuidelistMutation] = useMutation(DELETE_GUIDELIST_MUTATION, {
-        refetchQueries: [
-          {
-            query: GUIDELIST_QUERY,
-            variables: {
-                user_id: user?.id
-            }
-          }
-        ]
+    const [deleteReviewMutation] = useMutation(DELETE_REVIEW_MUTATION, {
+        update: (store, { data }) => {
+            const filmActionData = store.readQuery<FilmAction>({
+              query: FILM_ACTION_QUERY,
+              variables: {
+                film_id: review.film_id,
+                user_id: user?.id,
+              },
+            })
+            store.writeQuery({
+              query: FILM_ACTION_QUERY,
+              variables: {
+                film_id: review.film_id,
+                user_id: user?.id,
+              },
+              data: {
+                ...filmActionData,
+                review: {
+                  edges: []
+                }
+              }
+            })
+          },
     });
 
     const pathname = usePathname();
     const router = useRouter();
-    const queryClient = useQueryClient();
     const [open, setIsOpen] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -119,11 +134,15 @@ export function MovieReviewSettings({
                     <Button
                     variant="destructive"
                     onClick={async () => {
-                        await deleteGuidelistMutation({
-                            variables: {
-                                id: review.id
-                            }
-                        })
+                        await supabase
+                            .from('review')
+                            .delete()
+                            .eq('id', review.id)
+                        // await deleteReviewMutation({
+                        //     variables: {
+                        //         id: review.id
+                        //     }
+                        // })
                         // handleDeleteReview(review.$id, user.$id, review.movieId, queryClient)
                         setShowDeleteDialog(false);
                         if (pathname == `/@${user?.username}/film/${review.film_id}`)

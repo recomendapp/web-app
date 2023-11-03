@@ -28,20 +28,19 @@ import { Dispatch, SetStateAction, useState } from "react"
 import ButtonShare from "@/components/tools/ButtonShare"
 import UserCard from "@/components/User/UserCard/UserCard"
 import { PlaylistItem } from "@/types/type.playlist"
-import { Film, FilmAction } from "@/types/type.film"
+import { Film, FilmWatchlist } from "@/types/type.film"
 import { useMutation } from "@apollo/client"
 import { useAuth } from "@/context/AuthContext/AuthProvider"
 
 import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQuery';
-import DELETE_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/deleteFilmActionMutation';
-import UPDATE_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/updateFilmActionMutation';
+import DELETE_FILM_WATCHLIST_MUTATION from '@/components/Film/FilmAction/components/MovieWatchlistAction/mutations/deleteFilmWatchlistMutationOLD';
 import WATCHLIST_QUERY from "@/components/modules/MovieWatchlist/queries/watchlistQuery"
 
 interface DataTableRowActionsProps {
-  table: Table<FilmAction>,
-  row: Row<FilmAction>,
-  column: Column<FilmAction, unknown>,
-  data: FilmAction,
+  table: Table<FilmWatchlist>,
+  row: Row<FilmWatchlist>,
+  column: Column<FilmWatchlist, unknown>,
+  data: FilmWatchlist,
 }
 
 export function DataTableRowActions({
@@ -53,31 +52,21 @@ export function DataTableRowActions({
 
   const { user } = useAuth();
   const [ openShowDirectors, setOpenShowDirectors ] = useState(false);
-  const [ updateFilmActionMutation ] = useMutation(UPDATE_FILM_ACTION_MUTATION, {
-    refetchQueries: [
-      {
-        query: WATCHLIST_QUERY,
-        variables: {
-          user_id: user?.id
-        },
-      }
-    ]
-  });
-  const [ deleteFilmActionMutation, { error: errorDeletingWatch } ] = useMutation(DELETE_FILM_ACTION_MUTATION, {
-    update: (store) => {
-      store.writeQuery({
-        query: FILM_ACTION_QUERY,
-        variables: {
-          film_id: data.film_id,
-          user_id: user?.id,
-        },
-        data: {
-          film_actionCollection: {
-            edges: []
-          }
-        }
-      })
-    },
+  const [ deleteFilmWatchlistMutation, { error: errorDeletingWatch } ] = useMutation(DELETE_FILM_WATCHLIST_MUTATION, {
+    // update: (store) => {
+    //   store.writeQuery({
+    //     query: FILM_ACTION_QUERY,
+    //     variables: {
+    //       film_id: data.film_id,
+    //       user_id: user?.id,
+    //     },
+    //     data: {
+    //       film_actionCollection: {
+    //         edges: []
+    //       }
+    //     }
+    //   })
+    // },
     refetchQueries: [
       {
         query: WATCHLIST_QUERY,
@@ -113,12 +102,10 @@ export function DataTableRowActions({
           <DropdownMenuItem><ButtonShare url={`${location.origin}/film/${data.film?.id}`}/></DropdownMenuItem>
           <DropdownMenuItem 
             onClick={async () => {
-              const mutationToUse = (!data.is_liked && !data.is_watched && !data.rating) ? deleteFilmActionMutation : updateFilmActionMutation;
-              const { errors } = await mutationToUse({
+              const { errors } = await deleteFilmWatchlistMutation({
                 variables: {
                   film_id: data.film_id,
                   user_id: user?.id,
-                  is_watchlisted: false,
                 }
               });
             }}

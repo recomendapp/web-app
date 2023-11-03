@@ -25,6 +25,8 @@ interface MovieReviewFormProps {
 
 export default function MovieReviewForm({ review } : MovieReviewFormProps) {
 
+  console.log('review', review)
+
   const { user } = useAuth();
   const [ title, setTitle ] = useState(review.title);
   const [ body, setBody ] = useState<JSONContent>(JSON.parse(review.body));

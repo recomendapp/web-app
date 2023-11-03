@@ -1,19 +1,25 @@
+"use client"
+
 import { ImageWithFallback } from "@/components/tools/ImageWithFallback";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { cn } from "@/lib/utils";
 
-export default function MoviePoster({ width, poster_path, alt } : { width?: number, poster_path: string | null, alt: string }) {
+export default function MoviePoster({
+    className,
+    poster_path,
+    alt
+} : {
+    className?: string,
+    poster_path: string,
+    alt: string
+}) {
     return (
         <div 
-            className={`
-                shadow-md z-0
-                ${width ? `w-[${width}px]` : 'w-full'}
-            `}
+            className={cn("shadow-md z-0 shrink-0 w-full", className)}
         >
             <AspectRatio ratio={2 / 3} className="z-0">
                 <ImageWithFallback
-                    src={
-                        'https://image.tmdb.org/t/p/original/' + poster_path
-                    }
+                    src={poster_path}
                     alt={alt}
                     fill
                     className="rounded-md object-cover z-0"

@@ -1,9 +1,9 @@
 "use client"
 
-import MoviePlaylistCard from "@/components/Playlist/MoviePlaylist/MoviePlaylistCard";
+import MoviePlaylistCard from "@/components/Playlist/FilmPlaylist/MoviePlaylistCard";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { Plus } from "lucide-react";
@@ -12,120 +12,71 @@ import { useQuery } from "@apollo/client";
 import USER_PLAYLISTS_QUERY from "@/components/User/UserPlaylists/queries/userPlaylistsQuery";
 import { User } from "@/types/type.user";
 import { Playlist } from "@/types/type.playlist";
+import { useInfiniteQuery } from "react-query";
+import { supabase } from "@/lib/supabase/supabase";
 
 interface UserPlaylistsProps {
     profile: User;
-    horizontal?: boolean;
-    limit?: boolean;
 }
 
 export default function ProfilePlaylists({
     profile,
-    horizontal = false,
-    limit,
 } : UserPlaylistsProps) {
 
-    const [ order, setOrder ] = useState("recent");
+    const [ order, setOrder ] = useState("date-desc");
 
     const { ref, inView } = useInView();
 
-    const numberOfResult = 8;
+    const numberOfResult = 20;
+  
+    const {
+        data: playlists,
+        isLoading: loading,
+        fetchNextPage,
+        isFetchingNextPage,
+        hasNextPage,
+        } = useInfiniteQuery({
+        queryKey: ['user', profile.id, 'playlists', order],
+        queryFn: async ({ pageParam = 1 }) => {
+            let from = (pageParam - 1) * numberOfResult;
+            let to = from - 1 + numberOfResult;
+            let column;
+            let ascending;
 
-    const { data: userPlaylistsQuery, loading, error, fetchMore, networkStatus } = useQuery(USER_PLAYLISTS_QUERY, {
-        variables: {
-            user_id: profile.id,
-            order: order == 'recent' ? { "updated_at": "DescNullsFirst"} : { "likes_count": "DescNullsLast"},
-            first: numberOfResult,
+            const [columnPart, orderPart] = order.split('-');
+
+            if (columnPart === "date") {
+                column = 'updated_at';
+            } else {
+                column = 'likes_count';
+            }
+
+            if (orderPart === "desc")
+                ascending = false;
+            else
+                ascending = true;
+
+            const { data } = await supabase
+                .from('playlist')
+                .select('*')
+                .eq('user_id', profile.id)
+                .range(from, to)
+                .order(column, { ascending })
+
+            return (data);
         },
-        skip: !profile
-    })
-    const playlists: [ { playlist: Playlist }] = userPlaylistsQuery?.playlistCollection?.edges;
-    const pageInfo: { hasNextPage: boolean, endCursor: string,} = userPlaylistsQuery?.playlistCollection?.pageInfo;
-
+        getNextPageParam: (data, pages) => {
+            return data?.length == numberOfResult ? pages.length + 1 : undefined  
+        },
+    });
+    
     useEffect(() => {
-        if (inView && pageInfo?.hasNextPage) {
-            fetchMore({
-                variables: {
-                    user_id: profile.id,
-                    order: order == 'recent' ? { "updated_at": "DescNullsFirst"} : { "likes_count": "DescNullsLast"},
-                    first: numberOfResult,
-                    after: pageInfo?.endCursor
-                },
-                updateQuery: (previousResult, { fetchMoreResult }) => {
-                    return {
-                      playlistCollection: {
-                        edges: [
-                            ...previousResult.playlistCollection.edges,
-                            ...fetchMoreResult.playlistCollection.edges,
-                        ],
-                        pageInfo: fetchMoreResult.playlistCollection.pageInfo
-                      }
-                    };
-                  }
-            });
-        }
-    }, [inView, pageInfo])
-
-    if (!playlists?.length)
-        return (null)
-
-    if (horizontal)
-        return (
-            <div className="flex flex-col gap-2">
-                <div className="flex justify-between gap-4 items-center">
-                    <Link href={`/@${profile?.username}/playlists`}>
-                        <h3 className="font-semibold text-xl text-accent-1">Playlists</h3>
-                    </Link>
-                    <div className="flex gap-2">
-                        <Button variant={'link'} asChild>
-                            <Link href={`/@${profile?.username}/playlists`}>
-                                Tout afficher
-                            </Link>
-                        </Button>
-                        <Select onValueChange={setOrder} defaultValue={order}>
-                            <SelectTrigger className="w-fit">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent align="end">
-                                <SelectItem value={"recent"}>Récents</SelectItem>
-                                <SelectItem value={"popular"}>Populaires</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    
-                </div>
-                <ScrollArea className="pb-4">
-                    <div className="flex gap-4">
-                        {playlists.map(({ playlist } : { playlist: Playlist}) => (
-                            <MoviePlaylistCard key={playlist.id} playlist={playlist} className={'w-48'}/>
-                        ))}
-                        {/* {playlists?.pages.map((page, i) => (
-                            <Fragment key={i}>
-                                {page?.map((playlist: Models.Document) => (
-                                    <MoviePlaylistCard key={playlist.id} playlist={playlist} className={'w-48'}/>
-                                ))}
-                            </Fragment>
-                        ))} */}
-                        {/* {hasNextPage && 
-                            <div className="w-24 flex items-center justify-center">
-                                <Button variant={'ghost'} size={'icon'} className="rounded-full" asChild>
-                                    <Link href={`/@${profile?.username}/playlists`}>
-                                        <Plus />
-                                    </Link>
-                                </Button>
-                            </div>
-                        } */}
-                        {/* {playlists.slice(0, numberOfResult).map((playlist: Models.Document) => (
-                            <MoviePlaylistCard key={playlist.$id} playlist={playlist} className={'w-48'}/>
-                        ))} */}
-                    </div>
-                    <ScrollBar orientation="horizontal" />
-                </ScrollArea>
-            </div>
-        )
+        if (inView && hasNextPage)
+            fetchNextPage();
+    }, [inView, hasNextPage])
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="@container flex flex-col gap-2">
             <div className="flex justify-between gap-4 items-center">
                 <h3 className="font-semibold text-xl text-accent-1">Playlists</h3>
                 <Select onValueChange={setOrder} defaultValue={order}>
@@ -133,23 +84,41 @@ export default function ProfilePlaylists({
                         <SelectValue />
                     </SelectTrigger>
                     <SelectContent align="end">
-                        <SelectItem value={"recent"}>Récents</SelectItem>
-                        <SelectItem value={"popular"}>Populaires</SelectItem>
+                        <SelectGroup>
+                            <SelectLabel>Date</SelectLabel>
+                            <SelectItem value={"date-desc"}>Plus récentes</SelectItem>
+                            <SelectItem value={"date-asc"}>Plus anciennes</SelectItem>
+                        </SelectGroup>
+                        <SelectGroup>
+                            <SelectLabel>Popularité</SelectLabel>
+                            <SelectItem value={"popular-desc"}>Plus populaires</SelectItem>
+                            <SelectItem value={"popular-asc"}>Plus méconnus</SelectItem>
+                        </SelectGroup>
+                        
                     </SelectContent>
                 </Select>
                 
             </div>
-            {playlists ? <div className="gap-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5">
-                {playlists.map(({ playlist } : { playlist: Playlist}, index) => (
-                    <div key={playlist.id} ref={index === playlists.length - 1 ? ref : undefined}>
-                        <MoviePlaylistCard playlist={playlist} className={'w-full'} />
-                    </div>
-                ))}
-            </div>
-            :
-                <div className="w-full italic text-center">
-                    Aucune playlist
+            {playlists?.pages[0]?.length ?
+                <div className="grid gap-1 grid-cols-3 @lg:grid-cols-4 @3xl:grid-cols-5 @4xl:grid-cols-6 @5xl:grid-cols-7 @6xl:grid-cols-8">
+                    {playlists?.pages.map((page, i) => (
+                        <Fragment key={i}>
+                            {page?.map((playlist: any, index) => (
+                                <div key={playlist.id}
+                                    {...(i === playlists.pages.length - 1 && index === page.length - 1
+                                        ? { ref: ref }
+                                        : {})}
+                                >
+                                    <MoviePlaylistCard playlist={playlist} className={'w-full'} />
+                                </div>
+                            ))}
+                        </Fragment>
+                    ))}
                 </div>
+            :
+                <p className="text-center font-semibold">
+                    Aucune playlist
+                </p>
             }
         </div>
     )

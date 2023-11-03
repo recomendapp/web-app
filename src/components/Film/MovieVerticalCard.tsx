@@ -20,7 +20,7 @@ export default function MovieVerticalCard({ movie } : { movie:any }) {
     return (
         <div className="flex lg:flex-col gap-4 items-center">
             {/* MOVIE POSTER */}
-            <div className="w-full shadow-md">
+            <Link href={`/film/${movie.id}`} className="w-full shadow-md">
                 <AspectRatio ratio={2 / 3}>
                     <ImageWithFallback
                     src={
@@ -31,13 +31,13 @@ export default function MovieVerticalCard({ movie } : { movie:any }) {
                     className="rounded-md object-cover"
                     />
                 </AspectRatio>
-            </div>
+            </Link>
             {/* MOVIE DATAT */}
             <div className="w-full">
                 {/* TITLE */}
-                <h2 className="text-xl lg:text-4xl font-bold break-words">
+                <Link href={`/film/${movie.id}`} className="text-xl lg:text-4xl font-bold break-words">
                     {movie.title}
-                </h2>
+                </Link>
                 <div className="flex flex-col gap-2">
                     
                     {/* DATE / GENRES / RUNTIME */}

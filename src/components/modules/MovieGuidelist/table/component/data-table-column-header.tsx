@@ -3,7 +3,7 @@ import {
 } from "@radix-ui/react-icons"
 import { Column } from "@tanstack/react-table"
 
-import { cn } from "@/lib/utils/utils"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronUp, LucideIcon, Triangle } from "lucide-react"
 

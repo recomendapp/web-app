@@ -1,18 +1,18 @@
-import { gql } from "@apollo/client";
+import { supabase } from "@/lib/supabase/supabase"
 
-export default gql `
-  mutation insertFollower(
-    $followee_id: UUID!
-    $follower_id: UUID!
-  ) {
-    insertIntofollowerCollection(objects: {
-      followee_id: $followee_id,
-      follower_id: $follower_id,
-    }) {
-      records {
-        followee_id
-        follower_id
-      }
-    }
-  }
-`
+export default async function insertFollowerMutation ({
+    followee_id,
+    user_id,
+} : {
+    followee_id: string,
+    user_id: string,
+}) {
+    const { data, error } = await supabase
+        .from('follower')
+        .insert({
+            followee_id: followee_id,
+            user_id: user_id,
+        })
+    if (error) throw error;
+    return true;
+}

@@ -22,7 +22,7 @@ export default function MovieCardSmall({ movie } : { movie:any }) {
     return (
         <Link href={`/film/${movie.id}`} className="flex gap-4 items-center">
             {/* MOVIE POSTER */}
-            <MoviePoster width={100} poster_path={'https://image.tmdb.org/t/p/original/' + movie.poster_path} alt={movie.title}/>
+            <MoviePoster className="w-[100px]" poster_path={'https://image.tmdb.org/t/p/original/' + movie.poster_path} alt={movie.title}/>
             {/* MOVIE DATAT */}
             <div className="w-full block">
                 {/* TITLE */}

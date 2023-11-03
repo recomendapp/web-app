@@ -1,0 +1,70 @@
+{
+  "word": {
+    "hello": "Bonjour"
+  },
+  "about": {
+    "about": {
+      "label": "About",
+      "marquee": "Rien de plus excitant dans votre vie que de regarder les pages &apos;À propos&apos; sur Internet ?"
+    }
+  },
+  "sidebar": {
+    "routes": {
+      "home": "Accueil",
+      "explore": "Découverte",
+      "feed": "Feed",
+      "search": "Recherche"
+    }
+  },
+  "settings": {
+    "label": "Paramètres",
+    "description": "Gérez les paramètres de votre compte.",
+    "profile": {
+      "label": "Profil",
+      "description": "C'est ainsi que les autres vous verront sur le site.",
+      "avatar": {
+        "label": "Avatar",
+        "delete": "Supprimer"
+      },
+      "name": {
+        "label": "Nom",
+        "description": "Il s'agit du nom qui sera affiché sur votre profil et dans les emails."
+      },
+      "bio": {
+        "label": "Bio",
+        "description": ""
+      },
+      "url": {
+        "label": "URL",
+        "description": ""
+      }
+    },
+    "account": {
+      "label": "Compte",
+      "description": "Mettez à jour les paramètres de votre compte."
+    },
+    "appearance": {
+      "label": "Apparence",
+      "description": "Personnalisez l'apparence de l'application. Passez automatiquement entre les thèmes jour et nuit.",
+      "update_preferences": "Mettre à jour les préférences",
+      "language": {
+        "label": "Langue",
+        "description": "Choisissez une langue : les changements seront appliqués après le redémarrage de l'appli"
+      },
+      "theme": {
+        "label": "Thème",
+        "description": "Sélectionnez le thème pour l'interface.",
+        "options": {
+          "light": "Clair",
+          "dark": "Sombre"
+        }
+      }
+    },
+    "subscription": {
+      "label": "Abonnement"
+    },
+    "security": {
+      "label": "Sécurité"
+    }
+  }
+}

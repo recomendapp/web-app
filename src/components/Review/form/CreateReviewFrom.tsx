@@ -10,36 +10,35 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { MovieAction } from "@/components/Film/FilmAction/MovieAction";
 import { Textarea } from "@/components/ui/textarea";
-import { useMutation, useQuery } from "@apollo/client";
-import { useAuth } from "@/context/AuthContext/AuthProvider";
-import { FilmAction } from "@/types/type.film";
-import FILM_ACTION_QUERY from "@/components/Film/FilmAction/queries/filmActionQuery";
-import INSERT_REVIEW_MUTATION from "@/components/Review/mutations/insertReviewMutation";
+import { useQuery } from "react-query";
+import { supabase } from "@/lib/supabase/supabase";
 
 export default function CreateReviewForm({ filmId, user } : { filmId: string, user: User }) {
-
-  const { data: filmActionQuery, loading: filmActionLoading, error } = useQuery(FILM_ACTION_QUERY, {
-    variables: {
-      film_id: filmId,
-      user_id: user?.id,
+  const {
+    data: activity,
+    isLoading: activityLoading,
+    isError: activityError
+  } = useQuery({
+    queryKey: ['user', user?.id, 'film', filmId, 'activity'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('user_movie_activity')
+        .select(`*, review(count)`)
+        .eq('film_id', filmId)
+        .eq('user_id', user?.id)
+        .single()
+      return (data)
     },
-    skip: !user
-  })
-  const filmAction: FilmAction = filmActionQuery?.film_actionCollection?.edges[0]?.action;
-
-  const [ insertReviewMutation, { error: errorAddingReview } ] = useMutation(INSERT_REVIEW_MUTATION, {
-    // update: (store, { data }) => {
-    // },
+    enabled: user?.id !== undefined && user?.id !== null,
   });
-    const [ loading, setLoading ] = useState(false);
+  const [ loading, setLoading ] = useState(false);
     const router = useRouter();
 
     const [ body, setBody ] = useState<JSONContent>();
     const [ title, setTitle ] = useState<string>("");
 
     async function createReview() {
-    
-        if (!filmAction.rating)
+        if (!activity?.rating)
         {
             toast.error("Vous devez noter ce film pour ajouter une critique");
             return
@@ -59,15 +58,16 @@ export default function CreateReviewForm({ filmId, user } : { filmId: string, us
     
         try {
           setLoading(true);
-          await insertReviewMutation({
-            variables: {
+          const { data, error } = await supabase
+            .from('review')
+            .insert({
+              id: activity?.id,
               film_id: filmId,
               user_id: user.id,
               title: title ? title.trim() : `Critique par ${user.username}`,
               body: JSON.stringify(body),
-              action_id: filmAction.id,
-            }
-          })
+            })
+          if (error) throw error;
           toast.success('Votre critique a été publié avec succès');
           router.push(`/@${user.username}/film/${filmId}`);
         } catch (error) {

@@ -10,12 +10,18 @@ export interface Playlist {
     description: string,
     is_public: boolean,
     poster_url: string,
-    items_count: string,
+    items_count: number,
     playlist_item: {
         edges: [
             { item: PlaylistItem }
         ]
     }
+    guests: {
+        edges: [
+            { guest: PlaylistGuest }
+        ]
+    },
+    featured: boolean
 }
 
 export interface PlaylistItem {
@@ -27,5 +33,14 @@ export interface PlaylistItem {
     user_id: string,
     user: User,
     comment: string | null,
-    rank: string,
+    rank: number,
+}
+
+export interface PlaylistGuest {
+    id: string,
+    created_at: string,
+    playlist_id: string,
+    user_id: string,
+    user: User,
+    edit: boolean,
 }

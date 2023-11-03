@@ -1,13 +1,17 @@
-const withPWA = require('next-pwa');
+const withPWA = require("@ducanh2912/next-pwa").default({
+  dest: "public",
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development'
+});
+
+const withNextIntl = require('next-intl/plugin')(
+  './src/i18n.ts'
+);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  ...withPWA({
-    dest: 'public',
-    register: true,
-    skipWaiting: true,
-    disable: process.env.NODE_ENV === 'development'
-  }),
+  reactStrictMode: false,
   images: {
     domains: [
       'huecemdnsnivsvwhkiqz.supabase.co',
@@ -25,8 +29,8 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/settings',
-        destination: '/settings/profile',
+        source: '/:lang/settings',
+        destination: '/:lang/settings/profile',
         permanent: true,
       },
     ];
@@ -34,27 +38,27 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/@:username',
-        destination: '/user/:username',
+        source: '/:lang/@:username',
+        destination: '/:lang/user/:username',
       },
       {
-        source: '/@:username/playlists',
-        destination: '/user/:username/playlists',
+        source: '/:lang/@:username/playlists',
+        destination: '/:lang/user/:username/playlists',
       },
       {
-        source: '/@:username/films',
-        destination: '/user/:username/films',
+        source: '/:lang/@:username/films',
+        destination: '/:lang/user/:username/films',
       },
       {
-        source: '/@:username/stats',
-        destination: '/user/:username/stats',
+        source: '/:lang/@:username/stats',
+        destination: '/:lang/user/:username/stats',
       },
       {
-        source: '/@:username/film/:film',
-        destination: '/user/:username/film/:film',
+        source: '/:lang/@:username/film/:film',
+        destination: '/:lang/user/:username/film/:film',
       },
     ];
   },
 };
 
-module.exports = nextConfig;
+module.exports = withPWA(withNextIntl(nextConfig));

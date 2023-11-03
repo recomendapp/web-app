@@ -1,16 +1,17 @@
 'use client';
 
-import { Button } from '../../ui/button';
+import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { toast } from 'react-toastify';
-import { useMutation, useQuery } from '@apollo/client';
 import { User } from '@/types/type.user';
 import { Skeleton } from '@/components/ui/skeleton';
 
+import { cn } from '@/lib/utils';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { supabase } from '@/lib/supabase/supabase';
+
 import DELETE_FOLLOWER_MUTATION from '@/components/Profile/ProfileFollowButton/mutations/deleteFollowerMutation'
 import INSERT_FOLLOWER_MUTATION from '@/components/Profile/ProfileFollowButton/mutations/insertFollowerMutation'
-import FOLLOWER_QUERY from '@/components/Profile/ProfileFollowButton/queries/followerQuery'
-import { cn } from '@/lib/utils/utils';
 
 interface UserFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   profile: User;
@@ -22,130 +23,58 @@ export function ProfileFollowButton({
 }: UserFollowButtonProps) {
   const { user } = useAuth();
 
-  const { data: followerQuery, loading, error } = useQuery(FOLLOWER_QUERY, {
-    variables: {
-      followeeId: profile.id,
-      follower_id: user?.id,
+  const queryClient = useQueryClient();
+  
+  const {
+    data: isFollow,
+    isLoading: loading,
+  } = useQuery({
+    queryKey: ['user', user?.id, 'following', profile.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('follower')
+        .select('followee_id')
+        .eq('followee_id', profile.id)
+        .eq('user_id', user?.id)
+        .single()
+      return (data ? true : false);
     },
-    skip: !user
+    enabled: user !== undefined && user !== null,
+  });
+
+  const {
+    mutateAsync: deleteFollowerMutation,
+  } = useMutation(DELETE_FOLLOWER_MUTATION, {
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData([variables.user_id, 'following', variables.followee_id], data)
+    }
   })
 
-  const isFollow = followerQuery?.followerCollection?.edges[0]?.follower
-
-  const [ deleteFollowerMutation, { error: errorDeletingFollower } ] = useMutation(DELETE_FOLLOWER_MUTATION, {
-    update: (store) => {
-    //   const profileData = store.readQuery<{ userCollection: { edges: [{ user: User}]}}>({
-    //     query: PROFILE_QUERY,
-    //     variables: {
-    //       username: profile.username
-    //     },
-    //   })
-    //   const newFollowerCount = String(Number(profileData?.userCollection.edges[0].user.followers_count) - 1)
-
-    //   store.writeQuery({
-    //     query: PROFILE_QUERY,
-    //     variables: {
-    //       username: profile.username
-    //     },
-    //     data: {
-    //       userCollection: {
-    //         edges: [
-    //           {
-    //             user: {
-    //               ...profileData!.userCollection.edges[0].user,
-    //               followers_count: newFollowerCount
-    //             }
-    //           }
-    //         ]
-    //       }
-    //     }
-    //   })
-      // UPDATE FOLLOWING STATE
-      store.writeQuery({
-        query: FOLLOWER_QUERY,
-        variables: {
-          followeeId: profile.id,
-          follower_id: user?.id,
-        },
-        data: {
-          followerCollection: {
-            edges: []
-          }
-        }
-      })
-    },
-  });
-  const [ insertFollowerMutation, { error: errorAddingFollower} ] = useMutation(INSERT_FOLLOWER_MUTATION, {
-    update: (store, { data }) => {
-      // const profileData = store.readQuery<{ userCollection: { edges: [{ user: User}]}}>({
-      //   query: PROFILE_QUERY,
-      //   variables: {
-      //     username: profile.username
-      //   },
-      // })
-      // console.log('profileData', profileData)
-      // const newFollowerCount = String(Number(profileData?.userCollection.edges[0].user.followers_count) + 1)
-      // store.writeQuery({
-      //   query: PROFILE_QUERY,
-      //   variables: {
-      //     username: profile.username
-      //   },
-      //   data: {
-      //     userCollection: {
-      //       edges: [
-      //         {
-      //           user: {
-      //             ...profileData!.userCollection.edges[0].user,
-      //             followers_count: newFollowerCount
-      //           }
-      //         }
-      //       ]
-      //     }
-      //   }
-      // })
-
-      // UPDATE FOLLOWING STATE
-      store.writeQuery({
-        query: FOLLOWER_QUERY,
-        variables: {
-          followeeId: profile.id,
-          follower_id: user?.id,
-        },
-        data: {
-          followerCollection: {
-            edges: [
-              { action: data.insertIntofollowerCollection.records[0] }
-            ]
-          }
-        }
-      })
-    },
-  });
+  const {
+    mutateAsync: insertFollowerMutation,
+  } = useMutation(INSERT_FOLLOWER_MUTATION, {
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData([variables.user_id, 'following', variables.followee_id], data)
+    }
+  })
 
   async function followUser() {
     try {
-      const { errors } = await insertFollowerMutation({
-        variables: {
-          followee_id: profile.id,
-          follower_id: user?.id
-        }
-      });
-      if (errors) throw errors;
+      user?.id && await insertFollowerMutation({
+        followee_id: profile.id,
+        user_id: user?.id
+      })
     } catch (error) {
-      console.log(error)
       toast.error('Une erreur s\'est produite');
     }
   }
 
   async function unfollowUser() {
     try {
-      const { errors } = await deleteFollowerMutation({
-        variables: {
-          followee_id: profile.id,
-          follower_id: user?.id
-        }
-      });
-      if (errors) throw errors;
+      user?.id && await deleteFollowerMutation({
+        followee_id: profile.id,
+        user_id: user?.id
+      })
     } catch (error) {
       toast.error('Une erreur s\'est produite');
     }

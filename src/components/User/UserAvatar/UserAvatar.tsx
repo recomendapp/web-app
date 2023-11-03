@@ -1,7 +1,7 @@
 "use client"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { cn, getInitiales } from "@/lib/utils/utils";
+import { cn, getInitiales } from "@/lib/utils";
 import { User } from "@/types/type.user";
 
 interface UserAvatarProps

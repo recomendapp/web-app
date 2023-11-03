@@ -250,10 +250,10 @@ export function PlaylistForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(playlist ? handleUpdatePlaylist : handleCeatePlaylist)}
-        className="space-y-8"
+        className=" space-y-8"
       >
-        <div className="grid gap-4 grid-cols-2 w-full">
-          <div className="py-4">
+        <div className="flex flex-col gap-4 lg:grid  lg:grid-cols-2 w-full">
+          <div className=" w-1/2 lg:w-full">
             <PlaylistPictureUpload
               playlist={playlist}
               loading={loading}
@@ -261,7 +261,7 @@ export function PlaylistForm({
               setNewPoster={setNewPoster}
             />
           </div>
-          <div className="grid gap-4 py-4">
+          <div className="flex flex-col gap-4">
             <FormField
               control={form.control}
               name="title"

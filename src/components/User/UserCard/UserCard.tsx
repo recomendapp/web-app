@@ -1,6 +1,8 @@
+"use client"
+
 import { Models } from "appwrite";
 import Link from "next/link";
-import { cn, getInitiales } from "@/lib/utils/utils";
+import { cn, getInitiales } from "@/lib/utils";
 
 // UI
 import {

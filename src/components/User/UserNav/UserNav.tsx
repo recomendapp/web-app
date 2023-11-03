@@ -1,6 +1,6 @@
 'use client';
 
-import { LogOut, Settings, Sparkles, User, Users } from 'lucide-react';
+import { HelpCircle, Info, LogOut, Settings, Sparkles, Store, User, Users } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,16 +16,15 @@ import {
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import Novu from '@/context/NovuProvider';
-import { getInitiales } from '@/lib/utils/utils';
+import { getInitiales } from '@/lib/utils';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { useRightSidebar } from '@/context/RightSidebarContext/RightSidebarContext';
 import FriendsList from '@/components/Friends/FriendsLists';
+import FollowedUserListButton from '@/components/FollowedUsers/FollowedUserListButton';
 
 export function UserNav() {
 
   const { user, loading, logout } = useAuth();
-
-  const { isOpen: isOpenSidebar, openPanel, closePanel, setPanelContent, panelTitle, setPanelTitle } = useRightSidebar();
 
   if (!user) {
     return <Skeleton className="h-8 w-8 rounded-full" />;
@@ -33,25 +32,7 @@ export function UserNav() {
 
   return (
     <nav className='flex items-center gap-4'>
-      <Button
-        variant="ghost"
-        size={'icon'}
-        className="rounded-full"
-        onClick={() => {
-          if (isOpenSidebar && panelTitle != 'Amis') {
-            setPanelTitle('Amis')
-            setPanelContent(<FriendsList />)
-          } else if (isOpenSidebar) {
-            closePanel();
-          } else {
-            setPanelTitle('Amis')
-            setPanelContent(<FriendsList />)
-            openPanel()
-          }
-        }}
-      >
-        <Users />
-      </Button>
+      <FollowedUserListButton />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -63,19 +44,35 @@ export function UserNav() {
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
-            <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">{user?.full_name}</p>
-              <p className="text-xs leading-none text-muted-foreground">
-                @{user?.username}
-              </p>
-            </div>
+            <DropdownMenuItem asChild>
+              <Link href={'/@' + user?.username} className='flex flex-col space-y-1 !items-start'>
+                <p className="text-sm font-medium leading-none">{user?.full_name}</p>
+                <p className="text-xs leading-none text-muted-foreground">
+                  @{user?.username}
+                </p>
+              </Link>
+            </DropdownMenuItem>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem asChild>
-              <Link href={'/@' + user?.username}>
-                <User className="mr-2 h-4 w-4" />
-                <span>Profil</span>
+              <Link href={'https://shop.recomend.app/'} target='_blank'>
+                <Store className="mr-2 h-4 w-4" />
+                <span>Store / Gift shop</span>
+                <DropdownMenuShortcut>↗</DropdownMenuShortcut>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={'https://help.recomend.app/'} target='_blank'>
+                <HelpCircle className="mr-2 h-4 w-4" />
+                <span>Help / FAQs</span>
+                <DropdownMenuShortcut>↗</DropdownMenuShortcut>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={'/about'}>
+                <Info className="mr-2 h-4 w-4" />
+                <span>About</span>
                 {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
               </Link>
             </DropdownMenuItem>

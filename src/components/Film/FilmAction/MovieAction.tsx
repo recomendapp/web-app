@@ -1,7 +1,9 @@
+"use client"
+
 import { MovieLikeAction } from './components/MovieLikeAction/MovieLikeAction';
 import { MovieWatchAction } from './components/MovieWatchAction/MovieWatchAction';
 import { MovieRatingAction } from './components/MovieRatingAction/MovieRatingAction';
-import { MovieWatchDateAction } from './components/MovieWatchDateAction/MovieWatchDateAction';
+import { MovieWatchDateAction } from './components/MovieWatchAction/MovieWatchDateAction';
 import { MovieWatchlistAction } from './components/MovieWatchlistAction/MovieWatchlistAction';
 import { MoviePlaylistAction } from './components/MoviePlaylistAction/MoviePlaylistAction';
 import { MovieSendAction } from './components/MovieSendAction/MovieSendAction';
@@ -49,39 +51,39 @@ export function MovieAction({
         {(all || rating) && 
           <MovieRatingAction
             filmId={filmId}
-            filmAction={filmActionQuery?.film_actionCollection?.edges[0]?.action}
-            loading={loading}
-            error={error} 
+            // filmAction={filmActionQuery}
+            // loading={loading}
+            // error={error} 
           />
         }
         {(all || like) &&
           <MovieLikeAction
             filmId={filmId}
-            filmAction={filmActionQuery?.film_actionCollection?.edges[0]?.action}
-            loading={loading}
-            error={error} 
+            // filmAction={filmActionQuery}
+            // loading={loading}
+            // error={error} 
           />
         }
         {(all || watch) &&
           <MovieWatchAction
             filmId={filmId}
-            filmAction={filmActionQuery?.film_actionCollection?.edges[0]?.action}
-            loading={loading}
-            error={error}
+            // filmAction={filmActionQuery}
+            // loading={loading}
+            // error={error}
           />
         }
         {(all || watchlist) && 
           <MovieWatchlistAction
             filmId={filmId}
-            filmAction={filmActionQuery?.film_actionCollection?.edges[0]?.action}
-            loading={loading}
-            error={error}
+            // filmAction={filmActionQuery}
+            // loading={loading}
+            // error={error}
           />
         }
         {(all || watchDate) &&
           <MovieWatchDateAction
             filmId={filmId}
-            filmAction={filmActionQuery?.film_actionCollection?.edges[0]?.action}
+            filmAction={filmActionQuery}
             loading={loading}
             error={error}
           />

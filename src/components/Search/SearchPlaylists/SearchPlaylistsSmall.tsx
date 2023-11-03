@@ -5,7 +5,7 @@ import { Button } from '../../ui/button';
 import { useQuery } from '@apollo/client';
 import SEARCH_PLAYLIST_QUERY from './queries/searchPlaylistsQuery';
 import { Playlist } from '@/types/type.playlist';
-import MoviePlaylistCard from '@/components/Playlist/MoviePlaylist/MoviePlaylistCard';
+import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 

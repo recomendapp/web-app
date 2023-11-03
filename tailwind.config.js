@@ -153,6 +153,7 @@ module.exports = {
   },
   plugins: [
     require('tailwindcss-animate'),
-    require('@tailwindcss/typography')
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/container-queries')
   ],
 };

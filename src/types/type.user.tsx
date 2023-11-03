@@ -24,8 +24,8 @@ export interface User {
 export interface Follower {
     followee_id: string,
     followee: User,
-    follower_id: string,
-    follower: User,
+    user_id: string,
+    user: User,
 }
 
 export interface Friend {

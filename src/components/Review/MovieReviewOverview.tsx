@@ -25,14 +25,14 @@ export default function MovieReviewOverview({
   review: Review
 }) {
 
-
+  console.log('review', review)
   return (
     <Link
       href={`/@${review.user.username}/film/${review.film_id}`}
       className="w-full bg-muted px-4 py-2 transition rounded-3xl flex gap-4 justify-between"
     >
       <div className="flex flex-col gap-2">
-        <p className='font-semibold truncate'>
+        <p className='font-semibold line-clamp-1'>
           {review.title}
         </p>
         <div className="flex gap-4 items-center">
@@ -52,7 +52,7 @@ export default function MovieReviewOverview({
           <MovieReviewSettings review={review} />
         </div>
         <div className="flex justify-center items-center">
-          <ReviewUser rating={review.film_action.rating}/>
+          <ReviewUser rating={review.activity.rating}/>
         </div>
         <div className="flex justify-center items-end">
           <Heart />
@@ -60,37 +60,6 @@ export default function MovieReviewOverview({
       </div>
     </Link>
   )
-
-
-    return (
-      // <Link href={`/movie/${review.movieId}/review/${review.$id}`} className="relative">
-      <Link href={`/@${review.user.username}/film/${review.film_id}`}  className='w-full bg-muted px-4 py-2 transition rounded-3xl flex flex-col'>
-        {/* REVIEW */}
-        <div className="flex flex-col gap-2">
-          {/* TITLE */}
-          <div className="flex items-center justify-between gap-4">
-            {review.title && <p className='text-xl font-semibold truncate'>
-                {review.title}
-            </p>}
-            <MovieReviewSettings review={review} />
-          </div>
-          {/* AUTHOR */}
-          <div className="flex gap-4 items-center">
-            <UserCard user={review.user}/>
-            <div className="text-muted-foreground flex items-center gap-2">
-              <Heart size={13} className="fill-muted-foreground"/>
-              <span>{review.likes_count}</span>
-            </div>
-          </div>
-          {/* BODY */}
-          <div className='h-[85px] overflow-hidden'>
-            <Overview data={JSON.parse(review.body)} />
-          </div>
-        </div>
-        {/* LINK */}
-        
-      </Link>
-    )
   }
 
   export function Overview({ data} : { data: JSONContent}) {

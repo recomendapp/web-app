@@ -75,7 +75,7 @@ export function DataComment({
                 onChange={(e) => setComment(e.target.value.replace(/\s+/g, ' ').trimStart())}
                 value={comment}
                 readOnly={!edit}
-                placeholder={data.user?.id == user?.id ? "Ajouter un commentaire..." : ""}
+                placeholder={table.options.meta?.canEdit() ? "Ajouter un commentaire..." : ""}
                 maxLength={180}
                 className={`
                     w-full
@@ -90,7 +90,7 @@ export function DataComment({
                     setEdit(true)
                 }}
             />
-            {data.user?.id == user?.id && 
+            {table.options.meta?.canEdit() && 
             <div className="flex gap-2">
                 {edit ? 
                     <>

@@ -1,6 +1,6 @@
 //* Import tailwind-merge for combining Tailwind CSS classes.
 
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 
 //* Define the props interface for the Box component.
 interface BoxProps {
@@ -14,9 +14,9 @@ export const Box: React.FC<BoxProps> = ({ children, className }) => {
       className={cn(
         `
         bg-background
-        rounded-lg
         h-fit
         w-full
+        lg:rounded-lg
         `,
         className
       )}

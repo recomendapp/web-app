@@ -5,7 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import { Playlist } from '@/types/type.playlist';
 import { useQuery } from '@apollo/client';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import MoviePlaylistCard from '@/components/Playlist/MoviePlaylist/MoviePlaylistCard';
+import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
 import { User } from '@/types/type.user';
 
 import SEARCH_USERS_QUERY from '@/components/Search/SearchUsers/queries/searchUsersQuery'

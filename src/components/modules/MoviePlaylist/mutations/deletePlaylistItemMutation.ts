@@ -9,6 +9,7 @@ export default gql `
     deleteFromplaylist_itemCollection(
       filter: { id: { eq: $id } }
     ) {
+      affectedCount
       records {
         ...PlaylistItem
       }

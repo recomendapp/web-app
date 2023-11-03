@@ -1,23 +1,22 @@
 import { gql } from "@apollo/client";
-import FILM_ACTION_FRAGMENT from "@/components/Film/FilmAction/fragments/filmActionFragment";
+import FILM_LIKE_FRAGMENT from "@/components/Film/FilmAction/fragments/filmLikeFragment";
 
 export default gql`
     query Likes($user_id: UUID!){
-        film_actionCollection(
+        like: film_likeCollection(
             filter: {
                 user_id: { eq: $user_id }
-                is_liked: { eq: true }
             }
             orderBy: {
-              updated_at: DescNullsFirst
+              created_at: DescNullsFirst
             }
         ) {
             edges {
                 item: node {
-                    ...FilmAction
+                    ...FilmLike
                 }
             }
         }
     }
-    ${FILM_ACTION_FRAGMENT}
+    ${FILM_LIKE_FRAGMENT}
 `

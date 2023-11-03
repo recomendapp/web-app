@@ -35,13 +35,14 @@ import { DndContext, DragEndEvent, UniqueIdentifier, closestCenter, useDraggable
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from "@dnd-kit/utilities"
 import { useAuth } from "@/context/AuthContext/AuthProvider"
-import { PlaylistItem } from "@/types/type.playlist"
+import { Playlist, PlaylistItem } from "@/types/type.playlist"
 import { range } from "lodash"
 
 import { supabase } from "@/lib/supabase/supabase"
 
 declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
+    canEdit: () => boolean,
     updateComment: (rowIndex: number, value: string) => void,
     deleteItem: (itemToDelete: PlaylistItem) => void
   }
@@ -53,13 +54,13 @@ declare module '@tanstack/react-table' {
 
 
 interface DataTableProps {
-  playlist: { item: PlaylistItem; }[],
-  userId: string
+  playlistItems: { item: PlaylistItem; }[],
+  playlist: Playlist
 }
 
 export function TablePlaylist({
+  playlistItems,
   playlist,
-  userId,
 }: DataTableProps) {
 
   const { user } = useAuth();
@@ -69,17 +70,26 @@ export function TablePlaylist({
     React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 
-  const [ isDraggingDisabled, setisDraggingDisabled ] = React.useState(true)
+  const [ isDraggingDisabled, setIsDraggingDisabled ] = React.useState(true)
 
-  const [data, setData] = React.useState(playlist);
+  const [data, setData] = React.useState(playlistItems);
+
+  function canEdit() {
+    if (playlist?.user_id === user?.id) {
+      return true
+    } else if (playlist?.guests.edges.some(edge => edge.guest.user_id === user?.id && edge.guest.edit)) {
+      return true
+    } else
+      return false
+  }
 
   React.useEffect(() => {
-    playlist && setData(playlist)
-  }, [playlist])
+    playlistItems && setData(playlistItems)
+  }, [playlistItems])
 
   React.useEffect(() => {
-    userId == user?.id && setisDraggingDisabled(false)
-  }, [userId, user])
+    playlist && user && setIsDraggingDisabled(!canEdit());
+  }, [playlist, user])
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -108,6 +118,9 @@ export function TablePlaylist({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     meta: {
+      canEdit: () => {
+        return (canEdit());
+      },
       updateComment: async (rowIndex: number, value: string) => {
         setData((old) =>
           old.map((row, index) => {
@@ -188,21 +201,21 @@ export function TablePlaylist({
       if (isDown)
         affectedRange = range(Number(active.id), Number(over.id) + 1);
       else
-          affectedRange = range(Number(over.id), Number(active.id));
+        affectedRange = range(Number(over.id), Number(active.id));
   
       const reOrderedPlaylist = data.map(async (film) => {
           if (film.item.rank === active.id) {
             console.log('condition 1', film);
-            film.item.rank = String(over.id);
+            film.item.rank = Number(over.id);
             await supabase
               .from('playlist_item')
               .update({ rank: film.item.rank })
               .eq('id', film.item.id)
             return film;
-          } else if (affectedRange.includes(Number(film.item.rank))) {
+          } else if (affectedRange.includes(film.item.rank)) {
             if (isDown) {
               console.log('condition 2.1', film);
-              film.item.rank = String(Number(film.item.rank) - 1);
+              film.item.rank = film.item.rank - 1;
               await supabase
                 .from('playlist_item')
                 .update({ rank: film.item.rank })
@@ -210,7 +223,7 @@ export function TablePlaylist({
               return film;
             } else {
               console.log('condition 2.2', film);
-              film.item.rank = String(Number(film.item.rank) + 1);
+              film.item.rank = film.item.rank + 1;
               await supabase
                 .from('playlist_item')
                 .update({ rank: film.item.rank })
@@ -226,8 +239,8 @@ export function TablePlaylist({
       const updatedPlaylist = await Promise.all(reOrderedPlaylist);
 
       updatedPlaylist.sort((a, b) => {
-        const rankA = parseInt(a.item.rank);
-        const rankB = parseInt(b.item.rank);
+        const rankA = a.item.rank;
+        const rankB = b.item.rank;
       
         if (rankA < rankB) {
           return -1;
