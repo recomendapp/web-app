@@ -2,12 +2,10 @@ import '@/styles/globals.css';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/lib/fonts';
-import { Navbar } from '@/components/Navbar/Navbar';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { cn } from "@/lib/utils";
 import Provider from '@/context/Provider';
-import Layout from '@/components/Layout/Layout';
 import HelloNerd from '@/components/Console/HelloNerd';
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';

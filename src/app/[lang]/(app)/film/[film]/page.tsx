@@ -5,7 +5,7 @@ import MovieNavbar from './assets/MovieNavbar';
 import { notFound } from 'next/navigation';
 import RightSidebarServer from '@/context/RightSidebarContext/RightSidebarServer';
 import FriendsList from '@/components/Friends/FriendsLists';
-import { MovieReview } from '@/components/Review/Reviews/MovieReviews';
+import { ShowReviews } from '@/components/Review/ShowReviews/ShowReviews';
 
 export async function generateMetadata({
   params,
@@ -40,7 +40,7 @@ export default async function Film({
 
   return (
     <main>
-      <RightSidebarServer panelTitle='Critiques' panelContent={<MovieReview filmId={film.id} />}/>
+      {/*<RightSidebarServer panelTitle='Critiques' panelContent={<MovieReview filmId={film.id} />}/>*/}
       <MovieHeader movie={film} />
       <div className='px-4 pb-4'>
         <MovieNavbar focus={"description"} movieId={film.id} />

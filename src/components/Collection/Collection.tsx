@@ -5,25 +5,26 @@ import Link from "next/link";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { ImageWithFallback } from "../tools/ImageWithFallback";
 import { UserPlaylists } from "../User/UserPlaylists/UserPlaylists";
+import { Bookmark, Heart, Send } from "lucide-react";
 
 export function Collection() {
     const collectionRoutes = useMemo(
         () => [
-          {
-            icon: 'https://misc.scdn.co/liked-songs/liked-songs-640.png',
+            {
+            icon: <CollectionIcon from="#e6619b" to="#e84749"><Heart fill="#fff"/></CollectionIcon>,
             label: 'Coups de coeur',
             href: '/collection/likes',
-          },
-          {
-            icon: 'https://misc.scdn.co/your-episodes/SE-64.png',
+            },
+            {
+            icon: <CollectionIcon from="#39BAED" to="#32509e"><Bookmark fill="#fff"/></CollectionIcon>,
             label: 'Watchlist',
             href: '/collection/watchlist',
-          },
-          {
-            icon: 'https://misc.scdn.co/your-episodes/SE-64.png',
+            },
+            {
+            icon: <CollectionIcon from="#FBE773" to="#F18E43"><Send fill="#fff"/></CollectionIcon>,
             label: 'Guidelist',
             href: '/collection/guidelist',
-          },
+            },
         ],
         []
     );
@@ -36,24 +37,34 @@ export function Collection() {
                     className={`justify-start p-2`}
                     asChild
                 >
-                <Link href={item.href} className="h-fit w-full flex flex-col gap-2">
-                    <div className={`w-full shadow-2xl`}>
-                        <AspectRatio ratio={1 / 1}>
-                            <ImageWithFallback
-                                src={item.icon ? item.icon : ''}
-                                alt={item.label}
-                                fill
-                                className="rounded-md object-cover"
-                            />
-                        </AspectRatio>
-                    </div>
-                    <section className=" line-clamp-1">
+                    <Link href={item.href} className="h-full w-full flex flex-col gap-2">
+                        {item.icon}
                         {item.label}
-                    </section>
-                </Link>
+                    </Link>
                 </Button>
             ))}
             <UserPlaylists sidebarExpanded={false} grid />
+        </div>
+    )
+}
+
+export function CollectionIcon({
+    children,
+    from,
+    to
+} : {
+    children: React.ReactNode,
+    from: string,
+    to: string
+}) {
+    return (
+        <div
+            style={{ 
+                backgroundImage: `linear-gradient(to top right, ${from}, ${to})`, 
+            }}
+            className={`w-full h-full rounded-md flex items-center justify-center`}
+        >
+            {children}
         </div>
     )
 }

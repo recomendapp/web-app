@@ -49,44 +49,19 @@ export function MovieAction({
     <div className="flex justify-between gap-2">
       <div className='flex gap-2 overflow-x-auto items-center'>
         {(all || rating) && 
-          <MovieRatingAction
-            filmId={filmId}
-            // filmAction={filmActionQuery}
-            // loading={loading}
-            // error={error} 
-          />
+          <MovieRatingAction filmId={filmId} />
         }
         {(all || like) &&
-          <MovieLikeAction
-            filmId={filmId}
-            // filmAction={filmActionQuery}
-            // loading={loading}
-            // error={error} 
-          />
+          <MovieLikeAction filmId={filmId} />
         }
         {(all || watch) &&
-          <MovieWatchAction
-            filmId={filmId}
-            // filmAction={filmActionQuery}
-            // loading={loading}
-            // error={error}
-          />
+          <MovieWatchAction filmId={filmId} />
         }
         {(all || watchlist) && 
-          <MovieWatchlistAction
-            filmId={filmId}
-            // filmAction={filmActionQuery}
-            // loading={loading}
-            // error={error}
-          />
+          <MovieWatchlistAction filmId={filmId} />
         }
         {(all || watchDate) &&
-          <MovieWatchDateAction
-            filmId={filmId}
-            filmAction={filmActionQuery}
-            loading={loading}
-            error={error}
-          />
+          <MovieWatchDateAction filmId={filmId} />
         }
       </div>
       <div className='flex gap-2 items-center'>

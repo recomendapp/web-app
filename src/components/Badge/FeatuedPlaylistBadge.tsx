@@ -17,7 +17,7 @@ export default function FeaturedPlaylistBadge() {
                     </Badge>
                 </TooltipTrigger>
                 <TooltipContent align='center' side="bottom">
-                    <p className=" max-w-[100px]">Mise en avant : Lorsqu'une playliste est mise en avant elle est visible par tous dans la section Recherche</p>
+                    <p className=" max-w-[100px]">Mise en avant : Lorsqu&apos;une playliste est mise en avant elle est visible par tous dans la section Recherche</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

@@ -21,6 +21,7 @@ import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { useRightSidebar } from '@/context/RightSidebarContext/RightSidebarContext';
 import FriendsList from '@/components/Friends/FriendsLists';
 import FollowedUserListButton from '@/components/FollowedUsers/FollowedUserListButton';
+import UserAvatar from '../UserAvatar/UserAvatar';
 
 export function UserNav() {
 
@@ -36,20 +37,20 @@ export function UserNav() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.avatar_url} alt={user?.username} />
-              <AvatarFallback>{getInitiales(user?.full_name ?? '')}</AvatarFallback>
-            </Avatar>
+            <UserAvatar user={user} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <DropdownMenuItem asChild>
-              <Link href={'/@' + user?.username} className='flex flex-col space-y-1 !items-start'>
-                <p className="text-sm font-medium leading-none">{user?.full_name}</p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  @{user?.username}
-                </p>
+              <Link href={'/@' + user?.username} className='flex gap-2'>
+                <UserAvatar user={user} />
+                <div className='flex flex-col space-y-1 !items-start'>
+                  <p className="text-sm font-medium leading-none">{user?.full_name}</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    @{user?.username}
+                  </p>
+                </div>
               </Link>
             </DropdownMenuItem>
           </DropdownMenuLabel>

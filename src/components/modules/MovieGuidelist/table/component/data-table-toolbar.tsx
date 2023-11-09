@@ -22,7 +22,7 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between gap-4">
       <div className="flex flex-1 items-center gap-2">
         <Input
-          placeholder={"Rechercher dans la playlist..."}
+          placeholder={"Rechercher dans la guidelist..."}
           value={(table.getColumn("item_film.title")?.getFilterValue() as string) ?? ""}
           onChange={(event) => {
             table.getColumn("item_film.title")?.setFilterValue(event.target.value, )

@@ -15,7 +15,7 @@ import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 
 
-export function MovieReview({ filmId }: { filmId: string }) {
+export function ShowReviews({ filmId }: { filmId: string }) {
 
   const [ order, setOrder ] = useState("recent");
 

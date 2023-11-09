@@ -1,19 +1,4 @@
 'use client';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { ImageWithFallback } from '@/components/tools/ImageWithFallback';
-import { Button } from '../../../components/ui/button';
-import Link from 'next/link';
-import { MovieAction } from '../../../components/Film/FilmAction/MovieAction';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import { MovieActionCounter } from '../../../components/Film/MovieActionCounter';
 import { PersonFollowButton } from '@/components/Person/ButtonFollowPerson/PersonFollowButton';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 

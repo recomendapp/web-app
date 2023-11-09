@@ -14,7 +14,7 @@ export default function Dashboard() {
             <Loader />
         )
     return (
-        <main className="p-4">
+        <main className="flex flex-col gap-4 p-4">
             <div className="text-4xl font-bold">{t('hello')} {user.full_name}</div>
             <PreviewWatchlist />
         </main>

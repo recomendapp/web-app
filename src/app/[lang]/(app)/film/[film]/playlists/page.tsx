@@ -2,7 +2,7 @@ import { getMovieDetails } from '@/lib/tmdb';
 import MovieHeader from '../assets/MovieHeader';
 import MovieNavbar from '../assets/MovieNavbar';
 import { notFound } from 'next/navigation';
-import { ShowReviews } from '@/components/Review/ShowReviews/ShowReviews';
+import { ShowPlaylists } from '@/components/Playlist/ShowPlaylists/ShowPlaylists';
 
 export async function generateMetadata({
   params,
@@ -30,8 +30,8 @@ export default async function Reviews({ params }: { params: { film: string } }) 
     <main>
       <MovieHeader movie={film} />
       <div className='px-4 pb-4'>
-        <MovieNavbar focus={"reviews"} movieId={film.id} />
-        <ShowReviews filmId={String(film.id)} />
+        <MovieNavbar focus={"playlists"} movieId={film.id} />
+        <ShowPlaylists filmId={String(film.id)} />
       </div>
     </main>
   )

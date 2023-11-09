@@ -19,7 +19,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 
 // ICONS
@@ -30,8 +29,6 @@ import { Film, FilmLike } from "@/types/type.film"
 import { useMutation } from "@apollo/client"
 import { useAuth } from "@/context/AuthContext/AuthProvider"
 
-import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQuery';
-import DELETE_FILM_ACTION_MUTATION from '@/components/Film/FilmAction/mutations/deleteFilmActionMutation';
 import DELETE_FILM_LIKE_MUTATION from '@/components/Film/FilmAction/components/MovieLikeAction/mutations/deleteFilmLikeMutation';
 import LIKES_QUERY from "@/components/Playlist/Likes/queries/likesQuery"
 

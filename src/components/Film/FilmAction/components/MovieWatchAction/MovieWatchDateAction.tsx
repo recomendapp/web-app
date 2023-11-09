@@ -16,34 +16,55 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 
-import UPDATE_FILM_WATCH_MUTATION from '@/components/Film/FilmAction/components/MovieWatchAction/mutations/updateFilmActionMutationOLD';
-import { ApolloError, useMutation } from '@apollo/client';
-import { FilmAction } from '@/types/type.film';
+import UPDATE_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/updateMovieActivityMutation'
+
 import { useLocale } from 'next-intl';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { supabase } from '@/lib/supabase/supabase';
 
 
 interface MovieWatchedDateActionProps extends React.HTMLAttributes<HTMLDivElement> {
     filmId: string;
-    filmAction: FilmAction;
-    loading: boolean;
-    error: ApolloError | undefined;
 }
 
 export function MovieWatchDateAction({
   filmId,
-  filmAction,
-  loading,
-  error,
 }: MovieWatchedDateActionProps) {
 
   const { user } = useAuth();
   const locale = useLocale();
 
-  const [ updateFilmWatchMutation ] = useMutation(UPDATE_FILM_WATCH_MUTATION);
+  const queryClient = useQueryClient();
 
-  if (!filmAction?.watch.edges.length || !user) {
-    return null;
-  }
+  const {
+    data: activity,
+    isLoading: loading,
+    isError: error
+  } = useQuery({
+    queryKey: ['user', user?.id, 'film', filmId, 'activity'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('user_movie_activity')
+        .select(`*, review(*)`)
+        .eq('film_id', filmId)
+        .eq('user_id', user?.id)
+        .single()
+      if (error) throw error;
+      return (data)
+    },
+    enabled: user?.id !== undefined && user?.id !== null,
+  });
+
+  const {
+    mutateAsync: updateActivityMutation,
+  } = useMutation(UPDATE_ACTIVITY_MUTATION, {
+    onSuccess: (data, variables) => {
+      queryClient.setQueryData(['user', user?.id, 'film', filmId, 'activity'], data)
+    }
+  })
+
+  if (!activity)
+    return (null);
 
   return (
     <Popover>
@@ -58,8 +79,8 @@ export function MovieWatchDateAction({
               >
                 <CalendarDays />
                 <div className='hidden sm:block'>
-                  {filmAction.watch?.edges?.length ? (
-                    format(new Date(filmAction.watch.edges[0].watch.date), 'PPP', { locale: fr })
+                  {activity?.date ? (
+                    format(new Date(activity?.date), 'PPP', { locale: fr })
                   ) : (
                     <span>Pick a date</span>
                   )}
@@ -76,13 +97,13 @@ export function MovieWatchDateAction({
         <Calendar
           locale={fr}
           mode="single"
-          selected={new Date(filmAction?.watch?.edges[0]?.watch?.date)}
+          selected={new Date(activity?.date)}
           onSelect={(date) => {
             if (date) {
-              updateFilmWatchMutation({
-                variables: {
-                  film_id: filmId,
-                  user_id: user?.id,
+              user?.id && updateActivityMutation({
+                film_id: filmId,
+                user_id: user?.id,
+                data: {
                   date: date
                 }
               });

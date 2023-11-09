@@ -3,8 +3,6 @@
 import { useAuth } from '@/context/AuthContext/AuthProvider';
 import { supabase } from '@/lib/supabase/supabase';
 import { useQuery, useQueryClient } from 'react-query';
-import { Activity } from '@/components/Feed/Activity/Activity';
-import { Activity as ActivityType } from '@/types/type.feed';
 
 export default function Feed() {
 

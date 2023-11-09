@@ -11,7 +11,7 @@ export default function PlaylistEditCommentBottomSheet({
     playlistItem: PlaylistItem,
 }) {
     const [open, setOpen] = useState(false);
-    const contentRef = useRef(null);
+    const contentRef = useRef<any>(null);
 
     return (
         <div className="lg:hidden">
