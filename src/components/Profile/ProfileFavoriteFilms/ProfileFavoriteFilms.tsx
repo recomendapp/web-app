@@ -16,12 +16,11 @@ export default function ProfileFavoriteFilms({
             <h3 className="font-semibold text-xl text-accent-1">Films favoris</h3>
             <div className="grid grid-cols-4 @2xl:grid-cols-6 @5xl:grid-cols-8 gap-1">
                 {profile?.favorite_films?.map((filmId: string) => (
-                    <div key={filmId} className="">
-                        <MovieCard
-                            filmId={filmId}
-                            displayMode={"grid"}
-                        />
-                    </div>
+                    <MovieCard
+                        key={filmId}
+                        filmId={filmId}
+                        displayMode={"grid"}
+                    />
                 ))}
             </div>
         </div>

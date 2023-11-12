@@ -77,12 +77,12 @@ export function UserNav() {
                 {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
               </Link>
             </DropdownMenuItem>
-            {/* {!user?.subscription?.edges?.length && <DropdownMenuItem asChild>
+            {!user?.premium && <DropdownMenuItem asChild>
               <Link href={'/upgrade'} className='text-accent-1'>
                 <Sparkles className="mr-2 h-4 w-4" />
                 <span>Upgrade to Premium</span>
               </Link>
-            </DropdownMenuItem>} */}
+            </DropdownMenuItem>}
             <DropdownMenuItem asChild>
               <Link href={'/settings/profile'}>
                 <Settings className="mr-2 h-4 w-4" />

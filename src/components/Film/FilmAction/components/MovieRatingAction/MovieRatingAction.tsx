@@ -63,7 +63,7 @@ export function MovieRatingAction({
         .select(`*, review(*)`)
         .eq('film_id', filmId)
         .eq('user_id', user?.id)
-        .single()
+        .maybeSingle()
       return (data)
     },
     enabled: user?.id !== undefined && user?.id !== null,

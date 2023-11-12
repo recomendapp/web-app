@@ -48,7 +48,7 @@ export function MovieWatchDateAction({
         .select(`*, review(*)`)
         .eq('film_id', filmId)
         .eq('user_id', user?.id)
-        .single()
+        .maybeSingle()
       if (error) throw error;
       return (data)
     },

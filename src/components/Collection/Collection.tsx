@@ -29,7 +29,7 @@ export function Collection() {
         []
     );
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 px-4 pb-4">
             {collectionRoutes.map((item) => (
                 <Button
                     key={item.label}

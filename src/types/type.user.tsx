@@ -17,7 +17,7 @@ export interface User {
     followers_count: string,
     following_count: string,
     friends_count: string,
-    subscription: { edges: [ { node: Subscription } ] },
+    premium: boolean
     verified: boolean,
 }
 
