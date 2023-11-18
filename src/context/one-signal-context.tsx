@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import OneSignal from 'react-onesignal';
 import { useAuth } from "./AuthContext/auth-context";
+import Script from "next/script";
 
 const oneSignalAppId = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!
 
@@ -43,6 +44,8 @@ export const OneSignalContext = ({
 
     return (
         <>
+            {/* <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer /> */}
+            {/* <Script async src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" /> */}
             {children}
         </>
     );

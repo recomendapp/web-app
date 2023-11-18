@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Provider, Session } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '@/lib/supabase/client';
 import { gql, useQuery } from '@apollo/client';
 import { User } from '@/types/type.user';
 import USER_FRAGMENT from './fragments/userFragment';

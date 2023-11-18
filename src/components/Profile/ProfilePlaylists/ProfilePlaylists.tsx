@@ -13,7 +13,7 @@ import USER_PLAYLISTS_QUERY from "@/components/User/UserPlaylists/queries/userPl
 import { User } from "@/types/type.user";
 import { Playlist } from "@/types/type.playlist";
 import { useInfiniteQuery } from "react-query";
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from "@/lib/supabase/client";
 
 interface UserPlaylistsProps {
     profile: User;

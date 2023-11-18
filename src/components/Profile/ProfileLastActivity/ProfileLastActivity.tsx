@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { User } from "@/types/type.user";
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from "@/lib/supabase/client";
 import MovieCard from "@/components/Film/Card/MovieCard";
 
 export default async function ProfileLastActivity({

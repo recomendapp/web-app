@@ -21,7 +21,7 @@ import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQu
 
 import { toast } from 'react-toastify'
 import { FilmAction } from '@/types/type.film'
-import { supabase } from '@/lib/supabase/supabase'
+import { supabase } from '@/lib/supabase/client'
 
 export function MovieReviewSettings({
     review 

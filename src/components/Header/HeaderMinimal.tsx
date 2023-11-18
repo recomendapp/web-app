@@ -1,18 +1,18 @@
 import { cn } from '@/lib/utils';
-import { createServerClient } from '@/lib/supabase/supabase-server';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { UserNav } from '@/components/User/UserNav/UserNav';
 import Image from 'next/image';
 import { siteConfig } from '@/config/site';
+import { createServerClient } from '@/lib/supabase/server';
 
 interface HeaderMinimalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export async function HeaderMinimal({ className }: HeaderMinimalProps) {
   
-  const supabaseServer = createServerClient();
+  const supabase = createServerClient();
 
-  const { data: { session } } = await supabaseServer.auth.getSession();
+  const { data: { session } } = await supabase.auth.getSession();
 
   return (
     <header

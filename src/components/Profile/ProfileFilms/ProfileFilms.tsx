@@ -9,7 +9,7 @@ import { useInView } from 'react-intersection-observer';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { User } from "@/types/type.user";
 import { useInfiniteQuery } from "react-query";
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from "@/lib/supabase/client";
 
 interface UserMoviesProps {
     profile: User;

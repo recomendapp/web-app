@@ -11,7 +11,7 @@ import { Icons } from "@/components/icons";
 import { MovieAction } from "@/components/Film/FilmAction/MovieAction";
 import { Textarea } from "@/components/ui/textarea";
 import { useQuery } from "react-query";
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from "@/lib/supabase/client";
 
 export default function CreateReviewForm({ filmId, user } : { filmId: number, user: User }) {
   const {

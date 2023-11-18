@@ -12,7 +12,7 @@ import { FilmAction } from '@/types/type.film';
 import { toast } from 'react-toastify';
 import { useAuth } from '@/context/AuthContext/auth-context';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '@/lib/supabase/client';
 
 import INSERT_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/insertMovieActivityMutation'
 import UPDATE_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/updateMovieActivityMutation'

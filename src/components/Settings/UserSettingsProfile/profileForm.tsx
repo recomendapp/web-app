@@ -24,7 +24,7 @@ import { useMutation } from '@apollo/client';
 import UPDATE_PROFILE_MUTATION from './mutations/updateProfileMutation';
 import { Icons } from '@/components/icons';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '@/lib/supabase/client';
 import Compressor from 'compressorjs';
 import compressPicture from '@/lib/utils/compressPicture';
 import Loader from '@/components/Loader/Loader';

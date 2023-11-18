@@ -3,7 +3,7 @@
 import MovieCard from '@/components/Film/Card/MovieCard';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext/auth-context';
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '@/lib/supabase/client';
 import { PlaylistItem } from '@/types/type.playlist';
 import { DndContext, DragEndEvent, PointerSensor, Sensor, UniqueIdentifier, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';

@@ -1,9 +1,9 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextRequest, NextResponse } from 'next/server'
 import createIntlMiddleware from 'next-intl/middleware'
-import { User } from './types/type.user';
-
-const locales = ['en', 'fr'];
+// import { User } from '@/types/type.user';
+import { locales } from '@/lib/next-intl/navigation';
+import { createMiddlewareClient } from './lib/supabase/middleware';
 
 const intlMiddleware = createIntlMiddleware({
   locales,
@@ -12,9 +12,13 @@ const intlMiddleware = createIntlMiddleware({
   
 })
 
-export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
-  const supabase = createMiddlewareClient({ req, res })
+export async function middleware(request: NextRequest) {
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
+  const supabase = createMiddlewareClient({ request, response })
   await supabase.auth.getSession();
   // const { data: { session } } = await supabase.auth.getSession();
   // const { data: user } = await supabase.from('user').select('*').eq('id', session?.user.id).single() as { data: User }
@@ -29,7 +33,7 @@ export async function middleware(req: NextRequest) {
   //       priority: 'medium'
   //   });
   // }
-  return intlMiddleware(req);
+  return intlMiddleware(request);
 }
 
 export const config = {

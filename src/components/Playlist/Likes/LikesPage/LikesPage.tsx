@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { getMovieDetails } from "@/lib/tmdb/tmdb";
 import { FilmLike } from "@/types/type.film";
 import { useQuery } from "react-query";
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from "@/lib/supabase/client";
 
 export function LikesPage() {
     const { user } = useAuth();

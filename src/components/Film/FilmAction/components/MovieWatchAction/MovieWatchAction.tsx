@@ -24,7 +24,7 @@ import { FilmAction } from '@/types/type.film';
 import { useAuth } from '@/context/AuthContext/auth-context';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '@/lib/supabase/client';
 
 import DELETE_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/deleteMovieActivtyMutation'
 import INSERT_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/insertMovieActivityMutation'

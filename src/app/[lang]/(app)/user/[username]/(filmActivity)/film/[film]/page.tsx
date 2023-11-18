@@ -2,10 +2,10 @@ import { getMovieDetails } from '@/lib/tmdb/tmdb';
 import MovieVerticalCard from '@/components/Film/MovieVerticalCard';
 import MovieReviewForm from '@/components/Review/form/MovieReviewForm';
 import { notFound } from 'next/navigation';
-import { createServerClient } from '@/lib/supabase/supabase-server';
 import MoviePoster from '@/components/Film/MoviePoster';
 import UserCard from '@/components/User/UserCard/UserCard';
 import { MovieAction } from '@/components/Film/FilmAction/MovieAction';
+import { createServerClient } from '@/lib/supabase/server';
 
 export default async function Review({
     params
@@ -16,19 +16,17 @@ export default async function Review({
         film: number,
     }
 }) {
+    const supabase = createServerClient();
     
-    const supabaseServer = createServerClient();
-
     const film = await getMovieDetails(params.film, params.lang);
     
-    const { data } = await supabaseServer
+    const { data } = await supabase
         .from('user_movie_activity')
         .select(`*, user(*), review(count)`)
         .eq('film_id', params.film)
         .eq('user.username', params.username)
         .single()
 
-    console.log('film', film)
     return (
         <div className='@container px-4'>
             <main className='flex flex-col gap-4 @5xl:flex-row @5xl:justify-between'>

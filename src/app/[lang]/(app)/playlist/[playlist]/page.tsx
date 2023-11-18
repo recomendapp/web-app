@@ -1,6 +1,4 @@
-import { notFound } from 'next/navigation';
 import PlaylistDetails from '@/components/Playlist/FilmPlaylist/PlaylistDetails/PlaylistDetails';
-import { createServerClient } from '@/lib/supabase/supabase-server';
 
 export default async function Playlist({
   params,

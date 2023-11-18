@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 import UPDATE_PLAYLIST_ITEM_MUTATION from '@/components/modules/MoviePlaylist/mutations/updatePlaylistItemMutation'
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from "@/lib/supabase/client";
 
 export function DataComment({
     data,

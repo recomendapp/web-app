@@ -10,7 +10,7 @@ import MovieReviewOverview from '@/components/Review/MovieReviewOverview';
 
 import { Review } from '@/types/type.review';
 import { useInfiniteQuery, useQuery } from 'react-query';
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '@/lib/supabase/client';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 import MoviePlaylistCard from '../FilmPlaylist/MoviePlaylistCard';

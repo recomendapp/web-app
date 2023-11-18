@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
-import { createServerClient } from "@/lib/supabase/supabase-server";
+// import { createServerClient } from "@/lib/supabase/server";
 import { getMovieDetails } from "@/lib/tmdb/tmdb";
 import CreateReviewForm from "@/components/Review/form/CreateReviewFrom";
+import { createServerClient } from "@/lib/supabase/server";
 
 export async function generateMetadata({
     params,
@@ -31,13 +32,13 @@ export default async function CreateReview({
     }
 }) {
 
-    const supabaseServer = createServerClient()
+    const supabase = createServerClient()
 
-    const { data: { session } } = await supabaseServer.auth.getSession();
+    const { data: { session } } = await supabase.auth.getSession();
 
-    const { data: review } = await supabaseServer.from('review').select('*').eq('user_id', session?.user.id).eq('film_id', params.film).single();
+    const { data: review } = await supabase.from('review').select('*').eq('user_id', session?.user.id).eq('film_id', params.film).single();
     
-    const { data: user } = await supabaseServer.from('user').select('*').eq('id', session?.user.id).single();
+    const { data: user } = await supabase.from('user').select('*').eq('id', session?.user.id).single();
 
     if(review)
         redirect(`/@${user.username}/film/${params.film}`);

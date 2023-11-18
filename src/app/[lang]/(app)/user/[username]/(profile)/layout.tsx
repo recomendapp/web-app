@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { createServerClient } from "@/lib/supabase/supabase-server";
 import ProfileNavbar from "@/components/Profile/ProfileNavbar/ProfileNavbar";
+import { createServerClient } from "@/lib/supabase/server";
 
 
 interface UserLayoutProps {
@@ -12,8 +12,8 @@ export default async function UserLayout({
     params,
     children
 } : UserLayoutProps) {
-    const supabaseServer = createServerClient()
-    const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
+    const supabase = createServerClient();
+    const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
 
     if (!user) notFound();
 

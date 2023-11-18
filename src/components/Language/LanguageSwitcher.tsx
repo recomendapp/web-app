@@ -9,9 +9,10 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useAuth } from "@/context/AuthContext/auth-context";
+import { usePathname, useRouter } from "@/lib/next-intl/navigation";
 import { useLocale } from "next-intl";
 
-import { useRouter, usePathname } from 'next-intl/client';
+// import { useRouter, usePathname } from 'next-intl/client';
 
 export default function LanguageSwticher() {
   const router = useRouter();

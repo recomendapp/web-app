@@ -1,15 +1,14 @@
 import { notFound } from 'next/navigation';
-import PlaylistDetails from '@/components/Playlist/FilmPlaylist/PlaylistDetails/PlaylistDetails';
-import { createServerClient } from '@/lib/supabase/supabase-server';
 import PlaylistHeader from '@/components/Playlist/FilmPlaylist/PlaylistHeader';
+import { createServerClient } from '@/lib/supabase/server';
 
 export async function generateMetadata({
   params,
 }: {
   params: { playlist: string };
 }) {
-  const supabaseServer = createServerClient();
-  const { data: playlist } = await supabaseServer.from('playlist').select('*, user(username)').eq('id', params.playlist).single();
+  const supabase = createServerClient();
+  const { data: playlist } = await supabase.from('playlist').select('*, user(username)').eq('id', params.playlist).single();
   if (!playlist) {
     return {
       title: 'Oups, playlist introuvable !',
@@ -28,8 +27,8 @@ export default async function PlaylistLayout({
     params: { playlist: string };
     children: React.ReactNode;
 }) {
-  const supabaseServer = createServerClient();
-  const { data: playlist } = await supabaseServer.from('playlist').select('*').eq('id', params.playlist).single();
+  const supabase = createServerClient();
+  const { data: playlist } = await supabase.from('playlist').select('*').eq('id', params.playlist).single();
 
   if (!playlist) notFound();
 

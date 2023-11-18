@@ -1,7 +1,7 @@
 "use client"
 
 import { useAuth } from '@/context/AuthContext/auth-context';
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '@/lib/supabase/client';
 import { useQuery, useQueryClient } from 'react-query';
 
 export default function Feed() {

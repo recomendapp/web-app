@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/supabase"
+import { supabase } from "@/lib/supabase/client"
 
 export default async function deleteWatchlistMutation ({
     film_id,

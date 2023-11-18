@@ -27,7 +27,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 import INSERT_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/insertMovieActivityMutation'
 import UPDATE_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/updateMovieActivityMutation'
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '@/lib/supabase/client';
 import movieActivityQuery from '../../queries/movieActivityQuery';
 
 interface MovieRatingActionProps extends React.HTMLAttributes<HTMLDivElement> {

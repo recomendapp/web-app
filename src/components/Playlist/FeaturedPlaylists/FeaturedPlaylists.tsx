@@ -1,6 +1,6 @@
 "use client"
 
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from "@/lib/supabase/client";
 import { useInfiniteQuery, useQuery } from "react-query";
 import MoviePlaylistCard from "../FilmPlaylist/MoviePlaylistCard";
 import { Playlist } from "@/types/type.playlist";

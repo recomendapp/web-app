@@ -26,7 +26,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useMutation } from '@apollo/client';
 
 import compressPicture from '@/lib/utils/compressPicture';
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '@/lib/supabase/client';
 import { Icons } from '@/components/icons';
 import { Playlist } from '@/types/type.playlist';
 import CREATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/mutations/createPlaylistMutation'

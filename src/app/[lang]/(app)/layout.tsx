@@ -3,7 +3,6 @@ import { Header } from "@/components/Header/Header";
 import { Navbar } from "@/components/Navbar/Navbar";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
-import { Fragment } from "react";
 
 interface AppLayoutProps {
     children: React.ReactNode;

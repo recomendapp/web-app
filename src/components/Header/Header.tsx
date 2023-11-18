@@ -1,17 +1,18 @@
 import { cn } from '@/lib/utils';
-import { createServerClient } from '@/lib/supabase/supabase-server';
+// import { createServerClient } from '@/lib/supabase/supabase-server';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { UserNav } from '../User/UserNav/UserNav';
 import HeaderLeftSide from './HeaderLeftSide';
+import { createServerClient } from '@/lib/supabase/server';
 
 interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export async function Header({ className }: HeaderProps) {
   
-  const supabaseServer = createServerClient();
+  const supabase = createServerClient();
 
-  const { data: { session } } = await supabaseServer.auth.getSession();
+  const { data: { session } } = await supabase.auth.getSession();
 
   return (
     <header

@@ -1,10 +1,20 @@
 import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerClient as createServerClientSupabase, type CookieOptions } from '@supabase/ssr'
 import { Price, ProductWithPrices } from "@/types/type.stripe";
 
 export const createServerClient = () => {
   const cookieStore = cookies();
-  return createServerComponentClient({ cookies: () => cookieStore });
+  return createServerClientSupabase(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value
+        },
+      },
+    }
+  );
 };
 
 export async function getSession() {

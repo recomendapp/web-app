@@ -1,4 +1,4 @@
-import { createServerClient, getActiveProductsWithPrices, getSession, getSubscription } from "@/lib/supabase/supabase-server"
+import { getActiveProductsWithPrices, getSession, getSubscription } from "@/lib/supabase/server"
 import { Price, ProductWithPrices } from "@/types/type.stripe"
 import SubscriptionButton from "./SubscriptionButton";
 import { Check, Sparkles } from "lucide-react";

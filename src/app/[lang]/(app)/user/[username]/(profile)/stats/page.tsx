@@ -1,5 +1,4 @@
-
-import { createServerClient } from "@/lib/supabase/supabase-server";
+import { createServerClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 
 export default async function Stats({
@@ -7,9 +6,8 @@ export default async function Stats({
   } : {
     params: { username: string };
   }) {
-    const supabaseServer = createServerClient()
-
-    const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
+    const supabase = createServerClient();
+    const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
 
     return (
       <div>

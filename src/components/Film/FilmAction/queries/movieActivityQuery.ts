@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/supabase";
+import { supabase } from "@/lib/supabase/client";
 
 export default async function movieActivityQuery (film_id: string, user_id: string) {
     const { data, error } = await supabase

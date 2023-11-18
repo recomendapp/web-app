@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/supabase"
+import { supabase } from "@/lib/supabase/client"
 import { QueryClient, useQueryClient } from "react-query";
 
 export default async function insertMovieActivityMutation ({

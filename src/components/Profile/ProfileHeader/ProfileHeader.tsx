@@ -9,13 +9,13 @@ import PROFILE_QUERY from "../ProfileDetails/queries/ProfileQuery"
 import { User } from "@/types/type.user"
 import hexToRgb from "@/lib/utils/hexToRgb"
 import { notFound } from "next/navigation"
-import { createServerClient } from "@/lib/supabase/supabase-server"
+import { createServerClient } from "@/lib/supabase/server"
 import { HeaderBox } from "@/components/Box/HeaderBox"
 import ProfileNavbar from "../ProfileNavbar/ProfileNavbar"
 
 export default async function ProfileHeader({ profile } : { profile: User }) {
-    const supabaseServer = createServerClient()
-    const { data: { user } } = await supabaseServer.auth.getUser();
+    const supabase = createServerClient()
+    const { data: { user } } = await supabase.auth.getUser();
 
     return (
         <HeaderBox

@@ -1,17 +1,13 @@
-import { Fragment } from 'react';
-import ProfilePlaylists from '@/components/Profile/ProfilePlaylists/ProfilePlaylists';
-import ProfileFilms from '@/components/Profile/ProfileFilms/ProfileFilms';
-import { createServerClient } from '@/lib/supabase/supabase-server';
 import ProfileFavoriteFilms from '@/components/Profile/ProfileFavoriteFilms/ProfileFavoriteFilms';
 import ProfileHeader from '@/components/Profile/ProfileHeader/ProfileHeader';
 import ProfileNavbar from '@/components/Profile/ProfileNavbar/ProfileNavbar';
 import ProfileLastActivity from '@/components/Profile/ProfileLastActivity/ProfileLastActivity';
 import { notFound } from 'next/navigation';
+import { createServerClient } from '@/lib/supabase/server';
 
 export default async function UserPage({ params } : { params: { username: string } }) {
-  const supabaseServer = createServerClient()
-
-  const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
+  const supabase = createServerClient();
+  const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
   
   if (!user) notFound();
 

@@ -3,10 +3,7 @@ import MovieHeader from './assets/MovieHeader';
 import MovieDescription from './assets/MovieDescription';
 import MovieNavbar from './assets/MovieNavbar';
 import { notFound } from 'next/navigation';
-import RightSidebarServer from '@/context/RightSidebarContext/RightSidebarServer';
-import FriendsList from '@/components/Friends/FriendsList';
-import { ShowReviews } from '@/components/Review/ShowReviews/ShowReviews';
-import { supabase } from '@/lib/supabase/supabase';
+import { createServerClient } from '@/lib/supabase/server';
 
 export async function generateMetadata({
   params,
@@ -36,6 +33,7 @@ export default async function Film({
     film: string;
   }
 }) {
+  const supabase = createServerClient();
   const { data: isExist } = await supabase.from('film').select('id').eq('id', params.film).single();
   const film = await getMovieDetails(Number(params.film), params.lang);
   if (!film) notFound();

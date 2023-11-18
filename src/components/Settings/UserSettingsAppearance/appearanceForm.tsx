@@ -21,8 +21,10 @@ import { useLocale, useTranslations } from "next-intl"
 import { Lang } from "@/types/type.i18n"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useTheme } from "next-themes"
-import { usePathname, useRouter } from "next-intl/client"
+// import { usePathname, useRouter } from "next-intl/client"
+import {createSharedPathnamesNavigation} from 'next-intl/navigation';
 import { Theme } from "@/types/type.theme"
+import { usePathname, useRouter } from "@/lib/next-intl/navigation"
 
 const appearanceFormSchema = z.object({
   theme: z.enum(["light", "dark"], {
@@ -39,6 +41,7 @@ type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
 // This can come from your database or API.
 
 export function AppearanceForm() {
+
   const t = useTranslations('settings');
   const locale = useLocale();
   const { setTheme, theme } = useTheme();

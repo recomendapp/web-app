@@ -1,16 +1,14 @@
 import { notFound } from "next/navigation";
-import ProfileHeader from "@/components/Profile/ProfileHeader/ProfileHeader";
-import { createServerClient } from "@/lib/supabase/supabase-server";
 import { Fragment } from "react";
+import { createServerClient } from "@/lib/supabase/server";
 
 export async function generateMetadata({
     params,
   }: {
     params: { username: string };
   }) {
-    const supabaseServer = createServerClient()
-  
-    const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
+    const supabase = createServerClient();
+    const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
     if (!user) {
       return {
         title: 'Oups, utilisateur introuvable !',
@@ -31,10 +29,8 @@ export default async function UserLayout({
     params,
     children
 } : UserLayoutProps) {
-
-    const supabaseServer = createServerClient();
-
-    const { data: user } = await supabaseServer.from('user').select('*').eq('username', params.username).single();
+    const supabase = createServerClient();
+    const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
 
     if (!user) notFound()
     return (
