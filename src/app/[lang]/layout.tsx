@@ -1,5 +1,5 @@
 import '@/styles/globals.css';
-import { Metadata, Viewport } from 'next';
+import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/lib/fonts';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,19 +10,19 @@ import HelloNerd from '@/components/Console/HelloNerd';
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 
-export const viewport = {
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-    viewportFit: 'cover'
-  },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
-};
+// export const viewport = {
+//   viewport: {
+//     width: 'device-width',
+//     initialScale: 1,
+//     maximumScale: 1,
+//     userScalable: false,
+//     viewportFit: 'cover'
+//   },
+//   themeColor: [
+//     { media: '(prefers-color-scheme: light)', color: 'white' },
+//     { media: '(prefers-color-scheme: dark)', color: 'black' },
+//   ],
+// };
 
 export const metadata: Metadata = {
   title: {
@@ -34,6 +34,17 @@ export const metadata: Metadata = {
   icons: {
     apple: '/icons/icon-512x512.png',
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: 'cover'
+  },
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' },
+  ],
   // itunes: {
   //   appId: '333903271',
   //   appArgument: 'myAppArgument',
