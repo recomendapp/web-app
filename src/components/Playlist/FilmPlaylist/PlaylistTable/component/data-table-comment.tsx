@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/context/AuthContext/AuthProvider";
+import { useAuth } from "@/context/AuthContext/auth-context";
 import { PlaylistItem } from "@/types/type.playlist";
 import { useMutation } from "@apollo/client";
 import { Column, Row, Table } from "@tanstack/react-table";

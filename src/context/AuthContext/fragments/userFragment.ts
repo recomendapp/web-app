@@ -14,6 +14,7 @@ export default gql`
         website
         language
         favorite_color
+        favorite_films
         followers_count
         following_count
         friends_count

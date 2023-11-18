@@ -1,6 +1,6 @@
 'use client';
 import { PersonFollowButton } from '@/components/Person/ButtonFollowPerson/PersonFollowButton';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 
 export function PersonDetails({ person }: { person: any }) {
   const { user } = useAuth();

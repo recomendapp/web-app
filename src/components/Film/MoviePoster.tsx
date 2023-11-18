@@ -1,7 +1,7 @@
 "use client"
 
 import { ImageWithFallback } from "@/components/tools/ImageWithFallback";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+// import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "@/lib/utils";
 
 export default function MoviePoster({
@@ -15,16 +15,16 @@ export default function MoviePoster({
 }) {
     return (
         <div 
-            className={cn("shadow-md z-0 shrink-0 w-full", className)}
+            className={cn("shadow-md z-0 relative shrink-0 w-full aspect-[2/3]", className)}
         >
-            <AspectRatio ratio={2 / 3} className="z-0">
+            {/* <AspectRatio ratio={2 / 3} className="z-0"> */}
                 <ImageWithFallback
                     src={poster_path}
                     alt={alt}
                     fill
                     className="rounded-md object-cover z-0"
                 />
-            </AspectRatio>
+            {/* </AspectRatio> */}
         </div>
     )
 }

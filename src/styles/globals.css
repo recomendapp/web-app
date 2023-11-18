@@ -127,35 +127,36 @@
   }
 }
 
-html,
+
+/* html,
 body {
   position: fixed;
-  touch-action: none;
+  touch-action: none; */
   /* -webkit-user-select: none; */
   /* user-select: none; */
-}
+/* } */
 
 /* Scroll bar stylings */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
-  }
+  } */
 
   /* Track */
-  ::-webkit-scrollbar-track {
+  /* ::-webkit-scrollbar-track {
     background: var(--lightestgrey); 
-  }
+  } */
 
   /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: var(--scrollbar); 
+  /* ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar);  */
     /* border-radius: 5px; */
-  }
+  /* } */
 
   /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
+  /* ::-webkit-scrollbar-thumb:hover {
     background: var(--scrollbar-hover); 
-  }
+  } */
 
 /* @tailwind base;
 @tailwind components;

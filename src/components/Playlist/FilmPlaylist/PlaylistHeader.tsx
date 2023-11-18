@@ -1,6 +1,6 @@
 "use client"
 
-import { useAuth } from "@/context/AuthContext/AuthProvider";
+import { useAuth } from "@/context/AuthContext/auth-context";
 import { useState } from "react";
 import { PlaylistEditButton } from "../Button/PlaylistEditButton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
@@ -60,6 +60,7 @@ export default function PlaylistHeader({
                     alt={playlist?.title}
                     fill
                     className="rounded-md object-cover"
+                    type="playlist"
                   />
                 </AspectRatio>
               </div>

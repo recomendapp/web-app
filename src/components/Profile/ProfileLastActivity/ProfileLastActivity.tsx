@@ -23,7 +23,7 @@ export default async function ProfileLastActivity({
         return null;
 
     return (
-        <div className="@container flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
             <div className="flex justify-between gap-4 items-center">
                 <Link href={`/@${profile?.username}/films`}>
                     <h3 className="font-semibold text-xl text-accent-1">Dernières activités</h3>
@@ -35,7 +35,7 @@ export default async function ProfileLastActivity({
                 </Button>
                 
             </div>
-            <div className="grid grid-cols-4 @2xl:grid-cols-6 @5xl:grid-cols-8 gap-1">
+            <div className="grid grid-cols-4 md:grid-cols-6 2xl:grid-cols-8 gap-2">
                 {films.map((film: any) => (
                     <div key={film.film_id} className="">
                         <MovieCard

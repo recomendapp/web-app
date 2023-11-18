@@ -20,7 +20,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import checkUsernameExist from '@/components/Auth/hooks/checkUsernameExist';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 
 
 export function SignupForm() {

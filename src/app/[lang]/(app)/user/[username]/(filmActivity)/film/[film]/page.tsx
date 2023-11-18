@@ -1,4 +1,4 @@
-import { getMovieDetails } from '@/lib/tmdb';
+import { getMovieDetails } from '@/lib/tmdb/tmdb';
 import MovieVerticalCard from '@/components/Film/MovieVerticalCard';
 import MovieReviewForm from '@/components/Review/form/MovieReviewForm';
 import { notFound } from 'next/navigation';
@@ -12,8 +12,8 @@ export default async function Review({
 }: {
     params: {
         lang: string,
-        film: string,
         username: string
+        film: number,
     }
 }) {
     

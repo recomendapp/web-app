@@ -2,7 +2,7 @@
 
 import MovieCard from '@/components/Film/Card/MovieCard';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 import { supabase } from '@/lib/supabase/supabase';
 import { PlaylistItem } from '@/types/type.playlist';
 import { DndContext, DragEndEvent, PointerSensor, Sensor, UniqueIdentifier, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
@@ -192,30 +192,5 @@ const SortablePlaylistItem = ({
                 </Button>
             </TableCell>
         </TableRow>
-    )
-
-    return (
-        <tr
-            ref={setNodeRef}
-            style={style}
-            {...attributes}
-            {...listeners}
-            className='bg-background cursor-grab'
-        >
-            <td className="text-muted-foreground font-bold">
-                {item.rank}
-            </td>
-            <td>
-                <MovieCard link={false} filmId={item.film_id} displayMode='row' />
-            </td>
-            <td>
-                <PlaylistEditComment playlistItem={item} />
-            </td>
-            <td className=' text-right'>
-                <Button data-no-dnd="true" size={'sm'} variant={'ghost'} onClick={() => console.log('click')}>
-                    <XCircle  className=' fill-white text-background'/>
-                </Button>
-            </td>
-        </tr>
     )
 }

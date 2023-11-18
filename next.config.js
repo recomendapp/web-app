@@ -29,8 +29,8 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/:lang/settings',
-        destination: '/:lang/settings/profile',
+        source: '/settings',
+        destination: '/settings/profile',
         permanent: true,
       },
     ];

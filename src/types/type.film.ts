@@ -48,7 +48,7 @@ export interface FilmWatch {
     id: string,
     created_at: string,
     updated_at: string,
-    film_id: string,
+    film_id: number,
     user_id: string,
     date: string,
     film: any,
@@ -57,7 +57,7 @@ export interface FilmWatch {
 export interface FilmLike {
     id: string,
     created_at: string,
-    film_id: string,
+    film_id: number,
     user_id: string,
     film: any,
 }
@@ -66,7 +66,7 @@ export interface FilmRating {
     id: string,
     created_at: string,
     updated_at: string,
-    film_id: string,
+    film_id: number,
     user_id: string,
     rating: number,
     film: any,
@@ -75,7 +75,7 @@ export interface FilmRating {
 export interface FilmWatchlist {
     id: string,
     created_at: string,
-    film_id: string,
+    film_id: number,
     user_id: string,
     film: any,
 }

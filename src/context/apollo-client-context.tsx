@@ -17,7 +17,7 @@ const link = new BatchHttpLink({
     batchInterval: 10,
 });
 
-export function ApolloClientProvider ({
+export function ApolloClientContext ({
     children,
 } : {
     children: React.ReactNode;

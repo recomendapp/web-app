@@ -4,7 +4,7 @@ export default async function deleteMovieActivityMutation ({
     film_id,
     user_id,
 } : {
-    film_id: string,
+    film_id: number,
     user_id: string,
 }) {
     const { data, error } = await supabase

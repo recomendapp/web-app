@@ -34,6 +34,10 @@
         "label": "Bio",
         "description": ""
       },
+      "favorite_films": {
+        "label": "Favorite films",
+        "description": ""
+      },
       "url": {
         "label": "URL",
         "description": ""

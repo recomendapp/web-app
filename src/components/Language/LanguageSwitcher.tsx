@@ -8,7 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { useAuth } from "@/context/AuthContext/AuthProvider";
+import { useAuth } from "@/context/AuthContext/auth-context";
 import { useLocale } from "next-intl";
 
 import { useRouter, usePathname } from 'next-intl/client';

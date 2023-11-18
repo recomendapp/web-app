@@ -3,12 +3,12 @@
 import { useQuery } from "@apollo/client";
 import { TableGuidelist } from "../table/TableGuidelist";
 import { GuidelistHeader } from "./components/GuidelistHeader";
-import { useAuth } from "@/context/AuthContext/AuthProvider";
+import { useAuth } from "@/context/AuthContext/auth-context";
 import { Guidelist } from "@/types/type.guidelist";
 import { useEffect, useState } from "react";
 
 import GUIDELIST_QUERY from '@/components/modules/MovieGuidelist/queries/guidelistQuery'
-import { getMovieDetails } from "@/lib/tmdb";
+import { getMovieDetails } from "@/lib/tmdb/tmdb";
 
 export function GuidelistPage() {
     const { user } = useAuth();

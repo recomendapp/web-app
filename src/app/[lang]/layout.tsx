@@ -1,25 +1,16 @@
 import '@/styles/globals.css';
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/lib/fonts';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { cn } from "@/lib/utils";
-import Provider from '@/context/Provider';
+import Providers from '@/context/Providers';
 import HelloNerd from '@/components/Console/HelloNerd';
 import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s • ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
+export const viewport = {
   viewport: {
     width: 'device-width',
     initialScale: 1,
@@ -27,6 +18,18 @@ export const metadata: Metadata = {
     userScalable: false,
     viewportFit: 'cover'
   },
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: 'white' },
+    { media: '(prefers-color-scheme: dark)', color: 'black' },
+  ],
+};
+
+export const metadata: Metadata = {
+  title: {
+    default: siteConfig.name,
+    template: `%s • ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
   manifest: '/manifest.webmanifest',
   icons: {
     apple: '/icons/icon-512x512.png',
@@ -68,7 +71,7 @@ interface RootLayoutProps {
   params: { lang: string }
 }
 
-export default async function RootLayout({ children, params: { lang } }: RootLayoutProps) {
+export default async function LangLayout({ children, params: { lang } }: RootLayoutProps) {
   let dictionary;
   try {
     dictionary = (await import(`@/dictionaries/${lang}.json`)).default;
@@ -85,12 +88,12 @@ export default async function RootLayout({ children, params: { lang } }: RootLay
         )}
       >
         <HelloNerd />
-        <Provider>
+        <Providers>
           <NextIntlClientProvider locale={lang} messages={dictionary}>
             {/* <div className="flex items-start h-full gap-2 lg:p-2"> */}
             {children}
           </NextIntlClientProvider>
-        </Provider>
+        </Providers>
       </body>
     </html>
   );

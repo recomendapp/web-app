@@ -17,12 +17,12 @@ export default function About({
   const t = useTranslations('about');
 
   return (
-    <main className=' '>
+    <main>
 
       <div className='flex flex-col gap-4 items-center'>
         {/* ABOUT */}
         <section id='about' className='w-full flex flex-col items-center gap-2'>
-          <Marquee pauseOnHover className=' bg-blue-700 py-1 uppercase'>
+          <Marquee pauseOnHover className=' bg-blue-700 py-1 uppercase z-0'>
             {Array.from({ length: 3 }).map((_, index) => (
               <p key={index} className='mr-8'>
                 {t('about.marquee')}

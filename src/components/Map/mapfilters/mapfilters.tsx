@@ -12,10 +12,10 @@ import {
 
 import { Accordion } from '@/components/ui/accordion';
 
-import { getGenreList } from '@/lib/tmdb';
+import { getGenreList } from '@/lib/tmdb/tmdb';
 import { MapFiltersGenres } from './mapfiltersgenres';
 import { MapFiltersYears } from './mapfiltersyears';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 
 export function MapFilters(props: any) {
   const { user } = useAuth();

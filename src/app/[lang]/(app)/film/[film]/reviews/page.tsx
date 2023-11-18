@@ -1,4 +1,4 @@
-import { getMovieDetails } from '@/lib/tmdb';
+import { getMovieDetails } from '@/lib/tmdb/tmdb';
 import MovieHeader from '../assets/MovieHeader';
 import MovieNavbar from '../assets/MovieNavbar';
 import { notFound } from 'next/navigation';
@@ -7,9 +7,12 @@ import { ShowReviews } from '@/components/Review/ShowReviews/ShowReviews';
 export async function generateMetadata({
   params,
 }: {
-  params: { film: string };
+  params: {
+    lang: string;
+    film: number;
+  };
 }) {
-  const film = await getMovieDetails(params.film, 'fr');
+  const film = await getMovieDetails(params.film, params.lang);
   if (!film) {
     return {
       title: 'Oups, film introuvable !',
@@ -21,8 +24,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function Reviews({ params }: { params: { film: string } }) {
-  const film = await getMovieDetails(params.film, 'fr');
+export default async function Reviews({
+  params
+}: {
+  params: {
+    lang: string;
+    film: number;
+  }
+}) {
+  const film = await getMovieDetails(params.film, params.lang);
 
   if (!film) notFound();
 

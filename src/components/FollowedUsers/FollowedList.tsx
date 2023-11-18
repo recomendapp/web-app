@@ -1,4 +1,4 @@
-import { useAuth } from "@/context/AuthContext/AuthProvider"
+import { useAuth } from "@/context/AuthContext/auth-context"
 import { useQuery } from "@apollo/client";
 import USER_FRIENDS_QUERY from '@/components/Friends/queries/userFriendsQuery';
 import { Friend } from "@/types/type.user";
@@ -7,7 +7,7 @@ import UserCard from "../User/UserCard/UserCard";
 import { Skeleton } from "../ui/skeleton";
 
 
-export default function FriendsList() {
+export default function FollowedList() {
 
     const { user } = useAuth();
 

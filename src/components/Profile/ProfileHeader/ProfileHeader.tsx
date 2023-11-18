@@ -16,22 +16,11 @@ import ProfileNavbar from "../ProfileNavbar/ProfileNavbar"
 export default async function ProfileHeader({ profile } : { profile: User }) {
     const supabaseServer = createServerClient()
     const { data: { user } } = await supabaseServer.auth.getUser();
-    // const { data: profileQuery, loading } = useQuery(PROFILE_QUERY, {
-    //     variables: {
-    //         username: username
-    //     }
-    // })
-
-    // const profile: User = profileQuery?.userCollection?.edges[0]?.user;
-
-    // if (!loading && !profile)
-    //     notFound()
 
     return (
         <HeaderBox
-            height='fit-content'
-            backgroundImage={profile.background_url}
-            className="flex-col @lg:items-start @lg:flex-row gap-4"
+            style={{backgroundImage: `url(${profile.background_url})`}}
+            className="!h-fit flex-col @lg:items-start @lg:flex-row gap-4"
         >
             <div className="flex gap-4 items-start justify-between w-full @lg:w-fit">
                 <UserAvatar className=' h-20 w-20 @md:h-36 @md:w-36 @5xl:h-48 @5xl:w-48' user={profile} />

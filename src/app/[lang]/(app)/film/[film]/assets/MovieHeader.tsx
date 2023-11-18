@@ -36,7 +36,7 @@ import { ConvertHoursMinutes } from "@/lib/utils";
 import { Play } from "lucide-react";
 import { DateOnlyYearTooltip } from "@/components/tools/Date";
 import MoviePoster from "@/components/Film/MoviePoster";
-import { useAuth } from "@/context/AuthContext/AuthProvider";
+import { useAuth } from "@/context/AuthContext/auth-context";
 import { HeaderBox } from "@/components/Box/HeaderBox";
 
 
@@ -44,27 +44,26 @@ export default function MovieHeader({ movie, small } : { movie: any, small?: boo
   if (small) {
     return <MovieHeaderSmall movie={movie} />
   }
+
   return (
       <div>
           <HeaderBox
-              backgroundImage={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
+            style={{backgroundImage: `url(https://image.tmdb.org/t/p/w1280/${movie.backdrop_path})`}}
           >
-                <div className="flex w-full gap-4 items-center">
+                <div className="flex flex-col w-full gap-4 items-center @xl:flex-row">
                   {/* MOVIE POSTER */}
                   <MoviePoster className="w-[200px]" poster_path={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} alt={movie.title} />
                   {/* MOVIE MAIN DATA */}
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 w-full">
                   {/* TYPE */}
                   <div>Film</div>
                   {/* TITLE */}
-                  <div className="text-xl lg:text-6xl font-bold">
+                  <div className="text-xl lg:text-6xl font-bold line-clamp-2">
                       <span>{movie.title}</span>
                   </div>
                   {/* DATE / GENRES / RUNTIME */}
                   <div>
-                      {movie.credits.crew.filter(
-                      (member: any) => member.job === 'Director'
-                      ).length ? (
+                      {movie.directors ? (
                       movie.directors
                           .map((director: any, index: number) => (
                           <span key={director.id}>
@@ -85,7 +84,7 @@ export default function MovieHeader({ movie, small } : { movie: any, small?: boo
                           </span>
                           ))
                       ) : (
-                      <span className="w-fit p-0 h-full font-bold">Unknown</span>
+                        <span className="w-fit p-0 h-full font-bold">Unknown</span>
                       )}
 
                       {/* DATE */}
@@ -111,14 +110,14 @@ export default function MovieHeader({ movie, small } : { movie: any, small?: boo
                       </span>
                   </div>
                   <div className='flex items-center gap-2'>
-                      <MovieActionCounter movieId={movie.id} />
+                      {/* <MovieActionCounter movieId={movie.id} /> */}
                       {movie.videos.results.length && <MovieTrailerButton trailer={movie.videos} />}
                   </div>
                   </div>
                 </div>
           </HeaderBox>
           <div className='px-4 pb-4'>
-              <MovieAction filmId={String(movie.id)} all />
+              <MovieAction filmId={movie.id} all />
           </div>
       </div>
   )

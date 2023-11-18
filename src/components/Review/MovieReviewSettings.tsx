@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
-import { useAuth } from '@/context/AuthContext/AuthProvider'
+import { useAuth } from '@/context/AuthContext/auth-context'
 import { Review } from '@/types/type.review'
 import { useMutation } from '@apollo/client'
 import { MoreHorizontal, Trash2 } from 'lucide-react'

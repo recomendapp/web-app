@@ -5,7 +5,7 @@ export default async function updateMovieActivityMutation ({
     user_id,
     data,
 } : {
-    film_id: string,
+    film_id: number,
     user_id: string,
     data: any
 }) {

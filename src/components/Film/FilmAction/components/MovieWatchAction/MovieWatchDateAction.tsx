@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 
 import UPDATE_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/updateMovieActivityMutation'
 
@@ -24,7 +24,7 @@ import { supabase } from '@/lib/supabase/supabase';
 
 
 interface MovieWatchedDateActionProps extends React.HTMLAttributes<HTMLDivElement> {
-    filmId: string;
+    filmId: number;
 }
 
 export function MovieWatchDateAction({

@@ -79,7 +79,7 @@ export default function ProfileFilms({
         return 
             <div>Loading</div>
     return (
-        <div className="@container flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
             <div className="flex justify-between gap-4 items-center">
                 <h3 className="font-semibold text-xl text-accent-1">Films</h3>
                 <div className="flex gap-2">
@@ -119,8 +119,8 @@ export default function ProfileFilms({
             </div>
             {films?.pages[0]?.length ?
                 <>
-                    <div className={` gap-1
-                        ${displayMode == 'row' ? 'flex flex-col' : 'grid grid-cols-3 @md:grid-cols-4 @2xl:grid-cols-6 @5xl:grid-cols-8'}
+                    <div className={` gap-2
+                        ${displayMode == 'row' ? 'flex flex-col' : 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 2xl:grid-cols-8'}
                     `}
                     >
                         {films?.pages.map((page, i) => (

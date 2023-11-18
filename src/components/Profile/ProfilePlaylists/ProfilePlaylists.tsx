@@ -76,7 +76,7 @@ export default function ProfilePlaylists({
     }, [inView, hasNextPage])
 
     return (
-        <div className="@container flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
             <div className="flex justify-between gap-4 items-center">
                 <h3 className="font-semibold text-xl text-accent-1">Playlists</h3>
                 <Select onValueChange={setOrder} defaultValue={order}>
@@ -100,7 +100,7 @@ export default function ProfilePlaylists({
                 
             </div>
             {playlists?.pages[0]?.length ?
-                <div className="grid gap-1 grid-cols-3 @lg:grid-cols-4 @3xl:grid-cols-5 @4xl:grid-cols-6 @5xl:grid-cols-7 @6xl:grid-cols-8">
+                <div className="grid gap-2 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 2xl:grid-cols-8">
                     {playlists?.pages.map((page, i) => (
                         <Fragment key={i}>
                             {page?.map((playlist: any, index) => (

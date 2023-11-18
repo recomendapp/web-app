@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 // import { toast } from "@/components/ui/use-toast"
 import { toast } from 'react-toastify';
 import PictureUpload from './pictureUpload';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 import { useMutation } from '@apollo/client';
 import UPDATE_PROFILE_MUTATION from './mutations/updateProfileMutation';
 import { Icons } from '@/components/icons';
@@ -29,6 +29,7 @@ import Compressor from 'compressorjs';
 import compressPicture from '@/lib/utils/compressPicture';
 import Loader from '@/components/Loader/Loader';
 import { useTranslations } from 'next-intl';
+import { FavoriteFilms } from '@/components/Settings/UserSettingsProfile/FavoriteFilms/FavoriteFilms';
 
 export function ProfileForm() {
   const t = useTranslations('settings');
@@ -56,6 +57,8 @@ export function ProfileForm() {
         message: 'La bio ne doit pas dépasser 150 caractères.',
       })
       .optional(),
+    favorite_films: z
+      .array(z.number()),
     website: z.
       string()
       .url({ 
@@ -69,6 +72,7 @@ export function ProfileForm() {
   const defaultValues: Partial<ProfileFormValues> = {
     full_name: user?.full_name,
     bio: user?.bio ?? undefined,
+    favorite_films: user?.favorite_films ?? [],
     website: user?.website ?? undefined,
   };
 
@@ -82,6 +86,7 @@ export function ProfileForm() {
     user && form.reset({
       full_name: user.full_name,
       bio: user?.bio ?? undefined,
+      favorite_films: user?.favorite_films ?? [],
       website: user?.website ?? undefined,
     })
   }, [user])
@@ -97,6 +102,7 @@ export function ProfileForm() {
         id: user?.id,
         full_name: data.full_name,
         bio: data.bio,
+        favorite_films: data.favorite_films,
         website: data.website
       }
       if (newAvatar) {
@@ -206,6 +212,21 @@ export function ProfileForm() {
                 />
               </FormControl>
               {/* <FormMessage /> */}
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={"favorite_films"}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className='flex justify-between gap-4'>
+                <p>{t('profile.favorite_films.label')}</p>
+                <p className='text-muted-foreground'>{field?.value?.length ?? 0} / 4</p>
+              </FormLabel>
+              <FormControl>
+                <FavoriteFilms {...field} />
+              </FormControl>
             </FormItem>
           )}
         />

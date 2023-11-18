@@ -36,6 +36,7 @@ export default function PlaylistPictureUpload({
             alt={playlist?.title ?? ''}
             fill
             className="rounded-md object-cover"
+            type="playlist"
           />
         </AspectRatio>
       </div>

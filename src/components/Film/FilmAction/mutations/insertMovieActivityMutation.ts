@@ -9,7 +9,7 @@ export default async function insertMovieActivityMutation ({
     rating,
 } : {
     queryClient: QueryClient
-    film_id: string,
+    film_id: number,
     user_id: string,
     is_liked?: boolean,
     rating?: number

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 // import HeaderMinimal from '../../src/components/header/HeaderMinimal';
-import { getPersonDetails } from '@/lib/tmdb';
+import { getPersonDetails } from '@/lib/tmdb/tmdb';
 import { Metadata } from 'next';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { PersonFollowButton } from '@/components/Person/ButtonFollowPerson/PersonFollowButton';

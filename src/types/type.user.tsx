@@ -1,4 +1,4 @@
-import { Subscription } from "@/types/type.stripe";
+import { Subscription, SubscriptionWithProduct } from "@/types/type.stripe";
 
 export interface User {
     id: string,
@@ -13,12 +13,17 @@ export interface User {
     badge: string,
     website: string,
     favorite_color: string,
-    favorite_films: string[],
+    favorite_films: number[],
     followers_count: string,
     following_count: string,
     friends_count: string,
     premium: boolean
     verified: boolean,
+    subscription: {
+        edges: [
+            {node: SubscriptionWithProduct}
+        ]
+    },
 }
 
 export interface Follower {

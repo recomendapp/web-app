@@ -17,13 +17,17 @@ import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
 import Novu from '@/context/NovuProvider';
 import { getInitiales } from '@/lib/utils';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
-import { useRightSidebar } from '@/context/RightSidebarContext/RightSidebarContext';
-import FriendsList from '@/components/Friends/FriendsLists';
+import { useAuth } from '@/context/AuthContext/auth-context';
+import { useRightSidebar } from '@/context/right-sidebar-context';
+import FriendsList from '@/components/Friends/FriendsList';
 import FollowedUserListButton from '@/components/FollowedUsers/FollowedUserListButton';
 import UserAvatar from '../UserAvatar/UserAvatar';
 
-export function UserNav() {
+export function UserNav({
+  following = true,
+} : {
+  following?: boolean
+}) {
 
   const { user, loading, logout } = useAuth();
 
@@ -33,7 +37,7 @@ export function UserNav() {
 
   return (
     <nav className='flex items-center gap-4'>
-      <FollowedUserListButton />
+      {following && <FollowedUserListButton />}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">

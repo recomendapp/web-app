@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase/supabase';
 import { gql, useQuery } from '@apollo/client';
 import { User } from '@/types/type.user';
 import USER_FRAGMENT from './fragments/userFragment';
+import SUBSCRIPTION_FRAGMENT from '@/components/Subscription/fragments/subscriptionFragment';
 import { useRouter } from 'next/navigation';
 
 export interface UserState {
@@ -36,23 +37,37 @@ const defaultState: UserState = {
 };
 
 const USER_QUERY = gql`
-  query UserQuery($user_id: UUID!) {
-    userCollection(filter: { id: {eq: $user_id}}) {
+  query UserQuery($userId: UUID!) {
+    userCollection(
+      filter: { id: { eq: $userId } }
+      last: 1
+    ) {
       edges {
         user: node {
           ...User
+          subscription: subscriptionsCollection(
+            filter: { user_id: { eq: $userId } }
+            last: 1
+          ) {
+            edges {
+              node {
+                ...Subscription
+              }
+            }
+          }
         }
       }
     }
   }
   ${USER_FRAGMENT}
+  ${SUBSCRIPTION_FRAGMENT}
 `
 
 // create the context
-const AuthContext = createContext<UserState>(defaultState);
+const AuthProvider = createContext<UserState>(defaultState);
 
 // create the provider component
-export const AuthProvider = ({
+export const AuthContext = ({
   children
 } : {
   children: React.ReactNode;
@@ -64,9 +79,9 @@ export const AuthProvider = ({
   const [ loading, setLoading ] = useState(true);
   const { data, loading: userLoading } = useQuery(USER_QUERY, {
     variables: {
-      user_id: session?.user.id
+      userId: session?.user.id
     },
-    skip: session?.user?.id == null || session?.user?.id == undefined
+    skip: !session?.user?.id
   });
   const user = data?.userCollection?.edges[0]?.user;
 
@@ -163,12 +178,12 @@ export const AuthProvider = ({
   };
 
   return (
-    <AuthContext.Provider
+    <AuthProvider.Provider
       value={{ user, session, loading, login, logout, signup, loginOAuth2, userRefresh }}
     >
       {children}
-    </AuthContext.Provider>
+    </AuthProvider.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthProvider);

@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useQuery } from "react-query";
 import { supabase } from "@/lib/supabase/supabase";
 
-export default function CreateReviewForm({ filmId, user } : { filmId: string, user: User }) {
+export default function CreateReviewForm({ filmId, user } : { filmId: number, user: User }) {
   const {
     data: activity,
     isLoading: activityLoading,

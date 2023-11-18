@@ -5,13 +5,13 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { PlaylistEditButton } from '@/components/Playlist/Button/PlaylistEditButton';
 import { useEffect, useState } from 'react';
 import { User } from '@/types/type.user';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 import Loader from '@/components/Loader/Loader';
 import { useQuery } from '@apollo/client';
 import PlaylistTable from '@/components/Playlist/FilmPlaylist/PlaylistTable/PlaylistTable';
 import { Playlist, PlaylistItem } from '@/types/type.playlist';
 import { Film } from '@/types/type.film';
-import { getMovieDetails } from '@/lib/tmdb';
+import { getMovieDetails } from '@/lib/tmdb/tmdb';
 
 import PLAYLIST_DETAILS_QUERY from '@/components/Playlist/FilmPlaylist/PlaylistDetails/queries/playlistDetailsQuery';
 import PlaylistHeader from '../PlaylistHeader';

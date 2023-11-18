@@ -22,9 +22,9 @@ const defaultState: RightSidebarContextType = {
   setPanelTitle: () => {}
 };
 
-const RightSidebarContext = createContext(defaultState);
+const RightSidebarProvider = createContext(defaultState);
 
-export function RightSidebarProvider({
+export function RightSidebarContext({
   children
 } : {
   children: React.ReactNode
@@ -51,10 +51,10 @@ export function RightSidebarProvider({
   // };
 
   return (
-    <RightSidebarContext.Provider value={{ isOpen, openPanel, closePanel, panelContent, setPanelContent, panelTitle, setPanelTitle }}>
+    <RightSidebarProvider.Provider value={{ isOpen, openPanel, closePanel, panelContent, setPanelContent, panelTitle, setPanelTitle }}>
       {children}
-    </RightSidebarContext.Provider>
+    </RightSidebarProvider.Provider>
   );
 }
 
-export const useRightSidebar = () => useContext(RightSidebarContext);
+export const useRightSidebar = () => useContext(RightSidebarProvider);

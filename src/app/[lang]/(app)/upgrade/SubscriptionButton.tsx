@@ -2,7 +2,7 @@
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/AuthContext/AuthProvider";
+import { useAuth } from "@/context/AuthContext/auth-context";
 import { postData } from "@/lib/stripe/stripe-helpers";
 import { getStripe } from "@/lib/stripe/stripeClient";
 import { Price, Product } from "@/types/type.stripe";

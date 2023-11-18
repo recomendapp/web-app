@@ -1,4 +1,4 @@
-export async function getMovieDetails(movie: string, language: string) {
+export async function getMovieDetails(movie: number, language: string) {
   try {
     const movieDetails = await (await fetch(
       `${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/${movie}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&append_to_response=credits,videos`

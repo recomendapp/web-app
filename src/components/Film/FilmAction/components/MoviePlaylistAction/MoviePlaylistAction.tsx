@@ -25,7 +25,7 @@ import {
 
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 
 import USER_PLAYLISTS_QUERY from '@/components/User/UserPlaylists/queries/userPlaylistsQuery'
 import { useMutation, useQuery } from '@apollo/client';
@@ -34,7 +34,7 @@ import { Playlist } from '@/types/type.playlist';
 import INSERT_PLAYLIST_ITEM_MUATION from '@/components/Film/FilmAction/components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
 
 interface MoviePlaylistActionProps {
-  filmId: string;
+  filmId: number;
 }
 
 export function MoviePlaylistAction({

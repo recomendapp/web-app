@@ -3,12 +3,12 @@
 // import { useQuery } from "@apollo/client";
 import { TableLikes } from "../table/TableLikes";
 import { LikesHeader } from "./components/LikesHeader";
-import { useAuth } from "@/context/AuthContext/AuthProvider";
+import { useAuth } from "@/context/AuthContext/auth-context";
 import { Guidelist } from "@/types/type.guidelist";
 import { useEffect, useState } from "react";
 
 // import LIKES_QUERY from '@/components/Playlist/Likes/queries/likesQuery'
-import { getMovieDetails } from "@/lib/tmdb";
+import { getMovieDetails } from "@/lib/tmdb/tmdb";
 import { FilmLike } from "@/types/type.film";
 import { useQuery } from "react-query";
 import { supabase } from "@/lib/supabase/supabase";

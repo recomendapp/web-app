@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dialog';
 
 import { FilmAction } from '@/types/type.film';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 import UPDATE_FILM_RATING_MUTATION from '@/components/Film/FilmAction/components/MovieRatingAction/mutations/updateFilmRatingMutation';
 import { toast } from 'react-toastify';
 import { DialogClose } from '@radix-ui/react-dialog';
@@ -31,7 +31,7 @@ import { supabase } from '@/lib/supabase/supabase';
 import movieActivityQuery from '../../queries/movieActivityQuery';
 
 interface MovieRatingActionProps extends React.HTMLAttributes<HTMLDivElement> {
-  filmId: string;
+  filmId: number;
   // filmAction: FilmAction;
   // loading: boolean;
   // error: ApolloError | undefined;

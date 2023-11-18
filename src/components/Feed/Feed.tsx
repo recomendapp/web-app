@@ -1,6 +1,6 @@
 "use client"
 
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 import { supabase } from '@/lib/supabase/supabase';
 import { useQuery, useQueryClient } from 'react-query';
 

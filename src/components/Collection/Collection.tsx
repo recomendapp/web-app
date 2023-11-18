@@ -29,11 +29,11 @@ export function Collection() {
         []
     );
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 px-4 pb-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 px-4 pb-4 gap-2">
             {collectionRoutes.map((item) => (
                 <Button
                     key={item.label}
-                    variant={'ghost'}
+                    variant={'muted'}
                     className={`justify-start p-2`}
                     asChild
                 >
@@ -62,7 +62,7 @@ export function CollectionIcon({
             style={{ 
                 backgroundImage: `linear-gradient(to top right, ${from}, ${to})`, 
             }}
-            className={`w-full h-full rounded-md flex items-center justify-center`}
+            className={`w-full rounded-md flex items-center justify-center aspect-square`}
         >
             {children}
         </div>

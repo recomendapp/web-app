@@ -1,7 +1,7 @@
-import { useRightSidebar } from "@/context/RightSidebarContext/RightSidebarContext";
+import { useRightSidebar } from "@/context/right-sidebar-context";
 import { Button } from "../ui/button";
 import { Fragment, useEffect, useRef, useState } from "react";
-import FriendsList from "../Friends/FriendsLists";
+import FriendsList from "../Friends/FriendsList";
 import { Users } from "lucide-react";
 
 import { BottomSheet } from 'react-spring-bottom-sheet';
@@ -19,12 +19,12 @@ export default function FollowedUserListButton() {
                 className="rounded-full hidden lg:inline-flex"
                 onClick={() => {
                 if (isOpenSidebar && panelTitle != 'Amis') {
-                    setPanelTitle('Amis')
+                    setPanelTitle('Suivis')
                     setPanelContent(<FriendsList />)
                 } else if (isOpenSidebar) {
                     closePanel();
                 } else {
-                    setPanelTitle('Amis')
+                    setPanelTitle('Suivis')
                     setPanelContent(<FriendsList />)
                     openPanel()
                 }

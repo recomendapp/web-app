@@ -10,7 +10,7 @@ import { Icons } from '../../../../icons';
 import { useRouter } from 'next/navigation';
 import { FilmAction } from '@/types/type.film';
 import { toast } from 'react-toastify';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { supabase } from '@/lib/supabase/supabase';
 
@@ -18,7 +18,7 @@ import INSERT_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/ins
 import UPDATE_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/updateMovieActivityMutation'
 
 interface MovieLikeActionProps extends React.HTMLAttributes<HTMLDivElement> {
-  filmId: string;
+  filmId: number;
 }
 
 export function MovieLikeAction({

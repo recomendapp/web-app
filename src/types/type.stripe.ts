@@ -10,7 +10,7 @@ export interface Product {
     features: Stripe.Product.Feature[]
 }
 
-export interface ProductWithPrice extends Product {
+export interface ProductWithPrices extends Product {
     prices?: Price[];
 }
 
@@ -26,7 +26,10 @@ export interface Price {
     interval_count?: number;
     trial_period_days?: number | null;
     metadata?: Stripe.Metadata;
-    products?: Product;
+}
+
+export interface PriceWithProduct extends Price {
+    products: Product | null;
 }
 
 export interface Customer {
@@ -38,5 +41,8 @@ export interface Subscription {
     id: string,
     user_id: string,
     status: string,
-    prices: Price
+}
+
+export interface SubscriptionWithProduct extends Subscription {
+    prices: PriceWithProduct | null;
 }

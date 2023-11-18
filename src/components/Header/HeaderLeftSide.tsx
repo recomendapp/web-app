@@ -12,7 +12,7 @@ export default function HeaderLeftSide() {
         <>
             <NavigationButton />
             {pathname.startsWith('/search') && <SearchBar />}
-            {pathname.startsWith('/collection') && <PlaylistCreateButton />}
+            {pathname == '/collection' && <PlaylistCreateButton />}
         </>
     )
 }

@@ -1,14 +1,17 @@
 import { redirect } from "next/navigation";
 import { createServerClient } from "@/lib/supabase/supabase-server";
-import { getMovieDetails } from "@/lib/tmdb";
+import { getMovieDetails } from "@/lib/tmdb/tmdb";
 import CreateReviewForm from "@/components/Review/form/CreateReviewFrom";
 
 export async function generateMetadata({
     params,
 }: {
-    params: { film: string };
+    params: {
+        lang: string;
+        film: number;
+    };
 }) {
-    const film = await getMovieDetails(params.film, 'fr-FR');
+    const film = await getMovieDetails(params.film, params.lang);
     if (!film) {
         return {
         title: 'Oups, film introuvable !',
@@ -20,7 +23,13 @@ export async function generateMetadata({
     };
 }
 
-export default async function CreateReview({ params }: { params: { film: string } }) {
+export default async function CreateReview({
+    params
+}: {
+    params: {
+        film: number
+    }
+}) {
 
     const supabaseServer = createServerClient()
 

@@ -21,7 +21,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { FilmAction } from '@/types/type.film';
 // import { ApolloError, useMutation } from '@apollo/client';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { supabase } from '@/lib/supabase/supabase';
@@ -30,7 +30,7 @@ import DELETE_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/del
 import INSERT_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/insertMovieActivityMutation'
 
 interface MovieWatchActionProps extends React.HTMLAttributes<HTMLDivElement> {
-  filmId: string;
+  filmId: number;
 }
 
 export function MovieWatchAction({

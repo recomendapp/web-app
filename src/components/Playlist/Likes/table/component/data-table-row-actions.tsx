@@ -27,7 +27,7 @@ import { Dispatch, SetStateAction, useState } from "react"
 import ButtonShare from "@/components/tools/ButtonShare"
 import { Film, FilmLike } from "@/types/type.film"
 import { useMutation } from "@apollo/client"
-import { useAuth } from "@/context/AuthContext/AuthProvider"
+import { useAuth } from "@/context/AuthContext/auth-context"
 
 import DELETE_FILM_LIKE_MUTATION from '@/components/Film/FilmAction/components/MovieLikeAction/mutations/deleteFilmLikeMutation';
 import LIKES_QUERY from "@/components/Playlist/Likes/queries/likesQuery"

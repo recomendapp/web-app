@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/accordion';
 
 import { Input } from '@/components/ui/input';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 
 export function MapFiltersYears(props: any) {
   const { user } = useAuth();

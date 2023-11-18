@@ -43,7 +43,7 @@ export default function SendForm({
     setOpen
 } : {
     user: User;
-    filmId: string;
+    filmId: number;
     friends: [{ friend: Friend }];
     setOpen: Dispatch<SetStateAction<boolean>>;
 }) {

@@ -30,7 +30,7 @@ import UserCard from "@/components/User/UserCard/UserCard"
 import { PlaylistItem } from "@/types/type.playlist"
 import { Film } from "@/types/type.film"
 import { useMutation } from "@apollo/client"
-import { useAuth } from "@/context/AuthContext/AuthProvider"
+import { useAuth } from "@/context/AuthContext/auth-context"
 
 import GUIDELIST_QUERY from '@/components/modules/MovieGuidelist/queries/guidelistQuery'
 import DELETE_GUIDELIST_ITEM_MUTATION from '@/components/modules/MovieGuidelist/mutations/deleteGuidelistItemMutation'

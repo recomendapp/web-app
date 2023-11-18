@@ -17,12 +17,12 @@ import MoviePoster from "@/components/Film/MoviePoster";
 import { Heart, Text } from "lucide-react";
 import { MovieAction } from "@/components/Film/FilmAction/MovieAction";
 import { FilmAction } from "@/types/type.film";
-import { getMovieDetails } from "@/lib/tmdb";
+import { getMovieDetails } from "@/lib/tmdb/tmdb";
 import { useQuery } from "react-query";
 import { useLocale } from "next-intl";
 
 interface MovieCardProps {
-    filmId: string;
+    filmId: number;
     displayMode?: 'grid' | 'row',
     link?: boolean,
     movieActivity?: FilmAction
@@ -43,7 +43,7 @@ export default function MovieCard({
       } = useQuery({
         queryKey: ['film', filmId],
         queryFn: () => getMovieDetails(filmId, locale),
-        enabled: filmId !== undefined && filmId !== null,
+        enabled: !!filmId,
     });
 
     if (!film)

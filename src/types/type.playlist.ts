@@ -28,7 +28,7 @@ export interface PlaylistItem {
     id: string,
     created_at: string,
     playlist_id: string,
-    film_id: string,
+    film_id: number,
     film: Film,
     user_id: string,
     user: User,

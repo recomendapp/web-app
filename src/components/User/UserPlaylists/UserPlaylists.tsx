@@ -1,7 +1,7 @@
 import { ImageWithFallback } from "@/components/tools/ImageWithFallback";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/AuthContext/AuthProvider";
+import { useAuth } from "@/context/AuthContext/auth-context";
 import { useQuery } from "@apollo/client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,6 +9,7 @@ import { Fragment } from "react";
 import USER_PLAYLISTS_QUERY from '@/components/User/UserPlaylists/queries/userPlaylistsQuery'
 import { Playlist } from "@/types/type.playlist";
 import Loader from "@/components/Loader/Loader";
+import MoviePlaylistCard from "@/components/Playlist/FilmPlaylist/MoviePlaylistCard";
 
 export function UserPlaylists({
     sidebarExpanded,
@@ -42,33 +43,33 @@ export function UserPlaylists({
         return (
             <Fragment>
                 {playlists.map(({ playlist } : { playlist: Playlist}) => (
-                    <Button
-                        key={playlist.title}
-                        variant={
-                        pathname === `/playlist/${playlist.id}` ? 'secondary' : 'ghost'
-                        }
-                        className={`justify-start p-2`}
-                        asChild
-                    >
-                        <Link
-                            href={'/playlist/' + playlist.id}
-                            className="h-fit w-full flex flex-col gap-2"
-                        >
-                            <div className={`w-full shadow-2xl shrink-0`}>
-                                <AspectRatio ratio={1 / 1}>
-                                    <ImageWithFallback
-                                        src={playlist.poster_url ?? ''}
-                                        alt={playlist.title}
-                                        fill
-                                        className="rounded-md object-cover"
-                                    />
-                                </AspectRatio>
-                            </div>
-                            <section className="line-clamp-1">
-                                {playlist.title}
-                            </section>
-                        </Link>
-                    </Button>
+                    <MoviePlaylistCard playlist={playlist} key={playlist.id} />
+                    // <Button
+                    //     key={playlist.title}
+                    //     variant={
+                    //     pathname === `/playlist/${playlist.id}` ? 'secondary' : 'ghost'
+                    //     }
+                    //     className={`justify-start p-2`}
+                    //     asChild
+                    // >
+                    //     <Link
+                    //         href={'/playlist/' + playlist.id}
+                    //         className="h-fit w-full flex flex-col gap-2"
+                    //     >
+                    //         <div className={`w-full shadow-2xl shrink-0 aspect-square relative`}>
+                    //                 <ImageWithFallback
+                    //                     src={playlist.poster_url ?? ''}
+                    //                     alt={playlist.title}
+                    //                     fill
+                    //                     className="rounded-md object-cover"
+                    //                     type="playlist"
+                    //                 />
+                    //         </div>
+                    //         <section className="line-clamp-1">
+                    //             {playlist.title}
+                    //         </section>
+                    //     </Link>
+                    // </Button>
                 ))}
             </Fragment>
         )
@@ -79,7 +80,7 @@ export function UserPlaylists({
                 <Button
                     key={playlist.title}
                     variant={
-                    pathname === `/playlist/${playlist.id}` ? 'secondary' : 'ghost'
+                        pathname === `/playlist/${playlist.id}` ? 'secondary' : 'ghost'
                     }
                     className={`justify-start p-2`}
                     asChild
@@ -95,6 +96,7 @@ export function UserPlaylists({
                                 alt={playlist.title}
                                 fill
                                 className="rounded-md object-cover"
+                                type="playlist"
                             />
                         </AspectRatio>
                     </div>

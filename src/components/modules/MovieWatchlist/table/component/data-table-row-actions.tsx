@@ -30,7 +30,7 @@ import UserCard from "@/components/User/UserCard/UserCard"
 import { PlaylistItem } from "@/types/type.playlist"
 import { Film, FilmWatchlist } from "@/types/type.film"
 import { useMutation } from "@apollo/client"
-import { useAuth } from "@/context/AuthContext/AuthProvider"
+import { useAuth } from "@/context/AuthContext/auth-context"
 
 import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQuery';
 import DELETE_FILM_WATCHLIST_MUTATION from '@/components/Film/FilmAction/components/MovieWatchlistAction/mutations/deleteFilmWatchlistMutationOLD';

@@ -1,5 +1,5 @@
 'use client';
-import { handleSearchMovies } from '@/lib/tmdb';
+import { handleSearchMovies } from '@/lib/tmdb/tmdb';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { Badge } from '../../ui/badge';

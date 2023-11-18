@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect } from "react";
-import { useRightSidebar } from "./RightSidebarContext";
+import { useRightSidebar } from "../right-sidebar-context";
 
 export default function RightSidebarServer({
     panelTitle,

@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 
 import { Models } from 'appwrite';
 import { Fragment, useEffect, useState } from 'react';
@@ -76,7 +76,7 @@ export function ShowReviews({ filmId }: { filmId: string }) {
 
 
   return (
-    <div className="w-full h-full flex flex-col gap-4">
+    <div className="w-full h-full flex flex-col gap-2">
       <div className='flex flex-col gap-4 justify-between lg:flex-row'>
         {/* <MovieUserReview movie={movie} /> */}
         <MyReviewButton filmId={filmId} />

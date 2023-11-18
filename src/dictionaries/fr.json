@@ -5,7 +5,7 @@
   "about": {
     "about": {
       "label": "About",
-      "marquee": "Rien de plus excitant dans votre vie que de regarder les pages &apos;À propos&apos; sur Internet ?"
+      "marquee": "Rien de plus excitant dans votre vie que de regarder les pages 'À propos' sur Internet ?"
     }
   },
   "sidebar": {
@@ -32,6 +32,10 @@
       },
       "bio": {
         "label": "Bio",
+        "description": ""
+      },
+      "favorite_films": {
+        "label": "Films favoris",
         "description": ""
       },
       "url": {

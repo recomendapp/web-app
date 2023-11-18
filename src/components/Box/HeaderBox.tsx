@@ -3,30 +3,33 @@
 import { cn } from "@/lib/utils";
 
 //* Define the props interface for the Box component.
-interface BoxProps {
+interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
+  style?: React.CSSProperties;
   children: React.ReactNode;
-  height?: string;
   className?: string;
-  backgroundImage?: string;
 }
 
 export const HeaderBox: React.FC<BoxProps> = ({
+    style,
     children,
-    height,
     className,
-    backgroundImage
 }) => {
   return (
     <div
-        className="bg-background @container"
-        style={{
-          backgroundImage: `url('${backgroundImage}')`,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          height: height ?? 'clamp(340px,30vh,400px)',
-        }}
+      style={style}
+      className={cn(`
+          @container
+          bg-background bg-cover bg-no-repeat
+          lg:h-[clamp(340px,30vh,400px)]
+      `, className)}
+      // style={{
+      //   backgroundImage: `url('${backgroundImage}')`,
+      //   backgroundSize: 'cover',
+      //   backgroundRepeat: 'no-repeat',
+      //   height: height ?? 'clamp(340px,30vh,400px)',
+      // }}
     >
-        <div className={cn("w-full h-full flex p-4 bg-gradient-to-t from-background to-[#000000bd] bg-opacity-75 relative", className)}>
+        <div className="w-full h-full flex p-4 bg-gradient-to-t from-background to-[#000000bd] bg-opacity-75 relative">
             {children}
         </div>
     </div>

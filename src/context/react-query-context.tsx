@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
-export const ReactQueryProvider = ({
+export const ReactQueryContext = ({
   children,
 }: {
   children: React.ReactNode;

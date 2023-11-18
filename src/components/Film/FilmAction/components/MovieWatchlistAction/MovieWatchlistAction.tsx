@@ -9,7 +9,7 @@ import {
 import { Icons } from '../../../../icons';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { supabase } from '@/lib/supabase/supabase';
 
@@ -18,7 +18,7 @@ import INSERT_WATCHLIST_MUTATION from '@/components/Film/FilmAction/components/M
 
 
 interface MovieWatchlistActionProps extends React.HTMLAttributes<HTMLDivElement> {
-  filmId: string;
+  filmId: number;
   // filmAction: FilmAction;
   // loading: boolean;
   // error: ApolloError | undefined;

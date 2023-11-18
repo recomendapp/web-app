@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 
 import { Models } from 'appwrite';
 import { Fragment, useEffect, useState } from 'react';
@@ -75,7 +75,7 @@ export function ShowPlaylists({ filmId }: { filmId: string }) {
 
 
   return (
-    <div className="w-full h-full flex flex-col gap-4">
+    <div className="w-full h-full flex flex-col gap-2">
       <div className='flex flex-1 justify-end gap-2 items-center'>
         Trier par
         <Select onValueChange={setOrder} defaultValue={order}>
@@ -92,7 +92,7 @@ export function ShowPlaylists({ filmId }: { filmId: string }) {
       </div>
       {/* PLAYLISTS */}
       {playlists?.pages[0]?.length ?
-        <div className='grid grid-cols-5 gap-4'>
+        <div className='grid gap-2 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 2xl:grid-cols-8'>
           {playlists?.pages.map((page, i) => (
               <Fragment key={i}>
                   {page?.map((playlist: any, index) => (

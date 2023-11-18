@@ -23,7 +23,7 @@ export default function MovieDescription ({ movie } : { movie: any}) {
             <div className='flex flex-col lg:grid grid-cols-4 gap-4'>
               {/* OVERVIEW */}
               <div className="flex flex-col gap-2 col-span-3">
-                <h2 className='text-3xl font-bold'>Résumé 📙</h2>
+                <h2 className='text-3xl font-bold'>Résumé</h2>
                 <div className=" text-justify">
                   {movie.overview}
                 </div>
@@ -40,7 +40,7 @@ export default function MovieDescription ({ movie } : { movie: any}) {
             </div>
             {/* CASTING */}
             <div className='flex flex-col gap-4'>
-            <h2 className='text-3xl font-bold'>Casting ✨</h2>
+            <h2 className='text-3xl font-bold'>Casting</h2>
             <ScrollArea>
                 <div className="flex space-x-4 pb-4">
                 {movie.credits.cast.map((person: any) => (
@@ -53,7 +53,7 @@ export default function MovieDescription ({ movie } : { movie: any}) {
             </div>
             {/* Média */}
             <div className='flex flex-col gap-4'>
-              <h2 className='text-3xl font-bold'>Média 🎬</h2>
+              <h2 className='text-3xl font-bold'>Média</h2>
               <div>
                   MEDIA
               </div>
@@ -70,11 +70,11 @@ function CrewModal({
     return (
     <Dialog>
         <DialogTrigger asChild>
-          <Button variant="link">Équipe de tournage complète 👨‍🔧</Button>
+          <Button variant="link">Équipe de tournage complète</Button>
         </DialogTrigger>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle className='text-center'>CREW 👨‍🔧</DialogTitle>
+            <DialogTitle className='text-center'>CREW</DialogTitle>
           </DialogHeader>
           <ScrollArea className='h-[50vh] pr-4'>
             <div  className='grid grid-cols-4 gap-4'>

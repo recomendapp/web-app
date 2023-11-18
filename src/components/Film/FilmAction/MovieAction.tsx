@@ -9,7 +9,7 @@ import { MoviePlaylistAction } from './components/MoviePlaylistAction/MoviePlayl
 import { MovieSendAction } from './components/MovieSendAction/MovieSendAction';
 import { useQuery } from '@apollo/client';
 import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQuery';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 
 export function MovieAction({
   filmId,
@@ -23,7 +23,7 @@ export function MovieAction({
   send,
   dropdown,
 }: {
-  filmId: string;
+  filmId: number;
   all?: boolean;
   rating?: boolean;
   like?: boolean;

@@ -10,7 +10,7 @@ import {
 
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
-import { useAuth } from '@/context/AuthContext/AuthProvider';
+import { useAuth } from '@/context/AuthContext/auth-context';
 import { Playlist } from '@/types/type.playlist';
 
 export function PlaylistEditButton({

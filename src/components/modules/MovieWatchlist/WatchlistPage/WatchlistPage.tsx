@@ -3,12 +3,12 @@
 import { useQuery } from "@apollo/client";
 import { TableWatchlist } from "../table/TableWatchlist";
 import { WatchlistHeader } from "./components/WatchlistHeader";
-import { useAuth } from "@/context/AuthContext/AuthProvider";
+import { useAuth } from "@/context/AuthContext/auth-context";
 import { Guidelist } from "@/types/type.guidelist";
 import { useEffect, useState } from "react";
 
 import WATCHLIST_QUERY from '@/components/modules/MovieWatchlist/queries/watchlistQuery'
-import { getMovieDetails } from "@/lib/tmdb";
+import { getMovieDetails } from "@/lib/tmdb/tmdb";
 import { FilmAction, FilmWatchlist } from "@/types/type.film";
 import { useLocale } from "next-intl";
 

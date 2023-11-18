@@ -12,10 +12,10 @@ export default function ProfileFavoriteFilms({
         return null
 
     return (
-        <div className="@container flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
             <h3 className="font-semibold text-xl text-accent-1">Films favoris</h3>
-            <div className="grid grid-cols-4 @2xl:grid-cols-6 @5xl:grid-cols-8 gap-1">
-                {profile?.favorite_films?.map((filmId: string) => (
+            <div className="grid grid-cols-4 md:grid-cols-6 2xl:grid-cols-8 gap-2">
+                {profile?.favorite_films?.map((filmId: number) => (
                     <MovieCard
                         key={filmId}
                         filmId={filmId}
