@@ -45,6 +45,7 @@ interface DataTableProps {
 }
 
 export default function PlaylistTable({
+  playlist,
   playlistItems,
 }: DataTableProps) {
 
@@ -112,7 +113,7 @@ export default function PlaylistTable({
 
   return (
     <div className="flex flex-col gap-2">
-      <DataTableToolbar table={table} />
+      <DataTableToolbar table={table} playlist={playlist} />
       <div className="rounded-md">
         <Table>
           <TableHeader>

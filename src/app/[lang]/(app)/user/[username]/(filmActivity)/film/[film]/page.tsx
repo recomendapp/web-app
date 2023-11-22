@@ -39,7 +39,7 @@ export default async function Review({
                     <MovieAction all filmId={params.film} />
                 </div>
                 <div className='bg-red-500 w-full'>
-                    <UserCard user={data.user} />
+                    <UserCard user={data?.user} />
                 </div>
             </main>
             {/* <MovieVerticalCard movie={film} /> */}

@@ -10,16 +10,29 @@ import { DataTableSortOptions } from "./data-table-sort-options"
 import { Edit } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useAuth } from "@/context/AuthContext/auth-context"
+import { Playlist } from "@/types/type.playlist"
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
+  playlist: Playlist;
 }
 
 export function DataTableToolbar<TData>({
-  table
+  table,
+  playlist
 }: DataTableToolbarProps<TData>) {
+  const { user } = useAuth();
+  console.log(playlist);
   const pathname = usePathname();
   const isFiltered = table.getState().columnFilters.length > 0
+
+  const hasRightToEdit = () => {
+    if (user?.id == playlist.user_id) {
+      return true;
+    }
+    return false;
+  }
   return (
     <div className="flex flex-col-reverse items-end lg:flex-row lg:items-center lg:justify-between gap-4">
       <div className="flex flex-1 items-center gap-2 w-full">
@@ -43,7 +56,7 @@ export function DataTableToolbar<TData>({
         )}
       </div>
       <div className="w-fit flex gap-2">
-        <Button
+        {hasRightToEdit() && <Button
           variant="outline"
           size="sm"
           className="flex h-8"
@@ -53,7 +66,7 @@ export function DataTableToolbar<TData>({
             <Edit className="mr-2 h-4 w-4" />
             Éditer
           </Link>
-        </Button>
+        </Button>}
         <DataTableSortOptions table={table} />
         <DataTableViewOptions table={table} />
       </div>

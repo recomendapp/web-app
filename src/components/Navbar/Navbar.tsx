@@ -41,7 +41,7 @@ export function Navbar({ className }: NavbarProps) {
         icon: Compass,
         label: 'Carte',
         active: pathname === '/map',
-        href: '/map',
+        href: '/explore',
       },
       {
         icon: Zap,
