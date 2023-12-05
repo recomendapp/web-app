@@ -18,12 +18,10 @@ export async function generateMetadata({
 }) {
   const person = await getPersonDetails(params.person, 'fr-FR');
   if (person.success === false) {
-    console.log('FALSE');
     return {
       title: 'Oups, personne introuvable !',
     };
   }
-  console.log('TRUE');
   return {
     title: person.name,
     description: `This is the page of ${person.name}`,

@@ -19,7 +19,7 @@ import { useState } from 'react'
 import DELETE_REVIEW_MUTATION from '@/components/Review/mutations/deleteReviewMutation'
 import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQuery';
 
-import { toast } from 'react-toastify'
+import toast from "react-hot-toast";
 import { FilmAction } from '@/types/type.film'
 import { supabase } from '@/lib/supabase/client'
 

@@ -17,6 +17,7 @@ interface Props {
   user: User | null | undefined;
   products: ProductWithPrices[];
   subscription: SubscriptionWithProduct | null;
+  className?: string;
 }
 
 type BillingInterval = 'lifetime' | 'year' | 'month';
@@ -25,7 +26,8 @@ export default function Pricing({
   session,
   user,
   products,
-  subscription
+  subscription,
+  className,
 }: Props) {
     const locale = useLocale();
     const intervals = Array.from(
@@ -152,7 +154,7 @@ export default function Pricing({
 //     );
 
   return (
-    <div className="max-w-6xl px-4 py-8 space-y-4 mx-auto sm:py-24 sm:px-6 lg:px-8">
+    <div className={cn("max-w-6xl px-4 py-8 space-y-4 mx-auto sm:py-24 sm:px-6 lg:px-8", className)}>
         <div className="sm:flex sm:flex-col sm:align-center">
             <h1 className="text-4xl font-extrabold text-white sm:text-center sm:text-6xl">
             Pricing Plans
@@ -163,7 +165,7 @@ export default function Pricing({
             </p> */}
         </div>
         <div className='flex flex-col gap-4 items-center'>
-            <Tabs defaultValue={billingInterval} className="w-[400px] self-center ">
+            <Tabs defaultValue={billingInterval} className="w-full lg:w-[400px] self-center ">
                     <TabsList className="grid w-full grid-cols-2">
                     {intervals.includes('month') && (
                         <TabsTrigger onClick={() => setBillingInterval('month')} value="month">Monthly</TabsTrigger>
@@ -173,7 +175,7 @@ export default function Pricing({
                     )}
                     </TabsList>
             </Tabs>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4">
             {products.map((product) => {
                 const price = product?.prices?.find(
                     (price) => price.interval === billingInterval

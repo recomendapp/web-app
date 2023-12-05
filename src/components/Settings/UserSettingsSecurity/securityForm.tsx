@@ -16,11 +16,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 // import { toast } from "@/components/ui/use-toast"
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { useAuth } from '@/context/AuthContext/auth-context';
 import { supabase } from '@/lib/supabase/client';
-
-// This can come from your database or API.
 
 export function SecurityForm() {
   const { user, userRefresh } = useAuth();

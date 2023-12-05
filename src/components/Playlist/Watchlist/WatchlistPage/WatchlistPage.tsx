@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext/auth-context";
 import { Guidelist } from "@/types/type.guidelist";
 import { useEffect, useState } from "react";
 
-import WATCHLIST_QUERY from '@/components/modules/MovieWatchlist/queries/watchlistQuery'
+import WATCHLIST_QUERY from '@/components/Playlist/Watchlist/queries/watchlistQuery'
 import { getMovieDetails } from "@/lib/tmdb/tmdb";
 import { FilmAction, FilmWatchlist } from "@/types/type.film";
 import { useLocale } from "next-intl";
@@ -43,7 +43,7 @@ export function WatchlistPage() {
         };
       
         fetchData();
-      }, [watchlist])
+      }, [locale, watchlist])
 
     return (
         <main className="h-full">

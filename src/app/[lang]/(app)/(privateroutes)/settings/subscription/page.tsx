@@ -39,9 +39,9 @@ export default function SettingsAccountPage() {
         <Loader />
       :
       <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-        {user.subscription.edges.length ?
+        {user.subscriptions.edges.length ?
             <>
-              <p className="pb-4 sm:pb-0">You are currently on the <b>{user?.subscription?.edges[0]?.node?.prices?.products?.name}</b> plan</p>
+              <p className="pb-4 sm:pb-0">You are currently on the <b>{user?.subscriptions.edges[0]?.node?.prices?.products?.name}</b> plan</p>
               <Button
                 variant={"accent-1-enabled"}
                 disabled={!session}

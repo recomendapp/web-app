@@ -11,7 +11,6 @@ import { useInView } from "react-intersection-observer";
 import { useQuery } from "@apollo/client";
 import USER_PLAYLISTS_QUERY from "@/components/User/UserPlaylists/queries/userPlaylistsQuery";
 import { User } from "@/types/type.user";
-import { Playlist } from "@/types/type.playlist";
 import { useInfiniteQuery } from "react-query";
 import { supabase } from "@/lib/supabase/client";
 
@@ -73,7 +72,7 @@ export default function ProfilePlaylists({
     useEffect(() => {
         if (inView && hasNextPage)
             fetchNextPage();
-    }, [inView, hasNextPage])
+    }, [inView, hasNextPage, fetchNextPage])
 
     return (
         <div className="flex flex-col gap-2">

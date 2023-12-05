@@ -16,7 +16,7 @@ export default function RightSidebarServer({
         openPanel()
         setPanelTitle(panelTitle)
         setPanelContent(panelContent)
-    }, [])
+    }, [openPanel, panelContent, panelTitle, setPanelContent, setPanelTitle])
 
     return <></>
 }

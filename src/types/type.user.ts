@@ -19,7 +19,7 @@ export interface User {
     friends_count: string,
     premium: boolean
     verified: boolean,
-    subscription: {
+    subscriptions: {
         edges: [
             {node: SubscriptionWithProduct}
         ]

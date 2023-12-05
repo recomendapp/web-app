@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import { Skeleton } from '../../ui/skeleton';
 import { useInView } from 'react-intersection-observer';
@@ -7,9 +8,9 @@ import { useQuery } from '@apollo/client';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
 import { User } from '@/types/type.user';
+import UserCard from '@/components/User/UserCard/UserCard';
 
 import SEARCH_USERS_QUERY from '@/components/Search/SearchUsers/queries/searchUsersQuery'
-import UserCard from '@/components/User/UserCard/UserCard';
 
 export default function SearchUsersFull({
   query,
@@ -18,42 +19,44 @@ export default function SearchUsersFull({
 }) {
   const [ order, setOrder ] = useState("popular");
 
-    const { ref, inView } = useInView();
+  const { ref, inView } = useInView();
 
-    const numberOfResult = 2;
+  const numberOfResult = 20;
 
-    const { data: searchUsersQuery, loading, error, fetchMore, networkStatus } = useQuery(SEARCH_USERS_QUERY, {
-        variables: {
-            search: query,
-            first: numberOfResult,
-        },
-        skip: !query
-    })
-    const users: [ { user: User }] = searchUsersQuery?.userCollection?.edges;
-    const pageInfo: { hasNextPage: boolean, endCursor: string,} = searchUsersQuery?.userCollection?.pageInfo;
+  const { data: searchUsersQuery, loading, error, fetchMore, networkStatus } = useQuery(SEARCH_USERS_QUERY, {
+      variables: {
+          filter: {
+            "username": { "iregex": query }
+          },
+          first: numberOfResult
+      },
+      skip: !query
+  })
+  const users: [ { user: User }] = searchUsersQuery?.userCollection?.edges;
+  const pageInfo: { hasNextPage: boolean, endCursor: string,} = searchUsersQuery?.userCollection?.pageInfo;
 
-    useEffect(() => {
-        if (inView && pageInfo?.hasNextPage) {
-            fetchMore({
-                variables: {
-                    search: query,
-                    first: numberOfResult,
-                    after: pageInfo?.endCursor
-                },
-                updateQuery: (previousResult, { fetchMoreResult }) => {
-                    return {
-                      userCollection: {
-                        edges: [
-                            ...previousResult.userCollection.edges,
-                            ...fetchMoreResult.userCollection.edges,
-                        ],
-                        pageInfo: fetchMoreResult.userCollection.pageInfo
-                      }
-                    };
-                  }
-            });
-        }
-    }, [inView, pageInfo])
+  useEffect(() => {
+      if (inView && pageInfo?.hasNextPage) {
+          fetchMore({
+              variables: {
+                  search: query,
+                  first: numberOfResult,
+                  after: pageInfo?.endCursor
+              },
+              updateQuery: (previousResult, { fetchMoreResult }) => {
+                  return {
+                    userCollection: {
+                      edges: [
+                          ...previousResult.userCollection.edges,
+                          ...fetchMoreResult.userCollection.edges,
+                      ],
+                      pageInfo: fetchMoreResult.userCollection.pageInfo
+                    }
+                  };
+                }
+          });
+      }
+  }, [fetchMore, inView, pageInfo, query])
 
 
   if (loading) {
@@ -85,13 +88,13 @@ export default function SearchUsersFull({
   }
 
   return (
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-8 gap-4 overflow-x-auto overflow-y-hidden">
-        {users.map(({ user } : { user: User}, index) => (
-            <div key={user.id} ref={index === users.length - 1 ? ref : undefined}>
-              <UserCard user={user} full />
-            </div>
-          ))
-        }
-      </div>
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-8 gap-4 overflow-x-auto overflow-y-hidden">
+      {users.map(({ user } : { user: User}, index) => (
+          <div key={user.id} ref={index === users.length - 1 ? ref : undefined}>
+            <UserCard user={user} full />
+          </div>
+        ))
+      }
+    </div>
   );
 }

@@ -11,7 +11,7 @@ import { FileEdit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 import { Icons } from "@/components/icons";
 import { useAuth } from "@/context/AuthContext/auth-context";
 import { Review } from "@/types/type.review";
@@ -24,20 +24,13 @@ interface MovieReviewFormProps {
 }
 
 export default function MovieReviewForm({ review } : MovieReviewFormProps) {
-
-  console.log('review', review)
-
   const { user } = useAuth();
   const [ title, setTitle ] = useState(review.title);
   const [ body, setBody ] = useState<JSONContent>(JSON.parse(review.body));
   const [ isLoading, setIsLoading ] = useState(false);
-
   const [ editable, setEditable ] = useState(false);
-
   const [ updateReviewMutation ] = useMutation(UPDATE_REVIEW_MUTATION);
-
   const updateReview = async () => {
-    
     if (title == review.title && JSON.stringify(body) == review.body) {
       setEditable(false);
       return
@@ -64,8 +57,7 @@ export default function MovieReviewForm({ review } : MovieReviewFormProps) {
           body: JSON.stringify(body)
         }
       })
-      // await handleUpdateReview(review.$id, title.trim(), JSON.stringify(body));
-      toast.success("Les modifications ont bien été enregistrées");
+      toast.success("Enregistré");
       setEditable(false);
     } catch (error) {
       toast.error("Une erreur s'est produite")
@@ -77,7 +69,7 @@ export default function MovieReviewForm({ review } : MovieReviewFormProps) {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="w-full flex flex-col justify-center items-center bg-background">
+      <div className="w-full flex flex-col justify-center items-center">
         {/* SETTINGS */}
         <div className='flex justify-end w-full gap-2'>
             {review.user.id == user?.id && 

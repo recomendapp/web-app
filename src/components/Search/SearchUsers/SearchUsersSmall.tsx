@@ -20,7 +20,9 @@ export default function SearchUsersSmall({
 
   const { data: searchUsersQuery, loading } = useQuery(SEARCH_USERS_QUERY, {
       variables: {
-          search: query,
+          filter: {
+            "username": { "iregex": query }
+          },
           first: numberOfResult,
       },
       skip: !query

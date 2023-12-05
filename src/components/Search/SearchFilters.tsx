@@ -39,6 +39,7 @@ export default function SearchFilters() {
 
   useEffect(() => {
     setSearchFilter(getInitialFilter());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   if (!searchQuery)

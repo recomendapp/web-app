@@ -18,7 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { getInitiales } from "@/lib/utils"
 import { Textarea } from "@/components/ui/textarea"
 import { Dispatch, SetStateAction } from "react"
-import { toast } from "react-toastify"
+import toast from "react-hot-toast"
 import { useMutation } from "@apollo/client"
 
 import INSERT_GUIDELIST_MUTATION from '@/components/Film/FilmAction/components/MovieSendAction/mutations/insertGuidelistMutation'
@@ -27,9 +27,6 @@ const sendFormSchema = z.object({
     friends: z.array(z.object({
         friend: z.any()
     })),
-        // .refine((value) => value.some((item) => item),{
-        //     message: "You have to select at least one item.",
-        // }),
     comment: z.string()
         .optional()
 })

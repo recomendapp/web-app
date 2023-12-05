@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import checkUsernameExist from '@/components/Auth/hooks/checkUsernameExist';

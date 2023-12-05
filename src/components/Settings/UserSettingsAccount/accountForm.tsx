@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext/auth-context';
 import { supabase } from '@/lib/supabase/client';
@@ -84,7 +84,7 @@ export function AccountForm() {
       username: user?.username,
       email: session?.user.email,
     })
-  }, [user])
+  }, [form, session?.user.email, user])
 
   async function onSubmit(data: ProfileFormValues) {
     try {

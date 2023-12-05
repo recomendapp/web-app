@@ -16,10 +16,6 @@ export default gql`
         likes_count
         comments_count
         views_count
-        film_rating_id
-        film_rating {
-            ...FilmRating
-        }
     }
     ${USER_FRAGMENT}
     ${FILM_RATING_FRAGMENT}

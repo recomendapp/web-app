@@ -1,6 +1,6 @@
 // UI
 import { Button } from "@/components/ui/button"
-import { CopyToClipboard } from "@/utils/CopyToClipboard"
+import copyToClipboard from "@/hooks/copy-to-clipboard"
 
 // ICONS
 import { Share } from "lucide-react"
@@ -10,13 +10,13 @@ export default function ButtonShare({ url, icon } : { url: string, icon?: boolea
     if (icon)
     {
       return (
-        <Button variant={'share'} onClick={() => CopyToClipboard(url)}>
+        <Button variant={'share'} onClick={() => copyToClipboard(url)}>
             <Share className="h-4 w-4" />
         </Button>
       )
     }
 
     return (
-      <p onClick={() => CopyToClipboard(url)} >Partager</p>
+      <p onClick={() => copyToClipboard(url)} >Partager</p>
     )
 }

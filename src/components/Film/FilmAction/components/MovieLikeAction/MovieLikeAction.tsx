@@ -9,7 +9,7 @@ import {
 import { Icons } from '../../../../icons';
 import { useRouter } from 'next/navigation';
 import { FilmAction } from '@/types/type.film';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { useAuth } from '@/context/AuthContext/auth-context';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { supabase } from '@/lib/supabase/client';

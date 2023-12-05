@@ -4,10 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { MovieActionCounter } from "@/components/Film/MovieActionCounter";
 import { MovieAction } from "@/components/Film/FilmAction/MovieAction";
-import YoutubeEmbed from "@/components/tools/Youtube";
+import YoutubeEmbed from "@/components/utils/Youtube";
 
 // UI
-import { ImageWithFallback } from "@/components/tools/ImageWithFallback";
+import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
@@ -34,7 +34,7 @@ import { ConvertHoursMinutes } from "@/lib/utils";
 
 // ICONS
 import { Play } from "lucide-react";
-import { DateOnlyYearTooltip } from "@/components/tools/Date";
+import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import MoviePoster from "@/components/Film/MoviePoster";
 import { useAuth } from "@/context/AuthContext/auth-context";
 import { HeaderBox } from "@/components/Box/HeaderBox";
@@ -140,7 +140,7 @@ export function MovieTrailerButton({
             Trailer
           </Button>
         </DialogTrigger>
-        <DialogContent className=' max-w-[80vw]'>
+        <DialogContent className="max-w-[60vw]">
           <DialogHeader className='relative flex flex-row gap-4 items-center'>
             <div className='absolute w-full flex justify-center -top-16'>
               <h2 className="text-accent-1-foreground text-5xl font-bold rounded-md bg-accent-1 px-4 py-2">TRAILER</h2>
@@ -161,7 +161,11 @@ export function MovieTrailerButton({
             </div>
             
           </DialogHeader>
-          <YoutubeEmbed embedId={selectedTrailer}/>
+          <YoutubeEmbed
+            embedId={selectedTrailer}
+            className="aspect-video"
+          
+          />
         </DialogContent>
       </Dialog>
     )

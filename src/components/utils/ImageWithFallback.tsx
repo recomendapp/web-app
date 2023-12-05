@@ -2,7 +2,6 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-// import fallbackImage from '@/assets/images/fallback/fallback-image.svg';
 import { cn } from '@/lib/utils';
 import { ImageIcon, ListVideo } from 'lucide-react';
 

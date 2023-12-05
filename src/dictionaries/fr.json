@@ -4,8 +4,72 @@
   },
   "about": {
     "about": {
-      "label": "About",
-      "marquee": "Rien de plus excitant dans votre vie que de regarder les pages 'À propos' sur Internet ?"
+      "label": "A propos",
+      "marquee": "Rien de plus excitant dans votre vie que de regarder les pages 'À propos' sur Internet ?",
+      "intro": "<strong>Recomend</strong> est un espace dédié à la découverte, à la recommandation et à l'organisation d'œuvres audiovisuelles. Tout y est conçu pour offrir au bouche-à-oreille le meilleur support numérique possible. Notre démarche est axée sur l’humain et ses relations à l’ère de la consommation autocentrée ou plutôt « recommandé pour vous ».",
+      "slogan": {
+        "1": "C’est sans publicités ni algorithmes.",
+        "2": "C’est un réseau social et un outil.",
+        "3": "C’est fait maison par des passionnés.",
+        "4": "C’est amateur au sens propre du terme."
+      },
+      "last": "Recomend peut être utilisé seul ou à plusieurs, en public ou en privé, de jour comme de nuit mais jamais devant un film, concentrez-vous !"
+    },
+    "team": {
+      "label": "L'équipe",
+      "intro": "Recomend a été créé par deux frères passionnés de cinéma qui aiment investir leur temps dans des projets beaucoup trop ambitieux qu’ils ne sont pas sûrs de finir.",
+      "members": {
+        "yoann": {
+          "name": "Yoann",
+          "description": "Architecte-Ingénieur travaillant actuellement dans une agence d’architecture à Paris. Yoann est à l’origine du projet de réaliser une carte de films mais qui n’avait au départ que la modeste ambition de faire un poster à afficher dans ses toilettes. Un peu dépassé par l’ampleur qu’a pris le projet avec Loup, il se charge de toute la dimension graphique de la carte et du site. Il donne aussi son avis quand il peut sur les sujets UX/UI en essayant tant bien que mal de se rappeler de ses cours d’informatique. Il propose aussi beaucoup de fonctionnalités sympas à ajouter au site sans pour autant avoir conscience de la difficulté que cela représente à coder."
+        },
+        "loup": {
+          "name": "Loup",
+          "description": "Autodidacte complet ayant quand même suivi des études qui ont mené vers le chômage non rémunéré à moins de 25 ans. Véritable couteau suisse, Loup se charge de la partie web design en codant une interface que l’on imagine la plus ergonomique possible. Il essaye également d’adapter la carte de Yoann sous une forme beaucoup plus interactive qu’un bout de papier et ce n’est vraiment pas une mince affaire. Loup aimerait remercier tous les forums de code qui ont répondu à ses (très) nombreuses sollicitations ainsi que tous les youtubeurs indiens qui l’ont accompagné pendant ces quelques mois tels des pères adoptifs."
+        }
+      },
+      "last": "Pour échanger avec nous ou d’autres membres de la communauté, rejoins notre <link>Discord</link> !"
+    },
+    "pricing": {
+      "label": "Tarifs",
+      "intro": "Ce principe d’abonnement n’est pas un business mais un soutien pour faire vivre le projet et continuer de le développer.",
+      "subdescription": "*Si le prix extrêmement faible de cet abonnement reste au-dessus de vos moyens, veuillez-vous tourner vers votre gouvernement libéral responsable de votre perte de pouvoir d’achat"
+    },
+    "businessmodel": {
+      "label": "Business model",
+      "paragraph": {
+        "1": "Au vu des profils dans l’équipe et de l’idéologie générale du projet, vous pouvez rapidement en déduire qu’il n’existe aucun business model…",
+        "2": "Cependant !",
+        "3": "Nous ne mettons pas de publicités. Ce qui est déjà une certaine forme de business model. Bon on a quand même mis en place un principe d’abonnement histoire de pas non plus couler le projet donc n’hésitez pas à nous soutenir.",
+        "4": "Ah oui, on a un shop aussi pour avoir des objets physiques parce que c’est bien aussi le réel."
+      }
+    },
+    "roadmap": {
+      "label": "Roadmap"
+    },
+    "data": {
+      "label": "Data",
+      "paragraph": {
+        "1": "Toutes les métadonnées utilisées sur Recomend sont fournies par <link>The Movie Database (TMDb)</link> en utilisant l’API de la plateforme. Nous faisons exactement comme tout le monde.",
+        "2": "Pour toute erreur ou film manquant, veuillez donc vous tourner vers <link>TMDb</link>."
+      }
+    },
+    "ressources": {
+      "label": "Ressources",
+      "intro": "Ceci n’est pas forcément en lien avec le cinéma mais voici une liste non exhaustive de sites que l’on apprécie :"
+    },
+    "contact-support": {
+      "label": "Contact & Support",
+      "help-center": "Trouve les réponses à tes questions existentielles dans notre <link>Help Center</link>.",
+      "technical-support": "Pour des questions techniques : <link>help@recomend.app</link>",
+      "suggest-a-feature": "Pour des suggestions : <link>ideas@recomend.app</link>",
+      "conact-us": "Pour simplement rentrer en contact avec nous : <link>contact@recomend.app</link>"
+    },
+    "quote": {
+      "label": "Citation",
+      "quote": "« Je déteste le mot professionnel. Tous les comédiens et les autres qui disent : Moi je suis professionnel, je suis un pro ! Qu’est-ce que c’est ça ? Est-ce qu’il y a un mot plus triste que ça ? Parce qu’amateur c’est basé sur le mot amour Il faut faire les choses pour love sinon nous sommes idiots. »",
+      "author": "Orson Wells",
+      "date": "1972"
     }
   },
   "sidebar": {

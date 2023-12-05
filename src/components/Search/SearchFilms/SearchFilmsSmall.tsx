@@ -6,9 +6,10 @@ import { Badge } from '../../ui/badge';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '../../ui/skeleton';
-import { ImageWithFallback } from '../../tools/ImageWithFallback';
+import { ImageWithFallback } from '../../utils/ImageWithFallback';
 import { AspectRatio } from '../../ui/aspect-ratio';
 import { useLocale } from 'next-intl';
+import toast from 'react-hot-toast';
 
 export default function SearchFilmsSmall({
   query,
@@ -33,9 +34,10 @@ export default function SearchFilmsSmall({
           }
         })
         .catch((error) => {
-          console.log('error:', error);
+          toast.error("Une erreur s\'est produite");
         });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   if (loading) {

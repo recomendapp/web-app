@@ -22,6 +22,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import toast from 'react-hot-toast';
 
 export default function PlaylistEdit({
   playlistId,
@@ -46,7 +47,6 @@ export default function PlaylistEdit({
                     filter: `playlist_id=eq.${playlistId}`
                 },
                 (payload) => {
-                    console.log('NEW CHANGES', payload);
                     const updatedPlaylistItems = [...playlistItems];
                     if (payload.eventType === 'INSERT') {
                         updatedPlaylistItems.push(payload.new as PlaylistItem);
@@ -116,7 +116,7 @@ export default function PlaylistEdit({
                 .upsert(filteredUpdatedItems);
 
         } catch (error) {
-            console.log(error)
+            toast.error('Une erreur s\'est produite');
         }
     }
 

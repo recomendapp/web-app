@@ -12,7 +12,7 @@ import { Plus, X } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControllerRenderProps } from "react-hook-form";
 import SearchFavoriteFilms from "./components/SearchFavoriteFilms";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 export function FavoriteFilms({
     onChange,

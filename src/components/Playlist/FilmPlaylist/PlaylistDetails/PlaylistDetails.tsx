@@ -1,6 +1,6 @@
 'use client';
 
-import { ImageWithFallback } from '@/components/tools/ImageWithFallback';
+import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { PlaylistEditButton } from '@/components/Playlist/Button/PlaylistEditButton';
 import { useEffect, useState } from 'react';
@@ -32,7 +32,7 @@ export default function PlaylistDetails({
   });
 
   const playlist: Playlist = playlistQuery?.playlistCollection.edges[0]?.playlist;
-  
+
   useEffect(() => {
     const fetchData = async () => {
       if (playlist?.playlist_item?.edges) {

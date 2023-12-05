@@ -23,12 +23,11 @@ export function DataTableToolbar<TData>({
   playlist
 }: DataTableToolbarProps<TData>) {
   const { user } = useAuth();
-  console.log(playlist);
   const pathname = usePathname();
   const isFiltered = table.getState().columnFilters.length > 0
 
   const hasRightToEdit = () => {
-    if (user?.id == playlist.user_id) {
+    if (user?.id == playlist?.user_id) {
       return true;
     }
     return false;

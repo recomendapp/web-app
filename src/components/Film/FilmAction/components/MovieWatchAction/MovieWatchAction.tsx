@@ -22,7 +22,7 @@ import { useRouter } from 'next/navigation';
 import { FilmAction } from '@/types/type.film';
 // import { ApolloError, useMutation } from '@apollo/client';
 import { useAuth } from '@/context/AuthContext/auth-context';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { supabase } from '@/lib/supabase/client';
 
@@ -87,7 +87,6 @@ export function MovieWatchAction({
         user_id: user?.id
       })
     } catch (errors) {
-      console.log(errors)
       toast.error('Une erreur s\'est produite');
     }
   }
@@ -98,7 +97,6 @@ export function MovieWatchAction({
         user_id: user?.id
       })
     } catch (errors) {
-      console.log(errors)
       toast.error('Une erreur s\'est produite');
     }
   }

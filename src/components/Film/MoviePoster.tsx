@@ -1,6 +1,6 @@
 "use client"
 
-import { ImageWithFallback } from "@/components/tools/ImageWithFallback";
+import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 // import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "@/lib/utils";
 

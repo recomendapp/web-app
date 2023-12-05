@@ -64,35 +64,7 @@ export default function SearchPlaylistsFull({
                   }
             });
         }
-    }, [inView, pageInfo])
-
-
-  // if (loading) {
-  //   return (
-  //     <div className=" w-full flex flex-col gap-2">
-  //       {/* USERS TITLE */}
-  //       <div className="flex justify-between items-end">
-  //         <Skeleton className="h-8 w-32" />
-  //         <Skeleton className="h-8 w-32" />
-  //       </div>
-  //       {/* USERS CONTAINER */}
-  //       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 overflow-x-auto overflow-y-hidden flex-wrap">
-  //         {Array.from({ length: 10 }).map((_, index) => (
-  //           <Skeleton
-  //             key={index}
-  //             className="flex flex-col items-center bg-secondary h-full rounded-xl p-2 gap-2"
-  //           >
-  //             {/* AVATAR */}
-  //             <Skeleton className="bg-background h-[150px] w-[150px] rounded-xl" />
-  //             {/* NAME */}
-  //             <Skeleton className="bg-background h-5 w-20" />
-  //             <Skeleton className="bg-background h-5 w-20 rounded-full" />
-  //           </Skeleton>
-  //         ))}
-  //       </div>
-  //     </div>
-  //   );
-  // }
+    }, [fetchMore, inView, order, pageInfo, query])
 
   if (!loading && !playlists?.length) {
     return (
@@ -104,19 +76,6 @@ export default function SearchPlaylistsFull({
 
   return (
     <div className=" w-full flex flex-col gap-2">
-      {/* USERS TITLE */}
-      {/* <div className="flex justify-end items-end">
-        <Select onValueChange={setOrder} defaultValue={order}>
-            <SelectTrigger className="w-fit">
-                <SelectValue />
-            </SelectTrigger>
-            <SelectContent align="end">
-                <SelectItem value={"recent"}>Récents</SelectItem>
-                <SelectItem value={"popular"}>Populaires</SelectItem>
-            </SelectContent>
-        </Select>
-      </div> */}
-      {/* USERS CONTAINER */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-8 gap-4 overflow-x-auto overflow-y-hidden">
         {loading ? 
           Array.from({ length: 10 }).map((_, index) => (

@@ -1,4 +1,4 @@
-import { ImageWithFallback } from "@/components/tools/ImageWithFallback";
+import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext/auth-context";

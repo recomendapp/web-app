@@ -38,7 +38,10 @@ export const getActiveProductsWithPrices = async (): Promise<ProductWithPrices[]
     .select('*, prices(*)')
     .eq('active', true)
     .eq('prices.active', true)
-    .order('unit_amount', { foreignTable: 'prices', ascending: true })
+    .order('unit_amount', { 
+      referencedTable: 'prices',
+      ascending: true,
+    })
 
   if (error)
       console.log(error);

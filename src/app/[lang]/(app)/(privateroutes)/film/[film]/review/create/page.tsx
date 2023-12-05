@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 // import { createServerClient } from "@/lib/supabase/server";
 import { getMovieDetails } from "@/lib/tmdb/tmdb";
 import CreateReviewForm from "@/components/Review/form/CreateReviewFrom";
@@ -28,7 +28,8 @@ export default async function CreateReview({
     params
 }: {
     params: {
-        film: number
+        lang: string;
+        film: number;
     }
 }) {
 
@@ -36,16 +37,18 @@ export default async function CreateReview({
 
     const { data: { session } } = await supabase.auth.getSession();
 
-    const { data: review } = await supabase.from('review').select('*').eq('user_id', session?.user.id).eq('film_id', params.film).single();
+    const { data: review } = await supabase.from('review').select('*, user(*)').eq('user_id', session?.user.id).eq('film_id', params.film).single();
     
     const { data: user } = await supabase.from('user').select('*').eq('id', session?.user.id).single();
+
+    const film = await getMovieDetails(params.film, params.lang);
+
+    if (!film) notFound();
 
     if(review)
         redirect(`/@${user.username}/film/${params.film}`);
     
     return (
-        <div className="p-4">
-            <CreateReviewForm filmId={params.film} user={user}/>
-        </div>
+        <CreateReviewForm film={film} user={user}/>
     )
 }

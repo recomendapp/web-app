@@ -31,7 +31,6 @@ import MapPopup from './popup/MapPopup';
 import { Icons } from '@/components/icons';
 // import MapFilter from './mapfilters/MapFiltersOLD';
 import { MapFilters } from './mapfilters/mapfilters';
-import { Metadata } from 'next';
 import { useLocale } from 'next-intl';
 
 export function Map() {
@@ -465,6 +464,7 @@ export function Map() {
       //   setIsLoading(false);
       // }, 1000);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map.current, limitShowingMarkers]);
 
   return (
@@ -474,7 +474,7 @@ export function Map() {
           <Icons.spinner className="animate-spin" />
         </div>
       )}
-      <div className="w-full h-full flex flex-col relative bg-blue-950 bg-opacity-20">
+      <div className="w-full h-full flex flex-col relative bg-[#110731] bg-opacity-20">
         {/* HEADER MAP */}
         <div className="absolute z-10  pt-4 px-4 gap-2  w-full pointer-events-none flex flex-col justify-between lg:flex-row">
           <div className="bg-green-500 pointer-events-auto">SEARCHBAR</div>

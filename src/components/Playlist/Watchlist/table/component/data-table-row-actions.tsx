@@ -25,7 +25,7 @@ import {
 // ICONS
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Dispatch, SetStateAction, useState } from "react"
-import ButtonShare from "@/components/tools/ButtonShare"
+import ButtonShare from "@/components/utils/ButtonShare"
 import UserCard from "@/components/User/UserCard/UserCard"
 import { PlaylistItem } from "@/types/type.playlist"
 import { Film, FilmWatchlist } from "@/types/type.film"
@@ -34,7 +34,7 @@ import { useAuth } from "@/context/AuthContext/auth-context"
 
 import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQuery';
 import DELETE_FILM_WATCHLIST_MUTATION from '@/components/Film/FilmAction/components/MovieWatchlistAction/mutations/deleteFilmWatchlistMutationOLD';
-import WATCHLIST_QUERY from "@/components/modules/MovieWatchlist/queries/watchlistQuery"
+import WATCHLIST_QUERY from "@/components/Playlist/Watchlist/queries/watchlistQuery"
 
 interface DataTableRowActionsProps {
   table: Table<FilmWatchlist>,

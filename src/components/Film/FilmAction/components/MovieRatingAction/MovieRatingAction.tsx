@@ -21,7 +21,6 @@ import {
 import { FilmAction } from '@/types/type.film';
 import { useAuth } from '@/context/AuthContext/auth-context';
 import UPDATE_FILM_RATING_MUTATION from '@/components/Film/FilmAction/components/MovieRatingAction/mutations/updateFilmRatingMutation';
-import { toast } from 'react-toastify';
 import { DialogClose } from '@radix-ui/react-dialog';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
@@ -29,6 +28,7 @@ import INSERT_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/ins
 import UPDATE_ACTIVITY_MUTATION from '@/components/Film/FilmAction/mutations/updateMovieActivityMutation'
 import { supabase } from '@/lib/supabase/client';
 import movieActivityQuery from '../../queries/movieActivityQuery';
+import toast from 'react-hot-toast';
 
 interface MovieRatingActionProps extends React.HTMLAttributes<HTMLDivElement> {
   filmId: number;

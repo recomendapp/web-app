@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/client";
 import { Column, Row, Table } from "@tanstack/react-table";
 import { Check, Cross, FileEdit, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 import UPDATE_PLAYLIST_ITEM_MUTATION from '@/components/modules/MoviePlaylist/mutations/updatePlaylistItemMutation'
 import { supabase } from "@/lib/supabase/client";

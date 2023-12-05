@@ -2,7 +2,7 @@
 
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "@/lib/utils";
-import { ImageWithFallback } from "../../tools/ImageWithFallback";
+import { ImageWithFallback } from "../../utils/ImageWithFallback";
 import Link from "next/link";
 import { Playlist } from "@/types/type.playlist";
 import FeaturedPlaylistBadge from "@/components/Badge/FeatuedPlaylistBadge";

@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { AspectRatio } from "../ui/aspect-ratio";
-import { ImageWithFallback } from "../tools/ImageWithFallback";
+import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { UserPlaylists } from "../User/UserPlaylists/UserPlaylists";
 import { Bookmark, Heart, Send } from "lucide-react";
 

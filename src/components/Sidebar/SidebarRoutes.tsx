@@ -42,7 +42,7 @@ export function SidebarRoutes({
             href: '/search',
         },
         ],
-        [pathname]
+        [pathname, t]
     );
     return (
         <Box

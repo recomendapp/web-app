@@ -45,7 +45,7 @@ const USER_QUERY = gql`
       edges {
         user: node {
           ...User
-          subscription: subscriptionsCollection(
+          subscriptions: subscriptionsCollection(
             filter: { user_id: { eq: $userId } }
             last: 1
           ) {

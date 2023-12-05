@@ -69,7 +69,7 @@ export function ShowReviews({ filmId }: { filmId: string }) {
   useEffect(() => {
     if (inView && hasNextPage)
         fetchNextPage();
-  }, [inView, hasNextPage])
+  }, [inView, hasNextPage, fetchNextPage])
 
   if (loading)
     return <div>Loading</div>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 // UI
-import ButtonShare from "@/components/tools/ButtonShare";
+import ButtonShare from "@/components/utils/ButtonShare";
 import UserCard from "@/components/User/UserCard/UserCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -24,8 +24,6 @@ export default function MovieReviewOverview({
 }: {
   review: Review
 }) {
-
-  console.log('review', review)
   return (
     <Link
       href={`/@${review.user.username}/film/${review.film_id}`}

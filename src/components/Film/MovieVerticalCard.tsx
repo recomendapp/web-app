@@ -12,7 +12,7 @@ import {
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { AspectRatio } from "../ui/aspect-ratio";
-import { ImageWithFallback } from "../tools/ImageWithFallback";
+import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Button } from "../ui/button";
 import Link from "next/link";
 

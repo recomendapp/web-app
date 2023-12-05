@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase/client";
 import { PlaylistItem } from "@/types/type.playlist";
 import { Check, X } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function PlaylistEditCommentInputMobile({
     playlistItem,
@@ -31,7 +32,7 @@ export default function PlaylistEditCommentInputMobile({
             setComment(comment);
             setOpen(false);
         } catch (error) {
-            console.log(error);
+            toast.error('Une erreur s\'est produite');
         }
     }
 

@@ -10,9 +10,11 @@ import Loader from '@/components/Loader/Loader';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { ImageWithFallback } from '@/components/tools/ImageWithFallback';
+import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Film } from 'lucide-react';
+import { getLocale } from 'next-intl/server';
+import { useLocale } from 'next-intl';
 
 export default function SearchFavoriteFilms({
   onClick,
@@ -20,6 +22,8 @@ export default function SearchFavoriteFilms({
   onClick: (filmid: number) => void;
 }) {
   const { user } = useAuth();
+
+  const local = useLocale()
 
   const [ query, setQuery ] = useState('');
 
@@ -35,7 +39,7 @@ export default function SearchFavoriteFilms({
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ['search', query, 'films'],
-    queryFn: ({pageParam = 1}) => handleSearchMovies(query, user?.language, pageParam),
+    queryFn: ({pageParam = 1}) => handleSearchMovies(query, local, pageParam),
     getNextPageParam: (results, pages) => {
         return results?.length == numberOfResult ? pages.length + 1 : undefined  
     },

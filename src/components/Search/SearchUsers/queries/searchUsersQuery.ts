@@ -3,14 +3,12 @@ import USER_FRAGMENT from "@/context/AuthContext/fragments/userFragment";
 
 export default gql`
     query SearchUsers(
-        $search: String
+        $filter: userFilter!
         $first: Int!
         $after: Cursor!
     ) {
         userCollection(
-            filter: {
-                username: { iregex: $search }
-            }
+            filter: $filter
             first: $first
             after: $after
         ) {

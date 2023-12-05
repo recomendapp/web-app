@@ -11,9 +11,14 @@ export default async function AboutLayout({
 }: AboutLayoutProps) {
   
   return (
-    <>
+    <div className='h-screen w-screen'>
       <HeaderMinimal />
-      {children}
-    </>
+      <div className="flex-grow relative p-4
+          overflow-y-auto
+          h-[calc(100%-(var(--height-header)))]
+      ">
+        {children}
+      </div>
+    </div>
   );
 }

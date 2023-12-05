@@ -22,7 +22,7 @@ import {
 // ICONS
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Dispatch, SetStateAction, useState } from "react"
-import ButtonShare from "@/components/tools/ButtonShare"
+import ButtonShare from "@/components/utils/ButtonShare"
 import UserCard from "@/components/User/UserCard/UserCard"
 import { DataComment } from "./data-table-comment"
 import { PlaylistItem } from "@/types/type.playlist"

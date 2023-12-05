@@ -15,7 +15,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
-import Novu from '@/context/NovuProvider';
 import { getInitiales } from '@/lib/utils';
 import { useAuth } from '@/context/AuthContext/auth-context';
 import { useRightSidebar } from '@/context/right-sidebar-context';
@@ -34,6 +33,7 @@ export function UserNav({
   if (!user) {
     return <Skeleton className="h-8 w-8 rounded-full" />;
   }
+
 
   return (
     <nav className='flex items-center gap-4'>
@@ -81,7 +81,7 @@ export function UserNav({
                 {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
               </Link>
             </DropdownMenuItem>
-            {!user?.premium && <DropdownMenuItem asChild>
+            {!user?.subscriptions.edges.length && <DropdownMenuItem asChild>
               <Link href={'/upgrade'} className='text-accent-1'>
                 <Sparkles className="mr-2 h-4 w-4" />
                 <span>Upgrade to Premium</span>

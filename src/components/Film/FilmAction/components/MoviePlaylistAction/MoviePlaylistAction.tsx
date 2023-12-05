@@ -23,7 +23,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext/auth-context';
 
@@ -106,9 +106,8 @@ export function MoviePlaylistAction({
           rank: null,
         }
       });
-      toast.success(`Ajouté à ${playlist.title}`);
+      toast.success(`Ajouté`);
     } catch (error) {
-      console.log(error)
       toast.error('Une erreur s\'est produite');
     }
   }
@@ -166,17 +165,6 @@ export function MoviePlaylistAction({
               className="h-9"
             />
             <CommandList>
-                {/* <CommandGroup>
-                  <CommandItem
-                    onSelect={() => {
-                      setOpen(false);
-                      setOpenDialog(true)
-                    }}
-                  >
-                    Créer une playlist
-                  </CommandItem>
-                </CommandGroup>
-              <DropdownMenuSeparator /> */}
               <CommandGroup>
                 {playlists?.map(({ playlist } : { playlist: Playlist}) => (
                   <CommandItem
@@ -195,7 +183,6 @@ export function MoviePlaylistAction({
           </Command>
         </PopoverContent>
       </Popover>
-      {/* <PlaylistButton open={openDialog} setOpen={(setOpenDialog)} userId={user?.id} filmId={filmId} /> */}
     </>
   );
 }

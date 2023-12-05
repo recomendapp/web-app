@@ -73,7 +73,7 @@ export default function ProfileFilms({
     useEffect(() => {
         if (inView && hasNextPage)
             fetchNextPage();
-    }, [inView, hasNextPage])
+    }, [inView, hasNextPage, fetchNextPage])
 
     if (loading)
         return 

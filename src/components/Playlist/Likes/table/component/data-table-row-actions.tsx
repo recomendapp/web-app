@@ -24,7 +24,7 @@ import {
 // ICONS
 import { DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { Dispatch, SetStateAction, useState } from "react"
-import ButtonShare from "@/components/tools/ButtonShare"
+import ButtonShare from "@/components/utils/ButtonShare"
 import { Film, FilmLike } from "@/types/type.film"
 import { useMutation } from "@apollo/client"
 import { useAuth } from "@/context/AuthContext/auth-context"

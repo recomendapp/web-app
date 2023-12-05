@@ -1,4 +1,4 @@
-import { WatchlistPage } from '@/components/modules/MovieWatchlist/WatchlistPage/WatchlistPage';
+import { WatchlistPage } from '@/components/Playlist/Watchlist/WatchlistPage/WatchlistPage';
 import { Metadata } from 'next';
 import { Fragment } from 'react';
 

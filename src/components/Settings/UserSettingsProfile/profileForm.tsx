@@ -17,7 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 // import { toast } from "@/components/ui/use-toast"
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import PictureUpload from './pictureUpload';
 import { useAuth } from '@/context/AuthContext/auth-context';
 import { useMutation } from '@apollo/client';
@@ -89,7 +89,7 @@ export function ProfileForm() {
       favorite_films: user?.favorite_films ?? [],
       website: user?.website ?? undefined,
     })
-  }, [user])
+  }, [form, user])
 
   async function onSubmit(data: ProfileFormValues) {
     try {
@@ -132,8 +132,7 @@ export function ProfileForm() {
       if (errors) throw errors;
       toast.success('Enregistré');  
     } catch(error) {
-      console.log(error)
-      toast.error("Une erreur s'est produite");
+      toast.error("Une erreur s\'est produite");
     } finally {
       setLoading(false);
     }

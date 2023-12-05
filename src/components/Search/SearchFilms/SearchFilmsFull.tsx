@@ -4,12 +4,13 @@ import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '../../ui/skeleton';
-import { ImageWithFallback } from '../../tools/ImageWithFallback';
+import { ImageWithFallback } from '../../utils/ImageWithFallback';
 import { AspectRatio } from '../../ui/aspect-ratio';
 import { useInfiniteQuery } from 'react-query';
 import { useAuth } from '@/context/AuthContext/auth-context';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
+import { useLocale } from 'next-intl';
 
 export default function SearchFilmsFull({
   query,
@@ -17,6 +18,8 @@ export default function SearchFilmsFull({
   query: string;
 }) {
   const { user } = useAuth();
+
+  const locale = useLocale();
 
   const { ref, inView } = useInView();
 
@@ -30,7 +33,7 @@ export default function SearchFilmsFull({
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ['search', query, 'films'],
-    queryFn: ({pageParam = 1}) => handleSearchMovies(query, user?.language, pageParam),
+    queryFn: ({pageParam = 1}) => handleSearchMovies(query, locale, pageParam),
     getNextPageParam: (results, pages) => {
         return results?.length == numberOfResult ? pages.length + 1 : undefined  
     },

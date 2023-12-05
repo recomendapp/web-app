@@ -12,10 +12,10 @@ import {
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { ImageWithFallback } from "@/components/tools/ImageWithFallback"
+import { ImageWithFallback } from "@/components/utils/ImageWithFallback"
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { DateOnlyYearTooltip } from "@/components/tools/Date";
+import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import MoviePoster from "@/components/Film/MoviePoster";
 
 export default function MovieCardSmall({ movie } : { movie:any }) {

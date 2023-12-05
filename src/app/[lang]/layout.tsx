@@ -2,7 +2,6 @@ import '@/styles/globals.css';
 import { Metadata, Viewport } from 'next';
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/lib/fonts';
-import 'react-toastify/dist/ReactToastify.css';
 
 import { cn } from "@/lib/utils";
 import Providers from '@/context/Providers';
@@ -78,7 +77,7 @@ export default async function LangLayout({ children, params: { lang } }: RootLay
   }
   
   return (
-    <html lang={lang} suppressHydrationWarning>
+    <html className='scroll-smooth' lang={lang} suppressHydrationWarning>
       <body
         className={cn(
           'bg-background-border font-sans antialiased',
@@ -88,7 +87,6 @@ export default async function LangLayout({ children, params: { lang } }: RootLay
         <HelloNerd />
         <Providers>
           <NextIntlClientProvider locale={lang} messages={dictionary}>
-            {/* <div className="flex items-start h-full gap-2 lg:p-2"> */}
             {children}
           </NextIntlClientProvider>
         </Providers>
