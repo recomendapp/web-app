@@ -8,7 +8,6 @@ export default async function Stats({
   }) {
     const supabase = createServerClient();
     const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
-
     return (
       <div>
         Des stats

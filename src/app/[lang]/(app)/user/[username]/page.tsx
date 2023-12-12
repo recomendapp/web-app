@@ -2,15 +2,11 @@ import ProfileFavoriteFilms from '@/components/Profile/ProfileFavoriteFilms/Prof
 import ProfileHeader from '@/components/Profile/ProfileHeader/ProfileHeader';
 import ProfileNavbar from '@/components/Profile/ProfileNavbar/ProfileNavbar';
 import ProfileLastActivity from '@/components/Profile/ProfileLastActivity/ProfileLastActivity';
-import { notFound } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 
 export default async function UserPage({ params } : { params: { username: string } }) {
   const supabase = createServerClient();
   const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
-  
-  if (!user) notFound();
-
   return (
     <main>
         <ProfileHeader profile={user}/>

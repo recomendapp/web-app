@@ -14,9 +14,6 @@ export default async function UserLayout({
 } : UserLayoutProps) {
     const supabase = createServerClient();
     const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
-
-    if (!user) notFound();
-
     return (
         <main>
             <div className='px-4 pt-4 lg:pt-0 flex justify-center'><ProfileNavbar profile={user} withProfile className="w-full sticky top-0"/></div>

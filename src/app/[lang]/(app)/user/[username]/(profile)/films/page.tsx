@@ -8,7 +8,6 @@ export default async function Films({
   }) {
     const supabase = createServerClient();
     const { data: user } = await supabase.from('user').select('*').eq('username', params.username).single();
-
     return (
       <ProfileFilm profile={user} />
     )

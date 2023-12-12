@@ -6,6 +6,7 @@ import { RightSidebarContext } from "@/context/right-sidebar-context";
 import { OneSignalContext } from "@/context/one-signal-context";
 import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "react-hot-toast";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export default function Provider ({
     children,
@@ -28,6 +29,7 @@ export default function Provider ({
                                 <Toaster
                                     position="top-center"
                                 />
+                                <SpeedInsights />
                                 {children}
                             </RightSidebarContext>
                         </OneSignalContext>

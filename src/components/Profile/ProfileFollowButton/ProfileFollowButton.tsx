@@ -90,7 +90,7 @@ export function ProfileFollowButton({
         <Skeleton className="h-10 w-16 rounded-full" />
       :
         <Button variant={'accent-1'} onClick={() => (isFollow ? unfollowUser() : followUser())} className='rounded-full py-0'>
-          {isFollow ? 'Ne plus suivre' : 'Suivre'}
+          {isFollow ? 'Suivi(e)' : 'Suivre'}
         </Button>
       }
     </div>
