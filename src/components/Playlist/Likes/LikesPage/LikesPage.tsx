@@ -9,31 +9,48 @@ import { useEffect, useState } from "react";
 
 // import LIKES_QUERY from '@/components/Playlist/Likes/queries/likesQuery'
 import { getMovieDetails } from "@/lib/tmdb/tmdb";
-import { FilmLike } from "@/types/type.film";
-import { useQuery } from "react-query";
+import { FilmAction } from "@/types/type.film";
 import { supabase } from "@/lib/supabase/client";
+import { useLocale } from "next-intl";
+import USER_MOVIE_ACTIVITY_QUERY from '@/components/Film/FilmAction/queries/userMovieActivityQuery'
+import { useQuery } from "@apollo/client";
 
 export function LikesPage() {
+  const locale = useLocale();
     const { user } = useAuth();
 
-    const [ likesItem, setLikesItem ] = useState<{item: FilmLike}[]>();
+    const [ likesItem, setLikesItem ] = useState<{node: FilmAction}[]>();
 
-    const {
-      data: likes,
-      isLoading: loading,
-      isError: error
-    } = useQuery({
-      queryKey: ['user', 'collection', 'likes'],
-      queryFn: async () => {
-        const { data } = await supabase
-          .from('user_movie_activity')
-          .select(`*, review(*)`)
-          .eq('user_id', user?.id)
-          .eq('is_liked', true)
-        return (data)
+    const { data: likesQuery, loading, error } = useQuery(USER_MOVIE_ACTIVITY_QUERY, {
+      variables: {
+        filter: {
+          user_id: { eq: user?.id },
+          is_liked: { eq: true }
+        },
+        orderBy: {
+          created_at: "DescNullsLast",
+        }
       },
-      enabled: user?.id !== undefined && user?.id !== null,
+      skip: !user
     });
+    const likes: [ { node: FilmAction } ] = likesQuery?.user_movie_activityCollection?.edges;
+
+    // const {
+    //   data: likes,
+    //   isLoading: loading,
+    //   isError: error
+    // } = useQuery({
+    //   queryKey: ['user', 'collection', 'likes'],
+    //   queryFn: async () => {
+    //     const { data } = await supabase
+    //       .from('user_movie_activity')
+    //       .select(`*, review(*)`)
+    //       .eq('user_id', user?.id)
+    //       .eq('is_liked', true)
+    //     return (data)
+    //   },
+    //   enabled: user?.id !== undefined && user?.id !== null,
+    // });
     // const { data: likesQuery, loading, error } = useQuery(LIKES_QUERY, {
     //     variables: {
     //         user_id: user?.id
@@ -47,9 +64,9 @@ export function LikesPage() {
           if (likes) {
             const updatedGuidelistItems = await Promise.all(likes?.map(async (item, index) => {
               const option = { ...item }
-              if (item.film_id) {
-                const film = await getMovieDetails(item.film_id, 'fr');
-                option.item = { ...item, film };
+              if (item.node.film_id) {
+                const film = await getMovieDetails(item.node.film_id, locale);
+                option.node = { ...item.node, film };
               }
               return option;
             }));
@@ -58,7 +75,7 @@ export function LikesPage() {
         };
       
         fetchData();
-      }, [likes])
+      }, [locale, likes])
 
     return (
         <main className="h-full">

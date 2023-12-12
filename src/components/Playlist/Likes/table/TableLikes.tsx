@@ -32,7 +32,7 @@ import { columns } from "./component/columns"
 import { Models } from "appwrite"
 import { useMediaQuery } from "react-responsive"
 import { Guidelist } from "@/types/type.guidelist"
-import { FilmLike } from "@/types/type.film"
+import { FilmAction, FilmLike } from "@/types/type.film"
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -41,7 +41,7 @@ declare module '@tanstack/react-table' {
 }
 
 interface DataTableProps {
-  data: { item: FilmLike; }[],
+  data: { node: FilmAction; }[],
 }
 
 export function TableLikes({

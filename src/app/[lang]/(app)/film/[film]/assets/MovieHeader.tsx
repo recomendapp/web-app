@@ -140,7 +140,7 @@ export function MovieTrailerButton({
             Trailer
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-w-[60vw]">
+        <DialogContent className="lg:max-w-[60vw]">
           <DialogHeader className='relative flex flex-row gap-4 items-center'>
             <div className='absolute w-full flex justify-center -top-16'>
               <h2 className="text-accent-1-foreground text-5xl font-bold rounded-md bg-accent-1 px-4 py-2">TRAILER</h2>

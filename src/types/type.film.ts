@@ -11,6 +11,7 @@ export interface FilmAction {
     created_at: string,
     updated_at: string,
     film_id: number,
+    film: any,
     user_id: string,
     user: User,
     is_liked: boolean,

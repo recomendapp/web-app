@@ -201,6 +201,7 @@ const AddUser = ({
 				}
 			});
 			if (errors) throw errors;
+			toast.success('Ajouté');
 		} catch (error) {
 			toast.error('Une erreur s\'est produite');
 		}

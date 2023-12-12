@@ -53,28 +53,27 @@ export function DataTableRowActions({
   const { user } = useAuth();
   const [ openShowDirectors, setOpenShowDirectors ] = useState(false);
   const [ deleteFilmWatchlistMutation, { error: errorDeletingWatch } ] = useMutation(DELETE_FILM_WATCHLIST_MUTATION, {
-    // update: (store) => {
-    //   store.writeQuery({
-    //     query: FILM_ACTION_QUERY,
-    //     variables: {
-    //       film_id: data.film_id,
-    //       user_id: user?.id,
-    //     },
-    //     data: {
-    //       film_actionCollection: {
-    //         edges: []
-    //       }
-    //     }
-    //   })
-    // },
-    refetchQueries: [
-      {
-        query: WATCHLIST_QUERY,
+    update: (cache, { data }) => {
+			const watchlistData = cache.readQuery<any>({
+				query: WATCHLIST_QUERY,
         variables: {
           user_id: user?.id
         },
-      }
-    ]
+			});
+			cache.writeQuery({
+				query: WATCHLIST_QUERY,
+        variables: {
+          user_id: user?.id
+        },
+        data: {
+          watchlist: {
+            edges: watchlistData!.watchlist.edges.filter((edge: any) =>
+                    edge.item.film_id != data?.deleteFromuser_movie_watchlistCollection?.records[0]?.film_id
+                  )
+          },
+        },
+			});
+		},
   });
   
   return (

@@ -175,6 +175,18 @@ const SortablePlaylistItem = ({
         transform: CSS.Transform.toString(transform),
     }
 
+    const handleDeleteMovie = async () => {
+        try {
+            const { error } = await supabase
+                .from('playlist_item')
+                .delete()
+                .eq('id', item.id)
+            if (error) throw error;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <TableRow
             ref={setNodeRef}
@@ -187,7 +199,7 @@ const SortablePlaylistItem = ({
             <TableCell><MovieCard link={false} filmId={item.film_id} displayMode='row' /></TableCell>
             <TableCell className=''><PlaylistEditComment playlistItem={item} /></TableCell>
             <TableCell className="text-right">
-                <Button data-no-dnd="true" size={'sm'} variant={'ghost'}>
+                <Button onClick={handleDeleteMovie} data-no-dnd="true" size={'sm'} variant={'ghost'}>
                     <XCircle  className=' fill-white text-background'/>
                 </Button>
             </TableCell>

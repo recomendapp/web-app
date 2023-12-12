@@ -1,13 +1,13 @@
 export function LikesHeader ({ data } : { data?: any[] }) {
 
     const randomBackdrop = (object: any[]) => {
-      const itemsWithBackdrop = object.filter((item: any) => item.item.film.backdrop_path); 
+      const itemsWithBackdrop = object.filter((item: any) => item.node.film.backdrop_path); 
       
       if (itemsWithBackdrop.length === 0)
         return null;
   
       const randomIndex = Math.floor(Math.random() * itemsWithBackdrop.length);
-      return (itemsWithBackdrop[randomIndex].item.film.backdrop_path);
+      return (itemsWithBackdrop[randomIndex].node.film.backdrop_path);
     }
   
     return (

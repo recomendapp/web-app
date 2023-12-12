@@ -29,8 +29,8 @@ import { Film, FilmLike } from "@/types/type.film"
 import { useMutation } from "@apollo/client"
 import { useAuth } from "@/context/AuthContext/auth-context"
 
-import DELETE_FILM_LIKE_MUTATION from '@/components/Film/FilmAction/components/MovieLikeAction/mutations/deleteFilmLikeMutation';
-import LIKES_QUERY from "@/components/Playlist/Likes/queries/likesQuery"
+import DELETE_FILM_LIKE_MUTATION from '@/components/Film/FilmAction/mutations/updateUserMovieActivityMutation';
+import USER_MOVIE_ACTIVITY_QUERY from '@/components/Film/FilmAction/queries/userMovieActivityQuery'
 
 interface DataTableRowActionsProps {
   table: Table<FilmLike>,
@@ -49,28 +49,39 @@ export function DataTableRowActions({
   const { user } = useAuth();
   const [ openShowDirectors, setOpenShowDirectors ] = useState(false);
   const [ deleteFilmLikeMutation, { error: errorDeleteFilmLike } ] = useMutation(DELETE_FILM_LIKE_MUTATION, {
-    // update: (store) => {
-    //   store.writeQuery({
-    //     query: FILM_ACTION_QUERY,
-    //     variables: {
-    //       film_id: data.film_id,
-    //       user_id: user?.id,
-    //     },
-    //     data: {
-    //       film_actionCollection: {
-    //         edges: []
-    //       }
-    //     }
-    //   })
-    // },
-    refetchQueries: [
-      {
-        query: LIKES_QUERY,
+    update: (cache, { data }) => {
+			const filmLikesData = cache.readQuery<any>({
+				query: USER_MOVIE_ACTIVITY_QUERY,
         variables: {
-          user_id: user?.id
+          filter: {
+            user_id: { eq: user?.id },
+            is_liked: { eq: true }
+          },
+          orderBy: {
+            created_at: "DescNullsLast",
+          }
         },
-      }
-    ]
+			});
+			cache.writeQuery({
+				query: USER_MOVIE_ACTIVITY_QUERY,
+        variables: {
+          filter: {
+            user_id: { eq: user?.id },
+            is_liked: { eq: true }
+          },
+          orderBy: {
+            created_at: "DescNullsLast",
+          }
+        },
+        data: {
+          user_movie_activityCollection: {
+            edges: filmLikesData!.user_movie_activityCollection.edges.filter((edge: any) =>
+                    edge.node.film_id != data?.updateuser_movie_activityCollection?.records[0]?.film_id
+                  )
+          },
+        },
+			});
+		},
   });
   
   return (
@@ -100,8 +111,13 @@ export function DataTableRowActions({
             onClick={async () => {
               const { errors } = await deleteFilmLikeMutation({
                 variables: {
-                  film_id: data.film_id,
-                  user_id: user?.id,
+                  filter: {
+                    user_id: { eq: user?.id },
+                    film_id: { eq: data.film_id },
+                  },
+                  set: {
+                    is_liked: false
+                  }
                 }
               });
             }}

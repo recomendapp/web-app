@@ -16,39 +16,39 @@ import MovieCardSmall from "@/components/Film/MovieCardSmall"
 
 export const columns: ColumnDef<any>[] = [
   {
-    accessorKey: "item.film.title",
+    accessorKey: "node.film.title",
     meta: {
       displayName: "Film"
     },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Film" />
     ),
-    cell: ({ row }) => <MovieCardSmall movie={row.original.item.film}/>,
+    cell: ({ row }) => <MovieCardSmall movie={row.original.node.film}/>,
     enableHiding: false,
   },
   {
-    accessorKey: "item.film.release_date",
+    accessorKey: "node.film.release_date",
     meta: {
       displayName: "Date"
     },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date"/>
     ),
-    cell: ({ row }) => <DateOnlyYearTooltip date={row.original.item.film.release_date} />,
+    cell: ({ row }) => <DateOnlyYearTooltip date={row.original.node.film.release_date} />,
   },
   {
-    accessorKey: "item.film.runtime",
+    accessorKey: "node.film.runtime",
     meta: {
       displayName: "Durée"
     },
     header: ({ column }) => (
       <DataTableColumnHeader column={column} Icon={Clock} />
     ),
-    cell: ({ row }) => <p>{ConvertHoursMinutes(row.original.item.film?.runtime)}</p>
+    cell: ({ row }) => <p>{ConvertHoursMinutes(row.original.node.film?.runtime)}</p>
   },
   {
     id: "actions",
-    cell: ({ row, table, column }) => <DataTableRowActions data={row.original.item} table={table} row={row} column={column} />,
+    cell: ({ row, table, column }) => <DataTableRowActions data={row.original.node} table={table} row={row} column={column} />,
   },
 ]
 
