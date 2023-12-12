@@ -69,3 +69,16 @@ export async function handleSearchMovies(
   );
   return moviesWithCredits;
 }
+
+export async function handleSearchPersons(
+  query: string,
+  language: any,
+  page: number
+) {
+  const results = await (
+    await fetch(
+      `${process.env.NEXT_PUBLIC_TMDB_API_URL}search/person?query=${query}&include_adult=false&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}`
+    )
+  ).json();
+  return [...results.results];
+}

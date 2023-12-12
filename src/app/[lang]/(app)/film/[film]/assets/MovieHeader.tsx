@@ -111,7 +111,7 @@ export default function MovieHeader({ movie, small } : { movie: any, small?: boo
                   </div>
                   <div className='flex items-center gap-2'>
                       {/* <MovieActionCounter movieId={movie.id} /> */}
-                      {movie.videos.results.length && <MovieTrailerButton trailer={movie.videos} />}
+                      {movie.videos.results.length > 0 && <MovieTrailerButton trailer={movie.videos} />}
                   </div>
                   </div>
                 </div>

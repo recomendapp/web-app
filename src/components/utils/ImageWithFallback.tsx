@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
-import { ImageIcon, ListVideo } from 'lucide-react';
+import { ImageIcon, ListVideo, UserIcon } from 'lucide-react';
 
 interface ImageWithFallbackProps extends React.HTMLAttributes<HTMLDivElement> {
   src: string;
@@ -90,6 +90,8 @@ export function Fallback({
     {!children ? (
       type == 'playlist' ? 
         <ListVideo color="#fff" className='w-1/2 h-1/2'/>
+      : type == 'person' ?
+        <UserIcon color="#fff" className='w-1/2 h-1/2'/>
       :
         <ImageIcon color="#fff" className='w-1/2 h-1/2'/>
     ) : (

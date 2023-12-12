@@ -88,6 +88,7 @@ export function PersonMovies({
         : allMovies;
       const sorted = sortMovies(filteredMovies);
       setSortedMovies(sorted);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [order, roleFilter]);
 
 

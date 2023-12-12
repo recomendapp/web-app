@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 // UI
 import { Button } from '@/components/ui/button';
+import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 
 export default function SearchFilters() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function SearchFilters() {
     const segments = pathname.split('/');
     if (segments.length > 2) {
       const filter = segments[2];
-      if (['films', 'playlists', 'users'].includes(filter)) {
+      if (['films', 'playlists', 'users', 'crew-cast'].includes(filter)) {
         return filter;
       }
     }
@@ -46,35 +47,45 @@ export default function SearchFilters() {
     return null
 
   return (
-    <div className="flex gap-4 pb-2">
-      <Button
-        variant={!searchFilter ? 'accent-1' : 'secondary'}
-        className={`rounded-md`}
-        onClick={() => selectSearchFilter('')}
-      >
-        Tout
-      </Button>
-      <Button
-        variant={searchFilter == 'films' ? 'accent-1' : 'secondary'}
-        className={`rounded-md`}
-        onClick={() => selectSearchFilter('films')}
-      >
-        Films
-      </Button>
-      <Button
-        variant={searchFilter == 'playlists' ? 'accent-1' : 'secondary'}
-        className={`rounded-md`}
-        onClick={() => selectSearchFilter('playlists')}
-      >
-        Playlists
-      </Button>
-      <Button
-        variant={searchFilter == 'users' ? 'accent-1' : 'secondary'}
-        className={`rounded-md`}
-        onClick={() => selectSearchFilter('users')}
-      >
-        Utilisateurs
-      </Button>
-    </div>
+    <ScrollArea>
+      <div className="flex gap-4 pb-2">
+        <Button
+          variant={!searchFilter ? 'accent-1' : 'secondary'}
+          className={`rounded-md shrink-0`}
+          onClick={() => selectSearchFilter('')}
+        >
+          Tout
+        </Button>
+        <Button
+          variant={searchFilter == 'films' ? 'accent-1' : 'secondary'}
+          className={`rounded-md shrink-0`}
+          onClick={() => selectSearchFilter('films')}
+        >
+          Films
+        </Button>
+        <Button
+          variant={searchFilter == 'playlists' ? 'accent-1' : 'secondary'}
+          className={`rounded-md shrink-0`}
+          onClick={() => selectSearchFilter('playlists')}
+        >
+          Playlists
+        </Button>
+        <Button
+          variant={searchFilter == 'users' ? 'accent-1' : 'secondary'}
+          className={`rounded-md shrink-0`}
+          onClick={() => selectSearchFilter('users')}
+        >
+          Utilisateurs
+        </Button>
+        <Button
+          variant={searchFilter == 'crew-cast' ? 'accent-1' : 'secondary'}
+          className={`rounded-md shrink-0`}
+          onClick={() => selectSearchFilter('crew-cast')}
+        >
+          Crew & Cast
+        </Button>
+      </div>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
   );
 }
