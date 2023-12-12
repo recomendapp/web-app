@@ -34,29 +34,18 @@ const nextConfig = {
         destination: '/settings/profile',
         permanent: true,
       },
+      {
+        source: '/user/:username/:path*',
+        destination: '/@:username/:path*',
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
     return [
       {
-        source: '/:lang/@:username',
-        destination: '/:lang/user/:username',
-      },
-      {
-        source: '/:lang/@:username/playlists',
-        destination: '/:lang/user/:username/playlists',
-      },
-      {
-        source: '/:lang/@:username/films',
-        destination: '/:lang/user/:username/films',
-      },
-      {
-        source: '/:lang/@:username/stats',
-        destination: '/:lang/user/:username/stats',
-      },
-      {
-        source: '/:lang/@:username/film/:film',
-        destination: '/:lang/user/:username/film/:film',
+        source: '/:lang/@:username/:path*',
+        destination: '/:lang/user/:username/:path*',
       },
     ];
   },
