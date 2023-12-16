@@ -5,7 +5,7 @@ import { Table } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { DataTableViewOptions } from "@/components/modules/MovieGuidelist/table/component/data-table-view-options"
+import { DataTableViewOptions } from "@/components/Playlist/Guidelist/table/component/data-table-view-options"
 import { DataTableSortOptions } from "./data-table-sort-options"
 
 interface DataTableToolbarProps<TData> {

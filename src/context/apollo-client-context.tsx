@@ -1,56 +1,17 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase/client";
-import {
-    ApolloClient,
-    InMemoryCache,
-    ApolloProvider
-} from "@apollo/client";
-import { BatchHttpLink } from "@apollo/client/link/batch-http";
-
-const link = new BatchHttpLink({
-    uri: `${String(process.env.NEXT_PUBLIC_SUPABASE_URL)}/graphql/v1`,
-    headers: {
-        "apiKey": String(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
-    },
-    batchInterval: 10,
-});
+import React from "react";
+import apolloClient from "@/lib/apollo/client";
+import { ApolloProvider } from "@apollo/client";
 
 export function ApolloClientContext ({
-    children,
+  children,
 } : {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    const [header, setHeader] = useState<any>({
-        "apiKey": String(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
-    })
-
-    useEffect(() => {
-        supabase.auth.getSession()
-            .then(({data: { session }}) => {
-                if (session?.access_token)
-                {
-                    setHeader({
-                        ...header,
-                        "authorization": `Bearer ${session.access_token}`,
-                    })
-                }
-            })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const client = new ApolloClient({
-        // link,
-        uri: `${String(process.env.NEXT_PUBLIC_SUPABASE_URL)}/graphql/v1`,
-        headers: header,
-        cache: new InMemoryCache(),
-        connectToDevTools: true,
-    })
-
-    return (
-        <ApolloProvider client={client}>
-            {children}
-        </ApolloProvider>
-    );
+  return (
+      <ApolloProvider client={apolloClient}>
+          {children}
+      </ApolloProvider>
+  );
 }

@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import GUIDELIST_FRAGMENT from "@/components/modules/MovieGuidelist/fragments/guidelistFragment";
+import GUIDELIST_FRAGMENT from "@/components/Playlist/Guidelist/fragments/guidelistFragment";
 
 export default gql `
   mutation insertGuidelist(

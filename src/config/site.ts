@@ -2,7 +2,7 @@ export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
   name: 'Recomend',
-  description: 'Beautiful web movie app !',
+  description: 'An other way to discover movies',
   mainNav: [
     {
       title: 'Accueil',

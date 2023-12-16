@@ -127,6 +127,9 @@
   }
 }
 
+* {
+  min-width: 0;
+}
 
 html,
 body {

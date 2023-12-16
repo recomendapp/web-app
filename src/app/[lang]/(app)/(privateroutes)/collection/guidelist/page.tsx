@@ -1,4 +1,4 @@
-import { GuidelistPage } from '@/components/modules/MovieGuidelist/GuidelistPage/GuidelistPage';
+import { GuidelistPage } from '@/components/Playlist/Guidelist/GuidelistPage/GuidelistPage';
 import { Metadata } from 'next';
 import { Fragment } from 'react';
 

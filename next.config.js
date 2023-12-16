@@ -3,7 +3,7 @@ const withPWA = require("@ducanh2912/next-pwa").default({
   customWorkerSrc: "service-worker",
   register: true,
   skipWaiting: true,
-  // disable: process.env.NODE_ENV === 'development',
+  disable: process.env.NODE_ENV === 'development',
 });
 
 const withNextIntl = require('next-intl/plugin')(
