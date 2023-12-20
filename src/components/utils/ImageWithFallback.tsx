@@ -89,11 +89,11 @@ export function Fallback({
   >
     {!children ? (
       type == 'playlist' ? 
-        <ListVideo color="#fff" className='w-1/2 h-1/2'/>
+        <ListVideo color="#fff" className='w-2/5 h-2/5'/>
       : type == 'person' ?
-        <UserIcon color="#fff" className='w-1/2 h-1/2'/>
+        <UserIcon color="#fff" className='w-2/5 h-2/5'/>
       :
-        <ImageIcon color="#fff" className='w-1/2 h-1/2'/>
+        <ImageIcon color="#fff" className='w-2/5 h-2/5'/>
     ) : (
       children
     )}

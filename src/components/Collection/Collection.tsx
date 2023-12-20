@@ -11,17 +11,17 @@ export function Collection() {
     const collectionRoutes = useMemo(
         () => [
             {
-            icon: <CollectionIcon from="#e6619b" to="#e84749"><Heart fill="#fff"/></CollectionIcon>,
+            icon: <CollectionIcon from="#e6619b" to="#e84749"><Heart fill="#fff" className='w-2/5 h-2/5'/></CollectionIcon>,
             label: 'Coups de coeur',
             href: '/collection/likes',
             },
             {
-            icon: <CollectionIcon from="#39BAED" to="#32509e"><Bookmark fill="#fff"/></CollectionIcon>,
+            icon: <CollectionIcon from="#39BAED" to="#32509e"><Bookmark fill="#fff" className='w-2/5 h-2/5'/></CollectionIcon>,
             label: 'Watchlist',
             href: '/collection/watchlist',
             },
             {
-            icon: <CollectionIcon from="#FBE773" to="#F18E43"><Send fill="#fff"/></CollectionIcon>,
+            icon: <CollectionIcon from="#FBE773" to="#F18E43"><Send fill="#fff" className='w-2/5 h-2/5'/></CollectionIcon>,
             label: 'Guidelist',
             href: '/collection/guidelist',
             },

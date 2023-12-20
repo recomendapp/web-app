@@ -23,6 +23,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import toast from 'react-hot-toast';
+import { revalidatePath } from 'next/cache';
 
 export default function PlaylistEdit({
   playlistId,
@@ -62,9 +63,9 @@ export default function PlaylistEdit({
                         if (itemToUpdate) {
                             Object.assign(itemToUpdate, payload.new);
                         }
-                      }
-                      updatedPlaylistItems.sort((a, b) => a.rank - b.rank);
-                      setPlaylistItems(updatedPlaylistItems);
+                    }
+                    updatedPlaylistItems.sort((a, b) => a.rank - b.rank);
+                    setPlaylistItems(updatedPlaylistItems);
                 }
             )
             .subscribe()
