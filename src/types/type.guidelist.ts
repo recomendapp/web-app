@@ -3,10 +3,10 @@ import { Film } from "@/types/type.film";
 
 export interface Guidelist {
     id: string,
-    film_id: string,
+    film_id: number,
     film: Film,
     receiver_user_id: string,
     sender_user_id: string,
-    user: User,
+    sender_user: User,
     comment: string,
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { cn } from '@/lib/utils/utils';
+import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
   'inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
@@ -19,14 +19,15 @@ const buttonVariants = cva(
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
         action: 'text-foreground hover:text-foreground/60',
+        muted: 'bg-muted hover:bg-muted-hover',
         // ACCENT
-        'accent-1': 'bg-accent-1 text-accent-1-foreground',
+        'accent-1': 'bg-accent-1 text-accent-1-foreground hover:bg-background hover:text-accent-1',
         'accent-1-enabled': 'bg-accent-1-foreground text-accent-1',
         'accent-1-hover':
           'bg-accent-1 text-accent-1-foreground hover:bg-accent-1-hover',
         rating: 'text-foreground hover:text-accent-1',
         'rating-enabled' : 'border-2 border-accent-1 text-accent-1 hover:text-accent-1-foreground hover:bg-accent-1 bg-background',
-        share: 'text-destructive-foreground hover:bg-blue-500/10 hover:text-blue-300 rounded-full'
+        share: 'text-destructive-foreground hover:bg-blue-500/10 hover:text-blue-300 rounded-full',
       },
       size: {
         default: 'h-10 px-4 py-2',

@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import SUBSCRIPTION_FRAGMENT from "@/components/Subscription/fragments/subscriptionFragment";
 
 export default gql`
     fragment User on user {
@@ -9,11 +10,27 @@ export default gql`
         full_name
         bio
         avatar_url
+        background_url
         website
         language
         favorite_color
+        favorite_films
         followers_count
         following_count
         friends_count
+        verified
+        subscription: subscriptionsCollection(
+            filter: {
+              user_id: { eq: $user_id }
+              status: { eq: active }
+            }
+          ) {
+            edges {
+              node {
+                ...Subscription
+              }
+            }
+        }
     }
+    ${SUBSCRIPTION_FRAGMENT}
 `

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.5.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="uuid-02ba2b01-a659-4456-8965-365b77788adc"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 268.7 593.9"
+	 style="enable-background:new 0 0 268.7 593.9;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#EA629F;}
+	.st1{fill:none;stroke:#EA629F;stroke-width:12.03;stroke-miterlimit:10;}
+</style>
+<g>
+	<circle class="st0" cx="134.4" cy="134.4" r="14.2"/>
+	<g>
+		<polygon class="st0" points="134.4,134.4 218,27.5 185,8.5 		"/>
+		<polygon class="st0" points="134.4,134.4 260.2,83.7 241.2,50.7 		"/>
+		<polygon class="st0" points="134.4,134.4 268.7,153.4 268.7,115.3 		"/>
+		<polygon class="st0" points="134.4,134.4 241.2,218 260.2,185 		"/>
+		<polygon class="st0" points="134.4,134.4 185,260.2 218,241.2 		"/>
+		<polygon class="st0" points="134.4,134.4 115.3,268.7 153.4,268.7 		"/>
+		<polygon class="st0" points="134.4,134.4 50.7,241.2 83.7,260.2 		"/>
+		<polygon class="st0" points="134.4,134.4 8.5,185 27.5,218 		"/>
+		<polygon class="st0" points="134.4,134.4 0,115.3 0,153.4 		"/>
+		<polygon class="st0" points="134.4,134.4 27.5,50.7 8.5,83.7 		"/>
+		<polygon class="st0" points="134.4,134.4 83.7,8.5 50.7,27.5 		"/>
+		<polygon class="st0" points="134.4,134.4 153.4,0 115.3,0 		"/>
+	</g>
+	<g>
+		<g>
+			<path class="st1" d="M37.3,591.9c1.6-4.6,97-457.6,97-457.6"/>
+			<path class="st1" d="M231.4,591.9c-1.6-4.6-97-457.6-97-457.6"/>
+		</g>
+		<g>
+			<line class="st1" x1="97.8" y1="307.8" x2="170.8" y2="307.8"/>
+			<line class="st1" x1="84.7" y1="369.4" x2="183.9" y2="369.4"/>
+			<line class="st1" x1="71.5" y1="431" x2="197" y2="431"/>
+			<line class="st1" x1="58.4" y1="492.6" x2="210.1" y2="492.6"/>
+			<line class="st1" x1="45.3" y1="554.2" x2="223.2" y2="554.2"/>
+		</g>
+	</g>
+</g>
+</svg>

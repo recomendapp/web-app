@@ -13,11 +13,12 @@
     --like-foreground: #000000;
     --like-hover: #f32fb2;
 
-    --background: #000000;
-    --background-border: #080808;
+    --background: #101010;
+    --background-border: #000000;
     --foreground: 0 100% 100%;
 
-    --muted: #0e0e0e;
+    --muted: #1f1f1f;
+    --muted-hover: #141414;
     --muted-foreground: #929292;
 
     --popover: 240 10% 3.9%;
@@ -126,6 +127,10 @@
   }
 }
 
+* {
+  min-width: 0;
+}
+
 html,
 body {
   position: fixed;
@@ -147,7 +152,7 @@ body {
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: var(--scrollbar); 
+    background: var(--scrollbar);
     /* border-radius: 5px; */
   }
 

@@ -7,16 +7,76 @@ export interface Film {
 }
 
 export interface FilmAction {
-    id: string,
+    id: number,
     created_at: string,
-    film_id: string,
-    film: Film,
+    updated_at: string,
+    film_id: number,
+    film: any,
     user_id: string,
     user: User,
     is_liked: boolean,
-    is_watched: boolean,
     rating: number,
-    is_watchlisted: boolean,
-    review_id: string,
+    date: string,
     review: Review,
+    // watch: {
+    //     edges: [
+    //         { watch: FilmWatch }
+    //     ]
+    // },
+    // like: {
+    //     edges: [
+    //         { like: FilmLike }
+    //     ]
+    // },
+    // rating: {
+    //     edges: [
+    //         { rating: FilmRating }
+    //     ]
+    // },
+    // watchlist: {
+    //     edges: [
+    //         { watchlist: FilmWatchlist }
+    //     ]
+    // },
+    // review: {
+    //     edges: [
+    //         { review: Review }
+    //     ]
+    // }
+}
+
+export interface FilmWatch {
+    id: string,
+    created_at: string,
+    updated_at: string,
+    film_id: number,
+    user_id: string,
+    date: string,
+    film: any,
+}
+
+export interface FilmLike {
+    id: string,
+    created_at: string,
+    film_id: number,
+    user_id: string,
+    film: any,
+}
+
+export interface FilmRating {
+    id: string,
+    created_at: string,
+    updated_at: string,
+    film_id: number,
+    user_id: string,
+    rating: number,
+    film: any,
+}
+
+export interface FilmWatchlist {
+    id: string,
+    created_at: string,
+    film_id: number,
+    user_id: string,
+    film: any,
 }

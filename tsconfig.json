@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/modules/Editor/Editor.tsx", "src/components/elements/ModalFollowers"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/Editor/Editor.tsx", "src/components/elements/ModalFollowers", "src/components/RightSidebar", "service-worker/index.js"],
   "exclude": ["node_modules"]
 }

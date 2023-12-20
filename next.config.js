@@ -1,5 +1,18 @@
+const withPWA = require("@ducanh2912/next-pwa").default({
+  dest: "public",
+  customWorkerSrc: "service-worker",
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+});
+
+const withNextIntl = require('next-intl/plugin')(
+  './src/i18n.ts'
+);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: false,
   images: {
     domains: [
       'huecemdnsnivsvwhkiqz.supabase.co',
@@ -21,32 +34,21 @@ const nextConfig = {
         destination: '/settings/profile',
         permanent: true,
       },
+      {
+        source: '/user/:username/:path*',
+        destination: '/@:username/:path*',
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
     return [
       {
-        source: '/@:username',
-        destination: '/user/:username',
-      },
-      {
-        source: '/@:username/playlists',
-        destination: '/user/:username/playlists',
-      },
-      {
-        source: '/@:username/films',
-        destination: '/user/:username/films',
-      },
-      {
-        source: '/@:username/stats',
-        destination: '/user/:username/stats',
-      },
-      {
-        source: '/@:username/film/:film',
-        destination: '/user/:username/film/:film',
+        source: '/:lang/@:username/:path*',
+        destination: '/:lang/user/:username/:path*',
       },
     ];
   },
 };
 
-module.exports = nextConfig;
+module.exports = withPWA(withNextIntl(nextConfig));

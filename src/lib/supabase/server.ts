@@ -1,0 +1,66 @@
+import { cookies } from "next/headers";
+import { createServerClient as createServerClientSupabase, type CookieOptions } from '@supabase/ssr'
+import { Price, ProductWithPrices } from "@/types/type.stripe";
+
+export const createServerClient = () => {
+  const cookieStore = cookies();
+  return createServerClientSupabase(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value
+        },
+      },
+    }
+  );
+};
+
+export async function getSession() {
+  const supabase = createServerClient();
+  try {
+    const {
+      data: { session }
+    } = await supabase.auth.getSession();
+    return session;
+  } catch (error) {
+    console.error('Error:', error);
+    return null;
+  }
+}
+
+export const getActiveProductsWithPrices = async (): Promise<ProductWithPrices[]> => {
+  const supabase = createServerClient();
+
+  const { data, error } = await supabase
+    .from('products')
+    .select('*, prices(*)')
+    .eq('active', true)
+    .eq('prices.active', true)
+    .order('unit_amount', { 
+      referencedTable: 'prices',
+      ascending: true,
+    })
+
+  if (error)
+      console.log(error);
+
+  return (data) || [];
+}
+
+export async function getSubscription() {
+  const supabase = createServerClient();
+  try {
+    const { data: subscription } = await supabase
+      .from('subscriptions')
+      .select('*, prices(*, products(*))')
+      .in('status', ['trialing', 'active'])
+      .maybeSingle()
+      .throwOnError();
+    return subscription;
+  } catch (error) {
+    console.error('Error:', error);
+    return null;
+  }
+}

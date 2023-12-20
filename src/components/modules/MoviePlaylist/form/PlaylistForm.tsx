@@ -18,24 +18,22 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast';
 import { Textarea } from '@/components/ui/textarea';
-import { databases, storage } from '@/lib/appwrite';
 import { Dispatch, useState } from 'react';
 import PlaylistPictureUpload from '../components/PlaylistPictureUpload';
-import Compressor from 'compressorjs';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMutation } from '@apollo/client';
 
-import CREATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/createPlaylistMutation'
-import UPDATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/updatePlaylistMutation'
-import DELETE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/form/mutations/deletePlaylistMutation';
-import USER_PLAYLISTS_QUERY from '@/components/modules/UserPlaylists/queries/userPlaylistsQuery';
-import INSERT_PLAYLIST_ITEM_MUATION from '@/components/modules/MovieAction/_components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
 import compressPicture from '@/lib/utils/compressPicture';
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '@/lib/supabase/client';
 import { Icons } from '@/components/icons';
 import { Playlist } from '@/types/type.playlist';
+import CREATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/mutations/createPlaylistMutation'
+import UPDATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/mutations/updatePlaylistMutation'
+import DELETE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/mutations/deletePlaylistMutation';
+import USER_PLAYLISTS_QUERY from '@/components/User/UserPlaylists/queries/userPlaylistsQuery';
+import INSERT_PLAYLIST_ITEM_MUATION from '@/components/Film/FilmAction/components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -59,7 +57,6 @@ export function PlaylistForm({
   const [ loading, setLoading ] = useState(false);
 
   const [ newPoster, setNewPoster ] = useState<File>();
-  const [isUploading, setIsUploading] = useState(false);
   
   const [ createPlaylistMutation ] = useMutation(CREATE_PLAYLIST_MUTATION, {
    update: (store, { data }) => {
@@ -182,8 +179,7 @@ export function PlaylistForm({
       toast.success('Enregistré');
       success();
     } catch (error) {
-      console.log('error', error)
-      toast.error("Une erreur s'est produite");
+      toast.error("Une erreur s\'est produite");
     } finally {
       setLoading(false);
     }
@@ -208,7 +204,7 @@ export function PlaylistForm({
       toast.success('Enregistré');
       success();
     } catch (error) {
-      toast.error("Une erreur s'est produite");
+      toast.error("Une erreur s\'est produite");
     } finally {
       setLoading(false);
     }
@@ -226,7 +222,7 @@ export function PlaylistForm({
       if (playlist && pathname == '/playlist/' + playlist.id) router.push('/'); 
       else success();
     } catch (error) {
-      toast.error("Une erreur s'est produite");
+      toast.error("Une erreur s\'est produite");
     } finally {
       setLoading(false);
     }
@@ -253,18 +249,18 @@ export function PlaylistForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(playlist ? handleUpdatePlaylist : handleCeatePlaylist)}
-        className="space-y-8"
+        className=" space-y-8 h-full flex flex-col justify-between"
       >
-        <div className="grid gap-4 grid-cols-2 w-full">
-          <div className="py-4">
+        <div className="flex flex-col gap-4 lg:grid  lg:grid-cols-2 w-full">
+          <div className=" w-1/2 lg:w-full">
             <PlaylistPictureUpload
               playlist={playlist}
-              isUploading={isUploading}
+              loading={loading}
               newPoster={newPoster}
               setNewPoster={setNewPoster}
             />
           </div>
-          <div className="grid gap-4 py-4">
+          <div className="flex flex-col gap-4">
             <FormField
               control={form.control}
               name="title"

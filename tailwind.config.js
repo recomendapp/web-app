@@ -55,6 +55,7 @@ module.exports = {
         muted: {
           DEFAULT: 'var(--muted)',
           foreground: 'var(--muted-foreground)',
+          hover: 'var(--muted-hover)'
         },
         accent: {
           DEFAULT: 'hsl(var(--accent))',
@@ -152,6 +153,7 @@ module.exports = {
   },
   plugins: [
     require('tailwindcss-animate'),
-    require('@tailwindcss/typography')
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/container-queries')
   ],
 };

@@ -1,0 +1,38 @@
+"use client"
+
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { cn } from "@/lib/utils";
+import { ImageWithFallback } from "../../utils/ImageWithFallback";
+import Link from "next/link";
+import { Playlist } from "@/types/type.playlist";
+import FeaturedPlaylistBadge from "@/components/Badge/FeatuedPlaylistBadge";
+
+
+interface MoviePlaylistCardProps extends React.HTMLAttributes<HTMLElement> {
+    playlist: Playlist
+}
+
+export default function MoviePlaylistCard({ className, playlist } : MoviePlaylistCardProps) {
+    return (
+        <Link href={`/playlist/${playlist.id}`} className={cn("relative flex flex-col gap-2 bg-muted hover:bg-muted-hover rounded-md p-2", className)}>
+            {playlist.featured && (
+                <FeaturedPlaylistBadge />
+            )}
+            <div className={`w-full shadow-2xl`}>
+                <AspectRatio ratio={1 / 1}>
+                    <ImageWithFallback
+                        src={playlist.poster_url ?? ''}
+                        alt={playlist.title}
+                        fill
+                        className="rounded-md object-cover"
+                        type="playlist"
+                    />
+                </AspectRatio>
+            </div>
+            <div>
+                <p className="text-center line-clamp-1 break-words">{playlist.title}</p>
+                <p className="text-center text-muted-foreground">{playlist.items_count} film{Number(playlist.items_count) > 1 && "s"}</p>
+            </div>
+        </Link> 
+    )
+}
