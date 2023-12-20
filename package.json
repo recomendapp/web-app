@@ -95,7 +95,6 @@
     "react-onesignal": "^3.0.1",
     "react-query": "^3.39.3",
     "react-responsive": "^9.0.2",
-    "react-spring-bottom-sheet": "^3.4.1",
     "run": "^1.4.0",
     "stripe": "^13.8.0",
     "tailwind-merge": "^1.13.2",
