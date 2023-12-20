@@ -29,15 +29,6 @@ export const ImageWithFallback = ({
   useEffect(() => {
     setImgSrc(src);
   }, [src]);
-    // : type === 'playlist' ? fallbackPlaylist
-    // : type === 'film' && fallbackFilm
-
-  // let selectedFallbackImage = fallbackImage;
-  // if (type === 'playlist') {
-  //   selectedFallbackImage = fallbackImagePlaylist;
-  // } else if (type === 'film') {
-  //   selectedFallbackImage = fallbackImageFilm;
-  // }
 
   return (
     <>
@@ -48,9 +39,7 @@ export const ImageWithFallback = ({
           width={width}
           fill={fill}
           src={imgSrc}
-          // className={cn('transition-opacity opacity-0 duration-700', className)}
           className={cn('', className)}
-          // onLoadingComplete={(image) => image.classList.remove("opacity-0")}
           onError={() => {
             setImgSrc('');
           }}
@@ -60,8 +49,7 @@ export const ImageWithFallback = ({
           type={type}
           from="#363636"
           to="#363636"
-        >
-        </Fallback>
+        />
       }
 
     </>
@@ -70,12 +58,10 @@ export const ImageWithFallback = ({
 };
 
 export function Fallback({
-  children,
   type,
   from,
   to
 } : {
-  children: React.ReactNode,
   type?: string,
   from: string,
   to: string
@@ -87,16 +73,13 @@ export function Fallback({
     }}
     className={`w-full rounded-md flex items-center justify-center h-full`}
   >
-    {!children ? (
-      type == 'playlist' ? 
+    {type == 'playlist' ? 
         <ListVideo color="#fff" className='w-2/5 h-2/5'/>
       : type == 'person' ?
         <UserIcon color="#fff" className='w-2/5 h-2/5'/>
       :
         <ImageIcon color="#fff" className='w-2/5 h-2/5'/>
-    ) : (
-      children
-    )}
+    }
   </div>
   )
 }
