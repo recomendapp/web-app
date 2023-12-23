@@ -22,7 +22,7 @@ export function GuidelistPage() {
         },
         skip: !user
     });
-    const guidelist: [ { item: Guidelist } ] = guidelistQuery?.guidelistCollection?.edges;
+    const guidelist: [ { item: Guidelist } ] = guidelistQuery?.user_movie_guidelistCollection?.edges;
 
     useEffect(() => {
         const fetchData = async () => {

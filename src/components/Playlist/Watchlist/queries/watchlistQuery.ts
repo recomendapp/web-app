@@ -3,7 +3,7 @@ import FILM_WATCHLIST_FRAGMENT from "@/components/Film/FilmAction/fragments/film
 
 export default gql`
     query Watchlist($user_id: UUID!){
-        watchlist: user_movie_watchlistCollection(
+        user_movie_watchlistCollection(
             filter: {
                 user_id: { eq: $user_id }
             }

@@ -7,6 +7,21 @@ import {
     TooltipProvider,
     TooltipTrigger
 } from "@/components/ui/tooltip";
+import {
+    ContextMenu,
+    ContextMenuCheckboxItem,
+    ContextMenuContent,
+    ContextMenuItem,
+    ContextMenuLabel,
+    ContextMenuRadioGroup,
+    ContextMenuRadioItem,
+    ContextMenuSeparator,
+    ContextMenuShortcut,
+    ContextMenuSub,
+    ContextMenuSubContent,
+    ContextMenuSubTrigger,
+    ContextMenuTrigger,
+} from "@/components/ui/context-menu"
 
 // DATE
 import { getYear } from 'date-fns';
@@ -20,6 +35,7 @@ import { FilmAction } from "@/types/type.film";
 import { getMovieDetails } from "@/lib/tmdb/tmdb";
 import { useQuery } from "react-query";
 import { useLocale } from "next-intl";
+import ActivityIcon from "@/components/Review/ActivityIcon";
 
 interface MovieCardProps {
     filmId: number;
@@ -51,49 +67,84 @@ export default function MovieCard({
 
     if (displayMode == 'grid')
         return (
-            <TooltipProvider delayDuration={0}>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
-                            <Link href={`/film/${filmId}`} className="w-full">
-                                <MoviePoster poster_path={'https://image.tmdb.org/t/p/w500/' + film.poster_path}alt={film.title}/>
-                            </Link>
-                            {/* ACTIONS */}
-                            {movieActivity &&
-                                <Link href={`/@${movieActivity?.user.username}/film/${film.id}`} className="flex flex-col items-center gap-1 absolute right-0 top-[10%] bg-background p-1 rounded-l-md">
-                                    {movieActivity?.rating && 
-                                        <p
-                                            className={`h-5 w-6 rounded-sm flex items-center justify-center
-                                            text-background bg-accent-1
-                                            font-bold text-sm
-                                            `}
-                                        >
-                                            {movieActivity?.rating}
-                                        </p>
-                                    }
-                                    {movieActivity?.is_liked && 
-                                        <Heart
-                                            width={15}
-                                            className={`text-like fill-like`}
-                                        />
-                                    }
-                                    {movieActivity?.review &&
-                                        <Text width={20} className='fill-foreground'/>
-                                    }
+        <ContextMenu>
+            <ContextMenuTrigger>
+                <TooltipProvider delayDuration={0}>
+                    <Tooltip delayDuration={500}>
+                        <TooltipTrigger asChild>
+                            <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
+                                <Link href={`/film/${filmId}`} className="w-full">
+                                    <MoviePoster poster_path={'https://image.tmdb.org/t/p/w500/' + film.poster_path}alt={film.title}/>
                                 </Link>
-                            }
-                            <div className="hidden absolute top-3/4 group-hover:lg:flex w-full justify-center pointer-events-none">
-                                <div className="bg-background rounded-md w-fit pointer-events-auto">
-                                    <MovieAction filmId={filmId} watch watchlist dropdown/>
+                                {(movieActivity?.is_liked || movieActivity?.rating || movieActivity?.review) &&
+                                <div className="absolute -bottom-2 mx-auto my-auto w-full flex justify-center pointer-events-none">
+                                    <Link href={`/@${movieActivity?.user.username}/film/${film.id}`} className="pointer-events-auto">
+                                        <ActivityIcon
+                                            rating={movieActivity?.rating}
+                                            is_liked={movieActivity?.is_liked}
+                                            is_reviewed={movieActivity?.review ? true : false}
+                                        />
+                                    </Link>
+
+                                </div>
+                                }
+                                <div className="hidden absolute bottom-8 group-hover:lg:flex w-full justify-center pointer-events-none">
+                                    <div className="bg-background rounded-md w-fit pointer-events-auto">
+                                        <MovieAction filmId={filmId} watch watchlist dropdown/>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>{film.title} ({getYear(new Date(film.release_date))})</p>
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
+                        </TooltipTrigger>
+                        <TooltipContent className="flex flex-col gap-2">
+                            <p className=" text-center line-clamp-1 whitespace-nowrap">{film.title} ({getYear(new Date(film.release_date))})</p>
+                            {/* <MovieAction filmId={filmId} rating like watch playlist send /> */}
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            </ContextMenuTrigger>
+            <ContextMenuContent className="w-64">
+                <ContextMenuItem inset>
+                    Back
+                    <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+                </ContextMenuItem>
+                <ContextMenuItem inset disabled>
+                    Forward
+                    <ContextMenuShortcut>⌘]</ContextMenuShortcut>
+                </ContextMenuItem>
+                <ContextMenuItem inset>
+                    Reload
+                    <ContextMenuShortcut>⌘R</ContextMenuShortcut>
+                </ContextMenuItem>
+                <ContextMenuSub>
+                <ContextMenuSubTrigger inset>More Tools</ContextMenuSubTrigger>
+                <ContextMenuSubContent className="w-48">
+                    <ContextMenuItem>
+                    Save Page As...
+                    <ContextMenuShortcut>⇧⌘S</ContextMenuShortcut>
+                    </ContextMenuItem>
+                    <ContextMenuItem>Create Shortcut...</ContextMenuItem>
+                    <ContextMenuItem>Name Window...</ContextMenuItem>
+                    <ContextMenuSeparator />
+                    <ContextMenuItem>Developer Tools</ContextMenuItem>
+                </ContextMenuSubContent>
+                </ContextMenuSub>
+                <ContextMenuSeparator />
+                <ContextMenuCheckboxItem checked>
+                Show Bookmarks Bar
+                <ContextMenuShortcut>⌘⇧B</ContextMenuShortcut>
+                </ContextMenuCheckboxItem>
+                <ContextMenuCheckboxItem>Show Full URLs</ContextMenuCheckboxItem>
+                <ContextMenuSeparator />
+                <ContextMenuRadioGroup value="pedro">
+                <ContextMenuLabel inset>People</ContextMenuLabel>
+                <ContextMenuSeparator />
+                <ContextMenuRadioItem value="pedro">
+                    Pedro Duarte
+                </ContextMenuRadioItem>
+                <ContextMenuRadioItem value="colm">Colm Tuite</ContextMenuRadioItem>
+                </ContextMenuRadioGroup>
+            </ContextMenuContent>
+        </ContextMenu>
         )
 
     return (
@@ -122,25 +173,6 @@ export function MovieCardRow({
         <>
             <MoviePoster className=" w-14 lg:w-[100px]" poster_path={'https://image.tmdb.org/t/p/w500/' + film.poster_path} alt={film.title}/>
             <div className="w-full block">
-                {/* ACTIONS */}
-                {/* <div className="absolute top-0 flex items-center gap-2">
-                    {film_action?.rating && 
-                        <p
-                            className={`h-5 w-6 rounded-sm flex items-center justify-center
-                            text-background bg-accent-1
-                            font-bold text-sm
-                            `}
-                        >
-                            {film_action.rating}
-                        </p>
-                    }
-                    {film_action?.is_liked && 
-                        <Heart
-                            width={15}
-                            className={`text-like fill-like`}
-                        />
-                    }
-                </div> */}
                 {/* TITLE */}
                 <h2 className="text-xl font-bold line-clamp-2">
                     {film.title}

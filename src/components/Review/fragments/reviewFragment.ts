@@ -4,7 +4,7 @@ import USER_FRAGMENT from "@/context/AuthContext/fragments/userFragment";
 import FILM_RATING_FRAGMENT from "@/components/Film/FilmAction/fragments/filmRatingFragment";
 
 export default gql`
-    fragment Review on review {
+    fragment UserMovieReview on user_movie_review {
         id
         film_id
         user_id

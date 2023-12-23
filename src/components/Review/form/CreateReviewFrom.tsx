@@ -30,7 +30,7 @@ export default function CreateReviewForm({
     queryFn: async () => {
       const { data } = await supabase
         .from('user_movie_activity')
-        .select(`*, review(count)`)
+        .select(`*, review:user_movie_review(count)`)
         .eq('film_id', film.id)
         .eq('user_id', user?.id)
         .single()
@@ -66,7 +66,7 @@ export default function CreateReviewForm({
         try {
           setLoading(true);
           const { data, error } = await supabase
-            .from('review')
+            .from('user_movie_review')
             .insert({
               id: activity?.id,
               film_id: film.id,

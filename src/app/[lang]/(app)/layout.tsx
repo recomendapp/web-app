@@ -13,15 +13,15 @@ export default function RootLayout({ children }: AppLayoutProps) {
         <div className="h-screen w-screen flex flex-col">
             <div
                 className={`
-                flex
-                h-[calc(100%-(var(--height-navbar)))]
-                gap-2
-                lg:p-2
-                lg:h-full
+                    flex
+                    h-[calc(100%-(var(--height-navbar)))]
+                    gap-2
+                    lg:p-2
+                    lg:h-full
                 `}
             >
                 <Sidebar />
-                <Box className='h-full overflow-y-auto'>
+                <Box className='h-full overflow-auto p-0'>
                     <Header />
                     <div className="flex-grow relative lg:pb-0
                         h-full

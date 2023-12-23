@@ -9,9 +9,9 @@
     --accent-1-foreground: #000;
     --accent-1-hover: 44, 97%, 40%;
 
-    --like: #f788d2;
-    --like-foreground: #000000;
-    --like-hover: #f32fb2;
+    --accent-pink: #f788d2;
+    --accent-pink-foreground: #000000;
+    --accent-pink-hover: #f32fb2;
 
     --background: #101010;
     --background-border: #000000;
@@ -65,9 +65,9 @@
     --accent-1-foreground: #000;
     --accent-1-hover: 44, 97%, 40%;
 
-    --like: #f788d2;
-    --like-foreground: #000000;
-    --like-hover: #f32fb2;
+    --accent-pink: #f788d2;
+    --accent-pink-foreground: #000000;
+    --accent-pink-hover: #f32fb2;
 
     --background: #fff;
     --background-border: #b1b1b1;
@@ -120,7 +120,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background-border text-foreground;
     font-feature-settings:
       'rlig' 1,
       'calt' 1;
@@ -133,33 +133,32 @@
 
 html,
 body {
-  position: fixed;
-  touch-action: none;
+  /* position: fixed;
+  touch-action: none; */
   /* -webkit-user-select: none; */
   /* user-select: none; */
 }
 
 /* Scroll bar stylings */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
-  }
+  } */
 
   /* Track */
-  ::-webkit-scrollbar-track {
+  /* ::-webkit-scrollbar-track {
     background: var(--lightestgrey); 
-  }
+  } */
 
   /* Handle */
-  ::-webkit-scrollbar-thumb {
+  /* ::-webkit-scrollbar-thumb {
     background: var(--scrollbar);
-    /* border-radius: 5px; */
-  }
+  } */
 
   /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
+  /* ::-webkit-scrollbar-thumb:hover {
     background: var(--scrollbar-hover); 
-  }
+  } */
 
 /* @tailwind base;
 @tailwind components;

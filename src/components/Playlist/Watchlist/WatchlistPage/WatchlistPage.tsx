@@ -25,7 +25,7 @@ export function WatchlistPage() {
         },
         skip: !user
     });
-    const watchlist: [ { item: FilmWatchlist } ] = watchlistQuery?.watchlist?.edges;
+    const watchlist: [ { item: FilmWatchlist } ] = watchlistQuery?.user_movie_watchlistCollection?.edges;
 
     useEffect(() => {
         const fetchData = async () => {

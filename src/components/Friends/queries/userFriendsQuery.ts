@@ -1,15 +1,15 @@
 import { gql } from "@apollo/client";
-import FRIEND_FRAGMENT from "../fragments/friendFragment";
+import USER_FRIEND_FRAGMENT from "../fragments/userFriendFragment";
 
 export default gql`
     query UserFriends($user_id: UUID!) {
-        friendCollection(filter: { user_id: { eq: $user_id }}) {
+        user_friendCollection(filter: { user_id: { eq: $user_id }}) {
             edges {
                 friend: node {
-                    ...Friend
+                    ...UserFriend
                 }
             }
         }
     }
-    ${FRIEND_FRAGMENT}
+    ${USER_FRIEND_FRAGMENT}
 `

@@ -52,7 +52,7 @@ export default function UserCard({
         )
 
     return (
-        <HoverCard >
+        <HoverCard>
             <HoverCardTrigger asChild>
                 <UserLink user={user} className={cn("", className)} icon={icon} />
             </HoverCardTrigger>
@@ -87,16 +87,17 @@ function UserLink({ user, className, icon } : UserLinkProps) {
     return (
         <Link href={'/@' + user?.username} className={cn("flex items-center gap-2 w-fit", className)}>
             <UserAvatar className="w-[25px] h-[25px]" user={user} />
+            {!icon &&
             <div 
                 className={`flex justify-center items-center gap-1
-                    ${icon && 'hidden lg:flex'}
                 `}
             >
                 <span className='hover:underline'>
                 {user?.username}
                 </span>
-                {user?.verify && <BsFillPatchCheckFill fill="#1D9BF0" size={16} />}
+                {user?.verified && <BsFillPatchCheckFill fill="#1D9BF0" size={16} />}
             </div>
+            }
         </Link>
     )
 }

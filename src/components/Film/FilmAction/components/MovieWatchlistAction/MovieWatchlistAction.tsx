@@ -46,13 +46,13 @@ export function MovieWatchlistAction({
     queryFn: async () => {
       const { data } = await supabase
         .from('user_movie_activity')
-        .select(`*, review(*)`)
+        .select(`*, review:user_movie_review(*)`)
         .eq('film_id', filmId)
-        .eq('user_id', user?.id)
+        .eq('user_id', user!.id)
         .maybeSingle()
       return (data)
     },
-    enabled: user?.id !== undefined && user?.id !== null,
+    enabled: !!user,
   });
 
   const {
@@ -66,11 +66,11 @@ export function MovieWatchlistAction({
         .from('user_movie_watchlist')
         .select('*')
         .eq('film_id', filmId)
-        .eq('user_id', user?.id)
+        .eq('user_id', user!.id)
         .maybeSingle()
       return (data)
     },
-    enabled: user?.id !== undefined && user?.id !== null,
+    enabled: !!user,
   });
 
   const {

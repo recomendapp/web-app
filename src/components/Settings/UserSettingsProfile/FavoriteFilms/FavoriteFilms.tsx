@@ -1,7 +1,7 @@
 "use client";
 
 import MovieCard from "@/components/Film/Card/MovieCard";
-import { MouseSensor, TouchSensor } from "@/components/Playlist/FilmPlaylist/PlaylistEdit/components/CustomSensor";
+import { MouseSensor, TouchSensor } from "@/components/DragNDrop/CustomSensor";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";

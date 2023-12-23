@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { PlaylistItem } from "@/types/type.playlist";
 import { StickyNote } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import PlaylistEditCommentInputMobile from "@/components/Playlist/FilmPlaylist/PlaylistEdit/components/PlaylistEditCommentInputMobile";
+import PlaylistEditCommentInputMobile from "./PlaylistEditCommentInputMobile";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export default function PlaylistEditCommentBottomSheet({

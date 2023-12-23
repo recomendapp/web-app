@@ -17,7 +17,7 @@ export default function FriendsList() {
         },
         skip: !user
       });
-      const friends: [ { friend: Friend } ] = userFriendsQuery?.friendCollection?.edges;
+      const friends: [ { friend: Friend } ] = userFriendsQuery?.user_friendCollection?.edges;
     
 
     if (!user)

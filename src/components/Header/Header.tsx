@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { UserNav } from '../User/UserNav/UserNav';
 import HeaderLeftSide from './HeaderLeftSide';
 import { createServerClient } from '@/lib/supabase/server';
+import HeaderCenterSide from './HeaderCenterSide';
 
 interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -17,24 +18,21 @@ export async function Header({ className }: HeaderProps) {
   return (
     <header
       className={cn(
-        'hidden sticky top-0 z-[1] bg-background lg:flex justify-between items-center border-b p-4 lg:h-header lg:border-b-0',
+        'hidden sticky top-0 z-[1] bg-background lg:flex justify-between items-center border-b p-4 lg:h-header',
         className
       )}
     >
-      <div className="flex flex-col gap-4 w-full items-center lg:flex-row">
-        <HeaderLeftSide />
-      </div>
-      <div className="hidden lg:block">
-        { !session ?
-          <Button asChild>
-            <Link href={'/login'} className="whitespace-nowrap">
-              Se connecter
-            </Link>
-          </Button> 
-        :
-          <UserNav />
-        }
-      </div>
+      <HeaderLeftSide />
+      <HeaderCenterSide />
+      { !session ?
+        <Button asChild>
+          <Link href={'/login'} className="whitespace-nowrap">
+            Se connecter
+          </Link>
+        </Button> 
+      :
+        <UserNav />
+      }
     </header>
   );
 }

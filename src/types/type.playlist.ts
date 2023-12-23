@@ -25,15 +25,15 @@ export interface Playlist {
 }
 
 export interface PlaylistItem {
-    id: string,
-    created_at: string,
-    playlist_id: string,
-    film_id: number,
+    id?: number
+    created_at?: string
+    playlist_id: number
+    film_id: number
     film: Film,
-    user_id: string,
+    user_id: string
     user: User,
-    comment: string | null,
-    rank: number,
+    rank?: number
+    comment?: string | null
 }
 
 export interface PlaylistGuest {

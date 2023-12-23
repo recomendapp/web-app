@@ -10,8 +10,8 @@ import { cn } from '@/lib/utils';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { supabase } from '@/lib/supabase/client';
 
-import DELETE_FOLLOWER_MUTATION from '@/components/Profile/ProfileFollowButton/mutations/deleteFollowerMutation'
-import INSERT_FOLLOWER_MUTATION from '@/components/Profile/ProfileFollowButton/mutations/insertFollowerMutation'
+import INSERT_USER_FOLLOWER_MUTATION from '@/components/Profile/ProfileFollowButton/mutations/insertUserFollowerMutation'
+import DELETE_USER_FOLLOWER_MUTATION from '@/components/Profile/ProfileFollowButton/mutations/deleteUserFollowerMutation'
 
 interface UserFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   profile: User;
@@ -32,27 +32,27 @@ export function ProfileFollowButton({
     queryKey: ['user', user?.id, 'following', profile.id],
     queryFn: async () => {
       const { data } = await supabase
-        .from('follower')
+        .from('user_follower')
         .select('followee_id')
         .eq('followee_id', profile.id)
-        .eq('user_id', user?.id)
+        .eq('user_id', user!.id)
         .single()
       return (data ? true : false);
     },
-    enabled: user !== undefined && user !== null,
+    enabled: !!user,
   });
 
   const {
-    mutateAsync: deleteFollowerMutation,
-  } = useMutation(DELETE_FOLLOWER_MUTATION, {
+    mutateAsync: insertFollowerMutation,
+  } = useMutation(INSERT_USER_FOLLOWER_MUTATION, {
     onSuccess: (data, variables) => {
       queryClient.setQueryData([variables.user_id, 'following', variables.followee_id], data)
     }
   })
 
   const {
-    mutateAsync: insertFollowerMutation,
-  } = useMutation(INSERT_FOLLOWER_MUTATION, {
+    mutateAsync: deleteFollowerMutation,
+  } = useMutation(DELETE_USER_FOLLOWER_MUTATION, {
     onSuccess: (data, variables) => {
       queryClient.setQueryData([variables.user_id, 'following', variables.followee_id], data)
     }

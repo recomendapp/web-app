@@ -33,7 +33,7 @@ import { useMutation } from "@apollo/client"
 import { useAuth } from "@/context/AuthContext/auth-context"
 
 import GUIDELIST_QUERY from '@/components/Playlist/Guidelist/queries/guidelistQuery'
-import DELETE_GUIDELIST_ITEM_MUTATION from '@/components/Playlist/Guidelist/mutations/deleteGuidelistItemMutation'
+import DELETE_GUIDELIST_MUTATION from '@/components/Playlist/Guidelist/mutations/deleteUserMovieGuidelistMutation'
 
 
 
@@ -54,7 +54,7 @@ export function DataTableRowActions({
   const { user } = useAuth();
   const [ openShowDirectors, setOpenShowDirectors ] = useState(false);
   const [ openComment, setOpenComment ] = useState(false);
-  const [deleteGuidelistItemMutation] = useMutation(DELETE_GUIDELIST_ITEM_MUTATION, {
+  const [deleteGuidelistItemMutation] = useMutation(DELETE_GUIDELIST_MUTATION, {
     refetchQueries: [
       {
         query: GUIDELIST_QUERY,

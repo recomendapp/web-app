@@ -6,8 +6,6 @@ import { fontSans } from '@/lib/fonts';
 import { cn } from "@/lib/utils";
 import Providers from '@/context/Providers';
 import HelloNerd from '@/components/Console/HelloNerd';
-import { NextIntlClientProvider } from 'next-intl';
-import { notFound } from 'next/navigation';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -69,26 +67,17 @@ interface RootLayoutProps {
 }
 
 export default async function LangLayout({ children, params: { lang } }: RootLayoutProps) {
-  let dictionary;
-  try {
-    dictionary = (await import(`@/dictionaries/${lang}.json`)).default;
-  } catch (error) {
-    notFound();
-  }
-  
   return (
-    <html className='scroll-smooth' lang={lang} suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <body
         className={cn(
-          'bg-background-border font-sans antialiased',
+          'font-sans antialiased',
           fontSans.variable
         )}
       >
         <HelloNerd />
-        <Providers>
-          <NextIntlClientProvider locale={lang} messages={dictionary}>
-            {children}
-          </NextIntlClientProvider>
+        <Providers locale={lang}>
+          {children}
         </Providers>
       </body>
     </html>

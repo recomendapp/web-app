@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabase/client";
-import { PlaylistItem } from "@/types/type.playlist";
-import { Check, X } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -10,7 +8,7 @@ export default function PlaylistEditCommentInputMobile({
     playlistItem,
     setOpen,
 } : {
-    playlistItem: PlaylistItem,
+    playlistItem: Database['public']['Tables']['playlist_item']['Row'],
     setOpen: Dispatch<SetStateAction<boolean>>
 }) {
     const [ comment, setComment ] = useState('');

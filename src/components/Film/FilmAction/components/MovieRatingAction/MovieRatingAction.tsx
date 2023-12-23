@@ -60,13 +60,13 @@ export function MovieRatingAction({
     queryFn: async () => {
       const { data } = await supabase
         .from('user_movie_activity')
-        .select(`*, review(*)`)
+        .select(`*, review:user_movie_review(*)`)
         .eq('film_id', filmId)
-        .eq('user_id', user?.id)
+        .eq('user_id', user!.id)
         .maybeSingle()
       return (data)
     },
-    enabled: user?.id !== undefined && user?.id !== null,
+    enabled: !!user,
   });
 
   const {
@@ -113,7 +113,7 @@ export function MovieRatingAction({
     }
   }
   const handleUnrate = async () => {
-    if (activity.review) {
+    if (activity?.review) {
       toast.error('Impossible car vous avez une critique sur ce film');
       return ;
     }

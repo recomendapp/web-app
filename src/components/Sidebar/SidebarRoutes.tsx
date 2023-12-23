@@ -1,43 +1,43 @@
 import { Compass, Home, Search, Zap } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { Box } from "../Box/Box";
 import { useLocale, useTranslations } from "next-intl";
+import { SidebarContext } from "./Sidebar";
 
 
 export function SidebarRoutes({
-    sidebarExpanded,
     className,
 } : {
-    sidebarExpanded: boolean;
     className?: string;
 }) {
-    const t = useTranslations('sidebar');
+    const t = useTranslations('routes');
+    const { sidebarExpanded } = useContext(SidebarContext);
     const pathname = usePathname();
     const mainRoutes = useMemo(
         () => [
         {
             icon: Home,
-            label: t('routes.home'),
+            label: t('home'),
             active: pathname === '/',
             href: '/',
         },
         {
             icon: Compass,
-            label: t('routes.explore'),
+            label: t('explore'),
             active: pathname === '/explore',
             href: '/explore',
         },
         {
             icon: Zap,
-            label: t('routes.feed'),
+            label: t('feed'),
             active: pathname.startsWith('/feed'),
             href: '/feed',
         },
         {
             icon: Search,
-            label: t('routes.search'),
+            label: t('search'),
             active: pathname.startsWith('/search') || pathname.startsWith('/movie'),
             href: '/search',
         },
@@ -46,26 +46,53 @@ export function SidebarRoutes({
     );
     return (
         <Box
-            className={`flex flex-col gap-1 py-2
-                ${sidebarExpanded ? 'px-3' : 'px-1 items-center'}
+            className={`
+                    flex flex-col
+                    ${!sidebarExpanded && 'items-center'}
             `}
         >
-            {mainRoutes.map((item) => (
-            <Link
-                key={item.label}
-                href={item.href}
-                className={`flex items-center gap-2 text-base h-[40px] py-1 px-3 font-bold hover:text-primary transition-all
-                ${
-                    item.active
-                    ? 'text-primary'
-                    : 'text-primary-subued'
-                }
-                `}
-            >
-                <item.icon className="h-6 w-6" />
-                {sidebarExpanded && item.label}
-            </Link>
-            ))}
+            <ul>
+                {mainRoutes.map((item) => (
+                    <li key={item.label}>
+                        <Link
+                            href={item.href}
+                            className={`
+                                relative flex items-center p-2 my-1
+                                font-medium rounded-md transition-all
+                                group
+                                ${item.active
+                                    ? 'text-primary'
+                                    : 'text-primary-subued hover:text-primary'
+                                }
+                            `}
+                        >
+                            <item.icon/>
+                            <span
+                                className={`
+                                    overflow-hidden transition-all
+                                    ${sidebarExpanded ? 'w-52 ml-3' : "w-0"}
+                                `}
+                            >
+                                {item.label}
+                            </span>
+                            {/* {sidebarExpanded && item.label} */}
+                            {!sidebarExpanded && (
+                                <div
+                                    className={`
+                                        z-[1]
+                                        absolute left-full rounded-md px-2 py-1 ml-6
+                                        bg-muted text-sm whitespace-nowrap
+                                        invisible opacity-20 -translate-x-3 transition-all
+                                        group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
+                                    `}
+                                >
+                                    {item.label}
+                                </div>
+                            )}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
         </Box>
     )
 }

@@ -4,25 +4,37 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { Button } from "../ui/button";
 
+// WIDGETS
+import { MovieNowPlayingWidget } from "@/components/Widget/MovieNowPlayingWidget";
+import { MovieUpcomingWidget } from "@/components/Widget/MovieUpcomingWidget";
+import { ImageWithFallback } from "../utils/ImageWithFallback";
+import { AspectRatio } from "../ui/aspect-ratio";
+
 export default function Welcome() {
     return (
-        <main className="h-full flex items-center justify-center">
-            <div className="flex flex-col gap-4 items-center">
-                <h3 className="text-lg font-bold">
-                    Bienvenue sur
-                </h3>
+    <main className="flex flex-col gap-2">
+        <div className=" bg-background-border w-full flex flex-col p-4 items-center">
+            <h3 className="text-lg font-bold">
+                Bienvenue sur
+            </h3>
+            <div className="relative w-full h-[10vh]">
                 <Image
                     src={siteConfig.logo.href}
                     alt={siteConfig.logo.alt}
-                    width={500}
-                    height={500}
+                    fill
+                    className="object-scale-down"
                 />
-                <Button asChild>
-                    <Link href={'/login'}>
-                        Getting started
-                    </Link>
-                </Button>
             </div>
-        </main>
+            <Button variant={'link'} asChild>
+                <Link href={'/login'}>
+                    Getting started
+                </Link>
+            </Button>
+        </div>
+        <div className="px-4 pb-4">
+            <MovieNowPlayingWidget/>
+            <MovieUpcomingWidget/>
+        </div>
+    </main>
     )
 }

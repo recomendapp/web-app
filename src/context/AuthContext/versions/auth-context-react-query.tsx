@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useQuery } from 'react-query';
 
 export interface UserState {
-  user: User | null | undefined;
+  user: any | null | undefined;
   session: Session | null | undefined;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
@@ -65,7 +65,7 @@ export const AuthContext = ({
       const { data } = await supabase
         .from('user')
         .select(`*, subscriptions(*, prices(*, products(*)))`)
-        .eq('id', session?.user?.id)
+        .eq('id', session!.user?.id)
         .single()
       return (data)
     },

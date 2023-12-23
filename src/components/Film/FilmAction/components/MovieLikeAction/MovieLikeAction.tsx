@@ -40,13 +40,13 @@ export function MovieLikeAction({
     queryFn: async () => {
       const { data } = await supabase
         .from('user_movie_activity')
-        .select(`*, review(*)`)
+        .select(`*, review:user_movie_review(*)`)
         .eq('film_id', filmId)
-        .eq('user_id', user?.id)
+        .eq('user_id', user!.id)
         .maybeSingle()
       return (data)
     },
-    enabled: user?.id !== undefined && user?.id !== null,
+    enabled: !!user?.id,
   });
 
   const {
@@ -121,7 +121,7 @@ export function MovieLikeAction({
                 <AlertCircle />
               ) : (
                 <Heart
-                  className={`transition hover:text-like`}
+                  className={`transition hover:text-accent-pink`}
                 />
               )}
             </Button>
@@ -157,8 +157,8 @@ export function MovieLikeAction({
             ) : (
               <Heart
                 className={`
-                  transition hover:text-like
-                  ${activity?.is_liked && 'text-like fill-like'}
+                  transition hover:text-accent-pink
+                  ${activity?.is_liked && 'text-accent-pink fill-accent-pink'}
                 `}
               />
             )}

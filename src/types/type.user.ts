@@ -1,24 +1,27 @@
 import { Subscription, SubscriptionWithProduct } from "@/types/type.stripe";
+import { Json } from "@/types/type.db";
 
 export interface User {
-    id: string,
-    username: string,
-    username_updated_at: string,
-    full_name: string,
-    avatar_url: string,
-    background_url: string,
-    bio: string,
-    verify: boolean,
-    language: string,
-    badge: string,
-    website: string,
-    favorite_color: string,
-    favorite_films: number[],
-    followers_count: string,
-    following_count: string,
-    friends_count: string,
+    avatar_url: string | null
+    background_url: string | null
+    billing_address: Json | null
+    bio: string | null
+    created_at: string
+    favorite_color: string | null
+    favorite_films: number[] | null
+    followers_count: number
+    following_count: number
+    friends_count: number
+    full_name: string
+    id: string
+    language: string
+    payment_method: Json | null
     premium: boolean
-    verified: boolean,
+    updated_at: string | null
+    username: string
+    username_updated_at: string | null
+    verified: boolean
+    website: string | null,
     subscriptions: {
         edges: [
             {node: SubscriptionWithProduct}

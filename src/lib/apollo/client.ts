@@ -5,7 +5,6 @@ import {
   createHttpLink
 } from "@apollo/client";
 import { setContext } from '@apollo/client/link/context';
-import { BatchHttpLink } from "@apollo/client/link/batch-http";
 
 const isServer = typeof window === "undefined";
 

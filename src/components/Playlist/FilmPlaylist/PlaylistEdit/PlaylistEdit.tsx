@@ -12,7 +12,7 @@ import { range } from 'lodash';
 import { XCircle } from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import PlaylistEditComment from './components/PlaylistEditComment';
-import { MouseSensor, TouchSensor } from './components/CustomSensor';
+import { MouseSensor, TouchSensor } from '@/components/DragNDrop/CustomSensor';
 import {
     Table,
     TableBody,
@@ -23,14 +23,13 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import toast from 'react-hot-toast';
-import { revalidatePath } from 'next/cache';
 
 export default function PlaylistEdit({
-  playlistId,
-  serverPlaylistItems,
+    playlistId,
+    serverPlaylistItems,
 }: {
-  playlistId: string;
-  serverPlaylistItems: PlaylistItem[];
+    playlistId: string;
+    serverPlaylistItems: Database['public']['Tables']['playlist_item']['Row'][];
 }) {
     const { user } = useAuth();
 
@@ -160,7 +159,7 @@ const SortablePlaylistItem = ({
     item,
     index,
 } : {
-    item:PlaylistItem,
+    item:Database['public']['Tables']['playlist_item']['Row'],
     index: number,
 }) => {
     const {

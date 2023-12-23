@@ -37,7 +37,7 @@ export function PlaylistCreateButton({
             <Button
                 variant={'ghost'}
                 size={'icon'}
-                className="rounded-full"
+                className="rounded-full shrink-0"
                 onClick={() => setOpen(!open)}
             >
                 {icon ?

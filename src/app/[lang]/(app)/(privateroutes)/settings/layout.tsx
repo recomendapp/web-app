@@ -14,7 +14,7 @@ interface SettingsLayoutProps {
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   const t = useTranslations('settings');
   return (
-    <main className="p-4 lg:pt-0 flex flex-col gap-4">
+    <main className="p-4 flex flex-col gap-4">
       <div className="">
         <h2 className="text-2xl font-bold">{t('label')}</h2>
         <p className="text-muted-foreground">

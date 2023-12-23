@@ -1,25 +1,75 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { User } from "@/types/type.user";
 import { supabase } from "@/lib/supabase/client";
 import MovieCard from "@/components/Film/Card/MovieCard";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useInfiniteQuery } from "react-query";
+import { Fragment, useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 
-export default async function ProfileLastActivity({
+export default function ProfileLastActivity({
     profile,
 } : {
     profile: User
 }) {
 
-    const {
-        data: films
-    } = await supabase
-        .from('user_movie_activity')
-        .select('*, user(*), review(*)')
-        .eq('user_id', profile.id)
-        .limit(4)
-        .order('created_at', { ascending: false });
+    const [ order, setOrder ] = useState("watch-desc")
+    const { ref, inView } = useInView();
 
-    if (!films?.length)
+    const numberOfResult = 10;
+  
+    const {
+        data: films,
+        isLoading: loading,
+        fetchNextPage,
+        isFetchingNextPage,
+        hasNextPage,
+        } = useInfiniteQuery({
+        queryKey: ['user', profile.id, 'films', order],
+        queryFn: async ({ pageParam = 1 }) => {
+            let from = (pageParam - 1) * numberOfResult;
+            let to = from - 1 + numberOfResult;
+            let column;
+            let ascending;
+
+            const [tablePart, orderPart] = order.split('-');
+
+            if (tablePart === "like") {
+                column = 'created_at';
+            } else if (tablePart == "rating") {
+                column = 'rating';
+            } else {
+                column = 'date';
+            }
+
+            if (orderPart === "desc")
+                ascending = false;
+            else
+                ascending = true;
+
+            const { data } = await supabase
+                .from('user_movie_activity')
+                .select('*, user(*), review:user_movie_review(*)')
+                .eq('user_id', profile.id)
+                .range(from, to)
+                .order(column, { ascending });
+
+            return (data);
+        },
+        getNextPageParam: (data, pages) => {
+            return data?.length == numberOfResult ? pages.length + 1 : undefined  
+        },
+    });
+
+    useEffect(() => {
+        if (inView && hasNextPage)
+            fetchNextPage();
+    }, [inView, hasNextPage, fetchNextPage])
+
+    if (!films?.pages[0]?.length)
         return null;
 
     return (
@@ -33,9 +83,30 @@ export default async function ProfileLastActivity({
                         Tout afficher
                     </Link>
                 </Button>
-                
             </div>
-            <div className="grid grid-cols-4 md:grid-cols-6 2xl:grid-cols-8 gap-2">
+            <ScrollArea className="rounded-md">
+                <div className="flex space-x-4 pb-4">
+                    {films?.pages.map((page, i) => (
+                        <Fragment key={i}>
+                            {page?.map((film: any, index) => (
+                                <div key={film.id} className="w-[150px] pb-2"
+                                    {...(i === films.pages.length - 1 && index === page.length - 1
+                                        ? { ref: ref }
+                                        : {})}
+                                >
+                                    <MovieCard
+                                        filmId={film.film_id}
+                                        displayMode={"grid"}
+                                        movieActivity={film}
+                                    />
+                                </div>
+                            ))}
+                        </Fragment>
+                    ))}
+                </div>
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+            {/* <div className="grid grid-cols-4 md:grid-cols-6 2xl:grid-cols-8 gap-2">
                 {films.map((film: any) => (
                     <div key={film.film_id} className="">
                         <MovieCard
@@ -45,7 +116,7 @@ export default async function ProfileLastActivity({
                         />
                     </div>
                 ))}
-            </div>
+            </div> */}
         </div>
     )
 }

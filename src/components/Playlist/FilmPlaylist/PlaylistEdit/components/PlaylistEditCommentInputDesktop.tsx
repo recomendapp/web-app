@@ -1,14 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabase/client";
-import { PlaylistItem } from "@/types/type.playlist";
 import { Check, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export default function PlaylistEditCommentInputDesktop({
     playlistItem,
 } : {
-    playlistItem: PlaylistItem,
+    playlistItem: Database['public']['Tables']['playlist_item']['Row'],
 }) {
     const [ isEditing, setIsEditing ] = useState(false);
     const [ comment, setComment ] = useState('');

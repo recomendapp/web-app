@@ -34,10 +34,10 @@ module.exports = {
           foreground: 'var(--accent-1-foreground)',
           hover: 'hsl(var(--accent-1-hover))',
         },
-        'like': {
-          DEFAULT: 'var(--like)',
-          foreground: 'var(--like-foreground)',
-          hover: 'var(--like-hover)',
+        'accent-pink': {
+          DEFAULT: 'var(--accent-pink)',
+          foreground: 'var(--accent-pink-foreground)',
+          hover: 'var(--accent-pink-hover)',
         },
         primary: {
           DEFAULT: 'hsl(var(--primary))',

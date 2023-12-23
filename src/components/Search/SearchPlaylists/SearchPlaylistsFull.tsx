@@ -17,7 +17,7 @@ export default function SearchPlaylistsFull({
 
     const { ref, inView } = useInView();
 
-    const numberOfResult = 2;
+    const numberOfResult = 8;
 
     const { data: userPlaylistsQuery, loading, error, fetchMore, networkStatus } = useQuery(SEARCH_PLAYLIST_QUERY, {
         variables: {

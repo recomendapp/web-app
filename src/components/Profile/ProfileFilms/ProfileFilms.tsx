@@ -58,7 +58,7 @@ export default function ProfileFilms({
 
             const { data } = await supabase
                 .from('user_movie_activity')
-                .select('*, user(*), review(*)')
+                .select('*, user(*), review:user_movie_review(*)')
                 .eq('user_id', profile.id)
                 .range(from, to)
                 .order(column, { ascending });

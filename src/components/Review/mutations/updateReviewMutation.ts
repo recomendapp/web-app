@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import REVIEW_FRAGMENT from "@/components/Review/fragments/reviewFragment";
+import USER_MOVIE_REVIEW_FRAGMENT from "@/components/Review/fragments/reviewFragment";
 
 export default gql `
   mutation updateReview(
@@ -7,14 +7,14 @@ export default gql `
     $title: String!
     $body: String!
   ) {
-    updatereviewCollection(filter: { id: {eq: $id}}, set: {
+    updateuser_movie_reviewCollection(filter: { id: {eq: $id}}, set: {
       title: $title,
       body: $body
     }) {
       records {
-        ...Review
+        ...UserMovieReview
       }
     }
   }
-  ${REVIEW_FRAGMENT}
+  ${USER_MOVIE_REVIEW_FRAGMENT}
 `

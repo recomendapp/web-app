@@ -17,6 +17,7 @@ export const Box: React.FC<BoxProps> = ({ children, className }) => {
         h-fit
         w-full
         lg:rounded-lg
+        p-2
         `,
         className
       )}

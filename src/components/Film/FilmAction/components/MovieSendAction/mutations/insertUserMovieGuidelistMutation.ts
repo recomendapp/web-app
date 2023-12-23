@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import GUIDELIST_FRAGMENT from "@/components/Playlist/Guidelist/fragments/guidelistFragment";
+import USER_MOVIE_GUIDELIST_FRAGMENT from "@/components/Playlist/Guidelist/fragments/userMovieGuidelistFragment";
 
 export default gql `
   mutation insertGuidelist(
@@ -8,7 +8,7 @@ export default gql `
     $sender_user_id: UUI!
     $comment: String
   ) {
-    insertIntoguidelistCollection(
+    insertIntouser_movie_guidelistCollection(
       objects: {
         film_id: $film_id
         receiver_user_id: $receiver_user_id
@@ -17,9 +17,9 @@ export default gql `
       }
     ) {
       records {
-        ...Guidelist
+        ...UserMovieGuidelist
       }
     }
   }
-  ${GUIDELIST_FRAGMENT}
+  ${USER_MOVIE_GUIDELIST_FRAGMENT}
 `

@@ -1,7 +1,7 @@
 "use client"
 import { PlaylistItem } from "@/types/type.playlist"
-import PlaylistEditCommentInputDesktop from "@/components/Playlist/FilmPlaylist/PlaylistEdit/components/PlaylistEditCommentInputDesktop";
-import PlaylistEditCommentBottomSheet from "@/components/Playlist/FilmPlaylist/PlaylistEdit/components/PlaylistEditCommentBottomSheet";
+import PlaylistEditCommentInputDesktop from "./PlaylistEditCommentInputDesktop";
+import PlaylistEditCommentBottomSheet from "./PlaylistEditCommentBottomSheet";
 
 export default function PlaylistEditComment({
     playlistItem,

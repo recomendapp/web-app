@@ -2,14 +2,11 @@ import { Button } from "@/components/ui/button"
 import LanguageSwticher from "../Language/LanguageSwitcher"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Box } from "@/components/Box/Box";
+import { SidebarContext } from "./Sidebar";
+import { useContext } from "react";
 
-export default function SidebarFooter({
-    sidebarExpanded,
-    setSidebarExpanded
-} : {
-    sidebarExpanded: boolean;
-    setSidebarExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export default function SidebarFooter() {
+    const { sidebarExpanded, setSidebarExpanded } = useContext(SidebarContext);
     return (
         <Box className={`flex items-center px-3 py-2
             ${sidebarExpanded ? 'justify-between' : 'justify-center'}

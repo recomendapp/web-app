@@ -17,22 +17,35 @@ import { JSONContent } from "@tiptap/react";
 import { Button } from "@/components/ui/button";
 import { MovieReviewSettings } from "./MovieReviewSettings";
 import { Review } from "@/types/type.review";
-import ReviewUser from "./ReviewUser";
+import { FilmAction } from "@/types/type.film";
+import { cn } from "@/lib/utils";
+import Rating from "./ActivityIcon";
 
 export default function MovieReviewOverview({
-  review
+  review,
+  activity,
+  className,
 }: {
-  review: Review
+  review: Review,
+  activity: FilmAction,
+  className?: string,
 }) {
   return (
     <Link
       href={`/@${review.user.username}/film/${review.film_id}`}
-      className="w-full bg-muted px-4 py-2 transition rounded-3xl flex gap-4 justify-between"
+      className={cn("w-full bg-muted px-4 py-2 transition rounded-3xl flex flex-col gap-2", className)}
     >
-      <div className="flex flex-col gap-2">
-        <p className='font-semibold line-clamp-1'>
-          {review.title}
-        </p>
+        <div className="flex gap-2 justify-between">
+          <div className="flex gap-2 items-center">
+            <Rating rating={activity.rating} is_liked={activity.is_liked}/>
+            <p className='font-semibold line-clamp-1'>
+              {review.title}
+            </p>
+          </div>
+          <div className="flex justify-center items-start">
+            <MovieReviewSettings review={review} />
+          </div>
+        </div>
         <div className="flex gap-4 items-center">
           <UserCard user={review.user}/>
           <div className="text-muted-foreground flex items-center gap-2">
@@ -44,18 +57,9 @@ export default function MovieReviewOverview({
         <div className='overflow-hidden text-sm'>
           <Overview data={JSON.parse(review.body)} />
         </div>
-      </div>
-      <div className="grid grid-cols-1 grid-rows-3 gap-4 shrink-0">
-        <div className="flex justify-center items-start">
-          <MovieReviewSettings review={review} />
+        <div className="text-right">
+          ACTION
         </div>
-        <div className="flex justify-center items-center">
-          <ReviewUser rating={review.activity.rating}/>
-        </div>
-        <div className="flex justify-center items-end">
-          <Heart />
-        </div>
-      </div>
     </Link>
   )
   }

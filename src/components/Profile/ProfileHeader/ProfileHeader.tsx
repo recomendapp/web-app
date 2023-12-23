@@ -74,7 +74,7 @@ export default async function ProfileHeader({ profile } : { profile: User }) {
                 <section className='flex justify-between h-full'>
                     {/* PROFILE EXTRADATA */}
                     <div>
-                        {profile.badge && <p className='text-accent-1 italic'>{profile.badge}</p>}
+                        {/* {profile.badge && <p className='text-accent-1 italic'>{profile.badge}</p>} */}
                         {profile.bio && <p className="text-justify max-w-lg">{profile.bio}</p>}
                         {profile.website && <Link href={profile.website} className='flex gap-2 items-center' target='_blank'><LinkIcon width={15}/>{profile.website.replace(/(^\w+:|^)\/\//, '')}</Link>}
                     </div>
@@ -83,61 +83,5 @@ export default async function ProfileHeader({ profile } : { profile: User }) {
                 </section>
             </div>
         </HeaderBox>
-    )
-
-    return (
-        <div 
-            className={`
-            flex flex-col gap-4 p-4 
-            `}
-            style={{
-                background: `linear-gradient(to bottom, ${hexToRgb(profile?.favorite_color, 0.4)}, var(--background))`,
-            }}
-        >
-            <div className='flex gap-4'>
-                <UserAvatar className='h-20 w-20 lg:h-[150px] lg:w-[150px]' user={profile} />
-                <section className='flex flex-col gap-2 w-full'>
-                    <div className='flex flex-col lg:items-center justify-between gap-2 lg:flex-row'>
-                        <Link href={`/@${profile.username}`} className='flex items-center gap-2'>
-                            <h2 className='text-xl font-semibold'>{profile.full_name}</h2>
-                            {profile.verify && <BsFillPatchCheckFill fill="#1D9BF0" size={16} />}
-                            <span className='text-muted-foreground'>@{profile.username}</span>
-                        </Link>
-                        <div className='flex items-center gap-2'>
-                            <Button variant={'action'}>
-                                {/* {profile.followers_count} */}
-                                followers
-                            </Button>
-                            <Button variant={'action'}>
-                                {/* {profile.following_count} */}
-                                suivi(e)s
-                            </Button>
-                            <Button variant={'action'} asChild>
-                                <Link href={`/@${profile.username}/stats`}>
-                                <BarChart />
-                                </Link>
-                            </Button>
-                            {user?.id == profile.id &&
-                                <Button variant={'action'} asChild>
-                                    <Link href={'/settings/profile'}>
-                                        <Settings />
-                                    </Link>
-                                </Button>
-                            }
-                        </div>
-                    </div>
-                    <div className='flex justify-between h-full'>
-                        {/* PROFILE EXTRADATA */}
-                        <div>
-                            {profile.badge && <p className='text-accent-1 italic'>{profile.badge}</p>}
-                            {profile.bio && <p>{profile.bio}</p>}
-                            {profile.website && <Link href={profile.website} className='flex gap-2 items-center' target='_blank'><LinkIcon width={15}/>{profile.website.replace(/(^\w+:|^)\/\//, '')}</Link>}
-                        </div>
-                        {/* ACTION BUTTON */}
-                        <ProfileFollowButton profile={profile} />
-                    </div>
-                </section>
-            </div>
-        </div>
     )
   }

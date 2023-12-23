@@ -9,10 +9,13 @@ import FeaturedPlaylistBadge from "@/components/Badge/FeatuedPlaylistBadge";
 
 
 interface MoviePlaylistCardProps extends React.HTMLAttributes<HTMLElement> {
-    playlist: Playlist
+    playlist: any;
 }
 
-export default function MoviePlaylistCard({ className, playlist } : MoviePlaylistCardProps) {
+export default function MoviePlaylistCard({
+    className,
+    playlist
+} : MoviePlaylistCardProps) {
     return (
         <Link href={`/playlist/${playlist.id}`} className={cn("relative flex flex-col gap-2 bg-muted hover:bg-muted-hover rounded-md p-2", className)}>
             {playlist.featured && (

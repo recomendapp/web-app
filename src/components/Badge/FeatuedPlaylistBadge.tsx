@@ -12,12 +12,12 @@ export default function FeaturedPlaylistBadge() {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger className="absolute z-[1] top-4 right-4">
-                    <Badge className=" p-1">
-                        <Sparkles />
+                    <Badge className="p-1.5">
+                        <Sparkles/>
                     </Badge>
                 </TooltipTrigger>
                 <TooltipContent align='center' side="bottom">
-                    <p className=" max-w-[100px]">Mise en avant : Lorsqu&apos;une playliste est mise en avant elle est visible par tous dans la section Recherche</p>
+                    <p className=" max-w-[100px]">Featured playlist</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

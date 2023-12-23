@@ -247,29 +247,39 @@ const AddUser = ({
 						</>
 					)
 				:
-					(!loading && !users?.length) ? (
+					(!loading && query && !users?.length) ? (
 						<TableRow>
 							<TableCell>Aucun résultat.</TableCell>
 							<TableCell />
 						</TableRow>
 					)
 				:
-					users.map(({ user } : { user: User}, index) => (
+					(!loading && query && users?.length) ? users.map(({ user } : { user: User}, index) => (
 						<TableRow key={user.id} className='group'>
 							<TableCell className="text-muted-foreground font-medium">
 								<UserCard user={user} />
 							</TableCell>
 							<TableCell className="text-right">
-								<Button
+								{!invitedUserIds.includes(user.id) ? (
+									<Button
 									variant={"muted"}
 									onClick={() => handleAddUser(user.id)}
-								>
-									Inviter
-								</Button>
+									>
+										Inviter
+									</Button>
+								) : (
+									<Button
+										variant={"destructive"}
+									>
+										Invité
+									</Button>
+								)}
 							</TableCell>
 						</TableRow>
 					))
-				}
+				: (
+					<></>
+				)}
 			</TableBody>
 		</Table>
 	)

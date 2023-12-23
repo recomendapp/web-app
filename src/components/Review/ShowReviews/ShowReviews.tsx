@@ -53,7 +53,7 @@ export function ShowReviews({ filmId }: { filmId: string }) {
             ascending = true;
 
         const { data } = await supabase
-            .from('review')
+            .from('user_movie_review')
             .select('*, user(*), activity:user_movie_activity(*)')
             .eq('film_id', filmId)
             .range(from, to)
@@ -78,7 +78,6 @@ export function ShowReviews({ filmId }: { filmId: string }) {
   return (
     <div className="w-full h-full flex flex-col gap-2">
       <div className='flex flex-col gap-4 justify-between lg:flex-row'>
-        {/* <MovieUserReview movie={movie} /> */}
         <MyReviewButton filmId={filmId} />
         <div className='flex flex-1 justify-end gap-2 items-center'>
           Trier par
@@ -108,7 +107,7 @@ export function ShowReviews({ filmId }: { filmId: string }) {
                               ? { ref: ref }
                               : {})}
                       >
-                          <MovieReviewOverview key={review.id} review={review} />
+                          <MovieReviewOverview key={review.id} activity={review.activity} review={review} />
                       </div>
                   ))}
               </Fragment>
@@ -145,13 +144,13 @@ export function MyReviewButton({ filmId } : { filmId: string }) {
     queryFn: async () => {
       const { data } = await supabase
         .from('user_movie_activity')
-        .select(`*, review(*)`)
+        .select(`*, review:user_movie_review(*)`)
         .eq('film_id', filmId)
-        .eq('user_id', user?.id)
+        .eq('user_id', user!.id)
         .single()
       return (data)
     },
-    enabled: user?.id !== undefined && user?.id !== null,
+    enabled: !!user,
   });
 
 

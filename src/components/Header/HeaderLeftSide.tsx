@@ -7,12 +7,11 @@ import { PlaylistCreateButton } from "@/components/Playlist/Button/PlaylistCreat
 
 export default function HeaderLeftSide() {
     const pathname = usePathname();
-
     return (
-        <>
+        <div className="flex gap-4 items-center">
             <NavigationButton />
             {pathname.startsWith('/search') && <SearchBar />}
             {pathname == '/collection' && <PlaylistCreateButton />}
-        </>
+        </div>
     )
 }

@@ -18,6 +18,7 @@ interface Props {
   products: ProductWithPrices[];
   subscription: SubscriptionWithProduct | null;
   className?: string;
+  title?: boolean;
 }
 
 type BillingInterval = 'lifetime' | 'year' | 'month';
@@ -28,6 +29,7 @@ export default function Pricing({
   products,
   subscription,
   className,
+  title = true,
 }: Props) {
     const locale = useLocale();
     const intervals = Array.from(
@@ -155,15 +157,11 @@ export default function Pricing({
 
   return (
     <div className={cn("max-w-6xl px-4 py-8 space-y-4 mx-auto sm:py-24 sm:px-6 lg:px-8", className)}>
-        <div className="sm:flex sm:flex-col sm:align-center">
-            <h1 className="text-4xl font-extrabold text-white sm:text-center sm:text-6xl">
-            Pricing Plans
+        {title && <div className="sm:flex sm:flex-col sm:align-center">
+            <h1 className="text-4xl font-bold text-white sm:text-center sm:text-6xl">
+                Pricing Plans
             </h1>
-            {/* <p className="max-w-2xl m-auto mt-5 text-xl text-zinc-200 sm:text-center sm:text-2xl">
-            Start building for free, then add a site plan to go live. Account
-            plans unlock additional features.
-            </p> */}
-        </div>
+        </div>}
         <div className='flex flex-col gap-4 items-center'>
             <Tabs defaultValue={billingInterval} className="w-full lg:w-[400px] self-center ">
                     <TabsList className="grid w-full grid-cols-2">

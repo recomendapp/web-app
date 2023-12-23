@@ -3,7 +3,7 @@ import USER_FRAGMENT from "@/context/AuthContext/fragments/userFragment";
 import FILM_FRAGMENT from "@/components/Film/fragments/filmFragment";
 
 export default gql`
-    fragment Guidelist on guidelist {
+    fragment UserMovieGuidelist on user_movie_guidelist {
         id
         film_id
         film {

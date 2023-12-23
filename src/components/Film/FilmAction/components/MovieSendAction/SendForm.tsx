@@ -21,7 +21,7 @@ import { Dispatch, SetStateAction } from "react"
 import toast from "react-hot-toast"
 import { useMutation } from "@apollo/client"
 
-import INSERT_GUIDELIST_MUTATION from '@/components/Film/FilmAction/components/MovieSendAction/mutations/insertGuidelistMutation'
+import INSERT_GUIDELIST_MUTATION from '@/components/Film/FilmAction/components/MovieSendAction/mutations/insertUserMovieGuidelistMutation'
 
 const sendFormSchema = z.object({
     friends: z.array(z.object({
@@ -125,7 +125,7 @@ export default function SendForm({
                                     <FormLabel className="font-normal flex gap-2 items-center">
                                         <Avatar className="h-[50px] w-[50px] shadow-2xl">
                                             <AvatarImage
-                                                src={item.friend.avatar_url}
+                                                src={item.friend.avatar_url ?? ''}
                                                 alt={item.friend.username}
                                             />
                                             <AvatarFallback className="text-primary bg-muted text-[10px]">

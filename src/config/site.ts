@@ -1,4 +1,6 @@
 export type SiteConfig = typeof siteConfig;
+import icon from '@/assets/recomend_icon.svg';
+import logo from '@/assets/recomend_logo.svg';
 
 export const siteConfig = {
   name: 'Recomend',
@@ -12,10 +14,12 @@ export const siteConfig = {
   logo: {
     href: '/recomend_logo.svg',
     alt: 'Recomend Logo',
+    file: logo,
   },
   icon: {
     href: '/recomend_icon.svg',
     alt: 'Recomend Logo',
+    file: icon,
   },
   links: {
     twitter: 'https://twitter.com/xmesky',

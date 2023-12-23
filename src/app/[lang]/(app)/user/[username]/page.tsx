@@ -10,7 +10,7 @@ export default async function UserPage({ params } : { params: { username: string
   return (
     <main>
         <ProfileHeader profile={user}/>
-        <div className='px-4 flex justify-center'><ProfileNavbar profile={user} /></div>
+        <div className='px-4 pt-4 flex justify-center'><ProfileNavbar profile={user} /></div>
         <div className='p-4 flex flex-col gap-4'>
           <ProfileFavoriteFilms profile={user} />
           <ProfileLastActivity profile={user} />

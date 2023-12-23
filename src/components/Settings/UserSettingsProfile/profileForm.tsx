@@ -50,7 +50,7 @@ export function ProfileForm() {
       .max(50, {
         message: 'Le nom ne doit pas dépasser 50 caractères.',
       })
-      .regex(/^[a-zA-Z0-9\s\S]*$/),
+      .regex(/^(?!\s+$)[a-zA-Z0-9\s\S]*$/),
     bio: z
       .string()
       .max(150, {

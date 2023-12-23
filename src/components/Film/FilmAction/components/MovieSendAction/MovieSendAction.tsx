@@ -19,7 +19,7 @@ import USER_FRIENDS_QUERY from '../../../../Friends/queries/userFriendsQuery';
 import { Friend, User } from '@/types/type.user';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import INSERT_GUIDELIST_MUTATION from '@/components/Film/FilmAction/components/MovieSendAction/mutations/insertGuidelistMutation'
+import INSERT_GUIDELIST_MUTATION from '@/components/Film/FilmAction/components/MovieSendAction/mutations/insertUserMovieGuidelistMutation'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import SendForm from './SendForm';
@@ -43,7 +43,7 @@ export function MovieSendAction({ filmId }: MovieSendActionProps) {
     },
     skip: !user
   });
-  const friends: [ { friend: Friend } ] = userFriendsQuery?.friendCollection?.edges;
+  const friends: [ { friend: Friend } ] = userFriendsQuery?.user_friendCollection?.edges;
 
   const [ insertGuidelistMutation, { error: errorInsertGuidelist} ] = useMutation(INSERT_GUIDELIST_MUTATION)
 

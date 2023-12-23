@@ -1,15 +1,15 @@
 import { gql } from "@apollo/client";
-import GUIDELIST_FRAGMENT from "@/components/Playlist/Guidelist/fragments/guidelistFragment";
+import USER_MOVIE_GUIDELIST_FRAGMENT from "@/components/Playlist/Guidelist/fragments/userMovieGuidelistFragment";
 
 export default gql`
     query GuidelistQuery($user_id: UUID!){
-        guidelistCollection(filter: { receiver_user_id: { eq: $user_id }}) {
+        user_movie_guidelistCollection(filter: { receiver_user_id: { eq: $user_id }}) {
             edges {
                 item: node {
-                    ...Guidelist
+                    ...UserMovieGuidelist
                 }
             }
         }
     }
-    ${GUIDELIST_FRAGMENT}
+    ${USER_MOVIE_GUIDELIST_FRAGMENT}
 `

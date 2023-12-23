@@ -3,8 +3,12 @@
 import { useAuth } from "@/context/AuthContext/auth-context"
 import Loader from "@/components/Loader/Loader";
 import { useTranslations } from "next-intl";
-import PreviewWatchlist from "@/components/Dashboard/components/previewWatchlist";
-import PreviewGuidelist from "@/components/Dashboard/components/previewGuidelist";
+
+// WIDGETS
+import { UserMovieGuidelistWidget } from "@/components/Widget/UserMovieGuidelistWidget";
+import { UserMovieWatchlistWidget } from "@/components/Widget/UserMovieWatchlistWidget";
+import { MovieNowPlayingWidget } from "@/components/Widget/MovieNowPlayingWidget";
+import { MovieUpcomingWidget } from "@/components/Widget/MovieUpcomingWidget";
 
 export default function Dashboard() {
     const { user, loading } = useAuth();
@@ -12,13 +16,15 @@ export default function Dashboard() {
 
     if (!user || loading)
         return (
-            <Loader />
+            <Loader/>
         )
     return (
-        <main className="flex flex-col gap-4 p-4">
+        <main className="flex flex-col gap-2 p-4">
             <div className="text-4xl font-bold">{t('hello')} {user.full_name}</div>
-            <PreviewWatchlist />
-            <PreviewGuidelist />
+            <UserMovieWatchlistWidget/>
+            <UserMovieGuidelistWidget/>
+            <MovieNowPlayingWidget/>
+            <MovieUpcomingWidget/>
         </main>
     )
 }

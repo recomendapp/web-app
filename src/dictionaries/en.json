@@ -72,13 +72,17 @@
       "date": "1972"
     }
   },
-  "sidebar": {
-    "routes": {
-      "home": "Home",
-      "explore": "Explore",
-      "feed": "Feed",
-      "search": "Search"
-    }
+  "routes": {
+    "home": "Home",
+    "explore": "Explore",
+    "feed": "Feed",
+    "search": "Search",
+    "shop": "Shop",
+    "about": "About",
+    "help": "Help",
+    "settings": "Settings",
+    "library": "Library",
+    "logout": "Logout"
   },
   "settings": {
     "label": "Settings",
@@ -133,6 +137,15 @@
     },
     "security": {
       "label": "Security"
+    }
+  },
+  "feed": {
+    "user_movie_activity": {
+      "watched": "<name></name> a vu <movie></movie>",
+      "rated": "<name></name> a noté <movie></movie> avec un <rating></rating>",
+      "liked": "<name></name> a liké <movie></movie>",
+      "rated_liked": "<name></name> a liké et noté <movie></movie> avec un <rating></rating>",
+      "reviewed": "<name></name> a écrit une critique sur <movie></movie>"
     }
   }
 }

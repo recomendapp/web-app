@@ -73,7 +73,7 @@ export default function MovieReviewForm({ review } : MovieReviewFormProps) {
         {/* SETTINGS */}
         <div className='flex justify-end w-full gap-2'>
             {review.user.id == user?.id && 
-              <Button variant={'ghost'} size={'sm'} onClick={() => setEditable(true)}>
+              <Button variant={'ghost'} size={'sm'} onClick={() => editable ? updateReview() : setEditable(true)}>
                 <span className="sr-only">Modifier</span>
                 <FileEdit />
               </Button>
