@@ -2,7 +2,6 @@ import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
 import { Database } from '@/types/type.db';
-import { Price, Product } from '@/types/type.stripe';
 
 import { stripe } from '@/lib/stripe/stripe';
 import { toDateTime } from '@/lib/stripe/stripe-helpers';
