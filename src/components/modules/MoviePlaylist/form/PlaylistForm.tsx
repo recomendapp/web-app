@@ -151,8 +151,8 @@ export function PlaylistForm({
       const { data: createOutput } = await createPlaylistMutation({
         variables: {
           user_id: userId,
-          title: data.title,
-          description: data.description,
+          title: data.title.replace(/\s+/g, ' ').trim(),
+          description: data.description?.replace(/\s+/g, ' ').trim(),
           is_public: data.is_public,
         }
       })
@@ -190,8 +190,8 @@ export function PlaylistForm({
       setLoading(true);
       const payload: Record<string, any> = {
         id: playlist.id,
-        title: data.title,
-        description: data.description,
+        title: data.title.replace(/\s+/g, ' ').trim(),
+        description: data.description?.replace(/\s+/g, ' ').trim(),
         is_public: data.is_public,
       }
       if (newPoster) {
@@ -268,7 +268,7 @@ export function PlaylistForm({
                 <FormItem>
                   <FormLabel>Nom</FormLabel>
                   <FormControl>
-                    <Input {...field} id="title" placeholder="Ajoutez un nom" />
+                    <Input {...field} placeholder="Ajoutez un nom" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -283,9 +283,9 @@ export function PlaylistForm({
                   <FormControl>
                     <Textarea
                       {...field}
-                      id="name"
-                      placeholder="Ajoutez une description facultative"
+                      placeholder="Ajoutez une description..."
                       className='resize-none h-32'
+                      maxLength={300}
                     />
                   </FormControl>
                   <FormMessage />

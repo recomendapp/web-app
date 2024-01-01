@@ -29,9 +29,15 @@ interface TiptapProps {
   setBody: Dispatch<SetStateAction<JSONContent>>,
   editable?: boolean,
   defaultValue?: JSONContent,
+  placeholder?: string,
 }
 
-const Tiptap = ({ setBody, editable = true, defaultValue } : TiptapProps ) => {
+const Tiptap = ({
+  setBody,
+  editable = true,
+  defaultValue,
+  placeholder,
+} : TiptapProps ) => {
   const limit = 5000;
   const editor = useEditor({
     editable: editable,
@@ -42,7 +48,7 @@ const Tiptap = ({ setBody, editable = true, defaultValue } : TiptapProps ) => {
         limit,
       }),
       Placeholder.configure({
-        placeholder: 'Écrire une critique...',
+        placeholder: placeholder,
       }),
     ],
     content: defaultValue,

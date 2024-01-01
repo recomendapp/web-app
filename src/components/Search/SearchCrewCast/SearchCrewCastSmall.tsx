@@ -108,7 +108,7 @@ export default function SearchCrewCastSmall({
           {results.slice(0, 5).map((item: any) => (
             <Link
               key={item.id}
-              href={'/film/' + item.id}
+              href={'/person/' + item.id}
               className="text-sm flex justify-between p-2 hover:bg-secondary rounded-md"
             >
               <div className="flex items-center gap-2">

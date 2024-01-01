@@ -71,7 +71,7 @@ export default function CreateReviewForm({
               id: activity?.id,
               film_id: film.id,
               user_id: user.id,
-              title: title ? title.trim() : `Critique par ${user.username}`,
+              title: title.trim(),
               body: JSON.stringify(body),
             })
           if (error) throw error;
@@ -99,7 +99,7 @@ export default function CreateReviewForm({
                 <MovieAction filmId={film.id} rating like/>
               </div>
               {/* BODY */}
-              <Tiptap setBody={setBody}/>
+              <Tiptap setBody={setBody} placeholder="Écrire une critique..."/>
               {/* SUBMIT */}
               <Button disabled={loading} onClick={createReview}>
                   {loading && (

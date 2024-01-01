@@ -39,7 +39,7 @@ export default function Feed() {
     enabled: !!user,
   });
 
-  const numberOfResult = 20;
+  const numberOfResult = 10;
 
   const { data: feedQuery, loading, error, fetchMore, networkStatus } = useQueryApollo(FEED_QUERY, {
       variables: {
@@ -51,7 +51,7 @@ export default function Feed() {
           ],
           first: numberOfResult
       },
-      skip: !following && !user
+      skip: !following || !user
   })
   const feed: [ { node: FilmAction }] = feedQuery?.user_movie_activityCollection?.edges;
   const pageInfo: { hasNextPage: boolean, endCursor: string,} = feedQuery?.user_movie_activityCollection?.pageInfo;
