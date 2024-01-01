@@ -27,7 +27,6 @@ export async function POST(
     const sig = headers().get('Stripe-Signature');
 
     const webhookSecret =
-      process.env.STRIPE_WEBHOOK_SECRET_LIVE ??
       process.env.STRIPE_WEBHOOK_SECRET;
     let event: Stripe.Event;
 
