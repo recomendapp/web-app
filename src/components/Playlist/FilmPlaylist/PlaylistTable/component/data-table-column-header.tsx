@@ -3,26 +3,26 @@ import {
   ArrowUpIcon,
   CaretSortIcon,
   EyeNoneIcon,
-} from "@radix-ui/react-icons"
-import { Column, SortingState, flexRender } from "@tanstack/react-table"
+} from '@radix-ui/react-icons';
+import { Column, SortingState, flexRender } from '@tanstack/react-table';
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { useState } from "react"
-import { ChevronDown, ChevronUp, LucideIcon, Triangle } from "lucide-react"
+} from '@/components/ui/dropdown-menu';
+import { useState } from 'react';
+import { ChevronDown, ChevronUp, LucideIcon, Triangle } from 'lucide-react';
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
-  column: Column<TData, TValue>
-  title?: string
-  Icon?: LucideIcon
+  column: Column<TData, TValue>;
+  title?: string;
+  Icon?: LucideIcon;
 }
 
 export function DataTableColumnHeader<TData, TValue>({
@@ -31,38 +31,39 @@ export function DataTableColumnHeader<TData, TValue>({
   Icon,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-
-  const [sorting, setSorting] = useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   if (!column.getCanSort()) {
-    return <div className={cn(className)}>{title}</div>
+    return <div className={cn(className)}>{title}</div>;
   }
 
   return (
-    <div className={cn("flex items-center space-x-2", className)}>
+    <div className={cn('flex items-center space-x-2', className)}>
       {/* <DropdownMenu>
         <DropdownMenuTrigger asChild> */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="-ml-3 h-8 data-[state=open]:bg-muted whitespace-nowrap"
-            onClick={() => column.toggleSorting()}
-          >
-            {title && <span>{title}</span>}
-            {Icon && <Icon />}
-            {{
-              asc: <ChevronUp className=" ml-2 h-4 w-4 text-accent-1" />,
-              desc:  <ChevronDown className=" ml-2 h-4 w-4 text-accent-1" />,
-            }[column.getIsSorted() as string] ?? <CaretSortIcon className="ml-2 h-4 w-4" />}
-            {/* {column.getIsSorted() === "desc" ? (
+      <Button
+        variant="ghost"
+        size="sm"
+        className="-ml-3 h-8 data-[state=open]:bg-muted whitespace-nowrap"
+        onClick={() => column.toggleSorting()}
+      >
+        {title && <span>{title}</span>}
+        {Icon && <Icon />}
+        {{
+          asc: <ChevronUp className=" ml-2 h-4 w-4 text-accent-1" />,
+          desc: <ChevronDown className=" ml-2 h-4 w-4 text-accent-1" />,
+        }[column.getIsSorted() as string] ?? (
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        )}
+        {/* {column.getIsSorted() === "desc" ? (
               <ChevronDown className=" ml-2 h-4 w-4 text-accent-1" />
             ) : column.getIsSorted() === "asc" ? (
               <ChevronDown className=" ml-2 h-4 w-4 text-accent-1" />
             ) : (
               <CaretSortIcon className="ml-2 h-4 w-4" />
             )} */}
-          </Button>
-        {/* </DropdownMenuTrigger>
+      </Button>
+      {/* </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
             <ChevronUp className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
@@ -80,5 +81,5 @@ export function DataTableColumnHeader<TData, TValue>({
         </DropdownMenuContent>
       </DropdownMenu> */}
     </div>
-  )
+  );
 }

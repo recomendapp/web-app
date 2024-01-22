@@ -1,6 +1,6 @@
 //* Import tailwind-merge for combining Tailwind CSS classes.
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 //* Define the props interface for the Box component.
 interface BoxProps {

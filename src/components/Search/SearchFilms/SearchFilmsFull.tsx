@@ -12,11 +12,7 @@ import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 import { useLocale } from 'next-intl';
 
-export default function SearchFilmsFull({
-  query,
-}: {
-  query: string;
-}) {
+export default function SearchFilmsFull({ query }: { query: string }) {
   const { user } = useAuth();
 
   const locale = useLocale();
@@ -33,18 +29,19 @@ export default function SearchFilmsFull({
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ['search', query, 'films'],
-    queryFn: ({pageParam = 1}) => handleSearchMovies(query, locale, pageParam),
+    queryFn: ({ pageParam = 1 }) =>
+      handleSearchMovies(query, locale, pageParam),
     getNextPageParam: (results, pages) => {
-        return results?.length == numberOfResult ? pages.length + 1 : undefined  
+      return results?.length == numberOfResult ? pages.length + 1 : undefined;
     },
     enabled: !!query,
   });
 
-useEffect(() => {
-  if (inView && hasNextPage) {
-    fetchNextPage();
-  }
-}, [inView, hasNextPage, fetchNextPage])
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage]);
 
   if (loading) {
     return (
@@ -73,11 +70,7 @@ useEffect(() => {
   }
 
   if (!loading && !films) {
-    return (
-      <div>
-        Aucun résultat.
-      </div>
-    )
+    return <div>Aucun résultat.</div>;
   }
 
   return (
@@ -147,9 +140,7 @@ useEffect(() => {
           ))}
         </Fragment>
       ))}
-      {isFetchingNextPage &&
-        <Loader />
-      }
+      {isFetchingNextPage && <Loader />}
     </div>
   );
 }

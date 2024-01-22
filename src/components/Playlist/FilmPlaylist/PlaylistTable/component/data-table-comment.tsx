@@ -1,32 +1,60 @@
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { useAuth } from "@/context/AuthContext/auth-context";
-import { PlaylistItem } from "@/types/type.playlist";
-import { useMutation } from "@apollo/client";
-import { Column, Row, Table } from "@tanstack/react-table";
-import { Check, Cross, FileEdit, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { toast } from "react-hot-toast";
+import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext/auth-context';
+import { useLocale } from 'next-intl';
 
-import UPDATE_PLAYLIST_ITEM_MUTATION from '@/components/modules/MoviePlaylist/mutations/updatePlaylistItemMutation'
-import { supabase } from "@/lib/supabase/client";
+// COMPONENTS
+import ShowCommentModal from '@/components/Playlist/FilmPlaylist/PlaylistTable/component/ShowCommentModal';
 
-export function DataComment({
-    data,
-} : {
-    data: PlaylistItem,
-}) {
-    const [ comment, setComment ] = useState("");
+// GRAPHQL
+import { useQuery } from '@apollo/client';
+import GET_PLAYLIST_BY_ID from '@/graphql/Playlist/Playlist/queries/GetPlaylistById';
+import type { GetPlaylistByIdQuery, PlaylistItemFragment} from '@/graphql/__generated__/graphql';
 
-    useEffect(() => {
-        setComment(data.comment ?? '')
-    }, [data])
+export function DataComment({ playlistItem }: { playlistItem: PlaylistItemFragment }) {
 
-  
-    return (
-        <p className="line-clamp-5 break-all">
-            {comment}
-        </p>
+  const { user } = useAuth();
 
+  const locale = useLocale();
+
+  const [openCommentModal, setOpenCommentModal] = useState(false);
+
+  const { data: playlistQuery, refetch } = useQuery<GetPlaylistByIdQuery>(GET_PLAYLIST_BY_ID, {
+    variables: {
+      id: playlistItem.playlist_id,
+      locale: locale
+    },
+    skip: !playlistItem.playlist_id || !locale,
+  });
+  const playlist = playlistQuery?.playlistCollection?.edges[0]?.node;
+
+  const isAllowedToEdit = Boolean(
+    user?.id &&
+    playlist &&
+    (
+      user?.id === playlist?.user_id ||
+      (
+        playlist?.guests?.edges.some(
+          ({ node }) => node.user_id === user?.id && node.edit
+        ) &&
+        playlist?.user?.subscriptions?.edges.length! > 0
+      )
     )
+  );
+  
+  return (
+    <>
+      <p onClick={() => setOpenCommentModal((data) => !data)}>
+        {isAllowedToEdit ? (
+          playlistItem.comment ? (
+            <span className="line-clamp-2 break-all">{playlistItem.comment}</span>
+          ) : (
+            <span className='line-clamp-1 italic'>Ajouter un commentaire...</span>
+          )
+        ) : (
+          <p className="line-clamp-2 break-all">{playlistItem.comment}</p>
+        )}
+      </p>
+      <ShowCommentModal playlistItem={playlistItem} open={openCommentModal} setOpen={setOpenCommentModal}/>
+    </>
+  );
 }

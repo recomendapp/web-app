@@ -34,10 +34,10 @@ export default function SearchFilmsSmall({
           }
         })
         .catch((error) => {
-          toast.error("Une erreur s\'est produite");
+          toast.error("Une erreur s'est produite");
         });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   if (loading) {
@@ -127,9 +127,11 @@ export default function SearchFilmsSmall({
           {/* NAME */}
           <div className="flex flex-col justify-end">
             {/* MOVIE TITLE */}
-            <div className="text-2xl font-bold line-clamp-2 break-all overflow-hidden">{results[0].title}</div>
+            <div className="text-2xl font-bold line-clamp-2 break-all overflow-hidden">
+              {results[0].title}
+            </div>
             {/* MOVIE DIRECTOR */}
-            <div className='line-clamp-2'>
+            <div className="line-clamp-2">
               {results[0].credits.directors.length ? (
                 results[0].credits.directors.map(
                   (director: any, index: number) => (
@@ -156,73 +158,73 @@ export default function SearchFilmsSmall({
         </Link>
       </div>
       {/* MOVIE RESULTS */}
-      {results.length > 1 && <div className="flex flex-col gap-2 ">
-        <div className="flex justify-between items-end">
-          <div className="text-2xl font-bold">Films</div>
-          <Button variant="link" className="p-0 h-full" asChild>
-            <Link href={`/search/films?q=${query}`}>
-              Tout afficher
-            </Link>
-          </Button>
-        </div>
-        <div className="flex flex-col gap-2">
-          {results.slice(1, 5).map((item: any) => (
-            <Link
-              key={item.id}
-              href={'/film/' + item.id}
-              className="text-sm flex justify-between p-2 hover:bg-secondary rounded-md"
-            >
-              <div className="flex items-center gap-2">
-                {/* MOVIE COVER */}
-                <div className="w-[50px] shrink-0">
-                  <AspectRatio ratio={2 / 3}>
-                    <ImageWithFallback
-                      src={
-                        'https://image.tmdb.org/t/p/w500/' + item.poster_path
-                      }
-                      alt={item.title}
-                      fill
-                      className="rounded-md object-cover"
-                    />
-                  </AspectRatio>
-                </div>
-                {/* MOVIE DATA */}
-                <div className="flex flex-col">
-                  <p className='font-bold line-clamp-2 break-all overflow-hidden'>
-                    {item.title}
-                  </p>
-                  <div className='line-clamp-2'>
-                    {item.credits.directors.length ? (
-                      item.credits.directors.map(
-                        (director: any, index: number) => (
-                          <span key={director.id}>
-                            <Link
-                              href={`/person/${director.id}`}
-                              className="w-fit p-0 h-full text-accent-1 font-normal italic hover:underline underline-offset-4"
-                            >
-                              {director.name}
-                            </Link>
-                            {index !== item.credits.directors.length - 1 && (
-                              <span>, </span>
-                            )}
-                          </span>
+      {results.length > 1 && (
+        <div className="flex flex-col gap-2 ">
+          <div className="flex justify-between items-end">
+            <div className="text-2xl font-bold">Films</div>
+            <Button variant="link" className="p-0 h-full" asChild>
+              <Link href={`/search/films?q=${query}`}>Tout afficher</Link>
+            </Button>
+          </div>
+          <div className="flex flex-col gap-2">
+            {results.slice(1, 5).map((item: any) => (
+              <Link
+                key={item.id}
+                href={'/film/' + item.id}
+                className="text-sm flex justify-between p-2 hover:bg-secondary rounded-md"
+              >
+                <div className="flex items-center gap-2">
+                  {/* MOVIE COVER */}
+                  <div className="w-[50px] shrink-0">
+                    <AspectRatio ratio={2 / 3}>
+                      <ImageWithFallback
+                        src={
+                          'https://image.tmdb.org/t/p/w500/' + item.poster_path
+                        }
+                        alt={item.title}
+                        fill
+                        className="rounded-md object-cover"
+                      />
+                    </AspectRatio>
+                  </div>
+                  {/* MOVIE DATA */}
+                  <div className="flex flex-col">
+                    <p className="font-bold line-clamp-2 break-all overflow-hidden">
+                      {item.title}
+                    </p>
+                    <div className="line-clamp-2">
+                      {item.credits.directors.length ? (
+                        item.credits.directors.map(
+                          (director: any, index: number) => (
+                            <span key={director.id}>
+                              <Link
+                                href={`/person/${director.id}`}
+                                className="w-fit p-0 h-full text-accent-1 font-normal italic hover:underline underline-offset-4"
+                              >
+                                {director.name}
+                              </Link>
+                              {index !== item.credits.directors.length - 1 && (
+                                <span>, </span>
+                              )}
+                            </span>
+                          )
                         )
-                      )
-                    ) : (
-                      <span className="w-fit p-0 h-full text-accent-1 font-normal italic">
-                        Unknown
-                      </span>
-                    )}
+                      ) : (
+                        <span className="w-fit p-0 h-full text-accent-1 font-normal italic">
+                          Unknown
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex items-center">
-                {item.release_date ? item.release_date.split('-')[0] : 'n/a'}
-              </div>
-            </Link>
-          ))}
+                <div className="flex items-center">
+                  {item.release_date ? item.release_date.split('-')[0] : 'n/a'}
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>}
+      )}
     </div>
   );
 }

@@ -1,10 +1,10 @@
 {
-    "version": 8,
-    "id": "7e9212a6-3e95-4973-9818-ccdd4495cd85",
-    "name": "Paradise Picture",
-    "sources": {},
-    "layers": [],
-    "glyphs":"https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=xovgcl4cLfvN83i7rYlu",
-    "center": [0,0],
-    "zoom": 1
+  "version": 8,
+  "id": "7e9212a6-3e95-4973-9818-ccdd4495cd85",
+  "name": "Paradise Picture",
+  "sources": {},
+  "layers": [],
+  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=xovgcl4cLfvN83i7rYlu",
+  "center": [0, 0],
+  "zoom": 1
 }

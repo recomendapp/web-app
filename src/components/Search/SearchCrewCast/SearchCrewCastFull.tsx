@@ -12,11 +12,7 @@ import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 import { useLocale } from 'next-intl';
 
-export default function SearchCrewCastFull({
-  query,
-}: {
-  query: string;
-}) {
+export default function SearchCrewCastFull({ query }: { query: string }) {
   const { user } = useAuth();
 
   const locale = useLocale();
@@ -33,18 +29,19 @@ export default function SearchCrewCastFull({
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ['search', query, 'persons'],
-    queryFn: ({pageParam = 1}) => handleSearchPersons(query, locale, pageParam),
+    queryFn: ({ pageParam = 1 }) =>
+      handleSearchPersons(query, locale, pageParam),
     getNextPageParam: (results, pages) => {
-        return results?.length == numberOfResult ? pages.length + 1 : undefined  
+      return results?.length == numberOfResult ? pages.length + 1 : undefined;
     },
     enabled: !!query,
   });
 
-useEffect(() => {
-  if (inView && hasNextPage) {
-    fetchNextPage();
-  }
-}, [inView, hasNextPage, fetchNextPage])
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage]);
 
   if (loading) {
     return (
@@ -73,11 +70,7 @@ useEffect(() => {
   }
 
   if (!loading && !persons) {
-    return (
-      <div>
-        Aucun résultat.
-      </div>
-    )
+    return <div>Aucun résultat.</div>;
   }
 
   console.log(persons);
@@ -104,7 +97,7 @@ useEffect(() => {
                     alt={person.name}
                     fill
                     className="rounded-md object-cover"
-                    type='person'
+                    type="person"
                   />
                 </div>
                 {/* MOVIE DATA */}
@@ -121,9 +114,7 @@ useEffect(() => {
           ))}
         </Fragment>
       ))}
-      {isFetchingNextPage &&
-        <Loader />
-      }
+      {isFetchingNextPage && <Loader />}
     </div>
   );
 }

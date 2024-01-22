@@ -7,26 +7,26 @@ import { createRouteHandlerClient } from '@/lib/supabase/route';
 export async function POST() {
   try {
     const supabase = createRouteHandlerClient();
-    
+
     const {
-      data: { user }
+      data: { user },
     } = await supabase.auth.getUser();
 
     if (!user) throw Error('Could not get user');
     const customer = await createOrRetrieveCustomer({
       uuid: user.id || '',
-      email: user.email || ''
+      email: user.email || '',
     });
 
     if (!customer) throw Error('Could not get customer');
     const { url } = await stripe.billingPortal.sessions.create({
       customer,
-      return_url: `${getURL()}/settings/subscription`
+      return_url: `${location.origin}/settings/subscription`,
     });
 
     return NextResponse.json({ url });
   } catch (err: any) {
     console.log(err);
-    new NextResponse('Internal Error', { status: 500 })
+    new NextResponse('Internal Error', { status: 500 });
   }
-};
+}

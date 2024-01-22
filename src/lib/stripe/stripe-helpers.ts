@@ -14,17 +14,16 @@ export const getURL = () => {
 
 export const postData = async ({
   url,
-  data
+  data,
 }: {
   url: string;
   data?: { price: Price };
 }) => {
-
   const res: Response = await fetch(url, {
     method: 'POST',
     headers: new Headers({ 'Content-Type': 'application/json' }),
     credentials: 'same-origin',
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   });
 
   if (!res.ok) {

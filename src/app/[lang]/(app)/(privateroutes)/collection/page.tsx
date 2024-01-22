@@ -12,7 +12,7 @@ export default async function CollectionPage() {
   return (
     <main className="h-full">
       <div className="flex justify-between items-center w-full lg:hidden p-4">
-        <div className='flex gap-2 items-center'>
+        <div className="flex gap-2 items-center">
           <div className="text-2xl font-bold">Bibliothèque</div>
           <PlaylistCreateButton />
         </div>

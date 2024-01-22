@@ -3,7 +3,7 @@ import { Metadata, Viewport } from 'next';
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/lib/fonts';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 import Providers from '@/context/Providers';
 import HelloNerd from '@/components/Console/HelloNerd';
 
@@ -63,22 +63,18 @@ export const metadata: Metadata = {
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: { lang: string }
+  params: { lang: string };
 }
 
-export default async function LangLayout({ children, params: { lang } }: RootLayoutProps) {
+export default async function LangLayout({
+  children,
+  params: { lang },
+}: RootLayoutProps) {
   return (
     <html lang={lang} suppressHydrationWarning>
-      <body
-        className={cn(
-          'font-sans antialiased',
-          fontSans.variable
-        )}
-      >
+      <body className={cn('font-sans antialiased', fontSans.variable)}>
         <HelloNerd />
-        <Providers locale={lang}>
-          {children}
-        </Providers>
+        <Providers locale={lang}>{children}</Providers>
       </body>
     </html>
   );

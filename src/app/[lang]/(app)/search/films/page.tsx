@@ -1,30 +1,25 @@
-import SearchFilmsFull from "@/components/Search/SearchFilms/SearchFilmsFull";
-import { redirect } from "next/navigation";
+import SearchFilmsFull from '@/components/Search/SearchFilms/SearchFilmsFull';
+import { redirect } from 'next/navigation';
 
 export async function generateMetadata({
-    searchParams,
-  }: {
-    searchParams: {
-      q: string | undefined,
-    };
-  }) {
-    return {
-      title: `${searchParams.q} - Films`,
-    };
+  searchParams,
+}: {
+  searchParams: {
+    q: string | undefined;
+  };
+}) {
+  return {
+    title: `${searchParams.q} - Films`,
+  };
 }
 
 export default function SearchFilms({
-    searchParams
-} : {
-    searchParams?: {
-        q: string,
-    }
+  searchParams,
+}: {
+  searchParams?: {
+    q: string;
+  };
 }) {
-    if (!searchParams?.q)
-        redirect('/search')
-    return (
-        <SearchFilmsFull
-            query={searchParams?.q}
-        />
-    )
+  if (!searchParams?.q) redirect('/search');
+  return <SearchFilmsFull query={searchParams?.q} />;
 }

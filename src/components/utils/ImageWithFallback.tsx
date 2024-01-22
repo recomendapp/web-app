@@ -32,7 +32,7 @@ export const ImageWithFallback = ({
 
   return (
     <>
-      {imgSrc ?
+      {imgSrc ? (
         <Image
           alt={alt}
           height={height}
@@ -44,42 +44,36 @@ export const ImageWithFallback = ({
             setImgSrc('');
           }}
         />
-      :
-        <Fallback
-          type={type}
-          from="#363636"
-          to="#363636"
-        />
-      }
-
+      ) : (
+        <Fallback type={type} from="#363636" to="#363636" />
+      )}
     </>
-    
   );
 };
 
 export function Fallback({
   type,
   from,
-  to
-} : {
-  type?: string,
-  from: string,
-  to: string
+  to,
+}: {
+  type?: string;
+  from: string;
+  to: string;
 }) {
   return (
     <div
-    style={{
-      backgroundImage: `linear-gradient(to top right, ${from}, ${to})`,
-    }}
-    className={`w-full rounded-md flex items-center justify-center h-full`}
-  >
-    {type == 'playlist' ? 
-        <ListVideo color="#fff" className='w-2/5 h-2/5'/>
-      : type == 'person' ?
-        <UserIcon color="#fff" className='w-2/5 h-2/5'/>
-      :
-        <ImageIcon color="#fff" className='w-2/5 h-2/5'/>
-    }
-  </div>
-  )
+      style={{
+        backgroundImage: `linear-gradient(to top right, ${from}, ${to})`,
+      }}
+      className={`w-full rounded-md flex items-center justify-center h-full`}
+    >
+      {type == 'playlist' ? (
+        <ListVideo color="#fff" className="w-2/5 h-2/5" />
+      ) : type == 'person' ? (
+        <UserIcon color="#fff" className="w-2/5 h-2/5" />
+      ) : (
+        <ImageIcon color="#fff" className="w-2/5 h-2/5" />
+      )}
+    </div>
+  );
 }

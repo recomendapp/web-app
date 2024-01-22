@@ -30,7 +30,9 @@ export function AccountForm() {
 
   const { user, userRefresh, session } = useAuth();
 
-  const [ updateProfile, { data, loading, error } ] = useMutation(UPDATE_ACCOUNT_MUTATION);
+  const [updateProfile, { data, loading, error }] = useMutation(
+    UPDATE_ACCOUNT_MUTATION
+  );
 
   const date = new Date();
 
@@ -80,11 +82,12 @@ export function AccountForm() {
   });
 
   useEffect(() => {
-    user && form.reset({
-      username: user?.username,
-      email: session?.user.email,
-    })
-  }, [form, session?.user.email, user])
+    user &&
+      form.reset({
+        username: user?.username,
+        email: session?.user.email,
+      });
+  }, [form, session?.user.email, user]);
 
   async function onSubmit(data: ProfileFormValues) {
     try {
@@ -92,18 +95,17 @@ export function AccountForm() {
         variables: {
           id: user?.id,
           username: data.username,
-          username_updated_at: user?.username !== data.username ? date : null
-        }
+          username_updated_at: user?.username !== data.username ? date : null,
+        },
       });
       if (error) throw error;
-      toast.success('Enregistré');  
+      toast.success('Enregistré');
     } catch (error) {
       toast.error("Une erreur s'est produite");
     }
   }
 
-  if (!user)
-    return <Loader />
+  if (!user) return <Loader />;
 
   return (
     <Form {...form}>
@@ -113,16 +115,16 @@ export function AccountForm() {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='flex justify-between gap-4'>
+              <FormLabel className="flex justify-between gap-4">
                 <p>Nom d&apos;utilisateur</p>
-                <p className=''>{field?.value?.length ?? 0} / 15</p>
+                <p className="">{field?.value?.length ?? 0} / 15</p>
               </FormLabel>
               <FormControl>
                 <Input
                   disabled={
                     (date.getTime() - dateLastUsernameUpdate.getTime()) /
                       (1000 * 60 * 60 * 24) <
-                      30
+                    30
                       ? true
                       : false
                   }
@@ -144,11 +146,9 @@ export function AccountForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>
-                Adresse email{' '}
-              </FormLabel>
+              <FormLabel>Adresse email </FormLabel>
               <FormControl>
-                <Input placeholder={"Adresse mail"} {...field} disabled />
+                <Input placeholder={'Adresse mail'} {...field} disabled />
               </FormControl>
               <FormDescription className="flex flex-col md:flex-row w-full justify-between gap-4">
                 <div className="text-justify">
@@ -160,19 +160,19 @@ export function AccountForm() {
           )}
         />
         <Button type="submit" disabled={loading}>
-            {loading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Enregistrer
+          {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+          Enregistrer
         </Button>
       </form>
     </Form>
   );
 }
 
-
 export async function checkUsernameExist(username: string) {
-  const { data, error } = await supabase.from('user').select('*').eq('username', username)
+  const { data, error } = await supabase
+    .from('user')
+    .select('*')
+    .eq('username', username);
   if (error) throw error;
   if (data?.length) {
     return true;

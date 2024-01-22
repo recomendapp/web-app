@@ -65,9 +65,11 @@ export function SecurityForm() {
       return;
     }
     try {
-      const { error } = await supabase.auth.updateUser({ password: data.newpassword });
+      const { error } = await supabase.auth.updateUser({
+        password: data.newpassword,
+      });
       if (error) throw error;
-      toast.success('Enregistré');  
+      toast.success('Enregistré');
       form.reset();
     } catch (error) {
       toast.error("Une erreur s'est produite");
@@ -134,9 +136,7 @@ export function SecurityForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">
-          Enregistrer
-        </Button>
+        <Button type="submit">Enregistrer</Button>
       </form>
     </Form>
   );

@@ -1,6 +1,6 @@
-"use client"
+'use client';
 
-import * as React from "react"
+import * as React from 'react';
 import {
   ColumnFiltersState,
   RowData,
@@ -14,8 +14,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-
+} from '@tanstack/react-table';
 import {
   Table,
   TableBody,
@@ -23,40 +22,34 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table';
+import { DataTableToolbar } from './component/data-table-toolbar';
 
-import { DataTablePagination } from "./component/data-table-pagination"
-import { DataTableToolbar } from "./component/data-table-toolbar"
-
-import { columns } from "./component/columns"
-import { Models } from "appwrite"
-import { useMediaQuery } from "react-responsive"
-import { Guidelist } from "@/types/type.guidelist"
-import { FilmWatchlist } from "@/types/type.film"
+import { columns } from './component/columns';
+import { useMediaQuery } from 'react-responsive';
+import { UserMovieWatchlistFragment } from '@/graphql/__generated__/graphql';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
-    displayName: string
+    displayName: string;
   }
 }
 
 interface DataTableProps {
-  data: { item: FilmWatchlist; }[],
+  watchlist: { node: UserMovieWatchlistFragment }[];
 }
 
-export function TableWatchlist({
-  data,
-}: DataTableProps) {
-  const [rowSelection, setRowSelection] = React.useState({})
+export function TableWatchlist({ watchlist }: DataTableProps) {
+  const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+    React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  );
+  const [sorting, setSorting] = React.useState<SortingState>([]);
 
-  const table = useReactTable({
-    data,
+  const table = useReactTable<{ node: UserMovieWatchlistFragment }>({
+    data: watchlist,
     columns,
     state: {
       sorting,
@@ -75,24 +68,26 @@ export function TableWatchlist({
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-  })
+  });
 
   const isMobile = useMediaQuery({ maxWidth: 1024 });
   React.useEffect(() => {
     if (isMobile) {
-      table.getAllColumns()
+      table
+        .getAllColumns()
         .filter(
           (column) =>
-            typeof column.accessorFn !== "undefined" && column.getCanHide()
+            typeof column.accessorFn !== 'undefined' && column.getCanHide()
         )
         .forEach((column) => {
           column.toggleVisibility(false);
         });
     } else {
-      table.getAllColumns()
+      table
+        .getAllColumns()
         .filter(
           (column) =>
-            typeof column.accessorFn !== "undefined" && column.getCanHide()
+            typeof column.accessorFn !== 'undefined' && column.getCanHide()
         )
         .forEach((column) => {
           column.toggleVisibility(true);
@@ -118,7 +113,7 @@ export function TableWatchlist({
                             header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -128,7 +123,7 @@ export function TableWatchlist({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                   className="group"
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -155,5 +150,5 @@ export function TableWatchlist({
         </Table>
       </div>
     </div>
-  )
+  );
 }

@@ -10,10 +10,11 @@ import HeaderCenterSide from './HeaderCenterSide';
 interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export async function Header({ className }: HeaderProps) {
-  
   const supabase = createServerClient();
 
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
   return (
     <header
@@ -24,15 +25,15 @@ export async function Header({ className }: HeaderProps) {
     >
       <HeaderLeftSide />
       <HeaderCenterSide />
-      { !session ?
+      {!session ? (
         <Button asChild>
           <Link href={'/login'} className="whitespace-nowrap">
             Se connecter
           </Link>
-        </Button> 
-      :
+        </Button>
+      ) : (
         <UserNav />
-      }
+      )}
     </header>
   );
 }

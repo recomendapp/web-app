@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import React, { createContext, useContext, useState } from 'react';
 
@@ -19,18 +19,20 @@ const defaultState: RightSidebarContextType = {
   panelContent: null,
   setPanelContent: () => {},
   panelTitle: null,
-  setPanelTitle: () => {}
+  setPanelTitle: () => {},
 };
 
 const RightSidebarProvider = createContext(defaultState);
 
 export function RightSidebarContext({
-  children
-} : {
-  children: React.ReactNode
+  children,
+}: {
+  children: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [panelContent, setPanelContent] = useState<React.ReactNode | null>(null);
+  const [panelContent, setPanelContent] = useState<React.ReactNode | null>(
+    null
+  );
   const [panelTitle, setPanelTitle] = useState<string | null>(null); // Initialisez le titre
 
   const openPanel = () => {
@@ -43,7 +45,7 @@ export function RightSidebarContext({
 
   // const setPanelContent = (content: React.ReactNode) => {
   //   setPanelContent(content);
-  //   openPanel(); 
+  //   openPanel();
   // };
 
   // const setTitle = (title: string) => {
@@ -51,7 +53,17 @@ export function RightSidebarContext({
   // };
 
   return (
-    <RightSidebarProvider.Provider value={{ isOpen, openPanel, closePanel, panelContent, setPanelContent, panelTitle, setPanelTitle }}>
+    <RightSidebarProvider.Provider
+      value={{
+        isOpen,
+        openPanel,
+        closePanel,
+        panelContent,
+        setPanelContent,
+        panelTitle,
+        setPanelTitle,
+      }}
+    >
       {children}
     </RightSidebarProvider.Provider>
   );

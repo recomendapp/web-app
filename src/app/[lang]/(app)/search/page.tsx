@@ -1,4 +1,3 @@
-
 import FeaturedPlaylists from '@/components/Playlist/FeaturedPlaylists/FeaturedPlaylists';
 import SearchFilmsSmall from '@/components/Search/SearchFilms/SearchFilmsSmall';
 import SearchPlaylistsSmall from '@/components/Search/SearchPlaylists/SearchPlaylistsSmall';
@@ -10,7 +9,7 @@ export async function generateMetadata({
   searchParams,
 }: {
   searchParams?: {
-    q: string | undefined,
+    q: string | undefined;
   };
 }) {
   if (!searchParams?.q) {
@@ -27,18 +26,18 @@ export default function Search({
   searchParams,
 }: {
   searchParams?: {
-    q: string | undefined,
+    q: string | undefined;
   };
 }) {
   if (searchParams?.q)
     return (
       <Fragment>
-          <SearchFilmsSmall query={searchParams.q} />
-          <SearchPlaylistsSmall query={searchParams.q} />
-          <SearchUsersSmall query={searchParams.q} />
-          <SearchCrewCastSmall query={searchParams.q} />
+        <SearchFilmsSmall query={searchParams.q} />
+        <SearchPlaylistsSmall query={searchParams.q} />
+        <SearchUsersSmall query={searchParams.q} />
+        <SearchCrewCastSmall query={searchParams.q} />
       </Fragment>
-    )
+    );
 
-  return <FeaturedPlaylists />
+  return <FeaturedPlaylists />;
 }

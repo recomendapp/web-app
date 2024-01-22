@@ -29,9 +29,9 @@ export default function PlaylistPictureUpload({
           )}
           <ImageWithFallback
             src={
-              newPoster ? URL.createObjectURL(newPoster)
-              :
-              playlist?.poster_url ?? ''
+              newPoster
+                ? URL.createObjectURL(newPoster)
+                : playlist?.poster_url ?? ''
             }
             alt={playlist?.title ?? ''}
             fill

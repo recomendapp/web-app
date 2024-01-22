@@ -55,7 +55,7 @@ module.exports = {
         muted: {
           DEFAULT: 'var(--muted)',
           foreground: 'var(--muted-foreground)',
-          hover: 'var(--muted-hover)'
+          hover: 'var(--muted-hover)',
         },
         accent: {
           DEFAULT: 'hsl(var(--accent))',
@@ -72,8 +72,8 @@ module.exports = {
         navbar: 'var(--navbar-background-color)',
       },
       fontSize: {
-        clamp: "clamp(1rem, 5vw, 3rem)",
-        "clamp-title": "clamp(1rem, 5vw, 3rem)",
+        clamp: 'clamp(1rem, 5vw, 3rem)',
+        'clamp-title': 'clamp(1rem, 5vw, 3rem)',
       },
       height: {
         header: 'var(--height-header)',
@@ -154,6 +154,6 @@ module.exports = {
   plugins: [
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
-    require('@tailwindcss/container-queries')
+    require('@tailwindcss/container-queries'),
   ],
 };

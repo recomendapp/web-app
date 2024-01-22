@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 };
 
 export default function Watchlist() {
-
   return (
     <Fragment>
       <WatchlistPage />

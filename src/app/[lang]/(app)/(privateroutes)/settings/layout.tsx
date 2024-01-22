@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 
 export const metadata: Metadata = {
   title: 'Settings',
-  description: 'Recomend\'s settings',
+  description: "Recomend's settings",
 };
 
 interface SettingsLayoutProps {
@@ -17,9 +17,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
     <main className="p-4 flex flex-col gap-4">
       <div className="">
         <h2 className="text-2xl font-bold">{t('label')}</h2>
-        <p className="text-muted-foreground">
-          {t('description')}
-        </p>
+        <p className="text-muted-foreground">{t('description')}</p>
       </div>
       {/* <Separator className="my-6" /> */}
       <div className="flex flex-col lg:flex-row gap-4">

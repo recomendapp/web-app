@@ -14,20 +14,22 @@ const buttonVariants = cva(
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
           'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-        secondary:
-          'bg-muted text-secondary-foreground hover:bg-secondary/80',
+        secondary: 'bg-muted text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline !p-0',
         action: 'text-foreground hover:text-foreground/60',
         muted: 'bg-muted hover:bg-muted-hover',
         // ACCENT
-        'accent-1': 'bg-accent-1 text-accent-1-foreground hover:bg-background hover:text-accent-1',
+        'accent-1':
+          'bg-accent-1 text-accent-1-foreground hover:bg-background hover:text-accent-1',
         'accent-1-enabled': 'bg-accent-1-foreground text-accent-1',
         'accent-1-hover':
           'bg-accent-1 text-accent-1-foreground hover:bg-accent-1-hover',
         rating: 'text-foreground hover:text-accent-1',
-        'rating-enabled' : 'border-2 border-accent-1 text-accent-1 hover:text-accent-1-foreground hover:bg-accent-1 bg-background',
-        share: 'text-destructive-foreground hover:bg-blue-500/10 hover:text-blue-300 rounded-full',
+        'rating-enabled':
+          'border-2 border-accent-1 text-accent-1 hover:text-accent-1-foreground hover:bg-accent-1 bg-background',
+        share:
+          'text-destructive-foreground hover:bg-blue-500/10 hover:text-blue-300 rounded-full',
       },
       size: {
         default: 'h-10 px-4 py-2',
@@ -55,7 +57,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : 'button';
     return (
       <Comp
-        type='button'
+        type="button"
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}

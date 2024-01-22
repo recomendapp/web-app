@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 };
 
 export default function Login() {
-
   return (
     <main className="container h-full relative flex flex-col items-center justify-center">
       <div className="lg:p-8">

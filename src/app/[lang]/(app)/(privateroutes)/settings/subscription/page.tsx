@@ -18,7 +18,7 @@ export default function SettingsAccountPage() {
   const redirectToCustomerPortal = async () => {
     try {
       const { url } = await postData({
-        url: '/api/create-portal-link'
+        url: '/api/create-portal-link',
       });
       router.push(url);
     } catch (error) {
@@ -35,38 +35,42 @@ export default function SettingsAccountPage() {
         </p> */}
       </div>
       <Separator />
-      {!user ? 
+      {!user ? (
         <Loader />
-      :
-      <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-        {user.subscriptions.edges.length ?
+      ) : (
+        <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
+          {user?.subscriptions?.edges.length ? (
             <>
-              <p className="pb-4 sm:pb-0">You are currently on the <b>{user?.subscriptions.edges[0]?.node?.prices?.products?.name}</b> plan</p>
+              <p className="pb-4 sm:pb-0">
+                You are currently on the{' '}
+                <b>
+                  {user?.subscriptions.edges[0]?.node?.prices?.products?.name}
+                </b>{' '}
+                plan
+              </p>
               <Button
-                variant={"accent-1-enabled"}
+                variant={'accent-1-enabled'}
                 disabled={!session}
                 onClick={redirectToCustomerPortal}
               >
                 Open customer portal
               </Button>
             </>
-          :
+          ) : (
             <>
-              <p className="pb-4 sm:pb-0">You are currently on the <b>Free</b> plan</p>
-              <Button
-                variant={'accent-1-enabled'}
-                asChild
-              >
+              <p className="pb-4 sm:pb-0">
+                You are currently on the <b>Free</b> plan
+              </p>
+              <Button variant={'accent-1-enabled'} asChild>
                 <Link href={'/upgrade'}>
                   <Sparkles className="mr-2 h-4 w-4" />
                   <span>Upgrade to Premium</span>
                 </Link>
               </Button>
-                
             </>
-          }
+          )}
         </div>
-      }
+      )}
       {/* <AccountForm /> */}
     </div>
   );

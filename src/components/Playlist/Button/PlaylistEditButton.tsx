@@ -15,57 +15,50 @@ import PlaylistGuest from '@/components/Playlist/FilmPlaylist/PlaylistGuest/Play
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { PencilIcon } from 'lucide-react';
+import { PlaylistFragment } from '@/graphql/__generated__/graphql';
 
 export function PlaylistEditButton({
   children,
   filmId,
   playlist,
-  setPlaylist,
 }: {
-  children?: React.ReactNode,
+  children?: React.ReactNode;
   filmId?: string;
-  playlist?: Playlist;
-  setPlaylist?: Dispatch<SetStateAction<Playlist>>;
+  playlist?: PlaylistFragment;
 }) {
   const { user } = useAuth();
-  const [ open, setOpen ] = useState(false);
-  const [ view, setView ] = useState('general');
+  const [open, setOpen] = useState(false);
+  const [view, setView] = useState('general');
 
-  if (!user || user?.id != playlist?.user_id)
-    return children;
+  if (!user || user?.id != playlist?.user_id) return children;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <Button
-        variant={"ghost"}
-        size={"icon"}
-        className='absolute top-4 right-4 rounded-full'
+        variant={'ghost'}
+        size={'icon'}
+        className="absolute top-4 right-4 rounded-full"
         onClick={() => setOpen(!open)}
       >
-        <PencilIcon size={20}/>
+        <PencilIcon size={20} />
       </Button>
-      <div onClick={() => setOpen(!open)}>
-        {children}
-      </div>
+      <div onClick={() => setOpen(!open)}>{children}</div>
       <DialogContent className="max-w-3xl h-[98%] lg:h-2/3">
         {!playlist ? (
           <>
             <DialogHeader>
-              <DialogTitle>
-                Créer une playlist
-              </DialogTitle>
+              <DialogTitle>Créer une playlist</DialogTitle>
             </DialogHeader>
             <PlaylistForm
               success={() => setOpen(false)}
               userId={user?.id}
               filmId={filmId}
               playlist={playlist}
-              setPlaylist={setPlaylist}
             />
           </>
         ) : (
           <>
-            <DialogHeader className='flex-row space-y-0'>
+            <DialogHeader className="flex-row space-y-0">
               <DialogTitle
                 className={`py-2 px-4 border-b-2 cursor-pointer
                   ${view == 'general' ? 'border-accent-1' : 'border-muted'}
@@ -83,23 +76,19 @@ export function PlaylistEditButton({
                 Members
               </DialogTitle>
             </DialogHeader>
-              {view == 'general' && (
-                <PlaylistForm
-                  success={() => setOpen(false)}
-                  userId={user.id}
-                  filmId={filmId}
-                  playlist={playlist}
-                  setPlaylist={setPlaylist}
-                />
-              )}
-              {view == 'guest' && (
-                <ScrollArea className='border h-full'>
-                  <PlaylistGuest
-                    playlist={playlist}
-                    setPlaylist={setPlaylist}
-                  />
-                </ScrollArea>
-              )}
+            {view == 'general' && (
+              <PlaylistForm
+                success={() => setOpen(false)}
+                userId={user.id}
+                filmId={filmId}
+                playlist={playlist}
+              />
+            )}
+            {view == 'guest' && (
+              // <ScrollArea className="border h-full">
+                <PlaylistGuest playlist={playlist} />
+              // </ScrollArea>
+            )}
           </>
         )}
       </DialogContent>

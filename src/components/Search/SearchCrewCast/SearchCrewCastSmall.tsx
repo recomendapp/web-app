@@ -33,10 +33,10 @@ export default function SearchCrewCastSmall({
           }
         })
         .catch((error) => {
-          toast.error("Une erreur s\'est produite");
+          toast.error("Une erreur s'est produite");
         });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
   if (loading) {
@@ -95,49 +95,43 @@ export default function SearchCrewCastSmall({
   }
 
   return (
-      <div className="flex flex-col gap-2 ">
-        <div className="flex justify-between items-end">
-          <div className="text-2xl font-bold">Crew & Cast</div>
-          <Button variant="link" className="p-0 h-full" asChild>
-            <Link href={`/search/crew-cast?q=${query}`}>
-              Tout afficher
-            </Link>
-          </Button>
-        </div>
-        <div className="flex flex-col gap-2">
-          {results.slice(0, 5).map((item: any) => (
-            <Link
-              key={item.id}
-              href={'/person/' + item.id}
-              className="text-sm flex justify-between p-2 hover:bg-secondary rounded-md"
-            >
-              <div className="flex items-center gap-2">
-                {/* MOVIE COVER */}
-                <div className="w-[50px] shrink-0">
-                  <AspectRatio ratio={2 / 3}>
-                    <ImageWithFallback
-                      src={
-                        'https://image.tmdb.org/t/p/w500/' + item.profile_path
-                      }
-                      alt={item.name}
-                      fill
-                      className="rounded-md object-cover"
-                    />
-                  </AspectRatio>
-                </div>
-                {/* MOVIE DATA */}
-                <div className="flex flex-col">
-                  <p className='font-bold line-clamp-2 break-all overflow-hidden'>
-                    {item.name}
-                  </p>
-                </div>
+    <div className="flex flex-col gap-2 ">
+      <div className="flex justify-between items-end">
+        <div className="text-2xl font-bold">Crew & Cast</div>
+        <Button variant="link" className="p-0 h-full" asChild>
+          <Link href={`/search/crew-cast?q=${query}`}>Tout afficher</Link>
+        </Button>
+      </div>
+      <div className="flex flex-col gap-2">
+        {results.slice(0, 5).map((item: any) => (
+          <Link
+            key={item.id}
+            href={'/person/' + item.id}
+            className="text-sm flex justify-between p-2 hover:bg-secondary rounded-md"
+          >
+            <div className="flex items-center gap-2">
+              {/* MOVIE COVER */}
+              <div className="w-[50px] shrink-0">
+                <AspectRatio ratio={2 / 3}>
+                  <ImageWithFallback
+                    src={'https://image.tmdb.org/t/p/w500/' + item.profile_path}
+                    alt={item.name}
+                    fill
+                    className="rounded-md object-cover"
+                  />
+                </AspectRatio>
               </div>
-              <div className="flex items-center">
-                {item.known_for_department}
+              {/* MOVIE DATA */}
+              <div className="flex flex-col">
+                <p className="font-bold line-clamp-2 break-all overflow-hidden">
+                  {item.name}
+                </p>
               </div>
-            </Link>
-          ))}
-        </div>
+            </div>
+            <div className="flex items-center">{item.known_for_department}</div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

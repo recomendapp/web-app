@@ -1,122 +1,106 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { User } from "@/types/type.user";
-import { supabase } from "@/lib/supabase/client";
-import MovieCard from "@/components/Film/Card/MovieCard";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { useInfiniteQuery } from "react-query";
-import { Fragment, useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { User } from '@/types/type.user';
+import { supabase } from '@/lib/supabase/client';
+import MovieCard from '@/components/Movie/Card/MovieCard';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { useInfiniteQuery } from 'react-query';
+import { Fragment, useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { useLocale } from 'next-intl';
 
-export default function ProfileLastActivity({
-    profile,
-} : {
-    profile: User
-}) {
+// GRAPHQL
+import { useQuery } from '@apollo/client';
+import GET_USER_MOVIE_ACTIVITIES_BY_USER_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivitiesByUserId';
+import { GetUserMovieActivitiesByUserIdQuery } from '@/graphql/__generated__/graphql';
 
-    const [ order, setOrder ] = useState("watch-desc")
-    const { ref, inView } = useInView();
-
-    const numberOfResult = 10;
+export default function ProfileLastActivity({ profile }: { profile: User }) {
   
-    const {
-        data: films,
-        isLoading: loading,
-        fetchNextPage,
-        isFetchingNextPage,
-        hasNextPage,
-        } = useInfiniteQuery({
-        queryKey: ['user', profile.id, 'films', order],
-        queryFn: async ({ pageParam = 1 }) => {
-            let from = (pageParam - 1) * numberOfResult;
-            let to = from - 1 + numberOfResult;
-            let column;
-            let ascending;
+  const locale = useLocale();
 
-            const [tablePart, orderPart] = order.split('-');
+  const { ref, inView } = useInView();
 
-            if (tablePart === "like") {
-                column = 'created_at';
-            } else if (tablePart == "rating") {
-                column = 'rating';
-            } else {
-                column = 'date';
-            }
+  const numberOfResult = 10;
 
-            if (orderPart === "desc")
-                ascending = false;
-            else
-                ascending = true;
+  const {
+    data: profileLastActivitiesQuery,
+    fetchMore,
+  } = useQuery<GetUserMovieActivitiesByUserIdQuery>(GET_USER_MOVIE_ACTIVITIES_BY_USER_ID, {
+    variables: {
+      filter: {
+        user_id: { eq: profile.id },
+      },
+      first: numberOfResult,
+      locale: locale,
+    },
+    skip: !profile.id || !locale,
+  });
+  const profileActivities = profileLastActivitiesQuery?.user_movie_activityCollection?.edges;
+  const pageInfo = profileLastActivitiesQuery?.user_movie_activityCollection?.pageInfo;
 
-            const { data } = await supabase
-                .from('user_movie_activity')
-                .select('*, user(*), review:user_movie_review(*)')
-                .eq('user_id', profile.id)
-                .range(from, to)
-                .order(column, { ascending });
 
-            return (data);
+  useEffect(() => {
+    if (inView && pageInfo?.hasNextPage) {
+      fetchMore({
+        variables: {
+          filter: {
+            user_id: { eq: profile.id },
+          },
+          first: numberOfResult,
+          after: pageInfo?.endCursor,
+          locale: locale,
         },
-        getNextPageParam: (data, pages) => {
-            return data?.length == numberOfResult ? pages.length + 1 : undefined  
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          return {
+            ...previousResult,
+            userCollection: {
+              ...previousResult.user_movie_activityCollection,
+              edges: [
+                ...previousResult.user_movie_activityCollection!.edges,
+                ...fetchMoreResult.user_movie_activityCollection!.edges,
+              ],
+              pageInfo: fetchMoreResult.user_movie_activityCollection!.pageInfo,
+            },
+          };
         },
-    });
+      });
+    }
+  }, [fetchMore, inView, pageInfo, profile.id, locale]);
 
-    useEffect(() => {
-        if (inView && hasNextPage)
-            fetchNextPage();
-    }, [inView, hasNextPage, fetchNextPage])
+  if (!profileActivities?.length) return null;
 
-    if (!films?.pages[0]?.length)
-        return null;
-
-    return (
-        <div className="flex flex-col gap-2">
-            <div className="flex justify-between gap-4 items-center">
-                <Link href={`/@${profile?.username}/films`}>
-                    <h3 className="font-semibold text-xl text-accent-1">Dernières activités</h3>
-                </Link>
-                <Button variant={'link'} asChild>
-                    <Link href={`/@${profile?.username}/films`}>
-                        Tout afficher
-                    </Link>
-                </Button>
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex justify-between gap-4 items-center">
+        <Link href={`/@${profile?.username}/films`}>
+          <h3 className="font-semibold text-xl text-accent-1">
+            Dernières activités
+          </h3>
+        </Link>
+        <Button variant={'link'} asChild>
+          <Link href={`/@${profile?.username}/films`}>Tout afficher</Link>
+        </Button>
+      </div>
+      <ScrollArea className="rounded-md">
+        <div className="flex space-x-4 pb-4">
+          {profileActivities?.map(({ node }, index) => (
+            <div
+              key={node.id}
+              className="w-[150px] pb-2"
+              ref={index === profileActivities.length - 1 ? ref : undefined}
+            >
+              <MovieCard
+                movie={node.movie}
+                displayMode={'grid'}
+                movieActivity={node}
+              />
             </div>
-            <ScrollArea className="rounded-md">
-                <div className="flex space-x-4 pb-4">
-                    {films?.pages.map((page, i) => (
-                        <Fragment key={i}>
-                            {page?.map((film: any, index) => (
-                                <div key={film.id} className="w-[150px] pb-2"
-                                    {...(i === films.pages.length - 1 && index === page.length - 1
-                                        ? { ref: ref }
-                                        : {})}
-                                >
-                                    <MovieCard
-                                        filmId={film.film_id}
-                                        displayMode={"grid"}
-                                        movieActivity={film}
-                                    />
-                                </div>
-                            ))}
-                        </Fragment>
-                    ))}
-                </div>
-                <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-            {/* <div className="grid grid-cols-4 md:grid-cols-6 2xl:grid-cols-8 gap-2">
-                {films.map((film: any) => (
-                    <div key={film.film_id} className="">
-                        <MovieCard
-                            filmId={film.film_id}
-                            displayMode="grid"
-                            movieActivity={film}
-                        />
-                    </div>
-                ))}
-            </div> */}
+          ))}
         </div>
-    )
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
+    </div>
+  );
 }

@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 };
 
 export default function Favorites() {
-
   return (
     <Fragment>
       <LikesPage />

@@ -8,6 +8,11 @@ import PersonHeader from './components/PersonHeader';
 import PersonNavbar from './components/PersonNavbar';
 import PersonDescription from './components/PersonDescription';
 
+// GRAPHQL
+import apolloServer from '@/lib/apollo/server';
+import { GetPersonByIdQuery } from '@/graphql/__generated__/graphql';
+import GET_PERSON_BY_ID from '@/graphql/Person/queries/GetPersonById';
+
 export async function generateMetadata({
   params,
 }: {
@@ -29,29 +34,39 @@ export async function generateMetadata({
 }
 
 export default async function Film({
-  params
+  params,
 }: {
   params: {
     lang: string;
     person: string;
-  }
+  };
 }) {
-  const supabase = createServerClient();
-  const { data: isExist } = await supabase.from('person').select('id').eq('id', params.person).single();
   const person = await getPersonDetails(params.person, params.lang);
+
   if (!person) notFound();
-  if (!isExist && person) {
-      const { error } = await supabase.from('person').insert({ id: person.id });
-      if (error) return notFound();
-  }
+  // const { data: personQuery } = await apolloServer.query<GetPersonByIdQuery>({
+  //   query: GET_PERSON_BY_ID,
+  //   variables: {
+  //     filter: {
+  //       id: { eq: params.person },
+  //     },
+  //     locale: params.lang,
+  //   },
+  // });
+  // const person = personQuery?.tmdb_personCollection?.edges[0].node;
+
+  // console.log(person);
+
+  // if (!person) notFound();
+  
 
   return (
     <main>
       <PersonHeader person={person} />
-      <div className='px-4 pb-4'>
+      <div className="px-4 pb-4">
         {/* <PersonNavbar focus={"description"} personId={person.id} /> */}
         <PersonDescription person={person} />
       </div>
     </main>
-  )
+  );
 }

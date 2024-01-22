@@ -1,10 +1,10 @@
-"use client"
+'use client';
 
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
-import { MixerHorizontalIcon } from "@radix-ui/react-icons"
-import { Table } from "@tanstack/react-table"
+import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
+import { MixerHorizontalIcon } from '@radix-ui/react-icons';
+import { Table } from '@tanstack/react-table';
 
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -12,11 +12,11 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu"
-import { ChevronDown, ChevronUp, Filter } from "lucide-react"
+} from '@/components/ui/dropdown-menu';
+import { ChevronDown, ChevronUp, Filter } from 'lucide-react';
 
 interface DataTableSortOptionsProps<TData> {
-  table: Table<TData>
+  table: Table<TData>;
 }
 
 export function DataTableSortOptions<TData>({
@@ -41,7 +41,7 @@ export function DataTableSortOptions<TData>({
           .getAllColumns()
           .filter(
             (column) =>
-              typeof column.accessorFn !== "undefined" && column.getCanSort()
+              typeof column.accessorFn !== 'undefined' && column.getCanSort()
           )
           .map((column) => {
             return (
@@ -52,12 +52,12 @@ export function DataTableSortOptions<TData>({
                 {column.columnDef.meta?.displayName}
                 {{
                   asc: <ChevronUp className=" ml-2 h-4 w-4 text-accent-1" />,
-                  desc:  <ChevronDown className=" ml-2 h-4 w-4 text-accent-1" />,
+                  desc: <ChevronDown className=" ml-2 h-4 w-4 text-accent-1" />,
                 }[column.getIsSorted() as string] ?? null}
               </DropdownMenuItem>
-            )
+            );
           })}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

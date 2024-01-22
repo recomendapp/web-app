@@ -20,27 +20,28 @@ import { Switch } from '@/components/ui/switch';
 
 import toast from 'react-hot-toast';
 import { Textarea } from '@/components/ui/textarea';
-import { Dispatch, useState } from 'react';
+import { useState } from 'react';
 import PlaylistPictureUpload from '../components/PlaylistPictureUpload';
 import { usePathname, useRouter } from 'next/navigation';
-import { useMutation } from '@apollo/client';
 
 import compressPicture from '@/lib/utils/compressPicture';
 import { supabase } from '@/lib/supabase/client';
 import { Icons } from '@/components/icons';
-import { Playlist } from '@/types/type.playlist';
-import CREATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/mutations/createPlaylistMutation'
-import UPDATE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/mutations/updatePlaylistMutation'
-import DELETE_PLAYLIST_MUTATION from '@/components/modules/MoviePlaylist/mutations/deletePlaylistMutation';
-import USER_PLAYLISTS_QUERY from '@/components/User/UserPlaylists/queries/userPlaylistsQuery';
-import INSERT_PLAYLIST_ITEM_MUATION from '@/components/Film/FilmAction/components/MoviePlaylistAction/mutations/insertPlaylistItemMutation';
+
+// GRAPHQL
+import { useMutation } from '@apollo/client';
+import CREATE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/CreatePlaylist';
+import UPDATE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/UpdatePlaylist';
+import DELETE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/DeletePlaylist';
+import GET_PLAYLISTS_BY_USER_ID from '@/graphql/Playlist/Playlist/queries/GetPlaylistsByUserId';
+import INSERT_PLAYLIST_ITEM_MUATION from '@/graphql/Playlist/PlaylistItem/mutations/InsertPlaylistItemMutation';
+import { CreatePlaylistMutation, DeletePlaylistMutation, GetPlaylistsByUserIdQuery, PlaylistFragment, UpdatePlaylistMutation } from '@/graphql/__generated__/graphql';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
   userId: string;
   filmId?: string;
-  playlist?: any;
-  setPlaylist?: Dispatch<any>;
+  playlist?: PlaylistFragment;
 }
 
 export function PlaylistForm({
@@ -48,69 +49,76 @@ export function PlaylistForm({
   userId,
   filmId,
   playlist,
-  setPlaylist,
 }: PlaylistFormProps) {
-  
   const router = useRouter();
   const pathname = usePathname();
 
-  const [ loading, setLoading ] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [ newPoster, setNewPoster ] = useState<File>();
-  
-  const [ createPlaylistMutation ] = useMutation(CREATE_PLAYLIST_MUTATION, {
-   update: (store, { data }) => {
-    const playlistData = store.readQuery<{ playlistCollection: { edges: [{ playlist: Playlist}]}}>({
-      query: USER_PLAYLISTS_QUERY,
-      variables: {
-        user_id: userId,
-        order: { "updated_at": "DescNullsFirst"}
-      }
-    })
-    store.writeQuery({
-      query: USER_PLAYLISTS_QUERY,
-      variables: {
-        user_id: userId,
-        order: { "updated_at": "DescNullsFirst"}
-      },
-      data: {
-        playlistCollection: {
-          edges: [
-            ...playlistData!.playlistCollection.edges,
-            { playlist: data.insertIntoplaylistCollection.records[0] }
-          ]
-        }
-      }
-    })
-  },
-  });
-  const [ deletePlaylistMutation ] = useMutation(DELETE_PLAYLIST_MUTATION, {
+  const [newPoster, setNewPoster] = useState<File>();
+
+  const [createPlaylistMutation] = useMutation<CreatePlaylistMutation>(CREATE_PLAYLIST_MUTATION, {
     update: (store, { data }) => {
-      const playlistData = store.readQuery<{ playlistCollection: { edges: [{ playlist: Playlist}]}}>({
-        query: USER_PLAYLISTS_QUERY,
+      const playlistData = store.readQuery<GetPlaylistsByUserIdQuery>({
+        query: GET_PLAYLISTS_BY_USER_ID,
         variables: {
           user_id: userId,
-          order: { "updated_at": "DescNullsFirst"}
-        }
-      })
-      store.writeQuery({
-        query: USER_PLAYLISTS_QUERY,
-        variables: {
-          user_id: userId,
-          order: { "updated_at": "DescNullsFirst"}
+          order: { updated_at: 'DescNullsFirst' },
         },
-        data: {
-          playlistCollection: {
-            edges: playlistData!.playlistCollection.edges.filter(edge => {
-                edge.playlist.id !== data.deleteFromplaylistCollection.records[0]
-            })
-          }
-        }
-      })
+      });
+      if (playlistData && playlistData.playlistCollection && data?.insertIntoplaylistCollection) {
+        store.writeQuery({
+          query: GET_PLAYLISTS_BY_USER_ID,
+          variables: {
+            user_id: userId,
+            order: { updated_at: 'DescNullsFirst' },
+          },
+          data: {
+            ...playlistData,
+            playlistCollection: {
+              ...playlistData.playlistCollection,
+              edges: [
+                ...playlistData.playlistCollection.edges,
+                { playlist: data?.insertIntoplaylistCollection.records[0] },
+              ],
+            },
+          },
+        });
+      }
     },
   });
-  const [ updatePlaylistMutation ] = useMutation(UPDATE_PLAYLIST_MUTATION);
-  const [ insertPlaylistItemMutation, { error: errorInsertPlaylistItem} ] = useMutation(INSERT_PLAYLIST_ITEM_MUATION);
+  const [deletePlaylistMutation] = useMutation<DeletePlaylistMutation>(DELETE_PLAYLIST_MUTATION, {
+    update: (store, { data }) => {
+      const playlistData = store.readQuery<GetPlaylistsByUserIdQuery>({
+        query: GET_PLAYLISTS_BY_USER_ID,
+        variables: {
+          user_id: userId,
+          order: { updated_at: 'DescNullsFirst' },
+        },
+      });
+      if (playlistData && playlistData.playlistCollection) {
+        store.writeQuery({
+          query: GET_PLAYLISTS_BY_USER_ID,
+          variables: {
+            user_id: userId,
+            order: { updated_at: 'DescNullsFirst' },
+          },
+          data: {
+            ...playlistData,
+            playlistCollection: {
+              ...playlistData.playlistCollection,
+              edges: playlistData!.playlistCollection.edges.filter(({node}) => {
+                node.id !== data?.deleteFromplaylistCollection.records[0].id;
+              }),
+            },
+          },
+        });
+      }
+    },
+  });
+  const [updatePlaylistMutation] = useMutation<UpdatePlaylistMutation>(UPDATE_PLAYLIST_MUTATION);
+  const [insertPlaylistItemMutation, { error: errorInsertPlaylistItem }] =
+    useMutation(INSERT_PLAYLIST_ITEM_MUATION);
 
   const CreatePlaylistFormSchema = z.object({
     title: z
@@ -154,32 +162,35 @@ export function PlaylistForm({
           title: data.title.replace(/\s+/g, ' ').trim(),
           description: data.description?.replace(/\s+/g, ' ').trim(),
           is_public: data.is_public,
-        }
-      })
+        },
+      });
       if (filmId) {
         await insertPlaylistItemMutation({
           variables: {
-            playlist_id: createOutput?.insertIntoplaylistCollection?.records[0]?.id,
-            film_id: filmId,
+            playlist_id:
+              createOutput?.insertIntoplaylistCollection?.records[0]?.id,
+            movie_id: filmId,
             user_id: userId,
-            rank: String(1)
-          }
+            rank: String(1),
+          },
         });
       }
       if (newPoster) {
-        const newPlaylistId =  createOutput?.insertIntoplaylistCollection?.records[0]?.id;
+        const newPlaylistId =
+          createOutput?.insertIntoplaylistCollection?.records[0]?.id;
+        if (!newPlaylistId) throw Error('Playlist id not found');
         const newPosterUrl = await uploadPoster(newPoster, newPlaylistId);
         await updatePlaylistMutation({
           variables: {
             id: newPlaylistId,
-            poster_url: newPosterUrl
-          }
-        })
+            poster_url: newPosterUrl,
+          },
+        });
       }
       toast.success('Enregistré');
       success();
     } catch (error) {
-      toast.error("Une erreur s\'est produite");
+      toast.error("Une erreur s'est produite");
     } finally {
       setLoading(false);
     }
@@ -188,23 +199,24 @@ export function PlaylistForm({
   async function handleUpdatePlaylist(data: CreatePlaylistFormValues) {
     try {
       setLoading(true);
+      if (!playlist?.id) throw Error('Playlist ID not found');
       const payload: Record<string, any> = {
         id: playlist.id,
         title: data.title.replace(/\s+/g, ' ').trim(),
         description: data.description?.replace(/\s+/g, ' ').trim(),
         is_public: data.is_public,
-      }
+      };
       if (newPoster) {
         const newPosterUrl = await uploadPoster(newPoster, playlist.id);
         payload.poster_url = newPosterUrl;
       }
       await updatePlaylistMutation({
-        variables: payload
-      })
+        variables: payload,
+      });
       toast.success('Enregistré');
       success();
     } catch (error) {
-      toast.error("Une erreur s\'est produite");
+      toast.error("Une erreur s'est produite");
     } finally {
       setLoading(false);
     }
@@ -213,16 +225,17 @@ export function PlaylistForm({
   async function handleDeletePlaylist() {
     try {
       setLoading(true);
+      if (!playlist?.id) throw Error('Playlist ID not found');
       await deletePlaylistMutation({
         variables: {
-          id: playlist.id
-        }
-      })
+          id: playlist.id,
+        },
+      });
       toast.success('Supprimé');
-      if (playlist && pathname == '/playlist/' + playlist.id) router.push('/'); 
+      if (playlist && pathname == '/playlist/' + playlist.id) router.push('/');
       else success();
     } catch (error) {
-      toast.error("Une erreur s\'est produite");
+      toast.error("Une erreur s'est produite");
     } finally {
       setLoading(false);
     }
@@ -230,16 +243,18 @@ export function PlaylistForm({
 
   async function uploadPoster(file: File, playlistId: string) {
     try {
-      const fileExt = file.name.split('.').pop()
-      const filePath = `${playlistId}-${Math.random()}.${fileExt}`
+      const fileExt = file.name.split('.').pop();
+      const filePath = `${playlistId}-${Math.random()}.${fileExt}`;
 
       const posterCompressed = await compressPicture(file, filePath, 400, 400);
 
-      let { error } = await supabase.storage.from('playlist_posters').upload(filePath, posterCompressed)
-      
+      let { error } = await supabase.storage
+        .from('playlist_posters')
+        .upload(filePath, posterCompressed);
+
       if (error) throw error;
 
-      return (`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/playlist_posters/${filePath}`);
+      return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/playlist_posters/${filePath}`;
     } catch (error) {
       throw error;
     }
@@ -248,7 +263,9 @@ export function PlaylistForm({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(playlist ? handleUpdatePlaylist : handleCeatePlaylist)}
+        onSubmit={form.handleSubmit(
+          playlist ? handleUpdatePlaylist : handleCeatePlaylist
+        )}
         className=" space-y-8 h-full flex flex-col justify-between"
       >
         <div className="flex flex-col gap-4 lg:grid  lg:grid-cols-2 w-full">
@@ -284,7 +301,7 @@ export function PlaylistForm({
                     <Textarea
                       {...field}
                       placeholder="Ajoutez une description..."
-                      className='resize-none h-32'
+                      className="resize-none h-32"
                       maxLength={300}
                     />
                   </FormControl>
@@ -327,13 +344,8 @@ export function PlaylistForm({
               Supprimer
             </Button>
           )}
-          <Button
-            disabled={loading}
-            type="submit"
-          >
-            {loading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
+          <Button disabled={loading} type="submit">
+            {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
             {playlist ? 'Sauvegarder' : 'Créer'}
           </Button>
         </DialogFooter>

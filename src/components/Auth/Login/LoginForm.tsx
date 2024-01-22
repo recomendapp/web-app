@@ -35,14 +35,12 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
 
     try {
       setIsLoading(true);
-      await login(userLogin.email, userLogin.password)
+      await login(userLogin.email, userLogin.password);
     } catch (error: any) {
-      if (error.status == 400)
-        toast.error('Email ou mot de passe incorrect');
-      else
-        toast.error("Une erreur s'est produite");
+      if (error.status == 400) toast.error('Email ou mot de passe incorrect');
+      else toast.error("Une erreur s'est produite");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -50,7 +48,6 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
     try {
       setIsLoading(true);
       await loginOAuth2(provider);
-
     } catch (error) {
       toast.error("Une erreur s'est produite");
     } finally {
@@ -103,7 +100,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
               required
             />
           </div>
-          <Button type='submit' disabled={isLoading}>
+          <Button type="submit" disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}

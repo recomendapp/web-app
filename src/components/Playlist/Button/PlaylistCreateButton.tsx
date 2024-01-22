@@ -13,58 +13,53 @@ import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistFo
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext/auth-context';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 export function PlaylistCreateButton({
-    icon = true,
-    filmId,
+  icon = true,
+  filmId,
 }: {
-    icon?: boolean;
-    filmId?: string;
+  icon?: boolean;
+  filmId?: string;
 }) {
   const { user } = useAuth();
-  const [ open, setOpen ] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  if (!user)
-    return null;
+  if (!user) return null;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-        <TooltipProvider>
+      <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-                variant={'ghost'}
-                size={'icon'}
-                className="rounded-full shrink-0"
-                onClick={() => setOpen(!open)}
+              variant={'ghost'}
+              size={'icon'}
+              className="rounded-full shrink-0"
+              onClick={() => setOpen(!open)}
             >
-                {icon ?
-                    <Plus />
-                :
-                    "Créer une playlist"
-                }
+              {icon ? <Plus /> : 'Créer une playlist'}
             </Button>
           </TooltipTrigger>
-          <TooltipContent side="bottom">
-            Créer une playlist
-          </TooltipContent>
+          <TooltipContent side="bottom">Créer une playlist</TooltipContent>
         </Tooltip>
       </TooltipProvider>
-        
-        <DialogContent className="max-w-3xl">
-            <DialogHeader>
-            <DialogTitle>
-                Créer une playlist
-            </DialogTitle>
-            </DialogHeader>
-            <PlaylistForm
-                success={() => setOpen(false)}
-                userId={user.id}
-                filmId={filmId}
-            />
-        </DialogContent>
+
+      <DialogContent className="max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>Créer une playlist</DialogTitle>
+        </DialogHeader>
+        <PlaylistForm
+          success={() => setOpen(false)}
+          userId={user.id}
+          filmId={filmId}
+        />
+      </DialogContent>
     </Dialog>
   );
 }

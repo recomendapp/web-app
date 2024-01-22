@@ -1,6 +1,6 @@
-"use client"
+'use client';
 
-import * as React from "react"
+import * as React from 'react';
 import {
   ColumnFiltersState,
   RowData,
@@ -14,7 +14,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -23,39 +23,38 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table';
 
-import { DataTablePagination } from "./component/data-table-pagination"
-import { DataTableToolbar } from "./component/data-table-toolbar"
+import { DataTablePagination } from './component/data-table-pagination';
+import { DataTableToolbar } from './component/data-table-toolbar';
 
-import { columns } from "./component/columns"
-import { Models } from "appwrite"
-import { useMediaQuery } from "react-responsive"
-import { Guidelist } from "@/types/type.guidelist"
-import { FilmAction, FilmLike } from "@/types/type.film"
+import { columns } from './component/columns';
+import { Models } from 'appwrite';
+import { useMediaQuery } from 'react-responsive';
+import { Guidelist } from '@/types/type.guidelist';
+import { FilmAction, FilmLike } from '@/types/type.film';
+import { UserMovieActivityFragment } from '@/graphql/__generated__/graphql';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
-    displayName: string
+    displayName: string;
   }
 }
 
 interface DataTableProps {
-  data: { node: FilmAction; }[],
+  data: { node: UserMovieActivityFragment }[];
 }
 
-export function TableLikes({
-  data,
-}: DataTableProps) {
-  const [rowSelection, setRowSelection] = React.useState({})
+export function TableLikes({ data }: DataTableProps) {
+  const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+    React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  );
+  const [sorting, setSorting] = React.useState<SortingState>([]);
 
-  const table = useReactTable({
+  const table = useReactTable<{ node: UserMovieActivityFragment }>({
     data,
     columns,
     state: {
@@ -75,24 +74,26 @@ export function TableLikes({
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-  })
+  });
 
   const isMobile = useMediaQuery({ maxWidth: 1024 });
   React.useEffect(() => {
     if (isMobile) {
-      table.getAllColumns()
+      table
+        .getAllColumns()
         .filter(
           (column) =>
-            typeof column.accessorFn !== "undefined" && column.getCanHide()
+            typeof column.accessorFn !== 'undefined' && column.getCanHide()
         )
         .forEach((column) => {
           column.toggleVisibility(false);
         });
     } else {
-      table.getAllColumns()
+      table
+        .getAllColumns()
         .filter(
           (column) =>
-            typeof column.accessorFn !== "undefined" && column.getCanHide()
+            typeof column.accessorFn !== 'undefined' && column.getCanHide()
         )
         .forEach((column) => {
           column.toggleVisibility(true);
@@ -118,7 +119,7 @@ export function TableLikes({
                             header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -128,7 +129,7 @@ export function TableLikes({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                   className="group"
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -155,5 +156,5 @@ export function TableLikes({
         </Table>
       </div>
     </div>
-  )
+  );
 }

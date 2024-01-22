@@ -41,7 +41,7 @@ export default function SearchBar({ className }: SearchBarProps) {
     }
     const url = queryString ? `${pathname}?${queryString}` : pathname;
     url && router.push(url);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm]);
 
   return (

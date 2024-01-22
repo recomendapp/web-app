@@ -1,14 +1,14 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
-import USER_FRAGMENT from "@/context/AuthContext/fragments/userFragment";
+import USER_FRAGMENT from '@/graphql/User/User/fragments/User';
 
 export default gql`
-    fragment UserFriend on user_friend {
-        friend_id
-        friend: user {
-            ...User
-        }
-        user_id
+  fragment UserFriend on user_friend {
+    friend_id
+    friend: user {
+      ...User
     }
-    ${USER_FRAGMENT}
-`
+    user_id
+  }
+  ${USER_FRAGMENT}
+`;

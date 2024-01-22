@@ -8,14 +8,13 @@ import { Label } from '@/components/ui/label';
 import toast from 'react-hot-toast';
 import { supabase } from '@/lib/supabase/client';
 
-interface ForgotPasswordFormProps extends React.HTMLAttributes<HTMLDivElement> {
-}
+interface ForgotPasswordFormProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function ForgotPasswordForm({
   className,
   ...props
 }: ForgotPasswordFormProps) {
-
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const [userPasswordRecovery, setUserPasswordRecovery] = useState({
@@ -36,7 +35,7 @@ export function ForgotPasswordForm({
     try {
       await supabase.auth.resetPasswordForEmail(userPasswordRecovery.email, {
         redirectTo: `${location.origin}/auth/resetPassword`,
-      })
+      });
       setIsLoading(false);
       toast.success('Demande envoyé');
     } catch (error) {
@@ -74,7 +73,7 @@ export function ForgotPasswordForm({
             />
           </div>
 
-          <Button type='submit' disabled={isLoading}>
+          <Button type="submit" disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}

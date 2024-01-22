@@ -1,142 +1,1090 @@
 {
-"type": "FeatureCollection",
-"name": "buildings",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "id": null, "Nom": "Tour 1" }, "geometry": { "type": "Point", "coordinates": [ 1.908133937920503, 48.792863018824256 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 3" }, "geometry": { "type": "Point", "coordinates": [ 2.251892322621074, 48.749728361124511 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 4" }, "geometry": { "type": "Point", "coordinates": [ 2.174073525921137, 48.699965031792111 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 2" }, "geometry": { "type": "Point", "coordinates": [ 1.959165032480602, 48.828989661966929 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 2" }, "geometry": { "type": "Point", "coordinates": [ 2.32585681980628, 48.71718648420574 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 2" }, "geometry": { "type": "Point", "coordinates": [ 2.322290021722182, 48.835242066884554 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 2" }, "geometry": { "type": "Point", "coordinates": [ 2.008266376620757, 48.728846726118171 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 2" }, "geometry": { "type": "Point", "coordinates": [ 2.450936550929024, 48.761118677993501 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 2" }, "geometry": { "type": "Point", "coordinates": [ 2.257935155928989, 48.798248040517805 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 3" }, "geometry": { "type": "Point", "coordinates": [ 2.456486780420195, 48.817106951373489 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 3" }, "geometry": { "type": "Point", "coordinates": [ 2.033825987320468, 48.875581236354961 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 3" }, "geometry": { "type": "Point", "coordinates": [ 2.25796907974903, 48.862058620994468 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 3" }, "geometry": { "type": "Point", "coordinates": [ 2.106889477686237, 48.714659464134797 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 4" }, "geometry": { "type": "Point", "coordinates": [ 2.153014036107846, 48.898023138310393 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 4" }, "geometry": { "type": "Point", "coordinates": [ 2.099331275268899, 48.813980020635022 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 4" }, "geometry": { "type": "Point", "coordinates": [ 2.02863280253959, 48.782035401696447 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 4" }, "geometry": { "type": "Point", "coordinates": [ 2.315394920874557, 48.902984028508513 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 4" }, "geometry": { "type": "Point", "coordinates": [ 2.37966286429802, 48.789450863045545 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Chateau 1" }, "geometry": { "type": "Point", "coordinates": [ 2.66026220314603, 48.91000939940367 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Chateau 2" }, "geometry": { "type": "Point", "coordinates": [ 2.844065873822147, 48.95241486926745 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Chateau 3" }, "geometry": { "type": "Point", "coordinates": [ 2.994257766985941, 48.878815575858297 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Palais" }, "geometry": { "type": "Point", "coordinates": [ 2.544377387095688, 48.439363663157735 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Phare" }, "geometry": { "type": "Point", "coordinates": [ 2.950641229376176, 47.889460877295804 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Cirque" }, "geometry": { "type": "Point", "coordinates": [ 1.607452258015112, 48.660282544222817 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Grande roue" }, "geometry": { "type": "Point", "coordinates": [ 1.66032328989628, 48.732049744136674 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Manège" }, "geometry": { "type": "Point", "coordinates": [ 1.691965192166247, 48.684757345109773 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Tour prison" }, "geometry": { "type": "Point", "coordinates": [ 2.384636800968587, 48.513901863479497 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 1" }, "geometry": { "type": "Point", "coordinates": [ 2.389243288755044, 48.646475212631913 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 1" }, "geometry": { "type": "Point", "coordinates": [ 2.272951236103522, 48.611819177881216 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 1" }, "geometry": { "type": "Point", "coordinates": [ 2.318520542212961, 48.656511812726514 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 1" }, "geometry": { "type": "Point", "coordinates": [ 2.419415805896338, 48.622097023061713 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 1" }, "geometry": { "type": "Point", "coordinates": [ 2.246346626318834, 48.657911820812338 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 1" }, "geometry": { "type": "Point", "coordinates": [ 2.395963176099767, 48.680350245101693 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 1" }, "geometry": { "type": "Point", "coordinates": [ 2.410594992205151, 48.71755355745799 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 2" }, "geometry": { "type": "Point", "coordinates": [ 2.108395006292046, 48.568189916349581 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 2" }, "geometry": { "type": "Point", "coordinates": [ 2.222168434140102, 48.601043437327498 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 2" }, "geometry": { "type": "Point", "coordinates": [ 2.206504961357709, 48.644716809063311 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 2" }, "geometry": { "type": "Point", "coordinates": [ 2.079119015810048, 48.640508754778814 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 2" }, "geometry": { "type": "Point", "coordinates": [ 2.125774118487277, 48.614838429646916 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Hopital" }, "geometry": { "type": "Point", "coordinates": [ 2.017539654129362, 48.597910446025786 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Usine" }, "geometry": { "type": "Point", "coordinates": [ 2.46717944815977, 48.871267219837513 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison blanche" }, "geometry": { "type": "Point", "coordinates": [ 2.166221515838333, 48.839792416158581 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Ecole" }, "geometry": { "type": "Point", "coordinates": [ 1.732858585847932, 48.326962164937861 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Ferme" }, "geometry": { "type": "Point", "coordinates": [ 3.330255145665511, 48.464253407242317 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Eolienne ferme" }, "geometry": { "type": "Point", "coordinates": [ 3.334282345524175, 48.512962239298595 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Moulin" }, "geometry": { "type": "Point", "coordinates": [ 3.22748858645388, 48.499015940391772 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Scène" }, "geometry": { "type": "Point", "coordinates": [ 1.496266814342769, 48.569827027489467 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Villa" }, "geometry": { "type": "Point", "coordinates": [ 2.960581815863923, 48.056085560389938 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Station train" }, "geometry": { "type": "Point", "coordinates": [ 1.633378591217574, 48.419848281833922 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison jungle" }, "geometry": { "type": "Point", "coordinates": [ 1.426730920993243, 48.158368384549163 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Antenne radio" }, "geometry": { "type": "Point", "coordinates": [ 1.321654161350829, 48.126180534740122 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison jungle" }, "geometry": { "type": "Point", "coordinates": [ 1.334408062054063, 48.265023016605689 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison jungle" }, "geometry": { "type": "Point", "coordinates": [ 1.262095672593323, 48.097077754546547 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Ferme" }, "geometry": { "type": "Point", "coordinates": [ 3.155669990645412, 48.532061290571299 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Antenne radio" }, "geometry": { "type": "Point", "coordinates": [ 2.071125344087173, 48.677721166889285 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Villa" }, "geometry": { "type": "Point", "coordinates": [ 2.786381650605149, 48.090346933010025 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Moulin" }, "geometry": { "type": "Point", "coordinates": [ 3.305660746520593, 48.401328047397072 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Sphere bioclimatique" }, "geometry": { "type": "Point", "coordinates": [ 1.788263210374389, 48.727044148170123 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Hopital psychiatrique" }, "geometry": { "type": "Point", "coordinates": [ 2.576898445285946, 48.620888020733631 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Bateau radio" }, "geometry": { "type": "Point", "coordinates": [ 3.276683845766589, 49.07842960321944 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Eglise" }, "geometry": { "type": "Point", "coordinates": [ 2.558129482332249, 47.966655097961038 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Dirigeable" }, "geometry": { "type": "Point", "coordinates": [ 2.550438788032444, 49.07389973424182 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Statue liberté" }, "geometry": { "type": "Point", "coordinates": [ 2.199244540461643, 48.948007648865861 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Forage pétrole" }, "geometry": { "type": "Point", "coordinates": [ 2.104470986082322, 48.288625086141245 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Case africaine" }, "geometry": { "type": "Point", "coordinates": [ 1.607613119760109, 48.169103938289851 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Monastère" }, "geometry": { "type": "Point", "coordinates": [ 2.821107683691551, 48.80785502495187 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Grand Budapest Hotel" }, "geometry": { "type": "Point", "coordinates": [ 2.836301764688474, 48.691115673277373 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 2" }, "geometry": { "type": "Point", "coordinates": [ 2.179727780126469, 48.557298742958771 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 1" }, "geometry": { "type": "Point", "coordinates": [ 2.33774049674139, 48.59482164762445 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison coloniale" }, "geometry": { "type": "Point", "coordinates": [ 3.478545871200429, 48.474227150784778 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Tour eiffel" }, "geometry": { "type": "Point", "coordinates": [ 2.359142185228273, 48.28577815146442 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Motel" }, "geometry": { "type": "Point", "coordinates": [ 1.477457808669656, 48.325772193769971 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "HLM" }, "geometry": { "type": "Point", "coordinates": [ 1.998649759909857, 48.135887371222736 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Saloon" }, "geometry": { "type": "Point", "coordinates": [ 2.582131954652893, 48.255520010270068 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Porte avion" }, "geometry": { "type": "Point", "coordinates": [ 3.633583049290838, 48.768701834695307 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Cinema" }, "geometry": { "type": "Point", "coordinates": [ 2.646639530507023, 48.138988379113925 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Lancement fusée" }, "geometry": { "type": "Point", "coordinates": [ 1.949682862993823, 48.259071269658229 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Bateau pirate" }, "geometry": { "type": "Point", "coordinates": [ 1.083853516248084, 48.451690384491783 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Tour 2" }, "geometry": { "type": "Point", "coordinates": [ 1.971503418589942, 48.692253178144895 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison campagne 1" }, "geometry": { "type": "Point", "coordinates": [ 3.272810201333882, 48.513804741708533 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison campagne 2" }, "geometry": { "type": "Point", "coordinates": [ 3.41650333689588, 48.587417562068573 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison campagne 3" }, "geometry": { "type": "Point", "coordinates": [ 3.255667123378768, 48.577927559550254 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Ferme silot" }, "geometry": { "type": "Point", "coordinates": [ 3.246995066445248, 48.451637268060963 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Arène" }, "geometry": { "type": "Point", "coordinates": [ 1.998143209784733, 48.37452097482641 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 1 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.711174162581942, 48.06518158519193 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 1 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.304329132237538, 48.086710586047737 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 1 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.625169341459877, 48.184529966888924 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 2 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.447388572632397, 48.112829095552542 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 2 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.603877443363484, 48.026513602779069 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 2 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.595164407973558, 47.912760218422584 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 4 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.444480376761271, 47.981472402020536 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 4 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.763761657972242, 48.145616932263962 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 4 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.517943329405859, 47.907948527245274 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 3 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.705102018913925, 47.996065947891253 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 3 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.894426759346197, 48.144286059081665 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 3 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.296507623196313, 48.178615291085251 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 3 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.643727210310064, 47.857617564792157 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "HLM" }, "geometry": { "type": "Point", "coordinates": [ 1.85827658916814, 48.231559884404795 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Ruine 1" }, "geometry": { "type": "Point", "coordinates": [ 3.382342520175734, 48.877644726476156 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Ruine 2" }, "geometry": { "type": "Point", "coordinates": [ 3.489410448872353, 48.879601738194687 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Ruine 3" }, "geometry": { "type": "Point", "coordinates": [ 3.326613803719597, 48.827370641277177 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Tour Las Vegas" }, "geometry": { "type": "Point", "coordinates": [ 2.297035680105964, 48.360776486925218 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Panneau Las vegas" }, "geometry": { "type": "Point", "coordinates": [ 2.241111559267822, 48.294434866376278 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison blanche" }, "geometry": { "type": "Point", "coordinates": [ 2.429581302790309, 48.01408995017502 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Supermarche" }, "geometry": { "type": "Point", "coordinates": [ 2.141545245847619, 48.138751383953235 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Tour controle" }, "geometry": { "type": "Point", "coordinates": [ 2.728139026086468, 48.219759201021603 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Stade" }, "geometry": { "type": "Point", "coordinates": [ 1.909112402459605, 48.50093129788528 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Caserne" }, "geometry": { "type": "Point", "coordinates": [ 3.432478491329736, 48.697922793377593 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Restaurant" }, "geometry": { "type": "Point", "coordinates": [ 1.466464344236454, 48.446505675519496 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Grue Port" }, "geometry": { "type": "Point", "coordinates": [ 2.668725900941969, 47.902613780654065 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison modeste" }, "geometry": { "type": "Point", "coordinates": [ 1.879153332250266, 48.136785509970082 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Manoir" }, "geometry": { "type": "Point", "coordinates": [ 3.087465957695311, 48.1371128434902 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Tour controle" }, "geometry": { "type": "Point", "coordinates": [ 1.709767804745881, 48.788438730201719 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 1" }, "geometry": { "type": "Point", "coordinates": [ 2.402205567520512, 48.587795978524397 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 1" }, "geometry": { "type": "Point", "coordinates": [ 2.536104537791309, 48.814129385121923 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 1" }, "geometry": { "type": "Point", "coordinates": [ 2.605623622545659, 48.709227003798844 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Pavillon 2" }, "geometry": { "type": "Point", "coordinates": [ 2.591164518642128, 48.773843816163271 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Eolienne ferme" }, "geometry": { "type": "Point", "coordinates": [ 3.157330641895141, 48.488590503667382 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Restaurant" }, "geometry": { "type": "Point", "coordinates": [ 1.383334434762013, 48.395021593106932 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Tour dysto 2" }, "geometry": { "type": "Point", "coordinates": [ 3.182918230626234, 48.902919780405583 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Tour dysto 1" }, "geometry": { "type": "Point", "coordinates": [ 3.086665383837465, 48.858245487896738 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Antenne radio" }, "geometry": { "type": "Point", "coordinates": [ 2.393185916963588, 47.956724118922075 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Petite scène" }, "geometry": { "type": "Point", "coordinates": [ 1.392967985974175, 48.53506303148886 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Antenne radio" }, "geometry": { "type": "Point", "coordinates": [ 2.89165453595723, 48.267713376245375 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison campagne 1" }, "geometry": { "type": "Point", "coordinates": [ 3.334203535518239, 48.658875790858758 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison campagne 3" }, "geometry": { "type": "Point", "coordinates": [ 3.581767134921123, 48.610125583741819 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison campagne 3" }, "geometry": { "type": "Point", "coordinates": [ 3.434578485404269, 48.414215834967294 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison campagne 1" }, "geometry": { "type": "Point", "coordinates": [ 3.560119709846821, 48.33057953652014 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison campagne 3" }, "geometry": { "type": "Point", "coordinates": [ 3.412785175808264, 48.294174942257413 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Maison campagne 2" }, "geometry": { "type": "Point", "coordinates": [ 3.670046816102248, 48.340474583883392 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Case africaine" }, "geometry": { "type": "Point", "coordinates": [ 1.589877007013918, 48.228621904773945 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "premier contact" }, "geometry": { "type": "Point", "coordinates": [ 1.753846287691138, 48.626137788198342 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 2 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.159575444340716, 48.205412230068944 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 4 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.180865666876604, 48.067550446106893 ] } },
-{ "type": "Feature", "properties": { "id": null, "Nom": "Immeuble 4 Ville" }, "geometry": { "type": "Point", "coordinates": [ 2.443005737112724, 48.179580394772657 ] } }
-]
+  "type": "FeatureCollection",
+  "name": "buildings",
+  "crs": {
+    "type": "name",
+    "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Tour 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.908133937920503, 48.792863018824256]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 3" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.251892322621074, 48.749728361124511]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 4" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.174073525921137, 48.699965031792111]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.959165032480602, 48.828989661966929]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.32585681980628, 48.71718648420574]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.322290021722182, 48.835242066884554]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.008266376620757, 48.728846726118171]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.450936550929024, 48.761118677993501]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.257935155928989, 48.798248040517805]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 3" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.456486780420195, 48.817106951373489]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 3" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.033825987320468, 48.875581236354961]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 3" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.25796907974903, 48.862058620994468]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 3" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.106889477686237, 48.714659464134797]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 4" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.153014036107846, 48.898023138310393]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 4" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.099331275268899, 48.813980020635022]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 4" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.02863280253959, 48.782035401696447]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 4" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.315394920874557, 48.902984028508513]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 4" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.37966286429802, 48.789450863045545]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Chateau 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.66026220314603, 48.91000939940367]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Chateau 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.844065873822147, 48.95241486926745]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Chateau 3" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.994257766985941, 48.878815575858297]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Palais" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.544377387095688, 48.439363663157735]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Phare" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.950641229376176, 47.889460877295804]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Cirque" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.607452258015112, 48.660282544222817]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Grande roue" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.66032328989628, 48.732049744136674]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Manège" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.691965192166247, 48.684757345109773]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Tour prison" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.384636800968587, 48.513901863479497]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.389243288755044, 48.646475212631913]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.272951236103522, 48.611819177881216]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.318520542212961, 48.656511812726514]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.419415805896338, 48.622097023061713]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.246346626318834, 48.657911820812338]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.395963176099767, 48.680350245101693]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.410594992205151, 48.71755355745799]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.108395006292046, 48.568189916349581]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.222168434140102, 48.601043437327498]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.206504961357709, 48.644716809063311]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.079119015810048, 48.640508754778814]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.125774118487277, 48.614838429646916]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Hopital" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.017539654129362, 48.597910446025786]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Usine" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.46717944815977, 48.871267219837513]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison blanche" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.166221515838333, 48.839792416158581]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Ecole" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.732858585847932, 48.326962164937861]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Ferme" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.330255145665511, 48.464253407242317]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Eolienne ferme" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.334282345524175, 48.512962239298595]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Moulin" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.22748858645388, 48.499015940391772]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Scène" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.496266814342769, 48.569827027489467]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Villa" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.960581815863923, 48.056085560389938]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Station train" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.633378591217574, 48.419848281833922]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison jungle" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.426730920993243, 48.158368384549163]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Antenne radio" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.321654161350829, 48.126180534740122]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison jungle" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.334408062054063, 48.265023016605689]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison jungle" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.262095672593323, 48.097077754546547]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Ferme" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.155669990645412, 48.532061290571299]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Antenne radio" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.071125344087173, 48.677721166889285]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Villa" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.786381650605149, 48.090346933010025]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Moulin" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.305660746520593, 48.401328047397072]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Sphere bioclimatique" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.788263210374389, 48.727044148170123]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Hopital psychiatrique" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.576898445285946, 48.620888020733631]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Bateau radio" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.276683845766589, 49.07842960321944]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Eglise" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.558129482332249, 47.966655097961038]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Dirigeable" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.550438788032444, 49.07389973424182]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Statue liberté" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.199244540461643, 48.948007648865861]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Forage pétrole" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.104470986082322, 48.288625086141245]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Case africaine" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.607613119760109, 48.169103938289851]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Monastère" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.821107683691551, 48.80785502495187]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Grand Budapest Hotel" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.836301764688474, 48.691115673277373]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.179727780126469, 48.557298742958771]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.33774049674139, 48.59482164762445]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison coloniale" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.478545871200429, 48.474227150784778]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Tour eiffel" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.359142185228273, 48.28577815146442]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Motel" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.477457808669656, 48.325772193769971]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "HLM" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.998649759909857, 48.135887371222736]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Saloon" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.582131954652893, 48.255520010270068]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Porte avion" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.633583049290838, 48.768701834695307]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Cinema" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.646639530507023, 48.138988379113925]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Lancement fusée" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.949682862993823, 48.259071269658229]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Bateau pirate" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.083853516248084, 48.451690384491783]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Tour 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.971503418589942, 48.692253178144895]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison campagne 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.272810201333882, 48.513804741708533]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison campagne 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.41650333689588, 48.587417562068573]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison campagne 3" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.255667123378768, 48.577927559550254]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Ferme silot" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.246995066445248, 48.451637268060963]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Arène" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.998143209784733, 48.37452097482641]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 1 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.711174162581942, 48.06518158519193]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 1 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.304329132237538, 48.086710586047737]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 1 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.625169341459877, 48.184529966888924]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 2 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.447388572632397, 48.112829095552542]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 2 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.603877443363484, 48.026513602779069]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 2 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.595164407973558, 47.912760218422584]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 4 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.444480376761271, 47.981472402020536]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 4 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.763761657972242, 48.145616932263962]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 4 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.517943329405859, 47.907948527245274]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 3 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.705102018913925, 47.996065947891253]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 3 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.894426759346197, 48.144286059081665]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 3 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.296507623196313, 48.178615291085251]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 3 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.643727210310064, 47.857617564792157]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "HLM" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.85827658916814, 48.231559884404795]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Ruine 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.382342520175734, 48.877644726476156]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Ruine 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.489410448872353, 48.879601738194687]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Ruine 3" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.326613803719597, 48.827370641277177]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Tour Las Vegas" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.297035680105964, 48.360776486925218]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Panneau Las vegas" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.241111559267822, 48.294434866376278]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison blanche" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.429581302790309, 48.01408995017502]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Supermarche" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.141545245847619, 48.138751383953235]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Tour controle" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.728139026086468, 48.219759201021603]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Stade" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.909112402459605, 48.50093129788528]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Caserne" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.432478491329736, 48.697922793377593]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Restaurant" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.466464344236454, 48.446505675519496]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Grue Port" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.668725900941969, 47.902613780654065]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison modeste" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.879153332250266, 48.136785509970082]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Manoir" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.087465957695311, 48.1371128434902]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Tour controle" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.709767804745881, 48.788438730201719]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.402205567520512, 48.587795978524397]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.536104537791309, 48.814129385121923]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.605623622545659, 48.709227003798844]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Pavillon 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.591164518642128, 48.773843816163271]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Eolienne ferme" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.157330641895141, 48.488590503667382]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Restaurant" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.383334434762013, 48.395021593106932]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Tour dysto 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.182918230626234, 48.902919780405583]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Tour dysto 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.086665383837465, 48.858245487896738]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Antenne radio" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.393185916963588, 47.956724118922075]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Petite scène" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.392967985974175, 48.53506303148886]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Antenne radio" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.89165453595723, 48.267713376245375]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison campagne 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.334203535518239, 48.658875790858758]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison campagne 3" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.581767134921123, 48.610125583741819]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison campagne 3" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.434578485404269, 48.414215834967294]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison campagne 1" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.560119709846821, 48.33057953652014]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison campagne 3" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.412785175808264, 48.294174942257413]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Maison campagne 2" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.670046816102248, 48.340474583883392]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Case africaine" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.589877007013918, 48.228621904773945]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "premier contact" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [1.753846287691138, 48.626137788198342]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 2 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.159575444340716, 48.205412230068944]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 4 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.180865666876604, 48.067550446106893]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": null, "Nom": "Immeuble 4 Ville" },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.443005737112724, 48.179580394772657]
+      }
+    }
+  ]
 }

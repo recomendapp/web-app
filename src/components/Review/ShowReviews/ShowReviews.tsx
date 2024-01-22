@@ -5,7 +5,14 @@ import { useAuth } from '@/context/AuthContext/auth-context';
 import { Models } from 'appwrite';
 import { Fragment, useEffect, useState } from 'react';
 import { FileEdit } from 'lucide-react';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../../ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../../ui/select';
 import MovieReviewOverview from '@/components/Review/MovieReviewOverview';
 
 import { Review } from '@/types/type.review';
@@ -14,10 +21,8 @@ import { supabase } from '@/lib/supabase/client';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 
-
 export function ShowReviews({ filmId }: { filmId: string }) {
-
-  const [ order, setOrder ] = useState("recent");
+  const [order, setOrder] = useState('recent');
 
   const { ref, inView } = useInView();
 
@@ -29,94 +34,97 @@ export function ShowReviews({ filmId }: { filmId: string }) {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-    } = useInfiniteQuery({
+  } = useInfiniteQuery({
     queryKey: ['film', filmId, 'reviews', order],
     queryFn: async ({ pageParam = 1 }) => {
-        let from = (pageParam - 1) * numberOfResult;
-        let to = from - 1 + numberOfResult;
-        let column;
-        let ascending;
+      let from = (pageParam - 1) * numberOfResult;
+      let to = from - 1 + numberOfResult;
+      let column;
+      let ascending;
 
-        const [tablePart, orderPart] = order.split('-');
+      const [tablePart, orderPart] = order.split('-');
 
-        if (tablePart === "like") {
-            column = 'created_at';
-        } else if (tablePart == "rating") {
-            column = 'rating';
-        } else {
-            column = 'updated_at';
-        }
+      if (tablePart === 'like') {
+        column = 'created_at';
+      } else if (tablePart == 'rating') {
+        column = 'rating';
+      } else {
+        column = 'updated_at';
+      }
 
-        if (orderPart === "desc")
-            ascending = false;
-        else
-            ascending = true;
+      if (orderPart === 'desc') ascending = false;
+      else ascending = true;
 
-        const { data } = await supabase
-            .from('user_movie_review')
-            .select('*, user(*), activity:user_movie_activity(*)')
-            .eq('film_id', filmId)
-            .range(from, to)
-            .order(column, { ascending });
+      const { data } = await supabase
+        .from('user_movie_review')
+        .select('*, user(*), activity:user_movie_activity(*)')
+        .eq('movie_id', filmId)
+        .range(from, to)
+        .order(column, { ascending });
 
-        return (data);
-      },
-      getNextPageParam: (data, pages) => {
-          return data?.length == numberOfResult ? pages.length + 1 : undefined  
-      },
+      return data;
+    },
+    getNextPageParam: (data, pages) => {
+      return data?.length == numberOfResult ? pages.length + 1 : undefined;
+    },
   });
 
   useEffect(() => {
-    if (inView && hasNextPage)
-        fetchNextPage();
-  }, [inView, hasNextPage, fetchNextPage])
+    if (inView && hasNextPage) fetchNextPage();
+  }, [inView, hasNextPage, fetchNextPage]);
 
-  if (loading)
-    return <div>Loading</div>
-
+  if (loading) return <div>Loading</div>;
 
   return (
     <div className="w-full h-full flex flex-col gap-2">
-      <div className='flex flex-col gap-4 justify-between lg:flex-row'>
+      <div className="flex flex-col gap-4 justify-between lg:flex-row">
         <MyReviewButton filmId={filmId} />
-        <div className='flex flex-1 justify-end gap-2 items-center'>
+        <div className="flex flex-1 justify-end gap-2 items-center">
           Trier par
           <Select onValueChange={setOrder} defaultValue={order}>
             <SelectTrigger className="w-fit">
-              <SelectValue  placeholder="Langue" />
+              <SelectValue placeholder="Langue" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                  <SelectItem value={"recent"}>Récentes</SelectItem>
-                  <SelectItem value={"recommended"}>Recommandées</SelectItem>
-                  <SelectItem value={"rating-desc"}>Notes décroissantes</SelectItem>
-                  <SelectItem value={"rating-asc"}>Notes croissantes</SelectItem>
+                <SelectItem value={'recent'}>Récentes</SelectItem>
+                <SelectItem value={'recommended'}>Recommandées</SelectItem>
+                <SelectItem value={'rating-desc'}>
+                  Notes décroissantes
+                </SelectItem>
+                <SelectItem value={'rating-asc'}>Notes croissantes</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
       </div>
       {/* ALL */}
-      {reviews?.pages[0]?.length ?
+      {reviews?.pages[0]?.length ? (
         <>
           {reviews?.pages.map((page, i) => (
-              <Fragment key={i}>
-                  {page?.map((review: any, index) => (
-                      <div key={review.id}
-                          {...(i === reviews.pages.length - 1 && index === page.length - 1
-                              ? { ref: ref }
-                              : {})}
-                      >
-                          <MovieReviewOverview key={review.id} activity={review.activity} review={review} />
-                      </div>
-                  ))}
-              </Fragment>
+            <Fragment key={i}>
+              {page?.map((review: any, index) => (
+                <div
+                  key={review.id}
+                  {...(i === reviews.pages.length - 1 &&
+                  index === page.length - 1
+                    ? { ref: ref }
+                    : {})}
+                >
+                  <MovieReviewOverview
+                    key={review.id}
+                    activity={review.activity}
+                    review={review}
+                  />
+                </div>
+              ))}
+            </Fragment>
           ))}
           {(loading || isFetchingNextPage) && <Loader />}
         </>
-      :
+      ) : (
         <p className="text-center font-semibold">Aucune critique.</p>
-      } 
+      )}
       {/* {reviews.length ? <div className='flex flex-col gap-4'>
         {reviews.map(({ review } : { review: Review}) => (
           <MovieReviewOverview key={review.id} review={review} />
@@ -128,47 +136,50 @@ export function ShowReviews({ filmId }: { filmId: string }) {
         </div>
       )} */}
     </div>
-  )
+  );
 }
 
-export function MyReviewButton({ filmId } : { filmId: string }) {
-
+export function MyReviewButton({ filmId }: { filmId: string }) {
   const { user } = useAuth();
 
   const {
     data: activity,
     isLoading: loading,
-    isError: error
+    isError: error,
   } = useQuery({
     queryKey: ['user', user?.id, 'film', filmId, 'activity'],
     queryFn: async () => {
       const { data } = await supabase
         .from('user_movie_activity')
         .select(`*, review:user_movie_review(*)`)
-        .eq('film_id', filmId)
+        .eq('movie_id', filmId)
         .eq('user_id', user!.id)
-        .single()
-      return (data)
+        .single();
+      return data;
     },
     enabled: !!user,
   });
 
-
-  if (!user || loading)
-    return
+  if (!user || loading) return;
 
   if (!loading && !activity?.review)
     return (
-      <Link href={`/film/${filmId}/review/create/`} className="bg-blue-500 rounded-full px-4 py-1 flex gap-2 items-center">
+      <Link
+        href={`/film/${filmId}/review/create/`}
+        className="bg-blue-500 rounded-full px-4 py-1 flex gap-2 items-center"
+      >
         <FileEdit />
         Écrire une critique
       </Link>
-    )
+    );
 
   return (
-    <Link href={`/@${user.username}/film/${filmId}`} className="bg-blue-500 rounded-full px-4 py-1 flex gap-2 items-center">
+    <Link
+      href={`/@${user.username}/film/${filmId}`}
+      className="bg-blue-500 rounded-full px-4 py-1 flex gap-2 items-center"
+    >
       <FileEdit />
       Ma critique
     </Link>
-  )
+  );
 }

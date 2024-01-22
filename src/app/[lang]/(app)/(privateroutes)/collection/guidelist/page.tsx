@@ -7,7 +7,6 @@ export const metadata: Metadata = {
 };
 
 export default function Guidelist() {
-
   return (
     <Fragment>
       <GuidelistPage />

@@ -23,9 +23,9 @@ export default function SearchFavoriteFilms({
 }) {
   const { user } = useAuth();
 
-  const local = useLocale()
+  const local = useLocale();
 
-  const [ query, setQuery ] = useState('');
+  const [query, setQuery] = useState('');
 
   const { ref, inView } = useInView();
 
@@ -39,30 +39,30 @@ export default function SearchFavoriteFilms({
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ['search', query, 'films'],
-    queryFn: ({pageParam = 1}) => handleSearchMovies(query, local, pageParam),
+    queryFn: ({ pageParam = 1 }) => handleSearchMovies(query, local, pageParam),
     getNextPageParam: (results, pages) => {
-        return results?.length == numberOfResult ? pages.length + 1 : undefined  
+      return results?.length == numberOfResult ? pages.length + 1 : undefined;
     },
     enabled: !!query,
   });
 
-useEffect(() => {
-  if (inView && hasNextPage) {
-    fetchNextPage();
-  }
-}, [inView, hasNextPage, fetchNextPage])
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage]);
 
   return (
     <>
       <Input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder='Chercher un film'
+        placeholder="Chercher un film"
       />
-      {(!loading && !films) ? (
-          <div className='flex items-center justify-center h-full text-muted-foreground'>
-            <Film />
-          </div>
+      {!loading && !films ? (
+        <div className="flex items-center justify-center h-full text-muted-foreground">
+          <Film />
+        </div>
       ) : (
         <ScrollArea className="pr-4">
           {loading ? (
@@ -87,20 +87,19 @@ useEffect(() => {
                 </div>
               ))}
             </div>
-          ) : (!loading && !films?.pages[0].length && query) ? (
-            <div>
-              Aucun résultat.
-            </div>
+          ) : !loading && !films?.pages[0].length && query ? (
+            <div>Aucun résultat.</div>
           ) : (
             <div className="flex flex-col gap-2">
               {films?.pages.map((page, i) => (
                 <Fragment key={i}>
                   {page?.map((film: any, index) => (
                     <Button
-                    variant={"ghost"}
+                      variant={'ghost'}
                       key={film.id}
                       className="h-full text-sm flex justify-between p-2 !hover:bg-muted rounded-md"
-                      {...(i === films.pages.length - 1 && index === page.length - 1
+                      {...(i === films.pages.length - 1 &&
+                      index === page.length - 1
                         ? { ref: ref }
                         : {})}
                       onClick={() => onClick(film.id)}
@@ -111,7 +110,8 @@ useEffect(() => {
                           <AspectRatio ratio={2 / 3}>
                             <ImageWithFallback
                               src={
-                                'https://image.tmdb.org/t/p/w500/' + film.poster_path
+                                'https://image.tmdb.org/t/p/w500/' +
+                                film.poster_path
                               }
                               alt={film.title}
                               fill
@@ -121,7 +121,10 @@ useEffect(() => {
                         </div>
                         {/* MOVIE DATA */}
                         <div className="flex flex-col text-left">
-                          <Button variant="link" className="w-fit p-0 h-full text-base">
+                          <Button
+                            variant="link"
+                            className="w-fit p-0 h-full text-base"
+                          >
                             {film.title}
                           </Button>
                           <div>
@@ -138,7 +141,8 @@ useEffect(() => {
                                         {director.name}
                                       </Link>
                                     </Button>
-                                    {index !== film.credits.directors.length - 1 && (
+                                    {index !==
+                                      film.credits.directors.length - 1 && (
                                       <span>, </span>
                                     )}
                                   </span>
@@ -153,15 +157,15 @@ useEffect(() => {
                         </div>
                       </div>
                       <div className="flex items-center">
-                        {film.release_date ? film.release_date.split('-')[0] : 'n/a'}
+                        {film.release_date
+                          ? film.release_date.split('-')[0]
+                          : 'n/a'}
                       </div>
                     </Button>
                   ))}
                 </Fragment>
               ))}
-              {isFetchingNextPage &&
-                <Loader />
-              }
+              {isFetchingNextPage && <Loader />}
             </div>
           )}
           <ScrollBar />

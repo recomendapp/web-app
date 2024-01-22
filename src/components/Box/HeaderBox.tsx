@@ -1,6 +1,6 @@
 //* Import tailwind-merge for combining Tailwind CSS classes.
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 //* Define the props interface for the Box component.
 interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -11,19 +11,22 @@ interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const HeaderBox: React.FC<BoxProps> = ({
-    style,
-    children,
-    className,
-    classNameChild,
+  style,
+  children,
+  className,
+  classNameChild,
 }) => {
   return (
     <div
       style={style}
-      className={cn(`
+      className={cn(
+        `
           @container
           bg-background bg-cover bg-no-repeat
           lg:h-[clamp(340px,30vh,400px)]
-      `, className)}
+      `,
+        className
+      )}
       // style={{
       //   backgroundImage: `url('${backgroundImage}')`,
       //   backgroundSize: 'cover',
@@ -31,9 +34,14 @@ export const HeaderBox: React.FC<BoxProps> = ({
       //   height: height ?? 'clamp(340px,30vh,400px)',
       // }}
     >
-        <div className={cn("w-full h-full flex p-4 bg-gradient-to-t from-background to-[#000000bd] bg-opacity-75 relative", classNameChild)}>
-            {children}
-        </div>
+      <div
+        className={cn(
+          'w-full h-full flex p-4 bg-gradient-to-t from-background to-[#000000bd] bg-opacity-75 relative',
+          classNameChild
+        )}
+      >
+        {children}
+      </div>
     </div>
   );
 };

@@ -1,23 +1,17 @@
-import { gql } from "@apollo/client";
-import REVIEW_FRAGMENT from "@/components/Review/fragments/reviewFragment";
+import { gql } from '@apollo/client';
+import USER_MOVIE_REVIEW_FRAGMENT from '@/graphql/User/Movie/Review/fragments/UserMovieReview';
 
 export default gql`
-    query Reviews(
-        $film_id: BigInt!
-        $user_id: UUID!
+  query UserReviewQuery($movie_id: BigInt!, $user_id: UUID!) {
+    user_movie_reviewCollection(
+      filter: { movie_id: { eq: $movie_id }, user_id: { eq: $user_id } }
     ) {
-        reviewCollection(
-        filter: {
-            film_id: { eq: $film_id }
-            user_id: { eq: $user_id }
+      edges {
+        node {
+          ...UserMovieReview
         }
-        ) {
-        edges {
-            review: node {
-                ...Review
-            }
-        }
-        }
+      }
     }
-    ${REVIEW_FRAGMENT}
-`
+  }
+  ${USER_MOVIE_REVIEW_FRAGMENT}
+`;

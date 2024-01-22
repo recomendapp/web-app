@@ -1,6 +1,6 @@
-"use client"
+'use client';
 
-import * as React from "react"
+import * as React from 'react';
 import {
   ColumnFiltersState,
   RowData,
@@ -14,7 +14,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -23,39 +23,34 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table';
+import { DataTableToolbar } from './component/data-table-toolbar';
 
-import { DataTablePagination } from "./component/data-table-pagination"
-import { DataTableToolbar } from "./component/data-table-toolbar"
-
-import { columns } from "./component/columns"
-import { Models } from "appwrite"
-import { useMediaQuery } from "react-responsive"
-import { Guidelist } from "@/types/type.guidelist"
+import { columns } from './component/columns';
+import { useMediaQuery } from 'react-responsive';
+import { UserMovieGuidelistFragment } from '@/graphql/__generated__/graphql';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
-    displayName: string
+    displayName: string;
   }
 }
 
 interface DataTableProps {
-  data: { item: Guidelist; }[],
+  guidelist: { node: UserMovieGuidelistFragment }[];
 }
 
-export function TableGuidelist({
-  data,
-}: DataTableProps) {
-  const [rowSelection, setRowSelection] = React.useState({})
+export function TableGuidelist({ guidelist }: DataTableProps) {
+  const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+    React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  );
+  const [sorting, setSorting] = React.useState<SortingState>([]);
 
-  const table = useReactTable({
-    data,
+  const table = useReactTable<{ node: UserMovieGuidelistFragment }>({
+    data: guidelist,
     columns,
     state: {
       sorting,
@@ -74,24 +69,26 @@ export function TableGuidelist({
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-  })
+  });
 
   const isMobile = useMediaQuery({ maxWidth: 1024 });
   React.useEffect(() => {
     if (isMobile) {
-      table.getAllColumns()
+      table
+        .getAllColumns()
         .filter(
           (column) =>
-            typeof column.accessorFn !== "undefined" && column.getCanHide()
+            typeof column.accessorFn !== 'undefined' && column.getCanHide()
         )
         .forEach((column) => {
           column.toggleVisibility(false);
         });
     } else {
-      table.getAllColumns()
+      table
+        .getAllColumns()
         .filter(
           (column) =>
-            typeof column.accessorFn !== "undefined" && column.getCanHide()
+            typeof column.accessorFn !== 'undefined' && column.getCanHide()
         )
         .forEach((column) => {
           column.toggleVisibility(true);
@@ -117,7 +114,7 @@ export function TableGuidelist({
                             header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -127,7 +124,7 @@ export function TableGuidelist({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                   className="group"
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -155,5 +152,5 @@ export function TableGuidelist({
       </div>
       {/* <DataTablePagination table={table} /> */}
     </div>
-  )
+  );
 }

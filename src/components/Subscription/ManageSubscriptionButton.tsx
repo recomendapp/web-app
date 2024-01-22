@@ -15,7 +15,7 @@ export default function ManageSubscriptionButton({ session }: Props) {
   const redirectToCustomerPortal = async () => {
     try {
       const { url } = await postData({
-        url: '/api/create-portal-link'
+        url: '/api/create-portal-link',
       });
       router.push(url);
     } catch (error) {
@@ -27,7 +27,7 @@ export default function ManageSubscriptionButton({ session }: Props) {
     <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
       <p className="pb-4 sm:pb-0">Manage your subscription on Stripe.</p>
       <Button
-        variant={"accent-1-enabled"}
+        variant={'accent-1-enabled'}
         disabled={!session}
         onClick={redirectToCustomerPortal}
       >

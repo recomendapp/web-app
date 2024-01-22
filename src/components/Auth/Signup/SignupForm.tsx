@@ -22,7 +22,6 @@ import { Icons } from '@/components/icons';
 import checkUsernameExist from '@/components/Auth/hooks/checkUsernameExist';
 import { useAuth } from '@/context/AuthContext/auth-context';
 
-
 export function SignupForm() {
   const router = useRouter();
 
@@ -105,7 +104,6 @@ export function SignupForm() {
   });
 
   async function onSubmit(data: SignupFormValues) {
-
     if (data.password !== data.confirmpassword) {
       form.setError('password', {
         message: '',
@@ -122,12 +120,10 @@ export function SignupForm() {
         try {
           setIsLoading(true);
           await signup(data.email, data.name, data.username, data.password);
-          toast.success(
-            'Un email de confirmation vient de vous être envoyé'
-          );
+          toast.success('Un email de confirmation vient de vous être envoyé');
           router.push('/login');
         } catch (error) {
-          toast.error("Une erreur s'est produite")
+          toast.error("Une erreur s'est produite");
         } finally {
           setIsLoading(false);
         }
@@ -169,9 +165,9 @@ export function SignupForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='flex justify-between gap-4'>
+              <FormLabel className="flex justify-between gap-4">
                 <p>Nom</p>
-                <p className=''>{field?.value?.length ?? 0} / 50</p>
+                <p className="">{field?.value?.length ?? 0} / 50</p>
               </FormLabel>
               <FormControl>
                 <Input
@@ -191,9 +187,9 @@ export function SignupForm() {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className='flex justify-between gap-4'>
+              <FormLabel className="flex justify-between gap-4">
                 <p>Nom d&apos;utilisateur</p>
-                <p className=''>{field?.value?.length ?? 0} / 15</p>
+                <p className="">{field?.value?.length ?? 0} / 15</p>
               </FormLabel>
               <FormControl>
                 <Input

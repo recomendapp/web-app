@@ -1,151 +1,184 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Fragment, useEffect, useState } from "react";
-import { LayoutGrid, List } from "lucide-react";
-import MovieCard from "@/components/Film/Card/MovieCard";
-import Loader from "@/components/Loader/Loader";
+import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
+import { LayoutGrid, List } from 'lucide-react';
+import MovieCard from '@/components/Movie/Card/MovieCard';
+import Loader from '@/components/Loader/Loader';
 import { useInView } from 'react-intersection-observer';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { User } from "@/types/type.user";
-import { useInfiniteQuery } from "react-query";
-import { supabase } from "@/lib/supabase/client";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { User } from '@/types/type.user';
+
+// GRAPHQL
+import { useQuery } from '@apollo/client';
+import GET_USER_MOVIE_ACTIVITIES_BY_USER_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivitiesByUserId';
+import { GetUserMovieActivitiesByUserIdQuery } from '@/graphql/__generated__/graphql';
+import { useLocale } from 'next-intl';
 
 interface UserMoviesProps {
-    profile: User;
+  profile: User;
 }
 
-export default function ProfileFilms({
-    profile,
-} : UserMoviesProps) {
+export default function ProfileFilms({ profile }: UserMoviesProps) {
 
-    const [ order, setOrder ] = useState("watch-desc")
+  const locale = useLocale();
 
-    const [ displayMode, setDisplayMode ] = useState<"grid" | "row">('grid');
+  const [selectedOrder, setSelectedOrder] = useState('watch-desc');
 
-    const { ref, inView } = useInView();
+  const [order, setOrder] = useState<any>([{ date: 'DescNullsFirst' }]);
 
-    const numberOfResult = 20;
-  
-    const {
-        data: films,
-        isLoading: loading,
-        fetchNextPage,
-        isFetchingNextPage,
-        hasNextPage,
-        } = useInfiniteQuery({
-        queryKey: ['user', profile.id, 'films', order],
-        queryFn: async ({ pageParam = 1 }) => {
-            let from = (pageParam - 1) * numberOfResult;
-            let to = from - 1 + numberOfResult;
-            let column;
-            let ascending;
+  const [displayMode, setDisplayMode] = useState<'grid' | 'row'>('grid');
 
-            const [tablePart, orderPart] = order.split('-');
+  const { ref, inView } = useInView();
 
-            if (tablePart === "like") {
-                column = 'created_at';
-            } else if (tablePart == "rating") {
-                column = 'rating';
-            } else {
-                column = 'date';
+  const numberOfResult = 20;
+
+  const {
+    data: profileMovieActivitiesQuery,
+    loading,
+    error,
+    fetchMore,
+  } = useQuery<GetUserMovieActivitiesByUserIdQuery>(GET_USER_MOVIE_ACTIVITIES_BY_USER_ID, {
+    variables: {
+      filter: {
+        user_id: { eq: profile.id },
+      },
+      orderBy: order,
+      first: numberOfResult,
+      locale: locale,
+    },
+    skip: !profile.id || !locale,
+  });
+  const profileActivities = profileMovieActivitiesQuery?.user_movie_activityCollection?.edges;
+  const pageInfo = profileMovieActivitiesQuery?.user_movie_activityCollection?.pageInfo;
+
+  useEffect(() => {
+    if (inView && pageInfo?.hasNextPage) {
+      fetchMore({
+        variables: {
+          filter: {
+            user_id: { eq: profile.id },
+          },
+          orderBy: order,
+          first: numberOfResult,
+          after: pageInfo?.endCursor,
+          locale: locale,
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          return {
+            ...previousResult,
+            userCollection: {
+              ...previousResult.user_movie_activityCollection,
+              edges: [
+                ...previousResult.user_movie_activityCollection!.edges,
+                ...fetchMoreResult.user_movie_activityCollection!.edges,
+              ],
+              pageInfo: fetchMoreResult.user_movie_activityCollection!.pageInfo,
+            },
+          };
+        },
+      });
+    }
+  }, [fetchMore, inView, pageInfo, profile.id, locale, order]);
+
+  const changeOrder = (orderSelected: string) => {
+    if (orderSelected === 'watch-desc')
+      setOrder([{ date: 'DescNullsFirst' }]);
+    else if (orderSelected === 'watch-asc')
+      setOrder([{ date: 'AscNullsLast' }]);
+    else if (orderSelected === 'rating-desc')
+      setOrder([{ rating: 'DescNullsFirst' }]);
+    else if (orderSelected === 'rating-asc')
+      setOrder([{ rating: 'AscNullsLast' }]);
+    else if (orderSelected === 'like-desc')
+      setOrder([{ created_at: 'DescNullsFirst' }]);
+    else if (orderSelected === 'like-asc')
+      setOrder([{ created_at: 'AscNullsLast' }]);
+    setSelectedOrder(orderSelected);
+  }
+
+  if (!profileActivities?.length) return null;
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex justify-between gap-4 items-center">
+        <h3 className="font-semibold text-xl text-accent-1">Films</h3>
+        <div className="flex gap-2">
+          <Select onValueChange={changeOrder} defaultValue={selectedOrder}>
+            <SelectTrigger className="w-fit">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent align="end">
+              <SelectGroup>
+                <SelectLabel>Vus</SelectLabel>
+                <SelectItem value={'watch-desc'}>Plus récents</SelectItem>
+                <SelectItem value={'watch-asc'}>Plus anciens</SelectItem>
+              </SelectGroup>
+              <SelectSeparator />
+              <SelectGroup>
+                <SelectLabel>Notes</SelectLabel>
+                <SelectItem value={'rating-desc'}>
+                  Notes décroissantes
+                </SelectItem>
+                <SelectItem value={'rating-asc'}>Notes croissantes</SelectItem>
+              </SelectGroup>
+              <SelectSeparator />
+              <SelectGroup>
+                <SelectLabel>Coups de coeur</SelectLabel>
+                <SelectItem value={'like-desc'}>Plus récents</SelectItem>
+                <SelectItem value={'like-asc'}>Plus anciens</SelectItem>
+              </SelectGroup>
+              {/* <SelectItem value={"rating-desc"}>Notes décroissantes</SelectItem> */}
+            </SelectContent>
+          </Select>
+          <Button
+            variant={'ghost'}
+            onClick={() =>
+              setDisplayMode(displayMode == 'grid' ? 'row' : 'grid')
             }
-
-            if (orderPart === "desc")
-                ascending = false;
-            else
-                ascending = true;
-
-            const { data } = await supabase
-                .from('user_movie_activity')
-                .select('*, user(*), review:user_movie_review(*)')
-                .eq('user_id', profile.id)
-                .range(from, to)
-                .order(column, { ascending });
-
-            return (data);
-        },
-        getNextPageParam: (data, pages) => {
-            return data?.length == numberOfResult ? pages.length + 1 : undefined  
-        },
-    });
-    
-    useEffect(() => {
-        if (inView && hasNextPage)
-            fetchNextPage();
-    }, [inView, hasNextPage, fetchNextPage])
-
-    if (loading)
-        return 
-            <div>Loading</div>
-    return (
-        <div className="flex flex-col gap-2">
-            <div className="flex justify-between gap-4 items-center">
-                <h3 className="font-semibold text-xl text-accent-1">Films</h3>
-                <div className="flex gap-2">
-                    <Select onValueChange={setOrder} defaultValue={order}>
-                        <SelectTrigger className="w-fit">
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent align="end">
-                            <SelectGroup>
-                                <SelectLabel>Vus</SelectLabel>
-                                <SelectItem value={"watch-desc"}>Plus récents</SelectItem>
-                                <SelectItem value={"watch-asc"}>Plus anciens</SelectItem>
-                            </SelectGroup>
-                            <SelectSeparator />
-                            <SelectGroup>
-                                <SelectLabel>Notes</SelectLabel>
-                                <SelectItem value={"rating-desc"}>Notes décroissantes</SelectItem>
-                                <SelectItem value={"rating-asc"}>Notes croissantes</SelectItem>
-                            </SelectGroup>
-                            <SelectSeparator />
-                            <SelectGroup>
-                                <SelectLabel>Coups de coeur</SelectLabel>
-                                <SelectItem value={"like-desc"}>Plus récents</SelectItem>
-                                <SelectItem value={"like-asc"}>Plus anciens</SelectItem>
-                            </SelectGroup>
-                            {/* <SelectItem value={"rating-desc"}>Notes décroissantes</SelectItem> */}
-                        </SelectContent>
-                    </Select>
-                    <Button variant={'ghost'} onClick={() => setDisplayMode(displayMode == 'grid' ? 'row' : 'grid')}>
-                        {displayMode == 'grid' ?
-                            <LayoutGrid />
-                        :
-                            <List />
-                        }
-                    </Button>
-                </div>    
-            </div>
-            {films?.pages[0]?.length ?
-                <>
-                    <div className={` gap-2
-                        ${displayMode == 'row' ? 'flex flex-col' : 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 2xl:grid-cols-8'}
-                    `}
-                    >
-                        {films?.pages.map((page, i) => (
-                            <Fragment key={i}>
-                                {page?.map((film: any, index) => (
-                                    <div key={film.id}
-                                        {...(i === films.pages.length - 1 && index === page.length - 1
-                                            ? { ref: ref }
-                                            : {})}
-                                    >
-                                        <MovieCard
-                                            filmId={film.film_id}
-                                            displayMode={displayMode}
-                                            movieActivity={film}
-                                        />
-                                    </div>
-                                ))}
-                            </Fragment>
-                        ))}
-                    </div>
-                    {(loading || isFetchingNextPage) && <Loader />}
-                </>
-            :
-                <p className="text-center font-semibold">Aucun film.</p>
-            }  
+          >
+            {displayMode == 'grid' ? <LayoutGrid /> : <List />}
+          </Button>
         </div>
-    )
+      </div>
+      {profileActivities.length ? (
+        <>
+          <div
+            className={` gap-2
+                ${
+                  displayMode == 'row'
+                    ? 'flex flex-col'
+                    : 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 2xl:grid-cols-8'
+                }
+            `}
+          >
+            {profileActivities.map(({ node }, index) => (
+                <div
+                  key={node.id}
+                  ref={index === profileActivities.length - 1 ? ref : undefined}
+                >
+                  <MovieCard
+                    movie={node.movie}
+                    displayMode={displayMode}
+                    movieActivity={node}
+                  />
+                </div>
+            ))}
+          </div>
+          {(loading) && <Loader />}
+        </>
+      ) : (
+        <p className="text-center font-semibold">Aucun film.</p>
+      )}
+    </div>
+  );
 }

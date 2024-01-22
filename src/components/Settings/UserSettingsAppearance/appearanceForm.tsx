@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { ChevronDownIcon } from "@radix-ui/react-icons"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { Button, buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -14,34 +14,40 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { cn } from "@/lib/utils"
-import { useLocale, useTranslations } from "next-intl"
-import { Lang } from "@/types/type.i18n"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useTheme } from "next-themes"
+} from '@/components/ui/form';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { cn } from '@/lib/utils';
+import { useLocale, useTranslations } from 'next-intl';
+import { Lang } from '@/types/type.i18n';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useTheme } from 'next-themes';
 // import { usePathname, useRouter } from "next-intl/client"
-import {createSharedPathnamesNavigation} from 'next-intl/navigation';
-import { Theme } from "@/types/type.theme"
-import { usePathname, useRouter } from "@/lib/next-intl/navigation"
+import { createSharedPathnamesNavigation } from 'next-intl/navigation';
+import { Theme } from '@/types/type.theme';
+import { usePathname, useRouter } from '@/lib/next-intl/navigation';
 
 const appearanceFormSchema = z.object({
-  theme: z.enum(["light", "dark"], {
-    required_error: "Please select a theme.",
+  theme: z.enum(['light', 'dark'], {
+    required_error: 'Please select a theme.',
   }),
-  language: z.enum(["en", "fr"], {
-    invalid_type_error: "Select a language",
-    required_error: "Please select a language.",
+  language: z.enum(['en', 'fr'], {
+    invalid_type_error: 'Select a language',
+    required_error: 'Please select a language.',
   }),
-})
+});
 
-type AppearanceFormValues = z.infer<typeof appearanceFormSchema>
+type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
 // This can come from your database or API.
 
 export function AppearanceForm() {
-
   const t = useTranslations('settings');
   const locale = useLocale();
   const { setTheme, theme } = useTheme();
@@ -50,19 +56,17 @@ export function AppearanceForm() {
 
   const defaultValues: Partial<AppearanceFormValues> = {
     language: locale as Lang | undefined,
-    theme: theme as Theme| undefined,
-  }
+    theme: theme as Theme | undefined,
+  };
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
     defaultValues,
-  })
+  });
 
   function onSubmit(data: AppearanceFormValues) {
-    if (data.theme != theme)
-      setTheme(data.theme);
+    if (data.theme != theme) setTheme(data.theme);
     if (locale != data.language)
       router.push(pathname, { locale: data.language });
-
   }
 
   return (
@@ -78,8 +82,8 @@ export function AppearanceForm() {
                 <FormControl>
                   <select
                     className={cn(
-                      buttonVariants({ variant: "outline" }),
-                      "w-[200px] appearance-none bg-transparent font-normal"
+                      buttonVariants({ variant: 'outline' }),
+                      'w-[200px] appearance-none bg-transparent font-normal'
                     )}
                     {...field}
                   >
@@ -171,5 +175,5 @@ export function AppearanceForm() {
         <Button type="submit">{t('appearance.update_preferences')}</Button>
       </form>
     </Form>
-  )
+  );
 }

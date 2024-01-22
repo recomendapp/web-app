@@ -1,20 +1,19 @@
-const withPWA = require("@ducanh2912/next-pwa").default({
-  dest: "public",
-  customWorkerSrc: "service-worker",
+const withPWA = require('@ducanh2912/next-pwa').default({
+  dest: 'public',
+  customWorkerSrc: 'service-worker',
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development',
 });
 
-const withNextIntl = require('next-intl/plugin')(
-  './src/i18n.ts'
-);
+const withNextIntl = require('next-intl/plugin')('./src/i18n.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
   images: {
     domains: [
+      'api.recomend.app',
       'huecemdnsnivsvwhkiqz.supabase.co',
       'image.tmdb.org',
       'images.justwatch.com',
@@ -24,7 +23,7 @@ const nextConfig = {
       'misc.scdn.co',
       'localhost',
       's.ltrbxd.com',
-      'media.giphy.com'
+      'media.giphy.com',
     ],
   },
   async redirects() {

@@ -1,6 +1,9 @@
-import { cookies } from "next/headers";
-import { createServerClient as createServerClientSupabase, type CookieOptions } from '@supabase/ssr'
-import { Price, ProductWithPrices } from "@/types/type.stripe";
+import { cookies } from 'next/headers';
+import {
+  createServerClient as createServerClientSupabase,
+  type CookieOptions,
+} from '@supabase/ssr';
+import { Price, ProductWithPrices } from '@/types/type.stripe';
 
 export const createServerClient = () => {
   const cookieStore = cookies();
@@ -10,7 +13,7 @@ export const createServerClient = () => {
     {
       cookies: {
         get(name: string) {
-          return cookieStore.get(name)?.value
+          return cookieStore.get(name)?.value;
         },
       },
     }
@@ -21,7 +24,7 @@ export async function getSession() {
   const supabase = createServerClient();
   try {
     const {
-      data: { session }
+      data: { session },
     } = await supabase.auth.getSession();
     return session;
   } catch (error) {
@@ -30,7 +33,9 @@ export async function getSession() {
   }
 }
 
-export const getActiveProductsWithPrices = async (): Promise<ProductWithPrices[]> => {
+export const getActiveProductsWithPrices = async (): Promise<
+  ProductWithPrices[]
+> => {
   const supabase = createServerClient();
 
   const { data, error } = await supabase
@@ -38,18 +43,17 @@ export const getActiveProductsWithPrices = async (): Promise<ProductWithPrices[]
     .select('*, prices(*)')
     .eq('active', true)
     .eq('prices.active', true)
-    .order('unit_amount', { 
+    .order('unit_amount', {
       referencedTable: 'prices',
       ascending: true,
-    })
+    });
 
-  if (error)
-      console.log(error);
+  if (error) console.log(error);
 
-  return (data) || [];
-}
+  return data || [];
+};
 
-export async function getSubscription() {
+export async function getSubscriptionByUserId() {
   const supabase = createServerClient();
   try {
     const { data: subscription } = await supabase

@@ -1,17 +1,15 @@
-import {
-  CaretSortIcon,
-} from "@radix-ui/react-icons"
-import { Column } from "@tanstack/react-table"
+import { CaretSortIcon } from '@radix-ui/react-icons';
+import { Column } from '@tanstack/react-table';
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { ChevronDown, ChevronUp, LucideIcon, Triangle } from "lucide-react"
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { ChevronDown, ChevronUp, LucideIcon, Triangle } from 'lucide-react';
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
-  column: Column<TData, TValue>
-  title?: string
-  Icon?: LucideIcon
+  column: Column<TData, TValue>;
+  title?: string;
+  Icon?: LucideIcon;
 }
 
 export function DataTableColumnHeader<TData, TValue>({
@@ -20,13 +18,12 @@ export function DataTableColumnHeader<TData, TValue>({
   Icon,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-
   if (!column.getCanSort()) {
-    return <div className={cn(className)}>{title}</div>
+    return <div className={cn(className)}>{title}</div>;
   }
 
   return (
-    <div className={cn("flex items-center space-x-2", className)}>
+    <div className={cn('flex items-center space-x-2', className)}>
       <Button
         variant="ghost"
         size="sm"
@@ -37,9 +34,11 @@ export function DataTableColumnHeader<TData, TValue>({
         {Icon && <Icon />}
         {{
           asc: <ChevronUp className=" ml-2 h-4 w-4 text-accent-1" />,
-          desc:  <ChevronDown className=" ml-2 h-4 w-4 text-accent-1" />,
-        }[column.getIsSorted() as string] ?? <CaretSortIcon className="ml-2 h-4 w-4" />}
+          desc: <ChevronDown className=" ml-2 h-4 w-4 text-accent-1" />,
+        }[column.getIsSorted() as string] ?? (
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        )}
       </Button>
     </div>
-  )
+  );
 }

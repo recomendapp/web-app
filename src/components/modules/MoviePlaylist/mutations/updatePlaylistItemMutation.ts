@@ -1,20 +1,15 @@
-import { gql } from "@apollo/client";
-import PLAYLIST_ITEM_FRAGMENT from "../fragments/playlistItemFragment";
+import { gql } from '@apollo/client';
+import PLAYLIST_ITEM_FRAGMENT from '../../../../graphql/Playlist/PlaylistItem/fragments/PlaylistItem';
 
-export default gql `
+export default gql`
   mutation updatePlaylistItemMutation(
-    $id: BigInt!,
+    $id: BigInt!
     $comment: String!
-    $rank: BigInt!,
+    $rank: Int!
   ) {
     updateplaylist_itemCollection(
-      filter: {
-        id: {eq: $id}
-      },
-      set: {
-        comment: $comment
-        rank: $rank
-      }
+      filter: { id: { eq: $id } }
+      set: { comment: $comment, rank: $rank }
     ) {
       records {
         ...PlaylistItem
@@ -22,4 +17,4 @@ export default gql `
     }
   }
   ${PLAYLIST_ITEM_FRAGMENT}
-`
+`;

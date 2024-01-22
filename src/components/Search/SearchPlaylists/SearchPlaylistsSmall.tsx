@@ -3,33 +3,34 @@ import { Skeleton } from '../../ui/skeleton';
 import Link from 'next/link';
 import { Button } from '../../ui/button';
 import { useQuery } from '@apollo/client';
-import SEARCH_PLAYLIST_QUERY from './queries/searchPlaylistsQuery';
-import { Playlist } from '@/types/type.playlist';
+import SEARCH_PLAYLIST_QUERY from '../../../graphql/Search/SearchPlaylists';
 import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-
+import { SearchPlaylistsQuery } from '@/graphql/__generated__/graphql';
 
 export default function SearchPlaylistsSmall({
   query,
 }: {
   query: string | undefined;
 }) {
-
   const numberOfResult = 8;
 
-  const { data: userPlaylistsQuery, loading } = useQuery(SEARCH_PLAYLIST_QUERY, {
+  const { data: userPlaylistsQuery, loading } = useQuery<SearchPlaylistsQuery>(
+    SEARCH_PLAYLIST_QUERY,
+    {
       variables: {
-          search: query,
-          order: {
-                "updated_at": "DescNullsFirst",
-                "likes_count": "DescNullsFirst"
-              },
-          first: numberOfResult,
+        search: query,
+        order: {
+          updated_at: 'DescNullsFirst',
+          likes_count: 'DescNullsFirst',
+        },
+        first: numberOfResult,
       },
-      skip: !query
-  })
-  const playlists: [ { playlist: Playlist }] = userPlaylistsQuery?.playlistCollection?.edges;
-  const pageInfo: { hasNextPage: boolean, endCursor: string,} = userPlaylistsQuery?.playlistCollection?.pageInfo;
+      skip: !query,
+    }
+  );
+  const playlists = userPlaylistsQuery?.playlistCollection?.edges;
+  const pageInfo = userPlaylistsQuery?.playlistCollection?.pageInfo;
 
   if (loading) {
     return (
@@ -58,30 +59,31 @@ export default function SearchPlaylistsSmall({
     );
   }
 
-  if (!loading && !playlists?.length)
-    return null;
+  if (!loading && !playlists?.length) return null;
 
   return (
     <div className=" w-full flex flex-col gap-2">
       {/* USERS TITLE */}
       <div className="flex justify-between items-end">
         <div className="text-2xl font-bold">Playlists</div>
-        {pageInfo.hasNextPage && 
+        {pageInfo?.hasNextPage && (
           <Button variant="link" className="p-0 h-full" asChild>
-            <Link href={`/search/playlists?q=${query}`}>
-              Tout afficher
-            </Link>
+            <Link href={`/search/playlists?q=${query}`}>Tout afficher</Link>
           </Button>
-        }
+        )}
       </div>
       {/* USERS CONTAINER */}
       <ScrollArea className="pb-4">
-          <div className="flex gap-4">
-              {playlists.map(({ playlist } : { playlist: Playlist}) => (
-                  <MoviePlaylistCard key={playlist.id} playlist={playlist} className={'w-48'}/>
-              ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
+        <div className="flex gap-4">
+          {playlists?.map(({ node }) => (
+            <MoviePlaylistCard
+              key={node.id}
+              playlist={node}
+              className={'w-48'}
+            />
+          ))}
+        </div>
+        <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </div>
   );

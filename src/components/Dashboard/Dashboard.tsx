@@ -1,30 +1,29 @@
-"use client"
+'use client';
 
-import { useAuth } from "@/context/AuthContext/auth-context"
-import Loader from "@/components/Loader/Loader";
-import { useTranslations } from "next-intl";
+import { useAuth } from '@/context/AuthContext/auth-context';
+import Loader from '@/components/Loader/Loader';
+import { useTranslations } from 'next-intl';
 
 // WIDGETS
-import { UserMovieGuidelistWidget } from "@/components/Widget/UserMovieGuidelistWidget";
-import { UserMovieWatchlistWidget } from "@/components/Widget/UserMovieWatchlistWidget";
-import { MovieNowPlayingWidget } from "@/components/Widget/MovieNowPlayingWidget";
-import { MovieUpcomingWidget } from "@/components/Widget/MovieUpcomingWidget";
+import { UserMovieGuidelistWidget } from '@/components/Widget/UserMovieGuidelistWidget';
+import { UserMovieWatchlistWidget } from '@/components/Widget/UserMovieWatchlistWidget';
+import { MovieNowPlayingWidget } from '@/components/Widget/MovieNowPlayingWidget';
+import { MovieUpcomingWidget } from '@/components/Widget/MovieUpcomingWidget';
 
 export default function Dashboard() {
-    const { user, loading } = useAuth();
-    const t = useTranslations('word');
+  const { user, loading } = useAuth();
+  const t = useTranslations('word');
 
-    if (!user || loading)
-        return (
-            <Loader/>
-        )
-    return (
-        <main className="flex flex-col gap-2 p-4">
-            <div className="text-4xl font-bold">{t('hello')} {user.full_name}</div>
-            <UserMovieWatchlistWidget/>
-            <UserMovieGuidelistWidget/>
-            <MovieNowPlayingWidget/>
-            <MovieUpcomingWidget/>
-        </main>
-    )
+  if (!user || loading) return <Loader />;
+  return (
+    <main className="flex flex-col gap-2 p-4">
+      <div className="text-4xl font-bold">
+        {t('hello')} {user.full_name}
+      </div>
+      <UserMovieWatchlistWidget />
+      <UserMovieGuidelistWidget />
+      {/* <MovieNowPlayingWidget />
+      <MovieUpcomingWidget /> */}
+    </main>
+  );
 }

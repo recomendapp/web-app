@@ -1,16 +1,20 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Provider, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase/client';
-import { gql, useQuery } from '@apollo/client';
-import { User } from '@/types/type.user';
-import USER_FRAGMENT from './fragments/userFragment';
-import SUBSCRIPTION_FRAGMENT from '@/components/Subscription/fragments/subscriptionFragment';
-import { useRouter } from 'next/navigation';
+
+// GRAPHQL
+import { useQuery } from '@apollo/client';
+import GET_USER_BY_ID from '@/graphql/User/User/queries/GetUserById';
+import type {
+  GetUserByIdQuery,
+  UserFragment,
+} from '@/graphql/__generated__/graphql';
 
 export interface UserState {
-  user: User | null | undefined;
+  user: UserFragment | null | undefined;
   session: Session | null | undefined;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
@@ -26,7 +30,7 @@ export interface UserState {
 }
 
 const defaultState: UserState = {
-  user: null,
+  user: undefined,
   session: null,
   loading: true,
   login: async () => {},
@@ -36,75 +40,52 @@ const defaultState: UserState = {
   userRefresh: async () => {},
 };
 
-const USER_QUERY = gql`
-  query UserQuery($userId: UUID!) {
-    userCollection(
-      filter: { id: { eq: $userId } }
-      last: 1
-    ) {
-      edges {
-        user: node {
-          ...User
-          subscriptions: subscriptionsCollection(
-            filter: { user_id: { eq: $userId } }
-            last: 1
-          ) {
-            edges {
-              node {
-                ...Subscription
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  ${USER_FRAGMENT}
-  ${SUBSCRIPTION_FRAGMENT}
-`
-
 // create the context
 const AuthProvider = createContext<UserState>(defaultState);
 
 // create the provider component
-export const AuthContext = ({
-  children
-} : {
-  children: React.ReactNode;
-}) => {
+export const AuthContext = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   // const [ user, setUser ] = useState<User | null | undefined>();
-  const [ session, setSession ] = useState<Session | null>();
-  const [ sessionLoading, setSessionLoading ] = useState(true);
-  const [ loading, setLoading ] = useState(true);
-  const { data, loading: userLoading } = useQuery(USER_QUERY, {
-    variables: {
-      userId: session?.user.id
-    },
-    skip: !session?.user?.id
-  });
-  const user = data?.userCollection?.edges[0]?.user;
+  const [session, setSession] = useState<Session | null>();
+  const [sessionLoading, setSessionLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const { data: userQuery, loading: userLoading } = useQuery<GetUserByIdQuery>(
+    GET_USER_BY_ID,
+    {
+      variables: {
+        userId: session?.user.id,
+      },
+      skip: !session?.user?.id,
+    }
+  );
+  const user = userQuery?.userCollection?.edges[0]?.user;
 
   const init = async () => {
     const setData = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
       if (error) throw error;
       // const { data: dataUser, error: errorUser } = await supabase.from('user').select('*').eq('id', session?.user?.id).single();
-      
+
       if (error) throw error;
       setSession(session);
       // setUser(dataUser);
       // setLoading(false);
       setSessionLoading(false);
     };
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        setData();
-      } else {
-        setSession(null);
-        setSessionLoading(false);
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (session) {
+          setData();
+        } else {
+          setSession(null);
+          setSessionLoading(false);
+        }
       }
-    });
+    );
 
     setData();
 
@@ -118,15 +99,14 @@ export const AuthContext = ({
   }, []);
 
   useEffect(() => {
-    if (!userLoading && !sessionLoading)
-      setLoading(false)
-  }, [sessionLoading, userLoading])
+    if (!userLoading && !sessionLoading) setLoading(false);
+  }, [sessionLoading, userLoading]);
 
   const login = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
-    })
+    });
     if (error) throw error;
     router.refresh();
   };
@@ -144,31 +124,27 @@ export const AuthContext = ({
     username: string,
     password: string
   ) => {
-    const { error } = await supabase.auth.signUp(
-      {
-        email: email,
-        password: password,
-        options: {
-          emailRedirectTo: `${location.origin}/auth/callback`,
-          data: {
-            full_name: name,
-            username: username,
-          }
+    const { error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+        data: {
+          full_name: name,
+          username: username,
         },
       },
-    )
+    });
     if (error) throw error;
   };
 
-  const loginOAuth2 = async (
-    provider: Provider
-  ) => {
+  const loginOAuth2 = async (provider: Provider) => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
         redirectTo: `${location.origin}/auth/callback`,
-      }
-    })
+      },
+    });
     if (error) throw error;
   };
 
@@ -179,7 +155,16 @@ export const AuthContext = ({
 
   return (
     <AuthProvider.Provider
-      value={{ user, session, loading, login, logout, signup, loginOAuth2, userRefresh }}
+      value={{
+        user,
+        session,
+        loading,
+        login,
+        logout,
+        signup,
+        loginOAuth2,
+        userRefresh,
+      }}
     >
       {children}
     </AuthProvider.Provider>

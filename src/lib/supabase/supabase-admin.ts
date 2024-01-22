@@ -19,7 +19,7 @@ const upsertProductRecord = async (product: Stripe.Product) => {
     description: product.description,
     image: product.images?.[0] ?? null,
     metadata: product.metadata,
-    features: product.features as any
+    features: product.features as any,
   };
 
   const { error } = await supabaseAdmin.from('products').upsert([productData]);
@@ -49,7 +49,7 @@ const upsertPriceRecord = async (price: Stripe.Price) => {
 
 const createOrRetrieveCustomer = async ({
   email,
-  uuid
+  uuid,
 }: {
   email: string;
   uuid: string;
@@ -63,8 +63,8 @@ const createOrRetrieveCustomer = async ({
     const customerData: { metadata: { supabaseUUID: string }; email?: string } =
       {
         metadata: {
-          supabaseUUID: uuid
-        }
+          supabaseUUID: uuid,
+        },
       };
     if (email) customerData.email = email;
     const customer = await stripe.customers.create(customerData);
@@ -92,7 +92,7 @@ const copyBillingDetailsToCustomer = async (
     .from('users')
     .update({
       billing_address: { ...address },
-      payment_method: { ...payment_method[payment_method.type] }
+      payment_method: { ...payment_method[payment_method.type] },
     })
     .eq('id', uuid);
   if (error) throw error;
@@ -114,7 +114,7 @@ const manageSubscriptionStatusChange = async (
   const { id: uuid } = customerData!;
 
   const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
-    expand: ['default_payment_method']
+    expand: ['default_payment_method'],
   });
   // Upsert the latest status of the subscription object.
   const subscriptionData: Database['public']['Tables']['subscriptions']['Insert'] =
@@ -150,7 +150,7 @@ const manageSubscriptionStatusChange = async (
         : null,
       trial_end: subscription.trial_end
         ? toDateTime(subscription.trial_end).toISOString()
-        : null
+        : null,
     };
 
   const { error } = await supabaseAdmin

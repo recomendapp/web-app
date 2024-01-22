@@ -1,37 +1,37 @@
-import { getActiveProductsWithPrices, getSession, getSubscription } from "@/lib/supabase/server"
-import { Price, ProductWithPrices } from "@/types/type.stripe"
-import SubscriptionButton from "./SubscriptionButton";
-import { Check, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import Pricing from "@/components/Subscription/Pricing";
-
+import {
+  getActiveProductsWithPrices,
+  getSession,
+  getSubscriptionByUserId,
+} from '@/lib/supabase/server';
+import { Price, ProductWithPrices } from '@/types/type.stripe';
+import SubscriptionButton from './SubscriptionButton';
+import { Check, Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import Pricing from '@/components/Subscription/Pricing';
 
 export default async function Upgrade() {
-    const [session, products, subscription] = await Promise.all([
-        getSession(),
-        getActiveProductsWithPrices(),
-        getSubscription()
-      ]);
+  const [session, products] = await Promise.all([
+    getSession(),
+    getActiveProductsWithPrices(),
+  ]);
 
-    return (
-        <main className="h-full w-full flex flex-col gap-8 p-4">
-            <Pricing
-                session={session}
-                user={session?.user}
-                products={products}
-                subscription={subscription}
-            />
-        </main>
-    )
+  return (
+    <main className="h-full w-full flex flex-col gap-8 p-4">
+      <Pricing
+        session={session}
+        products={products}
+      />
+    </main>
+  );
 }
 
 const formatPrice = (price: Price) => {
-    const priceString = new Intl.NumberFormat('fr-FR', {
-        style: 'currency',
-        currency: price.currency,
-        minimumFractionDigits: 0
-    }).format((price?.unit_amount || 0) / 100);
-  
-    return priceString;
-  };
+  const priceString = new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: price.currency,
+    minimumFractionDigits: 0,
+  }).format((price?.unit_amount || 0) / 100);
+
+  return priceString;
+};

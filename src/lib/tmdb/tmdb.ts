@@ -1,18 +1,20 @@
 export async function getMovieDetails(movie: number, language: string) {
   try {
-    const movieDetails = await (await fetch(
-      `${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/${movie}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&append_to_response=credits,videos`
-    )).json();
+    const movieDetails = await (
+      await fetch(
+        `${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/${movie}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&append_to_response=credits,videos`
+      )
+    ).json();
     const directors = movieDetails.credits.crew.filter(
       (member: any) => member.job === 'Director'
     );
     const dataDetails = {
       ...movieDetails,
-      directors
+      directors,
     };
     return dataDetails;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 }
 
@@ -88,7 +90,7 @@ export async function handleMoviesNowPlaying(
   region: any,
   page: number
 ) {
-  const {results} = await (
+  const { results } = await (
     await fetch(
       `${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/now_playing?include_adult=false&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}&region=${region}`
     )
@@ -101,7 +103,7 @@ export async function handleMoviesUpcoming(
   region: any,
   page: number
 ) {
-  const {results} = await (
+  const { results } = await (
     await fetch(
       `${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/upcoming?include_adult=false&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}&region=${region}`
     )

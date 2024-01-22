@@ -8,8 +8,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
-interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-}
+interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {}
 
 export function SettingsNav({ className, ...props }: SidebarNavProps) {
   const t = useTranslations('settings');
@@ -63,7 +62,7 @@ export function SettingsNav({ className, ...props }: SidebarNavProps) {
           </Link>
         ))}
       </nav>
-      <ScrollBar orientation='horizontal'/>
+      <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
 }

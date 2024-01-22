@@ -1,45 +1,40 @@
-"use client"
+'use client';
 
-import { Cross2Icon } from "@radix-ui/react-icons"
-import { Table } from "@tanstack/react-table"
+import { Cross2Icon } from '@radix-ui/react-icons';
+import { Table } from '@tanstack/react-table';
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { DataTableViewOptions } from "@/components/Playlist/Guidelist/table/component/data-table-view-options"
-import { DataTableSortOptions } from "./data-table-sort-options"
-import { Edit } from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useAuth } from "@/context/AuthContext/auth-context"
-import { Playlist } from "@/types/type.playlist"
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { DataTableViewOptions } from '@/components/Playlist/Guidelist/table/component/data-table-view-options';
+import { DataTableSortOptions } from './data-table-sort-options';
+
+// GRAPHQL
+import { PlaylistFragment } from '@/graphql/__generated__/graphql';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
-  playlist: Playlist;
+  playlist: PlaylistFragment;
 }
 
 export function DataTableToolbar<TData>({
   table,
-  playlist
+  playlist,
 }: DataTableToolbarProps<TData>) {
-  const { user } = useAuth();
-  const pathname = usePathname();
-  const isFiltered = table.getState().columnFilters.length > 0
+  const isFiltered = table.getState().columnFilters.length > 0;
 
-  const hasRightToEdit = () => {
-    if (user?.id == playlist?.user_id) {
-      return true;
-    }
-    return false;
-  }
   return (
     <div className="flex flex-col-reverse items-end lg:flex-row lg:items-center lg:justify-between gap-4">
       <div className="flex flex-1 items-center gap-2 w-full">
         <Input
-          placeholder={"Rechercher dans la playlist..."}
-          value={(table.getColumn("item_film.title")?.getFilterValue() as string) ?? ""}
+          placeholder={'Rechercher dans la playlist...'}
+          value={
+            (table.getColumn('movie')?.getFilterValue() as string) ??
+            ''
+          }
           onChange={(event) => {
-            table.getColumn("item_film.title")?.setFilterValue(event.target.value, )
+            table
+              .getColumn('movie')
+              ?.setFilterValue(event.target.value);
           }}
           className="h-8 w-full lg:w-[250px]"
         />
@@ -55,20 +50,9 @@ export function DataTableToolbar<TData>({
         )}
       </div>
       <div className="w-fit flex gap-2">
-        {hasRightToEdit() && <Button
-          variant="outline"
-          size="sm"
-          className="flex h-8"
-          asChild
-        >
-          <Link href={`${pathname}/edit`}>
-            <Edit className="mr-2 h-4 w-4" />
-            Éditer
-          </Link>
-        </Button>}
         <DataTableSortOptions table={table} />
         <DataTableViewOptions table={table} />
       </div>
     </div>
-  )
+  );
 }

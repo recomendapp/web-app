@@ -1,11 +1,7 @@
 import SearchFilters from '@/components/Search/SearchFilters';
 import SearchBar from '@/components/Search/SearchBar';
 
-export default function Search({
-    children
-}: {
-    children: React.ReactNode;
-}) {
+export default function Search({ children }: { children: React.ReactNode }) {
   return (
     <main className="p-4">
       <div className="flex flex-col gap-4 pb-4 lg:hidden">

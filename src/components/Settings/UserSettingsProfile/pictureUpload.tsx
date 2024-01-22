@@ -1,8 +1,8 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UserFragment } from '@/graphql/__generated__/graphql';
 import { getInitiales } from '@/lib/utils';
-import { User } from '@/types/type.user';
 import { Loader2 } from 'lucide-react';
 import { Dispatch } from 'react';
 
@@ -12,12 +12,11 @@ export default function PictureUpload({
   newAvatar,
   setNewAvatar,
 }: {
-  user: User;
+  user: UserFragment;
   isUploading: boolean;
   newAvatar: File | undefined;
   setNewAvatar: Dispatch<any>;
 }) {
-
   return (
     <label className="flex w-[150px] h-[150px] rounded-full overflow-hidden relative cursor-pointer">
       <Avatar className="w-full h-full">
@@ -30,13 +29,13 @@ export default function PictureUpload({
         )}
         <AvatarImage
           src={
-            newAvatar ? URL.createObjectURL(newAvatar)
-            :
-            user.avatar_url ?? ''
+            newAvatar ? URL.createObjectURL(newAvatar) : user.avatar_url ?? ''
           }
           alt={user.username}
         />
-        <AvatarFallback className="text-[75px]">{getInitiales(user.full_name)}</AvatarFallback>
+        <AvatarFallback className="text-[75px]">
+          {getInitiales(user.full_name)}
+        </AvatarFallback>
       </Avatar>
       <input
         disabled={isUploading}

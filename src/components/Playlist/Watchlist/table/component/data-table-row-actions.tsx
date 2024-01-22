@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import Link from "next/link"
-import { Column, Row, Table } from "@tanstack/react-table"
-import { MovieAction } from "@/components/Film/FilmAction/MovieAction"
+import Link from 'next/link';
+import { Column, Row, Table } from '@tanstack/react-table';
+import { MovieAction } from '@/components/Movie/Actions/MovieAction';
 
 // UI
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,148 +13,190 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from '@/components/ui/dropdown-menu';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+} from '@/components/ui/dialog';
 
 // ICONS
-import { DotsHorizontalIcon } from "@radix-ui/react-icons"
-import { Dispatch, SetStateAction, useState } from "react"
-import ButtonShare from "@/components/utils/ButtonShare"
-import UserCard from "@/components/User/UserCard/UserCard"
-import { PlaylistItem } from "@/types/type.playlist"
-import { Film, FilmWatchlist } from "@/types/type.film"
-import { useMutation } from "@apollo/client"
-import { useAuth } from "@/context/AuthContext/auth-context"
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { Dispatch, SetStateAction, useState } from 'react';
+import ButtonShare from '@/components/utils/ButtonShare';
+import { useAuth } from '@/context/AuthContext/auth-context';
 
-import FILM_ACTION_QUERY from '@/components/Film/FilmAction/queries/filmActionQuery';
-import DELETE_FILM_WATCHLIST_MUTATION from '@/components/Film/FilmAction/components/MovieWatchlistAction/mutations/deleteFilmWatchlistMutationOLD';
-import WATCHLIST_QUERY from "@/components/Playlist/Watchlist/queries/watchlistQuery"
+// GRAPHQL
+import { useMutation } from '@apollo/client';
+import DELETE_USER_MOVIE_WATCHLIST from '@/graphql/User/Movie/Watchlist/mutations/DeleteUserMovieWatchlist';
+import GET_USER_MOVIE_WATCHLIST_BY_USER_ID from '@/graphql/User/Movie/Watchlist/queries/GetUserMovieWatchlistByUserId';
+import { DeleteUserMovieWatchlistMutation, GetUserMovieWatchlistByUserIdQuery, TmdbMovieMinimalFragment, UserMovieWatchlistFragment } from '@/graphql/__generated__/graphql';
+import { useLocale } from 'next-intl';
+import toast from 'react-hot-toast';
 
 interface DataTableRowActionsProps {
-  table: Table<FilmWatchlist>,
-  row: Row<FilmWatchlist>,
-  column: Column<FilmWatchlist, unknown>,
-  data: FilmWatchlist,
+  table: Table<{ node: UserMovieWatchlistFragment }>;
+  row: Row<{ node: UserMovieWatchlistFragment }>;
+  column: Column<{ node: UserMovieWatchlistFragment }, unknown>;
+  data: { node: UserMovieWatchlistFragment };
 }
 
 export function DataTableRowActions({
   row,
   table,
   column,
-  data
+  data,
 }: DataTableRowActionsProps) {
-
   const { user } = useAuth();
-  const [ openShowDirectors, setOpenShowDirectors ] = useState(false);
-  const [ deleteFilmWatchlistMutation, { error: errorDeletingWatch } ] = useMutation(DELETE_FILM_WATCHLIST_MUTATION, {
-    update: (cache, { data }) => {
-			const watchlistData = cache.readQuery<any>({
-				query: WATCHLIST_QUERY,
-        variables: {
-          user_id: user?.id
-        },
-			});
-			cache.writeQuery({
-				query: WATCHLIST_QUERY,
-        variables: {
-          user_id: user?.id
-        },
-        data: {
-          watchlist: {
-            edges: watchlistData!.watchlist.edges.filter((edge: any) =>
-                    edge.item.film_id != data?.deleteFromuser_movie_watchlistCollection?.records[0]?.film_id
-                  )
+  const locale = useLocale();
+  const [openShowDirectors, setOpenShowDirectors] = useState(false);
+  const [deleteFilmWatchlistMutation, { error: errorDeletingWatch }] =
+    useMutation<DeleteUserMovieWatchlistMutation>(DELETE_USER_MOVIE_WATCHLIST, {
+      update: (cache, { data }) => {
+        const watchlistData = cache.readQuery<GetUserMovieWatchlistByUserIdQuery>({
+          query: GET_USER_MOVIE_WATCHLIST_BY_USER_ID,
+          variables: {
+            user_id: user?.id,
+            locale: locale,
           },
-        },
-			});
-		},
-  });
-  
+        });
+        if (watchlistData?.user_movie_watchlistCollection?.edges) {
+          cache.writeQuery<GetUserMovieWatchlistByUserIdQuery>({
+            query: GET_USER_MOVIE_WATCHLIST_BY_USER_ID,
+            variables: {
+              user_id: user?.id,
+              locale: locale,
+            },
+            data: {
+              ...watchlistData,
+              user_movie_watchlistCollection: {
+                ...watchlistData?.user_movie_watchlistCollection,
+                edges: watchlistData!.user_movie_watchlistCollection?.edges.filter(
+                  ({ node }) =>
+                    node.id !=
+                    data?.deleteFromuser_movie_watchlistCollection?.records[0]
+                      ?.id
+                ),
+              },
+            },
+          });
+        }
+      },
+    });
+
+    const handleUnwatchlist = async () => {
+      try {
+        if (!user || !data.node.movie_id) throw Error("User or movieId doesn't exist");
+        await deleteFilmWatchlistMutation({
+          variables: {
+            movie_id: data.node.movie_id,
+            user_id: user?.id,
+          },
+        });
+      } catch (errors) {
+        toast.error("Une erreur s'est produite");
+      }
+    };
+
   return (
     <>
       <DropdownMenu>
         <div className="flex gap-2 items-center justify-end">
           <div className="hidden lg:invisible lg:group-hover:visible lg:flex items-center gap-2">
-          <MovieAction filmId={data.film_id} rating like />
+            <MovieAction filmId={data.node.movie_id} rating like />
           </div>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-              >
-                <DotsHorizontalIcon className="h-4 w-4" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+            >
+              <DotsHorizontalIcon className="h-4 w-4" />
+              <span className="sr-only">Open menu</span>
+            </Button>
+          </DropdownMenuTrigger>
         </div>
 
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem asChild><Link href={`/film/${data.film_id}`}>Voir le film</Link></DropdownMenuItem>
-          <ShowDirectorsButton film={data.film} setOpen={setOpenShowDirectors} />
+          <DropdownMenuItem asChild>
+            <Link href={`/film/${data.node.movie_id}`}>Voir le film</Link>
+          </DropdownMenuItem>
+          <ShowDirectorsButton
+            movie={data.node.movie}
+            setOpen={setOpenShowDirectors}
+          />
           <DropdownMenuSeparator />
-          <DropdownMenuItem><ButtonShare url={`${location.origin}/film/${data.film?.id}`}/></DropdownMenuItem>
-          <DropdownMenuItem 
-            onClick={async () => {
-              const { errors } = await deleteFilmWatchlistMutation({
-                variables: {
-                  film_id: data.film_id,
-                  user_id: user?.id,
-                }
-              });
-            }}
-          >
+          <DropdownMenuItem>
+            <ButtonShare url={`${location.origin}/film/${data.node.movie_id}`} />
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={handleUnwatchlist}>
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <ShowDirectorsModal film={data.film} open={openShowDirectors} setOpen={setOpenShowDirectors}/>
+      <ShowDirectorsModal
+        movie={data.node.movie}
+        open={openShowDirectors}
+        setOpen={setOpenShowDirectors}
+      />
     </>
-  )
+  );
 }
 
-export function ShowDirectorsButton({ film, setOpen } : { film: Film, setOpen: Dispatch<SetStateAction<boolean>> }) {
-  if (!film?.directors){
+export function ShowDirectorsButton({
+  movie,
+  setOpen,
+}: {
+  movie: TmdbMovieMinimalFragment;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) {
+  if (!movie.directors?.edges.length) {
     return (
       <DropdownMenuItem asChild>
         <p>Unknow</p>
       </DropdownMenuItem>
-    )
+    );
   }
-  if (film.directors.length == 1) {
+  if (movie.directors?.edges.length == 1) {
     return (
       <DropdownMenuItem asChild>
-        <Link href={`/person/${film.directors[0].id}`}>Voir le réalisateur</Link>
+        <Link href={`/person/${movie.directors.edges[0].node.person.id}`}>
+          Voir le réalisateur
+        </Link>
       </DropdownMenuItem>
-    )
+    );
   }
   return (
     <DropdownMenuItem onClick={() => setOpen(true)}>
       Voir les réalisateurs
     </DropdownMenuItem>
-  )
+  );
 }
 
-export function ShowDirectorsModal({ film, open, setOpen } : { film: Film, open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) {
+export function ShowDirectorsModal({
+  movie,
+  open,
+  setOpen,
+}: {
+  movie: TmdbMovieMinimalFragment;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-5xl bg-black">
         <DialogHeader>
-          <DialogTitle className='text-center'>Réalisateur</DialogTitle>
+          <DialogTitle className="text-center">Réalisateur</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4">
-          {film.directors?.map((director: any) => (
-            <Button key={director.id} variant={'ghost'} asChild>
-              <Link href={`/person/${director.id}`}>{director.name}</Link>
+          {movie.directors?.edges.map(({ node }) => (
+            <Button key={node.id} variant={'ghost'} asChild>
+              <Link href={`/person/${node.person.id}`}>{node.person.name}</Link>
             </Button>
           ))}
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

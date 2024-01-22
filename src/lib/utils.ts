@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getInitiales = (name: string) => {
-  if (!name) return null
+  if (!name) return null;
   const words = name.normalize('NFKC').toUpperCase().split(' ');
   let initials = '';
   if (words.length === 1) {
@@ -19,12 +19,13 @@ export const getInitiales = (name: string) => {
   return initials;
 };
 
-export function ConvertHoursMinutes(runtime: number) {
+export function ConvertHoursMinutes(runtime: number | null | undefined) {
+  if (!runtime) return "N/A";
   const heures = Math.floor(runtime / 60);
   const minutes = runtime % 60;
   const minutesFormat = minutes < 10 ? `0${minutes}` : minutes;
 
-  return (`${heures}h${minutesFormat}`);
+  return `${heures}h${minutesFormat}`;
 }
 
 export function convertDate(date: string) {

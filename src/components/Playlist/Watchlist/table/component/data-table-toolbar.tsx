@@ -1,12 +1,12 @@
-"use client"
+'use client';
 
-import { Cross2Icon } from "@radix-ui/react-icons"
-import { Table } from "@tanstack/react-table"
+import { Cross2Icon } from '@radix-ui/react-icons';
+import { Table } from '@tanstack/react-table';
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { DataTableViewOptions } from "@/components/Playlist/Guidelist/table/component/data-table-view-options"
-import { DataTableSortOptions } from "./data-table-sort-options"
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { DataTableViewOptions } from '@/components/Playlist/Guidelist/table/component/data-table-view-options';
+import { DataTableSortOptions } from './data-table-sort-options';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -15,34 +15,24 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
-
-  const isFiltered = table.getState().columnFilters.length > 0
+  const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
     <div className="flex items-center justify-between gap-4">
       <div className="flex flex-1 items-center gap-2">
         <Input
-          placeholder={"Rechercher dans la watchlist..."}
-          value={(table.getColumn("item_film.title")?.getFilterValue() as string) ?? ""}
+          placeholder={'Rechercher dans la watchlist...'}
+          value={
+            (table.getColumn('movie')?.getFilterValue() as string) ??
+            ''
+          }
           onChange={(event) =>
-            table.getColumn("item_film.title")?.setFilterValue(event.target.value)
+            table
+              .getColumn('movie')
+              ?.setFilterValue(event.target.value)
           }
           className="h-8 w-full lg:w-[250px]"
         />
-        {/* {table.getColumn("status") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("status")}
-            title="Status"
-            options={statuses}
-          />
-        )}
-        {table.getColumn("priority") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("priority")}
-            title="Priority"
-            options={priorities}
-          />
-        )} */}
         {isFiltered && (
           <Button
             variant="ghost"
@@ -57,5 +47,5 @@ export function DataTableToolbar<TData>({
       <DataTableSortOptions table={table} />
       <DataTableViewOptions table={table} />
     </div>
-  )
+  );
 }
