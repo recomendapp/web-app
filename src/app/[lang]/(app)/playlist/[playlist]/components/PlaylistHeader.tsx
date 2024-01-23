@@ -41,7 +41,7 @@ export default function PlaylistHeader({ playlist } : { playlist: PlaylistFragme
       >
         <div className="w-full h-full flex gap-4 p-4 items-center bg-gradient-to-t from-background to-[#000000bd] bg-opacity-75">
           <div
-            className="w-[200px] shadow-md cursor-pointer"
+            className="w-[150px] md:w-[200px] shadow-md cursor-pointer shrink-0"
             onClick={() => playlist.user_id == user?.id && setOpen(true)}
           >
             <AspectRatio ratio={1 / 1}>
@@ -61,10 +61,10 @@ export default function PlaylistHeader({ playlist } : { playlist: PlaylistFragme
             <p>
               {playlist?.is_public ? 'Playlist publique' : 'Playlist privée'}
             </p>
-            <h2 className="text-clamp font-bold text-accent-1">
+            <h2 className="text-clamp font-bold text-accent-1 line-clamp-2">
               {playlist?.title}
             </h2>
-            <p>{playlist?.description}</p>
+            <p className='line-clamp-2'>{playlist?.description}</p>
             <p className="text-muted-foreground">
               {Number(playlist?.items_count) ?? 0} film
               {Number(playlist?.items_count) > 1 && 's'}

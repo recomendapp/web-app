@@ -47,7 +47,7 @@ export function ShowReviews({ filmId }: { filmId: string }) {
       if (tablePart === 'like') {
         column = 'created_at';
       } else if (tablePart == 'rating') {
-        column = 'rating';
+        column = 'user_movie_activity.rating';
       } else {
         column = 'updated_at';
       }
@@ -88,7 +88,7 @@ export function ShowReviews({ filmId }: { filmId: string }) {
             <SelectContent>
               <SelectGroup>
                 <SelectItem value={'recent'}>Récentes</SelectItem>
-                <SelectItem value={'recommended'}>Recommandées</SelectItem>
+                <SelectItem value={'like-desc'}>Populaires</SelectItem>
                 <SelectItem value={'rating-desc'}>
                   Notes décroissantes
                 </SelectItem>

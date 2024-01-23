@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { addMinutes, format } from 'date-fns';
 
 // UI
 import {
@@ -9,29 +9,33 @@ import {
 } from '@/components/ui/tooltip';
 import { useLocale } from 'next-intl';
 import { enUS, fr } from 'date-fns/locale';
-import { cn } from '@/lib/utils';
+import { ConvertHoursMinutes, cn } from '@/lib/utils';
 
-export function DateOnlyYearTooltip({
-  date,
+export function RuntimeTooltip({
+  runtime,
   className,
 }: {
-  date: string | null | undefined;
+  runtime: number;
   className?: string;
 }) {
   const locale = useLocale();
-  if (!date) return;
+
+  if (!runtime) return;
+
+  const endTime = addMinutes(new Date(), runtime);
+
+  const formattedEndTime = format(endTime, 'HH:mm', {
+    locale: locale === 'en' ? enUS : fr,
+  });
+
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <p className={cn('w-fit', className)}>{date.split('-')[0]}</p>
+          <span className={cn('w-fit', className)}>{ConvertHoursMinutes(runtime ?? 0)}</span>
         </TooltipTrigger>
         <TooltipContent align="center" side="bottom">
-          {date
-            ? format(new Date(date), 'PPP', {
-                locale: locale === 'fr' ? fr : enUS,
-              })
-            : 'Unknown'}
+          {runtime ? `Se termine à ${formattedEndTime}` : 'Unknown'}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

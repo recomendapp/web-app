@@ -1,20 +1,21 @@
-import { AlertCircle, Bookmark } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext/auth-context';
+import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
+
+// COMPONENTS
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Icons } from '../../../../icons';
-import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
-import { useAuth } from '@/context/AuthContext/auth-context';
 
 // GRAPHQL
 import { useQuery, useMutation } from '@apollo/client';
 import GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID from '@/graphql/User/Movie/Watchlist/queries/GetUserMovieWatchlistByMovieId';
 import GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivityByMovieId';
+import GET_USER_MOVIE_WATCHLIST_BY_USER_ID from '@/graphql/User/Movie/Watchlist/queries/GetUserMovieWatchlistByUserId';
 import INSERT_WATCHLIST_MUTATION from '@/graphql/User/Movie/Watchlist/mutations/InsertUserMovieWatchlist';
 import DELETE_WATCHLIST_MUTATION from '@/graphql/User/Movie/Watchlist/mutations/DeleteUserMovieWatchlist';
 import type {
@@ -22,8 +23,12 @@ import type {
   GetUserMovieActivityByMovieIdQuery,
   GetUserMovieWatchlistByMovieIdQuery,
   InsertUserMovieWatchlistMutation,
-  UpdateUserMovieActivityMutation,
 } from '@/graphql/__generated__/graphql';
+
+// ICONS
+import { AlertCircle, Bookmark } from 'lucide-react';
+import { Icons } from '../../../../icons';
+import { useLocale } from 'next-intl';
 
 interface MovieWatchlistActionProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -34,7 +39,10 @@ export function MovieWatchlistAction({
   movieId
 }
 : MovieWatchlistActionProps) {
+
   const { user } = useAuth();
+
+  const locale = useLocale();
 
   const router = useRouter();
 
@@ -88,6 +96,15 @@ export function MovieWatchlistAction({
           },
         });
       },
+      refetchQueries: [
+        {
+          query: GET_USER_MOVIE_WATCHLIST_BY_USER_ID,
+          variables: {
+            user_id: user?.id,
+            locale: locale,
+          },
+        },
+      ],
     });
 
   const [deleteActivityMutation] =
@@ -106,6 +123,15 @@ export function MovieWatchlistAction({
           },
         });
       },
+      refetchQueries: [
+        {
+          query: GET_USER_MOVIE_WATCHLIST_BY_USER_ID,
+          variables: {
+            user_id: user?.id,
+            locale: locale,
+          },
+        },
+      ],
     });
 
   const handleWatchlist = async () => {

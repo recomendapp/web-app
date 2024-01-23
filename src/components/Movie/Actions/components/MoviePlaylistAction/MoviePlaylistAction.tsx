@@ -31,15 +31,22 @@ import { useAuth } from '@/context/AuthContext/auth-context';
 import { useMutation, useQuery } from '@apollo/client';
 import USER_PLAYLISTS_QUERY from '@/graphql/Playlist/Playlist/queries/GetPlaylistsByUserId';
 import INSERT_PLAYLIST_ITEM_MUATION from '@/graphql/Playlist/PlaylistItem/mutations/InsertPlaylistItemMutation';
-import type { GetPlaylistsByUserIdQuery, PlaylistFragment } from '@/graphql/__generated__/graphql';
+import GET_PLAYLIST_BY_ID from '@/graphql/Playlist/Playlist/queries/GetPlaylistById';
+import type { GetPlaylistsByUserIdQuery, InsertPlaylistItemMutation, PlaylistFragment } from '@/graphql/__generated__/graphql';
+import { useLocale } from 'next-intl';
 
 interface MoviePlaylistActionProps {
   movieId: string;
 }
 
 export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
+  
   const { user, loading: userLoading } = useAuth();
+
+  const locale = useLocale();
+
   const router = useRouter();
+  
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
 
@@ -57,16 +64,22 @@ export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
   const playlists = userPlaylistsQuery?.playlistCollection?.edges;
 
   const [insertPlaylistItemMutation, { error: errorInsertPlaylistItem }] =
-    useMutation(INSERT_PLAYLIST_ITEM_MUATION, {
-      refetchQueries: [
-        {
-          query: USER_PLAYLISTS_QUERY,
-          variables: {
-            user_id: user?.id,
-            order: { updated_at: 'DescNullsFirst' },
-          },
-        },
-      ],
+    useMutation<InsertPlaylistItemMutation>(INSERT_PLAYLIST_ITEM_MUATION, {
+      refetchQueries(result) {
+        if (result.data?.insertIntoplaylist_itemCollection?.records.length) {
+          return [
+            {
+              query: GET_PLAYLIST_BY_ID,
+              variables: {
+                id: result.data?.insertIntoplaylist_itemCollection?.records[0].playlist_id,
+                locale: locale,
+              },
+            },
+          ];
+        } else {
+          return [];
+        }
+      },
     });
 
   const handleAddToPlaylist = async (playlist: PlaylistFragment) => {

@@ -44,7 +44,7 @@ export function ProfileFollowButton({
     {
       onSuccess: (data, variables) => {
         queryClient.setQueryData(
-          [variables.user_id, 'following', variables.followee_id],
+          ['user', variables.user_id, 'following', variables.followee_id],
           data
         );
       },
@@ -56,7 +56,7 @@ export function ProfileFollowButton({
     {
       onSuccess: (data, variables) => {
         queryClient.setQueryData(
-          [variables.user_id, 'following', variables.followee_id],
+          ['user', variables.user_id, 'following', variables.followee_id],
           data
         );
       },

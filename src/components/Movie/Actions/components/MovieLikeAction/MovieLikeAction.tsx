@@ -1,4 +1,8 @@
-import { AlertCircle, Heart } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext/auth-context';
+import toast from 'react-hot-toast';
+
+// COMPONENTS
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -6,15 +10,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Icons } from '../../../../icons';
-import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
-import { useAuth } from '@/context/AuthContext/auth-context';
 
 // GRAPHQL
 import { useQuery, useMutation } from '@apollo/client';
 import GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivityByMovieId';
 import GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID from '@/graphql/User/Movie/Watchlist/queries/GetUserMovieWatchlistByMovieId';
+import GET_USER_MOVIE_ACTIVITY from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivity';
 import INSERT_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/InsertUserMovieActivity';
 import UPDATE_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/UpdateUserMovieActivity';
 import type {
@@ -23,12 +24,20 @@ import type {
   UpdateUserMovieActivityMutation,
 } from '@/graphql/__generated__/graphql';
 
+// ICONS
+import { AlertCircle, Heart } from 'lucide-react';
+import { Icons } from '../../../../icons';
+import { useLocale } from 'next-intl';
+
 interface MovieLikeActionProps extends React.HTMLAttributes<HTMLDivElement> {
   movieId: string;
 }
 
 export function MovieLikeAction({ movieId }: MovieLikeActionProps) {
+
   const { user } = useAuth();
+
+  const locale = useLocale();
 
   const router = useRouter();
 
@@ -80,6 +89,21 @@ export function MovieLikeAction({ movieId }: MovieLikeActionProps) {
           },
         });
       },
+      refetchQueries: [
+        {
+          query: GET_USER_MOVIE_ACTIVITY,
+          variables: {
+            filter: {
+              user_id: { eq: user?.id },
+              is_liked: { eq: true },
+            },
+            orderBy: {
+              created_at: 'DescNullsLast',
+            },
+            locale: locale,
+          },
+        },
+      ],
     }
   );
   const [updateActivityMutation] = useMutation<UpdateUserMovieActivityMutation>(
@@ -103,6 +127,21 @@ export function MovieLikeAction({ movieId }: MovieLikeActionProps) {
           },
         });
       },
+      refetchQueries: [
+        {
+          query: GET_USER_MOVIE_ACTIVITY,
+          variables: {
+            filter: {
+              user_id: { eq: user?.id },
+              is_liked: { eq: true },
+            },
+            orderBy: {
+              created_at: 'DescNullsLast',
+            },
+            locale: locale,
+          },
+        },
+      ],
     }
   );
 

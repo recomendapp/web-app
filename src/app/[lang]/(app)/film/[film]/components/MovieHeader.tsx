@@ -43,6 +43,7 @@ import MoviePoster from '@/components/Movie/MoviePoster';
 import { useAuth } from '@/context/AuthContext/auth-context';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { TmdbMovieFragment } from '@/graphql/__generated__/graphql';
+import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 
 export default function MovieHeader({
   movie,
@@ -72,36 +73,11 @@ export default function MovieHeader({
             alt={movie.data?.edges[0].node.title ?? ''}
           />
           {/* MOVIE MAIN DATA */}
-          <div className="flex flex-col gap-2 w-full">
-            {/* TYPE */}
-            <div>Film</div>
-            {/* TITLE */}
-            <div className="text-xl lg:text-6xl font-bold line-clamp-2">
-              <span>{movie.data?.edges[0].node.title}</span>
-            </div>
-            {/* DATE / GENRES / RUNTIME */}
+          <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
+            {/* TYPE & GENRES */}
             <div>
-              {movie.directors?.edges.map(({ node }, index: number) => (
-                <>
-                  {index > 0 && <span>, </span>}
-                  <span key={node.id}>
-                    <Button
-                      variant="link"
-                      className="w-fit p-0 h-full font-bold"
-                      asChild
-                    >
-                      <Link href={`/person/${node.person.id}`}>
-                        {node.person.name}
-                      </Link>
-                    </Button>
-                  </span>
-                </>
-              )) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
-
-              {/* DATE */}
-              <DateOnlyYearTooltip date={movie.release_date ?? ''} inline />
-              {/* GENRES */}
-              <span className=" before:content-['_•_']">
+              <span className='text-accent-1'>Film</span>
+              <span className=" before:content-['_|_']">
                 {movie.genres?.edges.map(({ node }, index: number) => (
                   <span key={node.genre_id}>
                     <Button
@@ -119,16 +95,44 @@ export default function MovieHeader({
                   </span>
                 ))}
               </span>
-              {/* RUNTIME */}
-              <span className=" before:content-['_•_']">
-                {ConvertHoursMinutes(movie.runtime ?? 0)}
-              </span>
             </div>
-            <div className="flex items-center gap-2">
-              {/* <MovieActionCounter movieId={movie.id} /> */}
-              {movie?.videos?.edges.length! > 0 && (
-                <MovieTrailerButton movie={movie} />
-              )}
+            {/* TITLE */}
+            <div>
+              <div className="text-xl lg:text-6xl font-bold line-clamp-2">
+                <span>{movie.data?.edges[0].node.title}</span>
+              </div>
+              {/* DATE */}
+              <DateOnlyYearTooltip date={movie.release_date ?? ''} className='text-2xl'/>
+              
+            </div>
+            <div className=" space-y-2">
+              {/* DATE / GENRES / RUNTIME */}
+              <div>
+                {movie.directors?.edges.map(({ node }, index: number) => (
+                  <>
+                    {index > 0 && <span>, </span>}
+                    <span key={node.id}>
+                      <Button
+                        variant="link"
+                        className="w-fit p-0 h-full font-bold"
+                        asChild
+                      >
+                        <Link href={`/person/${node.person.id}`}>
+                          {node.person.name}
+                        </Link>
+                      </Button>
+                    </span>
+                  </>
+                )) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
+                {/* RUNTIME */}
+                <RuntimeTooltip runtime={movie.runtime ?? 0} className=" before:content-['_•_']" />
+              </div>
+              <div>
+                {/* <MovieActionCounter movieId={movie.id} /> */}
+                {movie?.videos?.edges.length! > 0 && (
+                  <MovieTrailerButton movie={movie} />
+                )} 
+              </div>
             </div>
           </div>
         </div>

@@ -107,8 +107,8 @@ export function PlaylistForm({
             ...playlistData,
             playlistCollection: {
               ...playlistData.playlistCollection,
-              edges: playlistData!.playlistCollection.edges.filter(({node}) => {
-                node.id !== data?.deleteFromplaylistCollection.records[0].id;
+              edges: playlistData!.playlistCollection.edges.filter(({ node }) => {
+                return node.id !== data?.deleteFromplaylistCollection.records[0].id;
               }),
             },
           },
