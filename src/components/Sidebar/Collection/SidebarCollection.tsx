@@ -5,7 +5,7 @@ import SidebarCollectionRoutes from './SidebarCollectionRoutes';
 import { UserPlaylists } from '@/components/User/UserPlaylists/UserPlaylists';
 import { usePathname } from 'next/navigation';
 import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Box } from '@/components/Box/Box';
 import { Button } from '@/components/ui/button';

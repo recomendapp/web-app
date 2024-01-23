@@ -13,7 +13,7 @@ import {
 
 import Link from 'next/link';
 import { getGenreList } from '@/lib/tmdb/tmdb';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 
 interface MapFilterProps extends React.HTMLAttributes<HTMLDivElement> {
   skeleton?: boolean;

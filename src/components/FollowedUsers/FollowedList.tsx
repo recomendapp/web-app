@@ -1,4 +1,4 @@
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { useQuery } from '@apollo/client';
 import USER_FRIENDS_QUERY from '@/graphql/User/Friends/queries/GetUserFriends';
 import Link from 'next/link';

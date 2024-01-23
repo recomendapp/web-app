@@ -3,7 +3,7 @@ import Loader from '@/components/Loader/Loader';
 import ManageSubscriptionButton from '@/components/Subscription/ManageSubscriptionButton';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { postData } from '@/lib/stripe/stripe-helpers';
 import { Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';

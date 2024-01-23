@@ -1,5 +1,5 @@
 import { ApolloClientContext } from '@/context/apollo-client-context';
-import { AuthContext } from '@/context/AuthContext/auth-context';
+import { AuthContext } from '@/context/auth-context';
 import { ReactQueryContext } from '@/context/react-query-context';
 import { ThemeContext } from '@/context/theme-context';
 import { RightSidebarContext } from '@/context/right-sidebar-context';

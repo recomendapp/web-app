@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 
 import { Models } from 'appwrite';
 import { Fragment, useEffect, useState } from 'react';

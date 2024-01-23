@@ -9,7 +9,7 @@ import {
 
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { Playlist } from '@/types/type.playlist';
 import PlaylistGuest from '@/components/Playlist/FilmPlaylist/PlaylistGuest/PlaylistGuest';
 import { ScrollArea } from '@/components/ui/scroll-area';

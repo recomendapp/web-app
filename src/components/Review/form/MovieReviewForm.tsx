@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import toast from 'react-hot-toast';
 import { Icons } from '@/components/icons';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { useMutation } from '@apollo/client';
 
 import UPDATE_REVIEW_MUTATION from '@/graphql/User/Movie/Review/UpdateReview';

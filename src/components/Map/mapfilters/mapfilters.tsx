@@ -15,7 +15,7 @@ import { Accordion } from '@/components/ui/accordion';
 import { getGenreList } from '@/lib/tmdb/tmdb';
 import { MapFiltersGenres } from './mapfiltersgenres';
 import { MapFiltersYears } from './mapfiltersyears';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 
 export function MapFilters(props: any) {
   const { user } = useAuth();

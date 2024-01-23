@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import FollowedUserListButton from '@/components/FollowedUsers/FollowedUserListButton';
 import UserAvatar from '../UserAvatar/UserAvatar';
 import { useTranslations } from 'next-intl';

@@ -2,7 +2,7 @@
 
 import { TableLikes } from '../table/TableLikes';
 import { LikesHeader } from './components/LikesHeader';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { useEffect, useState } from 'react';
 
 import { getMovieDetails } from '@/lib/tmdb/tmdb';

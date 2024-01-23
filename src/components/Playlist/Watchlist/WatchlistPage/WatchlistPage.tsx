@@ -2,7 +2,7 @@
 
 import { TableWatchlist } from '../table/TableWatchlist';
 import { WatchlistHeader } from './components/WatchlistHeader';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { useLocale } from 'next-intl';
 
 // GRAPHQL

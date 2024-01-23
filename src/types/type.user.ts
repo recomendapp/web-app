@@ -20,7 +20,6 @@ export interface User {
   updated_at: string | null;
   username: string;
   username_updated_at: string | null;
-  verified: boolean;
   website: string | null;
   subscriptions: {
     edges: [{ node: SubscriptionWithProduct }];

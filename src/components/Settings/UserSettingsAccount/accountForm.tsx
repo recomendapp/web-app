@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { supabase } from '@/lib/supabase/client';
 import { useMutation } from '@apollo/client';
 import UPDATE_ACCOUNT_MUTATION from './mutations/updateAccountMutation';

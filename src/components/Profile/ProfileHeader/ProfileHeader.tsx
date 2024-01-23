@@ -54,9 +54,9 @@ export default async function ProfileHeader({ profile }: { profile: UserFragment
             className="flex items-center gap-2"
           >
             <h2 className="text-xl font-semibold">{profile.full_name}</h2>
-            {profile.verified && (
+            {/* {profile.verified && (
               <BsFillPatchCheckFill fill="#1D9BF0" size={16} />
-            )}
+            )} */}
             <span className="text-muted-foreground">@{profile.username}</span>
           </Link>
           <div className="hidden @lg:flex items-center gap-2">

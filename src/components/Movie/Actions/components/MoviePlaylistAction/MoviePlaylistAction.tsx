@@ -25,7 +25,7 @@ import {
 
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 
 // GRAPHQL
 import { useMutation, useQuery } from '@apollo/client';

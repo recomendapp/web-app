@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { Review } from '@/types/type.review';
 import { MoreHorizontal, Trash2 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';

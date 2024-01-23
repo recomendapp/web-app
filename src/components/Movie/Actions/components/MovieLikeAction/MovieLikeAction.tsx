@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 
 // COMPONENTS

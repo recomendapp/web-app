@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { useState } from 'react';
 import { PlaylistEditButton } from '../Button/PlaylistEditButton';
 import { AspectRatio } from '@/components/ui/aspect-ratio';

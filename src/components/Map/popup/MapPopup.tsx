@@ -20,7 +20,7 @@ import {
 import PopupFullScreen from './MapPopupFullScreen';
 import MapPopupSidebar from './MapPopupSidebar';
 import { getMovieDetails } from '@/lib/tmdb/tmdb';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 
 export default function MapPopup(props: any) {
   const { selectedMovie } = props;

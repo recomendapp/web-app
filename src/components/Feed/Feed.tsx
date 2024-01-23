@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { supabase } from '@/lib/supabase/client';
 import { useInView } from 'react-intersection-observer';
 import { useQuery, useQueryClient } from 'react-query';

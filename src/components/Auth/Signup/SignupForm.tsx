@@ -20,7 +20,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import checkUsernameExist from '@/components/Auth/hooks/checkUsernameExist';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 
 export function SignupForm() {
   const router = useRouter();

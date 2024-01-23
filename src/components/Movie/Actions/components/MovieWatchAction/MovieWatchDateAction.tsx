@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/popover';
 import { format } from 'date-fns';
 import { fr, enUS } from 'date-fns/locale';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 
 // import UPDATE_ACTIVITY_MUTATION from '@/components/Movie/Actions/mutations/updateMovieActivityMutation';
 

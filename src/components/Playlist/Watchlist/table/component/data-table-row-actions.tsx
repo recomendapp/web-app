@@ -26,7 +26,7 @@ import {
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Dispatch, SetStateAction, useState } from 'react';
 import ButtonShare from '@/components/utils/ButtonShare';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 
 // GRAPHQL
 import { useMutation } from '@apollo/client';

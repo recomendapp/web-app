@@ -16,7 +16,7 @@ import {
   Radio,
   User,
 } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 

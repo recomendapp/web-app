@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dialog';
 
 import { FilmAction } from '@/types/type.film';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 // import UPDATE_FILM_RATING_MUTATION from '@/components/Movie/FilmAction/components/MovieRatingAction/mutations/updateFilmRatingMutation';
 import { DialogClose } from '@radix-ui/react-dialog';
 

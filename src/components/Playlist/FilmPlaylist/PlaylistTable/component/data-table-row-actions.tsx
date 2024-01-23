@@ -31,7 +31,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import GET_PLAYLIST_BY_ID from '@/graphql/Playlist/Playlist/queries/GetPlaylistById';
 import DELETE_PLAYLIST_ITEM from '@/graphql/Playlist/PlaylistItem/mutations/DeletePlaylistItem';
 import type { DeletePlaylistItemMutation, GetPlaylistByIdQuery, PlaylistItemFragment, TmdbMovieMinimalFragment} from '@/graphql/__generated__/graphql';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { useLocale } from 'next-intl';
 import toast from 'react-hot-toast';
 

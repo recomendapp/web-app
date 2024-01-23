@@ -40,7 +40,7 @@ import { ConvertHoursMinutes } from '@/lib/utils';
 import { Play } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MoviePoster from '@/components/Movie/MoviePoster';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { TmdbMovieFragment } from '@/graphql/__generated__/graphql';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';

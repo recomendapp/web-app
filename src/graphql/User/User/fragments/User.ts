@@ -17,7 +17,6 @@ export default gql`
     followers_count
     following_count
     friends_count
-    verified
     subscriptions: subscriptionsCollection(filter: { status: { eq: active } }) {
       edges {
         node {

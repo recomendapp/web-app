@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 // COMPONENTS
 import PlaylistTable from '@/components/Playlist/FilmPlaylist/PlaylistTable/PlaylistTable';
 import PlaylistHeader from '@/app/[lang]/(app)/playlist/[playlist]/components/PlaylistHeader';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { supabase } from '@/lib/supabase/client';
 
 // GRAPHQL

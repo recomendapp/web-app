@@ -19,7 +19,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 
 // GRAPHQL

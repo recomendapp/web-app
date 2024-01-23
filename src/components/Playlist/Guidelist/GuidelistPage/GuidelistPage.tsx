@@ -2,7 +2,7 @@
 
 import { TableGuidelist } from '../table/TableGuidelist';
 import { GuidelistHeader } from './components/GuidelistHeader';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { Guidelist } from '@/types/type.guidelist';
 import { useLocale } from 'next-intl';
 

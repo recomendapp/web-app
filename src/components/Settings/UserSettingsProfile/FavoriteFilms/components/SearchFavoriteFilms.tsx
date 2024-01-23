@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useInfiniteQuery } from 'react-query';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 import { Input } from '@/components/ui/input';

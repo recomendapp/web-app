@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { useLocale } from 'next-intl';
 
 // COMPONENTS

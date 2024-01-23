@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 // import { toast } from "@/components/ui/use-toast"
 import toast from 'react-hot-toast';
 import PictureUpload from './pictureUpload';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { useMutation } from '@apollo/client';
 import UPDATE_PROFILE_MUTATION from './mutations/updateProfileMutation';
 import { Icons } from '@/components/icons';

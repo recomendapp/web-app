@@ -8,7 +8,7 @@ import { MovieWatchlistAction } from './components/MovieWatchlistAction/MovieWat
 import { MoviePlaylistAction } from './components/MoviePlaylistAction/MoviePlaylistAction';
 import { MovieSendAction } from './components/MovieSendAction/MovieSendAction';
 import { useQuery } from '@apollo/client';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 
 export function MovieAction({
   filmId,

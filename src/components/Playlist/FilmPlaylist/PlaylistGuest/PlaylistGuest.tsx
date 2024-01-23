@@ -1,4 +1,4 @@
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import UserCard from '@/components/User/UserCard/UserCard';
 import { useInView } from 'react-intersection-observer';

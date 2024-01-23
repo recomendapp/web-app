@@ -26,7 +26,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Dispatch, SetStateAction, useState } from 'react';
 import ButtonShare from '@/components/utils/ButtonShare';
 import { useMutation } from '@apollo/client';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 
 // GRAPHQL
 import GET_USER_MOVIE_ACTIVITY from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivity';

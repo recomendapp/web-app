@@ -17,7 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 // import { toast } from "@/components/ui/use-toast"
 import toast from 'react-hot-toast';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { supabase } from '@/lib/supabase/client';
 
 export function SecurityForm() {

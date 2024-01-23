@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 
 // GRAPHQL
 import { useQuery } from '@apollo/client';

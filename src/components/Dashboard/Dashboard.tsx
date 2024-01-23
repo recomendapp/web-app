@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import Loader from '@/components/Loader/Loader';
 import { useTranslations } from 'next-intl';
 

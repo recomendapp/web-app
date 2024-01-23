@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import OneSignal from 'react-onesignal';
-import { useAuth } from './AuthContext/auth-context';
+import { useAuth } from './auth-context';
 import Script from 'next/script';
 
 const oneSignalAppId = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!;

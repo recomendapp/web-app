@@ -15,7 +15,7 @@ import {
 import { Check } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import { useLocale } from 'next-intl';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import { Icons } from '../icons';
 
 interface Props {

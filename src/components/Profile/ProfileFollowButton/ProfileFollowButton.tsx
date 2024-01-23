@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/context/AuthContext/auth-context';
+import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 
