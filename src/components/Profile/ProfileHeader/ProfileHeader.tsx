@@ -14,6 +14,9 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 import ProfileNavbar from '../ProfileNavbar/ProfileNavbar';
 import { UserFragment } from '@/graphql/__generated__/graphql';
 
+// ICONS
+import { HiSparkles } from "react-icons/hi2";
+
 export default async function ProfileHeader({ profile }: { profile: UserFragment }) {
   const supabase = createServerClient();
   const {
@@ -51,12 +54,15 @@ export default async function ProfileHeader({ profile }: { profile: UserFragment
         <section className="flex items-center justify-between gap-2">
           <Link
             href={`/@${profile.username}`}
-            className="flex items-center gap-2"
+            className="flex items-center gap-1"
           >
-            <h2 className="text-xl font-semibold">{profile.full_name}</h2>
-            {/* {profile.verified && (
-              <BsFillPatchCheckFill fill="#1D9BF0" size={16} />
-            )} */}
+            
+            <h2 className="text-xl font-semibold">
+              {profile.full_name}
+              {profile.subscriptions?.edges.length! > 0 && (
+                  <sup><HiSparkles size={15} className=' fill-accent-1 inline'/></sup>
+              )}
+            </h2>
             <span className="text-muted-foreground">@{profile.username}</span>
           </Link>
           <div className="hidden @lg:flex items-center gap-2">

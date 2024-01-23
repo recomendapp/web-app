@@ -14,9 +14,9 @@ import { useLocale } from 'next-intl';
 // GRAPHQL
 import { useQuery } from '@apollo/client';
 import GET_USER_MOVIE_ACTIVITIES_BY_USER_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivitiesByUserId';
-import { GetUserMovieActivitiesByUserIdQuery } from '@/graphql/__generated__/graphql';
+import { GetUserMovieActivitiesByUserIdQuery, UserFragment, UserMinimalFragment } from '@/graphql/__generated__/graphql';
 
-export default function ProfileLastActivity({ profile }: { profile: User }) {
+export default function ProfileLastActivity({ profile }: { profile: UserFragment | UserMinimalFragment }) {
   
   const locale = useLocale();
 

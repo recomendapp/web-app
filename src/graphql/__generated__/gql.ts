@@ -85,6 +85,7 @@ const documents = {
     "\n  fragment Subscription on subscriptions {\n    id\n    user_id\n    status\n    prices {\n      ...Price\n    }\n  }\n  \n": types.SubscriptionFragmentDoc,
     "\n  fragment User on user {\n    id\n    updated_at\n    username\n    username_updated_at\n    full_name\n    bio\n    avatar_url\n    background_url\n    website\n    language\n    favorite_color\n    followers_count\n    following_count\n    friends_count\n    subscriptions: subscriptionsCollection(filter: { status: { eq: active } }) {\n      edges {\n        node {\n          ...Subscription\n        }\n      }\n    }\n  }\n  \n": types.UserFragmentDoc,
     "\n  fragment UserMinimal on user {\n    id\n    username\n    full_name\n    bio\n    avatar_url\n    background_url\n    language\n    subscriptions: subscriptionsCollection(filter: { status: { eq: active } }) {\n      edges {\n        node {\n          ...Subscription\n        }\n      }\n    }\n  }\n  \n": types.UserMinimalFragmentDoc,
+    "\n  query GetUser($filter: userFilter) {\n    userCollection(filter: $filter, last: 1) {\n      edges {\n        user: node {\n          ...User\n        }\n      }\n    }\n  }\n  \n": types.GetUserDocument,
     "\n  query GetUserById($userId: UUID!) {\n    userCollection(filter: { id: { eq: $userId } }, last: 1) {\n      edges {\n        user: node {\n          ...User\n        }\n      }\n    }\n  }\n  \n": types.GetUserByIdDocument,
 };
 
@@ -390,6 +391,10 @@ export function gql(source: "\n  fragment User on user {\n    id\n    updated_at
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  fragment UserMinimal on user {\n    id\n    username\n    full_name\n    bio\n    avatar_url\n    background_url\n    language\n    subscriptions: subscriptionsCollection(filter: { status: { eq: active } }) {\n      edges {\n        node {\n          ...Subscription\n        }\n      }\n    }\n  }\n  \n"): (typeof documents)["\n  fragment UserMinimal on user {\n    id\n    username\n    full_name\n    bio\n    avatar_url\n    background_url\n    language\n    subscriptions: subscriptionsCollection(filter: { status: { eq: active } }) {\n      edges {\n        node {\n          ...Subscription\n        }\n      }\n    }\n  }\n  \n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetUser($filter: userFilter) {\n    userCollection(filter: $filter, last: 1) {\n      edges {\n        user: node {\n          ...User\n        }\n      }\n    }\n  }\n  \n"): (typeof documents)["\n  query GetUser($filter: userFilter) {\n    userCollection(filter: $filter, last: 1) {\n      edges {\n        user: node {\n          ...User\n        }\n      }\n    }\n  }\n  \n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
