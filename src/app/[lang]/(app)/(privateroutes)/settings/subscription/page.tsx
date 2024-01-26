@@ -1,28 +1,43 @@
 'use client';
 import Loader from '@/components/Loader/Loader';
-import ManageSubscriptionButton from '@/components/Subscription/ManageSubscriptionButton';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/auth-context';
 import { postData } from '@/lib/stripe/stripe-helpers';
+import { supabase } from '@/lib/supabase/client';
 import { Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+
+// BILLINGPORTAL STRIPE
+import { stripe } from '@/lib/stripe/stripe';
+import { getURL } from '@/lib/stripe/stripe-helpers';
+import { createOrRetrieveCustomer } from '@/lib/supabase/supabase-admin';
 
 export default function SettingsAccountPage() {
   const { user, session } = useAuth();
   const t = useTranslations('settings');
 
   const router = useRouter();
+
   const redirectToCustomerPortal = async () => {
+    console.log('redirectToCustomerPortal', getURL());
     try {
-      const { url } = await postData({
-        url: '/api/create-portal-link',
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw Error('Could not get user');
+      const customer = await createOrRetrieveCustomer({
+        uuid: user.id || '',
+        email: user.email || '',
+      });
+      if (!customer) throw Error('Could not get customer');
+      const { url } = await stripe.billingPortal.sessions.create({
+        customer,
+        return_url: `${getURL()}/settings/subscription`,
       });
       router.push(url);
     } catch (error) {
-      if (error) return alert((error as Error).message);
+      console.log(error);
     }
   };
 
