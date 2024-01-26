@@ -136,14 +136,17 @@ export default function SearchFilmsSmall({
                 results[0].credits.directors.map(
                   (director: any, index: number) => (
                     <span key={director.id}>
-                      <Link
-                        href={`/person/${director.id}`}
-                        className="w-fit p-0 h-full text-accent-1 font-normal italic hover:underline underline-offset-4"
+                      <Button
+                      variant={'link'}
+                        className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition"
+                        asChild
                       >
-                        {director.name}
-                      </Link>
+                        <Link href={`/person/${director.id}`}>
+                          {director.name}
+                        </Link>
+                      </Button>
                       {index !== results[0].credits.directors.length - 1 && (
-                        <span>, </span>
+                        <span className='text-muted-foreground'>, </span>
                       )}
                     </span>
                   )
@@ -197,14 +200,17 @@ export default function SearchFilmsSmall({
                         item.credits.directors.map(
                           (director: any, index: number) => (
                             <span key={director.id}>
-                              <Link
-                                href={`/person/${director.id}`}
-                                className="w-fit p-0 h-full text-accent-1 font-normal italic hover:underline underline-offset-4"
-                              >
-                                {director.name}
-                              </Link>
+                              <Button
+                                variant={'link'}
+                                  className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition"
+                                  asChild
+                                >
+                                  <Link href={`/person/${director.id}`}>
+                                  {director.name}
+                                  </Link>
+                                </Button>
                               {index !== item.credits.directors.length - 1 && (
-                                <span>, </span>
+                                <span className='text-muted-foreground'>, </span>
                               )}
                             </span>
                           )

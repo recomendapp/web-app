@@ -3,24 +3,32 @@
 import { useAuth } from '@/context/auth-context';
 import { supabase } from '@/lib/supabase/client';
 import { useInView } from 'react-intersection-observer';
-import { useQuery, useQueryClient } from 'react-query';
-import { FilmAction } from '@/types/type.film';
+import { useQuery } from 'react-query';
 import { useEffect } from 'react';
 import { Skeleton } from '../ui/skeleton';
-import { User } from 'lucide-react';
 import UserCard from '../User/UserCard/UserCard';
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import MovieReviewOverview from '../Review/MovieReviewOverview';
 import Rating from '../Review/ActivityIcon';
 
+// COMPONENTS
+import { Button } from "@/components/ui/button"
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
+
 // GRAPHQL
 import { useQuery as useQueryApollo } from '@apollo/client';
 import GET_FEED from '@/graphql/Feed/queries/GetFeed';
 import {
   GetFeedQuery,
+  TmdbMovieMinimalFragment,
   UserMovieActivityFragment,
 } from '@/graphql/__generated__/graphql';
+import MoviePoster from '../Movie/MoviePoster';
 
 export default function Feed() {
   const { user } = useAuth();
@@ -129,13 +137,12 @@ const FeedItem = ({ activity }: { activity?: UserMovieActivityFragment }) => {
     );
   }
   return (
-    <Link
-      href={`/@${activity.user.username}/film/${activity.movie_id}`}
+    <div
       className="flex items-start gap-2 bg-muted rounded-xl p-2"
     >
       <UserCard user={activity.user} icon />
       <Activity activity={activity} />
-    </Link>
+    </div>
   );
 };
 
@@ -158,9 +165,7 @@ export function Activity({
                 </Link>
               ),
               movie: () => (
-                <Link href={`/film/${activity.movie_id}`}>
-                  {activity.movie.data?.edges[0].node.title}
-                </Link>
+                <MovieHoverCard movie={activity.movie} />
               ),
             })}
           </span>
@@ -181,9 +186,7 @@ export function Activity({
                   </Link>
                 ),
                 movie: () => (
-                  <Link href={`/film/${activity.movie_id}`}>
-                    {activity.movie.data?.edges[0].node.title}
-                  </Link>
+                  <MovieHoverCard movie={activity.movie} />
                 ),
                 rating: () => <Rating rating={activity.rating} />,
               })}
@@ -197,9 +200,7 @@ export function Activity({
                   </Link>
                 ),
                 movie: () => (
-                  <Link href={`/film/${activity.movie_id}`}>
-                    {activity.movie.data?.edges[0].node.title}
-                  </Link>
+                  <MovieHoverCard movie={activity.movie} />
                 ),
               })}
             </span>
@@ -212,9 +213,7 @@ export function Activity({
                   </Link>
                 ),
                 movie: () => (
-                  <Link href={`/film/${activity.movie_id}`}>
-                    {activity.movie.data?.edges[0].node.title}
-                  </Link>
+                  <MovieHoverCard movie={activity.movie} />
                 ),
                 rating: () => `${activity.rating}/10`,
               })}
@@ -228,9 +227,7 @@ export function Activity({
                   </Link>
                 ),
                 movie: () => (
-                  <Link href={`/film/${activity.movie_id}`}>
-                    {activity.movie.data?.edges[0].node.title}
-                  </Link>
+                  <MovieHoverCard movie={activity.movie} />
                 ),
               })}
             </span>
@@ -238,5 +235,24 @@ export function Activity({
         </>
       )}
     </div>
+  );
+}
+
+const MovieHoverCard = ({ movie }: { movie: TmdbMovieMinimalFragment }) => {
+  return (
+    <HoverCard>
+      <HoverCardTrigger asChild>
+        <Link href={`/film/${movie.id}`} className='hover:text-accent-pink transition'>
+          {movie.data?.edges[0].node.title}
+        </Link>
+      </HoverCardTrigger>
+      <HoverCardContent align='center' className="w-52">
+        <div className="flex justify-between space-x-4">
+          <MoviePoster
+            poster_path={`https://image.tmdb.org/t/p/w500/${movie.data?.edges[0].node.poster_path}`}
+            alt={movie.data?.edges[0].node.title ?? ''} />
+        </div>
+      </HoverCardContent>
+    </HoverCard>
   );
 }

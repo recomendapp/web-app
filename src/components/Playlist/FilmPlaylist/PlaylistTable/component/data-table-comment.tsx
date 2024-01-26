@@ -1,24 +1,24 @@
-import { useState } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { useLocale } from 'next-intl';
 
 // COMPONENTS
-import ShowCommentModal from '@/components/Playlist/FilmPlaylist/PlaylistTable/component/ShowCommentModal';
 
 // GRAPHQL
 import { useQuery } from '@apollo/client';
 import GET_PLAYLIST_BY_ID from '@/graphql/Playlist/Playlist/queries/GetPlaylistById';
 import type { GetPlaylistByIdQuery, PlaylistItemFragment} from '@/graphql/__generated__/graphql';
+import { useModal } from '@/context/modal-context';
+import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentModal';
 
 export function DataComment({ playlistItem }: { playlistItem: PlaylistItemFragment }) {
+
+  const { openModal } = useModal();
 
   const { user } = useAuth();
 
   const locale = useLocale();
 
-  const [openCommentModal, setOpenCommentModal] = useState(false);
-
-  const { data: playlistQuery, refetch } = useQuery<GetPlaylistByIdQuery>(GET_PLAYLIST_BY_ID, {
+  const { data: playlistQuery } = useQuery<GetPlaylistByIdQuery>(GET_PLAYLIST_BY_ID, {
     variables: {
       id: playlistItem.playlist_id,
       locale: locale
@@ -43,7 +43,10 @@ export function DataComment({ playlistItem }: { playlistItem: PlaylistItemFragme
   
   return (
     <>
-      <p onClick={() => setOpenCommentModal((data) => !data)}>
+      <p onClick={() => openModal({
+        id: `playlist-item-${playlistItem.id}-comment`,
+        content: <PlaylistCommentModal id={`playlist-item-${playlistItem.id}-comment`} playlistItem={playlistItem} />,
+      })}>
         {isAllowedToEdit ? (
           playlistItem.comment ? (
             <span className="line-clamp-2 break-all">{playlistItem.comment}</span>
@@ -54,7 +57,6 @@ export function DataComment({ playlistItem }: { playlistItem: PlaylistItemFragme
           <p className="line-clamp-2 break-all">{playlistItem.comment}</p>
         )}
       </p>
-      <ShowCommentModal playlistItem={playlistItem} open={openCommentModal} setOpen={setOpenCommentModal}/>
     </>
   );
 }

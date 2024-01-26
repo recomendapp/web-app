@@ -114,7 +114,7 @@ export default function MovieHeader({
                     <span key={node.id}>
                       <Button
                         variant="link"
-                        className="w-fit p-0 h-full font-bold"
+                        className="w-fit p-0 h-full hover:text-accent-1 transition"
                         asChild
                       >
                         <Link href={`/person/${node.person.id}`}>
@@ -158,7 +158,7 @@ export function MovieTrailerButton({ movie }: { movie: TmdbMovieFragment }) {
           <Play
             fill="black"
             size="icon"
-            className="bg-white rounded-full p-1"
+            className="bg-white rounded-full p-1 w-6"
           />
           Trailer
         </Button>

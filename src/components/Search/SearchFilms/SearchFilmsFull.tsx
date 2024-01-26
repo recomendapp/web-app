@@ -102,7 +102,7 @@ export default function SearchFilmsFull({ query }: { query: string }) {
                 </div>
                 {/* MOVIE DATA */}
                 <div className="flex flex-col">
-                  <Button variant="link" className="w-fit p-0 h-full text-base">
+                  <Button variant="link" className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition">
                     {film.title}
                   </Button>
                   <div>
@@ -126,7 +126,7 @@ export default function SearchFilmsFull({ query }: { query: string }) {
                         )
                       )
                     ) : (
-                      <span className="w-fit p-0 h-full text-accent-1 font-normal italic">
+                      <span className="w-fit p-0 h-full italic text-muted-foreground">
                         Unknown
                       </span>
                     )}

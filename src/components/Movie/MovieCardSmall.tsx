@@ -37,11 +37,11 @@ export default function MovieCardSmall({ movie }: { movie: TmdbMovieMinimalFragm
         <div className="line-clamp-1">
           {movie.directors?.edges.map(({ node }, index: number) => (
             <>
-              {index > 0 && <span>, </span>}
+              {index > 0 && <span className='text-muted-foreground'>, </span>}
               <span key={node.id}>
                 <Button
                   variant="link"
-                  className="w-fit p-0 h-full font-bold"
+                  className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition"
                   asChild
                 >
                   <Link href={`/person/${node.person.id}`}>

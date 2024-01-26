@@ -71,7 +71,6 @@ export default function SettingsAccountPage() {
           )}
         </div>
       )}
-      {/* <AccountForm /> */}
     </div>
   );
 }

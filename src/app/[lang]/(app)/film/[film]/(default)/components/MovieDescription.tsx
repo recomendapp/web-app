@@ -1,22 +1,6 @@
 'use client';
 
-import Image from 'next/image';
-import Link from 'next/link';
-
-// UI
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { Button } from '@/components/ui/button';
-import {
-  TmdbMovieCreditFragment,
   TmdbMovieFragment,
 } from '@/graphql/__generated__/graphql';
 import MovieCast from './MovieCast';
@@ -28,18 +12,15 @@ export default function MovieDescription({
 }) {
   if (!movie) return null;
 
-  console.log(movie);
-
   return (
     <div className="flex flex-col gap-4">
       {/* <div className="flex flex-col lg:grid grid-cols-4 gap-4"> */}
         {/* OVERVIEW */}
-        <div className="flex flex-col gap-2 col-span-3">
-          <h2 className="text-3xl font-bold">Résumé</h2>
-          <div className=" text-justify">
-            {movie.data?.edges[0].node.overview}
-          </div>
-        </div>
+          {movie.data?.edges[0].node.overview &&
+            <div className=" text-justify">
+              {movie.data?.edges[0].node.overview}
+            </div>
+          }
         {/* STREAMING PLATEFORMS */}
         {/* <div className="flex flex-col gap-2">
           <h2 className="text-3xl font-bold">Voir le film</h2>

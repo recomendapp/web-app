@@ -3,21 +3,15 @@
 import Link from 'next/link';
 
 // UI
-import ButtonShare from '@/components/utils/ButtonShare';
 import UserCard from '@/components/User/UserCard/UserCard';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 // ICONS
-import { BarChart3, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 // TYPES
-import { Models } from 'appwrite';
 import { JSONContent } from '@tiptap/react';
 
 // UI
-import { Button } from '@/components/ui/button';
 import { MovieReviewSettings } from './MovieReviewSettings';
-import { Review } from '@/types/type.review';
-import { FilmAction } from '@/types/type.film';
 import { cn } from '@/lib/utils';
 import Rating from './ActivityIcon';
 import type {
@@ -36,7 +30,7 @@ export default function MovieReviewOverview({
 }) {
   return (
     <Link
-      href={`/@${review.user.username}/film/${review.movie_id}`}
+      href={`/film/${review.movie_id}/review/${review.id}`}
       className={cn(
         'w-full bg-muted px-4 py-2 transition rounded-3xl flex flex-col gap-2',
         className

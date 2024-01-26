@@ -32,7 +32,7 @@ export default function SidebarHeader() {
           alt={siteConfig.logo.alt}
           className={`
               overflow-hidden transition-all
-              ${sidebarExpanded ? 'w-52' : 'w-0'}
+              ${sidebarExpanded ? 'w-36' : 'w-0'}
           `}
         />
       </Link>

@@ -71,6 +71,11 @@ export default function PlaylistHeader({
             className="flex flex-col gap-2 cursor-pointer"
             onClick={() => playlist?.user_id == user?.id && setOpen(true)}
           >
+            {/* TYPE & GENRES */}
+            <div>
+              <span className='text-accent-1'>Film</span>
+              <span className=" before:content-['_|_']"></span>
+            </div>
             <p>
               {playlist?.is_public ? 'Playlist publique' : 'Playlist privée'}
             </p>

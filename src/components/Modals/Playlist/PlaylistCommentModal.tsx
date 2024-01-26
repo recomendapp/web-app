@@ -15,22 +15,23 @@ import UPDATE_PLAYLIST_ITEM from '@/graphql/Playlist/PlaylistItem/mutations/Upda
 import type { GetPlaylistByIdQuery, PlaylistItemFragment, UpdatePlaylistItemMutation } from "@/graphql/__generated__/graphql";
 import { useAuth } from "@/context/auth-context";
 import { useLocale } from "next-intl";
+import { useModal } from "@/context/modal-context";
 
-const ShowCommentModal = ({
+const PlaylistCommentModal = ({
+	id,
 	playlistItem,
-	open,
-	setOpen,
   } : {
+	id: string,
 	playlistItem: PlaylistItemFragment,
-	open: boolean,
-	setOpen: Dispatch<SetStateAction<boolean>>,
   }) => {
+
+	const { closeModal } = useModal();
 
 	const { user } = useAuth();
 
 	const locale = useLocale();
 
-	const { data: playlistQuery, refetch } = useQuery<GetPlaylistByIdQuery>(GET_PLAYLIST_BY_ID, {
+	const { data: playlistQuery } = useQuery<GetPlaylistByIdQuery>(GET_PLAYLIST_BY_ID, {
 		variables: {
 		  id: playlistItem.playlist_id,
 		  locale: locale
@@ -67,7 +68,7 @@ const ShowCommentModal = ({
 	  event.preventDefault();
   
 	  if (comment == playlistItem.comment) {
-		setOpen(false);
+		closeModal(id);
 		return;
 	  }
 	  try {
@@ -79,7 +80,8 @@ const ShowCommentModal = ({
 		  }
 		})
 		if (!data?.updateplaylist_itemCollection.records.length) throw new Error('Nothing updated');
-		setOpen(false);
+		toast.success("Enregistré");
+		closeModal(id);
 	  } catch (error) {
 		toast.error("Une erreur s\'est produite");
 	  } finally {
@@ -88,33 +90,31 @@ const ShowCommentModal = ({
 	}
   
 	return (
-	  <Dialog open={open} onOpenChange={setOpen}>
 		<DialogContent className="sm:max-w-[425px]">
-		  <DialogHeader>
+			<DialogHeader>
 			<DialogTitle>Commentaire</DialogTitle>
-		  </DialogHeader>
+			</DialogHeader>
 			<form onSubmit={onSubmit} className="space-y-2">
-			  <Textarea
+				<Textarea
 				id="name"
 				value={comment}
 				onChange={(e) =>
-				  setComment(e.target.value.replace(/\s+/g, ' ').trimStart())
+					setComment(e.target.value.replace(/\s+/g, ' ').trimStart())
 				}
 				maxLength={180}
 				disabled={isLoading}
 				className="col-span-3 resize-none h-48"
 				placeholder='Ajouter un commentaire...'
 				readOnly={!isAllowedToEdit}
-			  />
-			  {isAllowedToEdit &&
+				/>
+				{isAllowedToEdit &&
 				<DialogFooter>
-				  <Button type="submit">Save changes</Button>
+					<Button type="submit">Save changes</Button>
 				</DialogFooter>
-			  }
+				}
 			</form>
 		</DialogContent>
-	  </Dialog>
 	);
 };
 
-export default ShowCommentModal;
+export default PlaylistCommentModal;

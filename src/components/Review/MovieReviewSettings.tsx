@@ -29,17 +29,14 @@ import { Review } from '@/types/type.review';
 import { MoreHorizontal, Trash2 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
-
-import DELETE_REVIEW_MUTATION from '@/graphql/User/Movie/Review/DeleteReview';
-import GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivityByMovieId';
-
 import toast from 'react-hot-toast';
-import { FilmAction } from '@/types/type.film';
-import { supabase } from '@/lib/supabase/client';
+
+
 
 // GRAPHQL
 import { useMutation } from '@apollo/client';
 import GET_USER_MOVIE_ACTIVITY from "@/graphql/User/Movie/Activity/queries/GetUserMovieActivity"
+import DELETE_REVIEW_MUTATION from '@/graphql/User/Movie/Review/DeleteReview';
 import { DeleteReviewMutation, type GetUserMovieActivityQuery, type UserMovieReviewFragment } from '@/graphql/__generated__/graphql';
 import { useLocale } from 'next-intl';
 
@@ -114,7 +111,10 @@ export function MovieReviewSettings({
         },
       });
       setShowDeleteDialog(false);
-      if (pathname == `/@${user?.username}/film/${review.movie_id}`)
+      if (
+        pathname == `/@${user?.username}/film/${review.movie_id}` || 
+        pathname == `/film/${review.movie_id}/review/${review.id} `
+      )
         router.push(`/film/${review.movie_id}`);
       toast.success('Supprimée');
     } catch (error) {

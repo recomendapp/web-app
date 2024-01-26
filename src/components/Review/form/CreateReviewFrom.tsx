@@ -69,10 +69,10 @@ export default function CreateReviewForm({
         user_id: user.id,
         title: title.trim(),
         body: JSON.stringify(body),
-      });
-      if (error) throw error;
+      }).select('id').single();
+      if (error || !data) throw error;
       toast.success('Votre critique a été publié avec succès');
-      router.push(`/@${user.username}/film/${film.id}`);
+      router.push(`/film/${film.id}/review/${data.id}`);
     } catch (error) {
       toast.error("Une erreur s'est produite");
     } finally {

@@ -1,19 +1,13 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Checkbox } from '@/components/ui/checkbox';
-
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
-import { Models } from 'appwrite';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
-import Link from 'next/link';
-import { ConvertHoursMinutes } from '@/lib/utils';
-import UserCard from '@/components/User/UserCard/UserCard';
-import MoviePoster from '@/components/Movie/MoviePoster';
 import { Clock } from 'lucide-react';
 import MovieCardSmall from '@/components/Movie/MovieCardSmall';
 import { UserMovieActivityFragment } from '@/graphql/__generated__/graphql';
+import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 
 export const columns: ColumnDef<{ node: UserMovieActivityFragment }>[] = [
   {
@@ -51,7 +45,7 @@ export const columns: ColumnDef<{ node: UserMovieActivityFragment }>[] = [
       <DataTableColumnHeader column={column} Icon={Clock} />
     ),
     cell: ({ row }) => (
-      <p>{ConvertHoursMinutes(row.original.node.movie.runtime)}</p>
+      <RuntimeTooltip runtime={row.original.node.movie.runtime ?? 0} />
     ),
   },
   {

@@ -24,7 +24,6 @@ import {
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Dispatch, SetStateAction, useState } from 'react';
 import ButtonShare from '@/components/utils/ButtonShare';
-import ShowCommentModal from './ShowCommentModal';
 
 // GRAPHQL
 import { useMutation, useQuery } from '@apollo/client';
@@ -34,6 +33,8 @@ import type { DeletePlaylistItemMutation, GetPlaylistByIdQuery, PlaylistItemFrag
 import { useAuth } from '@/context/auth-context';
 import { useLocale } from 'next-intl';
 import toast from 'react-hot-toast';
+import { useModal } from '@/context/modal-context';
+import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentModal';
 
 
 interface DataTableRowActionsProps {
@@ -41,6 +42,9 @@ interface DataTableRowActionsProps {
 }
 
 export function DataTableRowActions({ data }: DataTableRowActionsProps) {
+  
+  const { openModal } = useModal();
+  
   const [openShowDirectors, setOpenShowDirectors] = useState(false);
   const [openComment, setOpenComment] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -100,12 +104,22 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
           />
           {/* COMMENT */}
           {isAllowedToEdit && (
-            <DropdownMenuItem onClick={() => setOpenComment(true)}>
+            <DropdownMenuItem
+              onClick={() => openModal({
+                id: `playlist-item-${data.id}-comment`,
+                content: <PlaylistCommentModal id={`playlist-item-${data.id}-comment`} playlistItem={data} />,
+              })}
+            >
               {data.comment ? 'Voir le commentaire' : 'Ajouter un commentaire'}
             </DropdownMenuItem>
           )}
           {!isAllowedToEdit && data.comment && (
-            <DropdownMenuItem onClick={() => setOpenComment(true)}>
+            <DropdownMenuItem
+              onClick={() => openModal({
+                id: `playlist-item-${data.id}-comment`,
+                content: <PlaylistCommentModal id={`playlist-item-${data.id}-comment`} playlistItem={data} />,
+              })}
+            >
               Voir le commentaire
             </DropdownMenuItem>
           )}
@@ -115,7 +129,12 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
             <ButtonShare url={`${location.origin}/film/${data.movie_id}`} />
           </DropdownMenuItem>
           {isAllowedToEdit && (
-            <DropdownMenuItem onClick={() => setOpenDelete(true)}>
+            <DropdownMenuItem
+              onClick={() => openModal({
+                id: `playlist-item-${data.id}-delete`,
+                content: <DeleteModal id={`playlist-item-${data.id}-delete`} playlistItem={data} />,
+              })}
+            >
               Delete
             </DropdownMenuItem>
           )}
@@ -125,16 +144,6 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
         movie={data.movie}
         open={openShowDirectors}
         setOpen={setOpenShowDirectors}
-      />
-      <ShowCommentModal
-        playlistItem={data}
-        open={openComment}
-        setOpen={setOpenComment}
-      />
-      <DeleteModal
-        playlistItem={data}
-        open={openDelete}
-        setOpen={setOpenDelete}
       />
     </>
   );
@@ -198,14 +207,14 @@ export function ShowDirectorsModal({
 }
 
 export function DeleteModal({
+  id,
   playlistItem,
-  open,
-  setOpen,
 }: {
+  id: string;
   playlistItem: PlaylistItemFragment;
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { closeModal } = useModal();
+
   const [deletePlaylistItem] = useMutation<DeletePlaylistItemMutation>(DELETE_PLAYLIST_ITEM);
 
   async function handleDelete() {
@@ -216,25 +225,23 @@ export function DeleteModal({
         },
       });
       if (!data?.deleteFromplaylist_itemCollection?.records?.length) throw new Error('Nothing deleted');
-      setOpen(false);
+      closeModal(id);
     } catch (error) {
       toast.error("Une erreur s\'est produite");
     }
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[425px]">
-        <p>Êtes-vous sûr de vouloir supprimer ce film ?</p>
-        <DialogFooter>
-          <Button variant="ghost" onClick={() => setOpen(false)}>
-            Annuler
-          </Button>
-          <Button variant="destructive" onClick={handleDelete}>
-            Supprimer
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <DialogContent className="sm:max-w-[425px]">
+      <p>Êtes-vous sûr de vouloir supprimer ce film ?</p>
+      <DialogFooter>
+        <Button variant="ghost" onClick={() => closeModal(id)}>
+          Annuler
+        </Button>
+        <Button variant="destructive" onClick={handleDelete}>
+          Supprimer
+        </Button>
+      </DialogFooter>
+    </DialogContent>
   );
 }

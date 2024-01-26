@@ -9,6 +9,7 @@ import { Clock } from 'lucide-react';
 import MovieCardSmall from '@/components/Movie/MovieCardSmall';
 import { DataComment } from './data-table-comment';
 import { PlaylistItemFragment } from '@/graphql/__generated__/graphql';
+import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 
 export const columns: ColumnDef<{ node: PlaylistItemFragment }>[] = [
   {
@@ -57,7 +58,7 @@ export const columns: ColumnDef<{ node: PlaylistItemFragment }>[] = [
       <DataTableColumnHeader column={column} Icon={Clock} />
     ),
     cell: ({ row }) => (
-      <p>{ConvertHoursMinutes(row.original.node.movie.runtime)}</p>
+      <RuntimeTooltip runtime={row.original.node.movie.runtime ?? 0} />
     ),
   },
   {
