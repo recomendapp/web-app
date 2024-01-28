@@ -6,10 +6,14 @@ import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import UserCard from '@/components/User/UserCard/UserCard';
-import { Clock } from 'lucide-react';
+import { Clock, Text } from 'lucide-react';
 import MovieCardSmall from '@/components/Movie/MovieCardSmall';
 import { UserMovieGuidelistFragment } from '@/graphql/__generated__/graphql';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
+import UserAvatar from '@/components/User/UserAvatar/UserAvatar';
+import Senders from './data-table-senders';
+
+const senderToShow = 5;
 
 export const columns: ColumnDef<{ node: UserMovieGuidelistFragment }>[] = [
   {
@@ -50,25 +54,25 @@ export const columns: ColumnDef<{ node: UserMovieGuidelistFragment }>[] = [
       <RuntimeTooltip runtime={row.original.node.movie.runtime ?? 0} />
     ),
   },
-  {
-    id: 'comment',
-    accessorFn: (row) => row.node.comment,
-    meta: {
-      displayName: 'Commentaire',
-    },
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Commentaire" />
-    ),
-    cell: ({ row }) => (
-      <div className="max-w-[500px] text-justify italic line-clamp-5">
-        {row.original.node.comment}
-      </div>
-    ),
-    enableSorting: false,
-  },
+  // {
+  //   id: 'comment',
+  //   accessorFn: (row) => row.node.comment,
+  //   meta: {
+  //     displayName: 'Commentaire',
+  //   },
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Commentaire" />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <div className="max-w-[500px] text-justify italic line-clamp-5">
+  //       {row.original.node.comment}
+  //     </div>
+  //   ),
+  //   enableSorting: false,
+  // },
   {
     id: 'by',
-    accessorFn: (row) => row.node.sender_user.username,
+    accessorFn: (row) => row.node.senders?.totalCount,
     meta: {
       displayName: 'Ajouté par',
     },
@@ -80,9 +84,7 @@ export const columns: ColumnDef<{ node: UserMovieGuidelistFragment }>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className="flex justify-end lg:block">
-        <UserCard user={row.original.node.sender_user} icon />
-      </div>
+      <Senders row={row} />
     ),
     enableHiding: false,
   },

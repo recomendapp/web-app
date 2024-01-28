@@ -4,7 +4,7 @@ import USER_MOVIE_GUIDELIST_FRAGMENT from '@/graphql/User/Movie/Guidelist/fragme
 export default gql`
   query GetUserMovieGuidelistByUserId($user_id: UUID!, $locale: String!) {
     user_movie_guidelistCollection(
-      filter: { receiver_user_id: { eq: $user_id } }
+      filter: { user_id: { eq: $user_id } }
     ) {
       edges {
         node {

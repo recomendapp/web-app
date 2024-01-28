@@ -36,6 +36,8 @@ import GET_USER_MOVIE_GUIDELIST_BY_USER_ID from '@/graphql/User/Movie/Guidelist/
 import DELETE_USER_MOVIE_GUIDELIST from '@/graphql/User/Movie/Guidelist/mutations/DeleteUserMovieGuidelist';
 import { DeleteUserMovieGuidelistMutation, GetUserMovieGuidelistByUserIdQuery, TmdbMovieMinimalFragment, UserMovieGuidelistFragment } from '@/graphql/__generated__/graphql';
 import toast from 'react-hot-toast';
+import GuidelistSendersModal from '@/components/Modals/Guidelist/GuidelistSendersModal';
+import { useModal } from '@/context/modal-context';
 
 interface DataTableRowActionsProps {
   table: Table<{ node: UserMovieGuidelistFragment }>;
@@ -51,9 +53,9 @@ export function DataTableRowActions({
   data,
 }: DataTableRowActionsProps) {
   const { user } = useAuth();
+  const { openModal } = useModal();
   const locale = useLocale();
   const [openShowDirectors, setOpenShowDirectors] = useState(false);
-  const [openComment, setOpenComment] = useState(false);
   const [deleteGuidelistItemMutation] = useMutation<DeleteUserMovieGuidelistMutation>(DELETE_USER_MOVIE_GUIDELIST, {
     update: (cache, { data }) => {
       const watchlistData = cache.readQuery<GetUserMovieGuidelistByUserIdQuery>({
@@ -91,7 +93,7 @@ export function DataTableRowActions({
       if (!data.node.id) throw Error("Node id doesn't exist");
       await deleteGuidelistItemMutation({
         variables: {
-          movie_id: data.node.id,
+          id: data.node.id,
         },
       });
     } catch (errors) {
@@ -125,9 +127,17 @@ export function DataTableRowActions({
             movie={data.node.movie}
             setOpen={setOpenShowDirectors}
           />
-          {data.node.comment && (
-            <DropdownMenuItem onClick={() => setOpenComment(true)}>
-              Voir le commentaire
+          {data.node.senders?.totalCount! > 0 && (
+            <DropdownMenuItem
+              onClick={() => openModal({
+                id: `guidelist-${row.original.node.id}-senders`,
+                header: {
+                  title: 'Reco par',
+                },
+                content: <GuidelistSendersModal id={`guidelist-${row.original.node.id}-senders`} guidelist_id={row.original.node.id}/>,
+              })}
+            >
+              Voir les recos
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
@@ -143,11 +153,6 @@ export function DataTableRowActions({
         movie={data.node.movie}
         open={openShowDirectors}
         setOpen={setOpenShowDirectors}
-      />
-      <ShowCommentModal
-        guidelist={data.node}
-        open={openComment}
-        setOpen={setOpenComment}
       />
     </>
   );
@@ -204,30 +209,6 @@ export function ShowDirectorsModal({
               <Link href={`/person/${node.person.id}`}>{node.person.name}</Link>
             </Button>
           ))}
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-export function ShowCommentModal({
-  guidelist,
-  open,
-  setOpen,
-}: {
-  guidelist: UserMovieGuidelistFragment;
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) {
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-5xl bg-black">
-        <DialogHeader>
-          <DialogTitle className="text-center">Commentaire</DialogTitle>
-        </DialogHeader>
-        <div className="flex flex-col gap-4">
-          <UserCard user={guidelist.sender_user} />
-          <p className="text-justify">{guidelist.comment}</p>
         </div>
       </DialogContent>
     </Dialog>

@@ -24,14 +24,14 @@ export default function MovieCardSmall({ movie }: { movie: TmdbMovieMinimalFragm
     <Link href={`/film/${movie.id}`} className="flex gap-4 items-center">
       {/* MOVIE POSTER */}
       <MoviePoster
-        className="w-[100px]"
+        className="w-[70px]"
         poster_path={'https://image.tmdb.org/t/p/original/' + movie.data?.edges[0].node.poster_path}
         alt={movie.data?.edges[0].node.title ?? ''}
       />
       {/* MOVIE DATAT */}
       <div className="w-full block">
         {/* TITLE */}
-        <h2 className="text-xl font-bold line-clamp-2">{movie.data?.edges[0].node.title}</h2>
+        <h2 className="text-lg font-bold line-clamp-2">{movie.data?.edges[0].node.title}</h2>
 
         {/* DATE / GENRES / RUNTIME */}
         <div className="line-clamp-1">

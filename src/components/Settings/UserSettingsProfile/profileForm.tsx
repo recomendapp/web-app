@@ -57,7 +57,7 @@ export function ProfileForm() {
         message: 'La bio ne doit pas dépasser 150 caractères.',
       })
       .optional(),
-    favorite_films: z.array(z.number()),
+    // favorite_films: z.array(z.number()),
     website: z
       .string()
       .url({
@@ -101,7 +101,7 @@ export function ProfileForm() {
         id: user?.id,
         full_name: data.full_name,
         bio: data.bio,
-        favorite_films: data.favorite_films,
+        // favorite_films: data.favorite_films,
         website: data.website,
       };
       if (newAvatar) {

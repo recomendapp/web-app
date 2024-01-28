@@ -88,15 +88,14 @@ export function DataTableRowActions({
 
     const handleUnwatchlist = async () => {
       try {
-        if (!user || !data.node.movie_id) throw Error("User or movieId doesn't exist");
+        if (!user || !data.node.id) throw Error("User or nodeId doesn't exist");
         await deleteFilmWatchlistMutation({
           variables: {
-            movie_id: data.node.movie_id,
-            user_id: user?.id,
+            id: data.node.id,
           },
         });
       } catch (errors) {
-        toast.error("Une erreur s'est produite");
+        toast.error("Une erreur s\'est produite");
       }
     };
 

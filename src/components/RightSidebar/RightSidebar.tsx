@@ -8,9 +8,6 @@ import { X } from 'lucide-react';
 export default function RightSidebar() {
   const { isOpen, closePanel, panelContent, panelTitle } = useRightSidebar();
 
-  // if (!content)
-  //     return null
-
   if (!isOpen) return null;
 
   return (

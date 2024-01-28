@@ -1170,7 +1170,6 @@ export interface Database {
           bio: string | null
           created_at: string
           favorite_color: string | null
-          favorite_films: number[] | null
           followers_count: number
           following_count: number
           friends_count: number
@@ -1178,11 +1177,9 @@ export interface Database {
           id: string
           language: string
           payment_method: Json | null
-          premium: boolean
           updated_at: string | null
           username: string
           username_updated_at: string | null
-          verified: boolean
           website: string | null
         }
         Insert: {
@@ -1192,7 +1189,6 @@ export interface Database {
           bio?: string | null
           created_at?: string
           favorite_color?: string | null
-          favorite_films?: number[] | null
           followers_count?: number
           following_count?: number
           friends_count?: number
@@ -1200,11 +1196,9 @@ export interface Database {
           id: string
           language?: string
           payment_method?: Json | null
-          premium?: boolean
           updated_at?: string | null
           username: string
           username_updated_at?: string | null
-          verified?: boolean
           website?: string | null
         }
         Update: {
@@ -1214,7 +1208,6 @@ export interface Database {
           bio?: string | null
           created_at?: string
           favorite_color?: string | null
-          favorite_films?: number[] | null
           followers_count?: number
           following_count?: number
           friends_count?: number
@@ -1222,11 +1215,9 @@ export interface Database {
           id?: string
           language?: string
           payment_method?: Json | null
-          premium?: boolean
           updated_at?: string | null
           username?: string
           username_updated_at?: string | null
-          verified?: boolean
           website?: string | null
         }
         Relationships: [
@@ -1334,7 +1325,75 @@ export interface Database {
           }
         ]
       }
+      user_movie_favorite: {
+        Row: {
+          id: number
+          movie_id: number
+          order: number
+          user_id: string
+        }
+        Insert: {
+          id?: number
+          movie_id: number
+          order: number
+          user_id: string
+        }
+        Update: {
+          id?: number
+          movie_id?: number
+          order?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_favorite_movie_id_fkey"
+            columns: ["movie_id"]
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_favorite_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       user_movie_guidelist: {
+        Row: {
+          created_at: string
+          id: number
+          movie_id: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          movie_id: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          movie_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      user_movie_guidelist_bkp: {
         Row: {
           comment: string | null
           created_at: string
@@ -1361,20 +1420,57 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            foreignKeyName: "user_movie_guidelist_bkp_movie_id_fkey"
             columns: ["movie_id"]
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "user_movie_guidelist_receiver_user_id_fkey"
+            foreignKeyName: "user_movie_guidelist_bkp_receiver_user_id_fkey"
             columns: ["receiver_user_id"]
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "user_movie_guidelist_sender_user_id_fkey"
+            foreignKeyName: "user_movie_guidelist_bkp_sender_user_id_fkey"
             columns: ["sender_user_id"]
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      user_movie_guidelist_item: {
+        Row: {
+          comment: string | null
+          created_at: string
+          guidelist_id: number
+          id: number
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          guidelist_id: number
+          id?: number
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          guidelist_id?: number
+          id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_guidelist_item_guidelist_id_fkey"
+            columns: ["guidelist_id"]
+            referencedRelation: "user_movie_guidelist"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_item_user_id_fkey"
+            columns: ["user_id"]
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -1501,6 +1597,15 @@ export interface Database {
           user_details: unknown
         }
         Returns: string
+      }
+      insert_user_movie_guidelist: {
+        Args: {
+          movieid: number
+          comment: string
+          sender_user_id: string
+          receiver_user_ids: string[]
+        }
+        Returns: undefined
       }
     }
     Enums: {

@@ -54,47 +54,6 @@ export function DataTableRowActions({
   const { user } = useAuth();
   const locale = useLocale();
   const [openShowDirectors, setOpenShowDirectors] = useState(false);
-  const [deleteFilmLikeMutation, { error: errorDeleteFilmLike }] = useMutation(
-    DELETE_FILM_LIKE_MUTATION,
-    {
-      update: (cache, { data }) => {
-        const filmLikesData = cache.readQuery<any>({
-          query: USER_MOVIE_ACTIVITY_QUERY,
-          variables: {
-            filter: {
-              user_id: { eq: user?.id },
-              is_liked: { eq: true },
-            },
-            orderBy: {
-              created_at: 'DescNullsLast',
-            },
-          },
-        });
-        cache.writeQuery({
-          query: USER_MOVIE_ACTIVITY_QUERY,
-          variables: {
-            filter: {
-              user_id: { eq: user?.id },
-              is_liked: { eq: true },
-            },
-            orderBy: {
-              created_at: 'DescNullsLast',
-            },
-          },
-          data: {
-            user_movie_activityCollection: {
-              edges: filmLikesData!.user_movie_activityCollection.edges.filter(
-                (edge: any) =>
-                  edge.node.movie_id !=
-                  data?.updateuser_movie_activityCollection?.records[0]
-                    ?.movie_id
-              ),
-            },
-          },
-        });
-      },
-    }
-  );
 
   const [updateActivityMutation] = useMutation<UpdateUserMovieActivityMutation>(
     UPDATE_ACTIVITY_MUTATION,

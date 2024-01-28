@@ -49,6 +49,7 @@ export default function PlaylistHeader({ playlist } : { playlist: PlaylistFragme
           onClick={() => playlist.user_id === user?.id && openModal({
             id: `playlist-${playlist.id}-edit`,
             content: <PlaylistModal id={`playlist-${playlist.id}-edit`} playlist={playlist} />,
+            className: "max-w-3xl h-[98%] lg:h-2/3"
           })}
         >
           <AspectRatio ratio={1 / 1}>
@@ -74,6 +75,7 @@ export default function PlaylistHeader({ playlist } : { playlist: PlaylistFragme
               onClick={() => playlist.user_id === user?.id && openModal({
                 id: `playlist-${playlist.id}-edit`,
                 content: <PlaylistModal id={`playlist-${playlist.id}-edit`} playlist={playlist} />,
+                className: "max-w-3xl h-[98%] lg:h-2/3"
               })}
               className="w-fit text-clamp font-bold line-clamp-2 cursor-pointer"
             >
@@ -86,13 +88,11 @@ export default function PlaylistHeader({ playlist } : { playlist: PlaylistFragme
               className='text-muted-foreground font-light line-clamp-2'
               onClick={() => openModal({
                 id: `playlist-${playlist.id}-description`,
+                header: {
+                  title: 'Description',
+                },
                 content: (
-                  <DialogContent>
-                    <DialogTitle>
-                      Description
-                    </DialogTitle>
-                    <p>{playlist.description}</p>
-                  </DialogContent>
+                  <p>{playlist.description}</p>
                 ),
               })}
             >

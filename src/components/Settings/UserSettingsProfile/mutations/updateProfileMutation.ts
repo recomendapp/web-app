@@ -6,7 +6,6 @@ export default gql`
     $id: UUID!
     $full_name: String!
     $bio: String!
-    $favorite_films: [BigInt]
     $website: String!
     $avatar_url: String!
   ) {
@@ -15,7 +14,6 @@ export default gql`
       set: {
         full_name: $full_name
         bio: $bio
-        favorite_films: $favorite_films
         website: $website
         avatar_url: $avatar_url
       }

@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation';
 
 // BILLINGPORTAL STRIPE
 import { stripe } from '@/lib/stripe/stripe';
-import { getURL } from '@/lib/stripe/stripe-helpers';
 import { createOrRetrieveCustomer } from '@/lib/supabase/supabase-admin';
 
 export default function SettingsAccountPage() {
@@ -22,7 +21,7 @@ export default function SettingsAccountPage() {
   const router = useRouter();
 
   const redirectToCustomerPortal = async () => {
-    console.log('redirectToCustomerPortal', getURL());
+    console.log('redirectToCustomerPortal', location.origin);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw Error('Could not get user');
@@ -33,7 +32,7 @@ export default function SettingsAccountPage() {
       if (!customer) throw Error('Could not get customer');
       const { url } = await stripe.billingPortal.sessions.create({
         customer,
-        return_url: `${getURL()}/settings/subscription`,
+        return_url: `${location.origin}/settings/subscription`,
       });
       router.push(url);
     } catch (error) {

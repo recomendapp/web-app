@@ -37,7 +37,7 @@ import { fr } from 'date-fns/locale';
 import { ConvertHoursMinutes } from '@/lib/utils';
 
 // ICONS
-import { Play } from 'lucide-react';
+import { Play, Star } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MoviePoster from '@/components/Movie/MoviePoster';
 import { useAuth } from '@/context/auth-context';
@@ -98,15 +98,20 @@ export default function MovieHeader({
             </div>
             {/* TITLE */}
             <div>
-              <div className="text-xl lg:text-6xl font-bold line-clamp-2">
-                <span>{movie.data?.edges[0].node.title}</span>
+              <div className="text-clamp space-x-1">
+                <span className='font-bold '>{movie.data?.edges[0].node.title}</span>
+                {/* DATE */}
+                <sup>
+                  <DateOnlyYearTooltip date={movie.release_date ?? ''} className='text-sm font-medium text-accent-1'/>
+                </sup>
               </div>
-              {/* DATE */}
-              <DateOnlyYearTooltip date={movie.release_date ?? ''} className='text-2xl'/>
+              <div className='flex items-center gap-2'>
+                <Star size={20} className="text-accent-pink fill-accent-pink" />
+                <span className='text-accent-pink font-medium'>{movie.vote_average?.toFixed(1)}</span>
+              </div>
               
             </div>
             <div className=" space-y-2">
-              {/* DATE / GENRES / RUNTIME */}
               <div>
                 {movie.directors?.edges.map(({ node }, index: number) => (
                   <>

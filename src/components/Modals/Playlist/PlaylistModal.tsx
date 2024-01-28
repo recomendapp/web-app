@@ -9,7 +9,6 @@ import {
 import React, { useState } from 'react';
 import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
 import { useAuth } from '@/context/auth-context';
-import { Playlist } from '@/types/type.playlist';
 import PlaylistGuest from '@/components/Playlist/FilmPlaylist/PlaylistGuest/PlaylistGuest';
 import { PlaylistFragment } from '@/graphql/__generated__/graphql';
 import { useModal } from '@/context/modal-context';
@@ -30,7 +29,7 @@ export function PlaylistModal({
   if (!user) return null;
 
   return (
-    <DialogContent className="max-w-3xl h-[98%] lg:h-2/3">
+    <>
       {!playlist ? (
         <>
           <DialogHeader>
@@ -76,6 +75,6 @@ export function PlaylistModal({
           )}
         </>
       )}
-    </DialogContent>
+    </>
   );
 }

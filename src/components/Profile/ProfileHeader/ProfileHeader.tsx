@@ -103,7 +103,7 @@ export default async function ProfileHeader({ profile }: { profile: UserFragment
             )}
           </div>
           {/* ACTION BUTTON */}
-          <ProfileFollowButton profile={profile} className="hidden @md:flex" />
+          <ProfileFollowButton profile={profile} className="hidden @lg:flex" />
         </section>
       </div>
     </HeaderBox>

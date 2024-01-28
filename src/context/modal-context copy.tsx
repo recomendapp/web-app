@@ -1,10 +1,9 @@
 'use client';
 
-import React, { createContext, useContext, ReactNode, useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import React, { createContext, useContext, ReactNode, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import { cn } from '@/lib/utils';
 
 interface ModalInfo {
   id: string;
@@ -14,7 +13,6 @@ interface ModalInfo {
   }
   content: ReactNode;
   isOpen: boolean;
-  className?: string;
 }
 
 interface OpenModalArgs {
@@ -24,7 +22,6 @@ interface OpenModalArgs {
     description?: ReactNode;
   }
   content: ReactNode;
-  className?: string;
 }
 
 interface ModalContextProps {
@@ -54,7 +51,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
         return [...prevModals, { ...modal, isOpen: true }];
       }
     });
-    // setModals((prevModals) => [...prevModals, { ...modal isOpen: true }]);
+    // setModals((prevModals) => [...prevModals, { ...modal, isOpen: true }]);
   };
 
   const closeModal = (id: string) => {
@@ -87,21 +84,21 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
         //     </DrawerContent>
         //   </Drawer>
         // ) : (
-          <Dialog key={modal.id} open={modal.isOpen} onOpenChange={() => closeModal(modal.id)}>
-            <DialogContent className={cn("", modal.className)}>
-              {modal.header && <DialogHeader>
-                {modal.header.title && <DialogTitle>
-                  {modal.header.title}
-                </DialogTitle>}
-                {modal.header.description && <DialogDescription>
-                  {modal.header.description}
-                </DialogDescription>}
-              </DialogHeader>}
-              {modal.content}
-            </DialogContent>
-          </Dialog>
-      // )
-    ))}
+        <Dialog key={modal.id} open={modal.isOpen} onOpenChange={() => closeModal(modal.id)}>
+          <DialogContent>
+            {modal.header && <DialogHeader>
+              {modal.header.title && <DialogTitle>
+                {modal.header.title}
+              </DialogTitle>}
+              {modal.header.description && <DialogDescription>
+                {modal.header.description}
+              </DialogDescription>}
+            </DialogHeader>}
+            {modal.content}
+          </DialogContent>
+        </Dialog>
+        // )
+      ))}
     </ModalContext.Provider>
   );
 };

@@ -232,7 +232,7 @@ export function DeleteModal({
   }
 
   return (
-    <DialogContent className="sm:max-w-[425px]">
+    <>
       <p>Êtes-vous sûr de vouloir supprimer ce film ?</p>
       <DialogFooter>
         <Button variant="ghost" onClick={() => closeModal(id)}>
@@ -242,6 +242,6 @@ export function DeleteModal({
           Supprimer
         </Button>
       </DialogFooter>
-    </DialogContent>
+    </>
   );
 }

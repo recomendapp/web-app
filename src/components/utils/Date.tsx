@@ -24,7 +24,7 @@ export function DateOnlyYearTooltip({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <p className={cn('w-fit', className)}>{date.split('-')[0]}</p>
+          <span className={cn('w-fit', className)}>{date.split('-')[0]}</span>
         </TooltipTrigger>
         <TooltipContent align="center" side="bottom">
           {date

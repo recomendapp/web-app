@@ -90,7 +90,7 @@ const PlaylistCommentModal = ({
 	}
   
 	return (
-		<DialogContent className="sm:max-w-[425px]">
+		<>
 			<DialogHeader>
 			<DialogTitle>Commentaire</DialogTitle>
 			</DialogHeader>
@@ -113,7 +113,7 @@ const PlaylistCommentModal = ({
 				</DialogFooter>
 				}
 			</form>
-		</DialogContent>
+		</>
 	);
 };
 

@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import USER_FRAGMENT from '@/graphql/User/User/fragments/User';
+import USER_MOVIE_GUIDELIST_ITEM_FRAGMENT from '@/graphql/User/Movie/Guidelist/fragments/UserMovieGuidelistItem';
 import TMDB_MOVIE_MINIMAL_FRAGMENT from '@/graphql/Movie/fragments/tmdb_movie/minimal/tmdbMovieMinimalFragment';
 
 export default gql`
@@ -7,14 +7,23 @@ export default gql`
     id
     created_at
     movie_id
+    user_id
     movie: tmdb_movie {
       ...TmdbMovieMinimal
     }
-    comment
-    sender_user: user {
-      ...User
+    senders: user_movie_guidelist_itemCollection(
+      orderBy: [
+        { created_at: AscNullsLast }
+      ]
+    ) {
+      edges {
+        node {
+          ...UserMovieGuidelistItem
+        }
+      }
+      totalCount
     }
   }
-  ${USER_FRAGMENT}
+  ${USER_MOVIE_GUIDELIST_ITEM_FRAGMENT}
   ${TMDB_MOVIE_MINIMAL_FRAGMENT}
 `;
