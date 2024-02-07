@@ -30,6 +30,7 @@ import { Input } from '@/components/ui/input';
 import { useInView } from 'react-intersection-observer';
 import { Search } from 'lucide-react';
 import useDebounce from '@/hooks/use-debounce';
+import { Badge } from '@/components/ui/badge';
 
 const sendFormSchema = z.object({
 	friends: z.array(
@@ -73,13 +74,15 @@ export function MovieSendModal({
 	} = useInfiniteQuery({
 		queryKey: debouncedSearch ? ['user', user?.id, 'friends', { search: debouncedSearch }] : ['user', user?.id, 'friends'],
 		queryFn: async ({ pageParam = 1 }) => {
+			if (!user?.id) throw Error('Missing user id');
 			let from = (pageParam - 1) * numberOfResult;
 			let to = from - 1 + numberOfResult;
 
 			let query = supabase
 				.from('user_friend')
-				.select('id, friend:user!inner(*)')
+				.select('id, friend:user!inner(*, user_movie_activity(count))')
 				.eq('user_id', user?.id ?? '')
+				.eq('friend.user_movie_activity.movie_id', movieId)
 				.range(from, to)
 
 			if (debouncedSearch) {
@@ -178,29 +181,37 @@ export function MovieSendModal({
 													: {})}
 											>
 												<FormLabel className="flex flex-row w-full justify-between items-center space-x-3 space-y-0 hover:bg-muted p-2">
-													<div className="font-normal flex gap-2 items-center w-full">
-														<Avatar className="h-[40px] w-[4	0px] shadow-2xl">
-															<AvatarImage
-																src={friend?.avatar_url ?? ''}
-																alt={friend?.username}
-															/>
-															<AvatarFallback className="text-primary bg-muted text-[20px]">
-																{getInitiales(friend?.username ?? '')}
-															</AvatarFallback>
-														</Avatar>
-														<div>
-															<p className="line-clamp-1">{friend?.full_name}</p>
-															<p className="text-muted-foreground line-clamp-1">
-																@{friend?.username}
-															</p>
+													<div className='flex items-center w-full justify-between gap-4'>
+														<div className="font-normal flex gap-2 items-center">
+															<Avatar className="h-[40px] w-[4	0px] shadow-2xl">
+																<AvatarImage
+																	src={friend?.avatar_url ?? ''}
+																	alt={friend?.username}
+																/>
+																<AvatarFallback className="text-primary bg-muted text-[20px]">
+																	{getInitiales(friend?.username ?? '')}
+																</AvatarFallback>
+															</Avatar>
+															<div>
+																<p className="line-clamp-1">{friend?.full_name}</p>
+																<p className="text-muted-foreground line-clamp-1">
+																	@{friend?.username}
+																</p>
+															</div>
 														</div>
+														{/*
+														// @ts-ignore */}
+														{friend?.user_movie_activity[0].count > 0 && <Badge variant={'destructive'}>Déjà vu</Badge>}
 													</div>
+
 													<FormControl>
 														<Checkbox
 															checked={field.value?.some(
 															(friendSelected) =>
 																friendSelected.friend.id === friend?.id
 															)}
+															// @ts-ignore
+															disabled={friend?.user_movie_activity[0].count > 0}
 															onCheckedChange={(checked) => {
 															if (checked) {
 																field.onChange([

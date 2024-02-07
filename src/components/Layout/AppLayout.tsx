@@ -1,5 +1,5 @@
 'use client'
-
+import { setCookie } from "cookies-next";
 import { Box } from '@/components/Box/Box';
 import { Header } from '@/components/Header/Header';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
@@ -33,9 +33,9 @@ export default function AppLayout({
 			<ResizablePanelGroup
 				direction="horizontal"
 				onLayout={(sizes: number[]) => {
-					document.cookie = `ui:layout=${JSON.stringify(
-						sizes
-					)}`
+					setCookie("ui:layout", JSON.stringify(sizes), {
+						path: "/",
+					});
 				}}
 				className='h-full items-stretch gap-1'
 			>

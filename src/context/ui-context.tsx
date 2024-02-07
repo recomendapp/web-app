@@ -1,5 +1,6 @@
 'use client';
 
+import { setCookie } from 'cookies-next';
 import React, { createContext, useContext, useRef, useState } from 'react';
 import { ImperativePanelHandle } from 'react-resizable-panels';
 
@@ -52,14 +53,20 @@ export function UiContext({
     if (sidebarRef.current) {
       sidebarRef.current.collapse();
       setIsSidebarCollapsed(true);
-      document.cookie = `ui-sidebar:collapsed=${JSON.stringify(true)}`
+      setCookie("ui-sidebar:collapsed", JSON.stringify(true), {
+        path: "/",
+      });
+      // document.cookie = `ui-sidebar:collapsed=${JSON.stringify(true)}; path=/`
     }
   }
   const expandSidebar = () => {
     if (sidebarRef.current) {
       sidebarRef.current.expand();
       setIsSidebarCollapsed(false);
-      document.cookie = `ui-sidebar:collapsed=${JSON.stringify(false)}`
+      setCookie("ui-sidebar:collapsed", JSON.stringify(false), {
+        path: "/",
+      });
+      // document.cookie = `ui-sidebar:collapsed=${JSON.stringify(false)}; path=/`
     }
   }
   // *========== END SIDEBAR ==========*

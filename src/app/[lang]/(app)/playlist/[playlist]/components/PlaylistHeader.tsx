@@ -18,10 +18,14 @@ import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
 import { Playlist, PlaylistItem } from '@/types/type.db';
 import { Modal } from '@/components/Modals/Modal';
 import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
+import { Button } from '@/components/ui/button';
+import { UserCogIcon } from 'lucide-react';
+import PlaylistGuest from './guest/PlaylistGuest'
 
 export default function PlaylistHeader({ playlist } : { playlist: Playlist }) {
   const { user } = useAuth();
   const [ openPlaylistModal, setOpenPlaylistModal ] = useState(false);
+  const [ openPlaylistGuestModal, setOpenPlaylistGuestModal ] = useState(false);
   const [ openDescriptionModal, setOpenDescriptionModal ] = useState(false);
   // const { openModal } = useModal();
 
@@ -125,7 +129,18 @@ export default function PlaylistHeader({ playlist } : { playlist: Playlist }) {
         open={openPlaylistModal}
         setOpen={setOpenPlaylistModal}
         header={{
-          title: 'Modifier la playlist',
+          title: (
+            <div className='flex gap-4 items-center'>
+              <h2>Modifier la playlist</h2>
+              <Button
+                variant={'muted'}
+                size={'icon'}
+                onClick={() => setOpenPlaylistGuestModal(true)}
+              >
+                <UserCogIcon size={20}/>
+              </Button>
+            </div>
+          ),
           description: 'Modifiez les informations de votre playlist',
         }}
         content={
@@ -135,6 +150,18 @@ export default function PlaylistHeader({ playlist } : { playlist: Playlist }) {
           />
         }
         // className="max-w-3xl min-h-[50%] lg:h-2/3"
+      />
+      <Modal
+        open={openPlaylistGuestModal}
+        setOpen={setOpenPlaylistGuestModal}
+        header={{
+          title: 'Membres de la playlist',
+        }}
+        content={
+          <PlaylistGuest
+            playlist={playlist}
+          />
+        }
       />
       <Modal
         open={openDescriptionModal}

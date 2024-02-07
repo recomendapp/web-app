@@ -70,7 +70,7 @@ export default function PlaylistGuest({
 
   return (
     <div className="flex flex-col gap-4">
-      <Table>
+      <Table className=''>
         <TableHeader>
           <TableRow>
             <TableHead className="flex items-center gap-4">
@@ -96,13 +96,22 @@ export default function PlaylistGuest({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {playlist?.guests?.map((guest : PlaylistGuest) => (
-            <GuestManageAccess
-              key={guest?.id}
-              guest={guest}
-              playlist={playlist}
-            />
-          ))}
+
+            {playlist?.guests.length > 0 ? (
+              playlist?.guests?.map((guest : PlaylistGuest) => (
+                <GuestManageAccess
+                  key={guest?.id}
+                  guest={guest}
+                  playlist={playlist}
+                />
+              ))) : (
+                <TableRow>
+                  <TableCell colSpan={3} className="text-center">
+                    Aucun invité
+                  </TableCell>
+                </TableRow>
+              )
+            }
         </TableBody>
       </Table>
     </div>
