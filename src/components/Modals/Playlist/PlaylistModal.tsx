@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -9,9 +8,9 @@ import {
 import React, { useState } from 'react';
 import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
 import { useAuth } from '@/context/auth-context';
-import PlaylistGuest from '@/components/Playlist/FilmPlaylist/PlaylistGuest/PlaylistGuest';
-import { PlaylistFragment } from '@/graphql/__generated__/graphql';
+import PlaylistGuest from '@/app/[lang]/(app)/playlist/[playlist]/components/guest/PlaylistGuest';
 import { useModal } from '@/context/modal-context';
+import { Playlist } from '@/types/type.db';
 
 export function PlaylistModal({
   id,
@@ -20,7 +19,7 @@ export function PlaylistModal({
 }: {
   id: string;
   filmId?: string;
-  playlist?: PlaylistFragment;
+  playlist?: Playlist;
 }) {
   const { user } = useAuth();
   const [view, setView] = useState('general');
@@ -37,7 +36,6 @@ export function PlaylistModal({
           </DialogHeader>
           <PlaylistForm
             success={() => closeModal(id)}
-            userId={user?.id}
             filmId={filmId}
             playlist={playlist}
           />
@@ -65,7 +63,6 @@ export function PlaylistModal({
           {view == 'general' && (
             <PlaylistForm
               success={() => closeModal(id)}
-              userId={user.id}
               filmId={filmId}
               playlist={playlist}
             />

@@ -21,7 +21,7 @@ export function DateOnlyYearTooltip({
   const locale = useLocale();
   if (!date) return;
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={100}>
       <Tooltip>
         <TooltipTrigger asChild>
           <span className={cn('w-fit', className)}>{date.split('-')[0]}</span>

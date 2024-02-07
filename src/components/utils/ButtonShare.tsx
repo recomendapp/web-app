@@ -1,21 +1,24 @@
 // UI
 import { Button } from '@/components/ui/button';
 import copyToClipboard from '@/hooks/copy-to-clipboard';
+import { cn } from '@/lib/utils';
 
 // ICONS
-import { Share } from 'lucide-react';
+import { Share2 } from 'lucide-react';
 
 export default function ButtonShare({
   url,
   icon,
+  className
 }: {
   url: string;
   icon?: boolean;
+  className?: string;
 }) {
   if (icon) {
     return (
-      <Button variant={'share'} onClick={() => copyToClipboard(url)}>
-        <Share className="h-4 w-4" />
+      <Button className={cn('', className)} variant={'action'} onClick={() => copyToClipboard(url)}>
+        <Share2 />
       </Button>
     );
   }

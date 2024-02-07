@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import MovieCard from '@/components/Movie/Card/MovieCard';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { handleMoviesNowPlaying } from '@/lib/tmdb/tmdb';
 import { useLocale } from 'next-intl';
 import { useInView } from 'react-intersection-observer';
@@ -29,6 +28,7 @@ export const MovieNowPlayingWidget = () => {
     queryKey: ['films', 'now-playing'],
     queryFn: ({ pageParam = 1 }) =>
       handleMoviesNowPlaying(locale, locale, pageParam),
+    initialPageParam: 1,
     getNextPageParam: (results, pages) => {
       return results?.length == numberOfResult ? pages.length + 1 : undefined;
     },

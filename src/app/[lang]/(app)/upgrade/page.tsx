@@ -2,7 +2,6 @@ import {
   getActiveProductsWithPrices,
   getSession,
 } from '@/lib/supabase/server';
-import { Price } from '@/types/type.stripe';
 import Pricing from '@/components/Subscription/Pricing';
 
 export default async function Upgrade() {

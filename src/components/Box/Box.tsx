@@ -11,13 +11,10 @@ interface BoxProps {
 export const Box: React.FC<BoxProps> = ({ children, className }) => {
   return (
     <div
-      className={cn(
-        `
-        bg-background
-        h-fit
-        w-full
-        lg:rounded-lg
-        p-2
+      className={cn(`
+          bg-background
+          lg:rounded-lg
+          p-2
         `,
         className
       )}

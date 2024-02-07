@@ -2,19 +2,79 @@ import { Box } from '@/components/Box/Box';
 import { siteConfig } from '@/config/site';
 import Image from 'next/image';
 import Link from 'next/link';
-import { SidebarContext } from './Sidebar';
-import { useContext } from 'react';
+import { useUiContext } from '@/context/ui-context';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
-export default function SidebarHeader() {
-  const { sidebarExpanded } = useContext(SidebarContext);
+export default function SidebarHeader({
+  className,
+}: {
+  className?: string;
+}) {
+  const { isSidebarCollapsed, expandSidebar, collapseSidebar } = useUiContext();
   return (
-    <Box>
-      <Link
-        href={'/'}
+    <Box className={cn('', className)}>
+      {/* {isCollapsed ? (
+        <Tooltip delayDuration={0} disableHoverableContent>
+          <TooltipTrigger asChild>
+          <Link
+            href={'/'}
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "",
+              // "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
+            )}
+          >
+            <Image
+              priority
+              src={siteConfig.icon.file}
+              alt={siteConfig.icon.alt}
+              className={`
+                  overflow-hidden transition-all h-6 w-6
+              `}
+            />
+          </Link>
+          </TooltipTrigger>
+          <TooltipContent side="right" className="flex items-center gap-4">
+            Accueil
+          </TooltipContent>
+        </Tooltip>
+      ) : (
+        <Link
+          href={'/'}
+          className={`
+              relative flex items-center p-2 my-1
+              rounded-md
+              ${isCollapsed && 'justify-center'}
+          `}
+        >
+          <Image
+            priority
+            src={siteConfig.icon.file}
+            alt={siteConfig.icon.alt}
+            className={`
+                overflow-hidden transition-all
+                ${!isCollapsed ? 'w-0' : 'w-6'}
+            `}
+          />
+          <Image
+            priority
+            src={siteConfig.logo.file}
+            alt={siteConfig.logo.alt}
+            className={`
+                overflow-hidden transition-all
+                ${!isCollapsed ? 'w-36' : 'w-0'}
+            `}
+          />
+        </Link>
+      )} */}
+      <Button
+        onClick={isSidebarCollapsed ? expandSidebar : collapseSidebar}
+        variant={'ghost'}
         className={`
-            relative flex items-center p-2 my-1
+            relative flex items-center justify-start p-2 my-1
             rounded-md
-            ${!sidebarExpanded && 'justify-center'}
+            ${isSidebarCollapsed && 'justify-center'}
         `}
       >
         <Image
@@ -23,7 +83,7 @@ export default function SidebarHeader() {
           alt={siteConfig.icon.alt}
           className={`
               overflow-hidden transition-all
-              ${sidebarExpanded ? 'w-0' : 'w-6'}
+              ${!isSidebarCollapsed ? 'w-0' : 'w-6'}
           `}
         />
         <Image
@@ -32,10 +92,10 @@ export default function SidebarHeader() {
           alt={siteConfig.logo.alt}
           className={`
               overflow-hidden transition-all
-              ${sidebarExpanded ? 'w-36' : 'w-0'}
+              ${!isSidebarCollapsed ? 'w-36' : 'w-0'}
           `}
         />
-      </Link>
+      </Button>
     </Box>
   );
 }

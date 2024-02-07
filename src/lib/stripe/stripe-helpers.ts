@@ -1,3 +1,4 @@
+import { Prices } from '@/types/type.db';
 import { Price } from '@/types/type.stripe';
 
 export const getURL = () => {
@@ -17,7 +18,7 @@ export const postData = async ({
   data,
 }: {
   url: string;
-  data?: { price: Price };
+  data?: { price: Prices };
 }) => {
   const res: Response = await fetch(url, {
     method: 'POST',

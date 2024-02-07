@@ -82,7 +82,7 @@ export function UserNav({ following = true }: { following?: boolean }) {
                 {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
               </Link>
             </DropdownMenuItem>
-            {!user.subscriptions?.edges.length && (
+            {!user.premium && (
               <DropdownMenuItem asChild>
                 <Link href={'/upgrade'} className="text-accent-1">
                   <Sparkles className="mr-2 h-4 w-4" />

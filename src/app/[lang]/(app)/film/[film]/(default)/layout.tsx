@@ -1,48 +1,33 @@
 import { notFound } from 'next/navigation';
 
-// GRAPHQL
-import apolloServer from '@/lib/apollo/server';
-import GET_MOVIE_BY_ID from '@/graphql/Movie/queries/GetMovieById';
-import type { GetMovieByIdQuery } from '@/graphql/__generated__/graphql';
-
 // COMPONENTS
 import MovieHeader from './components/MovieHeader';
 import MovieNavbar from './components/MovieNavbar';
-
-interface LayoutProps {
-	children: React.ReactNode;
-	params: {
-		lang: string;
-		film: number;
-	};
-}
+import { createServerClient } from '@/lib/supabase/server';
 
 export async function generateMetadata({
 	params,
-  }: {
+}: {
 	params: {
 	  lang: string;
 	  film: number;
 	};
-  }) {
-	const { data: movieQuery } = await apolloServer.query<GetMovieByIdQuery>({
-	  query: GET_MOVIE_BY_ID,
-	  variables: {
-		filter: {
-		  id: { eq: params.film },
-		},
-		locale: params.lang,
-	  },
-	});
-	const movie = movieQuery?.tmdb_movieCollection?.edges[0].node;
-  
+}) {
+	const supabase = createServerClient();
+	const { data: movie } = await supabase
+		.from('tmdb_movie')
+		.select('id, data:tmdb_movie_translation!inner(*)')
+		.eq('id', params.film)
+		.eq('data.language_id', params.lang)
+		.single();
+	
 	if (!movie) return { title: 'Film introuvable' };
-  
+
 	return {
-	  title: movie.data?.edges[0].node.title,
-	  description: `This is the page of ${movie.data?.edges[0].node.title}`,
+		title: movie.data[0].title,
+		description: `This is the page of ${movie.data[0].title}`,
 	};
-  }
+}
 
 export default async function MovieLayout({
 	children,
@@ -54,18 +39,50 @@ export default async function MovieLayout({
 	  film: number;
 	};
 }) {
-	const { data: movieQuery } = await apolloServer.query<GetMovieByIdQuery>({
-		query: GET_MOVIE_BY_ID,
-		variables: {
-		  filter: {
-			id: { eq: params.film },
-		  },
-		  locale: params.lang,
-		},
-	  });
-	  const movie = movieQuery?.tmdb_movieCollection?.edges[0].node;
+	const supabase = createServerClient();
+	const { data: movie } = await supabase
+		.from('tmdb_movie')
+		.select(`
+			*,
+			data:tmdb_movie_translation(*),
+			genres:tmdb_movie_genre(
+				id,
+				genre:tmdb_genre(
+					*,
+					data:tmdb_genre_translation(*)
+				)
+			),
+			directors:tmdb_movie_credits(
+				id,
+				director:tmdb_person(*)
+			),
+			production_countries:tmdb_movie_country(
+				id,
+				country:tmdb_country(
+					*,
+					data:tmdb_country_translation(*)
+				)
+			),
+			spoken_languages:tmdb_movie_language(
+				id,
+				language:tmdb_language(
+					*,
+					data:tmdb_language_translation(*)
+				)
+			),
+			videos:tmdb_movie_videos(*)
+		`)
+		.eq('id', params.film)
+		.eq('data.language_id', params.lang)
+		.eq('genres.genre.data.language', params.lang)
+		.eq('production_countries.country.data.iso_639_1', params.lang)
+		.eq('spoken_languages.language.data.language', params.lang)
+		.eq('videos.iso_639_1', params.lang)
+		.eq('directors.job', 'Director')
+		.single();
 	
-	  if (!movie) notFound();
+	if (!movie) notFound();
+
 	return (
 		<main>
 			<MovieHeader movie={movie} />

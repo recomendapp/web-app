@@ -1,23 +1,35 @@
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { Library } from 'lucide-react';
-import Link from 'next/link';
-import SidebarCollectionRoutes from './SidebarCollectionRoutes';
-import { UserPlaylists } from '@/components/User/UserPlaylists/UserPlaylists';
-import { usePathname } from 'next/navigation';
-import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
-import { useAuth } from '@/context/auth-context';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Box } from '@/components/Box/Box';
-import { Button } from '@/components/ui/button';
 import { useContext, useMemo } from 'react';
-import { SidebarContext } from '../Sidebar';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+
+// CONTEXT
+import { useAuth } from '@/context/auth-context';
+
+// COMPONENTS
+import SidebarCollectionRoutes from '@/components/Sidebar/Collection/SidebarCollectionRoutes';
+import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
+// import { UserPlaylists } from '@/components/User/UserPlaylists/UserPlaylists';
+import { Box } from '@/components/Box/Box';
+
+// UI
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // ICONS
 import { HelpCircle, Info, Store } from 'lucide-react';
+import { Library } from 'lucide-react';
+import { useUiContext } from '@/context/ui-context';
+import { cn } from '@/lib/utils';
+import SidebarCollectionPlaylists from './SidebarCollectionPlaylists';
 
-export default function SidebarCollection() {
-  const { sidebarExpanded } = useContext(SidebarContext);
+export default function SidebarCollection({
+  className,
+}: {
+  className?: string;
+}) {
+  const { isSidebarCollapsed } = useUiContext();
   const { user, loading } = useAuth();
   const pathname = usePathname();
 
@@ -26,63 +38,61 @@ export default function SidebarCollection() {
   if (!user) return <SidebarCollectionNotConnected />;
 
   return (
-    <Box
-      className={`
-                flex flex-col gap-1 h-full overflow-x-hidden
-                `}
-      // ${sidebarExpanded ? 'px-3' : 'px-1 items-center'}
-    >
-      <div
-        className={`
-                    flex items-center
-                    ${
-                      sidebarExpanded
-                        ? 'flex justify-between'
-                        : 'justify-center'
-                    }
-                `}
-      >
-        <Link
-          href={'/collection'}
-          className={`
-                        relative flex items-center p-2 my-1
-                        font-medium rounded-md transition-colors
-                        group
-                        ${
-                          pathname == '/collection'
-                            ? 'text-primary'
-                            : 'text-primary-subued hover:text-primary'
-                        }
-                    `}
-        >
-          <Library className="transition-colors" />
-          <span
-            className={`
-                            overflow-hidden transition-all
-                            ${sidebarExpanded ? 'w-52 ml-3' : 'w-0'}
-                        `}
-          >
-            Bibliothèque
-          </span>
-          {!sidebarExpanded && (
-            <div
+    <Box className={cn('p-0 h-full', className)}>
+      <div className='px-2 pt-2'>
+        {isSidebarCollapsed ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+            <Link
+              href={'/collection'}
               className={`
-                                z-[1]
-                                absolute left-full rounded-md px-2 py-1 ml-6
-                                bg-muted text-sm whitespace-nowrap
-                                invisible opacity-20 -translate-x-3 transition-all
-                                group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-                            `}
+                relative flex items-center p-2 my-1
+                font-medium rounded-md transition-all
+                group
+                ${pathname == '/collection'
+                  ? 'text-primary'
+                  : 'text-primary-subued hover:text-primary'
+                }
+              `}
             >
+              <Library />
+            </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="flex items-center gap-4">
               Bibliothèque
-            </div>
-          )}
-        </Link>
-        {sidebarExpanded && <PlaylistCreateButton />}
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          <div className='flex items-center justify-between'>
+            <Link
+              href={'/collection'}
+              className={`
+                  relative flex items-center p-2 my-1
+                  font-medium rounded-md transition-all
+                  group
+                  ${pathname == '/collection'
+                    ? 'text-primary'
+                    : 'text-primary-subued hover:text-primary'
+                  }
+              `}
+            >
+              <Library className=' shrink-0'/>
+              <span
+                  className={`
+                      overflow-hidden transition-all
+                      ${!isSidebarCollapsed ? 'w-52 ml-3' : 'w-0'}
+                  `}
+              >
+                Bibliothèque
+              </span>
+            </Link>
+            {!isSidebarCollapsed && <PlaylistCreateButton />}
+          </div>
+        )}
       </div>
-      <ScrollArea>
+      <ScrollArea className='w-full h-[50vh] group-[[data-collapsed=false]]:px-2'>
         <SidebarCollectionRoutes />
-        <UserPlaylists sidebarExpanded={sidebarExpanded} />
+        <SidebarCollectionPlaylists />
         <ScrollBar orientation="vertical" />
       </ScrollArea>
     </Box>
@@ -91,7 +101,7 @@ export default function SidebarCollection() {
 
 export function SidebarCollectionNotConnected() {
   const t = useTranslations('routes');
-  const { sidebarExpanded } = useContext(SidebarContext);
+  const { isSidebarCollapsed } = useUiContext();
   const pathname = usePathname();
   const mainRoutes = useMemo(
     () => [
@@ -121,57 +131,58 @@ export function SidebarCollectionNotConnected() {
   );
 
   return (
-    <Box
-      className={`
-                    flex flex-col h-full
-                    ${!sidebarExpanded && 'items-center'}
-            `}
-    >
-      <ul>
-        {mainRoutes.map((item) => (
-          <li key={item.label}>
+    <Box className='h-full'>
+      {mainRoutes.map((item, i) => (
+        isSidebarCollapsed ? (
+          <Tooltip key={i}>
+            <TooltipTrigger asChild>
             <Link
               href={item.href}
               className={`
-                                relative flex items-center p-2 my-1
-                                font-medium rounded-md transition-all
-                                group
-                                ${
-                                  item.active
-                                    ? 'text-primary'
-                                    : 'text-primary-subued hover:text-primary'
-                                }
-                            `}
-              target={item.external_link ? '_blank' : ''}
+                relative flex items-center p-2 my-1 justify-center
+                font-medium rounded-md transition-all
+                group
+                ${
+                  item.active
+                    ? 'text-primary'
+                    : 'text-primary-subued hover:text-primary'
+                }
+              `}
             >
               <item.icon />
-              <div
-                className={`
-                                    flex justify-between overflow-hidden transition-all
-                                    ${sidebarExpanded ? 'w-full ml-3' : 'w-0'}
-                                `}
-              >
-                <span>{item.label}</span>
-                {item.external_link && <span>↗</span>}
-              </div>
-              {/* {sidebarExpanded && item.label} */}
-              {!sidebarExpanded && (
-                <div
-                  className={`
-                                        z-[1]
-                                        absolute left-full rounded-md px-2 py-1 ml-6
-                                        bg-muted text-sm whitespace-nowrap
-                                        invisible opacity-20 -translate-x-3 transition-all
-                                        group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-                                    `}
-                >
-                  {item.label}
-                </div>
-              )}
             </Link>
-          </li>
-        ))}
-      </ul>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="flex items-center gap-4">
+              {item.label}
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          <Link
+            key={i}
+            href={item.href}
+            className={`
+                relative flex items-center p-2 my-1
+                font-medium rounded-md transition-all
+                group
+                ${
+                  item.active
+                    ? 'text-primary'
+                    : 'text-primary-subued hover:text-primary'
+                }
+            `}
+          >
+            <item.icon className=' shrink-0'/>
+            <span
+                className={`
+                    overflow-hidden transition-all
+                    ${!isSidebarCollapsed ? 'w-52 ml-3' : 'w-0'}
+                `}
+            >
+                {item.label}
+            </span>
+          </Link>
+        )
+      ))}
     </Box>
   );
 }

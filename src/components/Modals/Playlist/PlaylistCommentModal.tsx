@@ -1,44 +1,34 @@
 'use client'
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 // COMPONENTS
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 
-// GRAPHQL
-import { useMutation, useQuery } from "@apollo/client";
-import GET_PLAYLIST_BY_ID from '@/graphql/Playlist/Playlist/queries/GetPlaylistById';
-import UPDATE_PLAYLIST_ITEM from '@/graphql/Playlist/PlaylistItem/mutations/UpdatePlaylistItem';
-import type { GetPlaylistByIdQuery, PlaylistItemFragment, UpdatePlaylistItemMutation } from "@/graphql/__generated__/graphql";
 import { useAuth } from "@/context/auth-context";
-import { useLocale } from "next-intl";
 import { useModal } from "@/context/modal-context";
+import { Playlist, PlaylistGuest, PlaylistItem } from "@/types/type.db";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase/client";
 
 const PlaylistCommentModal = ({
 	id,
 	playlistItem,
   } : {
 	id: string,
-	playlistItem: PlaylistItemFragment,
+	playlistItem: PlaylistItem,
   }) => {
 
 	const { closeModal } = useModal();
 
 	const { user } = useAuth();
 
-	const locale = useLocale();
+	const queryClient = useQueryClient();
 
-	const { data: playlistQuery } = useQuery<GetPlaylistByIdQuery>(GET_PLAYLIST_BY_ID, {
-		variables: {
-		  id: playlistItem.playlist_id,
-		  locale: locale
-		},
-		skip: !playlistItem.playlist_id || !locale,
-	});
-	const playlist = playlistQuery?.playlistCollection?.edges[0]?.node;
+  	const playlist = queryClient.getQueryData<Playlist>(['playlist', playlistItem?.playlist_id]);
 	
 	const isAllowedToEdit = Boolean(
 		user?.id &&
@@ -46,40 +36,47 @@ const PlaylistCommentModal = ({
 		(
 			user?.id === playlist?.user_id ||
 			(
-			playlist?.guests?.edges.some(
-				({ node }) => node.user_id === user?.id && node.edit
+			playlist?.guests?.some(
+				(guest: PlaylistGuest) => guest?.user_id === user?.id && guest?.edit
 			) &&
-			playlist?.user?.subscriptions?.edges.length! > 0
+			playlist?.user?.premium
 			)
 		)
 	);
-  
-	const [updatePlaylistItem] = useMutation<UpdatePlaylistItemMutation>(UPDATE_PLAYLIST_ITEM);
-  
+
+	const { mutateAsync: updatePlaylistItem } = useMutation({
+		mutationFn: async ({ comment } : { comment: string}) => {
+			if (!playlistItem?.id) throw Error('Missing id');
+			const { data, error } = await supabase
+			  .from('playlist_item')
+			  .update({
+				comment: comment,
+			  })
+			  .eq('id', playlistItem.id)
+			  .select(`*`)
+			if (error) throw error;
+			return data;
+		},
+	})
+
 	const [isLoading, setIsLoading] = useState<boolean>(false);
   
-	const [comment, setComment] = useState<string>(playlistItem.comment ?? '');
+	const [comment, setComment] = useState<string>(playlistItem?.comment ?? '');
 
 	useEffect(() => {
-		setComment(playlistItem.comment ?? '');
-	}, [playlistItem.comment]);
+		setComment(playlistItem?.comment ?? '');
+	}, [playlistItem?.comment]);
 
 	async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
 	  event.preventDefault();
   
-	  if (comment == playlistItem.comment) {
+	  if (comment == playlistItem?.comment) {
 		closeModal(id);
 		return;
 	  }
 	  try {
 		setIsLoading(true);      
-		const { data } = await updatePlaylistItem({
-		  variables: {
-			id: playlistItem.id,
-			comment: comment,
-		  }
-		})
-		if (!data?.updateplaylist_itemCollection.records.length) throw new Error('Nothing updated');
+		await updatePlaylistItem({ comment });
 		toast.success("Enregistré");
 		closeModal(id);
 	  } catch (error) {

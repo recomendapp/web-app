@@ -1,41 +1,48 @@
 'use client';
-import { handleSearchMovies, handleSearchPersons } from '@/lib/tmdb/tmdb';
+import { handleSearchPersons } from '@/lib/tmdb/tmdb';
 import Link from 'next/link';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '../../ui/skeleton';
 import { ImageWithFallback } from '../../utils/ImageWithFallback';
-import { AspectRatio } from '../../ui/aspect-ratio';
-import { useInfiniteQuery } from 'react-query';
-import { useAuth } from '@/context/auth-context';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
-import { useLocale } from 'next-intl';
+import { supabase } from '@/lib/supabase/client';
 
 export default function SearchCrewCastFull({ query }: { query: string }) {
-  const { user } = useAuth();
-
-  const locale = useLocale();
 
   const { ref, inView } = useInView();
 
   const numberOfResult = 20;
 
   const {
-    data: persons,
-    isLoading: loading,
-    fetchNextPage,
-    isFetchingNextPage,
-    hasNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['search', query, 'persons'],
-    queryFn: ({ pageParam = 1 }) =>
-      handleSearchPersons(query, locale, pageParam),
-    getNextPageParam: (results, pages) => {
-      return results?.length == numberOfResult ? pages.length + 1 : undefined;
-    },
-    enabled: !!query,
-  });
+		data: persons,
+		isLoading: loading,
+		fetchNextPage,
+		isFetchingNextPage,
+		hasNextPage,
+	} = useInfiniteQuery({
+		queryKey: ['search', 'person', { search: query }],
+		queryFn: async ({ pageParam = 1 }) => {
+      if (!query) return null;
+			let from = (pageParam - 1) * numberOfResult;
+			let to = from - 1 + numberOfResult;
+
+			const { data } = await supabase
+        .from('tmdb_person')
+        .select('*')
+        .order('updated_at', { ascending: false})
+        .range(from, to)
+        .ilike(`name`, `${query}%`);
+			return (data);
+		},
+		initialPageParam: 1,
+		getNextPageParam: (data, pages) => {
+			return data?.length == numberOfResult ? pages.length + 1 : undefined;
+		},
+		enabled: !!query
+	});
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -73,7 +80,6 @@ export default function SearchCrewCastFull({ query }: { query: string }) {
     return <div>Aucun résultat.</div>;
   }
 
-  console.log(persons);
   return (
     <div className="flex flex-col gap-2">
       {persons?.pages.map((page, i) => (

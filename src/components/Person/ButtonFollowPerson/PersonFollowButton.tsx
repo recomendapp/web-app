@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button } from '../../ui/button';
 import { Query } from 'appwrite';
 import { useEffect, useState } from 'react';

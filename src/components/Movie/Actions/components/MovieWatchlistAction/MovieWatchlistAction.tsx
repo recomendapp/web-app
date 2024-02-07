@@ -1,7 +1,8 @@
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase/client';
 
 // COMPONENTS
 import {
@@ -11,28 +12,14 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-// GRAPHQL
-import { useQuery, useMutation } from '@apollo/client';
-import GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID from '@/graphql/User/Movie/Watchlist/queries/GetUserMovieWatchlistByMovieId';
-import GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivityByMovieId';
-import GET_USER_MOVIE_WATCHLIST_BY_USER_ID from '@/graphql/User/Movie/Watchlist/queries/GetUserMovieWatchlistByUserId';
-import INSERT_WATCHLIST_MUTATION from '@/graphql/User/Movie/Watchlist/mutations/InsertUserMovieWatchlist';
-import DELETE_WATCHLIST_MUTATION from '@/graphql/User/Movie/Watchlist/mutations/DeleteUserMovieWatchlist';
-import type {
-  DeleteUserMovieWatchlistMutation,
-  GetUserMovieActivityByMovieIdQuery,
-  GetUserMovieWatchlistByMovieIdQuery,
-  InsertUserMovieWatchlistMutation,
-} from '@/graphql/__generated__/graphql';
-
 // ICONS
 import { AlertCircle, Bookmark } from 'lucide-react';
 import { Icons } from '../../../../icons';
-import { useLocale } from 'next-intl';
+import Link from 'next/link';
 
 interface MovieWatchlistActionProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  movieId: string;
+  movieId: number;
 }
 
 export function MovieWatchlistAction({
@@ -42,144 +29,112 @@ export function MovieWatchlistAction({
 
   const { user } = useAuth();
 
-  const locale = useLocale();
-
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const {
-    data: activityQuery,
-    loading: activityLoading,
-    error: activityError,
-  } = useQuery<GetUserMovieActivityByMovieIdQuery>(GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID, {
-    variables: {
-      movie_id: movieId,
-      user_id: user?.id,
+    data: activity,
+  } = useQuery({
+    queryKey: ['user', user?.id, 'activity', { movieId }],
+    queryFn: async () => {
+      if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
+      const { data, error } = await supabase
+        .from('user_movie_activity')
+        .select(`*, review:user_movie_review(*)`)
+        .eq('user_id', user.id)
+        .eq('movie_id', movieId)
+        .maybeSingle()
+      if (error) throw error;
+      return data;
     },
-    skip: !user || !movieId,
+    enabled: !!user?.id && !!movieId,
   });
-  const activity = activityQuery?.user_movie_activityCollection?.edges[0]?.node;
 
   const {
-    data: watchlistQuery,
-    loading: loading,
-    error: error,
-  } = useQuery<GetUserMovieWatchlistByMovieIdQuery>(GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID, {
-    variables: {
-      movie_id: movieId,
-      user_id: user?.id,
+    data: isWatchlisted,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['user', user?.id, 'watchlist', { movieId }],
+    queryFn: async () => {
+      if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
+      const { data, error } = await supabase
+        .from('user_movie_watchlist')
+        .select(`*`)
+        .eq('user_id', user.id)
+        .eq('movie_id', movieId)
+        .maybeSingle()
+      if (error) throw error;
+      return data ? true : false;
     },
-    skip: !user || !movieId,
+    meta: {
+      normalize: false,
+    },
+    enabled: !!user?.id && !!movieId,
   });
-  const isWatchlisted = watchlistQuery?.user_movie_watchlistCollection?.edges[0]
-    ?.node
-    ? true
-    : false;
 
-  const [insertWatchlistMutation] =
-    useMutation<InsertUserMovieWatchlistMutation>(INSERT_WATCHLIST_MUTATION, {
-      update: (cache, { data }) => {
-        cache.writeQuery({
-          query: GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID,
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-          },
-          data: {
-            user_movie_watchlistCollection: {
-              edges: [
-                {
-                  node: data?.insertIntouser_movie_watchlistCollection
-                    ?.records[0],
-                },
-              ],
-            },
-          },
-        });
-      },
-      refetchQueries: [
-        {
-          query: GET_USER_MOVIE_WATCHLIST_BY_USER_ID,
-          variables: {
-            user_id: user?.id,
-            locale: locale,
-          },
-        },
-      ],
-    });
-
-  const [deleteActivityMutation] =
-    useMutation<DeleteUserMovieWatchlistMutation>(DELETE_WATCHLIST_MUTATION, {
-      update: (cache, { data }) => {
-        cache.writeQuery({
-          query: GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID,
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-          },
-          data: {
-            user_movie_watchlistCollection: {
-              edges: [],
-            },
-          },
-        });
-      },
-      refetchQueries: [
-        {
-          query: GET_USER_MOVIE_WATCHLIST_BY_USER_ID,
-          variables: {
-            user_id: user?.id,
-            locale: locale,
-          },
-        },
-      ],
-    });
-
-  const handleWatchlist = async () => {
-    try {
-      if (!user || !movieId) throw Error("User or movieId doesn't exist");
-      await insertWatchlistMutation({
-        variables: {
+  const { mutateAsync: insertWatchlistMutation } = useMutation({
+    mutationFn: async () => {
+      if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
+      const { error } = await supabase
+        .from('user_movie_watchlist')
+        .insert({
+          user_id: user.id,
           movie_id: movieId,
-          user_id: user?.id,
-        },
-      });
-    } catch (errors) {
-      toast.error("Une erreur s'est produite");
-    }
-  };
-  const handleUnwatchlist = async () => {
-    try {
-      if (!user || !movieId) throw Error("User or movieId doesn't exist");
-      await deleteActivityMutation({
-        variables: {
-          movie_id: movieId,
-          user_id: user?.id,
-        },
-      });
-    } catch (errors) {
-      toast.error("Une erreur s'est produite");
-    }
-  };
+        })
+      if (error) throw error;
+      return true;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user', user?.id, 'watchlist', { movieId }], data);
+      queryClient.invalidateQueries({
+        queryKey: ['user', user?.id, 'collection', 'watchlist']
+      })
+    },
+    onError: (error) => {
+      if ('code' in error && error.code === "23505") { // Duplicate key value violates unique constraint
+        queryClient.setQueryData(['user', user?.id, 'watchlist', { movieId }], true)
+      } else {
+        toast.error('Une erreur s\'est produite');
+      }
+    },
+  });
 
-  if (!user) {
+  const { mutateAsync: deleteWatchlistMutation } = useMutation({
+    mutationFn: async () => {
+      if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
+      const { error } = await supabase
+        .from('user_movie_watchlist')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('movie_id', movieId)
+      if (error) throw error;
+      return false;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user', user?.id, 'watchlist', { movieId }], data);
+      queryClient.invalidateQueries({
+        queryKey: ['user', user?.id, 'collection', 'watchlist']
+      })
+    },
+    onError: () => {
+      toast.error('Une erreur s\'est produite');
+    },
+  });
+
+  if (user === null) {
     return (
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              onClick={() => router.push('/login')}
-              disabled={(loading || error) && true}
               size="icon"
               variant={'action'}
               className={`rounded-full`}
+              asChild
             >
-              {loading ? (
-                <Icons.spinner className="animate-spin" />
-              ) : error ? (
-                <AlertCircle />
-              ) : (
+              <Link href={'/login'}>
                 <Bookmark />
-              )}
+              </Link>
             </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">
@@ -195,15 +150,15 @@ export function MovieWatchlistAction({
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            onClick={isWatchlisted ? handleUnwatchlist : handleWatchlist}
-            disabled={(loading || error) && true}
+            onClick={async () => isWatchlisted ? await deleteWatchlistMutation() : await insertWatchlistMutation()}
+            disabled={isLoading || isError || activity === undefined}
             size="icon"
             variant={'action'}
             className={`rounded-full`}
           >
-            {loading ? (
+            {(isLoading || isWatchlisted === undefined)  ? (
               <Icons.spinner className="animate-spin" />
-            ) : error ? (
+            ) : isError ? (
               <AlertCircle />
             ) : (
               <Bookmark className={`${isWatchlisted && 'fill-foreground'}`} />

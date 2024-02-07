@@ -11,202 +11,135 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-// GRAPHQL
-import { useQuery, useMutation } from '@apollo/client';
-import GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivityByMovieId';
-import GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID from '@/graphql/User/Movie/Watchlist/queries/GetUserMovieWatchlistByMovieId';
-import GET_USER_MOVIE_ACTIVITY from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivity';
-import INSERT_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/InsertUserMovieActivity';
-import UPDATE_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/UpdateUserMovieActivity';
-import type {
-  GetUserMovieActivityByMovieIdQuery,
-  InsertUserMovieActivityMutation,
-  UpdateUserMovieActivityMutation,
-} from '@/graphql/__generated__/graphql';
-
 // ICONS
 import { AlertCircle, Heart } from 'lucide-react';
 import { Icons } from '../../../../icons';
-import { useLocale } from 'next-intl';
+import Link from 'next/link';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase/client';
 
 interface MovieLikeActionProps extends React.HTMLAttributes<HTMLDivElement> {
-  movieId: string;
+  movieId: number;
 }
 
 export function MovieLikeAction({ movieId }: MovieLikeActionProps) {
 
   const { user } = useAuth();
 
-  const locale = useLocale();
-
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const {
-    data: activityQuery,
-    loading,
-    error,
-  } = useQuery<GetUserMovieActivityByMovieIdQuery>(GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID, {
-    variables: {
-      movie_id: movieId,
-      user_id: user?.id,
+    data: activity,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['user', user?.id, 'activity', { movieId }],
+    queryFn: async () => {
+      if (!user?.id || !movieId) throw Error('Missing profile id or locale or movie id');
+      const { data, error } = await supabase
+        .from('user_movie_activity')
+        .select(`*, review:user_movie_review(*)`)
+        .eq('user_id', user.id)
+        .eq('movie_id', movieId)
+        .maybeSingle()
+      if (error) throw error;
+      return data;
     },
-    skip: !user || !movieId,
+    enabled: !!user?.id && !!movieId,
   });
-  const activity = activityQuery?.user_movie_activityCollection?.edges[0]?.node;
 
-  const [insertActivityMutation] = useMutation<InsertUserMovieActivityMutation>(
-    INSERT_ACTIVITY_MUTATION,
-    {
-      update: (cache, { data }) => {
-        cache.writeQuery({
-          query: GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID,
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-          },
-          data: {
-            user_movie_activityCollection: {
-              edges: [
-                {
-                  node: data?.insertIntouser_movie_activityCollection
-                    ?.records[0],
-                },
-              ],
-            },
-          },
-        });
-        // Delete Watchlist
-        cache.writeQuery({
-          query: GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID,
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-          },
-          data: {
-            user_movie_watchlistCollection: {
-              edges: [],
-            },
-          },
-        });
-      },
-      refetchQueries: [
-        {
-          query: GET_USER_MOVIE_ACTIVITY,
-          variables: {
-            filter: {
-              user_id: { eq: user?.id },
-              is_liked: { eq: true },
-            },
-            orderBy: {
-              created_at: 'DescNullsLast',
-            },
-            locale: locale,
-          },
-        },
-      ],
-    }
-  );
-  const [updateActivityMutation] = useMutation<UpdateUserMovieActivityMutation>(
-    UPDATE_ACTIVITY_MUTATION,
-    {
-      update: (cache, { data }) => {
-        cache.writeQuery({
-          query: GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID,
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-          },
-          data: {
-            user_movie_activityCollection: {
-              edges: [
-                {
-                  node: data?.updateuser_movie_activityCollection?.records[0],
-                },
-              ],
-            },
-          },
-        });
-      },
-      refetchQueries: [
-        {
-          query: GET_USER_MOVIE_ACTIVITY,
-          variables: {
-            filter: {
-              user_id: { eq: user?.id },
-              is_liked: { eq: true },
-            },
-            orderBy: {
-              created_at: 'DescNullsLast',
-            },
-            locale: locale,
-          },
-        },
-      ],
-    }
-  );
+  const { mutateAsync: insertActivityMutation } = useMutation({
+    mutationFn: async ({ is_liked } : { is_liked: boolean }) => {
+      if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
+      const {data, error } = await supabase
+        .from('user_movie_activity')
+        .insert({
+          user_id: user?.id,
+          movie_id: movieId,
+          is_liked: is_liked,
+        })
+        .select(`*, review:user_movie_review(*)`)
+        .single()
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user', user?.id, 'activity', { movieId }], data);
+
+      // UPDATE WATCHLIST
+      queryClient.setQueryData(['user', user?.id, 'watchlist', { movieId }], false);
+      queryClient.invalidateQueries({
+        queryKey: ['user', user?.id, 'collection', 'watchlist']
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['user', user?.id, 'collection', 'guidelist']
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['user', user?.id, 'collection', 'likes']
+      });
+    },
+    onError: () => {
+      toast.error('Une erreur s\'est produite');
+    },
+  });
+
+  const { mutateAsync: updateActivityMutation } = useMutation({
+    mutationFn: async ({ is_liked } : { is_liked: boolean }) => {
+      if (!activity?.id) throw Error('Missing profile id or movie id');
+      const {data, error } = await supabase
+        .from('user_movie_activity')
+        .update({
+            is_liked: is_liked,
+        })
+        .eq('id', activity?.id)
+        .select(`*, review:user_movie_review(*)`)
+        .single()
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user', user?.id, 'activity', { movieId }], data);
+      queryClient.invalidateQueries({
+        queryKey: ['user', user?.id, 'collection', 'likes']
+      });
+    },
+    onError: () => {
+      toast.error('Une erreur s\'est produite');
+    },
+  });
 
   const handleLike = async () => {
-    try {
-      if (!user || !movieId) throw Error("User or movieId doesn't exist");
-      if (activity) {
-        if (!activity.id) throw Error("Activity id doesn't exist");
-        await updateActivityMutation({
-          variables: {
-            id: activity.id,
-            movie_id: movieId,
-            user_id: user?.id,
-            is_liked: true,
-          },
-        });
-      } else {
-        await insertActivityMutation({
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-            is_liked: true,
-          },
-        });
-      }
-    } catch (errors) {
-      toast.error("Une erreur s'est produite");
+    if (activity) {
+      await updateActivityMutation({
+        is_liked: true,
+      });
+    } else {
+      await insertActivityMutation({
+        is_liked: true,
+      });
     }
   };
 
   const handleUnlike = async () => {
-    try {
-      if (!user || !movieId || !activity?.id) throw Error("User or movieId doesn't exist");
-      await updateActivityMutation({
-        variables: {
-          id: activity.id,
-          movie_id: movieId,
-          user_id: user?.id,
-          is_liked: false,
-        },
-      });
-    } catch (errors) {
-      toast.error("Une erreur s'est produite");
-    }
+    await updateActivityMutation({
+     is_liked: false,
+    });
   };
 
-  if (!user) {
+  if (user === null) {
     return (
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              onClick={() => router.push('/login')}
-              disabled={(loading || error) && true}
               size="icon"
               variant={'action'}
               className="rounded-full"
+              asChild
             >
-              {loading ? (
-                <Icons.spinner className="animate-spin" />
-              ) : error ? (
-                <AlertCircle />
-              ) : (
+              <Link href={'/login'}>
                 <Heart className={`transition hover:text-accent-pink`} />
-              )}
+              </Link>
             </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">
@@ -225,14 +158,14 @@ export function MovieLikeAction({ movieId }: MovieLikeActionProps) {
             onClick={() => {
               activity?.is_liked ? handleUnlike() : handleLike();
             }}
-            disabled={(loading || error) && true}
+            disabled={isLoading || isError || activity === undefined}
             size="icon"
             variant={'action'}
             className="rounded-full"
           >
-            {loading ? (
+            {(isLoading || activity === undefined) ? (
               <Icons.spinner className="animate-spin" />
-            ) : error ? (
+            ) : isError ? (
               <AlertCircle />
             ) : (
               <Heart

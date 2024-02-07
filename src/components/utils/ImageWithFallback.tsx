@@ -11,7 +11,7 @@ interface ImageWithFallbackProps extends React.HTMLAttributes<HTMLDivElement> {
   fill?: boolean | undefined;
   width?: number | `${number}` | undefined;
   height?: number | `${number}` | undefined;
-  type?: string;
+  type?: 'default' | 'playlist' | 'person';
 }
 
 export const ImageWithFallback = ({
@@ -34,6 +34,7 @@ export const ImageWithFallback = ({
     <>
       {imgSrc ? (
         <Image
+          unoptimized
           alt={alt}
           height={height}
           width={width}

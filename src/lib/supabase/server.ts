@@ -1,13 +1,11 @@
 import { cookies } from 'next/headers';
 import {
   createServerClient as createServerClientSupabase,
-  type CookieOptions,
 } from '@supabase/ssr';
-import { Price, ProductWithPrices } from '@/types/type.stripe';
 
 export const createServerClient = () => {
   const cookieStore = cookies();
-  return createServerClientSupabase(
+  return createServerClientSupabase<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -33,11 +31,8 @@ export async function getSession() {
   }
 }
 
-export const getActiveProductsWithPrices = async (): Promise<
-  ProductWithPrices[]
-> => {
+export const getActiveProductsWithPrices = async () => {
   const supabase = createServerClient();
-
   const { data, error } = await supabase
     .from('products')
     .select('*, prices(*)')
@@ -47,9 +42,7 @@ export const getActiveProductsWithPrices = async (): Promise<
       referencedTable: 'prices',
       ascending: true,
     });
-
-  if (error) console.log(error);
-
+  if (error) console.error(error);
   return data || [];
 };
 

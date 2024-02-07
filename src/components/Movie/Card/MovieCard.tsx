@@ -29,20 +29,16 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MoviePoster from '@/components/Movie/MoviePoster';
-import { Heart, Text } from 'lucide-react';
 import { MovieAction } from '@/components/Movie/Actions/MovieAction';
-import { FilmAction } from '@/types/type.film';
-import { getMovieDetails } from '@/lib/tmdb/tmdb';
-import { useQuery } from 'react-query';
 import { useLocale } from 'next-intl';
 import ActivityIcon from '@/components/Review/ActivityIcon';
-import { TmdbMovieMinimalFragment, UserMovieActivityFragment } from '@/graphql/__generated__/graphql';
+import { Movie, MoviePerson, UserMovieActivity } from '@/types/type.db';
 
 interface MovieCardProps {
-  movie: TmdbMovieMinimalFragment;
+  movie: Movie;
   displayMode?: 'grid' | 'row';
   link?: boolean;
-  movieActivity?: UserMovieActivityFragment;
+  movieActivity?: UserMovieActivity | null;
 }
 
 export default function MovieCard({
@@ -65,10 +61,8 @@ export default function MovieCard({
                 <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
                   <Link href={`/film/${movie.id}`} className="w-full">
                     <MoviePoster
-                      poster_path={
-                        'https://image.tmdb.org/t/p/w500/' + movie.data?.edges[0].node.poster_path
-                      }
-                      alt={movie.data?.edges[0].node.title ?? ''}
+                      poster_path={`https://image.tmdb.org/t/p/w500/${movie.data[0].poster_path}`}
+                      alt={movie.data[0].title ?? ''}
                     />
                   </Link>
                   {(movieActivity?.is_liked ||
@@ -76,7 +70,7 @@ export default function MovieCard({
                     movieActivity?.review) && (
                     <div className="absolute -bottom-2 mx-auto my-auto w-full flex justify-center pointer-events-none">
                       <Link
-                        href={`/@${movieActivity?.user.username}/film/${movie.id}`}
+                        href={`/@${movieActivity?.user?.username}/film/${movie.id}`}
                         className="pointer-events-auto"
                       >
                         <ActivityIcon
@@ -96,7 +90,7 @@ export default function MovieCard({
               </TooltipTrigger>
               <TooltipContent className="flex flex-col gap-2">
                 <p className=" text-center line-clamp-1 whitespace-nowrap">
-                  {movie.data?.edges[0].node.title} ({movie.release_date && getYear(new Date(movie.release_date))})
+                  {movie.data[0].title} ({movie.release_date && getYear(new Date(movie.release_date))})
                 </p>
                 {/* <MovieAction movie.id={movie.id} rating like watch playlist send /> */}
               </TooltipContent>
@@ -166,36 +160,36 @@ export default function MovieCard({
   );
 }
 
-export function MovieCardRow({ movie }: { movie: TmdbMovieMinimalFragment }) {
+export function MovieCardRow({ movie }: { movie: Movie }) {
   return (
     <>
       <MoviePoster
         className=" w-14 lg:w-[100px]"
-        poster_path={'https://image.tmdb.org/t/p/w500/' + movie.data?.edges[0].node.poster_path}
-        alt={movie.data?.edges[0].node.title ?? ''}
+        poster_path={'https://image.tmdb.org/t/p/w500/' + movie?.data[0].poster_path}
+        alt={movie?.data[0].title ?? ''}
       />
       <div className="w-full block">
         {/* TITLE */}
-        <h2 className="text-xl font-bold line-clamp-2">{movie.data?.edges[0].node.title}</h2>
+        <h2 className="text-xl font-bold line-clamp-2">{movie?.data[0].title}</h2>
 
         <div className="line-clamp-1">
-          {movie.directors?.edges.map(({ node }, index: number) => (
+          {movie?.directors?.map((director: MoviePerson, index: number) => (
             <>
               {index > 0 && <span>, </span>}
-              <span key={node.id}>
+              <span key={director?.id}>
                 <Button
                   variant="link"
-                  className="w-fit p-0 h-full hover:underline"
+                  className="w-fit p-0 h-full hover:underline text-muted-foreground hover:text-accent-1 italic"
                   asChild
                 >
-                  <Link href={`/person/${node.person.id}`}>{node.person.name}</Link>
+                  <Link href={`/person/${director?.person?.id}`}>{director?.person?.name}</Link>
                 </Button>
               </span>
             </>
           ))}
         </div>
         {/* DATE */}
-        <DateOnlyYearTooltip date={movie.release_date} />
+        <DateOnlyYearTooltip date={movie?.release_date} />
       </div>
     </>
   );

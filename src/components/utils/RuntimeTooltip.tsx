@@ -29,7 +29,7 @@ export function RuntimeTooltip({
   });
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={100}>
       <Tooltip>
         <TooltipTrigger asChild>
           <span className={cn('w-fit', className)}>{ConvertHoursMinutes(runtime ?? 0)}</span>

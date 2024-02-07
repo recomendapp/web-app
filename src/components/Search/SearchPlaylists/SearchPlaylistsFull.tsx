@@ -2,18 +2,12 @@
 import { useEffect, useState } from 'react';
 import { Skeleton } from '../../ui/skeleton';
 import { useInView } from 'react-intersection-observer';
-import { Playlist } from '@/types/type.playlist';
 import { useQuery } from '@apollo/client';
 import SEARCH_PLAYLIST_QUERY from '../../../graphql/Search/SearchPlaylists';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
 import { SearchPlaylistsQuery } from '@/graphql/__generated__/graphql';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase/client';
 
 export default function SearchPlaylistsFull({
   query,
@@ -27,67 +21,46 @@ export default function SearchPlaylistsFull({
   const numberOfResult = 8;
 
   const {
-    data: userPlaylistsQuery,
-    loading,
-    error,
-    fetchMore,
-    networkStatus,
-  } = useQuery<SearchPlaylistsQuery>(SEARCH_PLAYLIST_QUERY, {
-    variables: {
-      search: query,
-      order:
-        order == 'recent'
-          ? { updated_at: 'DescNullsFirst' }
-          : {
-              updated_at: 'DescNullsFirst',
-              likes_count: 'DescNullsFirst',
-            },
-      first: numberOfResult,
-    },
-    skip: !query,
-  });
-  const playlists = userPlaylistsQuery?.playlistCollection?.edges;
-  const pageInfo = userPlaylistsQuery?.playlistCollection?.pageInfo;
+		data: playlists,
+		isLoading: loading,
+		fetchNextPage,
+		isFetchingNextPage,
+		hasNextPage,
+	} = useInfiniteQuery({
+		queryKey: ['search', 'playlist', { search: query }],
+		queryFn: async ({ pageParam = 1 }) => {
+      if (!query) return null;
+			let from = (pageParam - 1) * numberOfResult;
+			let to = from - 1 + numberOfResult;
+
+			const { data } = await supabase
+        .from('playlist')
+        .select('*')
+        .order('updated_at', { ascending: false})
+        .range(from, to)
+        .ilike(`title`, `${query}%`);
+			return (data);
+		},
+		initialPageParam: 1,
+		getNextPageParam: (data, pages) => {
+			return data?.length == numberOfResult ? pages.length + 1 : undefined;
+		},
+		enabled: !!query
+	});
 
   useEffect(() => {
-    if (inView && pageInfo?.hasNextPage) {
-      fetchMore({
-        variables: {
-          search: query,
-          order:
-            order == 'recent'
-              ? { updated_at: 'DescNullsFirst' }
-              : {
-                  updated_at: 'DescNullsLast',
-                  likes_count: 'DescNullsFirst',
-                },
-          first: numberOfResult,
-          after: pageInfo?.endCursor,
-        },
-        updateQuery: (previousResult, { fetchMoreResult }) => {
-          return {
-            ...previousResult,
-            playlistCollection: {
-              ...previousResult.playlistCollection!,
-              edges: [
-                ...previousResult.playlistCollection!.edges,
-                ...fetchMoreResult.playlistCollection!.edges,
-              ],
-              pageInfo: fetchMoreResult.playlistCollection!.pageInfo,
-            },
-          };
-        },
-      });
+    if (inView && hasNextPage) {
+      fetchNextPage();
     }
-  }, [fetchMore, inView, order, pageInfo, query]);
+  }, [inView, hasNextPage, playlists, fetchNextPage]);
 
-  if (!loading && !playlists?.length) {
+  if (!loading && !playlists?.pages[0]?.length) {
     return <div>Aucun résultat.</div>;
   }
 
   return (
     <div className=" w-full flex flex-col gap-2">
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-8 gap-4 overflow-x-auto overflow-y-hidden">
+      <div className="grid grid-cols-3 md:grid-cols-5 xl:grid-cols-8 2xl:grid-cols-10 gap-4 overflow-x-auto overflow-y-hidden">
         {loading
           ? Array.from({ length: 10 }).map((_, index) => (
               <Skeleton
@@ -101,14 +74,17 @@ export default function SearchPlaylistsFull({
                 <Skeleton className="bg-background h-5 w-20 rounded-full" />
               </Skeleton>
             ))
-          : playlists?.map(({ node }, index) => (
-              <div
-                key={node.id}
-                ref={index === playlists.length - 1 ? ref : undefined}
-              >
-                <MoviePlaylistCard playlist={node} className={'w-full'} />
-              </div>
-            ))}
+          : playlists?.pages.map((page, i) => (
+              page?.map((playlist, index) => (
+                <div
+                  key={playlist.id}
+                  ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+                >
+                  <MoviePlaylistCard playlist={playlist} className={'w-full'} />
+                </div>
+              ))
+            ))
+          }
       </div>
     </div>
   );

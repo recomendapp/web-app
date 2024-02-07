@@ -8,6 +8,8 @@ import { useQuery } from '@apollo/client';
 import SEARCH_USERS_QUERY from '@/graphql/Search/SearchUsers';
 import UserCard from '@/components/User/UserCard/UserCard';
 import { SearchUsersQuery } from '@/graphql/__generated__/graphql';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase/client';
 
 export default function SearchUsersSmall({
   query,
@@ -17,20 +19,31 @@ export default function SearchUsersSmall({
   const numberOfResult = 8;
 
   const {
-    data: searchUsersQuery,
-    loading,
-    fetchMore,
-  } = useQuery<SearchUsersQuery>(SEARCH_USERS_QUERY, {
-    variables: {
-      filter: {
-        username: { iregex: query },
-      },
-      first: numberOfResult,
-    },
-    skip: !query,
-  });
-  const users = searchUsersQuery?.userCollection?.edges;
-  const pageInfo = searchUsersQuery?.userCollection?.pageInfo;
+		data: users,
+		isLoading: loading,
+		fetchNextPage,
+		isFetchingNextPage,
+		hasNextPage,
+	} = useInfiniteQuery({
+		queryKey: ['search', 'user', { search: query }],
+		queryFn: async ({ pageParam = 1 }) => {
+      if (!query) return null;
+			let from = (pageParam - 1) * numberOfResult;
+			let to = from - 1 + numberOfResult;
+
+			const { data } = await supabase
+        .from('user')
+        .select('*')
+        .range(from, to)
+        .ilike(`username`, `${query}%`);
+			return (data);
+		},
+		initialPageParam: 1,
+		getNextPageParam: (data, pages) => {
+			return data?.length == numberOfResult ? pages.length + 1 : undefined;
+		},
+		enabled: !!query
+	});
 
   if (loading) {
     return (
@@ -59,14 +72,14 @@ export default function SearchUsersSmall({
     );
   }
 
-  if (!loading && !users?.length) return null;
+  if (!loading && !users?.pages[0]?.length) return null;
 
   return (
     <div className=" w-full flex flex-col gap-2">
       {/* USERS TITLE */}
       <div className="flex justify-between items-end">
         <div className="text-2xl font-bold">Utilisateurs</div>
-        {pageInfo?.hasNextPage && (
+        {hasNextPage && (
           <Button variant="link" className="p-0 h-full" asChild>
             <Link href={`/search/users?q=${query}`}>Tout afficher</Link>
           </Button>
@@ -75,8 +88,10 @@ export default function SearchUsersSmall({
       {/* USERS CONTAINER */}
       <ScrollArea className="pb-4">
         <div className="flex gap-4">
-          {users?.map(({ node }) => (
-            <UserCard key={node.id} user={node} full />
+          {users?.pages.map((page, i) => (
+            page?.map((user, index) => (
+              <UserCard key={user.id} user={user} full />
+            ))
           ))}
         </div>
         <ScrollBar orientation="horizontal" />

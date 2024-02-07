@@ -1,7 +1,6 @@
 import { useAuth } from '@/context/auth-context';
 import { useQuery } from '@apollo/client';
 import USER_FRIENDS_QUERY from '@/graphql/User/Friends/queries/GetUserFriends';
-import { Friend } from '@/types/type.user';
 import Link from 'next/link';
 import UserCard from '../User/UserCard/UserCard';
 import { Skeleton } from '../ui/skeleton';
@@ -45,7 +44,7 @@ export default function FriendsList() {
 
   return (
     <div>
-      {friends?.map(({ node }) => (
+      {/* {friends?.map(({ node }) => (
         <Link
           key={node.friend_id}
           href={`/@${node.friend.username}`}
@@ -53,7 +52,7 @@ export default function FriendsList() {
         >
           <UserCard user={node.friend} />
         </Link>
-      ))}
+      ))} */}
     </div>
   );
 }

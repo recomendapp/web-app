@@ -5,16 +5,11 @@ import { useRouter } from 'next/navigation';
 import { Provider, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase/client';
 
-// GRAPHQL
-import { useQuery } from '@apollo/client';
-import GET_USER_BY_ID from '@/graphql/User/User/queries/GetUserById';
-import type {
-  GetUserByIdQuery,
-  UserFragment,
-} from '@/graphql/__generated__/graphql';
+import { useQuery } from '@tanstack/react-query';
+import { User } from '@/types/type.db';
 
 export interface UserState {
-  user: UserFragment | null | undefined;
+  user: User | null | undefined;
   session: Session | null | undefined;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
@@ -50,16 +45,23 @@ export const AuthContext = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>();
   const [sessionLoading, setSessionLoading] = useState(true);
   const [loading, setLoading] = useState(true);
-  const { data: userQuery, loading: userLoading } = useQuery<GetUserByIdQuery>(
-    GET_USER_BY_ID,
-    {
-      variables: {
-        userId: session?.user.id,
-      },
-      skip: !session?.user?.id,
-    }
-  );
-  const user = userQuery?.userCollection?.edges[0]?.user;
+  const {
+    data: user,
+    isLoading: userLoading,
+  } = useQuery({
+    queryKey: ['user', session?.user?.id],
+    queryFn: async () => {
+      if (session === null || !session?.user.id) return (null);
+      const { data, error } = await supabase
+        .from('user')
+        .select('*')
+        .eq('id', session.user.id)
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    enabled: session !== undefined,
+  })
 
   const init = async () => {
     const setData = async () => {

@@ -6,15 +6,6 @@ import { MovieActionCounter } from '@/components/Movie/MovieActionCounter';
 import { MovieAction } from '@/components/Movie/Actions/MovieAction';
 import YoutubeEmbed from '@/components/utils/Youtube';
 
-// UI
-import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -31,32 +22,19 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-// DATE
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import { ConvertHoursMinutes } from '@/lib/utils';
-
 // ICONS
 import { Play, Star } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MoviePoster from '@/components/Movie/MoviePoster';
-import { useAuth } from '@/context/auth-context';
 import { HeaderBox } from '@/components/Box/HeaderBox';
-import { TmdbMovieFragment } from '@/graphql/__generated__/graphql';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 
 export default function MovieHeader({
   movie,
-  small,
 }: {
-  movie: TmdbMovieFragment;
-  small?: boolean;
+  movie: any;
 }) {
   if (!movie) return null;
-
-  if (small) {
-    return <MovieHeaderSmall movie={movie} />;
-  }
 
   return (
     <div>
@@ -69,8 +47,8 @@ export default function MovieHeader({
           {/* MOVIE POSTER */}
           <MoviePoster
             className="w-[200px]"
-            poster_path={`https://image.tmdb.org/t/p/w500/${movie.data?.edges[0].node.poster_path}`}
-            alt={movie.data?.edges[0].node.title ?? ''}
+            poster_path={`https://image.tmdb.org/t/p/w500/${movie.data[0].poster_path}`}
+            alt={movie.data[0].title ?? ''}
           />
           {/* MOVIE MAIN DATA */}
           <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
@@ -78,18 +56,18 @@ export default function MovieHeader({
             <div>
               <span className='text-accent-1'>Film</span>
               <span className=" before:content-['_|_']">
-                {movie.genres?.edges.map(({ node }, index: number) => (
-                  <span key={node.genre_id}>
+                {movie.genres?.map(({ genre } : { genre: any }, index: number) => (
+                  <span key={genre.id}>
                     <Button
                       variant="link"
                       className="w-fit p-0 h-full font-normal"
                       asChild
                     >
-                      <Link href={`/genre/${node.genre_id}`}>
-                        {node.genre.data?.edges[0].node.name}
+                      <Link href={`/genre/${genre.id}`}>
+                        {genre.data[0].name}
                       </Link>
                     </Button>
-                    {index !== movie.genres?.edges.length! - 1 && (
+                    {index !== movie.genres?.length! - 1 && (
                       <span>, </span>
                     )}
                   </span>
@@ -99,7 +77,7 @@ export default function MovieHeader({
             {/* TITLE */}
             <div>
               <div className="text-clamp space-x-1">
-                <span className='font-bold '>{movie.data?.edges[0].node.title}</span>
+                <span className='font-bold '>{movie.data[0].title}</span>
                 {/* DATE */}
                 <sup>
                   <DateOnlyYearTooltip date={movie.release_date ?? ''} className='text-sm font-medium text-accent-1'/>
@@ -113,17 +91,17 @@ export default function MovieHeader({
             </div>
             <div className=" space-y-2">
               <div>
-                {movie.directors?.edges.map(({ node }, index: number) => (
+                {movie.directors?.map(({ director } : { director: Database['public']['Tables']['tmdb_person']['Row']}, index: number) => (
                   <>
                     {index > 0 && <span>, </span>}
-                    <span key={node.id}>
+                    <span key={director.id}>
                       <Button
                         variant="link"
                         className="w-fit p-0 h-full hover:text-accent-1 transition"
                         asChild
                       >
-                        <Link href={`/person/${node.person.id}`}>
-                          {node.person.name}
+                        <Link href={`/person/${director.id}`}>
+                          {director.name}
                         </Link>
                       </Button>
                     </span>
@@ -134,8 +112,8 @@ export default function MovieHeader({
               </div>
               <div>
                 {/* <MovieActionCounter movieId={movie.id} /> */}
-                {movie?.videos?.edges.length! > 0 && (
-                  <MovieTrailerButton movie={movie} />
+                {movie?.videos?.length > 0 && (
+                  <MovieTrailerButton videos={movie.videos} />
                 )} 
               </div>
             </div>
@@ -149,12 +127,12 @@ export default function MovieHeader({
   );
 }
 
-export function MovieTrailerButton({ movie }: { movie: TmdbMovieFragment }) {
+export function MovieTrailerButton({ videos }: { videos: Database['public']['Tables']['tmdb_movie_videos']['Row'][] }) {
   const [selectedTrailer, setSelectedTailer] = useState<string>(
-    movie.videos?.edges[0].node.key ?? ''
+    videos[0].key ?? ''
   );
 
-  if (!movie.videos?.edges.length) return null;
+  if (!videos?.length) return null;
 
   return (
     <Dialog>
@@ -185,9 +163,9 @@ export function MovieTrailerButton({ movie }: { movie: TmdbMovieFragment }) {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {movie.videos?.edges.map(({ node }: any) => (
-                    <SelectItem key={node.key} value={node.key}>
-                      {node.name}
+                  {videos?.map((video: any) => (
+                    <SelectItem key={video.key} value={video.key}>
+                      {video.name}
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -198,91 +176,5 @@ export function MovieTrailerButton({ movie }: { movie: TmdbMovieFragment }) {
         <YoutubeEmbed embedId={selectedTrailer} className="aspect-video" />
       </DialogContent>
     </Dialog>
-  );
-}
-
-export function MovieHeaderSmall({ movie }: { movie: any }) {
-  return (
-    <div
-      className="bg-white"
-      style={{
-        backgroundImage: `url('https://image.tmdb.org/t/p/original/${movie.backdrop_path}')`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        height: 'clamp(150px,30vh,200px)',
-      }}
-    >
-      <div className="w-full h-full flex  p-4 items-center bg-gradient-to-t from-background to-[#000000bd] bg-opacity-75">
-        <div className="flex gap-4 items-center">
-          {/* MOVIE POSTER */}
-          <div className="w-[100px] shadow-md">
-            <AspectRatio ratio={2 / 3}>
-              <ImageWithFallback
-                src={'https://image.tmdb.org/t/p/original/' + movie.poster_path}
-                alt={movie.title}
-                fill
-                className="rounded-md object-cover"
-              />
-            </AspectRatio>
-          </div>
-          {/* MOVIE MAIN DATA */}
-          <div className="flex flex-col gap-2">
-            {/* TYPE */}
-            <div>Film</div>
-            {/* TITLE */}
-            <div className="text-xl lg:text-4xl font-bold">
-              <span>{movie.title}</span>
-            </div>
-            {/* DATE / GENRES / RUNTIME */}
-            <div>
-              {movie.credits.crew.filter(
-                (member: any) => member.job === 'Director'
-              ).length ? (
-                movie.credits.crew
-                  .filter((member: any) => member.job === 'Director')
-                  .map((director: any, index: number) => (
-                    <span key={director.id}>
-                      <Button
-                        variant="link"
-                        className="w-fit p-0 h-full font-bold "
-                        asChild
-                      >
-                        <Link href={`/person/${director.id}`}>
-                          {director.name}
-                        </Link>
-                      </Button>
-                      {index !==
-                        movie.credits.crew.filter(
-                          (member: any) => member.job === 'Director'
-                        ).length -
-                          1 && <span> • </span>}
-                    </span>
-                  ))
-              ) : (
-                <span className="w-fit p-0 h-full font-bold">Unknown</span>
-              )}
-
-              {/* DATE */}
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <span className=" before:content-['_•_']">
-                      {movie.release_date.split('-')[0]}
-                    </span>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    {movie.release_date
-                      ? format(new Date(movie.release_date), 'PPP', {
-                          locale: fr,
-                        })
-                      : 'Unknown'}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }

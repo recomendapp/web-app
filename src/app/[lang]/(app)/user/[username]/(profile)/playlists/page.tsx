@@ -1,4 +1,4 @@
-import ProfilePlaylists from '@/components/Profile/ProfilePlaylists/ProfilePlaylists';
+import ProfilePlaylists from '@/app/[lang]/(app)/user/[username]/(profile)/playlists/components/ProfilePlaylists';
 import { createServerClient } from '@/lib/supabase/server';
 
 export default async function Playlists({
@@ -12,5 +12,6 @@ export default async function Playlists({
     .select('*')
     .eq('username', params.username)
     .single();
+    
   return <ProfilePlaylists profile={user} />;
 }

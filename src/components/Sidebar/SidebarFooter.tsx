@@ -2,36 +2,25 @@ import { Button } from '@/components/ui/button';
 import LanguageSwticher from '../Language/LanguageSwitcher';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Box } from '@/components/Box/Box';
-import { SidebarContext } from './Sidebar';
-import { useContext } from 'react';
+import { useUiContext } from '@/context/ui-context';
 
 export default function SidebarFooter() {
-  const { sidebarExpanded, setSidebarExpanded } = useContext(SidebarContext);
+
+  const { isSidebarCollapsed, expandSidebar, collapseSidebar } = useUiContext();
   return (
     <Box
-      className={`flex items-center px-3 py-2
-            ${sidebarExpanded ? 'justify-between' : 'justify-center'}
+      className={`flex items-center px-3 py-2 gap-2
+            ${!isSidebarCollapsed ? 'justify-between' : 'justify-center'}
         `}
     >
-      {/* <div> */}
-      {sidebarExpanded && <LanguageSwticher />}
-      {/* <Link
-                href={'/about'}
-                className={` overflow-hidden transition-all flex gap-2
-                    ${sidebarExpanded ? ' w-full px-3 py-2' : 'w-0'}
-                `}
-            >
-                <Info />
-                À propos
-            </Link>
-            </div> */}
+      {!isSidebarCollapsed && <LanguageSwticher />}
       <Button
-        onClick={() => setSidebarExpanded(!sidebarExpanded)}
+        onClick={isSidebarCollapsed ? expandSidebar : collapseSidebar}
         size={'icon'}
         variant={'ghost'}
         className="rounded-full"
       >
-        {sidebarExpanded ? <ChevronLeft /> : <ChevronRight />}
+        {!isSidebarCollapsed ? <ChevronLeft /> : <ChevronRight />}
       </Button>
     </Box>
   );

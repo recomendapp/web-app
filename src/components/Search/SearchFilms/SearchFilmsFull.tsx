@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '../../ui/skeleton';
 import { ImageWithFallback } from '../../utils/ImageWithFallback';
 import { AspectRatio } from '../../ui/aspect-ratio';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
@@ -31,6 +31,7 @@ export default function SearchFilmsFull({ query }: { query: string }) {
     queryKey: ['search', query, 'films'],
     queryFn: ({ pageParam = 1 }) =>
       handleSearchMovies(query, locale, pageParam),
+    initialPageParam: 1,
     getNextPageParam: (results, pages) => {
       return results?.length == numberOfResult ? pages.length + 1 : undefined;
     },

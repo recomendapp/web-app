@@ -16,81 +16,64 @@ import { format } from 'date-fns';
 import { fr, enUS } from 'date-fns/locale';
 import { useAuth } from '@/context/auth-context';
 
-// import UPDATE_ACTIVITY_MUTATION from '@/components/Movie/Actions/mutations/updateMovieActivityMutation';
-
 import { useLocale } from 'next-intl';
-
-// GRAPHQL
-import { useQuery, useMutation } from '@apollo/client';
-import GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivityByMovieId';
-import UPDATE_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/UpdateUserMovieActivity';
-import type {
-  UpdateUserMovieActivityMutation,
-  GetUserMovieActivityByMovieIdQuery,
-} from '@/graphql/__generated__/graphql';
 import toast from 'react-hot-toast';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase/client';
 
 interface MovieWatchedDateActionProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  movieId: string;
+  movieId: number;
 }
 
 export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
   const { user } = useAuth();
+
   const locale = useLocale();
 
+  const queryClient = useQueryClient();
+
   const {
-    data: activityQuery,
-    loading,
-    error,
-  } = useQuery<GetUserMovieActivityByMovieIdQuery>(GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID, {
-    variables: {
-      movie_id: movieId,
-      user_id: user?.id,
+    data: activity,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['user', user?.id, 'activity', { movieId }],
+    queryFn: async () => {
+      if (!user?.id || !movieId) throw Error('Missing profile id or locale or movie id');
+      const { data, error } = await supabase
+        .from('user_movie_activity')
+        .select(`*, review:user_movie_review(*)`)
+        .eq('user_id', user.id)
+        .eq('movie_id', movieId)
+        .maybeSingle()
+      if (error) throw error;
+      return data;
     },
-    skip: !user || !movieId,
+    enabled: !!user?.id && !!movieId,
   });
-  const activity = activityQuery?.user_movie_activityCollection?.edges[0]?.node;
 
-  const [updateActivityMutation] = useMutation<UpdateUserMovieActivityMutation>(
-    UPDATE_ACTIVITY_MUTATION,
-    {
-      update: (cache, { data }) => {
-        cache.writeQuery({
-          query: GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID,
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-          },
-          data: {
-            user_movie_activityCollection: {
-              edges: [
-                {
-                  node: data?.updateuser_movie_activityCollection?.records[0],
-                },
-              ],
-            },
-          },
-        });
-      },
-    }
-  );
-
-  const handleUpdate = async (date: Date) => {
-    try {
-      if (!user || !movieId || !activity?.id) throw Error("User or movieId doesn't exist");
-      await updateActivityMutation({
-        variables: {
-          id: activity.id,
-          movie_id: movieId,
-          user_id: user.id,
-          date: date,
-        },
-      });
-    } catch (errors) {
-      toast.error("Une erreur s'est produite");
-    }
-  };
+  const { mutateAsync: updateDate } = useMutation({
+    mutationFn: async (date: Date) => {
+      if (!activity?.id) throw Error('Missing activity id');
+      const {data, error } = await supabase
+        .from('user_movie_activity')
+        .update({
+          date: date.toISOString(),
+        })
+        .eq('id', activity?.id)
+        .select(`*, review:user_movie_review(*)`)
+        .single()
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user', user?.id, 'activity', { movieId }], data)
+    },
+    onError: () => {
+      toast.error('Une erreur s\'est produite');
+    },
+  });
 
   if (!activity) return null;
 
@@ -101,7 +84,7 @@ export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
           <TooltipTrigger asChild>
             <PopoverTrigger asChild>
               <Button
-                disabled={loading}
+                disabled={isLoading || isError}
                 variant="action"
                 className={`rounded-full flex gap-4`}
               >
@@ -125,10 +108,10 @@ export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
       </TooltipProvider>
       <PopoverContent className="w-auto p-0 flex flex-col justify-center">
         <Calendar
-          locale={fr}
+          locale={locale == 'fr' ? fr : enUS}
           mode="single"
           selected={new Date(activity?.date)}
-          onSelect={(date) => date && handleUpdate(date)}
+          onSelect={async (date) => date && await updateDate(date)}
           initialFocus
         />
       </PopoverContent>

@@ -20,7 +20,7 @@ import { useModal } from '@/context/modal-context';
 import { MovieSendModal } from '@/components/Modals/Movie/Actions/MovieSendModal';
 
 interface MovieSendActionProps {
-  movieId: string;
+  movieId: number;
 }
 
 export function MovieSendAction({ movieId }: MovieSendActionProps) {
@@ -31,19 +31,19 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
 
   // const [open, setOpen] = useState(false);
 
-  if (!user) {
+  if (user === null) {
     return (
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               onClick={() => router.push('/login')}
-              disabled={loading && true}
+              disabled={loading}
               size="icon"
               variant={'action'}
               className="rounded-full"
             >
-              {loading ? <Icons.spinner className="animate-spin" /> : <Send />}
+              <Send />
             </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">Connectez-vous</TooltipContent>
@@ -57,7 +57,7 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              disabled={loading && true}
+              disabled={loading}
               size="icon"
               variant={'action'}
               className="rounded-full"
@@ -74,7 +74,7 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
                 ),
               })}
             >
-              <Send />
+              {loading ? <Icons.spinner className="animate-spin" /> : <Send />}
             </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">Envoyer à un(e) ami(e)</TooltipContent>

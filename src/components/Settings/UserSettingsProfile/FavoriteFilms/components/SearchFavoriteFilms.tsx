@@ -3,7 +3,7 @@ import { handleSearchMovies } from '@/lib/tmdb/tmdb';
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
@@ -40,6 +40,7 @@ export default function SearchFavoriteFilms({
   } = useInfiniteQuery({
     queryKey: ['search', query, 'films'],
     queryFn: ({ pageParam = 1 }) => handleSearchMovies(query, local, pageParam),
+    initialPageParam: 1,
     getNextPageParam: (results, pages) => {
       return results?.length == numberOfResult ? pages.length + 1 : undefined;
     },

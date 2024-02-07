@@ -13,28 +13,19 @@ import {
 	FormLabel,
 	FormMessage,
 } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Loader from '@/components/Loader/Loader';
 
-// GRAPHQL
-// import { useMutation } from '@apollo/client';
-// import USER_FRIENDS_QUERY from '@/graphql/User/Friends/queries/GetUserFriends';
-// import INSERT_GUIDELIST_MUTATION from '@/graphql/User/Movie/Guidelist/mutations/InsertUserMovieGuidelist';
-// import {
-//   GetUserFriendsQuery,
-//   InsertUserMovieGuidelistMutation,
-// } from '@/graphql/__generated__/graphql';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getInitiales } from '@/lib/utils';
 import toast from 'react-hot-toast';
 import { useModal } from '@/context/modal-context';
 import { supabase } from '@/lib/supabase/client';
 import { Fragment, useEffect, useState } from 'react';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
 import { useInView } from 'react-intersection-observer';
 import { Search } from 'lucide-react';
@@ -59,27 +50,15 @@ export function MovieSendModal({
   movieId,
 }: {
   id: string;
-  movieId: string;
+  movieId: number;
 }) {
-  const { user } = useAuth();
+	const { user } = useAuth();
 
-  const { closeModal } = useModal();
+	const { closeModal } = useModal();
 
-  const [ search, setSearch ] = useState<null | string>(null);
+	const [ search, setSearch ] = useState<null | string>(null);
 
-  const debouncedSearch = useDebounce(search, 300);
-
-//   const {
-//     data: userFriendsQuery,
-//     loading,
-//     error,
-//   } = useQuery<GetUserFriendsQuery>(USER_FRIENDS_QUERY, {
-//     variables: {
-//       user_id: user?.id,
-//     },
-//     skip: !user,
-//   });
-//   const friends = userFriendsQuery?.user_friendCollection?.edges;
+	const debouncedSearch = useDebounce(search, 300);
 
 	const { ref, inView } = useInView();
 
@@ -110,6 +89,7 @@ export function MovieSendModal({
 			const { data } = await query;
 			return data;
 		},
+		initialPageParam: 1,
 		getNextPageParam: (data, pages) => {
 			return data?.length == numberOfResult ? pages.length + 1 : undefined;
 		},
@@ -118,13 +98,9 @@ export function MovieSendModal({
 
 	useEffect(() => {
 		if (inView && hasNextPage) {
-			console.log('fetchNextPage');
 			fetchNextPage();
 		}
-	}, [inView, hasNextPage, fetchNextPage]);
-
-	// const [insertGuidelistMutation, { error: errorInsertGuidelist }] =
-    // useMutation<InsertUserMovieGuidelistMutation>(INSERT_GUIDELIST_MUTATION);
+	}, [inView, hasNextPage, friends, fetchNextPage]);
 
 	const defaultValues: Partial<SendFormValues> = {
 		friends: [],
@@ -145,23 +121,14 @@ export function MovieSendModal({
 		}
 
 		try {
-			// const { error, count } = await supabase
-			// 	.from('user_movie_guidelist')
-			// 	.upsert(data.friends.map(({ friend }) => ({
-			// 		movie_id: Number(movieId),
-			// 		receiver_user_id: String(friend.id),
-			// 		sender_user_id: String(user?.id),
-			// 		comment: data.comment,
-			// 	})), { count: 'exact', onConflict: 'movie_id, receiver_user_id', ignoreDuplicates: true});
 			const { error, count } = await supabase
 				.rpc('insert_user_movie_guidelist', {
-					movieid: Number(movieId),
+					movieid: movieId,
 					receiver_user_ids: data.friends.map(({ friend }) => friend.id),
 					sender_user_id: user?.id,
 					comment: data.comment ?? '',
 				});
 			if (error) throw error;
-			// if (Number(count) !== data.friends.length) throw { count: Number(count), error };
 			form.reset();
 			toast.success('Envoyé');
 		} catch (error: any) {
@@ -205,53 +172,54 @@ export function MovieSendModal({
 											return (
 											<FormItem
 												key={friend?.id}
-												className="flex flex-row w-full justify-between items-center space-x-3 space-y-0 hover:bg-muted p-2"
 												{...(i === friends.pages.length - 1 &&
 												index === page.length - 1
 													? { ref: ref }
 													: {})}
 											>
-												<FormLabel className="font-normal flex gap-2 items-center">
-													<Avatar className="h-[40px] w-[4	0px] shadow-2xl">
-														<AvatarImage
-															src={friend?.avatar_url ?? ''}
-															alt={friend?.username}
-														/>
-														<AvatarFallback className="text-primary bg-muted text-[20px]">
-															{getInitiales(friend?.username ?? '')}
-														</AvatarFallback>
-													</Avatar>
-													<div>
-														<p className="font-semibold line-clamp-1">{friend?.full_name}</p>
-														<p className="text-muted-foreground line-clamp-1">
-															@{friend?.username}
-														</p>
+												<FormLabel className="flex flex-row w-full justify-between items-center space-x-3 space-y-0 hover:bg-muted p-2">
+													<div className="font-normal flex gap-2 items-center w-full">
+														<Avatar className="h-[40px] w-[4	0px] shadow-2xl">
+															<AvatarImage
+																src={friend?.avatar_url ?? ''}
+																alt={friend?.username}
+															/>
+															<AvatarFallback className="text-primary bg-muted text-[20px]">
+																{getInitiales(friend?.username ?? '')}
+															</AvatarFallback>
+														</Avatar>
+														<div>
+															<p className="line-clamp-1">{friend?.full_name}</p>
+															<p className="text-muted-foreground line-clamp-1">
+																@{friend?.username}
+															</p>
+														</div>
 													</div>
+													<FormControl>
+														<Checkbox
+															checked={field.value?.some(
+															(friendSelected) =>
+																friendSelected.friend.id === friend?.id
+															)}
+															onCheckedChange={(checked) => {
+															if (checked) {
+																field.onChange([
+																...(field.value || []),
+																{ friend: { ...friend } },
+																]);
+															} else {
+																field.onChange(
+																field.value?.filter(
+																	(friendSelected) =>
+																	friendSelected.friend.id !== friend?.id
+																)
+																);
+															}
+															}}
+															className="rounded-full"
+														/>
+													</FormControl>
 												</FormLabel>
-												<FormControl>
-													<Checkbox
-														checked={field.value?.some(
-														(friendSelected) =>
-															friendSelected.friend.id === friend?.id
-														)}
-														onCheckedChange={(checked) => {
-														if (checked) {
-															field.onChange([
-															...(field.value || []),
-															{ friend: { ...friend } },
-															]);
-														} else {
-															field.onChange(
-															field.value?.filter(
-																(friendSelected) =>
-																friendSelected.friend.id !== friend?.id
-															)
-															);
-														}
-														}}
-														className="rounded-full"
-													/>
-												</FormControl>
 											</FormItem>
 											);
 										}}

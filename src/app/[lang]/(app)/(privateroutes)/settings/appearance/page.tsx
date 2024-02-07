@@ -1,6 +1,6 @@
 'use client';
 import { Separator } from '@/components/ui/separator';
-import { AccountForm } from '@/components/Settings/UserSettingsAccount/accountForm';
+import { AccountForm } from '@/app/[lang]/(app)/(privateroutes)/settings/account/components/accountForm';
 import { useTranslations } from 'next-intl';
 import { AppearanceForm } from '@/components/Settings/UserSettingsAppearance/appearanceForm';
 

@@ -16,11 +16,11 @@ export async function generateMetadata({
 
 	if (!playlist) {
 		return {
-		title: 'Playlist introuvable',
+			title: 'Playlist introuvable',
 		};
 	}
 	return {
-		title: `${playlist.title} - playlist by @${playlist.user.username}`,
+		title: `${playlist.title} - playlist by @${playlist.user?.username}`,
 		description: `${playlist.description}`,
 	};
 }
@@ -32,7 +32,6 @@ export default async function PlaylistLayout({
 	children: ReactNode;
 	params: {lang: string, playlist: string };
 }) {
-
 	const supabase = createServerClient();
 	const { data: playlist } = await supabase
 	  .from('playlist')

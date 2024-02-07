@@ -44,7 +44,7 @@ export default function FollowedList() {
 
   return (
     <div>
-      {friends?.map(({ node }) => (
+      {/* {friends?.map(({ node }) => (
         <Link
           key={node.friend_id}
           href={`/@${node.friend.username}`}
@@ -52,7 +52,7 @@ export default function FollowedList() {
         >
           <UserCard user={node.friend} />
         </Link>
-      ))}
+      ))} */}
     </div>
   );
 }

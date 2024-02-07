@@ -17,25 +17,37 @@ import { Textarea } from '@/components/ui/textarea';
 import toast from 'react-hot-toast';
 import { Icons } from '@/components/icons';
 import { useAuth } from '@/context/auth-context';
-import { useMutation } from '@apollo/client';
 
-import UPDATE_REVIEW_MUTATION from '@/graphql/User/Movie/Review/UpdateReview';
-import { UserMovieReviewFragment } from '@/graphql/__generated__/graphql';
+import { UserMovieReview } from '@/types/type.db';
+import { useMutation } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase/client';
 
 interface MovieReviewFormProps {
-  review: UserMovieReviewFragment;
+  review: UserMovieReview;
 }
 
 export default function MovieReviewForm({ review }: MovieReviewFormProps) {
   const { user } = useAuth();
-  const [title, setTitle] = useState(review.title);
-  const [body, setBody] = useState<JSONContent>(JSON.parse(review.body));
+  const [title, setTitle] = useState(review?.title);
+  const [body, setBody] = useState<JSONContent>(JSON.parse(review?.body ?? ''));
   const [isLoading, setIsLoading] = useState(false);
   const [editable, setEditable] = useState(false);
-  const [updateReviewMutation] = useMutation(UPDATE_REVIEW_MUTATION);
+
+  const { mutateAsync: updateReviewMutation } = useMutation({
+    mutationFn: async (payload: { title: string, body: string }) => {
+      if (!review?.id) throw new Error('No user id');
+      const { data, error } = await supabase
+        .from('user_movie_review')
+        .update(payload)
+        .eq('id', review.id)
+        .select('*');
+      if (error) throw error;
+      return data;
+    },
+  });
 
   const updateReview = async () => {
-    if (title == review.title && JSON.stringify(body) == review.body) {
+    if (title == review?.title && JSON.stringify(body) == review?.body) {
       setEditable(false);
       return;
     }
@@ -56,11 +68,8 @@ export default function MovieReviewForm({ review }: MovieReviewFormProps) {
     try {
       setIsLoading(true);
       await updateReviewMutation({
-        variables: {
-          id: review.id,
-          title: title.trim(),
-          body: JSON.stringify(body),
-        },
+        title: title.trim(),
+        body: JSON.stringify(body),
       });
       toast.success('Enregistré');
       setEditable(false);
@@ -76,7 +85,7 @@ export default function MovieReviewForm({ review }: MovieReviewFormProps) {
       <div className="w-full flex flex-col justify-center items-center">
         {/* SETTINGS */}
         <div className="flex justify-end w-full gap-2">
-          {review.user.id == user?.id && (
+          {review?.user?.id == user?.id && (
             <Button
               variant={'ghost'}
               size={'sm'}
@@ -90,7 +99,7 @@ export default function MovieReviewForm({ review }: MovieReviewFormProps) {
         </div>
         <div className="w-full flex flex-col gap-4 justify-center items-center px-4 py-5">
           <ReviewTitle title={title} setTitle={setTitle} editable={editable} />
-          <UserCard user={review.user} />
+          <UserCard user={review?.user} />
         </div>
       </div>
 
@@ -113,8 +122,8 @@ export function ReviewTitle({
   setTitle,
   editable,
 }: {
-  title: string;
-  setTitle: Dispatch<SetStateAction<string>>;
+  title: string | undefined;
+  setTitle: Dispatch<SetStateAction<string | undefined>>;
   editable: boolean;
 }) {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);

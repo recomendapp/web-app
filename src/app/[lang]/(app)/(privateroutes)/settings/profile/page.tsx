@@ -1,6 +1,6 @@
 'use client';
 import { Separator } from '@/components/ui/separator';
-import { ProfileForm } from '@/components/Settings/UserSettingsProfile/profileForm';
+import { ProfileForm } from '@/app/[lang]/(app)/(privateroutes)/settings/profile/components/profileForm';
 import { useTranslations } from 'next-intl';
 
 export default function SettingsProfilePage() {

@@ -1,15 +1,12 @@
 'use client';
 
 import { useLocale } from "next-intl";
+import { supabase } from "@/lib/supabase/client";
+import { useQuery } from "@tanstack/react-query";
 
 // COMPONENTS
 import MovieCard from "@/components/Movie/Card/MovieCard";
-
-// GRAPHQL
-import { useQuery } from "@apollo/client"
-import { GetUserMovieReviewQuery } from "@/graphql/__generated__/graphql"
 import MovieReviewForm from "@/components/Review/form/MovieReviewForm";
-import GetUserMovieReview from "@/graphql/User/Movie/Review/queries/GetUserMovieReview";
 
 export default function Review({
 	reviewId,
@@ -19,23 +16,41 @@ export default function Review({
 	
 	const locale = useLocale();
 
-	const { data: reviewQuery } = useQuery<GetUserMovieReviewQuery>(GetUserMovieReview, {
-		variables: {
-			filter: {
-				id: { eq: reviewId },
-			},
-			locale: locale,
+	const {
+		data: review
+	} = useQuery({
+		queryKey: ['user_movie_review', reviewId],
+		queryFn: async () => {
+			if (!reviewId) throw Error('Missing review id');
+			const { data, error } = await supabase
+				.from('user_movie_review')
+				.select(`
+					*,
+					user(*),
+					activity:user_movie_activity(
+						*,
+						user(*),
+						movie:tmdb_movie(
+							*,
+							data:tmdb_movie_translation(*)
+						)
+					)
+				`)
+				.eq('id', reviewId)
+				.eq('activity.movie.data.language_id', locale)
+				.single()
+			if (error) throw error;
+			return data;
 		},
-		skip: !reviewId || !locale
+		enabled: !!reviewId,
 	});
-	const review = reviewQuery?.user_movie_reviewCollection?.edges[0].node;
 
 	if (!review) return null;
 	
 	return (
 		<div className="flex flex-col lg:flex-row gap-4 p-4">
 			<div className="bg-muted h-fit lg:w-[500px] p-4 rounded-md">
-				{review?.activity.movie && <MovieCard movie={review.activity?.movie} />}
+				{review?.activity?.movie && <MovieCard movie={review.activity?.movie} />}
 			</div>
 	    	<div className="w-full bg-muted h-fit p-4 rounded-md">
 				<MovieReviewForm review={review} />

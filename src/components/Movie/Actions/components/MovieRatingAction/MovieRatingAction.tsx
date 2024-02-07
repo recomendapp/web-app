@@ -18,176 +18,136 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-import { FilmAction } from '@/types/type.film';
 import { useAuth } from '@/context/auth-context';
-// import UPDATE_FILM_RATING_MUTATION from '@/components/Movie/FilmAction/components/MovieRatingAction/mutations/updateFilmRatingMutation';
 import { DialogClose } from '@radix-ui/react-dialog';
 
 import toast from 'react-hot-toast';
-
-// GRAPHQL
-import { useQuery, useMutation } from '@apollo/client';
-import GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivityByMovieId';
-import GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID from '@/graphql/User/Movie/Watchlist/queries/GetUserMovieWatchlistByMovieId';
-import INSERT_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/InsertUserMovieActivity';
-import UPDATE_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/UpdateUserMovieActivity';
-import type {
-  GetUserMovieActivityByMovieIdQuery,
-  InsertUserMovieActivityMutation,
-  UpdateUserMovieActivityMutation,
-} from '@/graphql/__generated__/graphql';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase/client';
+import Link from 'next/link';
 
 interface MovieRatingActionProps extends React.HTMLAttributes<HTMLDivElement> {
-  movieId: string;
+  movieId: number;
 }
 
 export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
-  const { user, loading: userLoading } = useAuth();
+  const { user } = useAuth();
 
-  const router = useRouter();
+  const queryClient = useQueryClient();
+
   const [ratingValue, setRatingValue] = useState(5);
 
   const {
-    data: activityQuery,
-    loading,
-    error,
-  } = useQuery<GetUserMovieActivityByMovieIdQuery>(GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID, {
-    variables: {
-      movie_id: movieId,
-      user_id: user?.id,
+    data: activity,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['user', user?.id, 'activity', { movieId }],
+    queryFn: async () => {
+      if (!user?.id || !movieId) throw Error('Missing profile id or locale or movie id');
+      const { data, error } = await supabase
+        .from('user_movie_activity')
+        .select(`*, review:user_movie_review(*)`)
+        .eq('user_id', user.id)
+        .eq('movie_id', movieId)
+        .maybeSingle()
+      if (error) throw error;
+      return data;
     },
-    skip: !user || !movieId,
+    enabled: !!user?.id && !!movieId,
   });
-  const activity = activityQuery?.user_movie_activityCollection?.edges[0]?.node;
 
-  const [insertActivityMutation] = useMutation<InsertUserMovieActivityMutation>(
-    INSERT_ACTIVITY_MUTATION,
-    {
-      update: (cache, { data }) => {
-        cache.writeQuery({
-          query: GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID,
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-          },
-          data: {
-            user_movie_activityCollection: {
-              edges: [
-                {
-                  node: data?.insertIntouser_movie_activityCollection
-                    ?.records[0],
-                },
-              ],
-            },
-          },
-        });
-        // Delete Watchlist
-        cache.writeQuery({
-          query: GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID,
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-          },
-          data: {
-            user_movie_watchlistCollection: {
-              edges: [],
-            },
-          },
-        });
-      },
-    }
-  );
+  const { mutateAsync: insertActivityMutation } = useMutation({
+    mutationFn: async ({ rating } : { rating: number }) => {
+      if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
+      const {data, error } = await supabase
+        .from('user_movie_activity')
+        .insert({
+          user_id: user?.id,
+          movie_id: movieId,
+          rating: rating,
+        })
+        .select(`*, review:user_movie_review(*)`)
+        .single()
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user', user?.id, 'activity', { movieId }], data);
 
-  const [updateActivityMutation] = useMutation<UpdateUserMovieActivityMutation>(
-    UPDATE_ACTIVITY_MUTATION,
-    {
-      update: (cache, { data }) => {
-        cache.writeQuery({
-          query: GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID,
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-          },
-          data: {
-            user_movie_activityCollection: {
-              edges: [
-                {
-                  node: data?.updateuser_movie_activityCollection?.records[0],
-                },
-              ],
-            },
-          },
-        });
-      },
-    }
-  );
+      // UPDATE WATCHLIST
+      queryClient.setQueryData(['user', user?.id, 'watchlist', { movieId }], false);
+      queryClient.invalidateQueries({
+        queryKey: ['user', user?.id, 'collection', 'watchlist']
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['user', user?.id, 'collection', 'guidelist']
+      });
+    },
+    onError: () => {
+      toast.error('Une erreur s\'est produite');
+    },
+  });
+
+  const { mutateAsync: updateRating } = useMutation({
+    mutationFn: async ({ rating } : { rating: number | null }) => {
+      if (!activity?.id ) throw Error('Missing activity id');
+      if (rating === undefined ) throw Error('Missing rating');
+      const {data, error } = await supabase
+        .from('user_movie_activity')
+        .update({
+            rating: rating,
+        })
+        .eq('id', activity?.id)
+        .select(`*, review:user_movie_review(*)`)
+        .single()
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user', user?.id, 'activity', { movieId }], data)
+    },
+    onError: () => {
+      toast.error('Une erreur s\'est produite');
+    },
+  });
 
   useEffect(() => {
     activity?.rating && setRatingValue(activity?.rating);
   }, [activity]);
 
   const handleRate = async () => {
-    try {
-      if (!user || !movieId) throw Error("User or movieId doesn't exist");
-      if (activity) {
-        if (!activity.id) throw Error("Activity id doesn't exist");
-        await updateActivityMutation({
-          variables: {
-            id: activity.id,
-            movie_id: movieId,
-            user_id: user?.id,
-            rating: ratingValue,
-          },
-        });
-      } else {
-        await insertActivityMutation({
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-            rating: ratingValue,
-          },
-        });
-      }
-    } catch {
-      toast.error("Une erreur s'est produite");
+    if (activity) {
+      await updateRating({
+        rating: ratingValue,
+      });
+    } else {
+      await insertActivityMutation({
+        rating: ratingValue,
+      });
     }
   };
   const handleUnrate = async () => {
     if (activity?.review)
       return toast.error('Impossible car vous avez une critique sur ce film');
-    if (!user || !movieId || !activity?.id) throw Error("User or movieId doesn't exist");
-    try {
-      await updateActivityMutation({
-        variables: {
-          id: activity.id,
-          movie_id: movieId,
-          user_id: user?.id,
-          rating: null,
-        },
-      });
-    } catch {
-      toast.error("Une erreur s'est produite");
-    }
+    await updateRating({
+     rating: null,
+    });
   };
 
-  if (!user) {
+  if (!user === null) {
     return (
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              onClick={() => router.push('/login')}
-              disabled={(loading || error) && true}
               size="rating"
               variant={'rating'}
+              asChild
             >
-              {loading ? (
-                <Icons.spinner className="animate-spin" />
-              ) : error ? (
-                <AlertCircle />
-              ) : (
+              <Link href={'/login'}>
                 <Star />
-              )}
+              </Link>
             </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">
@@ -203,16 +163,15 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            {/* {userId ? ( */}
             <DialogTrigger asChild>
               <Button
-                disabled={(loading || error) && true}
+                disabled={isLoading || isError || activity === undefined}
                 size="rating"
                 variant={activity?.rating ? 'rating-enabled' : 'rating'}
               >
-                {loading ? (
+                {(isLoading || activity === undefined) ? (
                   <Icons.spinner className="animate-spin" />
-                ) : error ? (
+                ) : isError ? (
                   <AlertCircle />
                 ) : activity?.rating ? (
                   <p className="font-bold text-lg">{activity?.rating}</p>
@@ -248,11 +207,11 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
         </div>
         <DialogFooter className="flex flex-col justify-center">
           <DialogClose asChild>
-            <Button onClick={() => handleRate()}>Enregistrer</Button>
+            <Button onClick={async () => handleRate()}>Enregistrer</Button>
           </DialogClose>
           {activity?.rating && (
             <DialogClose asChild>
-              <Button variant="destructive" onClick={() => handleUnrate()}>
+              <Button variant="destructive" onClick={async () => handleUnrate()}>
                 Supprimer la note
               </Button>
             </DialogClose>
@@ -289,7 +248,6 @@ export default function MovieRating({
               }}
             />
             <Star
-              // color={i <= ( hover || rating) ? stars.filledColor : stars.unfilledColor }
               aria-hidden="true"
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(null)}

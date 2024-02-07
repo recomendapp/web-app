@@ -25,76 +25,88 @@ import {
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/context/auth-context';
-import { Review } from '@/types/type.review';
 import { MoreHorizontal, Trash2 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-
-
 // GRAPHQL
-import { useMutation } from '@apollo/client';
-import GET_USER_MOVIE_ACTIVITY from "@/graphql/User/Movie/Activity/queries/GetUserMovieActivity"
-import DELETE_REVIEW_MUTATION from '@/graphql/User/Movie/Review/DeleteReview';
-import { DeleteReviewMutation, type GetUserMovieActivityQuery, type UserMovieReviewFragment } from '@/graphql/__generated__/graphql';
 import { useLocale } from 'next-intl';
+import { UserMovieReview } from '@/types/type.db';
+import { useMutation } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase/client';
 
 export function MovieReviewSettings({
   review,
 }: {
-  review: UserMovieReviewFragment;
+  review: UserMovieReview;
 }) {
   const { user } = useAuth();
 
   const locale = useLocale();
 
-  const [deleteReviewMutation] = useMutation<DeleteReviewMutation>(DELETE_REVIEW_MUTATION, {
-    update: (store) => {
-      const userMovieActivity = store.readQuery<GetUserMovieActivityQuery>({
-        query: GET_USER_MOVIE_ACTIVITY,
-        variables: {
-          filter: {
-            movie_id: { eq: review.movie_id },
-            user_id: { eq: review.user_id },
-          },
-          locale: locale,
-        },
-      });
-      if (userMovieActivity) {
-        store.writeQuery<GetUserMovieActivityQuery>({
-          query: GET_USER_MOVIE_ACTIVITY,
-          variables: {
-            filter: {
-              movie_id: { eq: review.movie_id },
-              user_id: { eq: review.user_id },
-            },
-            locale: locale,
-          },
-          data: {
-            ...userMovieActivity,
-            user_movie_activityCollection: {
-              ...userMovieActivity.user_movie_activityCollection!,
-              edges: userMovieActivity.user_movie_activityCollection!.edges.map(
-                (edge) => {
-                  if (edge.node.review?.id == review.id) {
-                    return {
-                      ...edge,
-                      node: {
-                        ...edge.node,
-                        review: null as any,
-                      },
-                    };
-                  }
-                  return edge;
-                }
-              ),
-            },
-          },
-        });
-      }
-    },
+  const { mutateAsync: deleteReviewMutation } = useMutation({
+    mutationFn: async () => {
+      if (!review?.id) throw new Error('No user id');
+      const {
+        data,
+        error
+      } = await supabase
+        .from('user_movie_review')
+        .delete()
+        .eq('id', review.id)
+        .select('*');
+      if (error) throw error;
+      return data;
+    }
   });
+
+  // const [deleteReviewMutation] = useMutation<DeleteReviewMutation>(DELETE_REVIEW_MUTATION, {
+  //   update: (store) => {
+  //     const userMovieActivity = store.readQuery<GetUserMovieActivityQuery>({
+  //       query: GET_USER_MOVIE_ACTIVITY,
+  //       variables: {
+  //         filter: {
+  //           movie_id: { eq: review.movie_id },
+  //           user_id: { eq: review.user_id },
+  //         },
+  //         locale: locale,
+  //       },
+  //     });
+  //     if (userMovieActivity) {
+  //       store.writeQuery<GetUserMovieActivityQuery>({
+  //         query: GET_USER_MOVIE_ACTIVITY,
+  //         variables: {
+  //           filter: {
+  //             movie_id: { eq: review.movie_id },
+  //             user_id: { eq: review.user_id },
+  //           },
+  //           locale: locale,
+  //         },
+  //         data: {
+  //           ...userMovieActivity,
+  //           user_movie_activityCollection: {
+  //             ...userMovieActivity.user_movie_activityCollection!,
+  //             edges: userMovieActivity.user_movie_activityCollection!.edges.map(
+  //               (edge) => {
+  //                 if (edge.node.review?.id == review.id) {
+  //                   return {
+  //                     ...edge,
+  //                     node: {
+  //                       ...edge.node,
+  //                       review: null as any,
+  //                     },
+  //                   };
+  //                 }
+  //                 return edge;
+  //               }
+  //             ),
+  //           },
+  //         },
+  //       });
+  //     }
+  //   },
+  // });
 
   const pathname = usePathname();
   const router = useRouter();
@@ -105,17 +117,13 @@ export function MovieReviewSettings({
 
   const handleDeleteReview = async () => {
     try {
-      await deleteReviewMutation({
-        variables: {
-          id: review.id,
-        },
-      });
+      await deleteReviewMutation();
       setShowDeleteDialog(false);
       if (
-        pathname == `/@${user?.username}/film/${review.movie_id}` || 
-        pathname == `/film/${review.movie_id}/review/${review.id} `
+        pathname == `/@${user?.username}/film/${review?.movie_id}` || 
+        pathname == `/film/${review?.movie_id}/review/${review?.id} `
       )
-        router.push(`/film/${review.movie_id}`);
+        router.push(`/film/${review?.movie_id}`);
       toast.success('Supprimée');
     } catch (error) {
       toast.error("Une erreur s\'est produite");
@@ -132,12 +140,12 @@ export function MovieReviewSettings({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          {(!user || user.id != review.user_id) && (
+          {(!user || user.id != review?.user_id) && (
             <DropdownMenuItem onSelect={() => setIsOpen(true)}>
               Signaler la critique
             </DropdownMenuItem>
           )}
-          {user && user.id == review.user_id && (
+          {user && user.id == review?.user_id && (
             <DropdownMenuItem
               onSelect={() => setShowDeleteDialog(true)}
               className="text-red-600 gap-2"

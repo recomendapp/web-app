@@ -18,150 +18,121 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase/client';
+import Link from 'next/link';
 
 // GRAPHQL
-import { useQuery, useMutation } from '@apollo/client';
-import GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivityByMovieId';
-import GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID from '@/graphql/User/Movie/Watchlist/queries/GetUserMovieWatchlistByMovieId';
-import INSERT_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/InsertUserMovieActivity';
-import DELETE_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/DeleteUserMovieActivity';
-import type {
-  DeleteUserMovieActivityMutation,
-  GetUserMovieActivityByMovieIdQuery,
-  InsertUserMovieActivityMutation,
-} from '@/graphql/__generated__/graphql';
+// import { useQuery, useMutation } from '@apollo/client';
+// import GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivityByMovieId';
+// import GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID from '@/graphql/User/Movie/Watchlist/queries/GetUserMovieWatchlistByMovieId';
+// import INSERT_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/InsertUserMovieActivity';
+// import DELETE_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/DeleteUserMovieActivity';
+// import type {
+//   DeleteUserMovieActivityMutation,
+//   GetUserMovieActivityByMovieIdQuery,
+//   InsertUserMovieActivityMutation,
+// } from '@/graphql/__generated__/graphql';
 
 interface MovieWatchActionProps extends React.HTMLAttributes<HTMLDivElement> {
-  movieId: string;
+  movieId: number;
 }
 
 export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
   const { user } = useAuth();
 
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const {
-    data: activityQuery,
-    loading,
-    error,
-  } = useQuery<GetUserMovieActivityByMovieIdQuery>(GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID, {
-    variables: {
-      movie_id: movieId,
-      user_id: user?.id,
+    data: activity,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['user', user?.id, 'activity', { movieId }],
+    queryFn: async () => {
+      if (!user?.id || !movieId) throw Error('Missing profile id or locale or movie id');
+      const { data, error } = await supabase
+        .from('user_movie_activity')
+        .select(`*, review:user_movie_review(*)`)
+        .eq('user_id', user.id)
+        .eq('movie_id', movieId)
+        .maybeSingle()
+      if (error) throw error;
+      return data;
     },
-    skip: !user || !movieId,
+    enabled: !!user?.id && !!movieId,
   });
-  const activity = activityQuery?.user_movie_activityCollection?.edges[0]?.node;
 
-  const [insertActivityMutation] = useMutation<InsertUserMovieActivityMutation>(
-    INSERT_ACTIVITY_MUTATION,
-    {
-      update: (cache, { data }) => {
-        cache.writeQuery({
-          query: GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID,
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-          },
-          data: {
-            user_movie_activityCollection: {
-              edges: [
-                {
-                  node: data?.insertIntouser_movie_activityCollection
-                    ?.records[0],
-                },
-              ],
-            },
-          },
-        });
-        // Delete Watchlist
-        cache.writeQuery({
-          query: GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID,
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-          },
-          data: {
-            user_movie_watchlistCollection: {
-              edges: [],
-            },
-          },
-        });
-      },
-    }
-  );
-  const [deleteActivityMutation] = useMutation<DeleteUserMovieActivityMutation>(
-    DELETE_ACTIVITY_MUTATION,
-    {
-      update: (cache, { data }) => {
-        cache.writeQuery({
-          query: GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID,
-          variables: {
-            movie_id: movieId,
-            user_id: user?.id,
-          },
-          data: {
-            user_movie_activityCollection: {
-              edges: [],
-            },
-          },
-        });
-      },
-    }
-  );
-  const handleWatch = async () => {
-    try {
-      if (!user || !movieId) throw Error("User or movieId doesn't exist");
-      await insertActivityMutation({
-        variables: {
-          movie_id: movieId,
+  const { mutateAsync: insertActivityMutation } = useMutation({
+    mutationFn: async () => {
+      if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
+      const {data, error } = await supabase
+        .from('user_movie_activity')
+        .insert({
           user_id: user?.id,
-        },
-      });
-    } catch (errors) {
-      toast.error("Une erreur s'est produite");
-    }
-  };
-  const handleUnwatch = async () => {
-    try {
-      if (!user || !movieId) throw Error("User or movieId doesn't exist");
-      await deleteActivityMutation({
-        variables: {
           movie_id: movieId,
-          user_id: user?.id,
-        },
-      });
-    } catch (errors) {
-      toast.error("Une erreur s'est produite");
-    }
-  };
+        })
+        .select(`*, review:user_movie_review(*)`)
+        .single()
+        if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user', user?.id, 'activity', { movieId }], data)
 
-  if (!user) {
+      // UPDATE WATCHLIST
+      queryClient.setQueryData(['user', user?.id, 'watchlist', { movieId }], false)
+      queryClient.invalidateQueries({
+        queryKey: ['user', user?.id, 'collection', 'watchlist']
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['user', user?.id, 'collection', 'guidelist']
+      });
+    },
+    onError: () => {
+      toast.error('Une erreur s\'est produite');
+    },
+  });
+
+  const { mutateAsync: deleteActivityMutation } = useMutation({
+    mutationFn: async () => {
+      if (!activity?.id) throw Error('Missing activity id');
+      const { error } = await supabase
+        .from('user_movie_activity')
+        .delete()
+        .eq('id', activity?.id)
+      if (error) throw error;
+      return null;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user', user?.id, 'activity', { movieId }], data)
+    },
+    onError: () => {
+      toast.error('Une erreur s\'est produite');
+    },
+  });
+
+  if (user === null) {
     return (
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              onClick={() => router.push('/login')}
-              disabled={(loading || error) && true}
               size="icon"
               variant={'action'}
               className={`rounded-full hover:text-foreground`}
+              asChild
             >
-              {loading ? (
-                <Icons.spinner className="animate-spin" />
-              ) : error ? (
-                <AlertCircle />
-              ) : (
+              <Link href={'/login'}>
                 <div
                   className={`transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[2px]`}
                 >
                   <Check size={16} />
                 </div>
-              )}
+              </Link>
             </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">
@@ -179,15 +150,15 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
           <TooltipTrigger asChild>
             {!activity ? (
               <Button
-                onClick={() => !activity && handleWatch()}
-                disabled={(loading || error) && true}
+                onClick={async () => !activity && await insertActivityMutation()}
+                disabled={isLoading || isError || activity === undefined}
                 size="icon"
                 variant={'action'}
                 className={`rounded-full hover:text-foreground`}
               >
-                {loading ? (
+                {(isLoading || activity === undefined) ? (
                   <Icons.spinner className="animate-spin" />
-                ) : error ? (
+                ) : isError ? (
                   <AlertCircle />
                 ) : (
                   <div
@@ -203,14 +174,14 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
             ) : (
               <AlertDialogTrigger disabled={!activity}>
                 <Button
-                  disabled={(loading || error) && true}
+                  disabled={(isLoading || isError) && true}
                   size="icon"
                   variant={'action'}
                   className={`rounded-full`}
                 >
-                  {loading ? (
+                  {(isLoading || activity == undefined) ? (
                     <Icons.spinner className="animate-spin" />
-                  ) : error ? (
+                  ) : isError ? (
                     <AlertCircle />
                   ) : (
                     <div
@@ -242,7 +213,7 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
         <AlertDialogFooter className="gap-2">
           <AlertDialogCancel>Annuler</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => activity && handleUnwatch()}
+            onClick={async () => activity && await deleteActivityMutation()}
             className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
           >
             Continuer

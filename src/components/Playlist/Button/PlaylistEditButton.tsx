@@ -7,15 +7,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
 import { useAuth } from '@/context/auth-context';
-import { Playlist } from '@/types/type.playlist';
-import PlaylistGuest from '@/components/Playlist/FilmPlaylist/PlaylistGuest/PlaylistGuest';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import PlaylistGuest from '@/app/[lang]/(app)/playlist/[playlist]/components/guest/PlaylistGuest';
 import { Button } from '@/components/ui/button';
 import { PencilIcon } from 'lucide-react';
-import { PlaylistFragment } from '@/graphql/__generated__/graphql';
+import { Playlist } from '@/types/type.db';
 
 export function PlaylistEditButton({
   children,
@@ -24,7 +22,7 @@ export function PlaylistEditButton({
 }: {
   children?: React.ReactNode;
   filmId?: string;
-  playlist?: PlaylistFragment;
+  playlist?: Playlist;
 }) {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
@@ -51,7 +49,6 @@ export function PlaylistEditButton({
             </DialogHeader>
             <PlaylistForm
               success={() => setOpen(false)}
-              userId={user?.id}
               filmId={filmId}
               playlist={playlist}
             />
@@ -79,9 +76,7 @@ export function PlaylistEditButton({
             {view == 'general' && (
               <PlaylistForm
                 success={() => setOpen(false)}
-                userId={user.id}
                 filmId={filmId}
-                playlist={playlist}
               />
             )}
             {view == 'guest' && (

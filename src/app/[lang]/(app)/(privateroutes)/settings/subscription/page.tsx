@@ -8,20 +8,56 @@ import { supabase } from '@/lib/supabase/client';
 import { Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
-// BILLINGPORTAL STRIPE
-import { stripe } from '@/lib/stripe/stripe';
+import { useQuery } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import { createOrRetrieveCustomer } from '@/lib/supabase/supabase-admin';
+import { stripe } from '@/lib/stripe/stripe';
 
 export default function SettingsAccountPage() {
   const { user, session } = useAuth();
   const t = useTranslations('settings');
-
   const router = useRouter();
 
+  const {
+    data: subscription,
+    isLoading
+  } = useQuery({
+    queryKey: ['user', user?.id, 'subscription'],
+    queryFn: async () => {
+      if (!user?.id) return;
+      const { data, error } = await supabase
+        .from('subscriptions')
+        .select(`
+          *,
+          price:prices(
+            *,
+            product:products(*)
+          )
+        `)
+        .eq('user_id', user.id)
+        .in('status', ['active', 'trialing'])
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user?.id,
+  })
+
+  // const redirectToCustomerPortal = async () => {
+  //   try {
+  //     const { url } = await postData({
+  //       url: '/api/create-portal-link'
+  //     });
+  //     router.push(url);
+  //   } catch (error) {
+  //     toast.error('Could not open customer portal');
+  //     if (error) console.log((error as Error).message);
+  //   }
+  // };
+
   const redirectToCustomerPortal = async () => {
-    console.log('redirectToCustomerPortal', location.origin);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw Error('Could not get user');
@@ -36,7 +72,7 @@ export default function SettingsAccountPage() {
       });
       router.push(url);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -53,12 +89,12 @@ export default function SettingsAccountPage() {
         <Loader />
       ) : (
         <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-          {user?.subscriptions?.edges.length ? (
+          {subscription ? (
             <>
               <p className="pb-4 sm:pb-0">
                 You are currently on the{' '}
                 <b>
-                  {user?.subscriptions.edges[0]?.node?.prices?.products?.name}
+                  {subscription.price?.product?.name}
                 </b>{' '}
                 plan
               </p>

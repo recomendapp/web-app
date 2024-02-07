@@ -11,21 +11,21 @@ export async function generateMetadata({
   };
 }) {
   const supabase = createServerClient();
-  const { data: review } = await supabase
+  const { data: review, error } = await supabase
     .from('user_movie_review')
     .select('*, user(username), movie: tmdb_movie(id, data:tmdb_movie_translation(title))')
     .eq('id', params.review)
     .eq('movie.data.language_id', params.lang)
     .single();
-    
-  if (!review) {
+  
+  if (!review || error) {
     return {
       title: 'Oups, utilisateur introuvable !',
     };
   }
   return {
-    title: `${review.title} by (@${review.user.username})`,
-    description: `Critique de ${review.movie.data[0].title} par @${review.user.username}`,
+    title: `${review.title} by (@${review.user?.username})`,
+    description: `Critique de ${review.movie?.data[0].title} par @${review.user?.username}`,
   };
 }
 
@@ -38,13 +38,13 @@ export default async function ReviewPage({
   };
 }) {
   const supabase = createServerClient();
-  const { data: review } = await supabase
+  const { data: review, error } = await supabase
     .from('user_movie_review')
     .select('*')
     .eq('id', params.review)
     .single();
 
-  if (!review) notFound();
+  if (!review || error) notFound();
 
   return (<Review reviewId={params.review} />)
 }

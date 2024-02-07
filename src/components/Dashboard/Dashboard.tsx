@@ -7,8 +7,6 @@ import { useTranslations } from 'next-intl';
 // WIDGETS
 import { UserMovieGuidelistWidget } from '@/components/Widget/UserMovieGuidelistWidget';
 import { UserMovieWatchlistWidget } from '@/components/Widget/UserMovieWatchlistWidget';
-import { MovieNowPlayingWidget } from '@/components/Widget/MovieNowPlayingWidget';
-import { MovieUpcomingWidget } from '@/components/Widget/MovieUpcomingWidget';
 
 export default function Dashboard() {
   const { user, loading } = useAuth();

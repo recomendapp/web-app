@@ -1,10 +1,5 @@
 'use client';
-import Link from 'next/link';
-import { useAuth } from '@/context/auth-context';
-
-import { Models } from 'appwrite';
 import { Fragment, useEffect, useState } from 'react';
-import { FileEdit } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -13,10 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../ui/select';
-import MovieReviewOverview from '@/components/Review/MovieReviewOverview';
 
-import { Review } from '@/types/type.review';
-import { useInfiniteQuery, useQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase/client';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
@@ -63,6 +56,7 @@ export function ShowPlaylists({ filmId }: { filmId: string }) {
 
       return data;
     },
+    initialPageParam: 1,
     getNextPageParam: (data, pages) => {
       return data?.length == numberOfResult ? pages.length + 1 : undefined;
     },

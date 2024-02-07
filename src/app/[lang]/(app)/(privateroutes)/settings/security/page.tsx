@@ -1,6 +1,6 @@
 'use client';
 import { Separator } from '@/components/ui/separator';
-import { SecurityForm } from '@/components/Settings/UserSettingsSecurity/securityForm';
+import { SecurityForm } from '@/app/[lang]/(app)/(privateroutes)/settings/security/components/securityForm';
 import { siteConfig } from '@/config/site';
 import { useTranslations } from 'next-intl';
 

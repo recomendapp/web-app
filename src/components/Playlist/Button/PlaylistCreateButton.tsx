@@ -56,7 +56,6 @@ export function PlaylistCreateButton({
         </DialogHeader>
         <PlaylistForm
           success={() => setOpen(false)}
-          userId={user.id}
           filmId={filmId}
         />
       </DialogContent>

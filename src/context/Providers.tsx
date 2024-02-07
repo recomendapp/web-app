@@ -12,6 +12,8 @@ import { ModalProvider } from '@/context/modal-context';
 import { ThemeContext } from '@/context/theme-context';
 import { OneSignalContext } from '@/context/one-signal-context';
 import { RightSidebarContext } from '@/context/right-sidebar-context';
+import { cookies } from 'next/headers';
+import { UiContext } from './ui-context';
 
 export default async function Provider({
   children,
@@ -20,12 +22,19 @@ export default async function Provider({
   children: React.ReactNode;
   locale: string;
 }) {
+  // NEXT-INTL
   let dictionary;
   try {
     dictionary = (await import(`@/dictionaries/${locale}.json`)).default;
   } catch (error) {
     notFound();
   }
+  // UI
+  const layout = cookies().get("ui:layout");
+  const sidebarCollapsed = cookies().get("ui-sidebar:collapsed");
+  const defaultLayout = layout ? JSON.parse(layout.value) : undefined
+  const cookieSidebarCollapsed = sidebarCollapsed ? JSON.parse(sidebarCollapsed.value) : undefined
+
   return (
     <ReactQueryContext>
       <ApolloClientContext>
@@ -34,26 +43,31 @@ export default async function Provider({
             <ModalProvider>
               <ThemeContext attribute="class" defaultTheme="dark" enableSystem>
                 <OneSignalContext>
-                  <RightSidebarContext>
-                    <NextTopLoader
-                      showSpinner={false}
-                      easing="ease"
-                      color="#FFE974"
-                      height={2}
-                    />
-                    <Toaster
-                      position="top-center"
-                      toastOptions={{
-                        style: {
-                          borderRadius: '10px',
-                          background: '#333',
-                          color: '#fff',
-                        },
-                      }}
-                    />
-                    <SpeedInsights />
-                    {children}
-                  </RightSidebarContext>
+                  <UiContext
+                    defaultLayout={defaultLayout}
+                    cookieSidebarCollapsed={cookieSidebarCollapsed}
+                  >
+                    <RightSidebarContext>
+                      <NextTopLoader
+                        showSpinner={false}
+                        easing="ease"
+                        color="#FFE974"
+                        height={2}
+                      />
+                      <Toaster
+                        position="top-center"
+                        toastOptions={{
+                          style: {
+                            borderRadius: '10px',
+                            background: '#333',
+                            color: '#fff',
+                          },
+                        }}
+                      />
+                      <SpeedInsights />
+                      {children}
+                    </RightSidebarContext>
+                  </UiContext>
                 </OneSignalContext>
               </ThemeContext>
             </ModalProvider>

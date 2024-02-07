@@ -4,12 +4,11 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '../../utils/ImageWithFallback';
 import Link from 'next/link';
-import { Playlist } from '@/types/type.playlist';
 import FeaturedPlaylistBadge from '@/components/Badge/FeatuedPlaylistBadge';
-import { PlaylistMinimalFragment } from '@/graphql/__generated__/graphql';
+import { Playlist } from '@/types/type.db';
 
 interface MoviePlaylistCardProps extends React.HTMLAttributes<HTMLElement> {
-  playlist: PlaylistMinimalFragment;
+  playlist: Playlist;
 }
 
 export default function MoviePlaylistCard({
@@ -18,18 +17,18 @@ export default function MoviePlaylistCard({
 }: MoviePlaylistCardProps) {
   return (
     <Link
-      href={`/playlist/${playlist.id}`}
+      href={`/playlist/${playlist?.id}`}
       className={cn(
         'relative flex flex-col gap-2 bg-muted hover:bg-muted-hover rounded-md p-2',
         className
       )}
     >
-      {playlist.featured && <FeaturedPlaylistBadge />}
+      {playlist?.featured && <FeaturedPlaylistBadge />}
       <div className={`w-full shadow-2xl`}>
         <AspectRatio ratio={1 / 1}>
           <ImageWithFallback
-            src={playlist.poster_url ?? ''}
-            alt={playlist.title}
+            src={playlist?.poster_url ?? ''}
+            alt={playlist?.title ?? ''}
             fill
             className="rounded-md object-cover"
             type="playlist"
@@ -37,9 +36,9 @@ export default function MoviePlaylistCard({
         </AspectRatio>
       </div>
       <div>
-        <p className="text-center line-clamp-1 break-words">{playlist.title}</p>
+        <p className="text-center line-clamp-1 break-words">{playlist?.title}</p>
         <p className="text-center text-muted-foreground">
-          {playlist.items_count} film{Number(playlist.items_count) > 1 && 's'}
+          {playlist?.items_count} film{Number(playlist?.items_count) > 1 && 's'}
         </p>
       </div>
     </Link>

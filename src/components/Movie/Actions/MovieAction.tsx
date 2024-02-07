@@ -7,8 +7,6 @@ import { MovieWatchDateAction } from './components/MovieWatchAction/MovieWatchDa
 import { MovieWatchlistAction } from './components/MovieWatchlistAction/MovieWatchlistAction';
 import { MoviePlaylistAction } from './components/MoviePlaylistAction/MoviePlaylistAction';
 import { MovieSendAction } from './components/MovieSendAction/MovieSendAction';
-import { useQuery } from '@apollo/client';
-import { useAuth } from '@/context/auth-context';
 
 export function MovieAction({
   filmId,
@@ -22,7 +20,7 @@ export function MovieAction({
   send,
   dropdown,
 }: {
-  filmId: string;
+  filmId: number;
   all?: boolean;
   rating?: boolean;
   like?: boolean;
@@ -33,15 +31,6 @@ export function MovieAction({
   send?: boolean;
   dropdown?: boolean;
 }) {
-  const { user } = useAuth();
-
-  // const { data: filmActionQuery, loading, error } = useQuery(FILM_ACTION_QUERY, {
-  //   variables: {
-  //     movie_id: filmId,
-  //     user_id: user?.id,
-  //   },
-  //   skip: !user
-  // })
 
   return (
     <div className="flex justify-between gap-2">
@@ -55,7 +44,6 @@ export function MovieAction({
       <div className="flex gap-2 items-center">
         {(all || playlist) && <MoviePlaylistAction movieId={filmId} />}
         {(all || send) && <MovieSendAction movieId={filmId} />}
-        {/* {dropdown && <MovieActionDropdownMenu movieId={movieId} />} */}
       </div>
     </div>
   );

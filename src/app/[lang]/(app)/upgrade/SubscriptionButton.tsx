@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
 import { postData } from '@/lib/stripe/stripe-helpers';
 import { getStripe } from '@/lib/stripe/stripeClient';
+import { Prices } from '@/types/type.db';
 import { Price, Product } from '@/types/type.stripe';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -14,14 +15,14 @@ export default function SubscriptionButton({
   price,
 }: {
   offer: Product;
-  price: Price;
+  price: Prices;
 }) {
   const { user, loading } = useAuth();
 
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
 
-  const handleCheckout = async (price: Price) => {
-    setPriceIdLoading(price.id);
+  const handleCheckout = async (price: Prices) => {
+    setPriceIdLoading(price?.id);
 
     if (!user) {
       setPriceIdLoading(undefined);
@@ -49,8 +50,8 @@ export default function SubscriptionButton({
     <Button
       onClick={() => handleCheckout(price)}
       disabled={
-        (user && user.subscriptions?.edges?.length! > 0) ||
-        price.id === priceIdLoading ||
+        (user && user.premium) ||
+        price?.id === priceIdLoading ||
         !user ||
         loading
       }
@@ -59,9 +60,9 @@ export default function SubscriptionButton({
         <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
       ) : (
         <>
-          {user.subscriptions?.edges.length! > 0
+          {user.premium
             ? 'Already subscribed'
-            : !user.subscriptions?.edges.length &&
+            : !user.premium &&
               offer.name === 'Free' &&
               'Already subscribed'}
         </>

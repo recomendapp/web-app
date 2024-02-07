@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation';
 import { Fragment } from 'react';
 import { createServerClient } from '@/lib/supabase/server';
 
@@ -30,16 +29,8 @@ interface UserLayoutProps {
 }
 
 export default async function UserLayout({
-  params,
   children,
 }: UserLayoutProps) {
-  const supabase = createServerClient();
-  const { data: user } = await supabase
-    .from('user')
-    .select('*')
-    .eq('username', params.username)
-    .single();
 
-  if (!user) notFound();
   return <Fragment>{children}</Fragment>;
 }

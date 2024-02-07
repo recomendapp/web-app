@@ -18,34 +18,39 @@ import Link from 'next/link';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MoviePoster from '@/components/Movie/MoviePoster';
 import { TmdbMovieMinimalFragment } from '@/graphql/__generated__/graphql';
+import { Movie, Person } from '@/types/type.db';
 
-export default function MovieCardSmall({ movie }: { movie: TmdbMovieMinimalFragment }) {
+export default function MovieCardSmall({ movie }: { movie: Movie }) {
   return (
-    <Link href={`/film/${movie.id}`} className="flex gap-4 items-center">
+    <div className="flex gap-4 items-center">
       {/* MOVIE POSTER */}
-      <MoviePoster
-        className="w-[70px]"
-        poster_path={'https://image.tmdb.org/t/p/original/' + movie.data?.edges[0].node.poster_path}
-        alt={movie.data?.edges[0].node.title ?? ''}
-      />
+      {/* <Link href={`/film/${movie.id}`}> */}
+        <MoviePoster
+          className="w-[60px]"
+          poster_path={'https://image.tmdb.org/t/p/original/' + movie?.data[0].poster_path}
+          alt={movie?.data[0].title ?? ''}
+        />
+      {/* </Link> */}
       {/* MOVIE DATAT */}
       <div className="w-full block">
         {/* TITLE */}
-        <h2 className="text-lg font-bold line-clamp-2">{movie.data?.edges[0].node.title}</h2>
+        <Link href={`/film/${movie?.id}`} className=" font-medium line-clamp-2">
+          {movie?.data[0].title}
+        </Link>
 
         {/* DATE / GENRES / RUNTIME */}
         <div className="line-clamp-1">
-          {movie.directors?.edges.map(({ node }, index: number) => (
+          {movie?.directors?.map(({ person } : { person: Person }, index: number) => (
             <>
               {index > 0 && <span className='text-muted-foreground'>, </span>}
-              <span key={node.id}>
+              <span key={person?.id}>
                 <Button
                   variant="link"
                   className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition"
                   asChild
                 >
-                  <Link href={`/person/${node.person.id}`}>
-                    {node.person.name}
+                  <Link href={`/person/${person?.id}`}>
+                    {person?.name}
                   </Link>
                 </Button>
               </span>
@@ -55,9 +60,9 @@ export default function MovieCardSmall({ movie }: { movie: TmdbMovieMinimalFragm
 
         {/* DATE */}
         <p className="lg:hidden">
-          <DateOnlyYearTooltip date={movie.release_date} />
+          <DateOnlyYearTooltip date={movie?.release_date} />
         </p>
       </div>
-    </Link>
+    </div>
   );
 }

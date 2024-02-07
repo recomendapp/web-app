@@ -6,7 +6,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import MovieCard from '@/components/Movie/Card/MovieCard';
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { handleMoviesUpcoming } from '@/lib/tmdb/tmdb';
 import { useLocale } from 'next-intl';
 import { useInView } from 'react-intersection-observer';
@@ -28,6 +28,7 @@ export const MovieUpcomingWidget = () => {
     queryKey: ['films', 'upcoming'],
     queryFn: ({ pageParam = 1 }) =>
       handleMoviesUpcoming(locale, locale, pageParam),
+    initialPageParam: 1,
     getNextPageParam: (results, pages) => {
       return results?.length == numberOfResult ? pages.length + 1 : undefined;
     },

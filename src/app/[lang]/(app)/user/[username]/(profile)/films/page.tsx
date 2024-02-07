@@ -1,5 +1,6 @@
-import ProfileFilm from '@/components/Profile/ProfileFilms/ProfileFilms';
+import ProfileFilm from '@/app/[lang]/(app)/user/[username]/(profile)/films/components/ProfileFilms';
 import { createServerClient } from '@/lib/supabase/server';
+import { notFound } from 'next/navigation';
 
 export default async function Films({
   params,
@@ -9,8 +10,11 @@ export default async function Films({
   const supabase = createServerClient();
   const { data: user } = await supabase
     .from('user')
-    .select('*')
+    .select('id')
     .eq('username', params.username)
     .single();
-  return <ProfileFilm profile={user} />;
+  
+  if (!user) notFound();
+
+  return <ProfileFilm userId={user?.id} />;
 }

@@ -1,4 +1,3 @@
-import { FilmAction } from '@/types/type.film';
 import { Text } from 'lucide-react';
 import { Heart } from 'lucide-react';
 

@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const getInitiales = (name: string) => {
+export const getInitiales = (name: string | undefined | null) => {
   if (!name) return null;
   const words = name.normalize('NFKC').toUpperCase().split(' ');
   let initials = '';

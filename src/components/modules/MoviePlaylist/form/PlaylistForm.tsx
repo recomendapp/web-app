@@ -29,96 +29,117 @@ import { supabase } from '@/lib/supabase/client';
 import { Icons } from '@/components/icons';
 
 // GRAPHQL
-import { useMutation } from '@apollo/client';
-import CREATE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/CreatePlaylist';
-import UPDATE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/UpdatePlaylist';
-import DELETE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/DeletePlaylist';
-import GET_PLAYLISTS_BY_USER_ID from '@/graphql/Playlist/Playlist/queries/GetPlaylistsByUserId';
-import INSERT_PLAYLIST_ITEM_MUATION from '@/graphql/Playlist/PlaylistItem/mutations/InsertPlaylistItemMutation';
-import { CreatePlaylistMutation, DeletePlaylistMutation, GetPlaylistsByUserIdQuery, PlaylistFragment, UpdatePlaylistMutation } from '@/graphql/__generated__/graphql';
+// import { useMutation } from '@apollo/client';
+// import CREATE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/CreatePlaylist';
+// import UPDATE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/UpdatePlaylist';
+// import DELETE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/DeletePlaylist';
+// import GET_PLAYLISTS_BY_USER_ID from '@/graphql/Playlist/Playlist/queries/GetPlaylistsByUserId';
+// import INSERT_PLAYLIST_ITEM_MUATION from '@/graphql/Playlist/PlaylistItem/mutations/InsertPlaylistItemMutation';
+// import { CreatePlaylistMutation, DeletePlaylistMutation, GetPlaylistsByUserIdQuery, PlaylistFragment, UpdatePlaylistMutation } from '@/graphql/__generated__/graphql';
+import { Playlist } from '@/types/type.db';
+import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '@/context/auth-context';
+import { set } from 'lodash';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
-  userId: string;
   filmId?: string;
-  playlist?: PlaylistFragment;
+  playlist?: Playlist;
 }
 
 export function PlaylistForm({
   success,
-  userId,
   filmId,
   playlist,
 }: PlaylistFormProps) {
+  const { user } = useAuth();
+
   const router = useRouter();
+
+  const queryClient = useQueryClient();
+
   const pathname = usePathname();
 
   const [loading, setLoading] = useState(false);
 
   const [newPoster, setNewPoster] = useState<File>();
 
-  const [createPlaylistMutation] = useMutation<CreatePlaylistMutation>(CREATE_PLAYLIST_MUTATION, {
-    update: (store, { data }) => {
-      const playlistData = store.readQuery<GetPlaylistsByUserIdQuery>({
-        query: GET_PLAYLISTS_BY_USER_ID,
-        variables: {
-          user_id: userId,
-          order: { updated_at: 'DescNullsFirst' },
-        },
-      });
-      if (playlistData && playlistData.playlistCollection && data?.insertIntoplaylistCollection) {
-        store.writeQuery({
-          query: GET_PLAYLISTS_BY_USER_ID,
-          variables: {
-            user_id: userId,
-            order: { updated_at: 'DescNullsFirst' },
-          },
-          data: {
-            ...playlistData,
-            playlistCollection: {
-              ...playlistData.playlistCollection,
-              edges: [
-                ...playlistData.playlistCollection.edges,
-                { playlist: data?.insertIntoplaylistCollection.records[0] },
-              ],
-            },
-          },
-        });
+  const { mutateAsync: insertPlaylistMutation } = useMutation({
+    mutationFn: async (
+      payload: {
+        user_id: string;
+        title: string;
+        description: string;
+        is_public: boolean;
       }
+    ) => {
+      const {data: response, error } = await supabase
+        .from('playlist')
+        .insert(payload)
+        .select(`*`)
+        .single()
+      if (error) throw error;
+      return response;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user', user?.id, 'playlists', { order: 'updated_at-desc'}], (oldData: InfiniteData<Playlist[], unknown>) => {
+        if (!oldData || !oldData.pages) {
+            return oldData;
+        }
+        const newPage = [data, ...oldData.pages[0]];
+        const newData: InfiniteData<Playlist[], unknown> = {
+          ...oldData,
+          pages: [newPage, ...oldData.pages.slice(1)],
+        };
+        return newData;
+      });
     },
   });
-  const [deletePlaylistMutation] = useMutation<DeletePlaylistMutation>(DELETE_PLAYLIST_MUTATION, {
-    update: (store, { data }) => {
-      const playlistData = store.readQuery<GetPlaylistsByUserIdQuery>({
-        query: GET_PLAYLISTS_BY_USER_ID,
-        variables: {
-          user_id: userId,
-          order: { updated_at: 'DescNullsFirst' },
-        },
-      });
-      if (playlistData && playlistData.playlistCollection) {
-        store.writeQuery({
-          query: GET_PLAYLISTS_BY_USER_ID,
-          variables: {
-            user_id: userId,
-            order: { updated_at: 'DescNullsFirst' },
-          },
-          data: {
-            ...playlistData,
-            playlistCollection: {
-              ...playlistData.playlistCollection,
-              edges: playlistData!.playlistCollection.edges.filter(({ node }) => {
-                return node.id !== data?.deleteFromplaylistCollection.records[0].id;
-              }),
-            },
-          },
-        });
+
+  const { mutateAsync: updatePlaylistMutation } = useMutation({
+    mutationFn: async (
+      payload: {
+        title?: string;
+        description?: string;
+        is_public?: boolean;
+        poster_url?: string | null;
       }
-    },
+    ) => {
+      if (!playlist?.id ) throw Error('Missing activity id');
+      const {data: response, error } = await supabase
+        .from('playlist')
+        .update(payload)
+        .eq('id', playlist?.id)
+        .select(`*`)
+        .single()
+      if (error) throw error;
+      return response;
+    }
   });
-  const [updatePlaylistMutation] = useMutation<UpdatePlaylistMutation>(UPDATE_PLAYLIST_MUTATION);
-  const [insertPlaylistItemMutation, { error: errorInsertPlaylistItem }] =
-    useMutation(INSERT_PLAYLIST_ITEM_MUATION);
+
+  const { mutateAsync: deletePlaylistMutation } = useMutation({
+    mutationFn: async () => {
+      if (!playlist?.id) throw Error('Missing playlist id');
+      const { error } = await supabase
+        .from('playlist')
+        .delete()
+        .eq('id', playlist?.id)
+      if (error) throw error;
+      return (playlist);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['user', user?.id, 'playlists', { order: 'updated_at-desc'}], (oldData: any) => {
+        if (!oldData || !oldData.pages) {
+            return oldData;
+        }
+        const updatedPages = oldData.pages.map((page: Playlist[]) => {
+            return page.filter((playlist) => playlist?.id !== data.id);
+        });
+        return { ...oldData, pages: updatedPages };
+      });
+      queryClient.setQueryData(['playlist', data?.id], null);
+    }
+  });
 
   const CreatePlaylistFormSchema = z.object({
     title: z
@@ -156,40 +177,35 @@ export function PlaylistForm({
   async function handleCeatePlaylist(data: CreatePlaylistFormValues) {
     try {
       setLoading(true);
-      const { data: createOutput } = await createPlaylistMutation({
-        variables: {
-          user_id: userId,
-          title: data.title.replace(/\s+/g, ' ').trim(),
-          description: data.description?.replace(/\s+/g, ' ').trim(),
-          is_public: data.is_public,
-        },
+      if (!user?.id) throw Error('Missing user id');
+      const newPlaylist = await insertPlaylistMutation({
+        user_id: user?.id,
+        title: data.title.replace(/\s+/g, ' ').trim(),
+        description: data.description?.replace(/\s+/g, ' ').trim() ?? '',
+        is_public: data.is_public,
       });
-      if (filmId) {
-        await insertPlaylistItemMutation({
-          variables: {
-            playlist_id:
-              createOutput?.insertIntoplaylistCollection?.records[0]?.id,
-            movie_id: filmId,
-            user_id: userId,
-            rank: String(1),
-          },
-        });
-      }
+      // if (filmId) {
+      //   await insertPlaylistItemMutation({
+      //     variables: {
+      //       playlist_id:
+      //         createOutput?.insertIntoplaylistCollection?.records[0]?.id,
+      //       movie_id: filmId,
+      //       user_id: userId,
+      //       rank: String(1),
+      //     },
+      //   });
+      // }
       if (newPoster) {
-        const newPlaylistId =
-          createOutput?.insertIntoplaylistCollection?.records[0]?.id;
-        if (!newPlaylistId) throw Error('Playlist id not found');
-        const newPosterUrl = await uploadPoster(newPoster, newPlaylistId);
+        if (!newPlaylist.id) throw Error('Playlist id not found');
+        const newPosterUrl = await uploadPoster(newPoster, newPlaylist.id);
         await updatePlaylistMutation({
-          variables: {
-            id: newPlaylistId,
-            poster_url: newPosterUrl,
-          },
+          poster_url: newPosterUrl,
         });
       }
       toast.success('Enregistré');
       success();
     } catch (error) {
+      console.error('error', error);
       toast.error("Une erreur s'est produite");
     } finally {
       setLoading(false);
@@ -199,20 +215,18 @@ export function PlaylistForm({
   async function handleUpdatePlaylist(data: CreatePlaylistFormValues) {
     try {
       setLoading(true);
-      if (!playlist?.id) throw Error('Playlist ID not found');
-      const payload: Record<string, any> = {
-        id: playlist.id,
+      if (!playlist?.id ) throw Error('Missing activity id');
+      const payload = {
         title: data.title.replace(/\s+/g, ' ').trim(),
         description: data.description?.replace(/\s+/g, ' ').trim(),
         is_public: data.is_public,
+        poster_url: playlist?.poster_url,
       };
       if (newPoster) {
-        const newPosterUrl = await uploadPoster(newPoster, playlist.id);
+        const newPosterUrl = await uploadPoster(newPoster, playlist?.id);
         payload.poster_url = newPosterUrl;
       }
-      await updatePlaylistMutation({
-        variables: payload,
-      });
+      await updatePlaylistMutation(payload);
       toast.success('Enregistré');
       success();
     } catch (error) {
@@ -225,30 +239,28 @@ export function PlaylistForm({
   async function handleDeletePlaylist() {
     try {
       setLoading(true);
-      if (!playlist?.id) throw Error('Playlist ID not found');
-      await deletePlaylistMutation({
-        variables: {
-          id: playlist.id,
-        },
-      });
+      console.log('step1')
+      const deletedPlaylist = await deletePlaylistMutation();
+      console.log('step2')
+      if (pathname.startsWith(`/playlist/${deletedPlaylist.id}`)) router.push('/');
+      console.log('step3')
       toast.success('Supprimé');
-      if (playlist && pathname == '/playlist/' + playlist.id) router.push('/');
-      else success();
-    } catch (error) {
+      success();
+    } catch(error) {
       toast.error("Une erreur s'est produite");
     } finally {
       setLoading(false);
     }
   }
 
-  async function uploadPoster(file: File, playlistId: string) {
+  async function uploadPoster(file: File, playlistId: number) {
     try {
       const fileExt = file.name.split('.').pop();
       const filePath = `${playlistId}-${Math.random()}.${fileExt}`;
 
       const posterCompressed = await compressPicture(file, filePath, 400, 400);
 
-      let { error } = await supabase.storage
+      let { data, error } = await supabase.storage
         .from('playlist_posters')
         .upload(filePath, posterCompressed);
 
@@ -268,8 +280,8 @@ export function PlaylistForm({
         )}
         className=" space-y-8 h-full flex flex-col justify-between"
       >
-        <div className="flex flex-col gap-4 lg:grid  lg:grid-cols-2 w-full">
-          <div className=" w-1/2 lg:w-full">
+        <div className="flex flex-col gap-4 md:grid  md:grid-cols-2 w-full">
+          <div className=" w-1/2 md:w-full">
             <PlaylistPictureUpload
               playlist={playlist}
               loading={loading}
@@ -309,7 +321,6 @@ export function PlaylistForm({
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="is_public"

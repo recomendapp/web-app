@@ -11,11 +11,10 @@ import {
 } from '@/components/ui/hover-card';
 import UserAvatar from '../UserAvatar/UserAvatar';
 
-// GRAPHQL
-import { UserFragment, UserMinimalFragment } from '@/graphql/__generated__/graphql';
+import { User } from '@/types/type.db';
 
 interface UserCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  user: UserFragment | UserMinimalFragment;
+  user: User;
   icon?: boolean;
   full?: boolean;
 }
@@ -29,14 +28,14 @@ export default function UserCard({
   if (full)
     return (
       <Link
-        key={user.username}
-        href={'/@' + user.username}
+        key={user?.username}
+        href={'/@' + user?.username}
         className="flex flex-col items-center bg-muted hover:bg-muted-hover h-full rounded-xl p-2 gap-2 transition"
       >
         <UserAvatar className="w-[150px] h-[150px]" user={user} />
         <div className="text-center">
-          <p>{user.full_name}</p>
-          <p className="text-muted-foreground">@{user.username}</p>
+          <p>{user?.full_name}</p>
+          <p className="text-muted-foreground">@{user?.username}</p>
         </div>
       </Link>
     );
@@ -68,7 +67,7 @@ export default function UserCard({
 }
 
 interface UserLinkProps extends React.HTMLAttributes<HTMLDivElement> {
-  user: UserFragment | UserMinimalFragment;
+  user: User;
   icon?: boolean;
 }
 

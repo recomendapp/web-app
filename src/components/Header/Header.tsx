@@ -1,5 +1,4 @@
 import { cn } from '@/lib/utils';
-// import { createServerClient } from '@/lib/supabase/supabase-server';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { UserNav } from '../User/UserNav/UserNav';

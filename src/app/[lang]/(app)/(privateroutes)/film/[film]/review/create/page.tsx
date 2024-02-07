@@ -1,13 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
-// import { createServerClient } from "@/lib/supabase/server";
-import { getMovieDetails } from '@/lib/tmdb/tmdb';
-import CreateReviewForm from '@/components/Review/form/CreateReviewFrom';
+import CreateReviewForm from '@/app/[lang]/(app)/(privateroutes)/film/[film]/review/create/components/CreateReviewFrom';
 import { createServerClient } from '@/lib/supabase/server';
-
-// GRAPHQL
-import apolloServer from '@/lib/apollo/server';
-import GET_MOVIE_BY_ID from '@/graphql/Movie/queries/GetMovieById';
-import type { GetMovieByIdQuery } from '@/graphql/__generated__/graphql';
 
 export async function generateMetadata({
   params,
@@ -17,17 +10,14 @@ export async function generateMetadata({
     film: number;
   };
 }) {
-  const { data: movieQuery } = await apolloServer.query<GetMovieByIdQuery>({
-    query: GET_MOVIE_BY_ID,
-    variables: {
-      filter: {
-      id: { eq: params.film },
-      },
-      locale: params.lang,
-    },
-  });
-  
-  const movie = movieQuery?.tmdb_movieCollection?.edges[0].node;
+  const supabase = createServerClient();
+
+  const { data: movie } = await supabase
+    .from('tmdb_movie_translation')
+    .select(`title`)
+    .eq('movie_id', params.film)
+    .eq('language_id', params.lang)
+    .single();
 
   if (!movie) {
     return {
@@ -36,7 +26,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `Ajouter une critique pour ${movie.data?.edges[0].node.title}`,
+    title: `Ajouter une critique pour ${movie.title}`,
   };
 }
 
@@ -54,34 +44,28 @@ export default async function CreateReview({
     data: { session },
   } = await supabase.auth.getSession();
 
+  if (!session) redirect('/login');
+
   const { data: review } = await supabase
     .from('user_movie_review')
-    .select('*')
+    .select(`id`)
     .eq('user_id', session?.user.id)
     .eq('movie_id', params.film)
     .single();
 
-  const { data: user } = await supabase
-    .from('user')
-    .select('*')
-    .eq('id', session?.user.id)
+  if (review) redirect(`/film/${params.film}/review/${review.id}`);
+
+  const { data: movie } = await supabase
+    .from('tmdb_movie')
+    .select(`
+      *,
+      data:tmdb_movie_translation(*)
+    `)
+    .eq('id', params.film)
+    .eq('data.language_id', params.lang)
     .single();
 
-  const { data: movieQuery } = await apolloServer.query<GetMovieByIdQuery>({
-    query: GET_MOVIE_BY_ID,
-    variables: {
-      filter: {
-      id: { eq: params.film },
-      },
-      locale: params.lang,
-    },
-  });
-
-  const movie = movieQuery?.tmdb_movieCollection?.edges[0].node;
-  
   if (!movie) notFound();
 
-  if (review) redirect(`/@${user.username}/film/${params.film}`);
-
-  return <CreateReviewForm film={movie} user={user} />;
+  return <CreateReviewForm movie={movie} />;
 }

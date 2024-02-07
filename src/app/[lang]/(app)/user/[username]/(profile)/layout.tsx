@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import ProfileNavbar from '@/components/Profile/ProfileNavbar/ProfileNavbar';
+import ProfileNavbar from '@/app/[lang]/(app)/user/[username]/components/ProfileNavbar';
 import { createServerClient } from '@/lib/supabase/server';
 
 interface UserLayoutProps {
@@ -17,6 +17,9 @@ export default async function UserLayout({
     .select('*')
     .eq('username', params.username)
     .single();
+
+  if (!user) notFound();
+
   return (
     <main className="p-4 space-y-4">
       <div className="flex justify-center">

@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { postData } from '@/lib/stripe/stripe-helpers';
 import { getStripe } from '@/lib/stripe/stripeClient';
-import { Session, User } from '@supabase/supabase-js';
+import { Session } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -17,10 +17,13 @@ import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import { useLocale } from 'next-intl';
 import { useAuth } from '@/context/auth-context';
 import { Icons } from '../icons';
+import { Prices, Products } from '@/types/type.db';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase/client';
 
 interface Props {
   session: Session | null;
-  products: ProductWithPrices[];
+  products: Products[];
   className?: string;
   title?: boolean;
 }
@@ -47,12 +50,12 @@ export default function Pricing({
     useState<BillingInterval>('month');
   const [priceIdLoading, setPriceIdLoading] = useState<string>();
 
-  const handleCheckout = async (price: Price) => {
-    setPriceIdLoading(price.id);
+  const handleCheckout = async (price: Prices) => {
+    setPriceIdLoading(price?.id);
     if (!session) {
       return router.push('/login');
     }
-    if (user?.subscriptions?.edges.length || price.unit_amount === 0) {
+    if (user?.premium|| price?.unit_amount === 0) {
       return router.push('/settings/subscription');
     }
 
@@ -112,12 +115,12 @@ export default function Pricing({
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-4">
           {products.map((product) => {
             const price = product?.prices?.find(
-              (price) => price.interval === billingInterval
+              (price) => price?.interval === billingInterval
             );
             if (!price) return null;
             return (
               <OfferCard
-                key={product.id}
+                key={product?.id}
                 locale={locale}
                 product={product}
                 price={price}
@@ -144,30 +147,55 @@ const OfferCard = ({
   priceIdLoading,
 }: {
   locale: string;
-  product: ProductWithPrices;
-  price: Price;
+  product: Products;
+  price: Prices;
   billingInterval: BillingInterval;
-  handleCheckout: (price: Price) => void;
+  handleCheckout: (price: Prices) => void;
   session?: Session | null;
   priceIdLoading?: string;
 }) => {
   const { user, loading } = useAuth();
-  console.log(user);
+
+  const {
+    data: subscription,
+    isLoading
+  } = useQuery({
+    queryKey: ['user', user?.id, 'subscription'],
+    queryFn: async () => {
+      if (!user?.id) return;
+      const { data, error } = await supabase
+        .from('subscriptions')
+        .select(`
+          *,
+          price:prices(
+            *,
+            product:products(*)
+          )
+        `)
+        .eq('user_id', user.id)
+        .in('status', ['active', 'trialing'])
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user?.id,
+  })
+
   return (
     <div
       className={cn(
         'rounded-md shadow-sm bg-muted border border-transparent',
         {
-        ' border-accent-1': product.name === user?.subscriptions?.edges[0]?.node.prices?.products?.name
-            || (price.unit_amount === 0 && session && !user?.subscriptions?.edges.length && !loading),
+        ' border-accent-1': product?.name === subscription?.price?.product?.name
+            || (price?.unit_amount === 0 && session && !subscription && !loading),
         }
       )}
     >
       <div className="flex flex-col gap-4 p-6 h-full">
-        <h2 className="text-2xl font-semibold">{product.name}</h2>
-        <p className="text-muted-foreground">{product.description}</p>
+        <h2 className="text-2xl font-semibold">{product?.name}</h2>
+        <p className="text-muted-foreground">{product?.description}</p>
         <section className="flex-1 flex flex-col gap-2">
-          {product.features.map((feature) => (
+          {Array.isArray(product?.features) && product?.features.map((feature: any) => (
             <p key={feature.name} className="flex gap-2 items-center">
               <Check className="text-accent-1 p-1 shrink-0" />
               <span>{feature.name}</span>
@@ -182,27 +210,25 @@ const OfferCard = ({
             <span className="text-base font-medium"> / {billingInterval}</span>
           </p>
           <Button
-          disabled={priceIdLoading === price.id || loading}
+            disabled={priceIdLoading === price?.id || loading}
             variant={
-              user?.subscriptions?.edges.length! > 0 &&
-              product.name === user?.subscriptions?.edges[0].node.prices?.products?.name
+              subscription &&
+              product?.name === subscription.price?.product?.name
                 ? 'accent-1-enabled'
-                : price.unit_amount === 0 && !!session
+                : price?.unit_amount === 0 && !!session
                   ? 'accent-1-enabled'
                   : 'accent-1'
             }
             type="button"
-            // disabled={(price.unit_amount === 0 && !!session) || priceIdLoading === price.id}
-            // loading={priceIdLoading === price.id}
             onClick={() => handleCheckout(price)}
             className="font-semibold"
           >
             {
-              priceIdLoading === price.id || loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              : user?.subscriptions?.edges.length! > 0 &&
-                product.name === user?.subscriptions?.edges[0].node.prices?.products?.name
+              priceIdLoading === price?.id || loading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              : subscription &&
+                product?.name === subscription?.price?.product?.name
                 ? 'Manage'
-                : price.unit_amount === 0 && !!session
+                : price?.unit_amount === 0 && !!session
                   ? 'Manage'
                   : session
                     ? 'Upgrade'
@@ -215,10 +241,11 @@ const OfferCard = ({
   );
 };
 
-const formatPrice = (price: Price, language: string) => {
+const formatPrice = (price: Prices, language: string) => {
+  if (!price?.currency) return '';
   const priceString = new Intl.NumberFormat(language, {
     style: 'currency',
-    currency: price.currency,
+    currency: price?.currency,
     minimumFractionDigits: 0,
   }).format((price?.unit_amount || 0) / 100);
 

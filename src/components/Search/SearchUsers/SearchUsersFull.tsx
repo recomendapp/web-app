@@ -8,6 +8,8 @@ import UserCard from '@/components/User/UserCard/UserCard';
 
 import SEARCH_USERS_QUERY from '@/graphql/Search/SearchUsers';
 import { SearchUsersQuery } from '@/graphql/__generated__/graphql';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase/client';
 
 export default function SearchUsersFull({
   query,
@@ -20,45 +22,37 @@ export default function SearchUsersFull({
   const numberOfResult = 20;
 
   const {
-    data: searchUsersQuery,
-    loading,
-    fetchMore,
-  } = useQuery<SearchUsersQuery>(SEARCH_USERS_QUERY, {
-    variables: {
-      filter: {
-        username: { iregex: query },
-      },
-      first: numberOfResult,
-    },
-    skip: !query,
-  });
-  const users = searchUsersQuery?.userCollection?.edges;
-  const pageInfo = searchUsersQuery?.userCollection?.pageInfo;
+		data: users,
+		isLoading: loading,
+		fetchNextPage,
+		isFetchingNextPage,
+		hasNextPage,
+	} = useInfiniteQuery({
+		queryKey: ['search', 'user', { search: query }],
+		queryFn: async ({ pageParam = 1 }) => {
+      if (!query) return null;
+			let from = (pageParam - 1) * numberOfResult;
+			let to = from - 1 + numberOfResult;
+
+			const { data } = await supabase
+        .from('user')
+        .select('*')
+        .range(from, to)
+        .ilike(`username`, `${query}%`);
+			return (data);
+		},
+		initialPageParam: 1,
+		getNextPageParam: (data, pages) => {
+			return data?.length == numberOfResult ? pages.length + 1 : undefined;
+		},
+		enabled: !!query
+	});
 
   useEffect(() => {
-    if (inView && pageInfo?.hasNextPage) {
-      fetchMore({
-        variables: {
-          search: query,
-          first: numberOfResult,
-          after: pageInfo?.endCursor,
-        },
-        updateQuery: (previousResult, { fetchMoreResult }) => {
-          return {
-            ...previousResult,
-            userCollection: {
-              ...previousResult.userCollection!,
-              edges: [
-                ...previousResult.userCollection!.edges,
-                ...fetchMoreResult.userCollection!.edges,
-              ],
-              pageInfo: fetchMoreResult.userCollection!.pageInfo,
-            },
-          };
-        },
-      });
+    if (inView && hasNextPage) {
+      fetchNextPage();
     }
-  }, [fetchMore, inView, pageInfo, query]);
+  }, [inView, hasNextPage, users, fetchNextPage]);
 
   if (loading) {
     return (
@@ -79,16 +73,21 @@ export default function SearchUsersFull({
     );
   }
 
-  if (!loading && !users?.length) {
+  if (!loading && !users?.pages[0]?.length) {
     return <div>Aucun résultat.</div>;
   }
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-8 gap-4 overflow-x-auto overflow-y-hidden">
-      {users?.map(({ node }, index) => (
-        <div key={node.id} ref={index === users.length - 1 ? ref : undefined}>
-          <UserCard user={node} full />
-        </div>
+      {users?.pages.map((page, i) => (
+        page?.map((user, index) => (
+          <div
+            key={user.id}
+            ref={(i === users.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+          >
+            <UserCard user={user} full />
+          </div>
+        ))
       ))}
     </div>
   );

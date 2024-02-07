@@ -1,5 +1,5 @@
 import Stripe from 'stripe';
-import { Json } from '@/types/type.db';
+import { Json } from '@/types/__generated__/type.db';
 
 export interface Product {
   id: string;

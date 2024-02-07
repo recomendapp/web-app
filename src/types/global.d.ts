@@ -1,5 +1,5 @@
-import type { Database } from '@/types/type.db';
+import type { Database as DBSupabase } from '@/types/__generated__/type.db';
 
 declare global {
-  type Database = Database;
+  type Database = DBSupabase;
 }
