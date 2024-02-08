@@ -4,7 +4,6 @@ import { format } from 'date-fns';
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useLocale } from 'next-intl';
@@ -21,19 +20,17 @@ export function DateOnlyYearTooltip({
   const locale = useLocale();
   if (!date) return;
   return (
-    <TooltipProvider delayDuration={100}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span className={cn('w-fit', className)}>{date.split('-')[0]}</span>
-        </TooltipTrigger>
-        <TooltipContent align="center" side="bottom">
-          {date
-            ? format(new Date(date), 'PPP', {
-                locale: locale === 'fr' ? fr : enUS,
-              })
-            : 'Unknown'}
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className={cn('w-fit', className)}>{date.split('-')[0]}</span>
+      </TooltipTrigger>
+      <TooltipContent align="center" side="bottom">
+        {date
+          ? format(new Date(date), 'PPP', {
+              locale: locale === 'fr' ? fr : enUS,
+            })
+          : 'Unknown'}
+      </TooltipContent>
+    </Tooltip>
   );
 }

@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Icons } from '../../../../icons';
@@ -117,91 +116,87 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
 
   if (user === null) {
     return (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              size="icon"
-              variant={'action'}
-              className={`rounded-full hover:text-foreground`}
-              asChild
-            >
-              <Link href={'/login'}>
-                <div
-                  className={`transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[2px]`}
-                >
-                  <Check size={16} />
-                </div>
-              </Link>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">
-            <p>Connectez-vous</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            size="icon"
+            variant={'action'}
+            className={`rounded-full hover:text-foreground`}
+            asChild
+          >
+            <Link href={'/login'}>
+              <div
+                className={`transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[2px]`}
+              >
+                <Check size={16} />
+              </div>
+            </Link>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          <p>Connectez-vous</p>
+        </TooltipContent>
+      </Tooltip>
     );
   }
 
   return (
     <AlertDialog>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            {!activity ? (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          {!activity ? (
+            <Button
+              onClick={async () => !activity && await insertActivityMutation()}
+              disabled={isLoading || isError || activity === undefined}
+              size="icon"
+              variant={'action'}
+              className={`rounded-full hover:text-foreground`}
+            >
+              {(isLoading || activity === undefined) ? (
+                <Icons.spinner className="animate-spin" />
+              ) : isError ? (
+                <AlertCircle />
+              ) : (
+                <div
+                  className={`
+                      transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[2px]
+                      ${activity && 'bg-blue-500 border-blue-500'}
+                    `}
+                >
+                  <Check size={16} />
+                </div>
+              )}
+            </Button>
+          ) : (
+            <AlertDialogTrigger disabled={!activity}>
               <Button
-                onClick={async () => !activity && await insertActivityMutation()}
-                disabled={isLoading || isError || activity === undefined}
+                disabled={(isLoading || isError) && true}
                 size="icon"
                 variant={'action'}
-                className={`rounded-full hover:text-foreground`}
+                className={`rounded-full`}
               >
-                {(isLoading || activity === undefined) ? (
+                {(isLoading || activity == undefined) ? (
                   <Icons.spinner className="animate-spin" />
                 ) : isError ? (
                   <AlertCircle />
                 ) : (
                   <div
                     className={`
-                        transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[2px]
-                        ${activity && 'bg-blue-500 border-blue-500'}
-                      `}
+                      border-2 hover:border-blue-500 rounded-full p-[2px]
+                      ${activity && 'bg-blue-500 border-blue-500'}
+                    `}
                   >
                     <Check size={16} />
                   </div>
                 )}
               </Button>
-            ) : (
-              <AlertDialogTrigger disabled={!activity}>
-                <Button
-                  disabled={(isLoading || isError) && true}
-                  size="icon"
-                  variant={'action'}
-                  className={`rounded-full`}
-                >
-                  {(isLoading || activity == undefined) ? (
-                    <Icons.spinner className="animate-spin" />
-                  ) : isError ? (
-                    <AlertCircle />
-                  ) : (
-                    <div
-                      className={`
-                        border-2 hover:border-blue-500 rounded-full p-[2px]
-                        ${activity && 'bg-blue-500 border-blue-500'}
-                      `}
-                    >
-                      <Check size={16} />
-                    </div>
-                  )}
-                </Button>
-              </AlertDialogTrigger>
-            )}
-          </TooltipTrigger>
-          <TooltipContent side="bottom">
-            {activity ? <p>Retirer des films vus</p> : <p>Marquer comme vu</p>}
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+            </AlertDialogTrigger>
+          )}
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          {activity ? <p>Retirer des films vus</p> : <p>Marquer comme vu</p>}
+        </TooltipContent>
+      </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Oula, tu es sûr ?</AlertDialogTitle>

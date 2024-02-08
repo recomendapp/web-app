@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Calendar } from '@/components/ui/calendar';
@@ -79,33 +78,31 @@ export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
 
   return (
     <Popover>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <PopoverTrigger asChild>
-              <Button
-                disabled={isLoading || isError}
-                variant="action"
-                className={`rounded-full flex gap-4`}
-              >
-                <CalendarDays />
-                <div className="hidden sm:block">
-                  {activity?.date ? (
-                    format(new Date(activity?.date), 'PPP', {
-                      locale: locale == 'fr' ? fr : enUS,
-                    })
-                  ) : (
-                    <span>Pick a date</span>
-                  )}
-                </div>
-              </Button>
-            </PopoverTrigger>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">
-            <p>Changer la date de visionnage</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <PopoverTrigger asChild>
+            <Button
+              disabled={isLoading || isError}
+              variant="action"
+              className={`rounded-full flex gap-4`}
+            >
+              <CalendarDays />
+              <div className="hidden sm:block">
+                {activity?.date ? (
+                  format(new Date(activity?.date), 'PPP', {
+                    locale: locale == 'fr' ? fr : enUS,
+                  })
+                ) : (
+                  <span>Pick a date</span>
+                )}
+              </div>
+            </Button>
+          </PopoverTrigger>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          <p>Changer la date de visionnage</p>
+        </TooltipContent>
+      </Tooltip>
       <PopoverContent className="w-auto p-0 flex flex-col justify-center">
         <Calendar
           locale={locale == 'fr' ? fr : enUS}

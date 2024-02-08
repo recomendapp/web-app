@@ -47,11 +47,11 @@ const sendFormSchema = z.object({
 type SendFormValues = z.infer<typeof sendFormSchema>;
 
 export function MoviePlaylistModal({
-  id,
-  movieId,
-}: {
-  id: string;
-  movieId: number;
+	onClose,
+	movieId,
+} : {
+	onClose: () => void;
+	movieId: number;
 }) {
 	const { user } = useAuth();
 
@@ -125,7 +125,7 @@ export function MoviePlaylistModal({
 			});
 			toast.success('Ajouté');
 			form.reset();
-			closeModal(id);
+			onClose();
 		},
 		onError: () => {
 			toast.error("Une erreur s\'est produite");

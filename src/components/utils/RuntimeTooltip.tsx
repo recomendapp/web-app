@@ -4,7 +4,6 @@ import { addMinutes, format } from 'date-fns';
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useLocale } from 'next-intl';
@@ -29,15 +28,13 @@ export function RuntimeTooltip({
   });
 
   return (
-    <TooltipProvider delayDuration={100}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span className={cn('w-fit', className)}>{ConvertHoursMinutes(runtime ?? 0)}</span>
-        </TooltipTrigger>
-        <TooltipContent align="center" side="bottom">
-          {runtime ? `Se termine à ${formattedEndTime}` : 'Unknown'}
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className={cn('w-fit', className)}>{ConvertHoursMinutes(runtime ?? 0)}</span>
+      </TooltipTrigger>
+      <TooltipContent align="center" side="bottom">
+        {runtime ? `Se termine à ${formattedEndTime}` : 'Unknown'}
+      </TooltipContent>
+    </Tooltip>
   );
 }

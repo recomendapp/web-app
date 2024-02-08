@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
@@ -137,59 +136,55 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
 
   if (!user === null) {
     return (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              size="rating"
-              variant={'rating'}
-              asChild
-            >
-              <Link href={'/login'}>
-                <Star />
-              </Link>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">
-            <p>Connectez-vous</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            size="rating"
+            variant={'rating'}
+            asChild
+          >
+            <Link href={'/login'}>
+              <Star />
+            </Link>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          <p>Connectez-vous</p>
+        </TooltipContent>
+      </Tooltip>
     );
   }
 
   return (
     <Dialog>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <DialogTrigger asChild>
-              <Button
-                disabled={isLoading || isError || activity === undefined}
-                size="rating"
-                variant={activity?.rating ? 'rating-enabled' : 'rating'}
-              >
-                {(isLoading || activity === undefined) ? (
-                  <Icons.spinner className="animate-spin" />
-                ) : isError ? (
-                  <AlertCircle />
-                ) : activity?.rating ? (
-                  <p className="font-bold text-lg">{activity?.rating}</p>
-                ) : (
-                  <Star />
-                )}
-              </Button>
-            </DialogTrigger>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">
-            {activity?.rating ? (
-              <p>Modifier la note</p>
-            ) : (
-              <p>Ajouter une note</p>
-            )}
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DialogTrigger asChild>
+            <Button
+              disabled={isLoading || isError || activity === undefined}
+              size="rating"
+              variant={activity?.rating ? 'rating-enabled' : 'rating'}
+            >
+              {(isLoading || activity === undefined) ? (
+                <Icons.spinner className="animate-spin" />
+              ) : isError ? (
+                <AlertCircle />
+              ) : activity?.rating ? (
+                <p className="font-bold text-lg">{activity?.rating}</p>
+              ) : (
+                <Star />
+              )}
+            </Button>
+          </DialogTrigger>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          {activity?.rating ? (
+            <p>Modifier la note</p>
+          ) : (
+            <p>Ajouter une note</p>
+          )}
+        </TooltipContent>
+      </Tooltip>
       <DialogContent>
         <DialogHeader className="relative">
           <div className="absolute w-full flex justify-center -top-16">

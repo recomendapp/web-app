@@ -1,5 +1,6 @@
 'use client';
 
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { setCookie } from 'cookies-next';
 import React, { createContext, useContext, useRef, useState } from 'react';
 import { ImperativePanelHandle } from 'react-resizable-panels';
@@ -100,7 +101,9 @@ export function UiContext({
         sidebarMaxSize,
       }}
     >
-      {children}
+      <TooltipProvider delayDuration={100}>
+        {children}
+      </TooltipProvider>
     </UiContextProvider.Provider>
   );
 }

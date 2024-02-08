@@ -4,7 +4,6 @@
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
@@ -70,22 +69,20 @@ export default function MovieVerticalCard({ movie }: { movie: any }) {
             )}
 
             {/* DATE */}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className=" before:content-['_•_']">
-                    {movie.release_date.split('-')[0]}
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  {movie.release_date
-                    ? format(new Date(movie.release_date), 'PPP', {
-                        locale: fr,
-                      })
-                    : 'Unknown'}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className=" before:content-['_•_']">
+                  {movie.release_date.split('-')[0]}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                {movie.release_date
+                  ? format(new Date(movie.release_date), 'PPP', {
+                      locale: fr,
+                    })
+                  : 'Unknown'}
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </div>

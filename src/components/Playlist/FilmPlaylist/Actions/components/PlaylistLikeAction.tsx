@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
@@ -140,41 +139,10 @@ export function PlaylistLikeAction({ playlistId }: MovieLikeActionProps) {
 
   if (!user) {
     return (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={() => router.push('/login')}
-              disabled={(loading || error) && true}
-              size="icon"
-              variant={'action'}
-              className="rounded-full"
-            >
-              {loading ? (
-                <Icons.spinner className="animate-spin" />
-              ) : error ? (
-                <AlertCircle />
-              ) : (
-                <Heart className={`transition hover:text-accent-1`} />
-              )}
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">
-            <p>Connectez-vous</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    );
-  }
-
-  return (
-    <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            onClick={() => {
-              isLiked ? handleUnlike() : handleLike();
-            }}
+            onClick={() => router.push('/login')}
             disabled={(loading || error) && true}
             size="icon"
             variant={'action'}
@@ -185,23 +153,50 @@ export function PlaylistLikeAction({ playlistId }: MovieLikeActionProps) {
             ) : error ? (
               <AlertCircle />
             ) : (
-              <Heart
-                className={`
-                  transition hover:text-accent-1
-                  ${isLiked && 'text-accent-1 fill-accent-1'}
-                `}
-              />
+              <Heart className={`transition hover:text-accent-1`} />
             )}
           </Button>
         </TooltipTrigger>
         <TooltipContent side="bottom">
-          {isLiked ? (
-            <p>Retirer des playlists sauvegardées</p>
-          ) : (
-            <p>Ajouter aux playlists sauvegardées</p>
-          )}
+          <p>Connectez-vous</p>
         </TooltipContent>
       </Tooltip>
-    </TooltipProvider>
+    );
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          onClick={() => {
+            isLiked ? handleUnlike() : handleLike();
+          }}
+          disabled={(loading || error) && true}
+          size="icon"
+          variant={'action'}
+          className="rounded-full"
+        >
+          {loading ? (
+            <Icons.spinner className="animate-spin" />
+          ) : error ? (
+            <AlertCircle />
+          ) : (
+            <Heart
+              className={`
+                transition hover:text-accent-1
+                ${isLiked && 'text-accent-1 fill-accent-1'}
+              `}
+            />
+          )}
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent side="bottom">
+        {isLiked ? (
+          <p>Retirer des playlists sauvegardées</p>
+        ) : (
+          <p>Ajouter aux playlists sauvegardées</p>
+        )}
+      </TooltipContent>
+    </Tooltip>
   );
 }

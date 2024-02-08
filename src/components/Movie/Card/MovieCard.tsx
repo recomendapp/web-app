@@ -4,7 +4,6 @@
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import {
@@ -55,47 +54,45 @@ export default function MovieCard({
     return (
       <ContextMenu>
         <ContextMenuTrigger>
-          <TooltipProvider delayDuration={0}>
-            <Tooltip delayDuration={500}>
-              <TooltipTrigger asChild>
-                <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
-                  <Link href={`/film/${movie.id}`} className="w-full">
-                    <MoviePoster
-                      poster_path={`https://image.tmdb.org/t/p/w500/${movie.data[0].poster_path}`}
-                      alt={movie.data[0].title ?? ''}
-                    />
-                  </Link>
-                  {(movieActivity?.is_liked ||
-                    movieActivity?.rating ||
-                    movieActivity?.review) && (
-                    <div className="absolute -bottom-2 mx-auto my-auto w-full flex justify-center pointer-events-none">
-                      <Link
-                        href={`/@${movieActivity?.user?.username}/film/${movie.id}`}
-                        className="pointer-events-auto"
-                      >
-                        <ActivityIcon
-                          rating={movieActivity?.rating}
-                          is_liked={movieActivity?.is_liked}
-                          is_reviewed={movieActivity?.review ? true : false}
-                        />
-                      </Link>
-                    </div>
-                  )}
-                  <div className="hidden absolute bottom-8 group-hover:lg:flex w-full justify-center pointer-events-none">
-                    <div className="bg-background rounded-md w-fit pointer-events-auto">
-                      <MovieAction filmId={movie.id} watch watchlist dropdown />
-                    </div>
+          <Tooltip delayDuration={500}>
+            <TooltipTrigger asChild>
+              <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
+                <Link href={`/film/${movie.id}`} className="w-full">
+                  <MoviePoster
+                    poster_path={`https://image.tmdb.org/t/p/w500/${movie.data[0].poster_path}`}
+                    alt={movie.data[0].title ?? ''}
+                  />
+                </Link>
+                {(movieActivity?.is_liked ||
+                  movieActivity?.rating ||
+                  movieActivity?.review) && (
+                  <div className="absolute -bottom-2 mx-auto my-auto w-full flex justify-center pointer-events-none">
+                    <Link
+                      href={`/@${movieActivity?.user?.username}/film/${movie.id}`}
+                      className="pointer-events-auto"
+                    >
+                      <ActivityIcon
+                        rating={movieActivity?.rating}
+                        is_liked={movieActivity?.is_liked}
+                        is_reviewed={movieActivity?.review ? true : false}
+                      />
+                    </Link>
+                  </div>
+                )}
+                <div className="hidden absolute bottom-8 group-hover:lg:flex w-full justify-center pointer-events-none">
+                  <div className="bg-background rounded-md w-fit pointer-events-auto">
+                    <MovieAction filmId={movie.id} watch watchlist dropdown />
                   </div>
                 </div>
-              </TooltipTrigger>
-              <TooltipContent className="flex flex-col gap-2">
-                <p className=" text-center line-clamp-1 whitespace-nowrap">
-                  {movie.data[0].title} ({movie.release_date && getYear(new Date(movie.release_date))})
-                </p>
-                {/* <MovieAction movie.id={movie.id} rating like watch playlist send /> */}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent className="flex flex-col gap-2">
+              <p className=" text-center line-clamp-1 whitespace-nowrap">
+                {movie.data[0].title} ({movie.release_date && getYear(new Date(movie.release_date))})
+              </p>
+              {/* <MovieAction movie.id={movie.id} rating like watch playlist send /> */}
+            </TooltipContent>
+          </Tooltip>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-64">
           <ContextMenuItem inset>

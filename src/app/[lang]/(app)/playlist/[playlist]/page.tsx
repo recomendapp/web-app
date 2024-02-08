@@ -22,7 +22,7 @@ export default function PlaylistPage({
   } = useQuery({
     queryKey: ['playlist', Number(params.playlist)],
     queryFn: async () => {
-      if (!params.playlist || !params.lang || !user?.id) throw new Error('No playlist id or locale or user id');
+      if (!params.playlist || !params.lang) throw new Error('No playlist id or locale');
       const { data } = await supabase
         .from('playlist')
         .select(`
@@ -55,13 +55,12 @@ export default function PlaylistPage({
         .eq('playlist_item.movie.data.language_id', params.lang)
         .eq('playlist_item.movie.genres.genre.data.language', params.lang)
         .eq('playlist_item.movie.directors.job', 'Director')
-        // .eq('playlist_guest.user_id', user?.id)
         .order('rank', { ascending: true, referencedTable: 'playlist_item' })
         .returns<Playlist[]>()
         .single();
       return data;
     },
-    enabled: !!params.playlist && !!params.lang && !!user?.id,
+    enabled: !!params.playlist && !!params.lang,
   });
 
   const [playlistItems, setPlaylistItems] = useState<PlaylistItem[]>(playlist?.items);
