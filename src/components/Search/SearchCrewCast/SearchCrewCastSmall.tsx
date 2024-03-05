@@ -35,9 +35,10 @@ export default function SearchCrewCastSmall({
 			const { data } = await supabase
         .from('tmdb_person')
         .select('*')
+        .ilike(`name`, `%${query}%`)
         .order('popularity', { ascending: false})
         .range(from, to)
-        .ilike(`name`, `%${query}%`);
+
 			return (data);
 		},
 		initialPageParam: 1,

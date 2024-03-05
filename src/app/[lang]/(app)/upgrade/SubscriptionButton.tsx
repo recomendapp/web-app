@@ -31,7 +31,7 @@ export default function SubscriptionButton({
 
     try {
       const { sessionId } = await postData({
-        url: '/api/create-checkout-session',
+        url: '/api/stripe/create-checkout-session',
         data: {
           price,
         },

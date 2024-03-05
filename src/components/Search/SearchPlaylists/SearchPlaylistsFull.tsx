@@ -39,6 +39,7 @@ export default function SearchPlaylistsFull({
         .order('updated_at', { ascending: false})
         .range(from, to)
         .ilike(`title`, `${query}%`);
+        
 			return (data);
 		},
 		initialPageParam: 1,

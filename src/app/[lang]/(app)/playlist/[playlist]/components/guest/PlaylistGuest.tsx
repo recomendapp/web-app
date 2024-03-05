@@ -138,7 +138,7 @@ const AddUser = ({
   const invitedUserIds =
     playlist?.guests?.map((guest: PlaylistGuest ) => guest?.user_id) || [];
 
-  const debouncedSearch = useDebounce(search, 300);
+  const debouncedSearch = useDebounce(search);
 
   const {
     data: friends,

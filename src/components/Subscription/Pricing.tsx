@@ -61,7 +61,7 @@ export default function Pricing({
 
     try {
       const { sessionId } = await postData({
-        url: '/api/create-checkout-session',
+        url: '/api/stripe/create-checkout-session',
         data: { price },
       });
 

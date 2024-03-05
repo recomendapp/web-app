@@ -63,7 +63,7 @@ export function MoviePlaylistModal({
 
 	const [ playlistView, setPlaylistView ] = useState<string>('personal');
 
-	const debouncedSearch = useDebounce(search, 300);
+	const debouncedSearch = useDebounce(search);
 
 	const { mutateAsync: addPlaylist } = useMutation({
 		mutationFn: async (data: SendFormValues) => {

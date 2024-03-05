@@ -48,7 +48,7 @@ export default function SettingsAccountPage() {
   // const redirectToCustomerPortal = async () => {
   //   try {
   //     const { url } = await postData({
-  //       url: '/api/create-portal-link'
+  //       url: '/api/stripe/create-portal-link'
   //     });
   //     router.push(url);
   //   } catch (error) {

@@ -20,7 +20,7 @@ export default function SearchBar({ className }: SearchBarProps) {
   const [isSearching, setIsSearching] = useState<any>(false);
   const searchbarRef = useRef<HTMLDivElement>(null);
 
-  const debouncedSearchTerm = useDebounce(searchQuery, 500);
+  const debouncedSearchTerm = useDebounce(searchQuery);
 
   const handleSubmit = (event: any) => {
     event.preventDefault();

@@ -59,7 +59,7 @@ export function MovieSendModal({
 
 	const [ search, setSearch ] = useState<null | string>(null);
 
-	const debouncedSearch = useDebounce(search, 300);
+	const debouncedSearch = useDebounce(search);
 
 	const { ref, inView } = useInView();
 

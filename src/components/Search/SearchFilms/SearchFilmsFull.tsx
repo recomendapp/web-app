@@ -11,6 +11,7 @@ import { useAuth } from '@/context/auth-context';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 import { useLocale } from 'next-intl';
+import { supabase } from '@/lib/supabase/client';
 
 export default function SearchFilmsFull({ query }: { query: string }) {
   const { user } = useAuth();
@@ -28,9 +29,30 @@ export default function SearchFilmsFull({ query }: { query: string }) {
     isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery({
-    queryKey: ['search', query, 'films'],
-    queryFn: ({ pageParam = 1 }) =>
-      handleSearchMovies(query, locale, pageParam),
+    queryKey: ['search', 'movie', { search: query }],
+    queryFn: async ({ pageParam = 1 }) => {
+      if (!query) return null;
+			let from = (pageParam - 1) * numberOfResult;
+			let to = from - 1 + numberOfResult;
+
+			const { data } = await supabase
+        .from('tmdb_movie')
+        .select(`
+          *,
+          data:tmdb_movie_translation!inner(*),
+          directors:tmdb_movie_credits(
+            id,
+            person:tmdb_person(*)
+          )
+        `)
+        .ilike(`tmdb_movie_translation.title`, `%${query}%`)
+        .eq('data.language_id', locale)
+        .eq('directors.job', 'Director')
+        .order('popularity', { ascending: false})
+        .range(from, to)
+      console.log('data', data);
+			return (data);
+    },
     initialPageParam: 1,
     getNextPageParam: (results, pages) => {
       return results?.length == numberOfResult ? pages.length + 1 : undefined;
