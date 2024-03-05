@@ -9,6 +9,7 @@ import { useAuth } from '@/context/auth-context';
 import { supabase } from '@/lib/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 import { Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
+import useDebounce from '@/hooks/use-debounce';
 
 export default function PlaylistPage({
   params,
@@ -16,6 +17,8 @@ export default function PlaylistPage({
   params: {lang: string, playlist: number };
 }) {
   const { user } = useAuth();
+  const [shouldRefresh, setShouldRefresh] = useState(false);
+  const debouncedRefresh = useDebounce(shouldRefresh, 200);
   const {
     data: playlist,
     refetch,
@@ -93,7 +96,8 @@ export default function PlaylistPage({
           },
           () => {
             console.log('playlist_items changes');
-            refetch();
+            // refetch();
+            setShouldRefresh(true);
           }
         )
         .subscribe();
@@ -102,6 +106,13 @@ export default function PlaylistPage({
       };
     }
   }, [params.playlist, playlist, user, refetch, isAllowedToEdit]);
+
+  useEffect(() => {
+    if (debouncedRefresh) {
+      refetch(); // Exécuter le rafraîchissement après le délai de débordement
+      setShouldRefresh(false);
+    }
+  }, [debouncedRefresh, refetch]);
 
   useEffect(() => {
     if (playlist?.items) {

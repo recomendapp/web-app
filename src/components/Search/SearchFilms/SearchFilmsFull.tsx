@@ -30,29 +30,41 @@ export default function SearchFilmsFull({ query }: { query: string }) {
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ['search', 'movie', { search: query }],
-    queryFn: async ({ pageParam = 1 }) => {
-      if (!query) return null;
-			let from = (pageParam - 1) * numberOfResult;
-			let to = from - 1 + numberOfResult;
+    queryFn: async ({ pageParam = 1 }) =>
+      handleSearchMovies(query, locale, pageParam),
+      // if (!query) return null;
+			// let from = (pageParam - 1) * numberOfResult;
+			// let to = from - 1 + numberOfResult;
 
-			const { data } = await supabase
-        .from('tmdb_movie')
-        .select(`
-          *,
-          data:tmdb_movie_translation!inner(*),
-          directors:tmdb_movie_credits(
-            id,
-            person:tmdb_person(*)
-          )
-        `)
-        .ilike(`tmdb_movie_translation.title`, `%${query}%`)
-        .eq('data.language_id', locale)
-        .eq('directors.job', 'Director')
-        .order('popularity', { ascending: false})
-        .range(from, to)
-      console.log('data', data);
-			return (data);
-    },
+      // const { data } = await supabase
+      //   .from('tmdb_movie')
+      //   .select(`
+      //     *,
+      //     data: tmdb_movie_translation!inner(*),
+      //     directors:tmdb_movie_credits(
+      //       id,
+      //       person:tmdb_person(*)
+      //     )
+      //   `)
+      //   .ilike(`original_title`, `%${query}%`)
+      //   .eq('data.language_id', locale)
+      //   .eq('directors.job', 'Director')
+      //   .order('popularity', { ascending: false})
+      //   .range(from, to)
+
+			// const { data } = await supabase
+      //   .from('tmdb_movie')
+      //   .select(`
+      //     *,
+      //     data:tmdb_movie_translation!inner(*)
+      //   `)
+      //   .ilike(`tmdb_movie_translation.title`, `%${query}%`)
+      //   // .eq('data.language_id', locale)
+      //   // .eq('directors.job', 'Director')
+      //   .order('popularity', { ascending: false})
+      //   .range(from, to)
+		// 	return (data);
+    // },
     initialPageParam: 1,
     getNextPageParam: (results, pages) => {
       return results?.length == numberOfResult ? pages.length + 1 : undefined;
@@ -125,9 +137,9 @@ export default function SearchFilmsFull({ query }: { query: string }) {
                 </div>
                 {/* MOVIE DATA */}
                 <div className="flex flex-col">
-                  <Button variant="link" className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition">
+                  <p className="font-bold line-clamp-2 break-all overflow-hidden">
                     {film.title}
-                  </Button>
+                  </p>
                   <div>
                     {film.credits.directors.length ? (
                       film.credits.directors.map(
@@ -135,7 +147,7 @@ export default function SearchFilmsFull({ query }: { query: string }) {
                           <span key={director.id}>
                             <Button
                               variant="link"
-                              className="w-fit p-0 h-full text-accent-1 font-normal italic"
+                              className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition"
                               asChild
                             >
                               <Link href={`/person/${director.id}`}>
@@ -149,7 +161,7 @@ export default function SearchFilmsFull({ query }: { query: string }) {
                         )
                       )
                     ) : (
-                      <span className="w-fit p-0 h-full italic text-muted-foreground">
+                      <span className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition">
                         Unknown
                       </span>
                     )}

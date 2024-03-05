@@ -34,7 +34,6 @@ export const ImageWithFallback = ({
     <>
       {imgSrc ? (
         <Image
-          unoptimized
           alt={alt}
           height={height}
           width={width}

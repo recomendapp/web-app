@@ -216,7 +216,7 @@ export default function SearchFilmsSmall({
                           )
                         )
                       ) : (
-                        <span className="w-fit p-0 h-full text-accent-1 font-normal italic">
+                        <span className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition">
                           Unknown
                         </span>
                       )}
