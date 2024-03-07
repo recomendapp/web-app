@@ -7,6 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 // COMPONENTS
 import MovieCard from "@/components/Movie/Card/MovieCard";
 import MovieReviewForm from "@/components/Review/form/MovieReviewForm";
+import MovieReviewActions from "@/components/Review/actions/MovieReviewActions";
+import MovieReviewComments from "./MovieReviewComments";
 
 export default function Review({
 	reviewId,
@@ -52,8 +54,12 @@ export default function Review({
 			<div className="bg-muted h-fit lg:w-[500px] p-4 rounded-md">
 				{review?.activity?.movie && <MovieCard movie={review.activity?.movie} />}
 			</div>
-	    	<div className="w-full bg-muted h-fit p-4 rounded-md">
-				<MovieReviewForm review={review} />
+			<div className="w-full space-y-2">
+				<div className="bg-muted h-fit p-4 rounded-md">
+					<MovieReviewForm review={review} />
+					<MovieReviewActions reviewId={review.id} />
+				</div>
+				<MovieReviewComments reviewId={review.id} />
 			</div>
 		</div>
 	)

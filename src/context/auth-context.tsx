@@ -130,7 +130,7 @@ export const AuthContext = ({ children }: { children: React.ReactNode }) => {
       email: email,
       password: password,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
+        emailRedirectTo: `${location.origin}/api/auth/callback`,
         data: {
           full_name: name,
           username: username,
@@ -144,7 +144,7 @@ export const AuthContext = ({ children }: { children: React.ReactNode }) => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: `${location.origin}/auth/callback`,
+        redirectTo: `${location.origin}/api/auth/callback`,
       },
     });
     if (error) throw error;

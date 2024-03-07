@@ -80,8 +80,8 @@ export default function Reviews({
   if (loading) return <div>Loading</div>;
 
   return (
-    <div className="w-full h-full flex flex-col gap-2">
-      <div className="flex flex-col gap-4 justify-between lg:flex-row">
+    <div className="w-full h-full flex flex-col items-center gap-2">
+      <div className="w-full flex flex-col gap-4 justify-between lg:flex-row">
         <MyReviewButton filmId={params.film} />
         <div className="flex flex-1 justify-end gap-2 items-center">
           Trier par
@@ -102,33 +102,35 @@ export default function Reviews({
           </Select>
         </div>
       </div>
-      {/* ALL */}
-      {reviews?.pages[0]?.length ? (
-        <>
-          {reviews?.pages.map((page, i) => (
-            <Fragment key={i}>
-              {page?.map((review: any, index) => (
-                <div
-                  key={review.id}
-                  {...(i === reviews.pages.length - 1 &&
-                  index === page.length - 1
-                    ? { ref: ref }
-                    : {})}
-                >
-                  <MovieReviewOverview
+      <div className='w-full max-w-lg'>
+        {/* ALL */}
+        {reviews?.pages[0]?.length ? (
+          <>
+            {reviews?.pages.map((page, i) => (
+              <Fragment key={i}>
+                {page?.map((review: any, index) => (
+                  <div
                     key={review.id}
-                    activity={review.activity}
-                    review={review}
-                  />
-                </div>
-              ))}
-            </Fragment>
-          ))}
-          {(loading || isFetchingNextPage) && <Loader />}
-        </>
-      ) : (
-        <p className="text-center font-semibold">Aucune critique.</p>
-      )}
+                    {...(i === reviews.pages.length - 1 &&
+                    index === page.length - 1
+                      ? { ref: ref }
+                      : {})}
+                  >
+                    <MovieReviewOverview
+                      key={review.id}
+                      activity={review.activity}
+                      review={review}
+                    />
+                  </div>
+                ))}
+              </Fragment>
+            ))}
+            {(loading || isFetchingNextPage) && <Loader />}
+          </>
+        ) : (
+          <p className="text-center font-semibold">Aucune critique.</p>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 'use client';
-import { handleSearchMovies } from '@/lib/tmdb/tmdb';
 import Link from 'next/link';
 import React, { Fragment, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -11,6 +10,7 @@ import { useAuth } from '@/context/auth-context';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 import { useLocale } from 'next-intl';
+import { handleSearchMovies } from './_actions/handleSearchMovies';
 import { supabase } from '@/lib/supabase/client';
 
 export default function SearchFilmsFull({ query }: { query: string }) {
@@ -30,8 +30,27 @@ export default function SearchFilmsFull({ query }: { query: string }) {
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ['search', 'movie', { search: query }],
-    queryFn: async ({ pageParam = 1 }) =>
-      handleSearchMovies(query, locale, pageParam),
+    queryFn: async ({ pageParam = 1 }) => {
+      if (!query) return null;
+      const data = await handleSearchMovies(query, locale, pageParam);
+			// let from = (pageParam - 1) * numberOfResult;
+			// let to = from - 1 + numberOfResult;
+      // const { data, error } = await supabase
+      //   .from('tmdb_movie')
+      //   .select(`
+      //     *,
+      //     data:tmdb_movie_translation!inner(*)
+      //   `)
+      //   .ilike(`data.title`, `%${query}%`)
+      //   .eq('data.language_id', locale)
+      //   .eq('directors.job', 'Director')
+      //   .order('popularity', { ascending: false})
+      //   .range(from, to)
+      //   .explain({analyze:true,verbose:true});
+      // console.log(data, error);
+      return data;
+    },
+      // handleSearchMovies(query, locale, pageParam),
       // if (!query) return null;
 			// let from = (pageParam - 1) * numberOfResult;
 			// let to = from - 1 + numberOfResult;
@@ -69,7 +88,7 @@ export default function SearchFilmsFull({ query }: { query: string }) {
     getNextPageParam: (results, pages) => {
       return results?.length == numberOfResult ? pages.length + 1 : undefined;
     },
-    enabled: !!query,
+    enabled: !!query && !!locale,
   });
 
   useEffect(() => {
@@ -112,7 +131,7 @@ export default function SearchFilmsFull({ query }: { query: string }) {
     <div className="flex flex-col gap-2">
       {films?.pages.map((page, i) => (
         <Fragment key={i}>
-          {page?.map((film: any, index) => (
+          {page?.map((film: any, index: number) => (
             <Link
               key={film.id}
               href={'/film/' + film.id}
@@ -141,8 +160,8 @@ export default function SearchFilmsFull({ query }: { query: string }) {
                     {film.title}
                   </p>
                   <div>
-                    {film.credits.directors.length ? (
-                      film.credits.directors.map(
+                    {film.directors.length ? (
+                      film.directors.map(
                         (director: any, index: number) => (
                           <span key={director.id}>
                             <Button
@@ -154,7 +173,7 @@ export default function SearchFilmsFull({ query }: { query: string }) {
                                 {director.name}
                               </Link>
                             </Button>
-                            {index !== film.credits.directors.length - 1 && (
+                            {index !== film.directors.length - 1 && (
                               <span>, </span>
                             )}
                           </span>
