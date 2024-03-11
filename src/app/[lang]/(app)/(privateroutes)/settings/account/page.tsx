@@ -1,6 +1,6 @@
 'use client';
 import { Separator } from '@/components/ui/separator';
-import { AccountForm } from '@/app/[lang]/(app)/(privateroutes)/settings/account/components/accountForm';
+import { AccountForm } from '@/app/[lang]/(app)/(privateroutes)/settings/account/_components/accountForm';
 import { useTranslations } from 'next-intl';
 
 export default function SettingsAccountPage() {

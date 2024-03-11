@@ -137,6 +137,14 @@
     },
     "security": {
       "label": "Sécurité"
+    },
+    "notifications": {
+      "label": "Notifications",
+      "description": "Personnalisez les notifications que vous recevez."
+    },
+    "data": {
+      "label": "Données",
+      "description": "Importez ou exportez vos données."
     }
   },
   "feed": {

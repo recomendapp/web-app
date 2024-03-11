@@ -35,6 +35,14 @@ export function SettingsNav({ className, ...props }: SidebarNavProps) {
       title: t('security.label'),
       href: '/settings/security',
     },
+    {
+      title: t('notifications.label'),
+      href: '/settings/notifications',
+    },
+    {
+      title: t('data.label'),
+      href: '/settings/data',
+    },
   ];
 
   return (

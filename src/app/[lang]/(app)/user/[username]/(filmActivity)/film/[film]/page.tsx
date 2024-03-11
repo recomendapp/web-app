@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
-import ProfileMovieActivity from '@/app/[lang]/(app)/user/[username]/(filmActivity)/film/[film]/components/ProfileMovieActivity';
+import ProfileMovieActivity from '@/app/[lang]/(app)/user/[username]/(filmActivity)/film/[film]/_components/ProfileMovieActivity';
 
 export default async function Review({
   params,

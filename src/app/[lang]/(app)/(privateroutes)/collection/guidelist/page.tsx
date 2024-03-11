@@ -1,8 +1,8 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { TableGuidelist } from './components/table/TableGuidelist';
-import { GuidelistHeader } from './components/GuidelistHeader';
+import { TableGuidelist } from './_components/table/TableGuidelist';
+import { GuidelistHeader } from './_components/GuidelistHeader';
 import { useAuth } from '@/context/auth-context';
 import { useLocale } from 'next-intl';
 import { supabase } from '@/lib/supabase/client';

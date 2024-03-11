@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import ProfileNavbar from '@/app/[lang]/(app)/user/[username]/components/ProfileNavbar';
+import ProfileNavbar from '@/app/[lang]/(app)/user/[username]/_components/ProfileNavbar';
 import { createServerClient } from '@/lib/supabase/server';
 
 interface UserLayoutProps {

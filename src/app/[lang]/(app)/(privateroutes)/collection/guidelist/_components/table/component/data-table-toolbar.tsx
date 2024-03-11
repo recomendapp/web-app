@@ -5,7 +5,7 @@ import { Table } from '@tanstack/react-table';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { DataTableViewOptions } from '@/app/[lang]/(app)/(privateroutes)/collection/guidelist/components/table/component/data-table-view-options';
+import { DataTableViewOptions } from '@/app/[lang]/(app)/(privateroutes)/collection/guidelist/_components/table/component/data-table-view-options';
 import { DataTableSortOptions } from './data-table-sort-options';
 
 interface DataTableToolbarProps<TData> {
@@ -21,16 +21,16 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between gap-4">
       <div className="flex flex-1 items-center gap-2">
         <Input
-          placeholder={'Rechercher dans les coups de coeur...'}
+          placeholder={'Rechercher dans la guidelist...'}
           value={
             (table.getColumn('movie')?.getFilterValue() as string) ??
             ''
           }
-          onChange={(event) =>
+          onChange={(event) => {
             table
               .getColumn('movie')
-              ?.setFilterValue(event.target.value)
-          }
+              ?.setFilterValue(event.target.value);
+          }}
           className="h-8 w-full lg:w-[250px]"
         />
         {isFiltered && (

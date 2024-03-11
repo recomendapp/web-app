@@ -205,6 +205,7 @@ export function PlaylistForm({
       toast.success('Enregistré');
       success();
     } catch (error) {
+      console.log("OUPS")
       console.error('error', error);
       toast.error("Une erreur s'est produite");
     } finally {

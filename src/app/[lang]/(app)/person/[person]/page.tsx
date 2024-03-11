@@ -1,12 +1,12 @@
 import { getMovieDetails, getPersonDetails } from '@/lib/tmdb/tmdb';
-import MovieHeader from './components/PersonHeader';
-import MovieDescription from './components/PersonDescription';
-import MovieNavbar from './components/PersonNavbar';
+import MovieHeader from './_components/PersonHeader';
+import MovieDescription from './_components/PersonDescription';
+import MovieNavbar from './_components/PersonNavbar';
 import { notFound } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
-import PersonHeader from './components/PersonHeader';
-import PersonNavbar from './components/PersonNavbar';
-import PersonDescription from './components/PersonDescription';
+import PersonHeader from './_components/PersonHeader';
+import PersonNavbar from './_components/PersonNavbar';
+import PersonDescription from './_components/PersonDescription';
 
 // GRAPHQL
 import apolloServer from '@/lib/apollo/server';

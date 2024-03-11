@@ -1,8 +1,8 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { TableWatchlist } from './components/table/TableWatchlist';
-import { WatchlistHeader } from './components/WatchlistHeader';
+import { TableWatchlist } from './_components/table/TableWatchlist';
+import { WatchlistHeader } from './_components/WatchlistHeader';
 import { useAuth } from '@/context/auth-context';
 import { useLocale } from 'next-intl';
 import { supabase } from '@/lib/supabase/client';

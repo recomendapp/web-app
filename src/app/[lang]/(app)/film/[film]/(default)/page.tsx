@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import MovieDescription from './components/MovieDescription';
+import MovieDescription from './_components/MovieDescription';
 
 // SUPABASE
 import { createServerClient } from '@/lib/supabase/server';

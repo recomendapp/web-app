@@ -1,8 +1,8 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { TableLikes } from './components/table/TableLikes';
-import { LikesHeader } from './components/LikesHeader';
+import { TableLikes } from './_components/table/TableLikes';
+import { LikesHeader } from './_components/LikesHeader';
 import { useAuth } from '@/context/auth-context';
 import { useLocale } from 'next-intl';
 import { supabase } from '@/lib/supabase/client';

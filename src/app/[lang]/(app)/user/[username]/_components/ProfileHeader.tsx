@@ -1,4 +1,4 @@
-import { ProfileFollowButton } from '@/app/[lang]/(app)/user/[username]/components/ProfileFollowButton';
+import { ProfileFollowButton } from '@/app/[lang]/(app)/user/[username]/_components/ProfileFollowButton';
 import UserAvatar from '@/components/User/UserAvatar/UserAvatar';
 import { Button } from '@/components/ui/button';
 import { LinkIcon, Settings } from 'lucide-react';

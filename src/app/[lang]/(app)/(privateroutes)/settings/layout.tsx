@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { SettingsNav } from '@/app/[lang]/(app)/(privateroutes)/settings/components/SettingsNav';
+import { SettingsNav } from '@/app/[lang]/(app)/(privateroutes)/settings/_components/SettingsNav';
 import { useTranslations } from 'next-intl';
 
 export const metadata: Metadata = {

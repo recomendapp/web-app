@@ -1,4 +1,4 @@
-import ProfileFilm from '@/app/[lang]/(app)/user/[username]/(profile)/films/components/ProfileFilms';
+import ProfileFilm from '@/app/[lang]/(app)/user/[username]/(profile)/films/_components/ProfileFilms';
 import { createServerClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 

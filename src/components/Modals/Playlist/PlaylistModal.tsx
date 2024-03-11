@@ -8,7 +8,7 @@ import {
 import React, { useState } from 'react';
 import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
 import { useAuth } from '@/context/auth-context';
-import PlaylistGuest from '@/app/[lang]/(app)/playlist/[playlist]/components/guest/PlaylistGuest';
+import PlaylistGuest from '@/app/[lang]/(app)/playlist/[playlist]/_components/guest/PlaylistGuest';
 import { useModal } from '@/context/modal-context';
 import { Playlist } from '@/types/type.db';
 

@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 
 // COMPONENTS
-import PlaylistTable from '@/app/[lang]/(app)/playlist/[playlist]/components/table/PlaylistTable';
-import PlaylistHeader from '@/app/[lang]/(app)/playlist/[playlist]/components/PlaylistHeader';
+import PlaylistTable from '@/app/[lang]/(app)/playlist/[playlist]/_components/table/PlaylistTable';
+import PlaylistHeader from '@/app/[lang]/(app)/playlist/[playlist]/_components/PlaylistHeader';
 import { useAuth } from '@/context/auth-context';
 import { supabase } from '@/lib/supabase/client';
 import { useQuery } from '@tanstack/react-query';

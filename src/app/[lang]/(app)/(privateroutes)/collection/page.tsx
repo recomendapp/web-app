@@ -18,7 +18,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button';
-import { UserPlaylistsLiked } from './components/UserPlaylistsLiked';
+import { UserPlaylistsLiked } from './_components/UserPlaylistsLiked';
 import CollectionIcon from '@/components/Collection/CollectionIcon';
 
 export default function Collection() {

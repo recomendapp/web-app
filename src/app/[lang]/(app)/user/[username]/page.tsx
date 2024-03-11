@@ -1,7 +1,7 @@
-import ProfileFavoriteFilms from '@/app/[lang]/(app)/user/[username]/components/ProfileFavoriteFilms';
-import ProfileHeader from '@/app/[lang]/(app)/user/[username]/components/ProfileHeader';
-import ProfileNavbar from '@/app/[lang]/(app)/user/[username]/components/ProfileNavbar';
-import ProfileLastActivity from '@/app/[lang]/(app)/user/[username]/components/ProfileLastActivity';
+import ProfileFavoriteFilms from '@/app/[lang]/(app)/user/[username]/_components/ProfileFavoriteFilms';
+import ProfileHeader from '@/app/[lang]/(app)/user/[username]/_components/ProfileHeader';
+import ProfileNavbar from '@/app/[lang]/(app)/user/[username]/_components/ProfileNavbar';
+import ProfileLastActivity from '@/app/[lang]/(app)/user/[username]/_components/ProfileLastActivity';
 import { createServerClient } from '@/lib/supabase/server';
 import { GetUserByIdQuery, GetUserQuery } from '@/graphql/__generated__/graphql';
 

@@ -21,12 +21,12 @@ export default function SidebarCollectionRoutes() {
   const collectionRoutes = useMemo(
     () => [
       {
-        icon: <Heart fill="#fff" className="w-2/5 h-2/5" />,
-        bgFrom: '#e6619b',
-        bgTo: '#e84749',
-        label: 'Coups de coeur',
-        active: pathname.startsWith('/collection/likes'),
-        href: '/collection/likes',
+        icon: <Send fill="#fff" className="w-2/5 h-2/5" />,
+        bgFrom: '#FBE773',
+        bgTo: '#F18E43',
+        label: 'Guidelist',
+        active: pathname.startsWith('/collection/guidelist'),
+        href: '/collection/guidelist',
       },
       {
         icon: <Bookmark fill="#fff" className="w-2/5 h-2/5" />,
@@ -37,12 +37,12 @@ export default function SidebarCollectionRoutes() {
         href: '/collection/watchlist',
       },
       {
-        icon: <Send fill="#fff" className="w-2/5 h-2/5" />,
-        bgFrom: '#FBE773',
-        bgTo: '#F18E43',
-        label: 'Guidelist',
-        active: pathname.startsWith('/collection/guidelist'),
-        href: '/collection/guidelist',
+        icon: <Heart fill="#fff" className="w-2/5 h-2/5" />,
+        bgFrom: '#e6619b',
+        bgTo: '#e84749',
+        label: 'Coups de coeur',
+        active: pathname.startsWith('/collection/likes'),
+        href: '/collection/likes',
       },
     ],
     [pathname]

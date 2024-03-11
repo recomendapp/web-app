@@ -5,23 +5,31 @@ import { Table } from '@tanstack/react-table';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { DataTableViewOptions } from '@/app/[lang]/(app)/(privateroutes)/collection/guidelist/components/table/component/data-table-view-options';
+import { DataTableViewOptions } from '@/app/[lang]/(app)/(privateroutes)/collection/guidelist/_components/table/component/data-table-view-options';
 import { DataTableSortOptions } from './data-table-sort-options';
+
+// GRAPHQL
+import { PlaylistAction } from '../../../../../../../../components/Playlist/FilmPlaylist/Actions/PlaylistAction';
+import { useAuth } from '@/context/auth-context';
+import { Playlist } from '@/types/type.db';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
+  playlist: Playlist;
 }
 
 export function DataTableToolbar<TData>({
   table,
+  playlist,
 }: DataTableToolbarProps<TData>) {
+  const { user } = useAuth();
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
-    <div className="flex items-center justify-between gap-4">
-      <div className="flex flex-1 items-center gap-2">
+    <div className="flex flex-col-reverse items-end lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div className="flex flex-1 items-center gap-2 w-full">
         <Input
-          placeholder={'Rechercher dans la guidelist...'}
+          placeholder={'Rechercher dans la playlist...'}
           value={
             (table.getColumn('movie')?.getFilterValue() as string) ??
             ''
@@ -44,8 +52,13 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      <DataTableSortOptions table={table} />
-      <DataTableViewOptions table={table} />
+      <div className="w-full lg:w-fit flex items-center justify-between gap-2">
+        {user?.id !== playlist?.user_id ? <PlaylistAction playlistId={playlist?.id!} /> : <div></div>}
+        <div className="w-fit flex items-center gap-2">
+          <DataTableSortOptions table={table} />
+          <DataTableViewOptions table={table} />
+        </div>
+      </div>
     </div>
   );
 }

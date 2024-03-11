@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import MovieCard from "@/components/Movie/Card/MovieCard";
 import MovieReviewForm from "@/components/Review/form/MovieReviewForm";
 import MovieReviewActions from "@/components/Review/actions/MovieReviewActions";
-import MovieReviewComments from "./MovieReviewComments";
+import MovieReviewComments from "./comments/MovieReviewComments";
 
 export default function Review({
 	reviewId,
