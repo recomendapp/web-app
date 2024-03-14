@@ -16,6 +16,13 @@ export function Importer() {
 	const [file, setFile] = useState<File | null>(null);
 	const sources: ImporterSource[]= [
 		{
+			source: 'recomend',
+			name: 'Recomend',
+			description: 'Import your data from Recomend',
+			icon: 'recomend',
+			enabled: true,
+		},
+		{
 			source: 'letterboxd',
 			name: 'Letterboxd',
 			description: 'Import your data from Letterboxd',
@@ -27,27 +34,6 @@ export function Importer() {
 			name: 'SensCritique',
 			description: 'Import your data from SensCritique',
 			icon: 'senscritique',
-			enabled: true,
-		},
-		{
-			source: 'trakt',
-			name: 'Trakt',
-			description: 'Import your data from Trakt',
-			icon: 'trakt',
-			enabled: false,
-		},
-		{
-			source: 'tmdb',
-			name: 'TMDB',
-			description: 'Import your data from TMDB',
-			icon: 'tmdb',
-			enabled: false,
-		},
-		{
-			source: 'imdb',
-			name: 'IMDB',
-			description: 'Import your data from IMDB',
-			icon: 'imdb',
 			enabled: false,
 		},
 		{
@@ -86,7 +72,7 @@ const SelectSource = ({
 	setSelectedSource: (source: ImporterSource | null) => void;
 }) => {
 	return (
-		<div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+		<div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
 			{sources.sort((a, b) => a.enabled === b.enabled ? 0 : a.enabled ? -1 : 1).map(source => (
 				<Button
 					variant={'muted'}

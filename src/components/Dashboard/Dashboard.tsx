@@ -7,6 +7,8 @@ import { useTranslations } from 'next-intl';
 // WIDGETS
 import { UserMovieGuidelistWidget } from '@/components/Widget/UserMovieGuidelistWidget';
 import { UserMovieWatchlistWidget } from '@/components/Widget/UserMovieWatchlistWidget';
+import { MovieNowPlayingWidget } from '../Widget/MovieNowPlayingWidget/MovieNowPlayingWidget';
+import { MovieUpcomingWidget } from '../Widget/MovieUpcomingWidget/MovieUpcomingWidget';
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
@@ -20,8 +22,8 @@ export default function Dashboard() {
       </div>
       <UserMovieWatchlistWidget />
       <UserMovieGuidelistWidget />
-      {/* <MovieNowPlayingWidget />
-      <MovieUpcomingWidget /> */}
+      <MovieNowPlayingWidget />
+      <MovieUpcomingWidget />
     </main>
   );
 }

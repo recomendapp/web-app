@@ -92,7 +92,7 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
     mutationFn: async ({ rating } : { rating: number | null }) => {
       if (!activity?.id ) throw Error('Missing activity id');
       if (rating === undefined ) throw Error('Missing rating');
-      const {data, error } = await supabase
+      const { data, error } = await supabase
         .from('user_movie_activity')
         .update({
             rating: rating,
@@ -134,7 +134,7 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
     });
   };
 
-  if (!user === null) {
+  if (user === null) {
     return (
       <Tooltip>
         <TooltipTrigger asChild>
