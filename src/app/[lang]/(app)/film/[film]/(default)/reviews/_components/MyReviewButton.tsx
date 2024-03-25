@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/context/auth-context";
 import { supabase } from "@/lib/supabase/client";
 import { UserMovieActivity } from "@/types/type.db";
@@ -28,7 +29,12 @@ export function MyReviewButton({ filmId }: { filmId: number }) {
 	  enabled: !!user?.id && !!filmId,
 	});
   
-	if (!user || isLoading || activity === undefined) return;
+	if (!user) return;
+
+	if (isLoading)
+	  return (
+		<Skeleton className="w-36 h-10 rounded-full"/>
+	  );
   
 	if (!isLoading && !activity?.review)
 	  return (
@@ -50,4 +56,4 @@ export function MyReviewButton({ filmId }: { filmId: number }) {
 		Ma critique
 	  </Link>
 	);
-  }
+}

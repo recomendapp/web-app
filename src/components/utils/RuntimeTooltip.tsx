@@ -30,7 +30,7 @@ export function RuntimeTooltip({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <span className={cn('w-fit', className)}>{ConvertHoursMinutes(runtime ?? 0)}</span>
+        <span className={cn('w-fit cursor-pointer', className)}>{ConvertHoursMinutes(runtime ?? 0)}</span>
       </TooltipTrigger>
       <TooltipContent align="center" side="bottom">
         {runtime ? `Se termine à ${formattedEndTime}` : 'Unknown'}

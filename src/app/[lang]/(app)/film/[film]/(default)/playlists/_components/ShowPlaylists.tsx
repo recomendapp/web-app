@@ -7,13 +7,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../ui/select';
+} from '../../../../../../../../components/ui/select';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase/client';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
-import MoviePlaylistCard from '../FilmPlaylist/MoviePlaylistCard';
+import MoviePlaylistCard from '../../../../../../../../components/Playlist/FilmPlaylist/MoviePlaylistCard';
 
 export function ShowPlaylists({ filmId }: { filmId: string }) {
   const [order, setOrder] = useState('recent');

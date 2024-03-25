@@ -47,9 +47,9 @@ export default function Reviews({
       const [tablePart, orderPart] = order.split('-');
 
       if (tablePart === 'like') {
-        column = 'created_at';
+        column = 'likes_count';
       } else if (tablePart == 'rating') {
-        column = 'user_movie_activity.rating';
+        column = 'activity.rating';
       } else {
         column = 'updated_at';
       }
@@ -63,7 +63,6 @@ export default function Reviews({
         .eq('movie_id', params.film)
         .range(from, to)
         .order(column, { ascending });
-
       return data;
     },
     initialPageParam: 1,
@@ -76,8 +75,6 @@ export default function Reviews({
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage();
   }, [inView, hasNextPage, fetchNextPage]);
-
-  if (loading) return <div>Loading</div>;
 
   return (
     <div className="w-full h-full flex flex-col items-center gap-2">
@@ -93,10 +90,10 @@ export default function Reviews({
               <SelectGroup>
                 <SelectItem value={'recent'}>Récentes</SelectItem>
                 <SelectItem value={'like-desc'}>Populaires</SelectItem>
-                <SelectItem value={'rating-desc'}>
+                {/* <SelectItem value={'rating-desc'}>
                   Notes décroissantes
                 </SelectItem>
-                <SelectItem value={'rating-asc'}>Notes croissantes</SelectItem>
+                <SelectItem value={'rating-asc'}>Notes croissantes</SelectItem> */}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -104,25 +101,23 @@ export default function Reviews({
       </div>
       <div className='w-full max-w-lg'>
         {/* ALL */}
-        {reviews?.pages[0]?.length ? (
+        {(loading || reviews === undefined) ? (
+          <Loader />
+        ) : reviews?.pages[0]?.length ? (
           <>
             {reviews?.pages.map((page, i) => (
               <Fragment key={i}>
                 {page?.map((review: any, index) => (
-                  <div
+                  <MovieReviewOverview
                     key={review.id}
+                    activity={review.activity}
+                    review={review}
                     {...(i === reviews.pages.length - 1 &&
-                    index === page.length - 1
-                      ? { ref: ref }
-                      : {})}
-                  >
-                    <MovieReviewOverview
-                      key={review.id}
-                      activity={review.activity}
-                      review={review}
-                    />
-                  </div>
-                ))}
+                      index === page.length - 1
+                        ? { ref: ref }
+                        : {})}
+                  />
+              ))}
               </Fragment>
             ))}
             {(loading || isFetchingNextPage) && <Loader />}

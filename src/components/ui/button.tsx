@@ -27,7 +27,7 @@ const buttonVariants = cva(
           'bg-accent-1 text-accent-1-foreground hover:bg-accent-1-hover',
         rating: 'text-foreground hover:text-accent-1',
         'rating-enabled':
-          'border-2 border-accent-1 text-accent-1 hover:text-accent-1-foreground hover:bg-accent-1 bg-background',
+          '!p-0 !aspect-[3/2] border-2 border-accent-1 rounded-sm text-accent-1 hover:text-accent-1-foreground hover:bg-accent-1 bg-background',
         share:
           'text-destructive-foreground hover:bg-blue-500/10 hover:text-blue-300 rounded-full',
       },
@@ -36,7 +36,6 @@ const buttonVariants = cva(
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
         icon: 'h-10 w-10',
-        rating: 'h-10 w-12 rounded-xl',
       },
     },
     defaultVariants: {

@@ -139,7 +139,6 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            size="rating"
             variant={'rating'}
             asChild
           >
@@ -162,7 +161,6 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
           <DialogTrigger asChild>
             <Button
               disabled={isLoading || isError || activity === undefined}
-              size="rating"
               variant={activity?.rating ? 'rating-enabled' : 'rating'}
             >
               {(isLoading || activity === undefined) ? (

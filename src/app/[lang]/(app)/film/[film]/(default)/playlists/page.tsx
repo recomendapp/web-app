@@ -1,4 +1,4 @@
-import { ShowPlaylists } from '@/components/Playlist/ShowPlaylists/ShowPlaylists';
+import { ShowPlaylists } from '@/app/[lang]/(app)/film/[film]/(default)/playlists/_components/ShowPlaylists';
 
 export default async function Reviews({
   params,

@@ -90,7 +90,7 @@ export default function SidebarCollection({
           </div>
         )}
       </div>
-      <ScrollArea className='w-full h-[50vh] group-[[data-collapsed=false]]:px-2'>
+      <ScrollArea className='w-full h-[61vh] group-[[data-collapsed=false]]:px-2'>
         <SidebarCollectionRoutes />
         <SidebarCollectionPlaylists />
         <ScrollBar orientation="vertical" />

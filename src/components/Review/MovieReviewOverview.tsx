@@ -38,17 +38,16 @@ export default function MovieReviewOverview({
       href={`/film/${review?.movie_id}/review/${review?.id}`}
 		  // className="flex items-start gap-2 bg-muted rounded-xl p-2"
       className={cn(
-        'flex items-start gap-2 bg-muted rounded-xl p-2',
+        'flex flex-col bg-muted rounded-xl p-2 w-full gap-2',
         className
       )}
 	  >
-		  <UserCard user={review.user} icon />
-      <div className='w-full space-y-2'>
         {/* HEADER */}
         <div className='w-full flex justify-between gap-2'>
-          <Link href={`/@${review.user?.username}`} className='line-clamp-1'>
-            {review.user?.username}
-          </Link>
+          <div className="flex gap-2 items-center w-full">
+            <Rating movieId={activity?.movie_id!} rating={activity?.rating} is_liked={activity?.is_liked} />
+            <p className="font-semibold line-clamp-1">{review?.title}</p>
+          </div>
           <div className="flex justify-center items-center shrink-0">
             <div className='text-sm text-muted-foreground'>
               {format.relativeTime(new Date(review.created_at), now)}
@@ -56,15 +55,10 @@ export default function MovieReviewOverview({
             {/* <MovieReviewSettings review={review} /> */}
           </div>
         </div>
+        <UserCard user={review.user} />
         {/* BODY */}
-        <div>
-          <div className="flex gap-2 items-center">
-            <Rating rating={activity?.rating} is_liked={activity?.is_liked} />
-            <p className="font-semibold line-clamp-1">{review?.title}</p>
-          </div>
-          <div className="overflow-hidden text-sm">
-            <Overview data={JSON.parse(review?.body ?? '')} />
-          </div>
+        <div className="overflow-hidden text-sm">
+          <Overview data={JSON.parse(review?.body ?? '')} />
         </div>
         {/* ACTIVITY */}
         <div className='flex justify-between items-center'>
@@ -79,7 +73,7 @@ export default function MovieReviewOverview({
             <UserMovieReviewLike reviewId={review?.id} />
           </div>
         </div>
-      </div>
+      {/* </div> */}
 	  </Link>
     // <Link
     //   href={`/film/${review?.movie_id}/review/${review?.id}`}

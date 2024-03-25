@@ -28,7 +28,7 @@ export const UserMovieGuidelistWidget = () => {
     isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery({
-    queryKey: ['user', user?.id, 'guidelist', { order: 'created_at-asc'}],
+    queryKey: ['user', user?.id, 'guidelist', { order: 'random'}],
     queryFn: async ({ pageParam = 1 }) => {
       if (!user?.id || !locale) return;
 
@@ -36,7 +36,7 @@ export const UserMovieGuidelistWidget = () => {
       let to = from - 1 + numberOfResult;
 
       const { data, error } = await supabase
-        .from('user_movie_guidelist')
+        .from('user_movie_guidelist_random')
         .select(`
           *,
           movie:tmdb_movie(
@@ -47,7 +47,6 @@ export const UserMovieGuidelistWidget = () => {
         .eq('user_id', user.id)
         .eq('movie.data.language_id', locale)
         .range(from, to)
-        .order('created_at', { ascending: true});
       if (error) throw error;
       return data;
     },

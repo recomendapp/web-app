@@ -66,15 +66,16 @@ export default function MovieCard({
                 {(movieActivity?.is_liked ||
                   movieActivity?.rating ||
                   movieActivity?.review) && (
-                  <div className="absolute -bottom-2 mx-auto my-auto w-full flex justify-center pointer-events-none">
+                  <div className="absolute top-1 right-1 pointer-events-none">
                     <Link
                       href={`/@${movieActivity?.user?.username}/film/${movie.id}`}
                       className="pointer-events-auto"
                     >
                       <ActivityIcon
+                        movieId={movieActivity.movie_id}
                         rating={movieActivity?.rating}
                         is_liked={movieActivity?.is_liked}
-                        is_reviewed={movieActivity?.review ? true : false}
+                        is_reviewed={movieActivity?.review?.id ?? null}
                       />
                     </Link>
                   </div>

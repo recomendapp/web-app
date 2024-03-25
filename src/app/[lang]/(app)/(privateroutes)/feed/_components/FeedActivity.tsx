@@ -46,7 +46,7 @@ activity: any;
 				  movie: () => (
 					<MovieHoverCard movie={activity.movie} />
 				  ),
-				  rating: () => <Rating rating={activity.rating} />,
+				  rating: () => <Rating movieId={activity.movie_id} rating={activity.rating} className="inline-flex"/>,
 				})}
 			  </span>
 			) : activity.is_liked && !activity.rating ? (
@@ -73,7 +73,7 @@ activity: any;
 				  movie: () => (
 					<MovieHoverCard movie={activity.movie} />
 				  ),
-				  rating: () => `${activity.rating}/10`,
+				  rating: () => <Rating movieId={activity.movie_id} rating={activity.rating} className="inline-flex"/>,
 				})}
 			  </span>
 			) : (

@@ -26,12 +26,12 @@ export default function Collection() {
     () => [
       {
         icon: (
-          <CollectionIcon from="#e6619b" to="#e84749">
-            <Heart fill="#fff" className="w-2/5 h-2/5" />
+          <CollectionIcon from="#FBE773" to="#F18E43">
+            <Send fill="#fff" className="w-2/5 h-2/5" />
           </CollectionIcon>
         ),
-        label: 'Coups de coeur',
-        href: '/collection/likes',
+        label: 'Guidelist',
+        href: '/collection/guidelist',
       },
       {
         icon: (
@@ -44,12 +44,12 @@ export default function Collection() {
       },
       {
         icon: (
-          <CollectionIcon from="#FBE773" to="#F18E43">
-            <Send fill="#fff" className="w-2/5 h-2/5" />
+          <CollectionIcon from="#e6619b" to="#e84749">
+            <Heart fill="#fff" className="w-2/5 h-2/5" />
           </CollectionIcon>
         ),
-        label: 'Guidelist',
-        href: '/collection/guidelist',
+        label: 'Coups de coeur',
+        href: '/collection/likes',
       },
     ],
     []
