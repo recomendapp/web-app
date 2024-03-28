@@ -25,15 +25,12 @@ export async function JustWatchWidget({
 }) {
 	const locale = useLocale();
 
-	const streamingRequest = await fetch(`https://apis.justwatch.com/contentpartner/v2/content/offers/object_type/movie/id_type/tmdb/id/${id}/locale/fr_FR?token=${process.env.NEXT_PUBLIC_JUSTWATCH_API_KEY}`);
-	const streaming = await streamingRequest.json();
+	// const streamingRequest = await fetch(`https://apis.justwatch.com/contentpartner/v2/content/offers/object_type/movie/id_type/tmdb/id/${id}/locale/fr_FR?token=${process.env.NEXT_PUBLIC_JUSTWATCH_API_KEY}`);
+	// const streaming = await streamingRequest.json();
 	// console.log('streaming', streaming);
 
 	return (
 		<div>
-			<div>
-				{JSON.stringify(streaming, null, 2)}
-			</div>
 			<div data-jw-widget
 				data-api-key={process.env.NEXT_PUBLIC_JUSTWATCH_API_KEY}
 				data-object-type={type}
