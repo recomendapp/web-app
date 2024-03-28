@@ -21,9 +21,9 @@ interface UserCardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export default function UserCard({
   user,
-  className,
   icon,
   full = false,
+  className,
 }: UserCardProps) {
   if (full)
     return (

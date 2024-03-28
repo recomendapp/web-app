@@ -86,7 +86,7 @@ export default function ProfilePlaylists({ profile }: UserPlaylistsProps) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between gap-4 items-center">
-        <h3 className="font-semibold text-xl text-accent-1">Playlists</h3>
+        <h3 className="font-semibold text-xl">Playlists</h3>
         <Select onValueChange={changeOrder} defaultValue={selectedOrder}>
           <SelectTrigger className="w-fit">
             <SelectValue />

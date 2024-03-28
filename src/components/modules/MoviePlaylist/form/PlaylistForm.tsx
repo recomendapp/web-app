@@ -97,19 +97,23 @@ export function PlaylistForm({
   });
 
   const { mutateAsync: updatePlaylistMutation } = useMutation({
-    mutationFn: async (
+    mutationFn: async ({
+      playlistId,
+      payload
+    } : {
+      playlistId: number,
       payload: {
         title?: string;
         description?: string;
         is_public?: boolean;
         poster_url?: string | null;
       }
-    ) => {
-      if (!playlist?.id ) throw Error('Missing activity id');
+    }) => {
+      if (!playlistId) throw Error('Missing activity id');
       const {data: response, error } = await supabase
         .from('playlist')
         .update(payload)
-        .eq('id', playlist?.id)
+        .eq('id', playlistId)
         .select(`*`)
         .single()
       if (error) throw error;
@@ -118,22 +122,26 @@ export function PlaylistForm({
   });
 
   const { mutateAsync: deletePlaylistMutation } = useMutation({
-    mutationFn: async () => {
-      if (!playlist?.id) throw Error('Missing playlist id');
+    mutationFn: async ({
+      playlistId
+    } : {
+      playlistId: number
+    }) => {
+      if (!playlistId) throw Error('Missing playlist id');
       const { error } = await supabase
         .from('playlist')
         .delete()
-        .eq('id', playlist?.id)
+        .eq('id', playlistId)
       if (error) throw error;
       return (playlist);
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       queryClient.setQueryData(['user', user?.id, 'playlists', { order: 'updated_at-desc'}], (oldData: any) => {
         if (!oldData || !oldData.pages) {
             return oldData;
         }
         const updatedPages = oldData.pages.map((page: Playlist[]) => {
-            return page.filter((playlist) => playlist?.id !== data.id);
+            return page.filter((playlist) => playlist?.id !== data?.id);
         });
         return { ...oldData, pages: updatedPages };
       });
@@ -199,14 +207,15 @@ export function PlaylistForm({
         if (!newPlaylist.id) throw Error('Playlist id not found');
         const newPosterUrl = await uploadPoster(newPoster, newPlaylist.id);
         await updatePlaylistMutation({
-          poster_url: newPosterUrl,
+          playlistId: newPlaylist.id,
+          payload: {
+            poster_url: newPosterUrl,
+          },
         });
       }
       toast.success('Enregistré');
       success();
     } catch (error) {
-      console.log("OUPS")
-      console.error('error', error);
       toast.error("Une erreur s'est produite");
     } finally {
       setLoading(false);
@@ -227,7 +236,10 @@ export function PlaylistForm({
         const newPosterUrl = await uploadPoster(newPoster, playlist?.id);
         payload.poster_url = newPosterUrl;
       }
-      await updatePlaylistMutation(payload);
+      await updatePlaylistMutation({
+        playlistId: playlist.id,
+        payload,
+      });
       toast.success('Enregistré');
       success();
     } catch (error) {
@@ -238,13 +250,13 @@ export function PlaylistForm({
   }
 
   async function handleDeletePlaylist() {
+    if (!playlist?.id) throw Error('Missing activity id');
     try {
       setLoading(true);
-      console.log('step1')
-      const deletedPlaylist = await deletePlaylistMutation();
-      console.log('step2')
-      if (pathname.startsWith(`/playlist/${deletedPlaylist.id}`)) router.push('/');
-      console.log('step3')
+      const deletedPlaylist = await deletePlaylistMutation({
+        playlistId: playlist?.id,
+      });
+      if (pathname.startsWith(`/playlist/${playlist.id}`)) router.push('/');
       toast.success('Supprimé');
       success();
     } catch(error) {

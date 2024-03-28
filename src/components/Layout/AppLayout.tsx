@@ -6,6 +6,7 @@ import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { useUiContext } from '@/context/ui-context';
 import { cn } from '@/lib/utils';
+import RightSidebar from "../RightSidebar/RightSidebar";
 
 export default function AppLayout({
 	children,
@@ -25,6 +26,13 @@ export default function AppLayout({
 		sidebarRef,
 		sidebarMinSize,
 		sidebarMaxSize,
+		isRightPanelCollapsed,
+		collapseRightPanel,
+		expandRightPanel,
+		rightPanelCollapsedSize,
+		rightPanelRef,
+		rightPanelMinSize,
+		rightPanelMaxSize,
 	} = useUiContext()
 
 	return (
@@ -55,7 +63,10 @@ export default function AppLayout({
 				</ResizablePanel>
 				<ResizableHandle withHandle className='hidden lg:flex bg-transparent hover:bg-accent-1 transition-colors'/>
 				{/* MAIN */}
-				<ResizablePanel defaultSize={uiLayout[1]} minSize={30}>
+				<ResizablePanel
+					defaultSize={uiLayout[1]}
+					minSize={50}
+				>
 					<Box className="h-full overflow-auto p-0">
 						{header}
 						<div
@@ -68,13 +79,21 @@ export default function AppLayout({
 						</div>
 					</Box>
 				</ResizablePanel>
-				{/* <ResizableHandle withHandle className='hidden lg:flex bg-transparent hover:bg-accent-1 transition-colors'/> */}
+				{!isRightPanelCollapsed && <ResizableHandle withHandle className='hidden lg:flex bg-transparent hover:bg-accent-1 transition-colors'/>}
 				{/* RIGHTPANEL */}
-				{/* <ResizablePanel defaultSize={defaultLayout[2]} className='hidden lg:flex'>
-					<div>
-						ok
-					</div>
-				</ResizablePanel> */}
+				<ResizablePanel
+					ref={rightPanelRef}
+					defaultSize={uiLayout[2]}
+					collapsedSize={rightPanelCollapsedSize}
+					collapsible={true}
+					minSize={rightPanelMinSize}
+					maxSize={rightPanelMaxSize}
+					onCollapse={collapseRightPanel}
+					onExpand={expandRightPanel}
+					className='hidden lg:flex'
+				>
+					<RightSidebar />
+				</ResizablePanel>
 				
 			</ResizablePanelGroup>
 		</div>

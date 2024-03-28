@@ -9,6 +9,8 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 // ICONS
 import { HiSparkles } from "react-icons/hi2";
 import { User } from '@/types/type.db';
+import { ProfileFollowersButton } from './ProfileFollowersButton/ProfileFollowersButton';
+import { ProfileFolloweesButton } from './ProfileFolloweesButton/ProfileFolloweesButton';
 
 export default async function ProfileHeader({ profile }: { profile: User }) {
   const supabase = createServerClient();
@@ -29,8 +31,8 @@ export default async function ProfileHeader({ profile }: { profile: User }) {
         />
         <div className="flex flex-col gap-2 items-end">
           <div className="flex items-center @lg:hidden">
-            <Button variant={'action'}>followers</Button>
-            <Button variant={'action'}>suivi(e)s</Button>
+            <ProfileFollowersButton userId={profile?.id!} />
+            <ProfileFolloweesButton userId={profile?.id!} />
             {user?.id == profile?.id && (
               <Button variant={'action'} asChild>
                 <Link href={'/settings/profile'}>
@@ -59,14 +61,11 @@ export default async function ProfileHeader({ profile }: { profile: User }) {
             <span className="text-muted-foreground">@{profile?.username}</span>
           </Link>
           <div className="hidden @lg:flex items-center gap-2">
-            <Button variant={'action'} className="hidden sm:block">
-              {/* {profile.followers_count} */}
-              followers
-            </Button>
-            <Button variant={'action'}>
-              {/* {profile.following_count} */}
+            <ProfileFollowersButton userId={profile?.id!} className="hidden sm:block" />
+            <ProfileFolloweesButton userId={profile?.id!} className="hidden sm:block" />
+            {/* <Button variant={'action'}>
               suivi(e)s
-            </Button>
+            </Button> */}
             {user?.id == profile?.id && (
               <Button variant={'action'} asChild>
                 <Link href={'/settings/profile'}>

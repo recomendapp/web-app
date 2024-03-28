@@ -34,6 +34,7 @@ import { Icons } from '@/components/icons';
 // import MapFilter from './mapfilters/MapFiltersOLD';
 import { MapFilters } from './mapfilters/mapfilters';
 import { useLocale } from 'next-intl';
+import { MapSearchbar } from './MapSearchbar';
 
 const environment_items = [
   'bush.png',
@@ -892,8 +893,8 @@ export function Map() {
       )}
       <div className="w-full h-full flex flex-col relative bg-[#110731] bg-opacity-20">
         {/* HEADER MAP */}
-        <div className="absolute z-10  pt-4 px-4 gap-2  w-full pointer-events-none flex flex-col justify-between lg:flex-row">
-          <div className="bg-green-500 pointer-events-auto">SEARCHBAR</div>
+        <div className="absolute  pt-4 px-4 gap-2  w-full pointer-events-none flex flex-col justify-between lg:flex-row">
+          <MapSearchbar />
           <div className="flex justify-end pointer-events-auto">
             <MapFilters
               closePopupMovie={handleUnselectMovie}

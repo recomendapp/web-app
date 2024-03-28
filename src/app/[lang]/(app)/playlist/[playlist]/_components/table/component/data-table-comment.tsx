@@ -30,15 +30,18 @@ export function DataComment({ playlistItem }: { playlistItem: PlaylistItem }) {
   
   return (
     <>
-      <p onClick={() => openModal({
-        id: `playlist-item-${playlistItem?.id}-comment`,
-        content: <PlaylistCommentModal id={`playlist-item-${playlistItem?.id}-comment`} playlistItem={playlistItem} />,
-      })}>
+      <p
+        onClick={() => openModal({
+          id: `playlist-item-${playlistItem?.id}-comment`,
+          content: <PlaylistCommentModal id={`playlist-item-${playlistItem?.id}-comment`} playlistItem={playlistItem} />,
+        })}
+        className='text-muted-foreground'
+      >
         {isAllowedToEdit ? (
           playlistItem?.comment ? (
             <span className="line-clamp-2 break-all">{playlistItem.comment}</span>
           ) : (
-            <span className='line-clamp-1 italic text-muted-foreground'>Ajouter un commentaire...</span>
+            <span className='line-clamp-1 italic'>Ajouter un commentaire...</span>
           )
         ) : (
           <p className="line-clamp-2 break-all">{playlistItem?.comment}</p>

@@ -71,7 +71,7 @@ export default function ProfileLastActivity({ profile }: { profile: User }) {
     <div className="flex flex-col gap-2">
       <div className="flex justify-between gap-4 items-center">
         <Link href={`/@${profile?.username}/films`}>
-          <h3 className="font-semibold text-xl text-accent-1">
+          <h3 className="font-semibold text-xl">
             Dernières activités
           </h3>
         </Link>

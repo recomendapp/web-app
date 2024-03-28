@@ -1,4 +1,4 @@
-import { SignupForm } from '@/components/Auth/Signup/SignupForm';
+import { SignupForm } from '@/app/[lang]/(app)/(auth)/signup/_components/SignupForm';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 import Image from 'next/image';

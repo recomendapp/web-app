@@ -2,13 +2,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { siteConfig } from '@/config/site';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 
 // WIDGETS
 import { MovieNowPlayingWidget } from '@/components/Widget/MovieNowPlayingWidget/MovieNowPlayingWidget';
 import { MovieUpcomingWidget } from '@/components/Widget/MovieUpcomingWidget/MovieUpcomingWidget';
-import { ImageWithFallback } from '../utils/ImageWithFallback';
-import { AspectRatio } from '../ui/aspect-ratio';
+import { ImageWithFallback } from '../../utils/ImageWithFallback';
+import { AspectRatio } from '../../ui/aspect-ratio';
 
 export default function Welcome() {
   return (

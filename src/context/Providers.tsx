@@ -32,9 +32,10 @@ export default async function Provider({
   // UI
   const layout = cookies().get("ui:layout");
   const sidebarCollapsed = cookies().get("ui-sidebar:collapsed");
+  const rightPanelCollapsed = cookies().get("ui-right-panel:collapsed");
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined
   const cookieSidebarCollapsed = sidebarCollapsed ? JSON.parse(sidebarCollapsed.value) : undefined
-
+  const cookieRightPanelCollapsed = rightPanelCollapsed ? JSON.parse(rightPanelCollapsed.value) : undefined
   return (
     <ReactQueryContext>
       <ApolloClientContext>
@@ -46,6 +47,7 @@ export default async function Provider({
                   <UiContext
                     defaultLayout={defaultLayout}
                     cookieSidebarCollapsed={cookieSidebarCollapsed}
+                    cookieRightPanelCollapsed={cookieRightPanelCollapsed}
                   >
                     <RightSidebarContext>
                       <NextTopLoader

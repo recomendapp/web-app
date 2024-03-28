@@ -16,7 +16,7 @@ export default async function MoviePage({
   const { data: movie } = await supabase
 		.from('tmdb_movie')
 		.select(`
-			id,
+			*,
 			data:tmdb_movie_translation(*),
 			cast:tmdb_movie_credits(
 				id,

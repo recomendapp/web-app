@@ -41,19 +41,29 @@ export function ProfileFollowButton({
 
   const { mutateAsync: insertFollowerMutation } = useMutation({
     mutationFn: async ({ followee_id, user_id } : { followee_id: string, user_id: string}) => {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('user_follower')
         .insert({
           followee_id: followee_id,
           user_id: user_id,
-        });
+        })
+        .select('*, friend:followee_id(*)')
+        .single();
       if (error) throw error;
-      return true;
+      return (data);
     },
     onSuccess: (data, variables) => {
+      // Update follow status
       queryClient.setQueryData(
         ['user', variables.user_id, 'followers', variables.followee_id],
-        data
+        true
+      );
+      // Add the followee to the user's following list
+      queryClient.setQueryData(
+        ['user', variables.user_id, 'followings'],
+        (existData: any) => {
+          return existData ? [...existData, data] : [data];
+        }
       );
     },
   });
@@ -69,9 +79,17 @@ export function ProfileFollowButton({
       return false;
     },
     onSuccess: (data, variables) => {
+      // Update follow status
       queryClient.setQueryData(
         ['user', variables.user_id, 'followers', variables.followee_id],
         data
+      );
+      // Delete the followee from the user's followeing list
+      queryClient.setQueryData(
+        ['user', variables.user_id, 'followings'],
+        (data: any) => {
+          return data?.filter((item: any) => item.followee_id !== variables.followee_id);
+        }
       );
     },
   });

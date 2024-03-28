@@ -1,5 +1,6 @@
 'use client';
 
+import { JustWatchWidget } from "@/components/JustWatch/JustWatchWidget";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
@@ -14,12 +15,29 @@ export default function MovieDescription({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* OVERVIEW */}
+      {/* OVERVIEW
         {movie.data[0].overview &&
           <div className=" text-justify">
             {movie.data[0].overview}
           </div>
-        }
+        } */}
+      <div className="flex flex-col lg:flex-row gap-4 justify-between">
+        <div>
+          <h2 className="text-lg font-medium">Description</h2>
+          {movie.data[0].overview ? (
+            <div className="text-justify">{movie.data[0].overview}</div>
+          ) : (
+            <div className="text-justify text-muted">No description available</div>
+          )}
+        </div>
+        <div className="min-w-[20%]">
+          <h2 className="text-lg font-medium">Streaming</h2>
+          <JustWatchWidget
+            id={movie.id}
+            type="movie"
+          />
+        </div>
+      </div>
       {/* CASTING */}
       <MovieCast cast={movie.cast} />
     </div>

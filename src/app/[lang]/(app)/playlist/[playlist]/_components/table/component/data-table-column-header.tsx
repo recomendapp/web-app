@@ -1,21 +1,10 @@
 import {
-  ArrowDownIcon,
-  ArrowUpIcon,
   CaretSortIcon,
-  EyeNoneIcon,
 } from '@radix-ui/react-icons';
-import { Column, SortingState, flexRender } from '@tanstack/react-table';
+import { Column } from '@tanstack/react-table';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useState } from 'react';
 import { ChevronDown, ChevronUp, LucideIcon, Triangle } from 'lucide-react';
 
 interface DataTableColumnHeaderProps<TData, TValue>
@@ -31,7 +20,6 @@ export function DataTableColumnHeader<TData, TValue>({
   Icon,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
 
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
@@ -39,8 +27,6 @@ export function DataTableColumnHeader<TData, TValue>({
 
   return (
     <div className={cn('flex items-center space-x-2', className)}>
-      {/* <DropdownMenu>
-        <DropdownMenuTrigger asChild> */}
       <Button
         variant="ghost"
         size="sm"
@@ -55,31 +41,7 @@ export function DataTableColumnHeader<TData, TValue>({
         }[column.getIsSorted() as string] ?? (
           <CaretSortIcon className="ml-2 h-4 w-4" />
         )}
-        {/* {column.getIsSorted() === "desc" ? (
-              <ChevronDown className=" ml-2 h-4 w-4 text-accent-1" />
-            ) : column.getIsSorted() === "asc" ? (
-              <ChevronDown className=" ml-2 h-4 w-4 text-accent-1" />
-            ) : (
-              <CaretSortIcon className="ml-2 h-4 w-4" />
-            )} */}
       </Button>
-      {/* </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
-            <ChevronUp className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Asc
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
-            <ChevronDown className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Desc
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
-            <EyeNoneIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Masquer
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu> */}
     </div>
   );
 }

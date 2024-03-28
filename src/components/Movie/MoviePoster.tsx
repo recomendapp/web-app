@@ -5,10 +5,12 @@ import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { cn } from '@/lib/utils';
 
 export default function MoviePoster({
+  children,
   className,
   poster_path,
   alt,
 }: {
+  children?: React.ReactNode;
   className?: string;
   poster_path: string;
   alt: string;
@@ -16,18 +18,17 @@ export default function MoviePoster({
   return (
     <div
       className={cn(
-        'shadow-md z-0 relative shrink-0 w-full aspect-[2/3]',
+        'shadow-md relative shrink-0 w-full aspect-[2/3]',
         className
       )}
     >
-      {/* <AspectRatio ratio={2 / 3} className="z-0"> */}
       <ImageWithFallback
         src={poster_path}
         alt={alt}
         fill
-        className="rounded-md object-cover z-0"
+        className="rounded-md object-cover"
       />
-      {/* </AspectRatio> */}
+      {children}
     </div>
   );
 }

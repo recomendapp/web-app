@@ -16,7 +16,7 @@ export const columns: ColumnDef<PlaylistItem>[] = [
     id: 'rank',
     accessorFn: (row) => row?.rank,
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="#" />
+      <DataTableColumnHeader column={column} title="#"/>
     ),
     cell: ({ row }) => (
       <div className="text-muted-foreground text-center w-fit font-bold">
@@ -24,6 +24,11 @@ export const columns: ColumnDef<PlaylistItem>[] = [
       </div>
     ),
     enableHiding: false,
+    enableResizing: false,
+    size: 4,
+    maxSize: 10,
+    minSize: 10,
+  
   },
   {
     id: 'movie',

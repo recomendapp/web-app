@@ -1,7 +1,7 @@
 import { useRightSidebar } from '@/context/right-sidebar-context';
 import { Button } from '../ui/button';
 import { Fragment, useEffect, useRef, useState } from 'react';
-import FriendsList from '../Friends/FriendsList';
+import FriendsList from '../RightSidebar/FriendsList';
 import { Users } from 'lucide-react';
 
 import './styles/style.css';
@@ -12,17 +12,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog';
+import { useUiContext } from '@/context/ui-context';
+import { Modal } from '../Modals/Modal';
 
 export default function FollowedUserListButton() {
   const {
-    isOpen: isOpenSidebar,
-    openPanel,
-    closePanel,
-    setPanelContent,
-    panelTitle,
-    setPanelTitle,
-  } = useRightSidebar();
-
+    isRightPanelCollapsed,
+    expandRightPanel,
+    collapseRightPanel,
+    rightPanelTitle,
+    setRightPanelTitle,
+    setRightPanelContent,
+  } = useUiContext();
   return (
     <Fragment>
       <Button
@@ -30,15 +31,15 @@ export default function FollowedUserListButton() {
         size={'icon'}
         className="rounded-full hidden lg:inline-flex"
         onClick={() => {
-          if (isOpenSidebar && panelTitle != 'Amis') {
-            setPanelTitle('Suivis');
-            setPanelContent(<FriendsList />);
-          } else if (isOpenSidebar) {
-            closePanel();
+          if (!isRightPanelCollapsed && rightPanelTitle != 'Suivis') {
+            setRightPanelTitle('Suivis');
+            setRightPanelContent(<FriendsList />);
+          } else if (!isRightPanelCollapsed) {
+            collapseRightPanel();
           } else {
-            setPanelTitle('Suivis');
-            setPanelContent(<FriendsList />);
-            openPanel();
+            setRightPanelTitle('Suivis');
+            setRightPanelContent(<FriendsList />);
+            expandRightPanel();
           }
         }}
       >
@@ -50,21 +51,43 @@ export default function FollowedUserListButton() {
 }
 
 export function FollowedUserListBottomSheet() {
+  const [openFollowing, setOpenFollowing] = useState(false);
+  
   return (
-    <div className="lg:hidden">
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant={'ghost'} size={'icon'} className="rounded-full">
-            <Users />
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="h-2/3">
-          <DialogHeader>
-            <DialogTitle>Follow</DialogTitle>
-          </DialogHeader>
+    <div className='lg:hidden'>
+      <Button
+        variant={'ghost'}
+        size={'icon'}
+        onClick={() => setOpenFollowing(true)}
+        className="rounded-full"
+      >
+        <Users />
+      </Button>
+      <Modal
+        open={openFollowing}
+        setOpen={setOpenFollowing}
+        header={{
+          title: 'Suivis',
+        }}
+        content={
           <FriendsList />
-        </DialogContent>
-      </Dialog>
+        }
+      />
     </div>
+    // <div className="lg:hidden">
+    //   <Dialog>
+    //     <DialogTrigger asChild>
+    //       <Button variant={'ghost'} size={'icon'} className="rounded-full">
+    //         <Users />
+    //       </Button>
+    //     </DialogTrigger>
+    //     <DialogContent className="h-2/3">
+    //       <DialogHeader>
+    //         <DialogTitle>Follow</DialogTitle>
+    //       </DialogHeader>
+    //       <FriendsList />
+    //     </DialogContent>
+    //   </Dialog>
+    // </div>
   );
 }

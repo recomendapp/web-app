@@ -1,5 +1,6 @@
 'use client';
 
+import FriendsList from '@/components/RightSidebar/FriendsList';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { setCookie } from 'cookies-next';
 import React, { createContext, useContext, useRef, useState } from 'react';
@@ -7,7 +8,7 @@ import { ImperativePanelHandle } from 'react-resizable-panels';
 
 export interface UiContextType {
   uiLayout: number[];
-  setSidebarLayout: (layout: number[]) => void;
+  setUiLayout: (layout: number[]) => void;
   isSidebarCollapsed: boolean;
   setIsSidebarCollapsed: (collapsed: boolean) => void;
   sidebarCollapsedSize: number;
@@ -16,11 +17,23 @@ export interface UiContextType {
   sidebarRef: React.RefObject<ImperativePanelHandle> | undefined;
   sidebarMinSize: number;
   sidebarMaxSize: number;
+  isRightPanelCollapsed: boolean;
+  setIsRightPanelCollapsed: (collapsed: boolean) => void;
+  rightPanelCollapsedSize: number;
+  collapseRightPanel: () => void;
+  expandRightPanel: () => void;
+  rightPanelRef: React.RefObject<ImperativePanelHandle> | undefined;
+  rightPanelMinSize: number;
+  rightPanelMaxSize: number;
+  rightPanelContent: React.ReactNode | null;
+  setRightPanelContent: (content: React.ReactNode) => void;
+  rightPanelTitle: string | null;
+  setRightPanelTitle: (title: string) => void;
 }
 
 const defaultState: UiContextType = {
   uiLayout: [],
-  setSidebarLayout: () => {},
+  setUiLayout: () => {},
   isSidebarCollapsed: false,
   setIsSidebarCollapsed: () => {},
   sidebarCollapsedSize: 5,
@@ -29,6 +42,18 @@ const defaultState: UiContextType = {
   sidebarRef: undefined,
   sidebarMinSize: 14,
   sidebarMaxSize: 20,
+  isRightPanelCollapsed: true,
+  setIsRightPanelCollapsed: () => {},
+  rightPanelCollapsedSize: 0,
+  collapseRightPanel: () => {},
+  expandRightPanel: () => {},
+  rightPanelRef: undefined,
+  rightPanelMinSize: 0,
+  rightPanelMaxSize: 20,
+  rightPanelContent: null,
+  setRightPanelContent: () => {},
+  rightPanelTitle: null,
+  setRightPanelTitle: () => {},
 };
 
 const UiContextProvider = createContext(defaultState);
@@ -37,13 +62,15 @@ export function UiContext({
   children,
   defaultLayout = [265, 440, 0],
 	cookieSidebarCollapsed = false,
+  cookieRightPanelCollapsed = true,
 }: {
   children: React.ReactNode;
   defaultLayout: number[] | undefined
 	cookieSidebarCollapsed?: boolean
+  cookieRightPanelCollapsed?: boolean
 }) {
   // LAYOUT
-  const [ uiLayout, setSidebarLayout ] = useState(defaultLayout);
+  const [ uiLayout, setUiLayout ] = useState(defaultLayout);
   // *========== START SIDEBAR ==========*
   const [ isSidebarCollapsed, setIsSidebarCollapsed ] = useState(cookieSidebarCollapsed);
   const sidebarCollapsedSize = 4;
@@ -73,24 +100,38 @@ export function UiContext({
   // *========== END SIDEBAR ==========*
 
   // *========== START RIGHTPANEL ==========*
-  const [ isRightPanelCollapsed, setIsRightPanelCollapsed ] = useState(true);
+  const [ isRightPanelCollapsed, setIsRightPanelCollapsed ] = useState(cookieRightPanelCollapsed);
   const rightPanelCollapsedSize = 0;
+  const rightPanelMinSize = 20;
+  const rightPanelMaxSize = 30;
   const rightPanelRef = useRef<ImperativePanelHandle >(null);
   const collapseRightPanel = () => {
-    setIsRightPanelCollapsed(true);
-    document.cookie = `ui-rightpanel:collapsed=${JSON.stringify(true)}`
+    if (rightPanelRef.current) {
+      rightPanelRef.current.collapse();
+      setIsRightPanelCollapsed(true);
+      setCookie("ui-right-panel:collapsed", JSON.stringify(false), {
+        path: "/",
+      });
+    }
   }
   const expandRightPanel = () => {
-    setIsRightPanelCollapsed(false);
-    document.cookie = `ui-rightpanel:collapsed=${JSON.stringify(false)}`
+    if (rightPanelRef.current) {
+      rightPanelRef.current.expand();
+      setIsRightPanelCollapsed(false);
+      setCookie("ui-right-panel:collapsed", JSON.stringify(true), {
+        path: "/",
+      });
+    }
   }
+  const [rightPanelContent, setRightPanelContent] = useState<React.ReactNode | null>(<FriendsList />);
+  const [rightPanelTitle, setRightPanelTitle] = useState<string | null>('Suivis');
   // *========== END RIGHTPANEL ==========*
 
   return (
     <UiContextProvider.Provider
       value={{
         uiLayout,
-        setSidebarLayout,
+        setUiLayout,
         isSidebarCollapsed,
         setIsSidebarCollapsed,
         sidebarCollapsedSize,
@@ -99,6 +140,18 @@ export function UiContext({
         sidebarRef,
         sidebarMinSize,
         sidebarMaxSize,
+        isRightPanelCollapsed,
+        setIsRightPanelCollapsed,
+        rightPanelCollapsedSize,
+        collapseRightPanel,
+        expandRightPanel,
+        rightPanelRef,
+        rightPanelMinSize,
+        rightPanelMaxSize,
+        rightPanelContent,
+        setRightPanelContent,
+        rightPanelTitle,
+        setRightPanelTitle,
       }}
     >
       <TooltipProvider delayDuration={100}>

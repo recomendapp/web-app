@@ -1,4 +1,4 @@
-import { LoginForm } from '@/components/Auth/Login/LoginForm';
+import { LoginForm } from '@/app/[lang]/(app)/(auth)/login/_components/LoginForm';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 import Image from 'next/image';

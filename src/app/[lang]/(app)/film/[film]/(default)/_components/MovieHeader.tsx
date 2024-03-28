@@ -28,6 +28,9 @@ import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MoviePoster from '@/components/Movie/MoviePoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
+import ActivityIcon from '@/components/Review/ActivityIcon';
+import { cn } from '@/lib/utils';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 export default function MovieHeader({
   movie,
@@ -49,7 +52,23 @@ export default function MovieHeader({
             className="w-[200px]"
             poster_path={`https://image.tmdb.org/t/p/w500/${movie.data[0].poster_path}`}
             alt={movie.data[0].title ?? ''}
-          />
+          >
+            {movie.vote_count && (
+              <ActivityIcon
+                movieId={movie.id}
+                rating={movie.vote_average.toFixed(1)}
+                variant="general"
+                className="absolute top-2 right-2 w-12"
+                tooltip='Note moyenne'
+              />
+            )}
+            {movie?.videos?.length > 0 && (
+              <MovieTrailerButton
+                videos={movie.videos}
+                className="absolute bottom-2 right-2"
+              />
+            )}
+          </MoviePoster>
           {/* MOVIE MAIN DATA */}
           <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
             {/* TYPE & GENRES */}
@@ -75,20 +94,20 @@ export default function MovieHeader({
               </span>
             </div>
             {/* TITLE */}
-            <div>
-              <div className="text-clamp space-x-1">
-                <span className='font-bold '>{movie.data[0].title}</span>
-                {/* DATE */}
-                <sup>
-                  <DateOnlyYearTooltip date={movie.release_date ?? ''} className='text-sm font-medium text-accent-1'/>
-                </sup>
-              </div>
-              <div className='flex items-center gap-2'>
+            <div className="text-clamp space-x-1">
+              <span className='font-bold '>{movie.data[0].title}</span>
+              {/* DATE */}
+              <sup>
+                <DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-base font-medium'/>
+              </sup>
+            </div>
+            {/* <div> */}
+              {/* <div className='flex items-center gap-2'>
                 <Star size={20} className="text-accent-pink fill-accent-pink" />
                 <span className='text-accent-pink font-medium'>{movie.vote_average?.toFixed(1)}</span>
-              </div>
+              </div> */}
               
-            </div>
+            {/* </div> */}
             <div className=" space-y-2">
               <div>
                 {movie.directors?.map(({ director } : { director: Database['public']['Tables']['tmdb_person']['Row']}, index: number) => (
@@ -110,12 +129,11 @@ export default function MovieHeader({
                 {/* RUNTIME */}
                 <RuntimeTooltip runtime={movie.runtime ?? 0} className=" before:content-['_•_']" />
               </div>
-              <div>
-                {/* <MovieActionCounter movieId={movie.id} /> */}
+              {/* <div>
                 {movie?.videos?.length > 0 && (
                   <MovieTrailerButton videos={movie.videos} />
                 )} 
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -127,7 +145,13 @@ export default function MovieHeader({
   );
 }
 
-export function MovieTrailerButton({ videos }: { videos: Database['public']['Tables']['tmdb_movie_videos']['Row'][] }) {
+export function MovieTrailerButton({
+  videos,
+  className,
+} : {
+  videos: Database['public']['Tables']['tmdb_movie_videos']['Row'][];
+  className?: string;
+}) {
   const [selectedTrailer, setSelectedTailer] = useState<string>(
     videos[0].key ?? ''
   );
@@ -136,20 +160,20 @@ export function MovieTrailerButton({ videos }: { videos: Database['public']['Tab
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant={'ghost'} className="w-fit flex gap-2 p-2">
-          <Play
-            fill="black"
-            size="icon"
-            className="bg-white rounded-full p-1 w-6"
-          />
-          Trailer
-        </Button>
-      </DialogTrigger>
+      <TooltipBox tooltip={videos.length > 1 ? 'Voir les trailers' : 'Voir le trailer'}>
+        <DialogTrigger asChild>
+          <Button variant={'default'} className={cn("p-1.5 w-6 h-6 bg-foreground rounded-full", className)}>
+            <Play
+              size="icon"
+              className="text-background fill-background"
+            />
+          </Button>
+        </DialogTrigger>
+      </TooltipBox>
       <DialogContent className="lg:max-w-[60vw]">
         <DialogHeader className="relative flex flex-row gap-4 items-center">
-          <div className="absolute w-full flex justify-center -top-16">
-            <h2 className="text-accent-1-foreground text-5xl font-bold rounded-md bg-accent-1 px-4 py-2">
+          <div className="absolute w-full flex justify-center -top-12 lg:-top-16 pointer-events-none">
+            <h2 className="text-accent-1-foreground text-2xl lg:text-5xl font-bold rounded-md bg-accent-1 px-4 py-2 pointer-events-auto">
               TRAILER
             </h2>
           </div>
