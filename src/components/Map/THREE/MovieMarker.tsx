@@ -23,7 +23,7 @@ export function MovieMarker({
 		if (!ref.current) return;
 		const distance = camera.position.distanceTo(ref.current);
 		// Définir ici la distance seuil à partir de laquelle afficher le marker
-		const thresholdDistance = 20; // Par exemple, afficher le marker si la distance est inférieure à 5 unités
+		const thresholdDistance = 45; // Par exemple, afficher le marker si la distance est inférieure à 5 unités
 		setVisible(distance < thresholdDistance);
 	});
 	if (!visible) return null;

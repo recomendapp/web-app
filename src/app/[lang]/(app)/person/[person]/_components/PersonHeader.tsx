@@ -99,7 +99,7 @@ export default function PersonHeader({
             </div>
             {/* NAME */}
             <div className="text-xl lg:text-6xl font-bold line-clamp-2">
-              <span>{person.name}</span>
+              {person.name}
             </div>
             <div className='space-y-2'>
               <PersonAbout person={person} />

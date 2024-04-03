@@ -82,10 +82,10 @@ export default function PersonFilmography({
       }
 
       // Order
-      if (selectedOrder === 'date-desc') query = query.order('movie(release_date)', { ascending: false });
-      if (selectedOrder === 'date-asc') query = query.order('movie(release_date)', { ascending: true });
-      if (selectedOrder === 'popularity-desc') query = query.order('movie(vote_count)', { ascending: false });
-      if (selectedOrder === 'popularity-asc') query = query.order('movie(vote_count)', { ascending: true });
+      if (selectedOrder === 'date-desc') query = query.order('movie(release_date)', { ascending: false, nullsFirst: false });
+      if (selectedOrder === 'date-asc') query = query.order('movie(release_date)', { ascending: true, nullsFirst: false });
+      if (selectedOrder === 'popularity-desc') query = query.order('movie(vote_count)', { ascending: false, nullsFirst: false });
+      if (selectedOrder === 'popularity-asc') query = query.order('movie(vote_count)', { ascending: true, nullsFirst: false });
 
       const { data, error } = await query;
       if (error) throw error;
