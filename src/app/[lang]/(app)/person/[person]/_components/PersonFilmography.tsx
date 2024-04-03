@@ -28,19 +28,151 @@ import { Button } from '@/components/ui/button';
 import MovieCard from '@/components/Movie/Card/MovieCard';
 import { LayoutGrid, List } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { Person } from '@/types/type.db';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase/client';
+import { useLocale } from 'next-intl';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default function PersonDescription({ person }: { person: any }) {
+export default function PersonFilmography({
+  person,
+  departments,
+  mainDepartment,
+} : {
+  person: Person,
+  departments: { department: string }[] | null,
+  mainDepartment: string | undefined,
+}) {
+  const locale = useLocale();
+  const [ selectedDepartment, setSelectedDepartment ] = useState<string | undefined>(mainDepartment);
+  const [ selectedFilter, setSelectedFilter ] = useState({
+    date: null,
+    genre: null,
+  });
+  const [ selectedOrder, setSelectedOrder ] = useState<string>('date-desc');
+  const [displayMode, setDisplayMode] = useState<'grid' | 'row'>('grid');
+
+  const {
+    data: movies,
+    isLoading,
+    isFetching,
+  } = useQuery({
+    queryKey: ['person', person?.id, 'movies', {
+      department: selectedDepartment,
+      filter: selectedFilter,
+      locale: locale,
+      order: selectedOrder
+    }],
+    queryFn: async () => {
+      if (!person) throw new Error('No person provided');
+      let query = supabase
+        .from('tmdb_movie_credits')
+        .select(`
+          *,
+          movie:tmdb_movie(
+            *,
+            data:tmdb_movie_translation(*)
+          )
+        `)
+        .eq('person_id', person.id)
+        .eq('movie.data.language_id', locale)
+        
+      if (selectedDepartment) {
+        query = query.eq('department', selectedDepartment)
+      }
+
+      // Order
+      if (selectedOrder === 'date-desc') query = query.order('movie(release_date)', { ascending: false });
+      if (selectedOrder === 'date-asc') query = query.order('movie(release_date)', { ascending: true });
+      if (selectedOrder === 'popularity-desc') query = query.order('movie(vote_count)', { ascending: false });
+      if (selectedOrder === 'popularity-asc') query = query.order('movie(vote_count)', { ascending: true });
+
+      const { data, error } = await query;
+      if (error) throw error;
+      return (data);
+    },
+    enabled: !!person && !!selectedDepartment && !!locale,
+  });
+
   return (
     <div className="flex flex-col gap-4">
-      {/* <div className="flex flex-col gap-2 col-span-3">
-              <h2 className='text-3xl font-bold'>Biographie</h2>
-              <div className=" text-justify">
-                {person.biography}
-              </div>
-            </div> */}
-
-      {/* MOVIES */}
-      <PersonMovies person={person} />
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <Select onValueChange={setSelectedDepartment} defaultValue={selectedDepartment}>
+            <SelectTrigger className="w-fit">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent align="end">
+              <SelectGroup>
+                <SelectLabel>Department</SelectLabel>
+                {departments?.map(({ department }) => (
+                  <SelectItem key={department} value={department}>
+                    {department}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex gap-2">
+          <Select onValueChange={setSelectedOrder} defaultValue={selectedOrder}>
+            <SelectTrigger className="w-fit">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent align="end">
+              <SelectGroup>
+                <SelectLabel>Date de sortie</SelectLabel>
+                <SelectItem value={'date-desc'}>Plus récentes</SelectItem>
+                <SelectItem value={'date-asc'}>Plus anciennes</SelectItem>
+              </SelectGroup>
+              <SelectSeparator />
+              <SelectGroup>
+                <SelectLabel>Popularite</SelectLabel>
+                <SelectItem value={'popularity-desc'}>
+                  Plus populaires
+                </SelectItem>
+                <SelectItem value={'popularity-asc'}>Plus meconnus</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+          <Button
+            variant={'ghost'}
+            onClick={() =>
+              setDisplayMode(displayMode == 'grid' ? 'row' : 'grid')
+            }
+          >
+            {displayMode == 'grid' ? <LayoutGrid /> : <List />}
+          </Button>
+        </div>
+      </div>
+      {movies?.length === 0 ? (
+        <p className="text-center font-semibold">Aucun film.</p>
+      ) : (
+        <div
+          className={` gap-2
+              ${
+                displayMode == 'row'
+                  ? 'flex flex-col'
+                  : 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 2xl:grid-cols-8'
+              }
+          `}
+        >
+          {(movies === undefined || isLoading) ? (
+            Array.from({ length: 10 }).map((_, index) => (
+              <Skeleton key={index} className="w-full aspect-[2/3] shrink-0" />
+            ))
+          ) : (
+            movies.map((credits, index) => (
+              <MovieCard
+                key={index}
+                movie={credits.movie}
+                displayMode={displayMode}
+                job={credits.job}
+              />
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 }

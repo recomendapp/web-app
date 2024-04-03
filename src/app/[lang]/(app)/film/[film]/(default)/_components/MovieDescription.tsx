@@ -24,11 +24,14 @@ export default function MovieDescription({
       <div className="flex flex-col lg:flex-row gap-4 justify-between">
         <div>
           <h2 className="text-lg font-medium">Description</h2>
-          {movie.data[0].overview ? (
-            <div className="text-justify">{movie.data[0].overview}</div>
+          <div className="text-justify text-muted-foreground">
+            {movie.data[0].overview ?? 'No description available'}
+          </div>
+          {/* {movie.data[0].overview ? (
+            <div className="text-justify text-muted-foreground">{movie.data[0].overview}</div>
           ) : (
-            <div className="text-justify text-muted">No description available</div>
-          )}
+            <div className="text-justify text-muted-foreground">No description available</div>
+          )} */}
         </div>
         <div className="min-w-[20%]">
           <h2 className="text-lg font-medium">Streaming</h2>
@@ -52,16 +55,20 @@ const MovieCast = ({
 	return (
 		<div>
 			<h2 className="text-lg font-medium">Casting</h2>
-			<ScrollArea>
-        <div className="flex space-x-4 pb-4">
-          {cast?.map((actor: any) => (
-            <div key={actor.id}>
-              <CastPoster credit={actor} />
-            </div>
-          ))}
-        </div>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+      {cast.length ? (
+        <ScrollArea>
+          <div className="flex space-x-4 pb-4">
+            {cast?.map((actor: any) => (
+              <div key={actor.id}>
+                <CastPoster credit={actor} />
+              </div>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      ) : (
+        <div className="text-justify text-muted-foreground">No cast available</div>
+      )}
 			{/* <CrewModal crew={movie.credits.crew} /> */}
 		</div>
 	)

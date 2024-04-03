@@ -31,6 +31,7 @@ import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import ActivityIcon from '@/components/Review/ActivityIcon';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
+import { MovieFollowerAverageRating } from './MovieFollowerAverageRating';
 
 export default function MovieHeader({
   movie,
@@ -54,13 +55,19 @@ export default function MovieHeader({
             alt={movie.data[0].title ?? ''}
           >
             {movie.vote_count && (
-              <ActivityIcon
-                movieId={movie.id}
-                rating={movie.vote_average.toFixed(1)}
-                variant="general"
-                className="absolute top-2 right-2 w-12"
-                tooltip='Note moyenne'
-              />
+              <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
+                <ActivityIcon
+                  movieId={movie.id}
+                  rating={movie.vote_average.toFixed(1)}
+                  variant="general"
+                  className="w-full"
+                  tooltip='Note moyenne'
+                />
+                <MovieFollowerAverageRating
+                  movieId={movie.id}
+                  className="w-full"
+                />
+              </div>
             )}
             {movie?.videos?.length > 0 && (
               <MovieTrailerButton
@@ -100,6 +107,9 @@ export default function MovieHeader({
               <sup>
                 <DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-base font-medium'/>
               </sup>
+              {movie.original_title !== movie.data[0].title && (
+                <div className='text-base font-semibold text-muted-foreground'>{movie.original_title}</div>
+              )}
             </div>
             {/* <div> */}
               {/* <div className='flex items-center gap-2'>
@@ -162,7 +172,7 @@ export function MovieTrailerButton({
     <Dialog>
       <TooltipBox tooltip={videos.length > 1 ? 'Voir les trailers' : 'Voir le trailer'}>
         <DialogTrigger asChild>
-          <Button variant={'default'} className={cn("p-1.5 w-6 h-6 bg-foreground rounded-full", className)}>
+          <Button variant={'default'} className={cn("p-1.5 w-6 h-6 shrink-0 bg-foreground rounded-full", className)}>
             <Play
               size="icon"
               className="text-background fill-background"

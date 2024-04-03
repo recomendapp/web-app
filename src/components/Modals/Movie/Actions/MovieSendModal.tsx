@@ -72,7 +72,7 @@ export function MovieSendModal({
 		isFetchingNextPage,
 		hasNextPage,
 	} = useInfiniteQuery({
-		queryKey: debouncedSearch ? ['user', user?.id, 'friends', { search: debouncedSearch }] : ['user', user?.id, 'friends'],
+		queryKey: debouncedSearch ? ['movie', movieId, 'send', { search: debouncedSearch }] : ['movie', movieId, 'send'],
 		queryFn: async ({ pageParam = 1 }) => {
 			if (!user?.id) throw Error('Missing user id');
 			let from = (pageParam - 1) * numberOfResult;
@@ -96,7 +96,7 @@ export function MovieSendModal({
 		getNextPageParam: (data, pages) => {
 			return data?.length == numberOfResult ? pages.length + 1 : undefined;
 		},
-		enabled: !!user?.id,
+		enabled: !!user?.id && !!movieId,
 	});
 
 	useEffect(() => {

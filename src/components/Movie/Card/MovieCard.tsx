@@ -38,6 +38,7 @@ interface MovieCardProps {
   displayMode?: 'grid' | 'row';
   link?: boolean;
   movieActivity?: UserMovieActivity | null;
+  job?: string;
 }
 
 export default function MovieCard({
@@ -45,8 +46,8 @@ export default function MovieCard({
   displayMode,
   link = true,
   movieActivity,
+  job,
 }: MovieCardProps) {
-  const locale = useLocale();
 
   if (!movie) return null;
 
@@ -147,18 +148,24 @@ export default function MovieCard({
           href={`/film/${movie.id}`}
           className="relative flex gap-4 items-center"
         >
-          <MovieCardRow movie={movie} />
+          <MovieCardRow movie={movie} job={job} />
         </Link>
       ) : (
         <div className="relative flex gap-4 items-center">
-          <MovieCardRow movie={movie} />
+          <MovieCardRow movie={movie} job={job} />
         </div>
       )}
     </>
   );
 }
 
-export function MovieCardRow({ movie }: { movie: Movie }) {
+export function MovieCardRow({
+  movie,
+  job
+} : {
+  movie: Movie,
+  job?: string
+}) {
   return (
     <>
       <MoviePoster
@@ -188,6 +195,7 @@ export function MovieCardRow({ movie }: { movie: Movie }) {
         </div>
         {/* DATE */}
         <DateOnlyYearTooltip date={movie?.release_date} />
+        {job && <div className="text-muted-foreground">{job}</div>}
       </div>
     </>
   );

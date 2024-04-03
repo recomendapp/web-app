@@ -1,17 +1,9 @@
-import { getMovieDetails, getPersonDetails } from '@/lib/tmdb/tmdb';
-import MovieHeader from './_components/PersonHeader';
-import MovieDescription from './_components/PersonDescription';
-import MovieNavbar from './_components/PersonNavbar';
+import { getPersonDetails } from '@/lib/tmdb/tmdb';
 import { notFound } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import PersonHeader from './_components/PersonHeader';
 import PersonNavbar from './_components/PersonNavbar';
-import PersonDescription from './_components/PersonDescription';
-
-// GRAPHQL
-import apolloServer from '@/lib/apollo/server';
-import { GetPersonByIdQuery } from '@/graphql/__generated__/graphql';
-import GET_PERSON_BY_ID from '@/graphql/Person/queries/GetPersonById';
+import PersonFilmography from './_components/PersonFilmography';
 
 export async function generateMetadata({
   params,
@@ -41,31 +33,50 @@ export default async function Film({
     person: string;
   };
 }) {
-  const person = await getPersonDetails(params.person, params.lang);
+  const supabase = createServerClient();
+  // const person = await getPersonDetails(params.person, params.lang);
+
+  const { data: person } = await supabase
+		.from('tmdb_person')
+		.select(`
+			*,
+			data:tmdb_person_translation(*)
+		`)
+		.eq('id', params.person)
+		.eq('data.language', params.lang)
+		.single();
 
   if (!person) notFound();
-  // const { data: personQuery } = await apolloServer.query<GetPersonByIdQuery>({
-  //   query: GET_PERSON_BY_ID,
-  //   variables: {
-  //     filter: {
-  //       id: { eq: params.person },
-  //     },
-  //     locale: params.lang,
-  //   },
-  // });
-  // const person = personQuery?.tmdb_personCollection?.edges[0].node;
 
-  // console.log(person);
-
-  // if (!person) notFound();
+  let queryBackground = supabase
+    .from('tmdb_movie_credits_random')
+    .select(`
+      *,
+      movie:tmdb_movie(*)
+    `)
+    .eq('person_id', params.person);
   
+  if (person.known_for_department) {
+    queryBackground = queryBackground.eq('department', person.known_for_department)
+  }
+
+  const { data: backgrounds } = await queryBackground.limit(1)
+
+  const { data: departments } = await supabase
+    .from('tmdb_person_department')
+    .select('department')
+    .eq('person_id', params.person);
 
   return (
     <main>
-      <PersonHeader person={person} />
+      <PersonHeader person={person} background={backgrounds![0].movie?.backdrop_path ?? ''} />
       <div className="px-4 pb-4">
-        {/* <PersonNavbar focus={"description"} personId={person.id} /> */}
-        <PersonDescription person={person} />
+        {/* <PersonNavbar focus={"oeuvre"} personId={person.id} /> */}
+        <PersonFilmography
+          person={person}
+          departments={departments}
+          mainDepartment={person.known_for_department ?? undefined}
+        />
       </div>
     </main>
   );

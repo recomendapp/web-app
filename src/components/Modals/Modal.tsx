@@ -24,6 +24,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useMediaQuery } from "react-responsive"
+import { ScrollArea } from "../ui/scroll-area"
 
 interface ModalProps {
 	children?: React.ReactNode
@@ -57,16 +58,16 @@ export function Modal({
 				{children}
 			</DialogTrigger>
 		)}
-        <DialogContent className={cn('', className)}>
+        <DialogContent className={cn('max-h-[80%]', className)}>
 			{header && (
 				<DialogHeader>
 					{header.title && (<DialogTitle>{header.title}</DialogTitle>)}
 					{header.description && (<DialogDescription>{header.description}</DialogDescription>)}
 				</DialogHeader>
 			)}
-			{/* <div className="p-4"> */}
+			<div className="overflow-y-auto pr-2">
 				{content}
-			{/* </div> */}
+			</div>
 			{footer && (<DialogFooter>{footer}</DialogFooter>)}
         </DialogContent>
       </Dialog>
@@ -80,14 +81,14 @@ export function Modal({
 				{children}
 			</DrawerTrigger>
 		)}
-		<DrawerContent className={cn('', className)}>
+		<DrawerContent className={cn('max-h-[95%]', className)}>
 			{header && (
 				<DrawerHeader className="text-left">
 					{header.title && (<DrawerTitle>{header.title}</DrawerTitle>)}
 					{header.description && (<DrawerDescription>{header.description}</DrawerDescription>)}
 				</DrawerHeader>
 			)}
-			<div className="p-4">
+			<div className="p-4 overflow-y-auto">
 				{content}
 			</div>
 			{footer && (<DrawerFooter>{footer}</DrawerFooter>)}

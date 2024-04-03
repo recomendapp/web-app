@@ -39,6 +39,7 @@ export const MovieNowPlayingWidget = () => {
     getNextPageParam: (results, pages) => {
       return results?.length == numberOfResult ? pages.length + 1 : undefined;
     },
+    enabled: !!locale,
   });
 
   useEffect(() => {

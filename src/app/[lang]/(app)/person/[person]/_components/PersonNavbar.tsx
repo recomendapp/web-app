@@ -7,23 +7,23 @@ export default function PersonNavbar({
   personId,
 }: {
   focus: string;
-  personId: string;
+  personId: number;
 }) {
   const routes = [
     {
-      label: 'Description',
-      active: focus === 'description',
+      label: 'Œuvres',
+      active: focus === 'oeuvre',
       href: `/person/${personId}`,
     },
+    // {
+    //   label: 'Prix',
+    //   active: focus === 'awards',
+    //   href: `/person/${personId}/awards`,
+    // },
     {
-      label: 'Critiques',
-      active: focus === 'reviews',
-      href: `/person/${personId}/reviews`,
-    },
-    {
-      label: 'Playlists',
-      active: focus === 'playlists',
-      href: `/person/${personId}/playlists`,
+      label: 'À propos',
+      active: focus === 'about',
+      href: `/person/${personId}/about`,
     },
   ];
 

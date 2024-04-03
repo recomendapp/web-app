@@ -9,7 +9,7 @@ interface RatingProps extends React.HTMLAttributes<HTMLDivElement> {
   rating?: number | null;
   is_liked?: boolean | null;
   is_reviewed?: number | null;
-  variant?: 'user' | 'general';
+  variant?: 'user' | 'general' | 'follower';
   tooltip?: string;
   className?: string;
 }
@@ -43,6 +43,7 @@ export default function ActivityIcon({
             border-accent-1
             ${variant === 'user' && 'border-accent-1'}
             ${variant === 'general' && 'border-accent-pink'}
+            ${variant === 'follower' && ' border-blue-500'}
           `,
           className)}>
           {is_reviewed && (
@@ -57,6 +58,7 @@ export default function ActivityIcon({
               font-bold text-sm
               ${variant === 'user' && 'text-accent-1'}
               ${variant === 'general' && 'text-accent-pink'}
+              ${variant === 'follower' && 'text-blue-500'}
             `}
           >
             {rating}

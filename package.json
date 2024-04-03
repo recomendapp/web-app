@@ -122,6 +122,7 @@
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/typography": "^0.5.9",
     "@types/lodash": "^4.14.199",
+    "r3f-perf": "^7.1.2",
     "supabase": "^1.123.4",
     "typescript": "^5.3.3",
     "webpack": "^5.89.0"

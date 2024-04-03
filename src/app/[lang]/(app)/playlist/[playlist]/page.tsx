@@ -95,7 +95,7 @@ export default function PlaylistPage({
             filter: `playlist_id=eq.${params.playlist }`,
           },
           () => {
-            console.log('playlist_items changes');
+            // console.log('playlist_items changes');
             // refetch();
             setShouldRefresh(true);
           }

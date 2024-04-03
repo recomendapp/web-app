@@ -6,6 +6,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Suspense } from 'react'
 import { MapControls, Stats, useGLTF } from '@react-three/drei'
 import { MovieMarker } from './MovieMarker';
+import { Perf } from 'r3f-perf'
 
 export function Map() {
 	const gltf = useGLTF('/scene.gltf');
@@ -49,14 +50,15 @@ export function Map() {
 					object={gltf.scene}
 					position={[1, 0, 0]}
 				/> */}
-				<ambientLight />
-				<directionalLight />
+				{/* <ambientLight /> */}
+				{/* <directionalLight /> */}
 				{/* <pointLight position={[10, 10, 10]} /> */}
 				{/* <spotLight position={[10, 10, 10]} /> */}
 				{/* <hemisphereLight /> */}
 				<gridHelper />
 				<Controls />
 				<Stats />
+				<Perf />
 			</Suspense>
 		</Canvas>
 	)

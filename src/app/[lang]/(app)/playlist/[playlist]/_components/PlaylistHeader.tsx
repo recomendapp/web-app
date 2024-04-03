@@ -98,15 +98,6 @@ export default function PlaylistHeader({ playlist } : { playlist: Playlist }) {
               <p
                 className='text-muted-foreground font-light line-clamp-2'
                 onClick={() => setOpenDescriptionModal(true)}
-                // onClick={() => openModal({
-                //   id: `playlist-${playlist?.id}-description`,
-                //   header: {
-                //     title: 'Description',
-                //   },
-                //   content: (
-                //     <p>{playlist?.description}</p>
-                //   ),
-                // })}
               >
                 {playlist?.description}
               </p>

@@ -7,56 +7,6 @@ export type Json =
   | Json[]
 
 export interface Database {
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          operationName?: string
-          query?: string
-          variables?: Json
-          extensions?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-  pgbouncer: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      get_auth: {
-        Args: {
-          p_usename: string
-        }
-        Returns: {
-          username: string
-          password: string
-        }[]
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       app_settings: {
@@ -97,6 +47,7 @@ export interface Database {
           id: number
           is_public: boolean
           items_count: number
+          likes_count: number
           poster_url: string | null
           title: string
           updated_at: string | null
@@ -109,6 +60,7 @@ export interface Database {
           id?: number
           is_public?: boolean
           items_count?: number
+          likes_count?: number
           poster_url?: string | null
           title: string
           updated_at?: string | null
@@ -121,6 +73,7 @@ export interface Database {
           id?: number
           is_public?: boolean
           items_count?: number
+          likes_count?: number
           poster_url?: string | null
           title?: string
           updated_at?: string | null
@@ -130,6 +83,7 @@ export interface Database {
           {
             foreignKeyName: "playlist_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -161,12 +115,14 @@ export interface Database {
           {
             foreignKeyName: "playlist_guest_playlist_id_fkey"
             columns: ["playlist_id"]
+            isOneToOne: false
             referencedRelation: "playlist"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "playlist_guest_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -204,18 +160,21 @@ export interface Database {
           {
             foreignKeyName: "playlist_item_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "playlist_item_playlist_id_fkey"
             columns: ["playlist_id"]
+            isOneToOne: false
             referencedRelation: "playlist"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "playlist_item_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -223,16 +182,19 @@ export interface Database {
       }
       playlist_like: {
         Row: {
+          created_at: string
           id: number
           playlist_id: number
           user_id: string
         }
         Insert: {
+          created_at?: string
           id?: number
           playlist_id: number
           user_id: string
         }
         Update: {
+          created_at?: string
           id?: number
           playlist_id?: number
           user_id?: string
@@ -241,12 +203,14 @@ export interface Database {
           {
             foreignKeyName: "playlist_like_playlist_id_fkey"
             columns: ["playlist_id"]
+            isOneToOne: false
             referencedRelation: "playlist"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "playlist_like_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -296,6 +260,7 @@ export interface Database {
           {
             foreignKeyName: "prices_product_id_fkey"
             columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
           }
@@ -387,12 +352,14 @@ export interface Database {
           {
             foreignKeyName: "subscriptions_price_id_fkey"
             columns: ["price_id"]
+            isOneToOne: false
             referencedRelation: "prices"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "subscriptions_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -442,6 +409,7 @@ export interface Database {
           {
             foreignKeyName: "tmdb_collection_translation_collection_fkey"
             columns: ["collection"]
+            isOneToOne: false
             referencedRelation: "tmdb_collection"
             referencedColumns: ["id"]
           }
@@ -482,6 +450,7 @@ export interface Database {
           {
             foreignKeyName: "tmdb_company_parent_company_fkey"
             columns: ["parent_company"]
+            isOneToOne: false
             referencedRelation: "tmdb_company"
             referencedColumns: ["id"]
           }
@@ -522,6 +491,7 @@ export interface Database {
           {
             foreignKeyName: "tmdb_country_translation_iso_3166_1_fkey"
             columns: ["iso_3166_1"]
+            isOneToOne: false
             referencedRelation: "tmdb_country"
             referencedColumns: ["iso_3166_1"]
           }
@@ -562,6 +532,7 @@ export interface Database {
           {
             foreignKeyName: "tmdb_gender_translation_gender_fkey"
             columns: ["gender"]
+            isOneToOne: false
             referencedRelation: "tmdb_gender"
             referencedColumns: ["id"]
           }
@@ -602,6 +573,7 @@ export interface Database {
           {
             foreignKeyName: "tmdb_genre_translation_genre_fkey"
             columns: ["genre"]
+            isOneToOne: false
             referencedRelation: "tmdb_genre"
             referencedColumns: ["id"]
           }
@@ -660,6 +632,7 @@ export interface Database {
           {
             foreignKeyName: "tmdb_language_translation_iso_639_1_fkey"
             columns: ["iso_639_1"]
+            isOneToOne: false
             referencedRelation: "tmdb_language"
             referencedColumns: ["iso_639_1"]
           }
@@ -724,12 +697,14 @@ export interface Database {
           {
             foreignKeyName: "tmdb_movie_collection_id_fkey"
             columns: ["collection_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_collection"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_movie_original_language_fkey"
             columns: ["original_language"]
+            isOneToOne: false
             referencedRelation: "tmdb_language"
             referencedColumns: ["iso_639_1"]
           }
@@ -755,12 +730,14 @@ export interface Database {
           {
             foreignKeyName: "tmdb_movie_country_country_id_fkey"
             columns: ["country_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_country"
             referencedColumns: ["iso_3166_1"]
           },
           {
             foreignKeyName: "tmdb_movie_country_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           }
@@ -792,12 +769,14 @@ export interface Database {
           {
             foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_movie_credits_person_id_fkey"
             columns: ["person_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_person"
             referencedColumns: ["id"]
           }
@@ -823,12 +802,14 @@ export interface Database {
           {
             foreignKeyName: "tmdb_movie_genre_genre_id_fkey"
             columns: ["genre_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_genre"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_movie_genre_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           }
@@ -854,12 +835,14 @@ export interface Database {
           {
             foreignKeyName: "tmdb_movie_keyword_keyword_id_fkey"
             columns: ["keyword_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_keyword"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_movie_keyword_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           }
@@ -885,12 +868,14 @@ export interface Database {
           {
             foreignKeyName: "tmdb_movie_language_language_id_fkey"
             columns: ["language_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_language"
             referencedColumns: ["iso_639_1"]
           },
           {
             foreignKeyName: "tmdb_movie_language_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           }
@@ -916,12 +901,14 @@ export interface Database {
           {
             foreignKeyName: "tmdb_movie_production_company_id_fkey"
             columns: ["company_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_company"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_movie_production_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           }
@@ -947,6 +934,7 @@ export interface Database {
           {
             foreignKeyName: "tmdb_movie_role_credit_id_fkey"
             columns: ["credit_id"]
+            isOneToOne: true
             referencedRelation: "tmdb_movie_credits"
             referencedColumns: ["id"]
           }
@@ -984,6 +972,7 @@ export interface Database {
           {
             foreignKeyName: "tmdb_movie_translation_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           }
@@ -1033,12 +1022,14 @@ export interface Database {
           {
             foreignKeyName: "tmdb_movie_videos_iso_3166_1_fkey"
             columns: ["iso_3166_1"]
+            isOneToOne: false
             referencedRelation: "tmdb_country"
             referencedColumns: ["iso_3166_1"]
           },
           {
             foreignKeyName: "tmdb_movie_videos_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           }
@@ -1094,6 +1085,7 @@ export interface Database {
           {
             foreignKeyName: "tmdb_person_gender_fkey"
             columns: ["gender"]
+            isOneToOne: false
             referencedRelation: "tmdb_gender"
             referencedColumns: ["id"]
           }
@@ -1122,6 +1114,7 @@ export interface Database {
           {
             foreignKeyName: "tmdb_person_translation_person_fkey"
             columns: ["person"]
+            isOneToOne: false
             referencedRelation: "tmdb_person"
             referencedColumns: ["id"]
           }
@@ -1216,6 +1209,7 @@ export interface Database {
           {
             foreignKeyName: "user_id_fkey"
             columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -1241,6 +1235,14 @@ export interface Database {
           {
             foreignKeyName: "user_follower_followee_id_fkey"
             columns: ["followee_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_follower_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -1266,6 +1268,7 @@ export interface Database {
           {
             foreignKeyName: "user_friend_friend_id_fkey"
             columns: ["friend_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -1306,12 +1309,14 @@ export interface Database {
           {
             foreignKeyName: "user_movie_activity_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_movie_activity_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -1340,12 +1345,14 @@ export interface Database {
           {
             foreignKeyName: "user_movie_favorite_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_movie_favorite_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -1374,58 +1381,14 @@ export interface Database {
           {
             foreignKeyName: "user_movie_guidelist_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_movie_guidelist_user_id_fkey"
             columns: ["user_id"]
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      user_movie_guidelist_bkp: {
-        Row: {
-          comment: string | null
-          created_at: string
-          id: number
-          movie_id: number
-          receiver_user_id: string
-          sender_user_id: string
-        }
-        Insert: {
-          comment?: string | null
-          created_at?: string
-          id?: number
-          movie_id: number
-          receiver_user_id: string
-          sender_user_id: string
-        }
-        Update: {
-          comment?: string | null
-          created_at?: string
-          id?: number
-          movie_id?: number
-          receiver_user_id?: string
-          sender_user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_movie_guidelist_bkp_movie_id_fkey"
-            columns: ["movie_id"]
-            referencedRelation: "tmdb_movie"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_guidelist_bkp_receiver_user_id_fkey"
-            columns: ["receiver_user_id"]
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_guidelist_bkp_sender_user_id_fkey"
-            columns: ["sender_user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -1457,12 +1420,21 @@ export interface Database {
           {
             foreignKeyName: "user_movie_guidelist_item_guidelist_id_fkey"
             columns: ["guidelist_id"]
+            isOneToOne: false
             referencedRelation: "user_movie_guidelist"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_item_guidelist_id_fkey"
+            columns: ["guidelist_id"]
+            isOneToOne: false
+            referencedRelation: "user_movie_guidelist_random"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_movie_guidelist_item_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -1509,18 +1481,148 @@ export interface Database {
           {
             foreignKeyName: "user_movie_review_id_fkey"
             columns: ["id"]
+            isOneToOne: true
             referencedRelation: "user_movie_activity"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_movie_review_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_movie_review_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      user_movie_review_comment: {
+        Row: {
+          comment: string
+          comments_count: number
+          created_at: string
+          id: number
+          likes_count: number
+          parent_comment_id: number | null
+          review_id: number
+          user_id: string
+        }
+        Insert: {
+          comment: string
+          comments_count?: number
+          created_at?: string
+          id?: number
+          likes_count?: number
+          parent_comment_id?: number | null
+          review_id: number
+          user_id: string
+        }
+        Update: {
+          comment?: string
+          comments_count?: number
+          created_at?: string
+          id?: number
+          likes_count?: number
+          parent_comment_id?: number | null
+          review_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_review_comment_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "user_movie_review_comment"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_comment_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "user_movie_review"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_comment_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      user_movie_review_comment_like: {
+        Row: {
+          comment_id: number
+          created_at: string
+          id: number
+          user_id: string
+        }
+        Insert: {
+          comment_id: number
+          created_at?: string
+          id?: number
+          user_id: string
+        }
+        Update: {
+          comment_id?: number
+          created_at?: string
+          id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_review_comment_like_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "user_movie_review_comment"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_comment_like_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      user_movie_review_like: {
+        Row: {
+          created_at: string
+          id: number
+          review_id: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          review_id: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          review_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_review_like_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "user_movie_review"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_like_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -1549,12 +1651,50 @@ export interface Database {
           {
             foreignKeyName: "user_movie_watchlist_movie_id_fkey"
             columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_movie_watchlist_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      user_person_follower: {
+        Row: {
+          created_at: string
+          id: number
+          person_id: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          person_id: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          person_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_person_follower_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_person_follower_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           }
@@ -1562,7 +1702,78 @@ export interface Database {
       }
     }
     Views: {
-      [_ in never]: never
+      user_movie_guidelist_random: {
+        Row: {
+          created_at: string | null
+          id: number | null
+          movie_id: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number | null
+          movie_id?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number | null
+          movie_id?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      user_movie_watchlist_random: {
+        Row: {
+          created_at: string | null
+          id: number | null
+          movie_id: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number | null
+          movie_id?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number | null
+          movie_id?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_watchlist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Functions: {
       delete_avatar: {
@@ -1599,6 +1810,36 @@ export interface Database {
         }
         Returns: undefined
       }
+      rls_playlist_guest: {
+        Args: {
+          p_playlist_id: number
+          p_user_id: string
+          p_action: string
+        }
+        Returns: boolean
+      }
+      rls_playlist_item: {
+        Args: {
+          p_playlist_id: number
+          p_action: string
+          p_user_id: string
+        }
+        Returns: boolean
+      }
+      rls_playlist_select: {
+        Args: {
+          p_playlist_id: number
+          p_user_id: string
+        }
+        Returns: boolean
+      }
+      user_movie_follower_average_rating: {
+        Args: {
+          userid: string
+          movieid: number
+        }
+        Returns: number
+      }
     }
     Enums: {
       eventType: "INSERT" | "DELETE" | "UPDATE"
@@ -1621,184 +1862,6 @@ export interface Database {
         | "language"
         | "country"
         | "genre"
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
-  storage: {
-    Tables: {
-      buckets: {
-        Row: {
-          allowed_mime_types: string[] | null
-          avif_autodetection: boolean | null
-          created_at: string | null
-          file_size_limit: number | null
-          id: string
-          name: string
-          owner: string | null
-          owner_id: string | null
-          public: boolean | null
-          updated_at: string | null
-        }
-        Insert: {
-          allowed_mime_types?: string[] | null
-          avif_autodetection?: boolean | null
-          created_at?: string | null
-          file_size_limit?: number | null
-          id: string
-          name: string
-          owner?: string | null
-          owner_id?: string | null
-          public?: boolean | null
-          updated_at?: string | null
-        }
-        Update: {
-          allowed_mime_types?: string[] | null
-          avif_autodetection?: boolean | null
-          created_at?: string | null
-          file_size_limit?: number | null
-          id?: string
-          name?: string
-          owner?: string | null
-          owner_id?: string | null
-          public?: boolean | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      migrations: {
-        Row: {
-          executed_at: string | null
-          hash: string
-          id: number
-          name: string
-        }
-        Insert: {
-          executed_at?: string | null
-          hash: string
-          id: number
-          name: string
-        }
-        Update: {
-          executed_at?: string | null
-          hash?: string
-          id?: number
-          name?: string
-        }
-        Relationships: []
-      }
-      objects: {
-        Row: {
-          bucket_id: string | null
-          created_at: string | null
-          id: string
-          last_accessed_at: string | null
-          metadata: Json | null
-          name: string | null
-          owner: string | null
-          owner_id: string | null
-          path_tokens: string[] | null
-          updated_at: string | null
-          version: string | null
-        }
-        Insert: {
-          bucket_id?: string | null
-          created_at?: string | null
-          id?: string
-          last_accessed_at?: string | null
-          metadata?: Json | null
-          name?: string | null
-          owner?: string | null
-          owner_id?: string | null
-          path_tokens?: string[] | null
-          updated_at?: string | null
-          version?: string | null
-        }
-        Update: {
-          bucket_id?: string | null
-          created_at?: string | null
-          id?: string
-          last_accessed_at?: string | null
-          metadata?: Json | null
-          name?: string | null
-          owner?: string | null
-          owner_id?: string | null
-          path_tokens?: string[] | null
-          updated_at?: string | null
-          version?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "objects_bucketId_fkey"
-            columns: ["bucket_id"]
-            referencedRelation: "buckets"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      can_insert_object: {
-        Args: {
-          bucketid: string
-          name: string
-          owner: string
-          metadata: Json
-        }
-        Returns: undefined
-      }
-      extension: {
-        Args: {
-          name: string
-        }
-        Returns: string
-      }
-      filename: {
-        Args: {
-          name: string
-        }
-        Returns: string
-      }
-      foldername: {
-        Args: {
-          name: string
-        }
-        Returns: unknown
-      }
-      get_size_by_bucket: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          size: number
-          bucket_id: string
-        }[]
-      }
-      search: {
-        Args: {
-          prefix: string
-          bucketname: string
-          limits?: number
-          levels?: number
-          offsets?: number
-          search?: string
-          sortcolumn?: string
-          sortorder?: string
-        }
-        Returns: {
-          name: string
-          id: string
-          updated_at: string
-          created_at: string
-          last_accessed_at: string
-          metadata: Json
-        }[]
-      }
-    }
-    Enums: {
-      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1885,3 +1948,4 @@ export type Enums<
   : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
   ? Database["public"]["Enums"][PublicEnumNameOrOptions]
   : never
+
