@@ -21,5 +21,5 @@ export async function GET(request: NextRequest) {
   // console.log('request', request)
 
   // return the user to the error page
-  return NextResponse.redirect('/auth/error');
+  return NextResponse.redirect(`${requestUrl.origin}/auth/error`);
 }

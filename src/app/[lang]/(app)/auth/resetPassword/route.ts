@@ -11,11 +11,11 @@ export async function GET(request: NextRequest) {
     const supabase = createRouteHandlerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      return NextResponse.redirect(`/settings/security`);
+      return NextResponse.redirect(`${requestUrl.origin}/settings/security`);
     }
   }
 
-  return NextResponse.redirect('/auth/error');
+  return NextResponse.redirect(`${requestUrl.origin}/auth/error`);
   // URL to redirect to after sign in process completes
   // return NextResponse.redirect(`${requestUrl.origin}/settings/security`);
 }
