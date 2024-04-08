@@ -135,7 +135,7 @@ export function MovieLikeAction({ movieId }: MovieLikeActionProps) {
             className="rounded-full"
             asChild
           >
-            <Link href={'/login'}>
+            <Link href={'/auth/login'}>
               <Heart className={`transition hover:text-accent-pink`} />
             </Link>
           </Button>

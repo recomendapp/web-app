@@ -35,7 +35,7 @@ export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              onClick={() => router.push('/login')}
+              onClick={() => router.push('/auth/login')}
               disabled={loading}
               size="icon"
               variant={'action'}

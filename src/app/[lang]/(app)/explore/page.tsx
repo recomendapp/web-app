@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
-import { Map } from '@/components/Map/THREE/Map';
+import { Experience } from '@/components/Map/THREE/Experience';
 
 export const metadata: Metadata = {
-  title: 'Map',
+  title: 'Explore',
 };
 
 export default function MapPage({
@@ -12,5 +12,5 @@ export default function MapPage({
     lang: string;
   };
 }) {
-  return <Map />;
+  return <Experience />;
 }

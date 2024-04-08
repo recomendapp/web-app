@@ -1,12 +1,13 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { Provider, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase/client';
 
 import { useQuery } from '@tanstack/react-query';
 import { User } from '@/types/type.db';
+import { headers } from 'next/headers';
 
 export interface UserState {
   user: User | null | undefined;
@@ -105,7 +106,7 @@ export const AuthContext = ({ children }: { children: React.ReactNode }) => {
   }, [sessionLoading, userLoading]);
 
   const login = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error, data } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -130,7 +131,7 @@ export const AuthContext = ({ children }: { children: React.ReactNode }) => {
       email: email,
       password: password,
       options: {
-        emailRedirectTo: `${location.origin}/api/auth/callback`,
+        emailRedirectTo: `${location.origin}/auth/callback`,
         data: {
           full_name: name,
           username: username,
@@ -144,10 +145,15 @@ export const AuthContext = ({ children }: { children: React.ReactNode }) => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: `${location.origin}/api/auth/callback`,
+        redirectTo: `${location.origin}/auth/callback`,
       },
     });
     if (error) throw error;
+    // if (error) {
+    //   console.log(error);
+    // } else {
+    //   return redirect(data.url);
+    // }
   };
 
   const userRefresh = async () => {

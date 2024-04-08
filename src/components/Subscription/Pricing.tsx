@@ -53,7 +53,7 @@ export default function Pricing({
   const handleCheckout = async (price: Prices) => {
     setPriceIdLoading(price?.id);
     if (!session) {
-      return router.push('/login');
+      return router.push('/auth/login');
     }
     if (user?.premium|| price?.unit_amount === 0) {
       return router.push('/settings/subscription');

@@ -121,7 +121,7 @@ export function SignupForm() {
           setIsLoading(true);
           await signup(data.email, data.name, data.username, data.password);
           toast.success('Un email de confirmation vient de vous être envoyé');
-          router.push('/login');
+          router.push('/auth/login');
         } catch (error) {
           toast.error("Une erreur s'est produite");
         } finally {

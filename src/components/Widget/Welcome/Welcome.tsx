@@ -24,7 +24,7 @@ export default function Welcome() {
           />
         </div>
         <Button variant={'link'} asChild>
-          <Link href={'/login'}>Getting started</Link>
+          <Link href={'/auth/login'}>Getting started</Link>
         </Button>
       </div>
       <div className="px-4 pb-4">

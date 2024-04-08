@@ -34,7 +34,7 @@ export function ForgotPasswordForm({
 
     try {
       await supabase.auth.resetPasswordForEmail(userPasswordRecovery.email, {
-        redirectTo: `${location.origin}/api/auth/resetPassword`,
+        redirectTo: `${location.origin}/auth/resetPassword`,
       });
       setIsLoading(false);
       toast.success('Demande envoyé');

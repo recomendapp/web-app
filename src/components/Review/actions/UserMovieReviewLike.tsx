@@ -98,7 +98,7 @@ export default function UserMovieReviewLike({
 				className={`rounded-full`}
 				asChild
 			  >
-				<Link href={'/login'}>
+				<Link href={'/auth/login'}>
 				  <HeartIcon />
 				</Link>
 			  </Button>

@@ -124,7 +124,7 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
             className={`rounded-full hover:text-foreground`}
             asChild
           >
-            <Link href={'/login'}>
+            <Link href={'/auth/login'}>
               <div
                 className={`transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[2px]`}
               >

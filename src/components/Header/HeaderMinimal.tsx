@@ -45,7 +45,7 @@ export async function HeaderMinimal({ className }: HeaderMinimalProps) {
       <div>
         {!session ? (
           <Button asChild>
-            <Link href={'/login'} className="whitespace-nowrap">
+            <Link href={'/auth/login'} className="whitespace-nowrap">
               Se connecter
             </Link>
           </Button>

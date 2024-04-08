@@ -130,7 +130,7 @@ export function MovieWatchlistAction({
             className={`rounded-full`}
             asChild
           >
-            <Link href={'/login'}>
+            <Link href={'/auth/login'}>
               <Bookmark />
             </Link>
           </Button>

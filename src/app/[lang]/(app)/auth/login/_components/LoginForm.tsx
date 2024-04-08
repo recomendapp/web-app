@@ -107,7 +107,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
             Se connecter avec un e-mail
           </Button>
           <Link
-            href="/forgotPassword"
+            href="/auth/forgotPassword"
             className="text-right text-sm text-muted-foreground hover:text-primary"
           >
             Mot de passe oublié ?

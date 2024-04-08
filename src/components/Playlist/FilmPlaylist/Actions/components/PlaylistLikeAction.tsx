@@ -209,12 +209,12 @@ export function PlaylistLikeAction({ playlistId }: MovieLikeActionProps) {
             className={`rounded-full`}
             asChild
           >
-            <Link href={'/login'}>
+            <Link href={'/auth/login'}>
               <Heart className={`transition hover:text-accent-1`} />
             </Link>
           </Button>
           {/* <Button
-            onClick={() => router.push('/login')}
+            onClick={() => router.push('/auth/login')}
             size="icon"
             variant={'action'}
             className="rounded-full"

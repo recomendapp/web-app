@@ -54,12 +54,12 @@ export function Navbar({ className }: NavbarProps) {
         label: 'Bibliothèque',
         active:
           pathname.startsWith('/collection') ||
-          pathname.startsWith('/login') ||
-          pathname.startsWith('/signup') ||
-          pathname.startsWith('/forgotPassword') ||
+          pathname.startsWith('/auth/login') ||
+          pathname.startsWith('/auth/signup') ||
+          pathname.startsWith('/auth/forgotPassword') ||
           pathname.startsWith('/resetPassword') ||
           pathname.startsWith('/verifyEmail'),
-        href: user ? '/collection' : '/login',
+        href: user ? '/collection' : '/auth/login',
       },
     ],
     [pathname, user]

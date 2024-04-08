@@ -142,7 +142,7 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
             variant={'rating'}
             asChild
           >
-            <Link href={'/login'}>
+            <Link href={'/auth/login'}>
               <Star />
             </Link>
           </Button>

@@ -44,7 +44,7 @@ export default async function CreateReview({
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session) redirect('/login');
+  if (!session) redirect('/auth/login');
 
   const { data: review } = await supabase
     .from('user_movie_review')
