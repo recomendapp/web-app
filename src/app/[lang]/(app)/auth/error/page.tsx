@@ -5,10 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Se connecter',
+  title: "Une erreur s\'est produite",
 };
 
-export default function Login() {
+export default function AuthError() {
   return (
     <main className="container h-full relative flex flex-col items-center justify-center">
       <div className="lg:p-8">
