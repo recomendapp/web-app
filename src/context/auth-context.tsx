@@ -142,7 +142,7 @@ export const AuthContext = ({ children }: { children: React.ReactNode }) => {
   };
 
   const loginOAuth2 = async (provider: Provider) => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
         redirectTo: `${location.origin}/auth/callback`,

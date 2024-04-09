@@ -17,8 +17,6 @@ interface LoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function LoginForm({ className, ...props }: LoginFormProps) {
   const { login, loginOAuth2 } = useAuth();
 
-  const router = useRouter();
-
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const [userLogin, setUserLogin] = useState({

@@ -1,25 +1,25 @@
 import { createRouteHandlerClient } from '@/lib/supabase/route';
-import { createServerClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
-  const code = requestUrl.searchParams.get('code');
-  const next = requestUrl.searchParams.get('next') ?? requestUrl.origin;
-
-  if (code) {
+  try {
+    const code = requestUrl.searchParams.get('code');
+    const next = requestUrl.searchParams.get('next') ?? '/';
+    
+    if (!code) throw new Error('No code provided');
     const supabase = createRouteHandlerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-        // URL to redirect to after sign in process completes
-      return NextResponse.redirect(next);
-    }
+    if (error) throw error;
+    
+    // URL to redirect to after sign in process completes
+    return NextResponse.redirect(new URL(next, requestUrl));
+  
+  } catch (error) {
+    console.error(`error [${new Date().toISOString()}]:`, error);
+    // return the user to the error page
+    return NextResponse.redirect(new URL('/auth/error', requestUrl));
   }
-
-  // console.log('request', request)
-
-  // return the user to the error page
-  return NextResponse.redirect(`${requestUrl.origin}/auth/error`);
 }
