@@ -1,13 +1,12 @@
 import { createRouteHandlerClient } from '@/lib/supabase/route';
 import { createServerClient } from '@/lib/supabase/server';
-import { NextURL } from 'next/dist/server/web/next-url';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
 
 export async function GET(request: NextRequest) {
-  const requestUrl = new NextURL(request.url);
+  const requestUrl = new URL(request.url);
   try {
     const code = requestUrl.searchParams.get('code');
     const next = requestUrl.searchParams.get('next') ?? '/';
@@ -18,12 +17,12 @@ export async function GET(request: NextRequest) {
     if (error) throw error;
     
     // URL to redirect to after sign in process completes
-    return NextResponse.redirect(new NextURL(next, requestUrl));
-  
+    return NextResponse.redirect(new URL(next, request.url));
   } catch (error) {
-    console.error(`error [${new Date().toISOString()}]:`, error);
     // return the user to the error page
-    return NextResponse.redirect(new NextURL('/auth/error', requestUrl));
+    const errorUrl = new URL('/auth/error', request.url);
+    errorUrl.searchParams.set('error', `${error}`);
+    return NextResponse.redirect(errorUrl);
   }
 }
 
