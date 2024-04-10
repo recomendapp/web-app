@@ -19,15 +19,18 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (error) throw error;
     
+    // if (next)
+    //   return NextResponse.redirect(next);
+    // else
+    //   return NextResponse.redirect(`${proto}//${host}/`)
     // URL to redirect to after sign in process completes
-    return NextResponse.redirect(`${proto}//${host}${next}`)
-    // return NextResponse.redirect(new URL(next, request.url));
+    return NextResponse.redirect(new URL(next, request.url));
   } catch (error) {
     // return the user to the error page
-    return NextResponse.redirect(`${proto}//${host}/auth/error?error=${error}`)
-    // const errorUrl = new URL('/auth/error', request.url);
-    // errorUrl.searchParams.set('error', `${error}`);
-    // return NextResponse.redirect(errorUrl);
+    // return NextResponse.redirect(`${proto}//${host}/auth/error?error=${error}`)
+    const errorUrl = new URL('/auth/error', request.url);
+    errorUrl.searchParams.set('error', `${error}`);
+    return NextResponse.redirect(errorUrl);
   }
 }
 
