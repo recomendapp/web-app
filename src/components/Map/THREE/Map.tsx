@@ -1,10 +1,12 @@
+import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
-import { useLoader } from "@react-three/fiber";
-import { useEffect } from "react";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { ObjectMap, useFrame, useLoader } from "@react-three/fiber";
+import { useEffect, useLayoutEffect, useRef } from "react";
+import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 export function Map({ ...props }) {
 	const gltf = useLoader(GLTFLoader, '/map4.glb');
+
 	// const gltf = useLoader(GLTFLoader, '/map4_comp.glb', (loader) => {
 	// 	const dracoLoader = new DRACOLoader();
 	// 	dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');

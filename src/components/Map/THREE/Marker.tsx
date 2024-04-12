@@ -1,10 +1,11 @@
 import { Billboard, Html, Text, useCursor } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { max } from "lodash";
+import { max, set } from "lodash";
 import { useRef, useState } from "react"
 import * as THREE from "three"
 import { animated, useSpring } from "@react-spring/three";
 import { fr } from "date-fns/locale";
+import useDebounce from "@/hooks/use-debounce";
 
 const AnimatedText = animated(Text);
 
@@ -22,6 +23,7 @@ const Marker = ({
 }) => {
 	const ref = useRef<THREE.Group>(null);
 
+	const [distance, setDistance] = useState<number>();
 	const [isOccluded, setIsOccluded] = useState<boolean>();
 	const [isInRange, setIsInRange] = useState<boolean>();
 	const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -37,17 +39,18 @@ const Marker = ({
 		reverse: !isVisible,
 	});
 	useFrame(({ camera }) => {
-		if (ref.current) {
-			const range = camera.position.distanceTo(ref.current.position) <= maxRange;
-			if (range !== isInRange) setIsInRange(range);
-
-			// Calculer la direction de la caméra par rapport au texte
-		}
-
-		// ref.current.lookAt(camera.position);
+		// dont use ref because that make draw call but compare with position
+		const range = camera.position.distanceTo(new THREE.Vector3(...position)) <= maxRange;
+		if (range !== isInRange) setIsInRange(range);
+		// if (ref.current) {
+		// 	const range = camera.position.distanceTo(ref.current.position) <= maxRange;
+		// 	if (range !== isInRange) setIsInRange(range);
+		// }
 	})
 
 	useCursor(isHovered);
+
+	if (!isVisible) return null;
 
 	return (
 		<Billboard
@@ -62,7 +65,7 @@ const Marker = ({
 					color: 'white',
 					depthTest: false,
 				})}
-				
+				fontSize={fontSize}
 				{...props}
 				{...spring}
 			>

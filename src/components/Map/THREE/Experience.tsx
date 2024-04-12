@@ -22,8 +22,8 @@ import { useControls, folder, button } from "leva";
 import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from 'three-mesh-bvh';
 import Marker from './Marker';
 import { FaMapMarkerAlt } from 'react-icons/fa';
-// import { Model as Map } from './Models/Map';
-import { Map } from './Map';
+import { Model as Map } from './Models/Map';
+// import { Map } from './Map';
 import { Movies } from './Movies';
 import Ocean from './Ocean';
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree
@@ -60,7 +60,7 @@ export function Experience() {
 			
 		>
 			{/* <SunLight sunPosition={[5, 1, -8]} /> */}
-			<color attach="background" args={['#000']} />
+			{/* <color attach="background" args={['#000']} /> */}
 			<ambientLight intensity={0.1} />
 			<Map scale={0.1} />
 			<CustomSky />
