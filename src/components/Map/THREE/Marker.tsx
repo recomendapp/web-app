@@ -6,28 +6,35 @@ import * as THREE from "three"
 import { animated, useSpring } from "@react-spring/three";
 import { fr } from "date-fns/locale";
 import useDebounce from "@/hooks/use-debounce";
+import { useMap } from "../../../context/map-context";
 
 const AnimatedText = animated(Text);
 
 const Marker = ({
+	id,
 	maxRange = 40,
 	position = [0, 0, 0],
 	fontSize = 0.2,
 	children,
 	...props
 } : {
+	id: number;
 	position?: [number, number, number];
 	maxRange?: number;
 	fontSize?: number;
+	onClick?: () => void;
 	children: React.ReactNode;
 }) => {
+	const {
+		movieId
+	} = useMap();
+
 	const ref = useRef<THREE.Group>(null);
 
-	const [distance, setDistance] = useState<number>();
 	const [isOccluded, setIsOccluded] = useState<boolean>();
 	const [isInRange, setIsInRange] = useState<boolean>();
 	const [isHovered, setIsHovered] = useState<boolean>(false);
-	const isVisible = isInRange && !isOccluded;
+	const isVisible = (movieId === id) || (isInRange && !isOccluded);
 
 	const spring = useSpring({
 		from: { scale: 0 },
@@ -55,7 +62,7 @@ const Marker = ({
 	return (
 		<Billboard
 			ref={ref}
-			onClick={() => console.log('Clicked on marker', children)}
+
 			onPointerOver={() => setIsHovered(true)}
 			onPointerOut={() => setIsHovered(false)}
 			position={position}

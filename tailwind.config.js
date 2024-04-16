@@ -40,9 +40,9 @@ module.exports = {
           hover: 'var(--accent-pink-hover)',
         },
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
+          DEFAULT: 'var(--primary)',
           subued: 'hsl(var(--primary-subued))',
-          foreground: 'hsl(var(--primary-foreground))',
+          foreground: 'var(--primary-foreground)',
         },
         secondary: {
           DEFAULT: 'var(--secondary)',

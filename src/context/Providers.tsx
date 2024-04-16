@@ -14,6 +14,7 @@ import { OneSignalContext } from '@/context/one-signal-context';
 import { RightSidebarContext } from '@/context/right-sidebar-context';
 import { cookies } from 'next/headers';
 import { UiContext } from './ui-context';
+import { MapContext } from './map-context';
 
 export default async function Provider({
   children,
@@ -49,26 +50,28 @@ export default async function Provider({
                     cookieSidebarCollapsed={cookieSidebarCollapsed}
                     cookieRightPanelCollapsed={cookieRightPanelCollapsed}
                   >
-                    <RightSidebarContext>
-                      <NextTopLoader
-                        showSpinner={false}
-                        easing="ease"
-                        color="#FFE974"
-                        height={2}
-                      />
-                      <Toaster
-                        position="top-center"
-                        toastOptions={{
-                          style: {
-                            borderRadius: '10px',
-                            background: '#333',
-                            color: '#fff',
-                          },
-                        }}
-                      />
-                      <SpeedInsights />
-                      {children}
-                    </RightSidebarContext>
+                    <MapContext>
+                      <RightSidebarContext>
+                        <NextTopLoader
+                          showSpinner={false}
+                          easing="ease"
+                          color="#FFE974"
+                          height={2}
+                        />
+                        <Toaster
+                          position="top-center"
+                          toastOptions={{
+                            style: {
+                              borderRadius: '10px',
+                              background: '#333',
+                              color: '#fff',
+                            },
+                          }}
+                        />
+                        <SpeedInsights />
+                        {children}
+                      </RightSidebarContext>
+                    </MapContext>
                   </UiContext>
                 </OneSignalContext>
               </ThemeContext>

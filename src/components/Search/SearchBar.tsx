@@ -51,7 +51,7 @@ export default function SearchBar({ className }: SearchBarProps) {
     >
       <form
         onSubmit={handleSubmit}
-        className={` w-full h-full flex items-center rounded-full bg-secondary text-primary border border-solid border-transparent ${
+        className={` w-full h-full flex items-center rounded-full bg-secondary text-primary-foreground border border-solid border-transparent ${
           isSearching && 'border-white'
         }`}
       >

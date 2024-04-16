@@ -50,8 +50,8 @@ export default function SidebarCollection({
                 font-medium rounded-md transition-all
                 group
                 ${pathname == '/collection'
-                  ? 'text-primary'
-                  : 'text-primary-subued hover:text-primary'
+                  ? 'text-primary-foreground'
+                  : 'text-primary-subued hover:text-primary-foreground'
                 }
               `}
             >
@@ -71,8 +71,8 @@ export default function SidebarCollection({
                   font-medium rounded-md transition-all
                   group
                   ${pathname == '/collection'
-                    ? 'text-primary'
-                    : 'text-primary-subued hover:text-primary'
+                    ? 'text-primary-foreground'
+                    : 'text-primary-subued hover:text-primary-foreground'
                   }
               `}
             >

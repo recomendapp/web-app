@@ -66,8 +66,8 @@ export default function SidebarCollectionRoutes() {
                     font-medium rounded-md transition-all w-full h-full
                     ${
                       item.active
-                        ? 'text-primary'
-                        : 'text-primary-subued hover:text-primary'
+                        ? 'text-primary-foreground'
+                        : 'text-primary-subued hover:text-primary-foreground'
                     }
                   `}
                 >

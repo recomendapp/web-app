@@ -85,8 +85,8 @@ export default function SidebarCollectionPlaylists() {
 							font-medium rounded-md transition-all w-full h-full
 							${
 							pathname === `/playlist/${playlist?.id}`
-								? 'text-primary'
-								: 'text-primary-subued hover:text-primary'
+								? 'text-primary-foreground'
+								: 'text-primary-subued hover:text-primary-foreground'
 							}
 						`}
 						>

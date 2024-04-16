@@ -31,7 +31,7 @@ export default function Signup() {
             Déjà inscrit ?{' '}
             <Link
               href="/auth/login"
-              className="underline underline-offset-4 hover:text-primary"
+              className="underline underline-offset-4 hover:text-primary-foreground"
             >
               Se connecter
             </Link>{' '}

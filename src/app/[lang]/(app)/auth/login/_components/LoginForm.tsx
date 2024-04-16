@@ -106,7 +106,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
           </Button>
           <Link
             href="/auth/forgotPassword"
-            className="text-right text-sm text-muted-foreground hover:text-primary"
+            className="text-right text-sm text-muted-foreground hover:text-primary-foreground"
           >
             Mot de passe oublié ?
           </Link>

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { Experience } from '@/components/Map/THREE/Experience';
+import { Map } from '@/components/Map/THREE/Map';
 
 export const metadata: Metadata = {
   title: 'Explore',
@@ -12,5 +12,5 @@ export default function MapPage({
     lang: string;
   };
 }) {
-  return <Experience />;
+  return <Map />;
 }

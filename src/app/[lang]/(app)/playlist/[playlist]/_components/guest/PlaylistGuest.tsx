@@ -293,7 +293,7 @@ const AddUser = ({
                                   src={friend?.avatar_url ?? ''}
                                   alt={friend?.username}
                                 />
-                                <AvatarFallback className="text-primary bg-muted text-[20px]">
+                                <AvatarFallback className="text-primary-foreground bg-muted text-[20px]">
                                   {getInitiales(friend?.username ?? '')}
                                 </AvatarFallback>
                               </Avatar>

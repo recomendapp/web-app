@@ -28,7 +28,7 @@ export default function AuthError() {
           </div>
           <Link
             href="/auth/login"
-            className="text-center underline underline-offset-4 hover:text-primary"
+            className="text-center underline underline-offset-4 hover:-foreground"
           >
             Réessayer
           </Link>{' '}

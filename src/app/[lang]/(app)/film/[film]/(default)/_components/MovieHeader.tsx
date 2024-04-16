@@ -58,7 +58,7 @@ export default function MovieHeader({
               <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
                 <ActivityIcon
                   movieId={movie.id}
-                  rating={movie.vote_average.toFixed(1)}
+                  rating={movie.vote_average}
                   variant="general"
                   className="w-full"
                   tooltip='Note moyenne'

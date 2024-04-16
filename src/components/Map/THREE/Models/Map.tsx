@@ -3,6 +3,32 @@
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 
+// export function Map({ ...props }) {
+// 	const gltf = useLoader(GLTFLoader, '/map4.glb');
+
+// 	useEffect(() => {
+// 		console.log('gltf', gltf);
+// 		if (gltf) {
+// 			console.log('gltf loaded', gltf);
+// 			gltf.scene.traverse((child) => {
+// 				if (child.isObject3D) {
+// 					child.castShadow = true;
+// 					child.receiveShadow = true;
+// 				}
+// 			})
+// 		}
+// 	}, [gltf]);
+
+// 	return (
+// 		<group
+// 			{...props}
+			
+// 		>
+// 			<primitive castShadow object={gltf.scene.clone()} />
+// 		</group>
+// 	)
+// }
+
 export function Model({ ...props }) {
   const { nodes, materials } = useGLTF('/map4.glb')
   return (
@@ -113,7 +139,7 @@ export function Model({ ...props }) {
         material={materials['Color texture_water']}
         position={[-45.161, -1.257, 58.543]}
       /> */}
-      <mesh
+      {/* <mesh
         castShadow
         receiveShadow
         geometry={nodes.Tree3004.geometry}
@@ -28699,7 +28725,7 @@ export function Model({ ...props }) {
         position={[195.068, 0, 341.452]}
         rotation={[-Math.PI, 0.066, -Math.PI]}
         scale={0.943}
-      />
+      /> */}
     </group>
   )
 }

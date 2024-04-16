@@ -257,7 +257,7 @@ export default function SearchFilmsSmall({
                     </div>
                   </div>
                   <div className="flex items-center">
-                    {item.release_date ? item.release_date.split('-')[0] : 'n/a'}
+                    {item.release_date ? new Date(item.release_date).getFullYear() : 'n/a'}
                   </div>
                 </Link>
               ))}

@@ -65,8 +65,8 @@ export function SidebarRoutes({
                 group
                 ${
                   item.active
-                    ? 'text-primary'
-                    : 'text-primary-subued hover:text-primary'
+                    ? 'text-primary-foreground'
+                    : 'text-primary-subued hover:text-primary-foreground'
                 }
               `}
             >
@@ -87,8 +87,8 @@ export function SidebarRoutes({
                 group
                 ${
                   item.active
-                    ? 'text-primary'
-                    : 'text-primary-subued hover:text-primary'
+                    ? 'text-primary-foreground'
+                    : 'text-primary-subued hover:text-primary-foreground'
                 }
             `}
           >
@@ -106,57 +106,4 @@ export function SidebarRoutes({
       ))}
     </Box>
   )
-
-  return (
-    <Box
-      className={`
-                    flex flex-col
-                    ${!isSidebarCollapsed && 'items-center'}
-            `}
-    >
-      <ul>
-        {mainRoutes.map((item) => (
-          <li key={item.label}>
-            <Link
-              href={item.href}
-              className={`
-                                relative flex items-center p-2 my-1
-                                font-medium rounded-md transition-all
-                                group
-                                ${
-                                  item.active
-                                    ? 'text-primary'
-                                    : 'text-primary-subued hover:text-primary'
-                                }
-                            `}
-            >
-              <item.icon />
-              <span
-                className={`
-                                    overflow-hidden transition-all
-                                    ${isSidebarCollapsed ? 'w-52 ml-3' : 'w-0'}
-                                `}
-              >
-                {item.label}
-              </span>
-              {/* {sidebarExpanded && item.label} */}
-              {!isSidebarCollapsed && (
-                <div
-                  className={`
-                                        z-[1]
-                                        absolute left-full rounded-md px-2 py-1 ml-6
-                                        bg-muted text-sm whitespace-nowrap
-                                        invisible opacity-20 -translate-x-3 transition-all
-                                        group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-                                    `}
-                >
-                  {item.label}
-                </div>
-              )}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </Box>
-  );
 }

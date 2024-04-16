@@ -61,7 +61,7 @@ export default function ActivityIcon({
               ${variant === 'follower' && 'text-blue-500'}
             `}
           >
-            {rating}
+            {rating.toFixed(1)}
           </p>
           {/* {is_liked && (
             <Heart
