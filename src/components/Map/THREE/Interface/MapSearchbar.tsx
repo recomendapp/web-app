@@ -109,7 +109,7 @@ export const MapSearchbar = () => {
 								<p>
 									{movie.title}
 								</p>
-								<div className="line-clamp-2">
+								<div className="line-clamp-1">
 									{movie.directors.length ? (
 										movie.directors.map(
 											(director: any, index: number) => (

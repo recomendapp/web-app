@@ -145,7 +145,7 @@ export const MovieWidget = () => {
 							)}
 						</div>
 						<div className=" space-y-2">
-						<div>
+						<div className="line-clamp-1">
 							{movie.directors?.map(({ director }, index: number) => (
 							<>
 								{index > 0 && <span>, </span>}
