@@ -1,16 +1,5 @@
 import useDebounce from "@/hooks/use-debounce";
-import { useEffect, useState } from "react";
-
-import {
-	Command,
-	CommandEmpty,
-	CommandGroup,
-	CommandInput,
-	CommandItem,
-	CommandList,
-	CommandSeparator,
-	CommandShortcut,
-} from "@/components/ui/command";
+import { useEffect, useRef, useState } from "react";
 import { useMap } from "../../../../context/map-context";
 import MoviePoster from "@/components/Movie/MoviePoster";
 import { SearchIcon } from "lucide-react";
@@ -25,6 +14,7 @@ export const MapSearchbar = () => {
 		data,
 	} = useMap();
 	const { ref, inView } = useInView();
+	const mainRef = useRef<HTMLDivElement>(null);
 	const numberOfResult = 10;
 	const [onFocus, setOnFocus] = useState(false);
 	const [displayedCount, setDisplayedCount] = useState(numberOfResult);
@@ -37,6 +27,20 @@ export const MapSearchbar = () => {
 		event.currentTarget.select();
 		setOnFocus(true);
 	}
+
+	const handleClick = (event: MouseEvent) => {
+		console.log('click');
+		if (mainRef.current && !mainRef.current.contains(event.target as Node)) {
+			setOnFocus(false);
+		}
+	};
+
+	useEffect(() => {
+		document.addEventListener('mousedown', handleClick);
+		return () => {
+			document.removeEventListener('mousedown', handleClick);
+		};
+	}, []);
 
 	useEffect(() => {
 		if (inView && data?.movies && displayedCount < data.movies.length) {
@@ -55,15 +59,9 @@ export const MapSearchbar = () => {
 		if (debouncedSearch && data?.movies) {
 			const fuse = new Fuse(data?.movies, {
 				keys: ['title', 'release_date', 'directors.name'],
-				includeScore: true,
-				threshold: 0.4, // Niveau de tolérance pour les correspondances floues
-				ignoreLocation: true,
+				threshold: 0.4,
 			});
 			const searchResults = fuse.search(debouncedSearch).map(result => result.item);
-			// const searchResults = movies.filter(movie => {
-			// 	const title = locale === "fr" ? movie.fr.title : movie.en.title;
-			// 	return title.toLowerCase().includes(debouncedSearch.toLowerCase());
-			// });
 			setResults(searchResults);
 		} else {
 			setResults(data?.movies);
@@ -71,7 +69,7 @@ export const MapSearchbar = () => {
 	}, [debouncedSearch, data?.movies]);
 
 	return (
-		<div className="md:w-2/5 pointer-events-auto relative">
+		<div ref={mainRef} className="md:w-2/5 pointer-events-auto relative">
 			{/* INPUT */}
 			<div
 				className={`
@@ -84,17 +82,20 @@ export const MapSearchbar = () => {
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
 					onFocus={handleFocus}
-					onBlur={() => setTimeout(() => setOnFocus(false), 100)}
+					// onBlur={() => setTimeout(() => setOnFocus(false), 100)}
 					placeholder="Chercher un film sur la carte..."
 					className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
 				/>
 			</div>
 			{/* RESULTS */}
-			{onFocus && <div className=" z-[1] absolute bg-background w-full max-h-48 overflow-hidden overflow-y-auto p-1 rounded-b-lg">
+			{onFocus && <div className=" z-[1] absolute bg-background w-full max-h-80 overflow-hidden overflow-y-auto p-1 rounded-b-lg">
 				{results?.slice(0, displayedCount).map((movie, i) => (
 					<div
 						key={i}
-						onClick={() => setMovieId(movie.id)}
+						onClick={() => {
+							setMovieId(movie.id)
+							setOnFocus(false)
+						}}
 						className="hover:bg-muted p-2 cursor-pointer rounded-md flex justify-between items-center"
 						{...(i === displayedCount - 1 ? { ref: ref } : {})}
 					>

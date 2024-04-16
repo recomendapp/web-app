@@ -24,7 +24,7 @@ export const MapFilters = () => {
 						<FilterIcon className="h-4 w-4"/>
 					</Button>
 				</PopoverTrigger>
-				<PopoverContent className="w-80 mr-4">
+				<PopoverContent className="w-80 mr-4" align='start'>
 					<MapFilterDate />
 					<Separator />
 					<MapFilterRuntime />
