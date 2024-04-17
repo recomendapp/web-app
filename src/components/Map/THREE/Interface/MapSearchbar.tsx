@@ -89,7 +89,7 @@ export const MapSearchbar = () => {
 			</div>
 			{/* RESULTS */}
 			{onFocus && <div className=" z-[1] absolute bg-background w-full max-h-80 overflow-hidden overflow-y-auto p-1 rounded-b-lg">
-				{results?.slice(0, displayedCount).map((movie, i) => (
+				{(results && results?.length > 0) ? results?.slice(0, displayedCount).map((movie, i) => (
 					<div
 						key={i}
 						onClick={() => {
@@ -142,7 +142,11 @@ export const MapSearchbar = () => {
 							{movie.release_date ? new Date(movie.release_date).getFullYear() : 'n/a'}
 						</div>
 					</div>
-				))}
+				)) : (
+					<div className="p-2">
+						<p>Aucun résultat.</p>
+					</div>
+				)}
 				{/* {Array.from({ length: 1500 }).map((_, i) => (
 					<div
 						key={i}

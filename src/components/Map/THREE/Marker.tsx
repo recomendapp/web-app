@@ -1,7 +1,7 @@
 import { Billboard, Html, Text, useCursor } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { max, set } from "lodash";
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import * as THREE from "three"
 import { animated, useSpring } from "@react-spring/three";
 import { fr } from "date-fns/locale";
@@ -15,6 +15,7 @@ const Marker = ({
 	maxRange = 40,
 	position = [0, 0, 0],
 	fontSize = 0.2,
+	color = 'white',
 	children,
 	...props
 } : {
@@ -22,6 +23,7 @@ const Marker = ({
 	position?: [number, number, number];
 	maxRange?: number;
 	fontSize?: number;
+	color?: string;
 	onClick?: () => void;
 	children: React.ReactNode;
 }) => {
@@ -69,7 +71,7 @@ const Marker = ({
 		>
 			<AnimatedText
 				material={new THREE.MeshBasicMaterial({
-					color: 'white',
+					color: color,
 					depthTest: false,
 				})}
 				fontSize={fontSize}

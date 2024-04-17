@@ -61,7 +61,8 @@ export default function ActivityIcon({
               ${variant === 'follower' && 'text-blue-500'}
             `}
           >
-            {rating.toFixed(1)}
+            {/* make to fixed only if it's a float */}
+            {rating % 1 === 0 ? rating : rating.toFixed(1)}
           </p>
           {/* {is_liked && (
             <Heart

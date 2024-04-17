@@ -22,6 +22,7 @@ export const MapFilterRuntime = () => {
 			filters.runtime.setValue(debouncedValue);
 	}, [debouncedValue, filters.runtime]);
 
+	console.log('runtime', value);
 	return (
 		<FormItem>
 			<Label className=" inline-flex items-center">
@@ -41,7 +42,8 @@ export const MapFilterRuntime = () => {
 				value={value}
 				max={filters.runtime.defaultValue[1]}
 				step={15}
-				formatLabel={(value) => format.dateTime(value * 60 * 1000, {hour: 'numeric', minute: 'numeric'})}
+				// turn minutes to hours
+				formatLabel={(value) => format.dateTime((value - 60) * 60 * 1000, { hour: 'numeric', minute: 'numeric' })}
 				onValueChange={(value) => {
 					setValue(value)
 				}}

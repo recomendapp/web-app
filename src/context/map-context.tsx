@@ -3,6 +3,7 @@
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { createContext, useContext, useMemo, useState } from "react";
 import moviesDataset from "../components/Map/THREE/Data/movies.json";
+import biomesDataset from "../components/Map/THREE/Data/biomes.json";
 import { useLocale } from "next-intl";
 
 interface ModalContextProps {
@@ -49,11 +50,18 @@ interface ModalContextProps {
 			coord_y: number;
 			runtime: number;
 		}[];
+		biomes: {
+			id: number;
+			name: string;
+			position: number[];
+			rotationX: number;
+		}[];
 		genres: {
 			id: number;
 			name: string;
 		}[];
 	};
+	debug?: boolean;
 }
 
 const MapProvider = createContext<ModalContextProps | undefined>(undefined);
@@ -64,6 +72,9 @@ export const MapContext = ({
 	children: React.ReactNode
 }) => {
 	const locale = useLocale();
+	/* Is in debug mode */
+	const debug = process.env.NODE_ENV === 'development';
+
 	/* Data */
 	const data = useMemo(() => {
 		const movies = moviesDataset.map(movie => {
@@ -85,6 +96,10 @@ export const MapContext = ({
 				runtime: movie.runtime,
 			}
 		});
+		// show duplicate movies
+		const duplicateMovies = movies.filter((movie, index, self) => self.findIndex(m => m.id === movie.id) !== index);
+		console.log('duplicateMovies', duplicateMovies);
+		const biomes = biomesDataset;
 		const genres = moviesDataset.reduce((acc: { id: number; name: string; }[], movie) => {
 			movie.genres.forEach(genre => {
 			  if (!acc.find(g => g.id === genre.id)) {
@@ -95,9 +110,10 @@ export const MapContext = ({
 			  }
 			});
 			return acc;
-		  }, []);
+		}, []);
 		return {
 			movies,
+			biomes,
 			genres,
 		}
 	}, [locale]);
@@ -137,6 +153,7 @@ export const MapContext = ({
 				}
 			},
 			data: data,
+			debug: debug,
 		}}>
 			{children}
 		</MapProvider.Provider>

@@ -1,13 +1,13 @@
 "use client";
 
 import * as THREE from 'three'
-import Loader from '@/components/Loader/Loader'
 import { Canvas, useLoader, useThree } from '@react-three/fiber'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Suspense, useEffect, useRef } from 'react'
 import {
 	ContactShadows,
 	Environment,
+	Loader,
 	MapControls,
 	Sky,
 	Stars,
@@ -18,7 +18,7 @@ import { MovieMarker } from './MovieMarker';
 import { Perf } from 'r3f-perf'
 import { EffectComposer, Bloom, HueSaturation, BrightnessContrast, TiltShift2, WaterEffect, ToneMapping, LensFlare, GodRays, Vignette, Scanline, Depth, DepthOfField } from '@react-three/postprocessing'
 
-import { useControls, folder, button } from "leva";
+import { useControls, folder, button, Leva } from "leva";
 import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from 'three-mesh-bvh';
 import Marker from './Marker';
 import { FaMapMarkerAlt } from 'react-icons/fa';
@@ -28,79 +28,56 @@ import { Movies } from './Movies';
 import Ocean from './Ocean';
 import { Interface } from './Interface/Interface';
 import { useQuery } from '@tanstack/react-query';
+import { Biomes } from './Biomes';
+import { useMap } from '@/context/map-context';
 THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree
 THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree
 THREE.Mesh.prototype.raycast = acceleratedRaycast
 
 export function Map() {
-	// const {
-	// 	orthographic,
-	// } = useControls({
-	// 	orthographic: { value: false },
-	// });
-
+	const {
+		debug
+	} = useMap();
 	return (
 		<div className='relative w-full h-full'>
 			<Canvas
 				camera={{
-					// near: 0.1,
-					// far: 1000,
 					position: [280, 10, 70],
 					fov: 60,
 					far: 10000,
-					
 				}}
-				// dpr={[1, 1.5]}
-				// orthographic={orthographic}
-				// gl={{ antialias: false }}
-				// flat
-				shadows={{
-					type: THREE.VSMShadowMap,
-				}}
-				
-				// frameloop="demand"
-				
-				
 			>
-				{/* <SunLight sunPosition={[5, 1, -8]} /> */}
-				{/* <color attach="background" args={['#000']} /> */}
 				<ambientLight intensity={0.1} />
 				<MapModel scale={0.1} />
+				<Biomes />
 				<CustomSky />
 				<Movies />
 				<Ocean />
-				<fog attach="fog" args={['#86B0E3', 10, 500]} />
-				{/* <Light /> */}
-				{/* {Array.from({ length: 1500 }, (_, index) => (
-					// <group
-					// 	key={index}
-					// 	position={[
-					// 		(index % 30) * (index % 2 === 0 ? 1 : 1),
-					// 		1,
-					// 		Math.floor(index / 30) * (Math.floor(index / 30) % 2 === 0 ? 1 : -1)
-					// 	]}
-					// 	rotation={[0, 0, Math.PI]}
-					// >
-						<Marker
-							key={index}
-							position={[
-								(index % 30) * (index % 2 === 0 ? 1 : -1),
-								1,
-								Math.floor(index / 30) * (Math.floor(index / 30) % 2 === 0 ? 1 : -1)
-							]}
-							fontSize={0.25}
-						>
-							ok drhdr rhdrh rh rdh dhrdt tfhxf thtfx htfh cfth ft
-						</Marker>
-					// </group>
-				))} */}
+				<fog attach="fog" args={['#86B0E3', 10, 400]} />
 				<Controls />
-				<Stats />
-				<Perf position="bottom-right" />
+				
 				<Postpro/>
+				<Debug />
 			</Canvas>
+			<Loader />
+			<Leva hidden={!debug} />
 			<Interface />
 		</div>
+	)
+}
+
+const Debug = () => {
+	const {
+		debug
+	} = useMap();
+
+	if (!debug) return null;
+
+	return (
+		<>
+			<Stats />
+			<Perf position="bottom-right" />
+		</>
 	)
 }
 
@@ -130,11 +107,9 @@ const CustomSky = () => {
 		}),
 	});
 
-
 	useEffect(() => {
 		gl.toneMappingExposure = exposure;
 	}, [gl, exposure]);
-
 
 	return (
 		<>
@@ -200,7 +175,7 @@ function Controls() {
 			dampingFactor={0.05}
 			maxPolarAngle={Math.PI / 2 - 0.25}
 			maxDistance={100}
-			minDistance={0.5}
+			minDistance={5}
 		/>
 	)
 }
@@ -232,15 +207,3 @@ function SunLight({ ...props }) {
 	  </group>
 	)
 }
-
-function Light() {
-	const ref = useRef<THREE.Group>(null);
-	
-	return (
-	  <group ref={ref}>
-		<directionalLight position={[5, 5, -8]} castShadow intensity={5} shadow-mapSize={2048} shadow-bias={-0.001}>
-		  <orthographicCamera attach="shadow-camera" args={[-8.5, 8.5, 8.5, -8.5, 0.1, 20]} />
-		</directionalLight>
-	  </group>
-	)
-  }
