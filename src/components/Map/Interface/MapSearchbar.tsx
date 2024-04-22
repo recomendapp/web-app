@@ -1,6 +1,6 @@
 import useDebounce from "@/hooks/use-debounce";
 import { useEffect, useRef, useState } from "react";
-import { useMap } from "../../../../context/map-context";
+import { useMap } from "../../../context/map-context";
 import MoviePoster from "@/components/Movie/MoviePoster";
 import { SearchIcon } from "lucide-react";
 import { useInView } from "react-intersection-observer";
@@ -29,7 +29,6 @@ export const MapSearchbar = () => {
 	}
 
 	const handleClick = (event: MouseEvent) => {
-		console.log('click');
 		if (mainRef.current && !mainRef.current.contains(event.target as Node)) {
 			setOnFocus(false);
 		}
@@ -58,7 +57,7 @@ export const MapSearchbar = () => {
 	useEffect(() => {
 		if (debouncedSearch && data?.movies) {
 			const fuse = new Fuse(data?.movies, {
-				keys: ['title', 'release_date', 'directors.name'],
+				keys: ['title', 'release_date', 'directors.name', 'original_title'],
 				threshold: 0.4,
 			});
 			const searchResults = fuse.search(debouncedSearch).map(result => result.item);
@@ -82,7 +81,6 @@ export const MapSearchbar = () => {
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
 					onFocus={handleFocus}
-					// onBlur={() => setTimeout(() => setOnFocus(false), 100)}
 					placeholder="Chercher un film sur la carte..."
 					className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
 				/>
@@ -147,61 +145,7 @@ export const MapSearchbar = () => {
 						<p>Aucun résultat.</p>
 					</div>
 				)}
-				{/* {Array.from({ length: 1500 }).map((_, i) => (
-					<div
-						key={i}
-						onSelect={() => setMovieId(i)}
-						className="hover:bg-muted p-2 cursor-pointer rounded-md"
-					>
-						<span>Movie {i}</span>
-					</div>
-				))} */}
 			</div>}
 		</div>
 	)
-
-	// return (
-	// 	<Command
-	// 		className="rounded-lg border shadow-md pointer-events-auto md:w-2/5"
-	// 	>
-	// 		<CommandInput
-	// 			onFocus={handleFocus}
-	// 			onBlur={() => setTimeout(() => setOnFocus(false), 100)}
-	// 			placeholder="Chercher un film sur la carte..."
-	// 		/>
-	// 		{onFocus && <CommandList>
-	// 			<CommandEmpty>No results found.</CommandEmpty>
-	// 			<CommandGroup heading="Films">
-	// 				{movies?.map((movie, i) => (
-	// 					<CommandItem
-	// 						key={i}
-	// 						onSelect={() => setSelectedMovie(movie)}
-							
-	// 					>
-	// 						<MoviePoster
-	// 							className="w-10"
-	// 							poster_path={`https://image.tmdb.org/t/p/w500/${movie.en.poster_path}`}
-	// 							alt={movie.en.title}
-	// 						/>
-	// 						<span className="ml-2">
-	// 							{locale === "fr" ?
-	// 								movie.fr.title
-	// 							:
-	// 								movie.en.title
-	// 							}
-	// 						</span>
-	// 					</CommandItem>
-	// 				))}
-	// 				{/* {Array.from({ length: 1500 }).map((_, i) => (
-	// 					<CommandItem
-	// 						key={i}
-	// 						onSelect={() => setMovieId(i.toString())}
-	// 					>
-	// 						<span>Movie {i}</span>
-	// 					</CommandItem>
-	// 				))} */}
-	// 			</CommandGroup>
-	// 		</CommandList>}
-	// 	</Command>
-	// )
 }

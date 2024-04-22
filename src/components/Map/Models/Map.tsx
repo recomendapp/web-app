@@ -29,8 +29,10 @@ import { useGLTF } from '@react-three/drei'
 // 	)
 // }
 
+const path = '/map5.glb'
+
 export function Model(props) {
-  const { nodes, materials } = useGLTF('/map5.glb')
+  const { nodes, materials } = useGLTF(path)
   return (
     <group {...props} dispose={null}>
       <mesh
@@ -28730,4 +28732,4 @@ export function Model(props) {
   )
 }
 
-useGLTF.preload('/map5.glb')
+useGLTF.preload(path)

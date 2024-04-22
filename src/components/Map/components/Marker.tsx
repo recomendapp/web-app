@@ -31,12 +31,9 @@ const Marker = ({
 		movieId
 	} = useMap();
 
-	const ref = useRef<THREE.Group>(null);
-
-	const [isOccluded, setIsOccluded] = useState<boolean>();
-	const [isInRange, setIsInRange] = useState<boolean>();
+	const [isInRange, setIsInRange] = useState<boolean>(true);
 	const [isHovered, setIsHovered] = useState<boolean>(false);
-	const isVisible = (movieId === id) || (isInRange && !isOccluded);
+	const isVisible = isInRange;
 
 	const spring = useSpring({
 		from: { scale: 0 },
@@ -48,13 +45,8 @@ const Marker = ({
 		reverse: !isVisible,
 	});
 	useFrame(({ camera }) => {
-		// dont use ref because that make draw call but compare with position
 		const range = camera.position.distanceTo(new THREE.Vector3(...position)) <= maxRange;
 		if (range !== isInRange) setIsInRange(range);
-		// if (ref.current) {
-		// 	const range = camera.position.distanceTo(ref.current.position) <= maxRange;
-		// 	if (range !== isInRange) setIsInRange(range);
-		// }
 	})
 
 	useCursor(isHovered);
@@ -63,16 +55,16 @@ const Marker = ({
 
 	return (
 		<Billboard
-			ref={ref}
-
 			onPointerOver={() => setIsHovered(true)}
 			onPointerOut={() => setIsHovered(false)}
+			// visible={isVisible}
 			position={position}
 		>
 			<AnimatedText
 				material={new THREE.MeshBasicMaterial({
 					color: color,
 					depthTest: false,
+					alphaTest: 0.5,
 				})}
 				fontSize={fontSize}
 				{...props}
@@ -81,32 +73,6 @@ const Marker = ({
 				{children}
 			</AnimatedText>
 		</Billboard>
-		// <Text
-		// 	ref={ref}
-		// 	castShadow={false}
-		// 	receiveShadow={false}
-		// 	{...props}
-		// >
-		// 	{children}
-		// </Text>
-		// <group ref={ref}>
-		// 	{/* <Html
-		// 		transform
-		// 		className=" select-none cursor-pointer"
-		// 		// occlude
-		// 		// onOcclude={setIsOccluded}
-		// 		style={{
-		// 			transition: 'all 0.2s',
-		// 			opacity: isVisible ? 1 : 0,
-		// 			transform: `
-		// 				scale(${isVisible ? 1 : 0.5}
-		// 			`
-		// 		}}
-		// 		{...props}
-		// 	>
-		// 		{children}
-		// 	</Html> */}
-		// </group>
 	)
 }
 

@@ -1,5 +1,11 @@
+// THREE
+import {
+	Text,
+	Text3D
+} from "@react-three/drei";
+
+// Context
 import { useMap } from "@/context/map-context";
-import { Text, Text3D } from "@react-three/drei";
 
 export const Biomes = () => {
 	const {

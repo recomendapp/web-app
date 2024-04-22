@@ -1,4 +1,4 @@
-import { MapFilters } from "./MapFilters/MapFilters"
+import { MapFilters } from "./MapFilters"
 import { MapSearchbar } from "./MapSearchbar"
 
 export const MapHeader = () => {

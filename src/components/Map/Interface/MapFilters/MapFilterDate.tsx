@@ -2,48 +2,54 @@ import { FormItem } from "@/components/ui/form"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { SliderRange } from "@/components/ui/slider-range"
-import { useMap } from "../../../../../context/map-context"
+import { useMap } from "../../../../context/map-context"
 import { useEffect, useState } from "react"
 import useDebounce from "@/hooks/use-debounce"
 import { TooltipBox } from "@/components/Box/TooltipBox"
 import { RotateCcwIcon } from "lucide-react"
-import { useFormatter } from "next-intl"
 
-export const MapFilterRuntime = () => {
-	const format = useFormatter();
+export const MapFilterDate = () => {
 	const {
+		map,
 		filters
 	} = useMap();
-	const [value, setValue] = useState<number[]>(filters.runtime.value);
+	const [value, setValue] = useState<number[]>(filters.date.value);
 	const debouncedValue = useDebounce(value, 500);
 
 	useEffect(() => {
-		if (debouncedValue !== filters.runtime.value)
-			filters.runtime.setValue(debouncedValue);
-	}, [debouncedValue, filters.runtime]);
+		if (debouncedValue !== filters.date.value)
+			filters.date.setValue(debouncedValue);
+	}, [debouncedValue, filters.date]);
 
-	console.log('runtime', value);
+	useEffect(() => {
+		if (!map.current) return;
+		map.current.setFilter('markers-layer', [
+			'>=',
+			['get', 'ReleaseDate'],
+			value[0]
+		]);
+		console.log('date', filters.date.value)
+	}, [filters.date.value]);
+
 	return (
 		<FormItem>
 			<Label className=" inline-flex items-center">
-				Durée
-				{!value.every((value, index) => value === filters.runtime.defaultValue[index]) &&
+				Date
+				{!value.every((value, index) => value === filters.date.defaultValue[index]) &&
 				<TooltipBox tooltip="Reset">
 					<RotateCcwIcon
 						onClick={() => {
-							setValue(filters.runtime.defaultValue)
+							setValue(filters.date.defaultValue)
 						}}
 						className="w-3 h-3 ml-1 text-muted-foreground hover:text-primary-foreground transition-colors cursor-pointer"
 					/>
 				</TooltipBox>}
 			</Label>
 			<SliderRange
-				min={filters.runtime.defaultValue[0]}
+				min={filters.date.defaultValue[0]}
 				value={value}
-				max={filters.runtime.defaultValue[1]}
-				step={15}
-				// turn minutes to hours
-				formatLabel={(value) => format.dateTime((value - 60) * 60 * 1000, { hour: 'numeric', minute: 'numeric' })}
+				max={filters.date.defaultValue[1]}
+				step={1}
 				onValueChange={(value) => {
 					setValue(value)
 				}}

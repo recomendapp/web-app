@@ -4,25 +4,25 @@ import React, { useState, useRef, useEffect } from 'react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import maplibre, { StyleSpecification, LngLatBoundsLike } from 'maplibre-gl';
 
-import movies from '@/components/Map/style/movies/movies.json';
+import movies from '@/components/Map/OLD/style/movies/movies.json';
 // MAP STYLE
-import style from '@/components/Map/style/style.json';
+import style from '@/components/Map/OLD/style/style.json';
 // MAP LAYERS
-import mapBase from '@/components/Map/style/layers/base.json';
-import mapBeach from '@/components/Map/style/layers/beach.json';
-import mapDesert from '@/components/Map/style/layers/desert.json';
-import mapGrass from '@/components/Map/style/layers/grass.json';
-import mapContour from '@/components/Map/style/layers/contour.json';
-import mapHighway from '@/components/Map/style/layers/highway.json';
-import mapTrain from '@/components/Map/style/layers/train.json';
-import mapPrimaryRoad from '@/components/Map/style/layers/primary-road.json';
-import mapSecondaryRoad from '@/components/Map/style/layers/secondary-road.json';
-import mapTrail from '@/components/Map/style/layers/trail.json';
-import mapSportsField from '@/components/Map/style/layers/sports-field.json';
-import mapEnvironmentItems from '@/components/Map/style/layers/environment-items.json';
-import mapEnvironmentSymbols from '@/components/Map/style/layers/environment-symbols.json';
-import mapBuildings from '@/components/Map/style/layers/buildings.json';
-import mapZones from '@/components/Map/style/layers/zones.json';
+import mapBase from '@/components/Map/OLD/style/layers/base.json';
+import mapBeach from '@/components/Map/OLD/style/layers/beach.json';
+import mapDesert from '@/components/Map/OLD/style/layers/desert.json';
+import mapGrass from '@/components/Map/OLD/style/layers/grass.json';
+import mapContour from '@/components/Map/OLD/style/layers/contour.json';
+import mapHighway from '@/components/Map/OLD/style/layers/highway.json';
+import mapTrain from '@/components/Map/OLD/style/layers/train.json';
+import mapPrimaryRoad from '@/components/Map/OLD/style/layers/primary-road.json';
+import mapSecondaryRoad from '@/components/Map/OLD/style/layers/secondary-road.json';
+import mapTrail from '@/components/Map/OLD/style/layers/trail.json';
+import mapSportsField from '@/components/Map/OLD/style/layers/sports-field.json';
+import mapEnvironmentItems from '@/components/Map/OLD/style/layers/environment-items.json';
+import mapEnvironmentSymbols from '@/components/Map/OLD/style/layers/environment-symbols.json';
+import mapBuildings from '@/components/Map/OLD/style/layers/buildings.json';
+import mapZones from '@/components/Map/OLD/style/layers/zones.json';
 // MAP ICONS
 import mapIconRailway from '@/components/Map/style/icons/railway.png';
 // import 'maplibre-gl/dist/maplibre-gl.css';
@@ -891,7 +891,7 @@ export function Map() {
           <Icons.spinner className="animate-spin" />
         </div>
       )}
-      <div className="w-full h-full flex flex-col relative bg-[#110731] bg-opacity-20">
+      <div className="w-full h-full flex flex-col relative bg-black">
         {/* HEADER MAP */}
         <div className="absolute  pt-4 px-4 gap-2  w-full pointer-events-none flex flex-col justify-between lg:flex-row">
           <MapSearchbar />

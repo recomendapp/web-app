@@ -74,7 +74,7 @@
   },
   "routes": {
     "home": "Accueil",
-    "explore": "Découverte",
+    "explore": "Explorer",
     "feed": "Feed",
     "search": "Recherche",
     "shop": "Shop",

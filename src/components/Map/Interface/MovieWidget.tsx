@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useMap } from "../../../../context/map-context"
+import { useMap } from "../../../context/map-context"
 import { TriangleAlert, XIcon } from "lucide-react";
 import MoviePoster from "@/components/Movie/MoviePoster";
 import { useQuery } from "@tanstack/react-query";
@@ -55,7 +55,6 @@ export const MovieWidget = () => {
 				.eq('directors.job', 'Director')
 				.single();
 			if (error) throw error;
-			console.log('movie', movie);
 			return movie;
 		},
 		enabled: !!movieId && !!locale,
@@ -83,7 +82,7 @@ export const MovieWidget = () => {
 					<Loader />
 				</div>
 			) : (
-				<div className="w-full h-full flex flex-col">
+				<div className="w-full h-full flex flex-col gap-2">
 					<div className="w-full h-full flex gap-2 items-center">
 						<MoviePoster
 							className="h-full w-fit"
@@ -137,7 +136,12 @@ export const MovieWidget = () => {
 							</div>
 							{/* TITLE */}
 							<div className="space-x-1">
-								<span className='font-bold text-lg line-clamp-2'>{movie.data[0].title}</span>
+								<Link
+									href={`/film/${movie.id}`}
+									className='font-bold text-lg line-clamp-2'
+								>
+									{movie.data[0].title}
+								</Link>
 								{/* DATE */}
 								<sup>
 									<DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-xs font-medium'/>
@@ -178,19 +182,6 @@ export const MovieWidget = () => {
 					<MovieAction filmId={movie.id} all />
 				</div>
 			)}
-			{/* <section className="w-full h-full flex gap-2 items-center">
-				<MoviePoster
-					className="h-full w-fit"
-					poster_path={`https://image.tmdb.org/t/p/w500/${movie.en.poster_path}`}
-					alt={movie.en.title}
-				/>
-				<div>
-					<h2 className="text-xl font-bold">
-						{movie.en.title}
-					</h2>
-				</div>
-
-			</section> */}
 		</div>
 	)
 }
