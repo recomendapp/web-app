@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
-import { Experience } from '@/components/Map/Experience';
+import { Experience } from '@/components/Map/THREE/Experience';
 // import { Map } from '@/components/Map/DeckGL/Map';
-import { Map } from '@/components/Map/OLD/Map';
+import { Map } from '@/components/Map/Map';
 
 export const metadata: Metadata = {
   title: 'Explore',

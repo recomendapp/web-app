@@ -80,7 +80,7 @@ export default async function MovieLayout({
 		.eq('videos.iso_639_1', params.lang)
 		.eq('directors.job', 'Director')
 		.single();
-	
+
 	if (!movie) notFound();
 
 	return (

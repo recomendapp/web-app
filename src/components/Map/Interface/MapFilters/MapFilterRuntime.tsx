@@ -12,6 +12,7 @@ import { useFormatter } from "next-intl"
 export const MapFilterRuntime = () => {
 	const format = useFormatter();
 	const {
+		map,
 		filters
 	} = useMap();
 	const [value, setValue] = useState<number[]>(filters.runtime.value);
@@ -21,6 +22,16 @@ export const MapFilterRuntime = () => {
 		if (debouncedValue !== filters.runtime.value)
 			filters.runtime.setValue(debouncedValue);
 	}, [debouncedValue, filters.runtime]);
+
+	useEffect(() => {
+		if (!map.current) return;
+		console.log('filters.runtime.value', filters.runtime.value);
+		map.current.setFilter('movies', [
+			"all",
+			[">=", ["get", "runtime"], filters.runtime.value[0]],
+			["<=", ["get", "runtime"], filters.runtime.value[1]]
+		]);
+	}, [filters.runtime.value, map]);
 
 	console.log('runtime', value);
 	return (

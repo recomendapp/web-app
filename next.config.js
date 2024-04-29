@@ -6,7 +6,11 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   disable: process.env.NODE_ENV === 'development',
 });
 
+
+const { withPlausibleProxy } = require('next-plausible');
+
 const withNextIntl = require('next-intl/plugin')('./src/i18n.ts');
+
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -51,4 +55,6 @@ const nextConfig = {
   },
 };
 
-module.exports = withPWA(withNextIntl(nextConfig));
+module.exports = withPlausibleProxy({
+  customDomain: 'https://analytics.recomend.app',
+})(withPWA(withNextIntl(nextConfig)));

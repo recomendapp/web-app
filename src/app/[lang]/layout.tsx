@@ -6,6 +6,7 @@ import { fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import Providers from '@/context/Providers';
 import HelloNerd from '@/components/Console/HelloNerd';
+import Script from 'next/script';
 
 export const viewport: Viewport = {
   width: 'device-width',

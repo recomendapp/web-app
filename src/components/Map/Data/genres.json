@@ -1,0 +1,107 @@
+[
+    {
+        "id": 8705,
+        "en": "Biopic",
+        "fr": "Biopic"
+    },
+    {
+        "id": 8738,
+        "en": "Dramedy",
+        "fr": "Com\u00e9die dramatique"
+    },
+    {
+        "id": 12,
+        "en": "Adventure",
+        "fr": "Aventure"
+    },
+    {
+        "id": 36,
+        "en": "History",
+        "fr": "Histoire"
+    },
+    {
+        "id": 10752,
+        "en": "War",
+        "fr": "Guerre"
+    },
+    {
+        "id": 18,
+        "en": "Drama",
+        "fr": "Drame"
+    },
+    {
+        "id": 53,
+        "en": "Thriller",
+        "fr": "Thriller"
+    },
+    {
+        "id": 37,
+        "en": "Western",
+        "fr": "Western"
+    },
+    {
+        "id": 80,
+        "en": "Crime",
+        "fr": "Crime"
+    },
+    {
+        "id": 35,
+        "en": "Comedy",
+        "fr": "Com\u00e9die"
+    },
+    {
+        "id": 27,
+        "en": "Horror",
+        "fr": "Horreur"
+    },
+    {
+        "id": 28,
+        "en": "Action",
+        "fr": "Action"
+    },
+    {
+        "id": 10749,
+        "en": "Romance",
+        "fr": "Romance"
+    },
+    {
+        "id": 14,
+        "en": "Fantasy",
+        "fr": "Fantastique"
+    },
+    {
+        "id": 10402,
+        "en": "Music",
+        "fr": "Musique"
+    },
+    {
+        "id": 878,
+        "en": "Science Fiction",
+        "fr": "Science-Fiction"
+    },
+    {
+        "id": 9648,
+        "en": "Mystery",
+        "fr": "Myst\u00e8re"
+    },
+    {
+        "id": 10751,
+        "en": "Family",
+        "fr": "Familial"
+    },
+    {
+        "id": 16,
+        "en": "Animation",
+        "fr": "Animation"
+    },
+    {
+        "id": 10770,
+        "en": "TV Movie",
+        "fr": "T\u00e9l\u00e9film"
+    },
+    {
+        "id": 99,
+        "en": "Documentary",
+        "fr": "Documentaire"
+    }
+]

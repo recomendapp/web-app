@@ -2,12 +2,16 @@
 
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { MutableRefObject, createContext, useContext, useMemo, useRef, useState } from "react";
+// import moviesDataset from "@/components/Map/Data/movies.json"
 import moviesDataset from "@/components/Map/Data/movies.json"
-import biomesDataset from "@/components/Map/Data/biomes.json"
+import genresDataset from "@/components/Map/Data/genres.json"
+// import biomesDataset from "@/components/Map/Data/biomes.json"
 import { useLocale } from "next-intl";
 
 interface ModalContextProps {
 	map: MutableRefObject<any>;
+	mapInitialized: boolean;
+	setMapInitialized: (value: boolean) => void;
 	movieId: number | null;
 	setMovieId: (movieId: number | null) => void;
 	filters: {
@@ -33,14 +37,12 @@ interface ModalContextProps {
 		}
 	};
 	data?: {
+		moviesDataset: typeof moviesDataset;
 		movies: {
 			id: number;
 			title: string;
 			poster_path: string;
-			genres: {
-				id: number;
-				name: string;
-			}[];
+			genres: number[];
 			directors: {
 				id: number;
 				name: string;
@@ -51,12 +53,6 @@ interface ModalContextProps {
 			// coord_x: number;
 			// coord_y: number;
 			runtime: number;
-		}[];
-		biomes: {
-			id: number;
-			name: string;
-			position: number[];
-			rotationX: number;
 		}[];
 		genres: {
 			id: number;
@@ -80,23 +76,20 @@ export const MapContext = ({
 	const locale = useLocale();
 	/* Map */
 	const map = useRef<any>(null);
+	const [mapInitialized, setMapInitialized] = useState(false);
 	/* Data */
 	const data = useMemo(() => {
-		const movies = moviesDataset.map(movie => {
+		const movies = moviesDataset.features.map(({ properties: movie, geometry }) => {
 			return {
 				id: movie.id,
 				title: locale === 'fr' ? movie.fr.title : movie.en.title,
 				poster_path: locale === 'fr' ? movie.fr.poster_path : movie.en.poster_path,
-				genres: movie.genres.map(genre => {
-					return {
-						id: genre.id,
-						name: genre.fr,
-					}
-				}),
+				genres: movie.genres,
 				directors: movie.directors,
 				release_date: movie.release_date,
 				original_title: movie.original_title,
-				position: movie.position,
+				// position: movie.position,
+				position: geometry.coordinates,
 				// coord_x: movie.coord_x ?? 0,
 				// coord_y: movie.coord_y ?? 0,
 				runtime: movie.runtime,
@@ -105,21 +98,15 @@ export const MapContext = ({
 		// show duplicate movies
 		// const duplicateMovies = movies.filter((movie, index, self) => self.findIndex(m => m.id === movie.id) !== index);
 		// console.log('duplicateMovies', duplicateMovies);
-		const biomes = biomesDataset;
-		const genres = moviesDataset.reduce((acc: { id: number; name: string; }[], movie) => {
-			movie.genres.forEach(genre => {
-			  if (!acc.find(g => g.id === genre.id)) {
-				acc.push({
-				  id: genre.id,
-				  name: genre.fr,
-				});
-			  }
-			});
-			return acc;
-		}, []);
+		const genres = genresDataset.map((genre) => {
+			return {
+				id: genre.id,
+				name: locale === 'fr' ? genre.fr : genre.en,
+			}
+		});
 		return {
+			moviesDataset,
 			movies,
-			biomes,
 			genres,
 		}
 	}, [locale]);
@@ -138,6 +125,8 @@ export const MapContext = ({
 	return (
 		<MapProvider.Provider value={{
 			map,
+			mapInitialized,
+			setMapInitialized,
 			movieId,
 			setMovieId,
 			filters: {

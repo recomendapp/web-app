@@ -65,7 +65,6 @@ export default function PlaylistPage({
     },
     enabled: !!params.playlist && !!params.lang,
   });
-
   const [playlistItems, setPlaylistItems] = useState<PlaylistItem[]>(playlist?.items);
 
   const isAllowedToEdit = Boolean(

@@ -10,6 +10,7 @@ import Link from "next/link";
 
 export const MapSearchbar = () => {
 	const {
+		map,
 		setMovieId,
 		data,
 	} = useMap();
@@ -93,6 +94,11 @@ export const MapSearchbar = () => {
 						onClick={() => {
 							setMovieId(movie.id)
 							setOnFocus(false)
+							map.current?.flyTo({
+								center: movie.position,
+								zoom: 12,
+								speed: 1.5,
+							})
 						}}
 						className="hover:bg-muted p-2 cursor-pointer rounded-md flex justify-between items-center"
 						{...(i === displayedCount - 1 ? { ref: ref } : {})}

@@ -23,13 +23,15 @@ export const MapFilterDate = () => {
 
 	useEffect(() => {
 		if (!map.current) return;
-		map.current.setFilter('markers-layer', [
-			'>=',
-			['get', 'ReleaseDate'],
-			value[0]
+		const startDate = new Date(`${filters.date.value[0]}`);
+		const endDate = new Date(`${filters.date.value[1]}`);
+		endDate.setFullYear(endDate.getFullYear() + 1);
+		map.current.setFilter('movies', [
+			"all",
+			[">=", ["get", "release_date"], startDate.toISOString().slice(0, 10)],
+			["<", ["get", "release_date"], endDate.toISOString().slice(0, 10)]
 		]);
-		console.log('date', filters.date.value)
-	}, [filters.date.value]);
+	}, [filters.date.value, map]);
 
 	return (
 		<FormItem>
