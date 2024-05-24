@@ -20,42 +20,62 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'api.recomend.app',
+        port: '',
+        pathname: '**',
       },
       {
         protocol: 'https',
         hostname: 'huecemdnsnivsvwhkiqz.supabase.co',
+        port: '',
+        pathname: '**',
       },
       {
         protocol: 'https',
         hostname: 'image.tmdb.org',
+        port: '',
+        pathname: '**',
       },
       {
         protocol: 'https',
         hostname: 'images.justwatch.com',
+        port: '',
+        pathname: '**',
       },
       {
         protocol: 'https',
         hostname: 'cloud.appwrite.io',
+        port: '',
+        pathname: '**',
       },
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '**',
       },
       {
         protocol: 'https',
         hostname: 'mosaic.scdn.co',
+        port: '',
+        pathname: '**',
       },
       {
         protocol: 'https',
         hostname: 'misc.scdn.co',
+        port: '',
+        pathname: '**',
       },
       {
         protocol: 'https',
         hostname: 's.ltrbxd.com',
+        port: '',
+        pathname: '**',
       },
       {
         protocol: 'https',
         hostname: 'media.giphy.com',
+        port: '',
+        pathname: '**',
       },
     ]
   },
