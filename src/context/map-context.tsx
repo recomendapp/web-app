@@ -9,7 +9,6 @@ import genresDataset from "@/components/Map/Data/genres.json"
 import { useLocale } from "next-intl";
 
 interface ModalContextProps {
-	map: MutableRefObject<any>;
 	mapInitialized: boolean;
 	setMapInitialized: (value: boolean) => void;
 	movieId: number | null;
@@ -75,7 +74,6 @@ export const MapContext = ({
 }) => {
 	const locale = useLocale();
 	/* Map */
-	const map = useRef<any>(null);
 	const [mapInitialized, setMapInitialized] = useState(false);
 	/* Data */
 	const data = useMemo(() => {
@@ -124,7 +122,6 @@ export const MapContext = ({
 	const debug = process.env.NODE_ENV === 'development';
 	return (
 		<MapProvider.Provider value={{
-			map,
 			mapInitialized,
 			setMapInitialized,
 			movieId,

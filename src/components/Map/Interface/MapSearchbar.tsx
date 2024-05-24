@@ -7,13 +7,16 @@ import { useInView } from "react-intersection-observer";
 import Fuse from "fuse.js";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import {LngLatLike, useMap as useMapContext} from 'react-map-gl/maplibre';
 
 export const MapSearchbar = () => {
 	const {
-		map,
 		setMovieId,
 		data,
 	} = useMap();
+	const {
+		current: map
+	} = useMapContext();
 	const { ref, inView } = useInView();
 	const mainRef = useRef<HTMLDivElement>(null);
 	const numberOfResult = 10;
@@ -94,8 +97,8 @@ export const MapSearchbar = () => {
 						onClick={() => {
 							setMovieId(movie.id)
 							setOnFocus(false)
-							map.current?.flyTo({
-								center: movie.position,
+							map?.flyTo({
+								center: movie.position as LngLatLike,
 								zoom: 12,
 								speed: 1.5,
 							})

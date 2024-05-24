@@ -1,6 +1,5 @@
 import { FormItem } from "@/components/ui/form"
 import { Label } from "@/components/ui/label"
-import { Slider } from "@/components/ui/slider"
 import { SliderRange } from "@/components/ui/slider-range"
 import { useMap } from "../../../../context/map-context"
 import { useEffect, useState } from "react"
@@ -10,7 +9,6 @@ import { RotateCcwIcon } from "lucide-react"
 
 export const MapFilterDate = () => {
 	const {
-		map,
 		filters
 	} = useMap();
 	const [value, setValue] = useState<number[]>(filters.date.value);
@@ -20,18 +18,6 @@ export const MapFilterDate = () => {
 		if (debouncedValue !== filters.date.value)
 			filters.date.setValue(debouncedValue);
 	}, [debouncedValue, filters.date]);
-
-	useEffect(() => {
-		if (!map.current) return;
-		const startDate = new Date(`${filters.date.value[0]}`);
-		const endDate = new Date(`${filters.date.value[1]}`);
-		endDate.setFullYear(endDate.getFullYear() + 1);
-		map.current.setFilter('movies', [
-			"all",
-			[">=", ["get", "release_date"], startDate.toISOString().slice(0, 10)],
-			["<", ["get", "release_date"], endDate.toISOString().slice(0, 10)]
-		]);
-	}, [filters.date.value, map]);
 
 	return (
 		<FormItem>

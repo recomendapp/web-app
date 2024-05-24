@@ -1,5 +1,0 @@
-.backdrop {
-  --mask: linear-gradient(#000, transparent);
-  -webkit-mask: var(--mask);
-  mask: var(--mask);
-}

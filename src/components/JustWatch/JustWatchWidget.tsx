@@ -1,10 +1,12 @@
-
+"use client"
+import { set } from "lodash"
 import { useLocale } from "next-intl"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import Script from "next/script"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { any } from "zod"
 
 export async function JustWatchWidget({
 	id,
@@ -25,9 +27,27 @@ export async function JustWatchWidget({
 }) {
 	const locale = useLocale();
 
-	// const streamingRequest = await fetch(`https://apis.justwatch.com/contentpartner/v2/content/offers/object_type/movie/id_type/tmdb/id/${id}/locale/fr_FR?token=${process.env.NEXT_PUBLIC_JUSTWATCH_API_KEY}`);
-	// const streaming = await streamingRequest.json();
-	// console.log('streaming', streaming);
+	useEffect(() => { 
+		const srcUrl = `https://widget.justwatch.com/justwatch_widget.js`;
+		
+		const s = document.createElement('script');
+		const addScript = (src: string) => {
+			s.setAttribute('src', src);
+			s.setAttribute('async', 'async');
+			s.setAttribute('id', `justwatch-widget-${id}`);
+			document.body.append(s);
+			s.remove();
+		};
+		addScript(srcUrl);
+
+		return () => {
+			// @ts-ignore
+			delete window['JustWatch'];
+			const script = document.getElementById(`justwatch-widget-${id}`);
+			if (script)
+				script.remove();
+		}
+	  },[id]);
 
 	return (
 		<div>
@@ -37,7 +57,7 @@ export async function JustWatchWidget({
 				data-id={id}
 				data-id-type={idType}
 				data-max-offers={maxOffer}
-				data-theme={theme}
+				data-theme={'dark'}
 				data-language={locale}
 				data-scale="0.8"
 			/>
@@ -57,12 +77,6 @@ export async function JustWatchWidget({
 					/>
 				</Link>
 			</div>
-			<Script
-				id={`justwatch-script-${id}`}
-				async
-				src="https://widget.justwatch.com/justwatch_widget.js"
-				onLoad={() => console.log(`JustWatch widget loaded for ${id}`)}
-			/>
 		</div>
 	)
 }
