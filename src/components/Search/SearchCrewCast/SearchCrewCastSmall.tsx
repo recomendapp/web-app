@@ -124,6 +124,11 @@ export default function SearchCrewCastSmall({
                       src={'https://image.tmdb.org/t/p/original/' + person.profile_path}
                       alt={person.name ?? ''}
                       fill
+                      sizes={`
+                        (max-width: 640px) 96px,
+                        (max-width: 1024px) 120px,
+                        150px
+                      `}
                       className="rounded-md object-cover"
                     />
                   </AspectRatio>

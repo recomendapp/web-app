@@ -23,6 +23,11 @@ export default function PersonPoster({
         src={poster_path}
         alt={alt}
         fill
+        sizes={`
+          (max-width: 640px) 150px,
+          (max-width: 1024px) 175px,
+          200px
+        `}
         className="rounded-md object-cover z-0"
       />
     </div>

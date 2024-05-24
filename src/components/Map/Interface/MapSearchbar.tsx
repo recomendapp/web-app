@@ -109,8 +109,10 @@ export const MapSearchbar = () => {
 						<div className="flex items-center gap-2">
 							<MoviePoster
 								className="w-10"
-								poster_path={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+								src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 								alt={movie.title}
+								width={40}
+								height={60}
 							/>
 							<div>
 								<p>

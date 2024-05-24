@@ -152,6 +152,11 @@ export default function SearchFilmsSmall({
                   }
                   alt={results[0].title}
                   fill
+                  sizes={`
+                    (max-width: 640px) 150px,
+                    (max-width: 1024px) 175px,
+                    200px
+                  `}
                   className="rounded-md object-cover"
                 />
               </AspectRatio>
@@ -219,6 +224,11 @@ export default function SearchFilmsSmall({
                           }
                           alt={item.title}
                           fill
+                          sizes={`
+                            (max-width: 640px) 96px,
+                            (max-width: 1024px) 120,
+                            150px
+                          `}
                           className="rounded-md object-cover"
                         />
                       </AspectRatio>

@@ -52,7 +52,7 @@ export default function Review({
 	return (
 		<div className="flex flex-col lg:flex-row gap-4 p-4">
 			<div className="bg-muted h-fit lg:w-[500px] p-4 rounded-md">
-				{review?.activity?.movie && <MovieCard movie={review.activity?.movie} />}
+				{review?.activity?.movie && <MovieCard movie={review.activity?.movie} width={96} height={144} />}
 			</div>
 			<div className="w-full space-y-2">
 				<div className="bg-muted h-fit p-4 rounded-md">

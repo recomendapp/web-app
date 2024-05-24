@@ -153,7 +153,7 @@ export default function PersonFilmography({
               ${
                 displayMode == 'row'
                   ? 'flex flex-col'
-                  : 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 2xl:grid-cols-8'
+                  : 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 2xl:grid-cols-10'
               }
           `}
         >
@@ -168,6 +168,12 @@ export default function PersonFilmography({
                 movie={credits.movie}
                 displayMode={displayMode}
                 job={credits.job}
+                fill
+                sizes={`
+                  (max-width: 640px) 96px,
+                  (max-width: 1024px) 120px,
+                  150px
+                `}
               />
             ))
           )}

@@ -13,8 +13,11 @@ const MovieHoverCard = ({ movie }: { movie: any }) => {
 		<HoverCardContent align='center' className="w-52">
 		  <div className="flex justify-between space-x-4">
 			<MoviePoster
-			  poster_path={`https://image.tmdb.org/t/p/original/${movie.data[0].poster_path}`}
-			  alt={movie.data[0].title ?? ''} />
+			  src={`https://image.tmdb.org/t/p/original/${movie.data[0].poster_path}`}
+			  alt={movie.data[0].title ?? ''}
+			  width={96}
+			  height={144}
+			/>
 		  </div>
 		</HoverCardContent>
 	  </HoverCard>

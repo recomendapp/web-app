@@ -27,8 +27,10 @@ export default function MovieCardSmall({ movie }: { movie: Movie }) {
       {/* <Link href={`/film/${movie.id}`}> */}
         <MoviePoster
           className="w-[60px]"
-          poster_path={'https://image.tmdb.org/t/p/original/' + movie?.data[0].poster_path}
+          src={'https://image.tmdb.org/t/p/original/' + movie?.data[0].poster_path}
           alt={movie?.data[0].title ?? ''}
+          width={60}
+          height={90}
         />
       {/* </Link> */}
       {/* MOVIE DATAT */}

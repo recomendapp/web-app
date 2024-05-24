@@ -1,25 +1,18 @@
 'use client';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { ComponentProps, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { ImageIcon, ListVideo, UserIcon } from 'lucide-react';
 
-interface ImageWithFallbackProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ImageWithFallbackProps extends ComponentProps<typeof Image> {
   src: string;
-  alt: string;
-  fill?: boolean | undefined;
-  width?: number | `${number}` | undefined;
-  height?: number | `${number}` | undefined;
   type?: 'default' | 'playlist' | 'person';
 }
 
 export const ImageWithFallback = ({
   src,
   alt,
-  fill,
-  width,
-  height,
   type = 'default',
   className,
   ...rest
@@ -35,25 +28,12 @@ export const ImageWithFallback = ({
       {imgSrc ? (
         <Image
           alt={alt}
-          height={height}
-          width={width}
-          fill={fill}
           src={imgSrc}
           className={cn('', className)}
           onError={() => {
             setImgSrc('');
           }}
-          sizes={`
-            (max-width: 640px) 20vw,
-            (max-width: 768px) 20vw,
-            (max-width: 1024px) 15vw,
-            (max-width: 1280px) 15vw,
-            (max-width: 1536px) 15vw,
-            (max-width: 1920px) 10vw,
-            (max-width: 2560px) 10vw,
-            (max-width: 3840px) 10vw,
-            10vw
-          `}
+          {...rest}
         />
       ) : (
         <Fallback type={type} from="#363636" to="#363636" />

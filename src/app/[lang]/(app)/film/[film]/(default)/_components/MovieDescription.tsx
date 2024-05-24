@@ -96,9 +96,14 @@ function CastPoster({
           <ImageWithFallback
             src={`https://image.tmdb.org/t/p/original/${credit.person?.profile_path}`}
             alt={credit.person.name ?? ''}
-            fill
             type="person"
             className="rounded-md object-cover"
+            fill
+            sizes={`
+              (max-width: 640px) 96px,
+              (max-width: 1024px) 120,
+              150px
+            `}
           />
         </AspectRatio>
       </div>

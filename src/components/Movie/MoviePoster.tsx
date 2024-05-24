@@ -3,18 +3,17 @@
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 // import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from '@/lib/utils';
+import { ComponentProps } from 'react';
+
+interface MoviePosterProps extends ComponentProps<typeof ImageWithFallback> {
+}
 
 export default function MoviePoster({
   children,
   className,
-  poster_path,
   alt,
-}: {
-  children?: React.ReactNode;
-  className?: string;
-  poster_path: string;
-  alt: string;
-}) {
+  ...props
+}: MoviePosterProps) {
   return (
     <div
       className={cn(
@@ -23,10 +22,9 @@ export default function MoviePoster({
       )}
     >
       <ImageWithFallback
-        src={poster_path}
         alt={alt}
-        fill
         className="rounded-md object-cover"
+        {...props}
       />
       {children}
     </div>

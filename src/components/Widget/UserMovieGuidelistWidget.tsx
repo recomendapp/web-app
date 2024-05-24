@@ -100,7 +100,16 @@ export const UserMovieGuidelistWidget = () => {
                 className="w-24"
                 ref={(i === guidelist.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
               >
-                <MovieCard movie={movie} displayMode="grid" />
+                <MovieCard
+                  movie={movie}
+                  displayMode="grid"
+                  fill
+                  sizes={`
+                    (max-width: 640px) 96px,
+                    (max-width: 1024px) 120px,
+                    150px
+                  `}
+                />
               </div>
             ))
           ))}

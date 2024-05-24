@@ -54,7 +54,7 @@ export default function ProfileMovieActivity({
 	return (
 		<div className="flex flex-col lg:flex-row gap-4 p-4">
 			<div className="bg-muted h-fit lg:w-[500px] p-4 rounded-md">
-				{activity?.movie && <MovieCard movie={activity?.movie} />}
+				{activity?.movie && <MovieCard movie={activity?.movie} width={96} height={144} />}
 			</div>
 	    	<div className="w-full bg-muted h-fit p-4 rounded-md">
 				{activity?.review && <MovieReviewForm review={activity?.review} />}

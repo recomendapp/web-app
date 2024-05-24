@@ -94,7 +94,7 @@ export default function CreateReviewForm({
   return (
     <div className="flex flex-col lg:flex-row gap-4 p-4">
       <div className="bg-muted h-fit p-4 rounded-md">
-        <MovieCard movie={movie} />
+        <MovieCard movie={movie} width={96} height={144}/>
       </div>
       <div className="w-full bg-muted p-4 rounded-md">
         <h2 className="text-3xl font-bold text-center p-4">

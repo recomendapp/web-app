@@ -91,8 +91,14 @@ export const MovieNowPlayingWidget = () => {
                   <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
                     <Link href={`/film/${film.id}`} className="w-full">
                       <MoviePoster
-                        poster_path={`https://image.tmdb.org/t/p/original/${film.poster_path}`}
+                        src={`https://image.tmdb.org/t/p/original/${film.poster_path}`}
                         alt={film.title ?? ''}
+                        fill
+                        sizes={`
+                          (max-width: 640px) 96px,
+                          (max-width: 1024px) 120px,
+                          150px
+                        `}
                       />
                     </Link>
                     {user && <div className="hidden absolute bottom-8 group-hover:lg:flex w-full justify-center pointer-events-none">

@@ -30,6 +30,11 @@ export default function MoviePlaylistCard({
             src={playlist?.poster_url ?? ''}
             alt={playlist?.title ?? ''}
             fill
+            sizes={`
+              (max-width: 640px) 96px,
+              (max-width: 1024px) 120px,
+              150px
+            `}
             className="rounded-md object-cover"
             type="playlist"
           />

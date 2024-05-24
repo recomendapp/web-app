@@ -127,6 +127,11 @@ export default function SearchCrewCastFull({ query }: { query: string }) {
                     }
                     alt={person.name ?? ''}
                     fill
+                    sizes={`
+                      (max-width: 640px) 96px,
+                      (max-width: 1024px) 120,
+                      150px
+                    `}
                     className="rounded-md object-cover"
                     type="person"
                   />

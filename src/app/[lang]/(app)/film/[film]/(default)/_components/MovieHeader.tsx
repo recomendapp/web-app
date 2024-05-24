@@ -51,8 +51,14 @@ export default function MovieHeader({
           {/* MOVIE POSTER */}
           <MoviePoster
             className="w-[200px]"
-            poster_path={`https://image.tmdb.org/t/p/original/${movie.data[0].poster_path}`}
+            src={`https://image.tmdb.org/t/p/original/${movie.data[0].poster_path}`}
             alt={movie.data[0].title ?? ''}
+            fill
+            sizes={`
+              (max-width: 640px) 150px,
+              (max-width: 1024px) 175px,
+              200px
+            `}
           >
             {movie.vote_count && (
               <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>

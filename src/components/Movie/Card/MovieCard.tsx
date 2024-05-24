@@ -39,6 +39,10 @@ interface MovieCardProps {
   link?: boolean;
   movieActivity?: UserMovieActivity | null;
   job?: string;
+  width?: number;
+  height?: number;
+  fill?: boolean;
+  sizes?: string;
 }
 
 export default function MovieCard({
@@ -47,6 +51,7 @@ export default function MovieCard({
   link = true,
   movieActivity,
   job,
+  ...props
 }: MovieCardProps) {
 
   if (!movie) return null;
@@ -60,8 +65,12 @@ export default function MovieCard({
               <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
                 <Link href={`/film/${movie.id}`} className="w-full">
                   <MoviePoster
-                    poster_path={`https://image.tmdb.org/t/p/original/${movie.data[0].poster_path}`}
+                    src={`https://image.tmdb.org/t/p/original/${movie.data[0].poster_path}`}
                     alt={movie.data[0].title ?? ''}
+                    width={props.width}
+                    height={props.height}
+                    fill={props.fill}
+                    sizes={props.sizes}
                   />
                 </Link>
                 {(movieActivity?.is_liked ||
@@ -170,8 +179,10 @@ export function MovieCardRow({
     <>
       <MoviePoster
         className=" w-14 lg:w-[100px]"
-        poster_path={`https://image.tmdb.org/t/p/original/${movie?.data[0].poster_path}`}
+        src={`https://image.tmdb.org/t/p/original/${movie?.data[0].poster_path}`}
         alt={movie?.data[0].title ?? ''}
+        width={56}
+        height={84}
       />
       <div className="w-full block">
         {/* TITLE */}
