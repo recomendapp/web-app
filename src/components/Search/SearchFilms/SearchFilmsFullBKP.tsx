@@ -93,7 +93,7 @@ export default function SearchFilmsFull({ query }: { query: string }) {
                   <AspectRatio ratio={2 / 3}>
                     <ImageWithFallback
                       src={
-                        'https://image.tmdb.org/t/p/w500/' + film.poster_path
+                        'https://image.tmdb.org/t/p/original/' + film.poster_path
                       }
                       alt={film.title}
                       fill

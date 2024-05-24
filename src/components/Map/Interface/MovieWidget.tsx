@@ -86,7 +86,7 @@ export const MovieWidget = () => {
 					<div className="w-full h-full flex gap-2 items-center">
 						<MoviePoster
 							className="h-full w-fit"
-							poster_path={`https://image.tmdb.org/t/p/w500/${movie.data[0].poster_path}`}
+							poster_path={`https://image.tmdb.org/t/p/original/${movie.data[0].poster_path}`}
 							alt={movie.data[0].title ?? ''}
 						>
 							{movie.vote_count && (

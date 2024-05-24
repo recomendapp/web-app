@@ -43,6 +43,17 @@ export const ImageWithFallback = ({
           onError={() => {
             setImgSrc('');
           }}
+          sizes={`
+            (max-width: 640px) 20vw,
+            (max-width: 768px) 20vw,
+            (max-width: 1024px) 15vw,
+            (max-width: 1280px) 15vw,
+            (max-width: 1536px) 15vw,
+            (max-width: 1920px) 10vw,
+            (max-width: 2560px) 10vw,
+            (max-width: 3840px) 10vw,
+            10vw
+          `}
         />
       ) : (
         <Fallback type={type} from="#363636" to="#363636" />

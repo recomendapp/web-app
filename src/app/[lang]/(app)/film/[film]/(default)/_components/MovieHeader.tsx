@@ -51,7 +51,7 @@ export default function MovieHeader({
           {/* MOVIE POSTER */}
           <MoviePoster
             className="w-[200px]"
-            poster_path={`https://image.tmdb.org/t/p/w500/${movie.data[0].poster_path}`}
+            poster_path={`https://image.tmdb.org/t/p/original/${movie.data[0].poster_path}`}
             alt={movie.data[0].title ?? ''}
           >
             {movie.vote_count && (

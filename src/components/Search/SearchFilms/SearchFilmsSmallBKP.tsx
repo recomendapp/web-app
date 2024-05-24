@@ -115,7 +115,7 @@ export default function SearchFilmsSmall({
             <AspectRatio ratio={2 / 3}>
               <ImageWithFallback
                 src={
-                  'https://image.tmdb.org/t/p/w500/' + results[0].poster_path
+                  'https://image.tmdb.org/t/p/original/' + results[0].poster_path
                 }
                 alt={results[0].title}
                 fill
@@ -182,7 +182,7 @@ export default function SearchFilmsSmall({
                     <AspectRatio ratio={2 / 3}>
                       <ImageWithFallback
                         src={
-                          'https://image.tmdb.org/t/p/w500/' + item.poster_path
+                          'https://image.tmdb.org/t/p/original/' + item.poster_path
                         }
                         alt={item.title}
                         fill

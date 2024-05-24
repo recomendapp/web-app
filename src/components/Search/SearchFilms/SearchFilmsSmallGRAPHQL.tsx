@@ -138,7 +138,7 @@ export default function SearchFilmsSmall({
             <AspectRatio ratio={2 / 3}>
               <ImageWithFallback
                 src={
-                  'https://image.tmdb.org/t/p/w500/' + movies![0].node.movie.data?.edges[0].node.poster_path ?? ''
+                  'https://image.tmdb.org/t/p/original/' + movies![0].node.movie.data?.edges[0].node.poster_path ?? ''
                 }
                 alt={movies![0].node.movie.data?.edges[0].node.title ?? ''}
                 fill
@@ -202,7 +202,7 @@ export default function SearchFilmsSmall({
                     <AspectRatio ratio={2 / 3}>
                       <ImageWithFallback
                         src={
-                          'https://image.tmdb.org/t/p/w500/' + node.movie.data?.edges[0].node.poster_path ?? ''
+                          'https://image.tmdb.org/t/p/original/' + node.movie.data?.edges[0].node.poster_path ?? ''
                         }
                         alt={node.movie.data?.edges[0].node.title ?? ''}
                         fill

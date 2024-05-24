@@ -137,7 +137,7 @@ export default function SearchCrewCastSmall({
               <div className="w-[50px] shrink-0">
                 <AspectRatio ratio={2 / 3}>
                   <ImageWithFallback
-                    src={'https://image.tmdb.org/t/p/w500/' + node.profile_path}
+                    src={'https://image.tmdb.org/t/p/original/' + node.profile_path}
                     alt={node.name ?? ''}
                     fill
                     className="rounded-md object-cover"

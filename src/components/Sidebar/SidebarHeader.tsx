@@ -85,6 +85,7 @@ export default function SidebarHeader({
               overflow-hidden transition-all
               ${!isSidebarCollapsed ? 'w-0' : 'w-6'}
           `}
+          width={24}
         />
         <Image
           priority
@@ -94,6 +95,7 @@ export default function SidebarHeader({
               overflow-hidden transition-all
               ${!isSidebarCollapsed ? 'w-36' : 'w-0'}
           `}
+          width={144}
         />
       </Button>
     </Box>

@@ -79,8 +79,7 @@ export const MovieNowPlayingWidget = () => {
       <ScrollArea className="rounded-md">
         <div className="flex space-x-4 pb-2">
           {nowPlaying?.pages.map((page, i) => (
-            <Fragment key={i}>
-              {page?.map((film: any, index) => (
+              page?.map((film: any, index) => (
                 <div
                   key={film.id}
                   className="w-24"
@@ -92,7 +91,7 @@ export const MovieNowPlayingWidget = () => {
                   <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
                     <Link href={`/film/${film.id}`} className="w-full">
                       <MoviePoster
-                        poster_path={`https://image.tmdb.org/t/p/w500/${film.poster_path}`}
+                        poster_path={`https://image.tmdb.org/t/p/original/${film.poster_path}`}
                         alt={film.title ?? ''}
                       />
                     </Link>
@@ -104,8 +103,7 @@ export const MovieNowPlayingWidget = () => {
                   </div>
                   {/* <MovieCard filmId={film.id} displayMode="grid" /> */}
                 </div>
-              ))}
-            </Fragment>
+              ))
           ))}
         </div>
         <ScrollBar orientation="horizontal" />

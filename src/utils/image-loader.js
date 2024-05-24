@@ -4,7 +4,11 @@ export default function myImageLoader({ src, width, quality }) {
     const isLocal = !src.startsWith('http');
     const query = new URLSearchParams();
 
+    console.log('src', src);
+    console.log('width', width);
+
     const imageOptimizationApi = process.env.NEXT_PUBLIC_IMAGE_OPTIMIZATION_URL;
+    // Your NextJS application URL
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
     const fullSrc = `${baseUrl}${src}`;

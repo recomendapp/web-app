@@ -92,7 +92,7 @@ export default function SearchCrewCastFull({ query }: { query: string }) {
                 <div className="shadow-md z-0 relative shrink-0 w-[50px] aspect-[2/3]">
                   <ImageWithFallback
                     src={
-                      'https://image.tmdb.org/t/p/w500/' + person.profile_path
+                      'https://image.tmdb.org/t/p/original/' + person.profile_path
                     }
                     alt={person.name}
                     fill

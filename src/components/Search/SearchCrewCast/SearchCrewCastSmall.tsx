@@ -121,7 +121,7 @@ export default function SearchCrewCastSmall({
                 <div className="w-[50px] shrink-0">
                   <AspectRatio ratio={2 / 3}>
                     <ImageWithFallback
-                      src={'https://image.tmdb.org/t/p/w500/' + person.profile_path}
+                      src={'https://image.tmdb.org/t/p/original/' + person.profile_path}
                       alt={person.name ?? ''}
                       fill
                       className="rounded-md object-cover"
@@ -155,7 +155,7 @@ export default function SearchCrewCastSmall({
   //     <div className="w-[50px] shrink-0">
   //       <AspectRatio ratio={2 / 3}>
   //         <ImageWithFallback
-  //           src={'https://image.tmdb.org/t/p/w500/' + item.profile_path}
+  //           src={'https://image.tmdb.org/t/p/original/' + item.profile_path}
   //           alt={item.name}
   //           fill
   //           className="rounded-md object-cover"

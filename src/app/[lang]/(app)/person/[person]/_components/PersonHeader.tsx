@@ -85,7 +85,7 @@ export default function PersonHeader({
           {/* MOVIE POSTER */}
           <PersonPoster
             className="w-[280px]"
-            poster_path={`https://image.tmdb.org/t/p/w500/${person.profile_path}`}
+            poster_path={`https://image.tmdb.org/t/p/original/${person.profile_path}`}
             alt={person.name}
           />
           {/* MOVIE MAIN DATA */}
