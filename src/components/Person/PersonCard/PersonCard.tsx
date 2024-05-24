@@ -1,4 +1,3 @@
-import { Models } from 'appwrite';
 import Link from 'next/link';
 import { getInitiales } from '@/lib/utils';
 
@@ -9,9 +8,6 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
-// ICONS
-import { BsFillPatchCheckFill } from 'react-icons/bs';
 
 export default function PersonCard({ person }: { person: any }) {
   return (

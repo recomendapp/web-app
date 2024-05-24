@@ -15,7 +15,6 @@ import { RightSidebarContext } from '@/context/right-sidebar-context';
 import { cookies } from 'next/headers';
 import { UiContext } from './ui-context';
 import { MapContext } from './map-context';
-import PlausibleProvider from 'next-plausible';
 
 export default async function Provider({
   children,
@@ -39,55 +38,47 @@ export default async function Provider({
   const cookieSidebarCollapsed = sidebarCollapsed ? JSON.parse(sidebarCollapsed.value) : undefined
   const cookieRightPanelCollapsed = rightPanelCollapsed ? JSON.parse(rightPanelCollapsed.value) : undefined
   return (
-    <PlausibleProvider
-      customDomain={process.env.NEXT_PUBLIC_PLAUSIBLE_CUSTOM_DOMAIN ?? ''}
-      domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN ?? ''}
-      trackLocalhost
-      enabled
-      selfHosted
-    >
-      <ReactQueryContext>
-        <ApolloClientContext>
-          <AuthContext>
-            <NextIntlClientProvider locale={locale} messages={dictionary}>
-              <ModalProvider>
-                <ThemeContext attribute="class" defaultTheme="dark" enableSystem>
-                  <OneSignalContext>
-                    <UiContext
-                      defaultLayout={defaultLayout}
-                      cookieSidebarCollapsed={cookieSidebarCollapsed}
-                      cookieRightPanelCollapsed={cookieRightPanelCollapsed}
-                    >
-                      <MapContext>
-                        <RightSidebarContext>
-                          <NextTopLoader
-                            showSpinner={false}
-                            easing="ease"
-                            color="#FFE974"
-                            height={2}
-                          />
-                          <Toaster
-                            position="top-center"
-                            toastOptions={{
-                              style: {
-                                borderRadius: '10px',
-                                background: '#333',
-                                color: '#fff',
-                              },
-                            }}
-                          />
-                          <SpeedInsights />
-                          {children}
-                        </RightSidebarContext>
-                      </MapContext>
-                    </UiContext>
-                  </OneSignalContext>
-                </ThemeContext>
-              </ModalProvider>
-            </NextIntlClientProvider>
-          </AuthContext>
-        </ApolloClientContext>
-      </ReactQueryContext>
-    </PlausibleProvider>
+    <ReactQueryContext>
+      <ApolloClientContext>
+        <AuthContext>
+          <NextIntlClientProvider locale={locale} messages={dictionary}>
+            <ModalProvider>
+              <ThemeContext attribute="class" defaultTheme="dark" enableSystem>
+                <OneSignalContext>
+                  <UiContext
+                    defaultLayout={defaultLayout}
+                    cookieSidebarCollapsed={cookieSidebarCollapsed}
+                    cookieRightPanelCollapsed={cookieRightPanelCollapsed}
+                  >
+                    <MapContext>
+                      <RightSidebarContext>
+                        <NextTopLoader
+                          showSpinner={false}
+                          easing="ease"
+                          color="#FFE974"
+                          height={2}
+                        />
+                        <Toaster
+                          position="top-center"
+                          toastOptions={{
+                            style: {
+                              borderRadius: '10px',
+                              background: '#333',
+                              color: '#fff',
+                            },
+                          }}
+                        />
+                        <SpeedInsights />
+                        {children}
+                      </RightSidebarContext>
+                    </MapContext>
+                  </UiContext>
+                </OneSignalContext>
+              </ThemeContext>
+            </ModalProvider>
+          </NextIntlClientProvider>
+        </AuthContext>
+      </ApolloClientContext>
+    </ReactQueryContext>
   );
 }

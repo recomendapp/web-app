@@ -6,9 +6,6 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   disable: process.env.NODE_ENV === 'development',
 });
 
-
-const { withPlausibleProxy } = require('next-plausible');
-
 const withNextIntl = require('next-intl/plugin')('./src/i18n.ts');
 
 
@@ -17,19 +14,50 @@ const nextConfig = {
   reactStrictMode: false,
   output: 'standalone',
   images: {
-    domains: [
-      'api.recomend.app',
-      'huecemdnsnivsvwhkiqz.supabase.co',
-      'image.tmdb.org',
-      'images.justwatch.com',
-      'cloud.appwrite.io',
-      'images.unsplash.com',
-      'mosaic.scdn.co',
-      'misc.scdn.co',
-      'localhost',
-      's.ltrbxd.com',
-      'media.giphy.com',
-    ],
+    loader: 'custom',
+    loaderFile: './src/utils/image-loader.js',
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'api.recomend.app',
+      },
+      {
+        protocol: 'https',
+        hostname: 'huecemdnsnivsvwhkiqz.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'image.tmdb.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.justwatch.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cloud.appwrite.io',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'mosaic.scdn.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'misc.scdn.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 's.ltrbxd.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.giphy.com',
+      },
+    ]
   },
   async redirects() {
     return [
@@ -55,6 +83,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withPlausibleProxy({
-  customDomain: 'https://analytics.recomend.app',
-})(withPWA(withNextIntl(nextConfig)));
+module.exports = withPWA(withNextIntl(nextConfig));

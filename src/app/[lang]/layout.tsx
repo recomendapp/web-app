@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import Providers from '@/context/Providers';
 import HelloNerd from '@/components/Console/HelloNerd';
 import Script from 'next/script';
+import Head from 'next/head';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -73,6 +74,11 @@ export default async function LangLayout({
 }: RootLayoutProps) {
   return (
     <html lang={lang} suppressHydrationWarning>
+      <Script
+        defer
+        src={process.env.NEXT_PUBLIC_ANAYLTICS_URL}
+        data-website-id={process.env.NEXT_PUBLIC_ANALYTICS_ID}
+      />
       <body className={cn('font-sans antialiased', fontSans.variable)}>
         <HelloNerd />
         <Providers locale={lang}>{children}</Providers>

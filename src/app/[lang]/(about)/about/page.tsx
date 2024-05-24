@@ -1,8 +1,6 @@
 import { Lang } from '@/types/type.i18n';
 import { Metadata } from 'next';
-import Marquee from 'react-fast-marquee';
 
-import { LoremIpsum } from 'react-lorem-ipsum';
 import Pricing from '@/components/Subscription/Pricing';
 import {
   getActiveProductsWithPrices,

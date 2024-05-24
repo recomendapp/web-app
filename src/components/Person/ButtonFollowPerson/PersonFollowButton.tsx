@@ -1,9 +1,7 @@
 'use client';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button } from '../../ui/button';
-import { Query } from 'appwrite';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface PersonFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   userId: string;

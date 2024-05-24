@@ -145,7 +145,7 @@ export function SidebarCollectionNotConnected() {
                 ${
                   item.active
                     ? 'text-primary'
-                    : 'text-primary-subued hover:text-primary'
+                    : 'text-primary-subued hover:text-primary-foreground'
                 }
               `}
             >
@@ -167,7 +167,7 @@ export function SidebarCollectionNotConnected() {
                 ${
                   item.active
                     ? 'text-primary'
-                    : 'text-primary-subued hover:text-primary'
+                    : 'text-primary-subued hover:text-primary-foreground'
                 }
             `}
           >
