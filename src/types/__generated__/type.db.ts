@@ -161,6 +161,13 @@ export interface Database {
             foreignKeyName: "playlist_item_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_item_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           },
@@ -497,6 +504,36 @@ export interface Database {
           }
         ]
       }
+      tmdb_department: {
+        Row: {
+          id: number
+        }
+        Insert: {
+          id?: number
+        }
+        Update: {
+          id?: number
+        }
+        Relationships: []
+      }
+      tmdb_department_translation: {
+        Row: {
+          department: string
+          id: number
+          language: Database["public"]["Enums"]["language"]
+        }
+        Insert: {
+          department: string
+          id?: number
+          language: Database["public"]["Enums"]["language"]
+        }
+        Update: {
+          department?: string
+          id?: number
+          language?: Database["public"]["Enums"]["language"]
+        }
+        Relationships: []
+      }
       tmdb_gender: {
         Row: {
           id: number
@@ -575,6 +612,47 @@ export interface Database {
             columns: ["genre"]
             isOneToOne: false
             referencedRelation: "tmdb_genre"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      tmdb_job: {
+        Row: {
+          id: number
+        }
+        Insert: {
+          id?: number
+        }
+        Update: {
+          id?: number
+        }
+        Relationships: []
+      }
+      tmdb_job_translation: {
+        Row: {
+          department_id: number
+          id: number
+          job: string
+          language: Database["public"]["Enums"]["language"]
+        }
+        Insert: {
+          department_id: number
+          id?: number
+          job: string
+          language: Database["public"]["Enums"]["language"]
+        }
+        Update: {
+          department_id?: number
+          id?: number
+          job?: string
+          language?: Database["public"]["Enums"]["language"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_job_translation_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_department"
             referencedColumns: ["id"]
           }
         ]
@@ -700,13 +778,6 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_collection"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "tmdb_movie_original_language_fkey"
-            columns: ["original_language"]
-            isOneToOne: false
-            referencedRelation: "tmdb_language"
-            referencedColumns: ["iso_639_1"]
           }
         ]
       }
@@ -733,6 +804,13 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_country"
             referencedColumns: ["iso_3166_1"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_country_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_movie_country_movie_id_fkey"
@@ -770,7 +848,21 @@ export interface Database {
             foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "persons"
             referencedColumns: ["id"]
           },
           {
@@ -810,6 +902,13 @@ export interface Database {
             foreignKeyName: "tmdb_movie_genre_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_genre_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           }
@@ -837,6 +936,13 @@ export interface Database {
             columns: ["keyword_id"]
             isOneToOne: false
             referencedRelation: "tmdb_keyword"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_keyword_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
             referencedColumns: ["id"]
           },
           {
@@ -876,6 +982,13 @@ export interface Database {
             foreignKeyName: "tmdb_movie_language_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_language_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           }
@@ -903,6 +1016,13 @@ export interface Database {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "tmdb_company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_production_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
             referencedColumns: ["id"]
           },
           {
@@ -937,6 +1057,13 @@ export interface Database {
             isOneToOne: true
             referencedRelation: "tmdb_movie_credits"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_role_credit_id_fkey"
+            columns: ["credit_id"]
+            isOneToOne: true
+            referencedRelation: "tmdb_movie_credits_random"
+            referencedColumns: ["id"]
           }
         ]
       }
@@ -969,6 +1096,13 @@ export interface Database {
           title?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "tmdb_movie_translation_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tmdb_movie_translation_movie_id_fkey"
             columns: ["movie_id"]
@@ -1025,6 +1159,13 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_country"
             referencedColumns: ["iso_3166_1"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_videos_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_movie_videos_movie_id_fkey"
@@ -1111,6 +1252,13 @@ export interface Database {
           person?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "tmdb_person_translation_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "persons"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tmdb_person_translation_person_fkey"
             columns: ["person"]
@@ -1310,6 +1458,13 @@ export interface Database {
             foreignKeyName: "user_movie_activity_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           },
@@ -1346,6 +1501,13 @@ export interface Database {
             foreignKeyName: "user_movie_favorite_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_favorite_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           },
@@ -1378,6 +1540,13 @@ export interface Database {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "user_movie_guidelist_movie_id_fkey"
             columns: ["movie_id"]
@@ -1483,6 +1652,13 @@ export interface Database {
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "user_movie_activity"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
             referencedColumns: ["id"]
           },
           {
@@ -1652,6 +1828,13 @@ export interface Database {
             foreignKeyName: "user_movie_watchlist_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_watchlist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
           },
@@ -1688,6 +1871,13 @@ export interface Database {
             foreignKeyName: "user_person_follower_person_id_fkey"
             columns: ["person_id"]
             isOneToOne: false
+            referencedRelation: "persons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_person_follower_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_person"
             referencedColumns: ["id"]
           },
@@ -1702,6 +1892,143 @@ export interface Database {
       }
     }
     Views: {
+      movies: {
+        Row: {
+          adult: boolean | null
+          backdrop_path: string | null
+          budget: number | null
+          collection_id: number | null
+          homepage: string | null
+          id: number | null
+          imdb_id: string | null
+          language: string | null
+          original_language: string | null
+          original_title: string | null
+          overview: string | null
+          popularity: number | null
+          poster_path: string | null
+          release_date: string | null
+          revenue: number | null
+          runtime: number | null
+          status: string | null
+          tagline: string | null
+          title: string | null
+          vote_average: number | null
+          vote_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_movie_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_collection"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      persons: {
+        Row: {
+          adult: boolean | null
+          also_known_as: string[] | null
+          biography: string | null
+          birthday: string | null
+          deathday: string | null
+          gender: number | null
+          homepage: string | null
+          id: number | null
+          imdb_id: string | null
+          known_for_department: string | null
+          language: string | null
+          name: string | null
+          place_of_birth: string | null
+          popularity: number | null
+          profile_path: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_person_gender_fkey"
+            columns: ["gender"]
+            isOneToOne: false
+            referencedRelation: "tmdb_gender"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      tmdb_movie_credits_random: {
+        Row: {
+          department: string | null
+          id: string | null
+          job: string | null
+          movie_id: number | null
+          person_id: number | null
+        }
+        Insert: {
+          department?: string | null
+          id?: string | null
+          job?: string | null
+          movie_id?: number | null
+          person_id?: number | null
+        }
+        Update: {
+          department?: string | null
+          id?: string | null
+          job?: string | null
+          movie_id?: number | null
+          person_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "persons"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      tmdb_person_department: {
+        Row: {
+          department: string | null
+          person_id: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "persons"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       user_movie_guidelist_random: {
         Row: {
           created_at: string | null
@@ -1727,6 +2054,13 @@ export interface Database {
             columns: ["movie_id"]
             isOneToOne: false
             referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
             referencedColumns: ["id"]
           },
           {
@@ -1766,6 +2100,13 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "user_movie_watchlist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "user_movie_watchlist_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -1800,6 +2141,38 @@ export interface Database {
           user_details: unknown
         }
         Returns: string
+      }
+      importer_best_match_movie: {
+        Args: {
+          lang: string
+          search_title: string
+          search_year?: number
+          similarity_threshold?: number
+        }
+        Returns: {
+          id: number
+          adult: boolean
+          backdrop_path: string
+          budget: number
+          homepage: string
+          imdb_id: string
+          original_language: string
+          original_title: string
+          popularity: number
+          release_date: string
+          revenue: number
+          runtime: number
+          status: string
+          vote_average: number
+          vote_count: number
+          collection_id: number
+          language: string
+          overview: string
+          poster_path: string
+          tagline: string
+          title: string
+          directors: Json
+        }[]
       }
       insert_user_movie_guidelist: {
         Args: {
@@ -1843,6 +2216,7 @@ export interface Database {
     }
     Enums: {
       eventType: "INSERT" | "DELETE" | "UPDATE"
+      language: "en" | "fr"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"
       subscription_status:

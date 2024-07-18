@@ -40,13 +40,10 @@ export default function ProfileLastActivity({ profile }: { profile: User }) {
           *,
           user(*),
           review:user_movie_review(*),
-          movie:tmdb_movie(
-            *,
-            data:tmdb_movie_translation(*)
-          )
+          movie:movies(*)
         `)
         .eq('user_id', profile.id)
-        .eq('movie.data.language_id', locale)
+        .eq('movie.language', locale)
         .range(from, to)
         .order('updated_at', { ascending: false})
         .returns<UserMovieActivity[]>();
@@ -85,7 +82,7 @@ export default function ProfileLastActivity({ profile }: { profile: User }) {
               page?.map((activity, index) => (
                 <div
                   key={activity?.id}
-                  className="w-[150px] pb-2"
+                  className="w-24 lg:w-32 pb-2"
                   ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
                 >
                   <MovieCard

@@ -31,7 +31,7 @@ export default function Login() {
             Pas encore de compte ?{' '}
             <Link
               href="/auth/signup"
-              className="underline underline-offset-4 hover:text-primary-foreground"
+              className="underline underline-offset-4 hover:text-foreground"
             >
               S&apos;inscrire
             </Link>{' '}

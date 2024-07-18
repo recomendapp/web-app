@@ -55,13 +55,10 @@ export default function Feed() {
             *,
             user(*)
           ),
-          movie:movie_id(
-            *,
-            data:tmdb_movie_translation!inner(*)
-          )
+          movie:movies(*)
         `)
         .in('user_id', following || [])
-        .eq('movie.data.language_id', locale)
+        .eq('movie.language', locale)
         .range(from, to)
         .order('created_at', { ascending: false });
       if (error) throw error;

@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryNormalizerProvider } from '@normy/react-query';
 import { getType } from '@/lib/react-query/getType';
+import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
 
 export const ReactQueryContext = ({
   children,
@@ -18,6 +19,10 @@ export const ReactQueryContext = ({
       },
     },
   });
+  broadcastQueryClient({
+    queryClient: queryClient as any,
+    broadcastChannel: 'recomend'
+  })
   return (
     <QueryNormalizerProvider
       queryClient={queryClient}

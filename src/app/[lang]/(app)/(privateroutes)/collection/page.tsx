@@ -76,7 +76,7 @@ export default function Collection() {
               className={`justify-start p-2`}
               asChild
             >
-              <Link href={item.href} className="h-full w-full flex flex-col gap-2 text-center">
+              <Link href={item.href} className="h-full w-full flex flex-col gap-2 text-center line-clamp-2">
                 {item.icon}
                 {item.label}
               </Link>

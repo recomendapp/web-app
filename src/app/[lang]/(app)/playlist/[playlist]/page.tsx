@@ -7,9 +7,10 @@ import PlaylistTable from '@/app/[lang]/(app)/playlist/[playlist]/_components/ta
 import PlaylistHeader from '@/app/[lang]/(app)/playlist/[playlist]/_components/PlaylistHeader';
 import { useAuth } from '@/context/auth-context';
 import { supabase } from '@/lib/supabase/client';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
 import useDebounce from '@/hooks/use-debounce';
+import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
 export default function PlaylistPage({
   params,
@@ -17,6 +18,7 @@ export default function PlaylistPage({
   params: {lang: string, playlist: number };
 }) {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [shouldRefresh, setShouldRefresh] = useState(false);
   const debouncedRefresh = useDebounce(shouldRefresh, 200);
   const {
@@ -33,9 +35,8 @@ export default function PlaylistPage({
           user(*),
           items:playlist_item(
             *,
-            movie:tmdb_movie(
+            movie:movies(
               *,
-              data:tmdb_movie_translation(*),
               genres:tmdb_movie_genre(
                 id,
                 genre:tmdb_genre(
@@ -55,7 +56,7 @@ export default function PlaylistPage({
           )
         `)
         .eq('id', params.playlist)
-        .eq('playlist_item.movie.data.language_id', params.lang)
+        .eq('playlist_item.movie.language', params.lang)
         .eq('playlist_item.movie.genres.genre.data.language', params.lang)
         .eq('playlist_item.movie.directors.job', 'Director')
         .order('rank', { ascending: true, referencedTable: 'playlist_item' })
@@ -81,6 +82,95 @@ export default function PlaylistPage({
     )
   );
 
+  const applyLocalChanges = async (payload: RealtimePostgresChangesPayload<{
+    [key: string]: any;
+  }>) => {
+    console.log('payload', payload);
+    console.log('playlistItems', playlist?.items);
+    switch (payload.eventType) {
+      /*
+      * INSERT:
+      *  - Check if the new item rank is n + 1 from the last item rank => if not, return false
+      *  - If everything is ok, ask supabase for the new item and add it to the playlist.items
+      */
+      case 'INSERT':
+        if (payload.new.rank !== playlist?.items.length + 1) return false;
+        const { error, data } = await supabase
+          .from('playlist_item')
+          .select(`
+            *,
+            movie:movies(
+              *,
+              genres:tmdb_movie_genre(
+                id,
+                genre:tmdb_genre(
+                  *,
+                  data:tmdb_genre_translation(*)
+                )
+              ),
+              directors:tmdb_movie_credits(
+                id,
+                person:tmdb_person(*)
+              )
+            )
+          `)
+          .eq('id', payload.new.id)
+          .single();
+        if (error || !data) return false;
+        queryClient.setQueryData(['playlist', Number(params.playlist)], (oldData: Playlist) => {
+          if (!oldData) return null;
+          return {
+            ...oldData,
+            items: [...oldData.items, data],
+          };
+        });
+        break;
+      
+      /*
+      * UPDATE:
+      *  - Check if the item exists in the playlist.items => if not, return false
+      *  - If everything is ok, update the item from payload.new and re-order the playlist.items
+      */
+      case 'UPDATE':
+        if (!playlist?.items?.some((item: PlaylistItem) => item?.id === payload.new.id)) return false;
+        queryClient.setQueryData(['playlist', Number(params.playlist)], (oldData: Playlist) => {
+          if (!oldData) return null;
+          const updatedItems = oldData.items.map((item: PlaylistItem) => {
+            if (item?.id === payload.new.id) {
+              return {
+                ...item,
+                ...payload.new,
+              };
+            }
+            return item;
+          });
+          updatedItems.sort((a: PlaylistItem, b: PlaylistItem) => a!.rank - b!.rank);
+          return {
+            ...oldData,
+            items: updatedItems,
+          };
+        });
+        break;
+      /*
+      * DELETE:
+      *  - Check if the item exists in the playlist.items => if not, return false
+      */
+      case 'DELETE':
+        if (!playlist?.items?.some((item: PlaylistItem) => item?.id === payload.old.id)) return false;
+        queryClient.setQueryData(['playlist', Number(params.playlist)], (oldData: Playlist) => {
+          if (!oldData) return null;
+          return {
+            ...oldData,
+            items: oldData.items.filter((item: PlaylistItem) => item?.id !== payload.old.id),
+          };
+        });
+        break;
+      default:
+        break
+    }
+    return true;
+  };
+
   useEffect(() => {
     if (isAllowedToEdit) {
       const playlistItemsChanges = supabase
@@ -93,10 +183,10 @@ export default function PlaylistPage({
             table: 'playlist_item',
             filter: `playlist_id=eq.${params.playlist }`,
           },
-          () => {
-            // console.log('playlist_items changes');
-            // refetch();
-            setShouldRefresh(true);
+          async (payload) => {
+            const success = await applyLocalChanges(payload);
+            if (!success)
+              setShouldRefresh(true);
           }
         )
         .subscribe();

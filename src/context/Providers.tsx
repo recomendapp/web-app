@@ -15,6 +15,7 @@ import { RightSidebarContext } from '@/context/right-sidebar-context';
 import { cookies } from 'next/headers';
 import { UiContext } from './ui-context';
 import { MapContext } from './map-context';
+import { getMessages } from 'next-intl/server';
 
 export default async function Provider({
   children,
@@ -24,12 +25,7 @@ export default async function Provider({
   locale: string;
 }) {
   // NEXT-INTL
-  let dictionary;
-  try {
-    dictionary = (await import(`@/dictionaries/${locale}.json`)).default;
-  } catch (error) {
-    notFound();
-  }
+  const messages = await getMessages({ locale });
   // UI
   const layout = cookies().get("ui:layout");
   const sidebarCollapsed = cookies().get("ui-sidebar:collapsed");
@@ -41,7 +37,7 @@ export default async function Provider({
     <ReactQueryContext>
       <ApolloClientContext>
         <AuthContext>
-          <NextIntlClientProvider locale={locale} messages={dictionary}>
+          <NextIntlClientProvider locale={locale} messages={messages}>
             <ModalProvider>
               <ThemeContext attribute="class" defaultTheme="dark" enableSystem>
                 <OneSignalContext>

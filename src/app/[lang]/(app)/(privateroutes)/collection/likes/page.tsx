@@ -21,9 +21,8 @@ export default function Likes() {
         .from('user_movie_activity')
         .select(`
           *,
-          movie:tmdb_movie(
+          movie:movies(
             *,
-            data:tmdb_movie_translation(*),
             genres:tmdb_movie_genre(
               id,
               genre:tmdb_genre(
@@ -39,7 +38,7 @@ export default function Likes() {
         `)
         .eq('user_id', user.id)
         .eq('is_liked', true)
-        .eq('movie.data.language_id', locale)
+        .eq('movie.language', locale)
         .eq('movie.genres.genre.data.language', locale)
         .eq('movie.directors.job', 'Director')
         .order('created_at', { ascending: true });

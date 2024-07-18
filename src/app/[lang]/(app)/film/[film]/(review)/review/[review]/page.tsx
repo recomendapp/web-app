@@ -13,9 +13,9 @@ export async function generateMetadata({
   const supabase = createServerClient();
   const { data: review, error } = await supabase
     .from('user_movie_review')
-    .select('*, user(username), movie: tmdb_movie(id, data:tmdb_movie_translation(title))')
+    .select('*, user(username), movie:movies(id, title)')
     .eq('id', params.review)
-    .eq('movie.data.language_id', params.lang)
+    .eq('movie.language', params.lang)
     .single();
   
   if (!review || error) {
@@ -25,7 +25,7 @@ export async function generateMetadata({
   }
   return {
     title: `${review.title} by (@${review.user?.username})`,
-    description: `Critique de ${review.movie?.data[0].title} par @${review.user?.username}`,
+    description: `Critique de ${review.movie?.title} par @${review.user?.username}`,
   };
 }
 

@@ -56,13 +56,10 @@ export default async function CreateReview({
   if (review) redirect(`/film/${params.film}/review/${review.id}`);
 
   const { data: movie } = await supabase
-    .from('tmdb_movie')
-    .select(`
-      *,
-      data:tmdb_movie_translation(*)
-    `)
+    .from('movies')
+    .select(`*`)
     .eq('id', params.film)
-    .eq('data.language_id', params.lang)
+    .eq('language', params.lang)
     .single();
 
   if (!movie) notFound();

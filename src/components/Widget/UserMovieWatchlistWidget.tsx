@@ -39,13 +39,10 @@ export const UserMovieWatchlistWidget = () => {
         .from('user_movie_watchlist_random')
         .select(`
           *,
-          movie:tmdb_movie(
-            *,
-            data:tmdb_movie_translation(*)
-          )
+          movie:movies(*)
         `)
         .eq('user_id', user.id)
-        .eq('movie.data.language_id', locale)
+        .eq('movie.language', locale)
         .range(from, to)
         // .order('created_at', { ascending: true});
       if (error) throw error;

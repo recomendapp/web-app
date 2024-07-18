@@ -65,8 +65,8 @@ export function SidebarRoutes({
                 group
                 ${
                   item.active
-                    ? 'text-primary-foreground'
-                    : 'text-primary-subued hover:text-primary-foreground'
+                    ? 'text-primary'
+                    : 'text-primary-subued hover:text-primary'
                 }
               `}
             >
@@ -87,8 +87,8 @@ export function SidebarRoutes({
                 group
                 ${
                   item.active
-                    ? 'text-primary-foreground'
-                    : 'text-primary-subued hover:text-primary-foreground'
+                    ? 'text-primary'
+                    : 'text-primary-subued hover:text-primary'
                 }
             `}
           >

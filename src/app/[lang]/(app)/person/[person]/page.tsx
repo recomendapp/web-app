@@ -52,7 +52,7 @@ export default async function Film({
     .from('tmdb_movie_credits_random')
     .select(`
       *,
-      movie:tmdb_movie(*)
+      movie:movies(*)
     `)
     .eq('person_id', params.person);
   

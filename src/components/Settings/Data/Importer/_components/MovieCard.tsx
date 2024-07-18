@@ -1,0 +1,72 @@
+import MoviePoster from "@/components/Movie/MoviePoster";
+import ActivityIcon from "@/components/Review/ActivityIcon";
+import { Button } from "@/components/ui/button";
+import { DateOnlyYearTooltip } from "@/components/utils/Date";
+import { Movie, Person } from "@/types/type.db";
+import { HeartIcon } from "lucide-react";
+
+export default function MovieCard({
+	id,
+	title,
+	poster_url,
+	release_date,
+	directors,
+	rating,
+	liked,
+} : {
+	id: number | undefined;
+	title: string | null | undefined;
+	poster_url: string | null | undefined;
+	release_date: string | null | undefined;
+	directors: any[] | null | undefined;
+	rating?: number | null;
+	liked?: boolean | null;
+}) {
+	return (
+	  <div className="flex gap-4 items-center">
+		{/* MOVIE POSTER */}
+		{/* <Link href={`/film/${movie.id}`}> */}
+		  <MoviePoster
+			className="w-[60px]"
+			src={poster_url ?? ''}
+			alt={title ?? ''}
+			width={60}
+			height={90}
+		  />
+		{/* </Link> */}
+		{/* MOVIE DATAT */}
+		<div className="w-full block">
+		  {/* TITLE */}
+		  <p className="font-medium line-clamp-2">
+			{title ?? 'Unknown'}
+		  </p>
+  
+		  {/* DATE / GENRES / RUNTIME */}
+		  <div className="line-clamp-1">
+			{directors?.map(({ person } : { person: Person }, index: number) => (
+			  <>
+				{index > 0 && <span className='text-muted-foreground'>, </span>}
+				<span key={person?.id} className="italic text-muted-foreground">
+					{person?.name}
+				</span>
+			  </>
+			)) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
+		  </div>
+  
+		  {/* DATE */}
+		  <p>
+			<DateOnlyYearTooltip date={release_date} />
+		  </p>
+		</div>
+		{rating && (
+			<ActivityIcon
+				movieId={id ?? 0}
+				rating={rating}
+			/>
+		)}
+		{liked && (
+			<HeartIcon size={45} className="shadow-sm text-background fill-accent-pink" />
+		)}
+	  </div>
+	);
+  }

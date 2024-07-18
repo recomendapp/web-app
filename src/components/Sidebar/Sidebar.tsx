@@ -19,6 +19,7 @@ export function Sidebar() {
           <SidebarHeader className='grid group-[[data-collapsed=true]]:justify-center'/>
           <SidebarRoutes className='grid group-[[data-collapsed=true]]:justify-center'/>
           <SidebarCollection className='flex flex-col group-[[data-collapsed=true]]:items-center'/>
+          <SidebarFooter className='flex justify-center'/>
         </nav>
       </aside>  
     </TooltipProvider>

@@ -28,6 +28,18 @@ import compressPicture from '@/lib/utils/compressPicture';
 import { supabase } from '@/lib/supabase/client';
 import { Icons } from '@/components/icons';
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 // GRAPHQL
 // import { useMutation } from '@apollo/client';
 // import CREATE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/CreatePlaylist';
@@ -188,8 +200,13 @@ export function PlaylistForm({
       if (!user?.id) throw Error('Missing user id');
       const newPlaylist = await insertPlaylistMutation({
         user_id: user?.id,
-        title: data.title.replace(/\s+/g, ' ').trim(),
-        description: data.description?.replace(/\s+/g, ' ').trim() ?? '',
+        title: data.title ?? '',
+        // title: data.title.replace(/\s+/g, ' ').trim(),
+        description: data.description?.trim() ?? '',
+        // description: data.description
+        //   ?.replace(/[\r\n]+/g, '\n') // Multiple new lines
+        //   .replace(/[^\S\r\n]+/g, ' ') // Multiple spaces
+        //   .trim() ?? '',
         is_public: data.is_public,
       });
       // if (filmId) {
@@ -228,7 +245,11 @@ export function PlaylistForm({
       if (!playlist?.id ) throw Error('Missing activity id');
       const payload = {
         title: data.title.replace(/\s+/g, ' ').trim(),
-        description: data.description?.replace(/\s+/g, ' ').trim(),
+        description: data.description?.trim() ?? '',
+        // description: data.description
+        //   ?.replace(/[\r\n]+/g, '\n') // Multiple new lines
+        //   .replace(/[^\S\r\n]+/g, ' ') // Multiple spaces
+        //   .trim() ?? '',
         is_public: data.is_public,
         poster_url: playlist?.poster_url,
       };
@@ -328,6 +349,13 @@ export function PlaylistForm({
                       placeholder="Ajoutez une description..."
                       className="resize-none h-32"
                       maxLength={300}
+                      onChange={(e) => {
+                        const description = e.target.value
+                          .replace(/[\r\n]+/g, '\n') // Multiple new lines
+                          .replace(/[^\S\r\n]+/g, ' ') // Multiple spaces
+                        console.log(description);
+                        form.setValue('description', description);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -359,14 +387,40 @@ export function PlaylistForm({
         </div>
         <DialogFooter>
           {playlist && (
-            <Button
-              disabled={loading}
-              type="button"
-              variant={'destructive'}
-              onClick={handleDeletePlaylist}
-            >
-              Supprimer
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  type="button"
+                  variant={'outline'}
+                >
+                  Supprimer
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>T&apos;es sur ?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Cela supprimera <strong className='text-foreground'>{playlist.title}</strong> définitivement.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleDeletePlaylist}
+                  >
+                    Supprimer
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            // <Button
+            //   disabled={loading}
+            //   type="button"
+            //   variant={'destructive'}
+            //   onClick={handleDeletePlaylist}
+            // >
+            //   Supprimer
+            // </Button>
           )}
           <Button disabled={loading} type="submit">
             {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}

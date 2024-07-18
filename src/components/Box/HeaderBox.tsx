@@ -36,7 +36,7 @@ export const HeaderBox: React.FC<BoxProps> = ({
     >
       <div
         className={cn(
-          'w-full h-full flex p-4 bg-gradient-to-t from-background to-[#000000bd] bg-opacity-75 relative',
+          'w-full h-full flex p-4 bg-gradient-to-t from-background to-[#00000050] relative',
           classNameChild
         )}
       >

@@ -219,7 +219,7 @@ export default function PlaylistTable({
             collisionDetection={closestCenter}
             modifiers={[restrictToVerticalAxis]}
           >
-            <TableContainer table={table} items={items} />
+            <TableContainer table={table} items={items} isAllowedToEdit={isAllowedToEdit}/>
             <DragOverlay>
               {activeId && (
                 <Table style={{ width: "100%" }}>
@@ -231,7 +231,7 @@ export default function PlaylistTable({
             </DragOverlay>
           </DndContext>
         ) : (
-          <TableContainer table={table} items={items} />
+          <TableContainer table={table} items={items} isAllowedToEdit={isAllowedToEdit}/>
         )}
       </div>
     </div>
@@ -241,9 +241,11 @@ export default function PlaylistTable({
 const TableContainer = ({
   table,
   items,
+  isAllowedToEdit
 } : {
   table: TableType<PlaylistItem>;
   items: UniqueIdentifier[];
+  isAllowedToEdit: boolean;
 }) => {
   return (
   <Table>
@@ -267,7 +269,7 @@ const TableContainer = ({
         {table.getRowModel().rows?.length ? (
           <SortableContext items={items} strategy={verticalListSortingStrategy}>
             {table.getRowModel().rows.map((row) => (
-              <DraggableTableRow key={row.original?.id} row={row} />
+              <DraggableTableRow key={row.original?.id} row={row} isAllowedToEdit={isAllowedToEdit}/>
             ))}
           </SortableContext>
         ) : (
@@ -285,7 +287,13 @@ const TableContainer = ({
   )
 }
 
-const DraggableTableRow = ({ row } : { row: Row<PlaylistItem>}) => {
+const DraggableTableRow = ({
+  row,
+  isAllowedToEdit,
+} : {
+  row: Row<PlaylistItem>;
+  isAllowedToEdit: boolean;
+}) => {
   const {
     attributes,
     listeners,
@@ -308,7 +316,12 @@ const DraggableTableRow = ({ row } : { row: Row<PlaylistItem>}) => {
         <TableCell className='bg-accent-1 h-28' colSpan={row.getVisibleCells().length}>&nbsp;</TableCell>
       ) : (
         row.getVisibleCells().map((cell) => (
-          <TableCell key={cell.id} {...attributes} {...listeners} className=' cursor-grab'>
+          <TableCell
+            key={cell.id}
+            {...attributes}
+            {...listeners}
+            className={`${isAllowedToEdit ? 'cursor-grab' : 'cursor-default'}`}
+          >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </TableCell>
         ))

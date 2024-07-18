@@ -24,7 +24,7 @@ export function RuntimeTooltip({
   const endTime = addMinutes(new Date(), runtime);
 
   const formattedEndTime = format(endTime, 'HH:mm', {
-    locale: locale === 'en' ? enUS : fr,
+    locale: locale === 'en-FR' ? enUS : fr,
   });
 
   return (

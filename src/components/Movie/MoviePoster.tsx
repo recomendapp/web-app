@@ -24,6 +24,7 @@ export default function MoviePoster({
       <ImageWithFallback
         alt={alt}
         className="rounded-md object-cover"
+        type='movie'
         {...props}
       />
       {children}

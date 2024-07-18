@@ -32,14 +32,11 @@ export default function Review({
 					activity:user_movie_activity(
 						*,
 						user(*),
-						movie:tmdb_movie(
-							*,
-							data:tmdb_movie_translation(*)
-						)
+						movie:movies(*)
 					)
 				`)
 				.eq('id', reviewId)
-				.eq('activity.movie.data.language_id', locale)
+				.eq('activity.movie.language', locale)
 				.single()
 			if (error) throw error;
 			return data;

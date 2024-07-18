@@ -40,7 +40,7 @@ export default function PersonFilmography({
   mainDepartment,
 } : {
   person: Person,
-  departments: { department: string }[] | null,
+  departments: { department: string | null }[] | null,
   mainDepartment: string | undefined,
 }) {
   const locale = useLocale();
@@ -69,13 +69,10 @@ export default function PersonFilmography({
         .from('tmdb_movie_credits')
         .select(`
           *,
-          movie:tmdb_movie(
-            *,
-            data:tmdb_movie_translation(*)
-          )
+          movie:movies(*)
         `)
         .eq('person_id', person.id)
-        .eq('movie.data.language_id', locale)
+        .eq('movie.language', locale)
         
       if (selectedDepartment) {
         query = query.eq('department', selectedDepartment)
@@ -106,7 +103,7 @@ export default function PersonFilmography({
               <SelectGroup>
                 <SelectLabel>Department</SelectLabel>
                 {departments?.map(({ department }) => (
-                  <SelectItem key={department} value={department}>
+                  <SelectItem key={department} value={department!}>
                     {department}
                   </SelectItem>
                 ))}

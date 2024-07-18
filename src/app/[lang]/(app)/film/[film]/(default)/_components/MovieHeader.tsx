@@ -40,6 +40,8 @@ export default function MovieHeader({
 }) {
   if (!movie) return null;
 
+  console.log(movie);
+
   return (
     <div>
       <HeaderBox
@@ -51,13 +53,13 @@ export default function MovieHeader({
           {/* MOVIE POSTER */}
           <MoviePoster
             className="w-[200px]"
-            src={`https://image.tmdb.org/t/p/original/${movie.data[0].poster_path}`}
-            alt={movie.data[0].title ?? ''}
+            src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+            alt={movie.title ?? ''}
             fill
             sizes={`
-              (max-width: 640px) 150px,
-              (max-width: 1024px) 175px,
-              200px
+              (max-width: 640px) 96px,
+              (max-width: 1024px) 120px,
+              150px
             `}
           >
             {movie.vote_count && (
@@ -95,7 +97,7 @@ export default function MovieHeader({
                       className="w-fit p-0 h-full font-normal"
                       asChild
                     >
-                      <Link href={`/genre/${genre.id}`}>
+                      <Link href={`/genre/${genre.data[0].id}`}>
                         {genre.data[0].name}
                       </Link>
                     </Button>
@@ -108,12 +110,12 @@ export default function MovieHeader({
             </div>
             {/* TITLE */}
             <div className="text-clamp space-x-1">
-              <span className='font-bold '>{movie.data[0].title}</span>
+              <span className='font-bold '>{movie.title}</span>
               {/* DATE */}
               <sup>
                 <DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-base font-medium'/>
               </sup>
-              {movie.original_title !== movie.data[0].title && (
+              {movie.original_title !== movie.title && (
                 <div className='text-base font-semibold text-muted-foreground'>{movie.original_title}</div>
               )}
             </div>

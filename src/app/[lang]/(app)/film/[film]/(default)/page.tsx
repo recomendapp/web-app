@@ -13,11 +13,11 @@ export default async function MoviePage({
   };
 }) {
   const supabase = createServerClient();
+  const time = new Date().getTime();
   const { data: movie } = await supabase
-		.from('tmdb_movie')
+		.from('movies')
 		.select(`
 			*,
-			data:tmdb_movie_translation(*),
 			cast:tmdb_movie_credits(
 				id,
 				person:tmdb_person(*),
@@ -25,7 +25,7 @@ export default async function MoviePage({
 			)
 		`)
 		.eq('id', params.film)
-		.eq('data.language_id', params.lang)
+		.eq('language', params.lang)
 		.eq('cast.job', 'Actor')
 		.single();
 

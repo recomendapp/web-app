@@ -27,8 +27,8 @@ export default function MovieCardSmall({ movie }: { movie: Movie }) {
       {/* <Link href={`/film/${movie.id}`}> */}
         <MoviePoster
           className="w-[60px]"
-          src={'https://image.tmdb.org/t/p/original/' + movie?.data[0].poster_path}
-          alt={movie?.data[0].title ?? ''}
+          src={'https://image.tmdb.org/t/p/original/' + movie?.poster_path}
+          alt={movie?.title ?? ''}
           width={60}
           height={90}
         />
@@ -37,7 +37,7 @@ export default function MovieCardSmall({ movie }: { movie: Movie }) {
       <div className="w-full block">
         {/* TITLE */}
         <Link href={`/film/${movie?.id}`} className=" font-medium line-clamp-2">
-          {movie?.data[0].title}
+          {movie?.title}
         </Link>
 
         {/* DATE / GENRES / RUNTIME */}

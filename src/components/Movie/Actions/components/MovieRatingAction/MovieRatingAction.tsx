@@ -223,8 +223,26 @@ export default function MovieRating({
   setRating: Dispatch<SetStateAction<number>>;
 }) {
   const [hover, setHover] = useState<number | null>(null);
+  const [tmpRating, setTmpRating] = useState(rating);
 
   const stars = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  const handleMouseEnter = (i: number) => {
+    setHover(i);
+    setTmpRating((prev) => {
+      if (prev === rating) {
+        return rating;
+      } else {
+        return prev;
+      }
+    });
+    setRating(i);
+  };
+
+  const handleMouseLeave = () => {
+    setHover(null);
+    setRating(tmpRating);
+  };
 
   return (
     <div className="flex w-full justify-center">
@@ -238,12 +256,13 @@ export default function MovieRating({
               value={rating}
               onClick={() => {
                 setRating(i);
+                setTmpRating(i);
               }}
             />
             <Star
               aria-hidden="true"
-              onMouseEnter={() => setHover(i)}
-              onMouseLeave={() => setHover(null)}
+              onMouseEnter={() => handleMouseEnter(i)}
+              onMouseLeave={handleMouseLeave}
               className={`
                             text-accent-1
                             ${i <= (hover || rating) && 'fill-accent-1'}

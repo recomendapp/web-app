@@ -7,13 +7,15 @@ import { ImageIcon, ListVideo, UserIcon } from 'lucide-react';
 
 interface ImageWithFallbackProps extends ComponentProps<typeof Image> {
   src: string;
-  type?: 'default' | 'playlist' | 'person';
+  type?: 'default' | 'playlist' | 'person' | 'movie' | 'service';
+  blurDataURL?: string;
 }
 
 export const ImageWithFallback = ({
   src,
   alt,
   type = 'default',
+  blurDataURL,
   className,
   ...rest
 }: ImageWithFallbackProps) => {
@@ -33,10 +35,12 @@ export const ImageWithFallback = ({
           onError={() => {
             setImgSrc('');
           }}
+          placeholder={blurDataURL ? 'blur' : 'empty'}
+          blurDataURL={blurDataURL}
           {...rest}
         />
       ) : (
-        <Fallback type={type} from="#363636" to="#363636" />
+        <Fallback type={type} from="#363636" to="#363636" alt={alt} />
       )}
     </>
   );
@@ -46,10 +50,12 @@ export function Fallback({
   type,
   from,
   to,
+  alt,
 }: {
   type?: string;
   from: string;
   to: string;
+  alt: string;
 }) {
   return (
     <div
@@ -62,6 +68,14 @@ export function Fallback({
         <ListVideo color="#fff" className="w-2/5 h-2/5" />
       ) : type == 'person' ? (
         <UserIcon color="#fff" className="w-2/5 h-2/5" />
+      ) : type == 'movie' ? (
+        <span className="text-muted-foreground text-clamp-2 text-center">
+          {alt}
+        </span>
+      ) : type == 'service' ? (
+        <span className="text-muted-foreground text-clamp-2 text-center">
+          {alt}
+        </span>
       ) : (
         <ImageIcon color="#fff" className="w-2/5 h-2/5" />
       )}

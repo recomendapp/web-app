@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useState } from "react"
+import { ImageWithFallback } from "../../../utils/ImageWithFallback";
+import { useTheme } from "next-themes";
 
 export type ExporterDestination = {
 	destination: string;
@@ -11,6 +13,7 @@ export type ExporterDestination = {
 };
 
 export function Exporter() {
+	const { theme } = useTheme();
 	const [selectedDestination, setSelectedDestination] = useState<ExporterDestination | null>(null);
 	const destinations: ExporterDestination[]= [
 		{
@@ -24,7 +27,7 @@ export function Exporter() {
 			destination: 'letterboxd',
 			name: 'Letterboxd',
 			description: 'Import your data from Letterboxd',
-			icon: 'letterboxd',
+			icon: 'letterboxd_vertical',
 			enabled: false,
 		},
 		{
@@ -53,10 +56,20 @@ export function Exporter() {
 						key={destination.destination}
 						disabled={!destination.enabled}
 						onClick={() => setSelectedDestination(destination)}
-						className="flex flex-col items-center gap-2 aspect-square h-full overflow-hidden"
+						className="relative flex flex-col items-center gap-2 aspect-square h-full overflow-hidden"
 					>
-						<Image src={`/icons/${destination.icon}.svg`} alt={destination.name} width={48} height={48} />
-						<p className="text-sm text-muted-foreground">{destination.name}</p>
+						<ImageWithFallback
+							src={`/icons/${theme}/${destination.icon}.svg`}
+							alt={destination.name}
+							fill
+							sizes={`
+								(max-width: 640px) 48px,
+								(max-width: 1024px) 64px,
+								80px
+							`}
+							type="service"
+						/>
+						{/* <p className="text-sm text-muted-foreground">{destination.name}</p> */}
 					</Button>
 				))}
 			</div>

@@ -25,7 +25,7 @@ export default function MovieDescription({
         <div>
           <h2 className="text-lg font-medium">Description</h2>
           <div className="text-justify text-muted-foreground">
-            {movie.data[0].overview ?? 'No description available'}
+            {movie.overview ?? 'No description available'}
           </div>
           {/* {movie.data[0].overview ? (
             <div className="text-justify text-muted-foreground">{movie.data[0].overview}</div>

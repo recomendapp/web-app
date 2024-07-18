@@ -53,8 +53,8 @@ export type Products = Database['public']['Tables']['products']['Row'] & {
 } | null | undefined;
 
 // *========== MOVIE ==========* //
-export type Movie = Database['public']['Tables']['tmdb_movie']['Row'] & {
-	data?: MovieTranslation[] | any;
+export type Movie = Database['public']['Views']['movies']['Row'] & {
+	// data?: MovieTranslation[] | any;
 	directors?: MoviePerson[] | any;
 } | null | undefined;
 

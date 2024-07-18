@@ -65,8 +65,8 @@ export default function MovieCard({
               <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
                 <Link href={`/film/${movie.id}`} className="w-full">
                   <MoviePoster
-                    src={`https://image.tmdb.org/t/p/original/${movie.data[0].poster_path}`}
-                    alt={movie.data[0].title ?? ''}
+                    src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                    alt={movie.title ?? ''}
                     width={props.width}
                     height={props.height}
                     fill={props.fill}
@@ -92,14 +92,14 @@ export default function MovieCard({
                 )}
                 <div className="hidden absolute bottom-8 group-hover:lg:flex w-full justify-center pointer-events-none">
                   <div className="bg-background rounded-md w-fit pointer-events-auto">
-                    <MovieAction filmId={movie.id} watch watchlist dropdown />
+                    <MovieAction filmId={movie.id!} watch watchlist dropdown />
                   </div>
                 </div>
               </div>
             </TooltipTrigger>
             <TooltipContent className="flex flex-col gap-2">
               <p className=" text-center line-clamp-1 whitespace-nowrap">
-                {movie.data[0].title} ({movie.release_date && getYear(new Date(movie.release_date))})
+                {movie.title} ({movie.release_date && getYear(new Date(movie.release_date))})
               </p>
               {/* <MovieAction movie.id={movie.id} rating like watch playlist send /> */}
             </TooltipContent>
@@ -157,36 +157,45 @@ export default function MovieCard({
           href={`/film/${movie.id}`}
           className="relative flex gap-4 items-center"
         >
-          <MovieCardRow movie={movie} job={job} />
+          <MovieCardRow movie={movie} job={job} {...props} />
         </Link>
       ) : (
         <div className="relative flex gap-4 items-center">
-          <MovieCardRow movie={movie} job={job} />
+          <MovieCardRow movie={movie} job={job} {...props} />
         </div>
       )}
     </>
   );
 }
 
+interface MovieCardRowProps {
+  movie: Movie,
+  job?: string,
+  width?: number;
+  height?: number;
+  fill?: boolean;
+  sizes?: string;
+}
+
 export function MovieCardRow({
   movie,
-  job
-} : {
-  movie: Movie,
-  job?: string
-}) {
+  job,
+  ...props
+} : MovieCardRowProps) {
   return (
     <>
       <MoviePoster
         className=" w-14 lg:w-[100px]"
-        src={`https://image.tmdb.org/t/p/original/${movie?.data[0].poster_path}`}
-        alt={movie?.data[0].title ?? ''}
-        width={56}
-        height={84}
+        src={`https://image.tmdb.org/t/p/original/${movie?.poster_path}`}
+        alt={movie?.title ?? ''}
+        width={props.width}
+        height={props.height}
+        fill={props.fill}
+        sizes={props.sizes}
       />
       <div className="w-full block">
         {/* TITLE */}
-        <h2 className="text-xl font-bold line-clamp-2">{movie?.data[0].title}</h2>
+        <h2 className="text-xl font-bold line-clamp-2">{movie?.title}</h2>
 
         <div className="line-clamp-1">
           {movie?.directors?.map((director: MoviePerson, index: number) => (

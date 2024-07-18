@@ -90,7 +90,7 @@ export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
               <div className="hidden sm:block">
                 {activity?.date ? (
                   format(new Date(activity?.date), 'PPP', {
-                    locale: locale == 'fr' ? fr : enUS,
+                    locale: locale == 'fr-FR' ? fr : enUS,
                   })
                 ) : (
                   <span>Pick a date</span>
@@ -105,7 +105,7 @@ export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
       </Tooltip>
       <PopoverContent className="w-auto p-0 flex flex-col justify-center">
         <Calendar
-          locale={locale == 'fr' ? fr : enUS}
+          locale={locale == 'fr-FR' ? fr : enUS}
           mode="single"
           selected={new Date(activity?.date)}
           onSelect={async (date) => date && await updateDate(date)}

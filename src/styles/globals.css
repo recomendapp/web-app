@@ -30,9 +30,9 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
 
-    --primary: #101010; /* 0 100% 100% */
+    --primary: #fff; /* 0 100% 100% */
     --primary-subued: 0 0% 65%;
-    --primary-foreground: #fff /* 240 5.9% 10% */;
+    --primary-foreground: #101010 /* 240 5.9% 10% */;
 
     --secondary: #0e0e0e;
     --secondary-foreground: #fff;
@@ -134,6 +134,7 @@
 html,
 body {
   background-color: var(--background)!important;
+  white-space: pre-wrap;
   /* position: fixed;
   touch-action: none; */
   /* -webkit-user-select: none; */

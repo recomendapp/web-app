@@ -26,7 +26,7 @@ export default async function ProfileHeader({ profile }: { profile: User }) {
     >
       <div className="flex gap-4 shrink-0 items-start justify-between w-full @lg:w-fit">
         <UserAvatar
-          className=" h-20 w-20 @md:h-36 @md:w-36 @5xl:h-48 @5xl:w-48"
+          className=" h-20 w-20 @md:h-28 @md:w-28 xl:h-36 xl:w-36"
           user={profile}
         />
         <div className="flex flex-col gap-2 items-end">

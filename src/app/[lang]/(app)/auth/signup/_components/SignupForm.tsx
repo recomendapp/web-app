@@ -21,11 +21,15 @@ import { useRouter } from 'next/navigation';
 import { Icons } from '@/components/icons';
 import checkUsernameExist from '@/components/Auth/hooks/checkUsernameExist';
 import { useAuth } from '@/context/auth-context';
+import { useLocale } from 'next-intl';
 
 export function SignupForm() {
+  const locale = useLocale();
   const router = useRouter();
 
   const { signup } = useAuth();
+
+  console.log('locale', locale);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -119,7 +123,7 @@ export function SignupForm() {
       if (!isUsernameExist) {
         try {
           setIsLoading(true);
-          await signup(data.email, data.name, data.username, data.password);
+          await signup(data.email, data.name, data.username, data.password, locale);
           toast.success('Un email de confirmation vient de vous être envoyé');
           router.push('/auth/login');
         } catch (error) {

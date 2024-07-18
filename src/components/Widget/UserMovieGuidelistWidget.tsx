@@ -39,13 +39,10 @@ export const UserMovieGuidelistWidget = () => {
         .from('user_movie_guidelist_random')
         .select(`
           *,
-          movie:tmdb_movie(
-            *,
-            data:tmdb_movie_translation(*)
-          )
+          movie:movies(*)
         `)
         .eq('user_id', user.id)
-        .eq('movie.data.language_id', locale)
+        .eq('movie.language', locale)
         .range(from, to)
       if (error) throw error;
       return data;

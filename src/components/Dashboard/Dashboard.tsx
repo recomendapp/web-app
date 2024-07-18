@@ -20,8 +20,8 @@ export default function Dashboard() {
       <div className="text-4xl font-bold">
         {t('hello')} {user.full_name}
       </div>
-      <UserMovieWatchlistWidget />
       <UserMovieGuidelistWidget />
+      <UserMovieWatchlistWidget />
       <MovieNowPlayingWidget />
       <MovieUpcomingWidget />
     </main>

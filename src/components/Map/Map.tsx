@@ -95,7 +95,7 @@ export function Map() {
               id="movies"
               type="symbol"
               layout={{
-                'text-field': ['get', 'title', ['get', locale === 'fr' ? 'fr' : 'en']],
+                'text-field': ['get', 'title', ['get', locale === 'fr-FR' ? 'fr' : 'en']],
                 'text-font': ['Open Sans Bold'],
                 'text-size': [
                   "interpolate",

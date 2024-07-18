@@ -35,14 +35,11 @@ export default function ProfileMovieActivity({
 						*,
 						user(*)
 					),
-					movie:tmdb_movie(
-						*,
-						data:tmdb_movie_translation(*)
-					)
+					movie:movies(*)
 				`)
 				.eq('user_id', userId)
 				.eq('movie_id', movieId)
-				.eq('movie.data.language_id', locale)
+				.eq('movie.language', locale)
 				.returns<UserMovieActivity[]>()
 				.single()
 			if (error) throw error;

@@ -12,7 +12,7 @@ import { UserMovieActivity } from '@/types/type.db';
 export const columns: ColumnDef<UserMovieActivity>[] = [
   {
     id: 'movie',
-    accessorFn: (row) => row?.movie?.data[0].title,
+    accessorFn: (row) => row?.movie?.title,
     meta: {
       displayName: 'Film',
     },

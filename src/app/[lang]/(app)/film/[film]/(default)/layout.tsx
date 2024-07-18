@@ -15,17 +15,17 @@ export async function generateMetadata({
 }) {
 	const supabase = createServerClient();
 	const { data: movie } = await supabase
-		.from('tmdb_movie')
-		.select('id, data:tmdb_movie_translation!inner(*)')
+		.from('movies')
+		.select('title')
 		.eq('id', params.film)
-		.eq('data.language_id', params.lang)
+		.eq('language', params.lang)
 		.single();
 	
 	if (!movie) return { title: 'Film introuvable' };
 
 	return {
-		title: movie.data[0].title,
-		description: `This is the page of ${movie.data[0].title}`,
+		title: movie.title,
+		description: `This is the page of ${movie.title}`,
 	};
 }
 
@@ -41,10 +41,9 @@ export default async function MovieLayout({
 }) {
 	const supabase = createServerClient();
 	const { data: movie } = await supabase
-		.from('tmdb_movie')
+		.from('movies')
 		.select(`
 			*,
-			data:tmdb_movie_translation(*),
 			genres:tmdb_movie_genre(
 				id,
 				genre:tmdb_genre(
@@ -73,7 +72,7 @@ export default async function MovieLayout({
 			videos:tmdb_movie_videos(*)
 		`)
 		.eq('id', params.film)
-		.eq('data.language_id', params.lang)
+		.eq('language', params.lang)
 		.eq('genres.genre.data.language', params.lang)
 		.eq('production_countries.country.data.iso_639_1', params.lang)
 		.eq('spoken_languages.language.data.language', params.lang)

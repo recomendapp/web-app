@@ -41,7 +41,7 @@ export default function MoviePlaylistCard({
         </AspectRatio>
       </div>
       <div>
-        <p className="text-center line-clamp-1 break-words">{playlist?.title}</p>
+        <p className="text-center line-clamp-2 break-words">{playlist?.title}</p>
         <p className="text-center text-muted-foreground">
           {playlist?.items_count} film{Number(playlist?.items_count) > 1 && 's'}
         </p>

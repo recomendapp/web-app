@@ -58,9 +58,8 @@ export default function ProfileFilms({
           *,
           user(*),
           review:user_movie_review(*),
-          movie:movie_id(
+          movie:movies(
             *,
-            data:tmdb_movie_translation(*),
             directors:tmdb_movie_credits(
               *,
               person:tmdb_person(*)
@@ -68,7 +67,7 @@ export default function ProfileFilms({
           )
         `)
         .eq('user_id', userId)
-        .eq('movie.data.language_id', locale)
+        .eq('movie.language', locale)
         .eq('movie.directors.job', 'Director')
         .range(from, to)
         .order('updated_at', { ascending: false});
@@ -202,7 +201,7 @@ export default function ProfileFilms({
                 ${
                   displayMode == 'row'
                     ? 'flex flex-col'
-                    : 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 2xl:grid-cols-8'
+                    : 'grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 2xl:grid-cols-10'
                 }
             `}
           >

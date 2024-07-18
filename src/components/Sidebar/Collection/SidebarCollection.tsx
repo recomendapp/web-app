@@ -50,8 +50,8 @@ export default function SidebarCollection({
                 font-medium rounded-md transition-all
                 group
                 ${pathname == '/collection'
-                  ? 'text-primary-foreground'
-                  : 'text-primary-subued hover:text-primary-foreground'
+                  ? 'text-primary'
+                  : 'text-primary-subued hover:text-primary'
                 }
               `}
             >
@@ -71,8 +71,8 @@ export default function SidebarCollection({
                   font-medium rounded-md transition-all
                   group
                   ${pathname == '/collection'
-                    ? 'text-primary-foreground'
-                    : 'text-primary-subued hover:text-primary-foreground'
+                    ? 'text-primary'
+                    : 'text-primary-subued hover:text-primary'
                   }
               `}
             >
@@ -90,7 +90,7 @@ export default function SidebarCollection({
           </div>
         )}
       </div>
-      <ScrollArea className='w-full h-[61vh] group-[[data-collapsed=false]]:px-2'>
+      <ScrollArea className='w-full group-[[data-collapsed=false]]:px-2'>
         <SidebarCollectionRoutes />
         <SidebarCollectionPlaylists />
         <ScrollBar orientation="vertical" />
@@ -145,7 +145,7 @@ export function SidebarCollectionNotConnected() {
                 ${
                   item.active
                     ? 'text-primary'
-                    : 'text-primary-subued hover:text-primary-foreground'
+                    : 'text-primary-subued hover:text-primary'
                 }
               `}
             >
@@ -167,7 +167,7 @@ export function SidebarCollectionNotConnected() {
                 ${
                   item.active
                     ? 'text-primary'
-                    : 'text-primary-subued hover:text-primary-foreground'
+                    : 'text-primary-subued hover:text-primary'
                 }
             `}
           >

@@ -19,7 +19,8 @@ export interface UserState {
     email: string,
     name: string,
     username: string,
-    password: string
+    password: string,
+    language: string,
   ) => Promise<void>;
   loginOAuth2: (provider: Provider) => Promise<void>;
   userRefresh: () => Promise<void>;
@@ -125,7 +126,8 @@ export const AuthContext = ({ children }: { children: React.ReactNode }) => {
     email: string,
     name: string,
     username: string,
-    password: string
+    password: string,
+    language: string,
   ) => {
     const { error } = await supabase.auth.signUp({
       email: email,
@@ -135,6 +137,7 @@ export const AuthContext = ({ children }: { children: React.ReactNode }) => {
         data: {
           full_name: name,
           username: username,
+          language: language,
         },
       },
     });

@@ -19,7 +19,7 @@ const senderToShow = 5;
 export const columns: ColumnDef<UserMovieGuidelist>[] = [
   {
     id: 'movie',
-    accessorFn: (row) => row?.movie?.data[0].title,
+    accessorFn: (row) => row?.movie?.title,
     meta: {
       displayName: 'Film',
     },

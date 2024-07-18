@@ -31,10 +31,9 @@ export const MovieWidget = () => {
 		queryFn: async () => {
 			if (!movieId) throw new Error('No movieId');
 			const { data: movie, error } = await supabase
-				.from('tmdb_movie')
+				.from('movies')
 				.select(`
 					*,
-					data:tmdb_movie_translation(*),
 					genres:tmdb_movie_genre(
 						id,
 						genre:tmdb_genre(
@@ -49,7 +48,7 @@ export const MovieWidget = () => {
 					videos:tmdb_movie_videos(*)
 				`)
 				.eq('id', movieId)
-				.eq('data.language_id', locale)
+				.eq('language', locale)
 				.eq('genres.genre.data.language', locale)
 				.eq('videos.iso_639_1', locale)
 				.eq('directors.job', 'Director')
@@ -86,8 +85,8 @@ export const MovieWidget = () => {
 					<div className="w-full h-full flex gap-2 items-center">
 						<MoviePoster
 							className="h-full w-fit"
-							src={`https://image.tmdb.org/t/p/original/${movie.data[0].poster_path}`}
-							alt={movie.data[0].title ?? ''}
+							src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+							alt={movie.title ?? ''}
 							width={96}
 							height={144}
 						>
@@ -101,8 +100,8 @@ export const MovieWidget = () => {
 									tooltip='Note moyenne'
 								/>
 								<MovieFollowerAverageRating
-								movieId={movie.id}
-								className="w-full"
+									movieId={movie.id}
+									className="w-full"
 								/>
 							</div>
 							)}
@@ -142,13 +141,13 @@ export const MovieWidget = () => {
 									href={`/film/${movie.id}`}
 									className='font-bold text-lg line-clamp-2'
 								>
-									{movie.data[0].title}
+									{movie.title}
 								</Link>
 								{/* DATE */}
 								<sup>
 									<DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-xs font-medium'/>
 								</sup>
-								{movie.original_title !== movie.data[0].title && (
+								{movie.original_title !== movie.title && (
 									<div className='text-xs !ml-0 font-semibold text-muted-foreground line-clamp-1'>{movie.original_title}</div>
 								)}
 							</div>

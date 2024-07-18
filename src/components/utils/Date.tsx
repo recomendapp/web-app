@@ -27,7 +27,7 @@ export function DateOnlyYearTooltip({
       <TooltipContent align="center" side="bottom">
         {date
           ? format(new Date(date), 'PPP', {
-              locale: locale === 'fr' ? fr : enUS,
+              locale: locale === 'fr-FR' ? fr : enUS,
             })
           : 'Unknown'}
       </TooltipContent>

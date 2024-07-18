@@ -7,16 +7,20 @@ const MovieHoverCard = ({ movie }: { movie: any }) => {
 	  <HoverCard>
 		<HoverCardTrigger asChild>
 		  <Link href={`/film/${movie.id}`} className='hover:text-accent-pink transition'>
-			{movie.data[0].title}
+			{movie.title}
 		  </Link>
 		</HoverCardTrigger>
 		<HoverCardContent align='center' className="w-52">
 		  <div className="flex justify-between space-x-4">
 			<MoviePoster
-			  src={`https://image.tmdb.org/t/p/original/${movie.data[0].poster_path}`}
-			  alt={movie.data[0].title ?? ''}
-			  width={96}
-			  height={144}
+			  src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+			  alt={movie.title ?? ''}
+			  fill
+			  sizes={`
+				(max-width: 640px) 96px,
+				(max-width: 1024px) 120px,
+				150px
+			  `}
 			/>
 		  </div>
 		</HoverCardContent>

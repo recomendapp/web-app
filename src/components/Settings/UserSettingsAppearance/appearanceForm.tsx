@@ -32,12 +32,18 @@ import { useTheme } from 'next-themes';
 import { createSharedPathnamesNavigation } from 'next-intl/navigation';
 import { Theme } from '@/types/type.theme';
 import { usePathname, useRouter } from '@/lib/next-intl/navigation';
+import { useMutation } from '@tanstack/react-query';
+import { useAuth } from '@/context/auth-context';
+import { supabase } from '@/lib/supabase/client';
+import toast from 'react-hot-toast';
+import { useState } from 'react';
+import { Icons } from '@/components/icons';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
     required_error: 'Please select a theme.',
   }),
-  language: z.enum(['en', 'fr'], {
+  language: z.enum(['en-US', 'fr-FR'], {
     invalid_type_error: 'Select a language',
     required_error: 'Please select a language.',
   }),
@@ -50,9 +56,27 @@ type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 export function AppearanceForm() {
   const t = useTranslations('settings');
   const locale = useLocale();
+  const [loading, setLoading] = useState(false);
   const { setTheme, theme } = useTheme();
   const router = useRouter();
   const pathname = usePathname();
+  const { user, loading: userLoading } = useAuth();
+
+  const { mutateAsync: updateProfile } = useMutation({
+    mutationFn: async (payload: any) => {
+      if (!user?.id) throw new Error('No user id');
+      const {
+        data,
+        error
+      } = await supabase
+        .from('user')
+        .update(payload)
+        .eq('id', user?.id)
+        .select('*');
+      if (error) throw error;
+      return data;
+    }
+  });
 
   const defaultValues: Partial<AppearanceFormValues> = {
     language: locale as Lang | undefined,
@@ -63,10 +87,21 @@ export function AppearanceForm() {
     defaultValues,
   });
 
-  function onSubmit(data: AppearanceFormValues) {
-    if (data.theme != theme) setTheme(data.theme);
-    if (locale != data.language)
-      router.push(pathname, { locale: data.language });
+  async function onSubmit(data: AppearanceFormValues) {
+    try {
+      setLoading(true);
+      if (data.theme != theme) setTheme(data.theme);
+      if (locale != data.language)
+      {
+        await updateProfile({ language: data.language });
+        router.push(pathname, { locale: data.language });
+      }
+      toast.success('Enregistré');
+    } catch (error) {
+      toast.error("Une erreur s'est produite");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -87,8 +122,8 @@ export function AppearanceForm() {
                     )}
                     {...field}
                   >
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
+                    <option value="en-US">English</option>
+                    <option value="fr-FR">Français</option>
                   </select>
                 </FormControl>
                 <ChevronDownIcon className="absolute right-3 top-2.5 h-4 w-4 opacity-50" />
@@ -171,8 +206,11 @@ export function AppearanceForm() {
             </FormItem>
           )}
         />
-
-        <Button type="submit">{t('appearance.update_preferences')}</Button>
+        <Button type="submit" disabled={loading}>
+          {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+          {t('appearance.update_preferences')}
+        </Button>
+        {/* <Button type="submit">{t('appearance.update_preferences')}</Button> */}
       </form>
     </Form>
   );

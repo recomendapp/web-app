@@ -2,8 +2,8 @@
 
 import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "next-intl";
-import { Importer } from "../../../../../../components/Importer/Importer";
-import { Exporter } from "@/components/Exporter/Exporter";
+import { Importer } from "../../../../../../components/Settings/Data/Importer/Importer";
+import { Exporter } from "@/components/Settings/Data/Exporter/Exporter";
 
 export default function SettingsNotificationsPage() {
   const t = useTranslations('settings');
