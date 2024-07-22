@@ -2,6 +2,7 @@
 
 // import { supabase } from "@/lib/supabase/client";
 import { createServerClient } from "@/lib/supabase/server";
+import { Movie } from "@/types/type.db";
 
 export const handleGetWatchlist = async (
 	movies: {
@@ -69,7 +70,7 @@ export const handleGetWatchlist = async (
 			success.push({
 				date: movie.date,
 				source: movie,
-				movie: data[0],
+				movie: data[0] as Movie,
 			});
 		else
 			failed.push(movie);

@@ -64,12 +64,12 @@ export default function ActivityIcon({
             {/* make to fixed only if it's a float */}
             {rating % 1 === 0 ? rating : rating.toFixed(1)}
           </p>
-          {/* {is_liked && (
+          {is_liked && (
             <Heart
               size={16}
               className="absolute -bottom-2 -right-2 text-background fill-accent-pink"
             />
-          )} */}
+          )}
         </div>
     </TooltipBox>
   );

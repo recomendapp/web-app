@@ -391,7 +391,7 @@ export interface Database {
         Row: {
           collection: number
           id: number
-          language: string
+          language: Database["public"]["Enums"]["language"]
           name: string
           overview: string | null
           poster_path: string | null
@@ -399,7 +399,7 @@ export interface Database {
         Insert: {
           collection: number
           id?: number
-          language: string
+          language: Database["public"]["Enums"]["language"]
           name: string
           overview?: string | null
           poster_path?: string | null
@@ -407,7 +407,7 @@ export interface Database {
         Update: {
           collection?: number
           id?: number
-          language?: string
+          language?: Database["public"]["Enums"]["language"]
           name?: string
           overview?: string | null
           poster_path?: string | null
@@ -479,19 +479,19 @@ export interface Database {
         Row: {
           id: number
           iso_3166_1: string
-          iso_639_1: string
+          iso_639_1: Database["public"]["Enums"]["language"]
           name: string
         }
         Insert: {
           id?: number
           iso_3166_1: string
-          iso_639_1: string
+          iso_639_1: Database["public"]["Enums"]["language"]
           name: string
         }
         Update: {
           id?: number
           iso_3166_1?: string
-          iso_639_1?: string
+          iso_639_1?: Database["public"]["Enums"]["language"]
           name?: string
         }
         Relationships: [
@@ -550,19 +550,19 @@ export interface Database {
         Row: {
           gender: number
           id: number
-          language: string
+          language: Database["public"]["Enums"]["language"]
           name: string
         }
         Insert: {
           gender: number
           id?: number
-          language: string
+          language: Database["public"]["Enums"]["language"]
           name: string
         }
         Update: {
           gender?: number
           id?: number
-          language?: string
+          language?: Database["public"]["Enums"]["language"]
           name?: string
         }
         Relationships: [
@@ -591,19 +591,19 @@ export interface Database {
         Row: {
           genre: number
           id: number
-          language: string
+          language: Database["public"]["Enums"]["language"]
           name: string
         }
         Insert: {
           genre: number
           id?: number
-          language: string
+          language: Database["public"]["Enums"]["language"]
           name: string
         }
         Update: {
           genre?: number
           id?: number
-          language?: string
+          language?: Database["public"]["Enums"]["language"]
           name?: string
         }
         Relationships: [
@@ -691,19 +691,19 @@ export interface Database {
         Row: {
           id: number
           iso_639_1: string
-          language: string
+          language: Database["public"]["Enums"]["language"]
           name: string
         }
         Insert: {
           id?: number
           iso_639_1: string
-          language: string
+          language: Database["public"]["Enums"]["language"]
           name: string
         }
         Update: {
           id?: number
           iso_639_1?: string
-          language?: string
+          language?: Database["public"]["Enums"]["language"]
           name?: string
         }
         Relationships: [
@@ -1070,7 +1070,7 @@ export interface Database {
       tmdb_movie_translation: {
         Row: {
           id: number
-          language_id: string
+          language_id: Database["public"]["Enums"]["language"]
           movie_id: number
           overview: string | null
           poster_path: string | null
@@ -1079,7 +1079,7 @@ export interface Database {
         }
         Insert: {
           id?: number
-          language_id: string
+          language_id: Database["public"]["Enums"]["language"]
           movie_id: number
           overview?: string | null
           poster_path?: string | null
@@ -1088,7 +1088,7 @@ export interface Database {
         }
         Update: {
           id?: number
-          language_id?: string
+          language_id?: Database["public"]["Enums"]["language"]
           movie_id?: number
           overview?: string | null
           poster_path?: string | null
@@ -1117,7 +1117,7 @@ export interface Database {
           created_at: string
           id: string
           iso_3166_1: string
-          iso_639_1: string
+          iso_639_1: Database["public"]["Enums"]["language"]
           key: string
           movie_id: number
           name: string
@@ -1130,7 +1130,7 @@ export interface Database {
           created_at?: string
           id: string
           iso_3166_1: string
-          iso_639_1: string
+          iso_639_1: Database["public"]["Enums"]["language"]
           key: string
           movie_id: number
           name: string
@@ -1143,7 +1143,7 @@ export interface Database {
           created_at?: string
           id?: string
           iso_3166_1?: string
-          iso_639_1?: string
+          iso_639_1?: Database["public"]["Enums"]["language"]
           key?: string
           movie_id?: number
           name?: string
@@ -1236,19 +1236,19 @@ export interface Database {
         Row: {
           biography: string | null
           id: number
-          language: string
+          language: Database["public"]["Enums"]["language"]
           person: number | null
         }
         Insert: {
           biography?: string | null
           id?: number
-          language: string
+          language: Database["public"]["Enums"]["language"]
           person?: number | null
         }
         Update: {
           biography?: string | null
           id?: number
-          language?: string
+          language?: Database["public"]["Enums"]["language"]
           person?: number | null
         }
         Relationships: [
@@ -1305,7 +1305,7 @@ export interface Database {
           friends_count: number
           full_name: string
           id: string
-          language: string
+          language: Database["public"]["Enums"]["language"]
           payment_method: Json | null
           premium: boolean
           updated_at: string | null
@@ -1325,7 +1325,7 @@ export interface Database {
           friends_count?: number
           full_name: string
           id: string
-          language?: string
+          language?: Database["public"]["Enums"]["language"]
           payment_method?: Json | null
           premium?: boolean
           updated_at?: string | null
@@ -1345,7 +1345,7 @@ export interface Database {
           friends_count?: number
           full_name?: string
           id?: string
-          language?: string
+          language?: Database["public"]["Enums"]["language"]
           payment_method?: Json | null
           premium?: boolean
           updated_at?: string | null
@@ -1901,7 +1901,7 @@ export interface Database {
           homepage: string | null
           id: number | null
           imdb_id: string | null
-          language: string | null
+          language: Database["public"]["Enums"]["language"] | null
           original_language: string | null
           original_title: string | null
           overview: string | null
@@ -1938,7 +1938,7 @@ export interface Database {
           id: number | null
           imdb_id: string | null
           known_for_department: string | null
-          language: string | null
+          language: Database["public"]["Enums"]["language"] | null
           name: string | null
           place_of_birth: string | null
           popularity: number | null
@@ -2151,26 +2151,10 @@ export interface Database {
         }
         Returns: {
           id: number
-          adult: boolean
-          backdrop_path: string
-          budget: number
-          homepage: string
-          imdb_id: string
-          original_language: string
-          original_title: string
-          popularity: number
-          release_date: string
-          revenue: number
-          runtime: number
-          status: string
-          vote_average: number
-          vote_count: number
-          collection_id: number
-          language: string
-          overview: string
-          poster_path: string
-          tagline: string
           title: string
+          release_date: string
+          language: string
+          popularity: number
           directors: Json
         }[]
       }
@@ -2216,7 +2200,7 @@ export interface Database {
     }
     Enums: {
       eventType: "INSERT" | "DELETE" | "UPDATE"
-      language: "en" | "fr"
+      language: "en-US" | "fr-FR"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"
       subscription_status:

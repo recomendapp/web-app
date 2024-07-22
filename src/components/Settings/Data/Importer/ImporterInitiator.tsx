@@ -37,6 +37,7 @@ export type ImportResults = {
 			source: {
 				title: string;
 				year: string;
+				date: string;
 			},
 			movie: Movie;
 		}[];

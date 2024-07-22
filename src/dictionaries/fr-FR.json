@@ -149,11 +149,11 @@
   },
   "feed": {
     "user_movie_activity": {
-      "watched": "<name></name> a vu <movie></movie>",
-      "rated": "<name></name> a noté <movie></movie> avec un <rating></rating>",
-      "liked": "<name></name> a liké <movie></movie>",
-      "rated_liked": "<name></name> a liké et noté <movie></movie> avec un <rating></rating>",
-      "reviewed": "<name></name> a écrit une critique sur <movie></movie>"
+      "watched": "<name></name> a vu",
+      "rated": "<name></name> a noté",
+      "liked": "<name></name> a liké",
+      "rated_liked": "<name></name> a liké et noté",
+      "reviewed": "<name></name> a écrit une critique"
     }
   }
 }
