@@ -26,7 +26,7 @@ export const handleNowPlayingMovies = async (
 	}
 	const { results } = await (
 		await fetch(
-		  `${process.env.NEXT_PUBLIC_TMDB_API_URL}movie/now_playing?include_adult=false&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}&region=${region}`
+		  `${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/now_playing?include_adult=false&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}&region=${region}`
 		)
 	).json();
 	return [...results];

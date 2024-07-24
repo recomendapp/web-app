@@ -21,7 +21,6 @@ export const HeaderBox: React.FC<BoxProps> = ({
       style={style}
       className={cn(
         `
-          @container
           bg-background bg-cover bg-no-repeat
           lg:h-[clamp(340px,30vh,400px)]
       `,

@@ -7,7 +7,7 @@ import { ImageIcon, ListVideo, UserIcon } from 'lucide-react';
 
 interface ImageWithFallbackProps extends ComponentProps<typeof Image> {
   src: string;
-  type?: 'default' | 'playlist' | 'person' | 'movie' | 'service';
+  type?: 'default' | 'playlist' | 'person' | 'movie' | 'service' | 'watch-provider';
   blurDataURL?: string;
 }
 

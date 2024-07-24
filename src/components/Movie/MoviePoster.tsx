@@ -6,11 +6,13 @@ import { cn } from '@/lib/utils';
 import { ComponentProps } from 'react';
 
 interface MoviePosterProps extends ComponentProps<typeof ImageWithFallback> {
+  classNameFallback?: string;
 }
 
 export default function MoviePoster({
   children,
   className,
+  classNameFallback,
   alt,
   ...props
 }: MoviePosterProps) {
@@ -23,7 +25,7 @@ export default function MoviePoster({
     >
       <ImageWithFallback
         alt={alt}
-        className="rounded-md object-cover"
+        className={cn("rounded-md object-cover h-full", classNameFallback)}
         type='movie'
         {...props}
       />

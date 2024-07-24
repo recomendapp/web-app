@@ -209,7 +209,7 @@ export default function PlaylistTable({
   return (
     <div className="flex flex-col gap-2">
       <DataTableToolbar table={table} playlist={playlist} />
-      <div className="rounded-md'">
+      <div className="rounded-md">
         {(isAllowedToEdit && !sorting.length && !globalFilter && !columnFilters.length) ? (
           <DndContext
             sensors={sensors}

@@ -34,7 +34,7 @@ export default function MovieDescription({
           )} */}
         </div>
         <div className="min-w-[20%]">
-          <h2 className="text-lg font-medium">Streaming</h2>
+          <h2 className="text-lg font-medium">Où voir ?</h2>
           <JustWatchWidget
             id={movie.id}
             type="movie"

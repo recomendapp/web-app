@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // COMPONENTS
 import PlaylistTable from '@/app/[lang]/(app)/playlist/[playlist]/_components/table/PlaylistTable';
@@ -82,93 +82,105 @@ export default function PlaylistPage({
     )
   );
 
-  const applyLocalChanges = async (payload: RealtimePostgresChangesPayload<{
+  const eventBuffer = useRef<RealtimePostgresChangesPayload<{
+    [key: string]: any;
+  }>[] | null>(null);
+  const eventBufferTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const applyBufferedChanges = async () => {
+    if (!eventBuffer.current) return;
+    
+    const bufferedEvents = [...eventBuffer.current];
+    eventBuffer.current = null;
+
+    const newPlaylistItems = [...playlist?.items];
+
+    for (const payload of bufferedEvents) {
+      switch (payload.eventType) {
+        /*
+        * INSERT:
+        *  - Check if the new item rank is n + 1 from the last item rank => if not, return false
+        *  - If everything is ok, ask supabase for the new item and add it to the playlist.items
+        */
+        case 'INSERT':
+          if (payload.new.rank !== newPlaylistItems.length + 1) return false;
+          const { error: insertError, data: insertData } = await supabase
+            .from('playlist_item')
+            .select(`
+              *,
+              movie:movies(
+                *,
+                genres:tmdb_movie_genre(
+                  id,
+                  genre:tmdb_genre(
+                    *,
+                    data:tmdb_genre_translation(*)
+                  )
+                ),
+                directors:tmdb_movie_credits(
+                  id,
+                  person:tmdb_person(*)
+                )
+              )
+            `)
+            .eq('id', payload.new.id)
+            .single();
+          if (insertError || !insertData) return false;
+          newPlaylistItems.push(insertData);
+          break;
+        /*
+        * UPDATE:
+        *  - Check if the item exists in the playlist.items => if not, return false
+        *  - If everything is ok, update the item from payload.new and re-order the playlist.items
+        */
+        case 'UPDATE':
+          const itemIndex = newPlaylistItems.findIndex(item => item?.id === payload.new.id);
+          if (itemIndex === -1) return false;
+          newPlaylistItems[itemIndex] = { ...newPlaylistItems[itemIndex], ...payload.new } as PlaylistItem;
+          break;
+        /*
+        * DELETE:
+        *  - Check if the item exists in the playlist.items => if not, return false
+        */
+        case 'DELETE':
+          const deleteIndex = newPlaylistItems.findIndex(item => item?.id === payload.old.id);
+          if (deleteIndex === -1) return false;
+          newPlaylistItems.splice(deleteIndex, 1);
+          break;
+        default:
+          break;
+      }
+    }
+
+    newPlaylistItems.sort((a, b) => a!.rank - b!.rank);
+    queryClient.setQueryData(['playlist', Number(params.playlist)], (oldData: Playlist) => {
+      if (!oldData) return null;
+      return {
+        ...oldData,
+        items: newPlaylistItems,
+      };
+    });
+  };
+
+  const handleEventBuffering = (payload: RealtimePostgresChangesPayload<{
     [key: string]: any;
   }>) => {
-    console.log('payload', payload);
-    console.log('playlistItems', playlist?.items);
-    switch (payload.eventType) {
-      /*
-      * INSERT:
-      *  - Check if the new item rank is n + 1 from the last item rank => if not, return false
-      *  - If everything is ok, ask supabase for the new item and add it to the playlist.items
-      */
-      case 'INSERT':
-        if (payload.new.rank !== playlist?.items.length + 1) return false;
-        const { error, data } = await supabase
-          .from('playlist_item')
-          .select(`
-            *,
-            movie:movies(
-              *,
-              genres:tmdb_movie_genre(
-                id,
-                genre:tmdb_genre(
-                  *,
-                  data:tmdb_genre_translation(*)
-                )
-              ),
-              directors:tmdb_movie_credits(
-                id,
-                person:tmdb_person(*)
-              )
-            )
-          `)
-          .eq('id', payload.new.id)
-          .single();
-        if (error || !data) return false;
-        queryClient.setQueryData(['playlist', Number(params.playlist)], (oldData: Playlist) => {
-          if (!oldData) return null;
-          return {
-            ...oldData,
-            items: [...oldData.items, data],
-          };
-        });
-        break;
-      
-      /*
-      * UPDATE:
-      *  - Check if the item exists in the playlist.items => if not, return false
-      *  - If everything is ok, update the item from payload.new and re-order the playlist.items
-      */
-      case 'UPDATE':
-        if (!playlist?.items?.some((item: PlaylistItem) => item?.id === payload.new.id)) return false;
-        queryClient.setQueryData(['playlist', Number(params.playlist)], (oldData: Playlist) => {
-          if (!oldData) return null;
-          const updatedItems = oldData.items.map((item: PlaylistItem) => {
-            if (item?.id === payload.new.id) {
-              return {
-                ...item,
-                ...payload.new,
-              };
-            }
-            return item;
-          });
-          updatedItems.sort((a: PlaylistItem, b: PlaylistItem) => a!.rank - b!.rank);
-          return {
-            ...oldData,
-            items: updatedItems,
-          };
-        });
-        break;
-      /*
-      * DELETE:
-      *  - Check if the item exists in the playlist.items => if not, return false
-      */
-      case 'DELETE':
-        if (!playlist?.items?.some((item: PlaylistItem) => item?.id === payload.old.id)) return false;
-        queryClient.setQueryData(['playlist', Number(params.playlist)], (oldData: Playlist) => {
-          if (!oldData) return null;
-          return {
-            ...oldData,
-            items: oldData.items.filter((item: PlaylistItem) => item?.id !== payload.old.id),
-          };
-        });
-        break;
-      default:
-        break
+    if (!eventBuffer.current) {
+      eventBuffer.current = [];
     }
-    return true;
+    eventBuffer.current.push(payload);
+
+    if (eventBufferTimeout.current) {
+      clearTimeout(eventBufferTimeout.current);
+    }
+
+    eventBufferTimeout.current = setTimeout(() => {
+      const success = applyBufferedChanges();
+      if (!success) {
+        eventBuffer.current = null;
+        setShouldRefresh(true);
+      }
+    }, 250);
   };
 
   useEffect(() => {
@@ -184,9 +196,7 @@ export default function PlaylistPage({
             filter: `playlist_id=eq.${params.playlist }`,
           },
           async (payload) => {
-            const success = await applyLocalChanges(payload);
-            if (!success)
-              setShouldRefresh(true);
+            handleEventBuffering(payload);
           }
         )
         .subscribe();
@@ -198,7 +208,7 @@ export default function PlaylistPage({
 
   useEffect(() => {
     if (debouncedRefresh) {
-      refetch(); // Exécuter le rafraîchissement après le délai de débordement
+      refetch();
       setShouldRefresh(false);
     }
   }, [debouncedRefresh, refetch]);

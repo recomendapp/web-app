@@ -40,16 +40,15 @@ export default function MovieHeader({
 }) {
   if (!movie) return null;
 
-  console.log(movie);
-
   return (
     <div>
       <HeaderBox
+        className='@container/movie-header'
         style={{
           backgroundImage: `url(https://image.tmdb.org/t/p/w1280/${movie.backdrop_path})`,
         }}
       >
-        <div className="flex flex-col w-full gap-4 items-center @xl:flex-row">
+        <div className="flex flex-col w-full gap-4 items-center @xl/movie-header:flex-row">
           {/* MOVIE POSTER */}
           <MoviePoster
             className="w-[200px]"
@@ -71,6 +70,13 @@ export default function MovieHeader({
                   className="w-full"
                   tooltip='Note moyenne'
                 />
+                {/* {movie.follower_avg_rating && <ActivityIcon
+                  movieId={movie.id}
+                  rating={movie.follower_avg_rating}
+                  variant="follower"
+                  className="w-full"
+                  tooltip='Note followers'
+                />} */}
                 <MovieFollowerAverageRating
                   movieId={movie.id}
                   className="w-full"

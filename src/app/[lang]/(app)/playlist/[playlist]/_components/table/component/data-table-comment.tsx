@@ -3,6 +3,8 @@ import { useModal } from '@/context/modal-context';
 import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentModal';
 import { Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
 import { useQueryClient } from '@tanstack/react-query';
+import { MessageSquarePlusIcon } from 'lucide-react';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 export function DataComment({ playlistItem }: { playlistItem: PlaylistItem }) {
 
@@ -40,7 +42,11 @@ export function DataComment({ playlistItem }: { playlistItem: PlaylistItem }) {
         `}
       >
         {playlistItem?.comment && <span className='line-clamp-2 break-all'>{playlistItem.comment}</span>}
-        {!playlistItem?.comment && isAllowedToEdit && <span className='line-clamp-1 italic'>Ajouter un commentaire...</span>}
+        {!playlistItem?.comment && isAllowedToEdit &&
+          <TooltipBox tooltip='Ajouter un commentaire'>
+            <MessageSquarePlusIcon className='w-5 h-5' />
+          </TooltipBox>
+        }
       </p>
     </>
   );

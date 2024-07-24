@@ -26,7 +26,7 @@ export const handleSearchMovies = async (query: string, language = "en", page = 
 	}
 	const tmdbResults = await (
 		await fetch(
-			`${process.env.NEXT_PUBLIC_TMDB_API_URL}search/movie?query=${query}&include_adult=false&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}&append_to_response=credits`
+			`${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/movie?query=${query}&include_adult=false&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}&append_to_response=credits`
 		)
 	).json();
 	const moviesWithDirectors = await Promise.all(

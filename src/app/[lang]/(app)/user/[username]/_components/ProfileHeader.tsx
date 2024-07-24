@@ -21,16 +21,16 @@ export default async function ProfileHeader({ profile }: { profile: User }) {
   return (
     <HeaderBox
       style={{ backgroundImage: `url(${profile?.background_url})` }}
-      className="!h-fit"
-      classNameChild="flex-col @lg:items-start @lg:flex-row gap-4"
+      className="!h-fit @container/profile-header"
+      classNameChild="flex-col @lg/profile-header:items-start @lg/profile-header:flex-row gap-4"
     >
-      <div className="flex gap-4 shrink-0 items-start justify-between w-full @lg:w-fit">
+      <div className="flex gap-4 shrink-0 items-start justify-between w-full @lg/profile-header:w-fit">
         <UserAvatar
           className=" h-20 w-20 @md:h-28 @md:w-28 xl:h-36 xl:w-36"
           user={profile}
         />
         <div className="flex flex-col gap-2 items-end">
-          <div className="flex items-center @lg:hidden">
+          <div className="flex items-center @lg/profile-header:hidden">
             <ProfileFollowersButton userId={profile?.id!} />
             <ProfileFolloweesButton userId={profile?.id!} />
             {user?.id == profile?.id && (
@@ -41,7 +41,7 @@ export default async function ProfileHeader({ profile }: { profile: User }) {
               </Button>
             )}
           </div>
-          <ProfileFollowButton profileId={profile?.id!} className="@lg:hidden" />
+          <ProfileFollowButton profileId={profile?.id!} className="@lg/profile-header:hidden" />
         </div>
       </div>
       <div className="flex flex-col gap-2 w-full">
@@ -60,7 +60,7 @@ export default async function ProfileHeader({ profile }: { profile: User }) {
             </h2>
             <span className="text-muted-foreground">@{profile?.username}</span>
           </Link>
-          <div className="hidden @lg:flex items-center gap-2">
+          <div className="hidden @lg/profile-header:flex items-center gap-2">
             <ProfileFollowersButton userId={profile?.id!} className="hidden sm:block" />
             <ProfileFolloweesButton userId={profile?.id!} className="hidden sm:block" />
             {/* <Button variant={'action'}>
@@ -95,7 +95,7 @@ export default async function ProfileHeader({ profile }: { profile: User }) {
             )}
           </div>
           {/* ACTION BUTTON */}
-          <ProfileFollowButton profileId={profile?.id!} className="hidden @lg:flex" />
+          <ProfileFollowButton profileId={profile?.id!} className="hidden @lg/profile-header:flex" />
         </section>
       </div>
     </HeaderBox>

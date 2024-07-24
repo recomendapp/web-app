@@ -38,7 +38,7 @@ export default function MovieReviewOverview({
       href={`/film/${review?.movie_id}/review/${review?.id}`}
 		  // className="flex items-start gap-2 bg-muted rounded-xl p-2"
       className={cn(
-        'flex flex-col bg-muted rounded-xl p-2 w-full gap-2',
+        '@container/review flex flex-col bg-muted rounded-xl p-2 w-full gap-2',
         className
       )}
 	  >
@@ -48,7 +48,7 @@ export default function MovieReviewOverview({
             <Rating movieId={activity?.movie_id!} rating={activity?.rating} is_liked={activity?.is_liked} />
             <p className="font-semibold line-clamp-1">{review?.title}</p>
           </div>
-          <div className="flex justify-center items-center shrink-0">
+          <div className="hidden @md/review:flex justify-center items-center shrink-0">
             <div className='text-sm text-muted-foreground'>
               {format.relativeTime(new Date(review.created_at), now)}
             </div>

@@ -77,11 +77,12 @@ export default function PersonHeader({
     // <div>
     <>
       <HeaderBox
+        className='@container/person-header'
         style={{
           backgroundImage: `url('https://image.tmdb.org/t/p/original/${background}`,
         }}
       >
-        <div className="flex flex-col w-full gap-4 items-center @xl:flex-row">
+        <div className="flex flex-col w-full gap-4 items-center @2xl/person-header:flex-row">
           {/* MOVIE POSTER */}
           <PersonPoster
             className="w-[280px]"
@@ -98,7 +99,7 @@ export default function PersonHeader({
               </span>
             </div>
             {/* NAME */}
-            <div className="text-xl lg:text-6xl font-bold line-clamp-2">
+            <div className="text-xl @xl/person-header:text-6xl font-bold line-clamp-2">
               {person.name}
             </div>
             <div className='space-y-2'>

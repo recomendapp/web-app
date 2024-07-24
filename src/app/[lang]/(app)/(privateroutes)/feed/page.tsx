@@ -78,7 +78,7 @@ export default function Feed() {
 
   return (
     <main className="flex flex-col items-center p-4">
-      <div className="w-full max-w-xl">
+      <div className="w-full max-w-2xl">
         {isLoading || feed == undefined ? (
           <div className="flex items-center h-full">
             <Loader />

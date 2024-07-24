@@ -1,12 +1,11 @@
 "use client"
-import { set } from "lodash"
+import { useQuery } from "@tanstack/react-query"
 import { useLocale } from "next-intl"
-import Image from "next/image"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import Script from "next/script"
-import { useEffect, useState } from "react"
-import { any } from "zod"
+import { handleGetWatchProviders } from "./hook/handleGetWatchProviders"
+import { Skeleton } from "@/components/ui/skeleton"
+import { ImageWithFallback } from "@/components/utils/ImageWithFallback"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
 export async function JustWatchWidget({
 	id,
@@ -26,41 +25,94 @@ export async function JustWatchWidget({
 	maxOffer?: number
 }) {
 	const locale = useLocale();
+	const country = locale.split('-')[1];
+	
+	const {
+		data: offers,
+		isLoading
+	} = useQuery({
+		queryKey: ['movie', id, 'justwatch'],
+		queryFn: async () => {
+			const results = await handleGetWatchProviders(id);
+			return results;
+		},
+		enabled: !!id,
+	});
 
-	useEffect(() => { 
-		const srcUrl = `https://widget.justwatch.com/justwatch_widget.js`;
+	// useEffect(() => { 
+	// 	const srcUrl = `https://widget.justwatch.com/justwatch_widget.js`;
 		
-		const s = document.createElement('script');
-		const addScript = (src: string) => {
-			s.setAttribute('src', src);
-			s.setAttribute('async', 'async');
-			s.setAttribute('id', `justwatch-widget-${id}`);
-			document.body.append(s);
-			s.remove();
-		};
-		addScript(srcUrl);
+	// 	const s = document.createElement('script');
+	// 	const addScript = (src: string) => {
+	// 		s.setAttribute('src', src);
+	// 		s.setAttribute('async', 'async');
+	// 		s.setAttribute('id', `justwatch-widget-${id}`);
+	// 		document.body.append(s);
+	// 		s.remove();
+	// 	};
+	// 	addScript(srcUrl);
 
-		return () => {
-			// @ts-ignore
-			delete window['JustWatch'];
-			const script = document.getElementById(`justwatch-widget-${id}`);
-			if (script)
-				script.remove();
-		}
-	  },[id]);
+	// 	return () => {
+	// 		// @ts-ignore
+	// 		delete window['JustWatch'];
+	// 		const script = document.getElementById(`justwatch-widget-${id}`);
+	// 		if (script)
+	// 			script.remove();
+	// 	}
+	//   },[id]);
+	// get country from local
+
 
 	return (
 		<div>
-			<div data-jw-widget
-				data-api-key={process.env.NEXT_PUBLIC_JUSTWATCH_API_KEY}
-				data-object-type={type}
-				data-id={id}
-				data-id-type={idType}
-				data-max-offers={maxOffer}
-				data-theme={'dark'}
-				data-language={locale}
-				data-scale="0.8"
-			/>
+			{(offers == undefined || isLoading) ? (
+				<div className="flex gap-2 overflow-hidden">
+					{Array.from({ length: 10 }, (_, index) => (
+						<Skeleton key={index} className="h-10 w-10 shrink-0" />
+					))}
+				</div>
+			) : (
+				<ScrollArea>
+					<div className="flex pb-4">
+						{offers[country] ? (
+							// delete duplicate provider_id
+							// offers[country].filter((v, i, a) => a.findIndex(t => (t.provider_id === v.provider_id)) === i).map((offer, i) => (
+							offers[country].map((offer, i) => (
+								<Link
+									key={i}
+									href={offer.link}
+									target="_blank"
+									className="flex flex-col items-center gap-2 hover:bg-muted rounded-xl p-2 shrink-0"
+								>
+									<ImageWithFallback
+										alt={offer.provider_id}
+										height={40}
+										width={40}
+										src={`https://image.tmdb.org/t/p/original/${offer.logo_path}`}
+										className="rounded-md"
+										type="watch-provider"
+									/>
+									<div className="flex flex-col space-x-1">
+										<span className="text-sm bg-muted rounded-sm px-1 text-muted-foreground">
+											{offer.types[0]}
+										</span>
+									</div>
+									{/* <div className="flex  flex-col space-x-1">
+										{offer.types.map((type: string, idx: number) => (
+											<span key={idx} className="text-sm bg-muted rounded-sm px-1 text-muted-foreground">{type}</span>
+										))}
+									</div> */}
+								</Link>
+							))
+						) : (
+							<p className="text-muted-foreground">
+								Aucune offre disponible
+							</p>
+						)}
+					</div>
+					<ScrollBar orientation="horizontal" />
+				</ScrollArea>
+			)}
 			<div className="text-right">
 				<span className="text-sm text-muted-foreground">Powered by{' '}</span>
 				<Link
@@ -69,7 +121,7 @@ export async function JustWatchWidget({
 					target="_blank"
 					className="inline-flex items-center gap-1"
 				>
-					<Image
+					<ImageWithFallback
 						alt="JustWatch"
 						height={11}
 						width={70}
