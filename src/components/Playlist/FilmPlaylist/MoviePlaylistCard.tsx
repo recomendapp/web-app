@@ -15,20 +15,20 @@ export default function MoviePlaylistCard({
   className,
   playlist,
 }: MoviePlaylistCardProps) {
+  if (!playlist) return null;
   return (
     <Link
-      href={`/playlist/${playlist?.id}`}
-      className={cn(
-        'relative flex flex-col gap-2 bg-muted hover:bg-muted-hover rounded-md p-2',
+      href={`/playlist/${playlist.id}`}
+      className={cn(`relative flex flex-col gap-2 h-full bg-muted hover:bg-muted-hover rounded-md p-2`,
         className
       )}
     >
-      {playlist?.featured && <FeaturedPlaylistBadge />}
+      {playlist.featured && <FeaturedPlaylistBadge />}
       <div className={`w-full shadow-2xl`}>
         <AspectRatio ratio={1 / 1}>
           <ImageWithFallback
-            src={playlist?.poster_url ?? ''}
-            alt={playlist?.title ?? ''}
+            src={playlist.poster_url ?? ''}
+            alt={playlist.title ?? ''}
             fill
             sizes={`
               (max-width: 640px) 96px,
@@ -41,9 +41,9 @@ export default function MoviePlaylistCard({
         </AspectRatio>
       </div>
       <div>
-        <p className="text-center line-clamp-2 break-words">{playlist?.title}</p>
+        <p className="text-center line-clamp-2 break-words">{playlist.title}</p>
         <p className="text-center text-muted-foreground">
-          {playlist?.items_count} film{Number(playlist?.items_count) > 1 && 's'}
+          {playlist.items_count} film{Number(playlist.items_count) > 1 && 's'}
         </p>
       </div>
     </Link>

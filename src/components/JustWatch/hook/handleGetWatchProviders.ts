@@ -24,11 +24,20 @@ export const handleGetWatchProviders = async (
 		if (providers.rent) processProviders(providers.rent, 'rent');
 		if (providers.buy) processProviders(providers.buy, 'buy');
 
-		const sortedProviders = Object.values(providerMap).sort((a, b) => a.display_priority - b.display_priority);
+		const sortedProviders = Object.values(providerMap).sort((a, b) => {
+			// Prioritize "flatrate" providers
+			if (a.types.includes('flatrate') && !b.types.includes('flatrate')) {
+				return -1;
+			} else if (!a.types.includes('flatrate') && b.types.includes('flatrate')) {
+				return 1;
+			}
+			// If both or neither have "flatrate", sort by display_priority
+			return a.display_priority - b.display_priority;
+		});
 
 		acc[country] = sortedProviders;
 		return acc;
 	}, {} as { [key: string]: any[] });
 
-	return (providers);
+	return providers;
 }

@@ -28,7 +28,6 @@ export default async function MoviePage({
 		.eq('language', params.lang)
 		.eq('cast.job', 'Actor')
 		.single();
-	console.log("movie", movie);
 
   if (!movie) notFound();
 

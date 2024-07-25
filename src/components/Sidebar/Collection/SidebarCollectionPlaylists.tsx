@@ -121,7 +121,7 @@ export default function SidebarCollectionPlaylists() {
 					href={`/playlist/${playlist?.id}`}
 					className={`
 						relative h-fit flex items-center p-2
-						font-medium rounded-md transition-colors
+						font-medium rounded-md
 						${!isSidebarCollapsed ? 'w-full' : 'w-fit'}
 					`}
 					>

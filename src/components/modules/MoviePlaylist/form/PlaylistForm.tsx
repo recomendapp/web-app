@@ -353,7 +353,6 @@ export function PlaylistForm({
                         const description = e.target.value
                           .replace(/[\r\n]+/g, '\n') // Multiple new lines
                           .replace(/[^\S\r\n]+/g, ' ') // Multiple spaces
-                        console.log(description);
                         form.setValue('description', description);
                       }}
                     />

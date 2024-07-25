@@ -32,12 +32,13 @@ import { MovieAction } from '@/components/Movie/Actions/MovieAction';
 import { useLocale } from 'next-intl';
 import ActivityIcon from '@/components/Review/ActivityIcon';
 import { Movie, MoviePerson, UserMovieActivity } from '@/types/type.db';
+import { useState } from 'react';
 
 interface MovieCardProps {
   movie: Movie;
   displayMode?: 'grid' | 'row';
   link?: boolean;
-  movieActivity?: UserMovieActivity | null;
+  movieActivity?: UserMovieActivity;
   job?: string;
   width?: number;
   height?: number;
@@ -53,6 +54,7 @@ export default function MovieCard({
   job,
   ...props
 }: MovieCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
 
   if (!movie) return null;
 
@@ -62,7 +64,11 @@ export default function MovieCard({
         <ContextMenuTrigger>
           <Tooltip delayDuration={500}>
             <TooltipTrigger asChild>
-              <div className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md">
+              <div
+                className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
                 <Link href={`/film/${movie.id}`} className="w-full">
                   <MoviePoster
                     src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
@@ -92,7 +98,9 @@ export default function MovieCard({
                 )}
                 <div className="hidden absolute bottom-8 group-hover:lg:flex w-full justify-center pointer-events-none">
                   <div className="bg-background rounded-md w-fit pointer-events-auto">
+                  {isHovered && (
                     <MovieAction filmId={movie.id!} watch watchlist dropdown />
+                  )}
                   </div>
                 </div>
               </div>

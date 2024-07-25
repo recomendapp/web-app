@@ -33,13 +33,15 @@ export default function MovieDescription({
             <div className="text-justify text-muted-foreground">No description available</div>
           )} */}
         </div>
-        <div className="min-w-[20%]">
-          <h2 className="text-lg font-medium">Où voir ?</h2>
-          <JustWatchWidget
-            id={movie.id}
-            type="movie"
-          />
-        </div>
+        <JustWatchWidget
+          id={movie.id}
+          title={movie.title}
+          type="movie"
+          className="min-w-[20%]"
+        />
+        {/* <div className="min-w-[20%]">
+          <h2 className="text-lg font-medium">Voir le film</h2>
+        </div> */}
       </div>
       {/* CASTING */}
       <MovieCast cast={movie.cast} />

@@ -60,7 +60,7 @@ export default function AppLayout({
 				>
 					<Sidebar />
 				</ResizablePanel>
-				<ResizableHandle withHandle className='hidden lg:flex bg-transparent hover:bg-accent-1 transition-colors'/>
+				<ResizableHandle withHandle className='hidden lg:flex bg-transparent hover:bg-accent-1'/>
 				{/* MAIN */}
 				<ResizablePanel
 					defaultSize={uiLayout[1]}
@@ -78,7 +78,7 @@ export default function AppLayout({
 						</div>
 					</Box>
 				</ResizablePanel>
-				{!isRightPanelCollapsed && <ResizableHandle withHandle className='hidden lg:flex bg-transparent hover:bg-accent-1 transition-colors'/>}
+				{!isRightPanelCollapsed && <ResizableHandle withHandle className='hidden lg:flex bg-transparent hover:bg-accent-1'/>}
 				{/* RIGHTPANEL */}
 				<ResizablePanel
 					ref={rightPanelRef}

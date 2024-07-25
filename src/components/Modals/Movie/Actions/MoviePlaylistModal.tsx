@@ -397,8 +397,6 @@ const UserMoviePlaylistLike = ({
 		enabled: !!user?.id,
 	});
 
-	console.log(playlists);
-
 	useEffect(() => {
 		if (inView && hasNextPage) {
 			fetchNextPage();

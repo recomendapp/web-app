@@ -69,7 +69,7 @@ export default function Collection() {
           <TabsTrigger value="external">Enregistré</TabsTrigger>
         </TabsList>
         {/* <TabsContent value="personal" className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2"> */}
-        <TabsContent value="personal" className="grid gap-2 grid-cols-3 @md/main:grid-cols-4 @2xl/main:grid-cols-6 @4xl/main:grid-cols-8 @6xl/main:grid-cols-10 @7xl:grid-cols-12">
+        <TabsContent value="personal" className="grid gap-2 grid-cols-3 @md/collection:grid-cols-4 @2xl/collection:grid-cols-6 @4xl/collection:grid-cols-8 @6xl/collection:grid-cols-10 @7xl/collection:grid-cols-12">
           {collectionRoutes.map((item) => (
             <Button
               key={item.label}
@@ -85,7 +85,7 @@ export default function Collection() {
           ))}
           <UserPlaylists grid />
         </TabsContent>
-        <TabsContent value="external" className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2">
+        <TabsContent value="external" className="grid gap-2 grid-cols-3 @md/collection:grid-cols-4 @2xl/collection:grid-cols-6 @4xl/collection:grid-cols-8 @6xl/collection:grid-cols-10 @7xl/collection:grid-cols-12">
           <UserPlaylistsLiked sidebarExpanded={false} grid />
         </TabsContent>
       </Tabs>

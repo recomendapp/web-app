@@ -13,7 +13,6 @@ className,
 activity: any;
 className?: string;
 }) {
-	console.log(activity);
 	const t = useTranslations('feed');
   
 	return (

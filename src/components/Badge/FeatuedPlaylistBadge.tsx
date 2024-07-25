@@ -9,9 +9,9 @@ import { Info, Sparkles } from 'lucide-react';
 export default function FeaturedPlaylistBadge() {
   return (
     <Tooltip>
-      <TooltipTrigger className="absolute z-[1] top-4 right-4">
-        <Badge className="p-1.5">
-          <Sparkles />
+      <TooltipTrigger className="absolute z-[1] top-2 right-3">
+        <Badge className="p-0.5">
+          <Sparkles size={10}/>
         </Badge>
       </TooltipTrigger>
       <TooltipContent align="center" side="bottom">

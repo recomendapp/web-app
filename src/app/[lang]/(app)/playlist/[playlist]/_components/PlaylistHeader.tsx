@@ -96,7 +96,7 @@ export default function PlaylistHeader({ playlist } : { playlist: Playlist }) {
             <div className='space-y-2'>
               {/* DESCRIPTION */}
               <p
-                className='text-muted-foreground font-light line-clamp-2'
+                className='cursor-pointer text-muted-foreground font-light line-clamp-2'
                 onClick={() => setOpenDescriptionModal(true)}
               >
                 {playlist?.description}

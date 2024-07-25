@@ -38,7 +38,7 @@ export function DataComment({ playlistItem }: { playlistItem: PlaylistItem }) {
           content: <PlaylistCommentModal id={`playlist-item-${playlistItem?.id}-comment`} playlistItem={playlistItem} />,
         })}
         className={` cursor-pointer
-          ${!playlistItem?.comment && 'text-muted-foreground'}
+          text-muted-foreground
         `}
       >
         {playlistItem?.comment && <span className='line-clamp-2 break-all'>{playlistItem.comment}</span>}

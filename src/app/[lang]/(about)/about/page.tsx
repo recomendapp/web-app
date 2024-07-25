@@ -148,7 +148,7 @@ export default async function About({
               <Link
                 href="https://discord.gg/z4fXr39xPr"
                 target="_blank"
-                className="transition-colors underline underline-offset-2 hover:text-accent-pink"
+                className="underline underline-offset-2 hover:text-accent-pink"
               >
                 {chunks}
               </Link>
@@ -211,7 +211,7 @@ export default async function About({
               <Link
                 href="https://www.themoviedb.org/"
                 target="_blank"
-                className="transition-colors underline underline-offset-2 hover:text-accent-pink"
+                className="underline underline-offset-2 hover:text-accent-pink"
               >
                 {chunks}
               </Link>
@@ -224,7 +224,7 @@ export default async function About({
               <Link
                 href="https://www.themoviedb.org/"
                 target="_blank"
-                className="transition-colors underline underline-offset-2 hover:text-accent-pink"
+                className="underline underline-offset-2 hover:text-accent-pink"
               >
                 {chunks}
               </Link>
@@ -247,7 +247,7 @@ export default async function About({
               <Link
                 href={ressource.link}
                 target="_blank"
-                className="transition-colors underline underline-offset-2 hover:text-accent-pink"
+                className="underline underline-offset-2 hover:text-accent-pink"
               >
                 {ressource.name}
               </Link>
@@ -269,7 +269,7 @@ export default async function About({
               <Link
                 href="https://help.recomend.app/"
                 target="_blank"
-                className="transition-colors underline underline-offset-2 hover:text-accent-pink"
+                className="underline underline-offset-2 hover:text-accent-pink"
               >
                 {chunks}
               </Link>
@@ -281,7 +281,7 @@ export default async function About({
             link: (chunks) => (
               <Link
                 href="mailto:help@recomend.app"
-                className="transition-colors underline underline-offset-2 hover:text-accent-pink"
+                className="underline underline-offset-2 hover:text-accent-pink"
               >
                 {chunks}
               </Link>
@@ -293,7 +293,7 @@ export default async function About({
             link: (chunks) => (
               <Link
                 href="mailto:ideas@recomend.app"
-                className="transition-colors underline underline-offset-2 hover:text-accent-pink"
+                className="underline underline-offset-2 hover:text-accent-pink"
               >
                 {chunks}
               </Link>
@@ -305,7 +305,7 @@ export default async function About({
             link: (chunks) => (
               <Link
                 href="mailto:contact@recomend.app"
-                className="transition-colors underline underline-offset-2 hover:text-accent-pink"
+                className="underline underline-offset-2 hover:text-accent-pink"
               >
                 {chunks}
               </Link>

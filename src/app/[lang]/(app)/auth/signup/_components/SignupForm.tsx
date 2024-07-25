@@ -29,8 +29,6 @@ export function SignupForm() {
 
   const { signup } = useAuth();
 
-  console.log('locale', locale);
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const signupFormSchema = z.object({

@@ -62,7 +62,7 @@ export default function FeaturedPlaylists() {
             key={playlist.id}
             ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
           >
-            <MoviePlaylistCard playlist={playlist} />
+            <MoviePlaylistCard playlist={playlist}/>
           </div>
          ))
       ))}

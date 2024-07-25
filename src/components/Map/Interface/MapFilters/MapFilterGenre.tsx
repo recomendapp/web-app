@@ -35,7 +35,7 @@ export const MapFilterGenre = () => {
 					<TooltipBox tooltip="Reset">
 					<RotateCcwIcon
 						onClick={() => filters.genres.setValue([])}
-						className="w-3 h-3 ml-1 text-muted-foreground hover:text-primary-foreground transition-colors cursor-pointer"
+						className="w-3 h-3 ml-1 text-muted-foreground hover:text-primary-foreground cursor-pointer"
 					/>
 				</TooltipBox>}
 			</Label>

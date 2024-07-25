@@ -41,13 +41,13 @@ export default function ProfileFilms({
   const numberOfResult = 20;
 
   const {
-    data: activity,
+    data: activities,
     isLoading,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery({
-    queryKey: ['user', userId, 'activity', { order: 'updated_at-desc'}],
+    queryKey: ['user', userId, 'activities', { order: 'updated_at-desc'}],
     queryFn: async ({ pageParam = 1 }) => {
       let from = (pageParam - 1) * numberOfResult;
       let to = from - 1 + numberOfResult;
@@ -81,58 +81,10 @@ export default function ProfileFilms({
     enabled: !!userId && !!locale,
   });
 
-  // const {
-  //   data: profileMovieActivitiesQuery,
-  //   loading,
-  //   error,
-  //   fetchMore,
-  // } = useQuery<GetUserMovieActivitiesByUserIdQuery>(GET_USER_MOVIE_ACTIVITIES_BY_USER_ID, {
-  //   variables: {
-  //     filter: {
-  //       userId: { eq: username},
-  //     },
-  //     orderBy: order,
-  //     first: numberOfResult,
-  //     locale: locale,
-  //   },
-  //   skip: !profile.id || !locale,
-  // });
-  // const profileActivities = profileMovieActivitiesQuery?.user_movie_activityCollection?.edges;
-  // const pageInfo = profileMovieActivitiesQuery?.user_movie_activityCollection?.pageInfo;
-
-  // useEffect(() => {
-  //   if (inView && pageInfo?.hasNextPage) {
-  //     fetchMore({
-  //       variables: {
-  //         filter: {
-  //           userId: { eq: profile.id },
-  //         },
-  //         orderBy: order,
-  //         first: numberOfResult,
-  //         after: pageInfo?.endCursor,
-  //         locale: locale,
-  //       },
-  //       updateQuery: (previousResult, { fetchMoreResult }) => {
-  //         return {
-  //           ...previousResult,
-  //           userCollection: {
-  //             ...previousResult.user_movie_activityCollection,
-  //             edges: [
-  //               ...previousResult.user_movie_activityCollection!.edges,
-  //               ...fetchMoreResult.user_movie_activityCollection!.edges,
-  //             ],
-  //             pageInfo: fetchMoreResult.user_movie_activityCollection!.pageInfo,
-  //           },
-  //         };
-  //       },
-  //     });
-  //   }
-  // }, [fetchMore, inView, pageInfo, profile.id, locale, order]);
-
   useEffect(() => {
     if (inView && hasNextPage)
       fetchNextPage();
-   }, [inView, hasNextPage, activity, fetchNextPage]);
+   }, [inView, hasNextPage, activities, fetchNextPage]);
 
   const changeOrder = (orderSelected: string) => {
     if (orderSelected === 'watch-desc')
@@ -148,9 +100,7 @@ export default function ProfileFilms({
     else if (orderSelected === 'like-asc')
       setOrder([{ created_at: 'AscNullsLast' }]);
     setSelectedOrder(orderSelected);
-  }
-
-  // if (!profileActivities?.length) return null;
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -194,46 +144,50 @@ export default function ProfileFilms({
           </Button>
         </div>
       </div>
-      {activity?.pages[0].length! > 0 ? (
-        <>
-          <div
-            className={` gap-2
-                ${
-                  displayMode == 'row'
-                    ? 'flex flex-col'
-                    : 'grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 2xl:grid-cols-10'
-                }
-            `}
-          >
-            {activity?.pages.map((page, i) => (
-              page?.map((activity: any, index) => (
-                <div
-                  key={activity.id}
-                  ref={(i === activity.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
-                >
-                  <MovieCard
-                    movie={activity.movie}
-                    displayMode={displayMode}
-                    movieActivity={activity}
-                    fill
-                    sizes={`
-                      (max-width: 640px) 100px,
-                      (max-width: 768px) 100px,
-                      (max-width: 1024px) 120px,
-                      (max-width: 1280px) 150px,
-                      (max-width: 1536px) 150px,
-                      (max-width: 1792px) 150px,
-                      (max-width: 2048px) 200px,
-                      (max-width: 2304px) 200px,
-                      200px
-                    `}
-                  />
-                </div>
-              ))
-            ))}
-          </div>
-          {(isLoading) && <Loader />}
-        </>
+      {isLoading || activities == undefined ? (
+        <div className="flex items-center h-full">
+          <Loader />
+        </div>
+      ) : !isLoading && activities?.pages[0].length ? (
+        <div
+          className={` gap-2
+              ${
+                displayMode == 'row'
+                  ? 'flex flex-col'
+                  : 'grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 2xl:grid-cols-10'
+              }
+          `}
+        >
+          {activities.pages.map((page, i) => (
+            page?.map((activity, index) => (
+              <div
+                key={activity.id}
+                ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+              >
+                <MovieCard
+                  movie={activity.movie}
+                  displayMode={displayMode}
+                  movieActivity={activity as any}
+                  fill
+                  sizes={`
+                    (max-width: 640px) 100px,
+                    (max-width: 768px) 100px,
+                    (max-width: 1024px) 120px,
+                    (max-width: 1280px) 150px,
+                    (max-width: 1536px) 150px,
+                    (max-width: 1792px) 150px,
+                    (max-width: 2048px) 200px,
+                    (max-width: 2304px) 200px,
+                    200px
+                  `}
+                />
+              </div>
+            ))
+          ))}
+          {isFetchingNextPage && (
+            <Loader/>
+          )}
+        </div>
       ) : (
         <p className="text-center font-semibold">Aucun film.</p>
       )}

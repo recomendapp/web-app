@@ -5,21 +5,21 @@
 @layer base {
   :root {
     /* COLORS */
-    --accent-1: #ffe974;
-    --accent-1-foreground: #000;
-    --accent-1-hover: 44, 97%, 40%;
+    --accent-1: 51 100% 73%;
+    --accent-1-foreground: 0 0% 0%;
+    --accent-1-hover: 44 97% 40%;
 
-    --accent-pink: #f788d2;
-    --accent-pink-foreground: #000000;
-    --accent-pink-hover: #f32fb2;
+    --accent-pink: 320 87% 75%;
+    --accent-pink-foreground: 0 0% 0%;
+    --accent-pink-hover: 320 89% 57%;
 
-    --background: #101010;
-    --background-border: #000000;
+    --background: 0 0% 6%;
+    --background-border: 0 0% 0%;
     --foreground: 0 100% 100%;
 
-    --muted: #1f1f1f;
-    --muted-hover: #141414;
-    --muted-foreground: #929292;
+    --muted: 0 0% 12%;
+    --muted-hover: 0 0% 8%;
+    --muted-foreground: 0 0% 57%;
 
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
@@ -30,12 +30,12 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
 
-    --primary: #fff; /* 0 100% 100% */
+    --primary: 0 0% 100%; /* 0 100% 100% */
     --primary-subued: 0 0% 65%;
-    --primary-foreground: #101010 /* 240 5.9% 10% */;
+    --primary-foreground: 0 0% 6% /* 240 5.9% 10% */;
 
-    --secondary: #0e0e0e;
-    --secondary-foreground: #fff;
+    --secondary: 0 0% 5%;
+    --secondary-foreground: 0 0% 100%;
 
     --accent: 240 3.7% 15.9%;
     --accent-foreground: ;
@@ -48,7 +48,7 @@
     --radius: 0.5rem;
 
     /* NAVBAR */
-    --navbar-background-color: #000000;
+    --navbar-background-color: 0 0% 0%;
 
     /* SCROLLBAR */
     --scrollbar: #858585;
@@ -61,20 +61,21 @@
 
   .light {
     /* COLORS */
-    --accent-1: #ffe974;
-    --accent-1-foreground: #000;
-    --accent-1-hover: 44, 97%, 40%;
+    --accent-1: 51 100% 73%;
+    --accent-1-foreground: 0 0% 0%;
+    --accent-1-hover: 44 97% 40%;
 
-    --accent-pink: #f788d2;
-    --accent-pink-foreground: #000000;
-    --accent-pink-hover: #f32fb2;
+    --accent-pink: 320 87% 75%;
+    --accent-pink-foreground: 0 0% 0%;
+    --accent-pink-hover: 320 89% 57%;
 
-    --background: #fff;
-    --background-border: #b1b1b1;
+    --background: 0 0% 6%;
+    --background-border: 0 0% 0%;
     --foreground: 0 100% 100%;
 
-    --muted: #0e0e0e;
-    --muted-foreground: #929292;
+    --muted: 0 0% 12%;
+    --muted-hover: 0 0% 8%;
+    --muted-foreground: 0 0% 57%;
 
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
@@ -89,8 +90,8 @@
     --primary-subued: 0 0% 65%;
     --primary-foreground: 240 5.9% 10%;
 
-    --secondary: #0e0e0e;
-    --secondary-foreground: #fff;
+    --secondary: 0 0% 5%;
+    --secondary-foreground: 0 0% 100%;
 
     --accent: 240 3.7% 15.9%;
     --accent-foreground: ;
@@ -103,7 +104,7 @@
     --radius: 0.5rem;
 
     /* NAVBAR */
-    --navbar-background-color: #000000;
+    --navbar-background-color: 0 0% 0%;
 
     /* SCROLLBAR */
     --scrollbar: #858585;
@@ -117,13 +118,16 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border  transition-colors;
   }
   body {
     @apply bg-background-border text-foreground;
     font-feature-settings:
       'rlig' 1,
       'calt' 1;
+  }
+  .clickable {
+    @apply cursor-pointer hover:text-accent-pink;
   }
 }
 
