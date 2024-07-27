@@ -23,7 +23,6 @@ import {
 } from '@/components/ui/context-menu';
 
 // DATE
-import { getYear } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
@@ -107,7 +106,7 @@ export default function MovieCard({
             </TooltipTrigger>
             <TooltipContent className="flex flex-col gap-2">
               <p className=" text-center line-clamp-1 whitespace-nowrap">
-                {movie.title} ({movie.release_date && getYear(new Date(movie.release_date))})
+                {movie.title} ({movie.release_date && (new Date(movie.release_date)).getFullYear()})
               </p>
               {/* <MovieAction movie.id={movie.id} rating like watch playlist send /> */}
             </TooltipContent>

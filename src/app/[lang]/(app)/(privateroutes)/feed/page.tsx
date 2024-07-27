@@ -8,7 +8,6 @@ import FeedItem from "./_components/FeedItem";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import Loader from "@/components/Loader/Loader";
-import { th } from "date-fns/locale";
 
 export default function Feed() {
 

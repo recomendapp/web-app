@@ -8,14 +8,14 @@ import {
 } from '@/components/ui/tooltip';
 
 // DATE
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import { useFormatter } from "next-intl";
 import { AspectRatio } from '../ui/aspect-ratio';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
 import { Button } from '../ui/button';
 import Link from 'next/link';
 
 export default function MovieVerticalCard({ movie }: { movie: any }) {
+  const format = useFormatter();
   return (
     <div className="flex lg:flex-col gap-4 items-center">
       {/* MOVIE POSTER */}
@@ -77,8 +77,9 @@ export default function MovieVerticalCard({ movie }: { movie: any }) {
               </TooltipTrigger>
               <TooltipContent side="bottom">
                 {movie.release_date
-                  ? format(new Date(movie.release_date), 'PPP', {
-                      locale: fr,
+                  ? format.dateTime(new Date(movie.release_date), {
+                      month: 'long',
+                      year: 'numeric',
                     })
                   : 'Unknown'}
               </TooltipContent>

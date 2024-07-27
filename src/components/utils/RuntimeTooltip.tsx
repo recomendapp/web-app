@@ -1,13 +1,10 @@
-import { addMinutes, format } from 'date-fns';
-
 // UI
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useLocale } from 'next-intl';
-import { enUS, fr } from 'date-fns/locale';
+import { useFormatter } from 'next-intl';
 import { ConvertHoursMinutes, cn } from '@/lib/utils';
 
 export function RuntimeTooltip({
@@ -17,14 +14,16 @@ export function RuntimeTooltip({
   runtime: number;
   className?: string;
 }) {
-  const locale = useLocale();
+  const format = useFormatter();
 
   if (!runtime) return;
 
-  const endTime = addMinutes(new Date(), runtime);
+  const endTime = new Date();
+  endTime.setMinutes(endTime.getMinutes() + runtime);
 
-  const formattedEndTime = format(endTime, 'HH:mm', {
-    locale: locale === 'en-FR' ? enUS : fr,
+  const formattedEndTime = format.dateTime(endTime, {
+    hour: 'numeric',
+    minute: '2-digit',
   });
 
   return (

@@ -9,8 +9,6 @@ import {
 } from '@/components/ui/tooltip';
 
 // DATE
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Button } from '@/components/ui/button';

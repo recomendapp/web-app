@@ -1,13 +1,10 @@
-import { format } from 'date-fns';
-
 // UI
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useLocale } from 'next-intl';
-import { enUS, fr } from 'date-fns/locale';
+import { useFormatter, useLocale } from 'next-intl';
 import { cn } from '@/lib/utils';
 
 export function DateOnlyYearTooltip({
@@ -18,6 +15,7 @@ export function DateOnlyYearTooltip({
   className?: string;
 }) {
   const locale = useLocale();
+  const format = useFormatter();
   if (!date) return;
   return (
     <Tooltip>
@@ -26,8 +24,10 @@ export function DateOnlyYearTooltip({
       </TooltipTrigger>
       <TooltipContent align="center" side="bottom">
         {date
-          ? format(new Date(date), 'PPP', {
-              locale: locale === 'fr-FR' ? fr : enUS,
+          ? format.dateTime(new Date(date), {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
             })
           : 'Unknown'}
       </TooltipContent>

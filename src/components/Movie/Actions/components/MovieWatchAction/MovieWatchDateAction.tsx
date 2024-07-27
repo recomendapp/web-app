@@ -11,11 +11,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 import { fr, enUS } from 'date-fns/locale';
 import { useAuth } from '@/context/auth-context';
 
-import { useLocale } from 'next-intl';
+
+import { useFormatter, useLocale } from 'next-intl';
 import toast from 'react-hot-toast';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase/client';
@@ -31,6 +32,8 @@ export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
   const locale = useLocale();
 
   const queryClient = useQueryClient();
+
+  const format = useFormatter();
 
   const {
     data: activity,
@@ -89,8 +92,10 @@ export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
               <CalendarDays />
               <div className="hidden sm:block">
                 {activity?.date ? (
-                  format(new Date(activity?.date), 'PPP', {
-                    locale: locale == 'fr-FR' ? fr : enUS,
+                  format.dateTime(new Date(activity?.date), {
+                    month: 'long',
+                    year: 'numeric',
+                    day: 'numeric',
                   })
                 ) : (
                   <span>Pick a date</span>
