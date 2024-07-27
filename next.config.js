@@ -14,6 +14,7 @@ const nextConfig = {
   reactStrictMode: false,
   output: 'standalone',
   images: {
+    unoptimized: true, // Issue: https://github.com/vercel/next.js/issues/54482
     loader: 'custom',
     loaderFile: './src/utils/image-loader.js',
     remotePatterns: [
