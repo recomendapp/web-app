@@ -156,7 +156,7 @@ export function JustWatchWidget({
 												key={i}
 												href={offer.link}
 												target="_blank"
-												className="hover:bg-muted rounded-xl p-2 shrink-0"
+												className="hover:bg-muted rounded-xl p-2 shrink-0 w-fit"
 											>
 												<ImageWithFallback
 													alt={offer.provider_id}
@@ -183,7 +183,7 @@ export function JustWatchWidget({
 												key={i}
 												href={offer.link}
 												target="_blank"
-												className="hover:bg-muted rounded-xl p-2 shrink-0"
+												className="hover:bg-muted rounded-xl p-2 shrink-0 w-fit"
 											>
 												<ImageWithFallback
 													alt={offer.provider_id}
@@ -210,7 +210,7 @@ export function JustWatchWidget({
 												key={i}
 												href={offer.link}
 												target="_blank"
-												className="hover:bg-muted rounded-xl p-2 shrink-0"
+												className="hover:bg-muted rounded-xl p-2 shrink-0 w-fit"
 											>
 												<ImageWithFallback
 													alt={offer.provider_id}

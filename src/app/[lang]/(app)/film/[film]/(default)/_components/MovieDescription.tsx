@@ -14,14 +14,14 @@ export default function MovieDescription({
   if (!movie) return null;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="@container/movie-description flex flex-col gap-4">
       {/* OVERVIEW
         {movie.data[0].overview &&
           <div className=" text-justify">
             {movie.data[0].overview}
           </div>
         } */}
-      <div className="flex flex-col lg:flex-row gap-4 justify-between">
+      <div className="flex flex-col @4xl/movie-description:flex-row gap-4 justify-between">
         <div>
           <h2 className="text-lg font-medium">Description</h2>
           <div className="text-justify text-muted-foreground">

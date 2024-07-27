@@ -1,3 +1,5 @@
+import { addMinutes } from 'date-fns';
+
 // UI
 import {
   Tooltip,
@@ -18,8 +20,7 @@ export function RuntimeTooltip({
 
   if (!runtime) return;
 
-  const endTime = new Date();
-  endTime.setMinutes(endTime.getMinutes() + runtime);
+  const endTime = addMinutes(new Date(), runtime);
 
   const formattedEndTime = format.dateTime(endTime, {
     hour: 'numeric',
