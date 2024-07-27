@@ -32,6 +32,7 @@ const FeedItem = ({ activity }: { activity?: any }) => {
 			alt={activity.movie.title ?? ''}
 			width={96}
 			height={144}
+			classNameFallback="h-full"
 			// sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
 			/>
 		{/* </Link> */}
