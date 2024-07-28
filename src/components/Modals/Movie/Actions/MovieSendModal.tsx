@@ -31,6 +31,7 @@ import { useInView } from 'react-intersection-observer';
 import { Search } from 'lucide-react';
 import useDebounce from '@/hooks/use-debounce';
 import { Badge } from '@/components/ui/badge';
+import { UserFriend } from '@/types/type.db';
 
 const sendFormSchema = z.object({
 	friends: z.array(
@@ -80,7 +81,7 @@ export function MovieSendModal({
 
 			let query = supabase
 				.from('user_friend')
-				.select('id, friend:user!inner(*, user_movie_activity(count))')
+				.select('id, friend:friend_id!inner(*, user_movie_activity(count))')
 				.eq('user_id', user?.id ?? '')
 				.eq('friend.user_movie_activity.movie_id', movieId)
 				.range(from, to)
@@ -89,7 +90,7 @@ export function MovieSendModal({
 				query = query
 					.ilike(`friend.username`, `${debouncedSearch}%`)
 			}
-			const { data } = await query;
+			const { data } = await query.returns<UserFriend[]>();
 			return data;
 		},
 		initialPageParam: 1,
@@ -124,7 +125,7 @@ export function MovieSendModal({
 		}
 
 		try {
-			const { error, count } = await supabase
+			const { error, } = await supabase
 				.rpc('insert_user_movie_guidelist', {
 					movieid: movieId,
 					receiver_user_ids: data.friends.map(({ friend }) => friend.id),

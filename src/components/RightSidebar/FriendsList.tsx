@@ -10,19 +10,6 @@ import { supabase } from '@/lib/supabase/client';
 
 export default function FriendsList() {
   const { user } = useAuth();
-
-  // const {
-  //   data: userFriendsQuery,
-  //   loading,
-  //   error,
-  // } = useQuery<GetUserFriendsQuery>(USER_FRIENDS_QUERY, {
-  //   variables: {
-  //     user_id: user?.id,
-  //   },
-  //   skip: !user,
-  // });
-  // const friends = userFriendsQuery?.user_friendCollection?.edges;
-
   const {
     data: followings,
     isLoading,

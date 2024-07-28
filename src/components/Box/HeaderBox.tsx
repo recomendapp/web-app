@@ -17,29 +17,31 @@ export const HeaderBox: React.FC<BoxProps> = ({
   classNameChild,
 }) => {
   return (
-    <div
-      style={style}
-      className={cn(
-        `
-          bg-background bg-cover bg-no-repeat
-          lg:h-[clamp(340px,30vh,400px)]
-      `,
-        className
-      )}
-      // style={{
-      //   backgroundImage: `url('${backgroundImage}')`,
-      //   backgroundSize: 'cover',
-      //   backgroundRepeat: 'no-repeat',
-      //   height: height ?? 'clamp(340px,30vh,400px)',
-      // }}
-    >
+    <div className='@container/header-box'>
       <div
+        style={style}
         className={cn(
-          'w-full h-full flex p-4 bg-gradient-to-t from-background to-[#00000050] relative',
-          classNameChild
+          `
+            bg-background bg-cover bg-no-repeat
+            @xl/header-box:h-[clamp(340px,30vh,400px)]
+        `,
+          className
         )}
+        // style={{
+        //   backgroundImage: `url('${backgroundImage}')`,
+        //   backgroundSize: 'cover',
+        //   backgroundRepeat: 'no-repeat',
+        //   height: height ?? 'clamp(340px,30vh,400px)',
+        // }}
       >
-        {children}
+        <div
+          className={cn(
+            'w-full h-full flex p-4 bg-gradient-to-t from-background to-[#00000050] relative',
+            classNameChild
+          )}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

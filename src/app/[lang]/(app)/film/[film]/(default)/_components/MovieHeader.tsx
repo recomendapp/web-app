@@ -194,10 +194,10 @@ export function MovieTrailerButton({
           </Button>
         </DialogTrigger>
       </TooltipBox>
-      <DialogContent className="lg:max-w-[60vw]">
+      <DialogContent className="@xl/movie-header:max-w-[60vw]">
         <DialogHeader className="relative flex flex-row gap-4 items-center">
-          <div className="absolute w-full flex justify-center -top-12 lg:-top-16 pointer-events-none">
-            <h2 className="text-accent-1-foreground text-2xl lg:text-5xl font-bold rounded-md bg-accent-1 px-4 py-2 pointer-events-auto">
+          <div className="absolute w-full flex justify-center -top-12 @xl/movie-header:-top-16 pointer-events-none">
+            <h2 className="text-accent-1-foreground text-2xl @xl/movie-header:text-5xl font-bold rounded-md bg-accent-1 px-4 py-2 pointer-events-auto">
               TRAILER
             </h2>
           </div>
