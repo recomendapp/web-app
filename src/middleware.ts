@@ -7,7 +7,7 @@ import { createMiddlewareClient } from './lib/supabase/middleware';
 
 const intlMiddleware = createIntlMiddleware({
   locales,
-  defaultLocale: 'en-US',
+  defaultLocale: 'en',
   localePrefix: 'never',
 });
 

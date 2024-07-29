@@ -1,107 +1,107 @@
 [
     {
         "id": 8705,
-        "en-US": "Biopic",
-        "fr-FR": "Biopic"
+        "en": "Biopic",
+        "fr": "Biopic"
     },
     {
         "id": 8738,
-        "en-US": "Dramedy",
-        "fr-FR": "Com\u00e9die dramatique"
+        "en": "Dramedy",
+        "fr": "Com\u00e9die dramatique"
     },
     {
         "id": 12,
-        "en-US": "Adventure",
-        "fr-FR": "Aventure"
+        "en": "Adventure",
+        "fr": "Aventure"
     },
     {
         "id": 36,
-        "en-US": "History",
-        "fr-FR": "Histoire"
+        "en": "History",
+        "fr": "Histoire"
     },
     {
         "id": 10752,
-        "en-US": "War",
-        "fr-FR": "Guerre"
+        "en": "War",
+        "fr": "Guerre"
     },
     {
         "id": 18,
-        "en-US": "Drama",
-        "fr-FR": "Drame"
+        "en": "Drama",
+        "fr": "Drame"
     },
     {
         "id": 53,
-        "en-US": "Thriller",
-        "fr-FR": "Thriller"
+        "en": "Thriller",
+        "fr": "Thriller"
     },
     {
         "id": 37,
-        "en-US": "Western",
-        "fr-FR": "Western"
+        "en": "Western",
+        "fr": "Western"
     },
     {
         "id": 80,
-        "en-US": "Crime",
-        "fr-FR": "Crime"
+        "en": "Crime",
+        "fr": "Crime"
     },
     {
         "id": 35,
-        "en-US": "Comedy",
-        "fr-FR": "Com\u00e9die"
+        "en": "Comedy",
+        "fr": "Com\u00e9die"
     },
     {
         "id": 27,
-        "en-US": "Horror",
-        "fr-FR": "Horreur"
+        "en": "Horror",
+        "fr": "Horreur"
     },
     {
         "id": 28,
-        "en-US": "Action",
-        "fr-FR": "Action"
+        "en": "Action",
+        "fr": "Action"
     },
     {
         "id": 10749,
-        "en-US": "Romance",
-        "fr-FR": "Romance"
+        "en": "Romance",
+        "fr": "Romance"
     },
     {
         "id": 14,
-        "en-US": "Fantasy",
-        "fr-FR": "Fantastique"
+        "en": "Fantasy",
+        "fr": "Fantastique"
     },
     {
         "id": 10402,
-        "en-US": "Music",
-        "fr-FR": "Musique"
+        "en": "Music",
+        "fr": "Musique"
     },
     {
         "id": 878,
-        "en-US": "Science Fiction",
-        "fr-FR": "Science-Fiction"
+        "en": "Science Fiction",
+        "fr": "Science-Fiction"
     },
     {
         "id": 9648,
-        "en-US": "Mystery",
-        "fr-FR": "Myst\u00e8re"
+        "en": "Mystery",
+        "fr": "Myst\u00e8re"
     },
     {
         "id": 10751,
-        "en-US": "Family",
-        "fr-FR": "Familial"
+        "en": "Family",
+        "fr": "Familial"
     },
     {
         "id": 16,
-        "en-US": "Animation",
-        "fr-FR": "Animation"
+        "en": "Animation",
+        "fr": "Animation"
     },
     {
         "id": 10770,
-        "en-US": "TV Movie",
-        "fr-FR": "T\u00e9l\u00e9film"
+        "en": "TV Movie",
+        "fr": "T\u00e9l\u00e9film"
     },
     {
         "id": 99,
-        "en-US": "Documentary",
-        "fr-FR": "Documentaire"
+        "en": "Documentary",
+        "fr": "Documentaire"
     }
 ]

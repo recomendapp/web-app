@@ -80,8 +80,8 @@ export const MapContext = ({
 		const movies = moviesDataset.features.map(({ properties: movie, geometry }) => {
 			return {
 				id: movie.id,
-				title: locale === 'fr-FR' ? movie["fr-FR"].title : movie["en-US"].title,
-				poster_path: locale === 'fr-FR' ? movie["fr-FR"].poster_path : movie["en-US"].poster_path,
+				title: locale === 'fr' ? movie["fr"].title : movie["en"].title,
+				poster_path: locale === 'fr' ? movie["fr"].poster_path : movie["en"].poster_path,
 				genres: movie.genres,
 				directors: movie.directors,
 				release_date: movie.release_date,
@@ -99,7 +99,7 @@ export const MapContext = ({
 		const genres = genresDataset.map((genre) => {
 			return {
 				id: genre.id,
-				name: locale === 'fr-FR' ? genre["fr-FR"] : genre["en-US"],
+				name: locale === 'fr' ? genre["fr"] : genre["en"],
 			}
 		});
 		return {

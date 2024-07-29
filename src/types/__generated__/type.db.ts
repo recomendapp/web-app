@@ -2234,7 +2234,7 @@ export type Database = {
     Enums: {
       eventType: "INSERT" | "DELETE" | "UPDATE"
       guidelist_status: "active" | "completed" | "deleted"
-      language: "en-US" | "fr-FR"
+      language: "en" | "fr"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"
       subscription_status:

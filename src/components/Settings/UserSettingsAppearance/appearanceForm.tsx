@@ -43,7 +43,7 @@ const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
     required_error: 'Please select a theme.',
   }),
-  language: z.enum(['en-US', 'fr-FR'], {
+  language: z.enum(['en', 'fr'], {
     invalid_type_error: 'Select a language',
     required_error: 'Please select a language.',
   }),
@@ -122,8 +122,8 @@ export function AppearanceForm() {
                     )}
                     {...field}
                   >
-                    <option value="en-US">English</option>
-                    <option value="fr-FR">Français</option>
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
                   </select>
                 </FormControl>
                 <ChevronDownIcon className="absolute right-3 top-2.5 h-4 w-4 opacity-50" />
