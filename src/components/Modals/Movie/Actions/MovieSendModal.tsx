@@ -32,6 +32,7 @@ import { Search } from 'lucide-react';
 import useDebounce from '@/hooks/use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { UserFriend } from '@/types/type.db';
+import { da } from 'date-fns/locale';
 
 const sendFormSchema = z.object({
 	friends: z.array(
@@ -125,18 +126,44 @@ export function MovieSendModal({
 		}
 
 		try {
-			const { error, } = await supabase
-				.rpc('insert_user_movie_guidelist', {
+			// const { error, } = await supabase
+			// 	.rpc('insert_user_movie_guidelist', {
+			// 		movieid: movieId,
+			// 		receiver_user_ids: data.friends.map(({ friend }) => friend.id),
+			// 		sender_user_id: user?.id,
+			// 		comment: data.comment ?? '',
+			// 	});
+			const { error } = await supabase
+				.rpc('user_movie_guidelist_insert', {
 					movieid: movieId,
 					receiver_user_ids: data.friends.map(({ friend }) => friend.id),
 					sender_user_id: user?.id,
 					comment: data.comment ?? '',
 				});
-			if (error) throw error;
+
+			// const { error } = await supabase
+			// 	.from('user_movie_guidelist_new')
+			// 	.upsert(data.friends.map(({ friend }) => ({
+			// 			movie_id: movieId,
+			// 			user_id: friend.id,
+			// 			sender_id: user.id,
+			// 			comment: data.comment ?? '',
+			// 	})))
+ 			if (error) throw error;
 			form.reset();
 			toast.success('Envoyé');
 		} catch (error: any) {
-			toast.error("Une erreur s'est produite");
+			switch (error.code) {
+				case '23505':
+					if (data.friends.length === 1)
+						toast.error('Vous avez déjà envoyé ce film à cet ami(e)');
+					else
+						toast.error('Vous avez déjà envoyé ce film à un ou plusieurs de ces amis');
+					break;
+				default:
+					toast.error("Une erreur s'est produite");
+					break;
+			}
 		} finally {
 			onClose();
 		}

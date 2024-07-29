@@ -19,7 +19,7 @@ export default function Guidelist() {
     queryFn: async () => {
       if (!user?.id || !locale) throw new Error('No user or locale');
       const { data } = await supabase
-        .from('user_movie_guidelist')
+        .from('user_movie_guidelist_view')
         .select(`
           *,
           movie:movies(
@@ -35,21 +35,14 @@ export default function Guidelist() {
               id,
               person:tmdb_person(*)
             )
-          ),
-          senders:user_movie_guidelist_item(
-            *,
-            user(*)
-          ),
-          senders_count:user_movie_guidelist_item(count)
+          )
         `)
         .eq('user_id', user.id)
+        .eq('status', 'active')
         .eq('movie.language', locale)
         .eq('movie.genres.genre.data.language', locale)
         .eq('movie.directors.job', 'Director')
-        .limit(2, { referencedTable: 'senders' })
-        .order('created_at', { ascending: true, referencedTable: 'senders' })
         .order('created_at', { ascending: true })
-        .returns<UserMovieGuidelist[]>();
       return data;
     },
     enabled: !!user?.id && !!locale,

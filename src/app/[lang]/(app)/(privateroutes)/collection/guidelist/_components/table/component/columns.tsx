@@ -12,11 +12,11 @@ import { UserMovieGuidelistFragment } from '@/graphql/__generated__/graphql';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import UserAvatar from '@/components/User/UserAvatar/UserAvatar';
 import Senders from './data-table-senders';
-import { UserMovieGuidelist } from '@/types/type.db';
+import { UserMovieGuidelistView } from '@/types/type.db';
 
 const senderToShow = 5;
 
-export const columns: ColumnDef<UserMovieGuidelist>[] = [
+export const columns: ColumnDef<UserMovieGuidelistView>[] = [
   {
     id: 'movie',
     accessorFn: (row) => row?.movie?.title,
@@ -57,7 +57,7 @@ export const columns: ColumnDef<UserMovieGuidelist>[] = [
   },
   {
     id: 'by',
-    accessorFn: (row) => row?.senders_count![0].count,
+    accessorFn: (row) => row?.senders?.length,
     meta: {
       displayName: 'Ajouté par',
     },

@@ -31,15 +31,15 @@ import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import GuidelistSendersModal from '@/components/Modals/Guidelist/GuidelistSendersModal';
 import { useModal } from '@/context/modal-context';
-import { Movie, Person, UserMovieGuidelist } from '@/types/type.db';
+import { Movie, Person, UserMovieGuidelistView } from '@/types/type.db';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase/client';
 
 interface DataTableRowActionsProps {
-  table: Table<UserMovieGuidelist>;
-  row: Row<UserMovieGuidelist>;
-  column: Column<UserMovieGuidelist, unknown>;
-  data: UserMovieGuidelist;
+  table: Table<UserMovieGuidelistView>;
+  row: Row<UserMovieGuidelistView>;
+  column: Column<UserMovieGuidelistView, unknown>;
+  data: UserMovieGuidelistView;
 }
 
 export function DataTableRowActions({
@@ -55,17 +55,20 @@ export function DataTableRowActions({
 
   const { mutateAsync: deleteGuidelistMutation } = useMutation({
     mutationFn: async () => {
-      if (!data?.id) throw Error('Missing id');
+      if (!data?.movie_id || !data.user_id) throw Error('Missing movie id or user id');
+      console.log('deleteGuidelistMutation', data);
       const { error } = await supabase
         .from('user_movie_guidelist')
-        .delete()
-        .eq('id', data.id)
+        .update({ status: 'deleted' })
+        .eq('movie_id', data.movie_id)
+        .eq('user_id', data.user_id)
+        .eq('status', 'active')
       if (error) throw error;
       return data;
     },
     onSuccess: (response) => {
-      queryClient.setQueryData(['user', user?.id, 'collection', 'guidelist'], (oldData: UserMovieGuidelist[]) => {
-        return (oldData ?? [])?.filter((activity) => activity?.id !== response.id)
+      queryClient.setQueryData(['user', user?.id, 'collection', 'guidelist'], (oldData: UserMovieGuidelistView[]) => {
+        return (oldData ?? [])?.filter((activity) => activity?.movie_id !== response.movie_id)
       })
     },
     onError: () => {
@@ -99,14 +102,14 @@ export function DataTableRowActions({
             movie={data?.movie}
             setOpen={setOpenShowDirectors}
           />
-          {data?.senders_count![0].count! > 0 && (
+          {data?.senders?.length! > 0 && (
             <DropdownMenuItem
               onClick={() => openModal({
-                id: `guidelist-${row.original?.id}-senders`,
+                id: `guidelist-${row.original?.movie_id}-senders`,
                 header: {
                   title: 'Reco par',
                 },
-                content: <GuidelistSendersModal id={`guidelist-${row.original?.id}-senders`} guidelist_id={row.original?.id!}/>,
+                content: <GuidelistSendersModal comments={row.original?.senders}/>,
               })}
             >
               Voir les recos

@@ -42,6 +42,7 @@ export const UserMovieGuidelistWidget = () => {
           movie:movies(*)
         `)
         .eq('user_id', user.id)
+        .eq('status', 'active')
         .eq('movie.language', locale)
         .range(from, to)
       if (error) throw error;

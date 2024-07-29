@@ -1,10 +1,11 @@
 'use client';
 
-import React, { createContext, useContext, ReactNode, useState } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { useMediaQuery } from 'react-responsive';
 import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
 
 interface ModalInfo {
   id: string;
@@ -14,47 +15,38 @@ interface ModalInfo {
   }
   content: ReactNode;
   isOpen: boolean;
-  className?: string;
-}
-
-interface OpenModalArgs {
-  id: string;
-  header?: {
-    title?: ReactNode;
-    description?: ReactNode;
-  }
-  content: ReactNode;
+  autoClose?: boolean; // Ajouter autoClose ici
   className?: string;
 }
 
 interface ModalContextProps {
   modals: ModalInfo[];
-  openModal: (args: OpenModalArgs) => void;
+  openModal: (args: Omit<ModalInfo, 'isOpen'>) => void; // Exclure isOpen ici
   closeModal: (id: string) => void;
 }
+
 const ModalContext = createContext<ModalContextProps | undefined>(undefined);
 
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [modals, setModals] = useState<ModalInfo[]>([]);
-
+  const pathname = usePathname();
   const isMobile = useMediaQuery({ maxWidth: 1024 });
 
-  const openModal = (modal: OpenModalArgs) => {
+  const openModal = (modal: Omit<ModalInfo, 'isOpen'>) => {
     setModals((prevModals) => {
       // Vérifier si une modal avec le même id existe déjà
       const modalIndex = prevModals.findIndex((m) => m.id === modal.id);
-  
+
       if (modalIndex !== -1) {
         // Remplacer la modal existante
         const updatedModals = [...prevModals];
-        updatedModals[modalIndex] = { ...modal, isOpen: true };
+        updatedModals[modalIndex] = { ...modal, isOpen: true, autoClose: modal.autoClose ?? true };
         return updatedModals;
       } else {
         // Ajouter une nouvelle modal
-        return [...prevModals, { ...modal, isOpen: true }];
+        return [...prevModals, { ...modal, isOpen: true, autoClose: modal.autoClose ?? true }];
       }
     });
-    // setModals((prevModals) => [...prevModals, { ...modal isOpen: true }]);
   };
 
   const closeModal = (id: string) => {
@@ -66,42 +58,34 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  // auto close modals on route change only if autoClose is true
+  useEffect(() => {
+    setModals((prevModals) => {
+      const updatedModals = prevModals.map((modal) =>
+        modal.autoClose ? { ...modal, isOpen: false } : modal
+      );
+      return updatedModals;
+    });
+  }, [pathname]);
+
   return (
     <ModalContext.Provider value={{ modals, openModal, closeModal }}>
       {children}
       {modals.map((modal) => (
-        // isMobile ? (
-        //   <Drawer key={modal.id} open={modal.isOpen} onOpenChange={() => closeModal(modal.id)}>
-        //     <DrawerContent>
-        //       {modal.header && <DrawerHeader>
-        //         {modal.header.title && <DrawerTitle className='text-left'>
-        //           {modal.header.title}
-        //         </DrawerTitle>}
-        //         {modal.header.description && <DrawerDescription>
-        //           {modal.header.description}
-        //         </DrawerDescription>}
-        //       </DrawerHeader>}
-        //       <div className='p-4'>
-        //         {modal.content}
-        //       </div>
-        //     </DrawerContent>
-        //   </Drawer>
-        // ) : (
-          <Dialog key={modal.id} open={modal.isOpen} onOpenChange={() => closeModal(modal.id)}>
-            <DialogContent className={cn("", modal.className)}>
-              {modal.header && <DialogHeader>
-                {modal.header.title && <DialogTitle>
-                  {modal.header.title}
-                </DialogTitle>}
-                {modal.header.description && <DialogDescription>
-                  {modal.header.description}
-                </DialogDescription>}
-              </DialogHeader>}
-              {modal.content}
-            </DialogContent>
-          </Dialog>
-      // )
-    ))}
+        <Dialog key={modal.id} open={modal.isOpen} onOpenChange={() => closeModal(modal.id)}>
+          <DialogContent className={cn("", modal.className)}>
+            {modal.header && <DialogHeader>
+              {modal.header.title && <DialogTitle>
+                {modal.header.title}
+              </DialogTitle>}
+              {modal.header.description && <DialogDescription>
+                {modal.header.description}
+              </DialogDescription>}
+            </DialogHeader>}
+            {modal.content}
+          </DialogContent>
+        </Dialog>
+      ))}
     </ModalContext.Provider>
   );
 };

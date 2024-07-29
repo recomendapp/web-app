@@ -28,7 +28,7 @@ import { DataTableToolbar } from './component/data-table-toolbar';
 
 import { columns } from './component/columns';
 import { useMediaQuery } from 'react-responsive';
-import { UserMovieGuidelist } from '@/types/type.db';
+import { UserMovieGuidelistView } from '@/types/type.db';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -37,7 +37,7 @@ declare module '@tanstack/react-table' {
 }
 
 interface DataTableProps {
-  data: UserMovieGuidelist[];
+  data: UserMovieGuidelistView[];
 }
 
 export function TableGuidelist({ data }: DataTableProps) {
@@ -49,7 +49,7 @@ export function TableGuidelist({ data }: DataTableProps) {
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
-  const table = useReactTable<UserMovieGuidelist>({
+  const table = useReactTable<UserMovieGuidelistView>({
     data,
     columns,
     initialState: {

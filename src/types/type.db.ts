@@ -28,15 +28,13 @@ export type UserMovieWatchlist = Database['public']['Tables']['user_movie_watchl
 export type UserMovieGuidelist = Database['public']['Tables']['user_movie_guidelist']['Row'] & {
 	movie?: Movie;
 	user?: User;
-	senders?: UserMovieGuidelistItem[] | any;
-	senders_count?: { count: number }[];
+	sender?: User;
 } | null | undefined;
 
-// *========== USER_MOVIE_GUIDELIST_ITEM ==========* //
-export type UserMovieGuidelistItem = Database['public']['Tables']['user_movie_guidelist_item']['Row'] & {
+export type UserMovieGuidelistView = Database['public']['Views']['user_movie_guidelist_view']['Row'] & {
 	movie?: Movie;
 	user?: User;
-} | null | undefined;
+};
 
 // *========== USER_MOVIE_REVIEW ==========* //
 export type UserMovieReview = Database['public']['Tables']['user_movie_review']['Row'] & {

@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       app_settings: {
@@ -86,7 +86,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       playlist_guest: {
@@ -125,7 +125,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       playlist_item: {
@@ -184,7 +184,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       playlist_like: {
@@ -220,7 +220,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       prices: {
@@ -270,7 +270,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       products: {
@@ -369,7 +369,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_collection: {
@@ -419,7 +419,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_collection"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_company: {
@@ -460,7 +460,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_company"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_country: {
@@ -501,7 +501,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_country"
             referencedColumns: ["iso_3166_1"]
-          }
+          },
         ]
       }
       tmdb_department: {
@@ -572,7 +572,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_gender"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_genre: {
@@ -613,7 +613,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_genre"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_job: {
@@ -654,7 +654,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_department"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_keyword: {
@@ -713,7 +713,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_language"
             referencedColumns: ["iso_639_1"]
-          }
+          },
         ]
       }
       tmdb_movie: {
@@ -778,7 +778,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_collection"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_movie_country: {
@@ -818,7 +818,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_movie_credits: {
@@ -871,7 +871,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_person"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_movie_genre: {
@@ -911,7 +911,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_movie_keyword: {
@@ -951,7 +951,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_movie_language: {
@@ -991,7 +991,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_movie_production: {
@@ -1031,7 +1031,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_movie_role: {
@@ -1064,7 +1064,7 @@ export interface Database {
             isOneToOne: true
             referencedRelation: "tmdb_movie_credits_random"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_movie_translation: {
@@ -1109,7 +1109,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_movie_videos: {
@@ -1173,7 +1173,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_person: {
@@ -1229,7 +1229,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_gender"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_person_translation: {
@@ -1265,7 +1265,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_person"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_update_logs: {
@@ -1360,7 +1360,33 @@ export interface Database {
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
-          }
+          },
+        ]
+      }
+      user_billing: {
+        Row: {
+          billing_address: Json | null
+          payment_method: Json | null
+          user_id: string
+        }
+        Insert: {
+          billing_address?: Json | null
+          payment_method?: Json | null
+          user_id: string
+        }
+        Update: {
+          billing_address?: Json | null
+          payment_method?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_billing_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_follower: {
@@ -1393,7 +1419,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       user_friend: {
@@ -1419,7 +1445,14 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
+          {
+            foreignKeyName: "user_friend_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_movie_activity: {
@@ -1474,7 +1507,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       user_movie_favorite: {
@@ -1517,26 +1550,35 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       user_movie_guidelist: {
         Row: {
+          comment: string
           created_at: string
           id: number
           movie_id: number
+          sender_id: string
+          status: Database["public"]["Enums"]["guidelist_status"]
           user_id: string
         }
         Insert: {
+          comment: string
           created_at?: string
           id?: number
           movie_id: number
+          sender_id: string
+          status?: Database["public"]["Enums"]["guidelist_status"]
           user_id: string
         }
         Update: {
+          comment?: string
           created_at?: string
           id?: number
           movie_id?: number
+          sender_id?: string
+          status?: Database["public"]["Enums"]["guidelist_status"]
           user_id?: string
         }
         Relationships: [
@@ -1555,58 +1597,19 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "user_movie_guidelist_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "user_movie_guidelist_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
-        ]
-      }
-      user_movie_guidelist_item: {
-        Row: {
-          comment: string | null
-          created_at: string
-          guidelist_id: number
-          id: number
-          user_id: string
-        }
-        Insert: {
-          comment?: string | null
-          created_at?: string
-          guidelist_id: number
-          id?: number
-          user_id: string
-        }
-        Update: {
-          comment?: string | null
-          created_at?: string
-          guidelist_id?: number
-          id?: number
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_movie_guidelist_item_guidelist_id_fkey"
-            columns: ["guidelist_id"]
-            isOneToOne: false
-            referencedRelation: "user_movie_guidelist"
-            referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "user_movie_guidelist_item_guidelist_id_fkey"
-            columns: ["guidelist_id"]
-            isOneToOne: false
-            referencedRelation: "user_movie_guidelist_random"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_guidelist_item_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          }
         ]
       }
       user_movie_review: {
@@ -1674,7 +1677,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       user_movie_review_comment: {
@@ -1729,7 +1732,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       user_movie_review_comment_like: {
@@ -1765,7 +1768,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       user_movie_review_like: {
@@ -1801,7 +1804,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       user_movie_watchlist: {
@@ -1844,7 +1847,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       user_person_follower: {
@@ -1887,7 +1890,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
     }
@@ -1923,7 +1926,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_collection"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       persons: {
@@ -1951,7 +1954,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "tmdb_gender"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_movie_credits_random: {
@@ -2004,7 +2007,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "persons"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       tmdb_person_department: {
@@ -2026,27 +2029,16 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "persons"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       user_movie_guidelist_random: {
         Row: {
           created_at: string | null
-          id: number | null
           movie_id: number | null
+          senders: Json[] | null
+          status: Database["public"]["Enums"]["guidelist_status"] | null
           user_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number | null
-          movie_id?: number | null
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number | null
-          movie_id?: number | null
-          user_id?: string | null
         }
         Relationships: [
           {
@@ -2069,7 +2061,39 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
+        ]
+      }
+      user_movie_guidelist_view: {
+        Row: {
+          created_at: string | null
+          movie_id: number | null
+          senders: Json[] | null
+          status: Database["public"]["Enums"]["guidelist_status"] | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_movie_watchlist_random: {
@@ -2112,7 +2136,7 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
     }
@@ -2197,9 +2221,19 @@ export interface Database {
         }
         Returns: number
       }
+      user_movie_guidelist_insert: {
+        Args: {
+          movieid: number
+          comment: string
+          sender_user_id: string
+          receiver_user_ids: string[]
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       eventType: "INSERT" | "DELETE" | "UPDATE"
+      guidelist_status: "active" | "completed" | "deleted"
       language: "en-US" | "fr-FR"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"
@@ -2227,14 +2261,16 @@ export interface Database {
   }
 }
 
+type PublicSchema = Database[Extract<keyof Database, "public">]
+
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -2242,68 +2278,68 @@ export type Tables<
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
-      Database["public"]["Views"])
-  ? (Database["public"]["Tables"] &
-      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R
-    }
-    ? R
+  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
+        PublicSchema["Views"])
+    ? (PublicSchema["Tables"] &
+        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
     : never
-  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I
-    }
-    ? I
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
     : never
-  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U
-    }
-    ? U
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
     : never
-  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof Database["public"]["Enums"]
+    | keyof PublicSchema["Enums"]
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
-    : never = never
+    : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
-  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
-  : never
+  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
+    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
 

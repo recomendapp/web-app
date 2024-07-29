@@ -1,10 +1,10 @@
 import { HeaderBox } from "@/components/Box/HeaderBox";
 import { UserMovieGuidelistFragment } from "@/graphql/__generated__/graphql";
-import { UserMovieGuidelist } from "@/types/type.db";
+import { UserMovieGuidelistView } from "@/types/type.db";
 
-export function GuidelistHeader({ data }: { data: UserMovieGuidelist[] }) {
+export function GuidelistHeader({ data }: { data: UserMovieGuidelistView[] }) {
   
-  const randomBackdrop = (object: UserMovieGuidelist[]) => {
+  const randomBackdrop = (object: UserMovieGuidelistView[]) => {
     const itemsWithBackdrop = object.filter(
       (item) => item?.movie?.backdrop_path
     );
