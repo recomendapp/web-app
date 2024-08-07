@@ -11,9 +11,9 @@ import { useLocale } from 'next-intl';
 
 // QUERY
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { User, UserMovieActivity } from '@/types/type.db';
+import { UserMovieActivity, UserProfile } from '@/types/type.db';
 
-export default function ProfileLastActivity({ profile }: { profile: User }) {
+export default function ProfileLastActivity({ profile }: { profile: UserProfile }) {
   
   const locale = useLocale();
 

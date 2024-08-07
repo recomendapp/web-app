@@ -42,6 +42,7 @@ export const UserMovieWatchlistWidget = () => {
           movie:movies(*)
         `)
         .eq('user_id', user.id)
+        .eq('status', 'active')
         .eq('movie.language', locale)
         .range(from, to)
         // .order('created_at', { ascending: true});

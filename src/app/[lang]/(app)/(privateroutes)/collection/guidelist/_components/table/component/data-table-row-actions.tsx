@@ -69,7 +69,8 @@ export function DataTableRowActions({
     onSuccess: (response) => {
       queryClient.setQueryData(['user', user?.id, 'collection', 'guidelist'], (oldData: UserMovieGuidelistView[]) => {
         return (oldData ?? [])?.filter((activity) => activity?.movie_id !== response.movie_id)
-      })
+      });
+      toast.success('Supprimé');
     },
     onError: () => {
       toast.error('Une erreur s\'est produite');

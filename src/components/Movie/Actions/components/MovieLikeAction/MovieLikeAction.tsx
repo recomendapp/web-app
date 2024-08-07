@@ -47,7 +47,7 @@ export function MovieLikeAction({ movieId }: MovieLikeActionProps) {
     enabled: !!user?.id && !!movieId,
   });
 
-  const { mutateAsync: insertActivityMutation } = useMutation({
+  const { mutateAsync: insertActivityMutation, isPending: isInsertPending } = useMutation({
     mutationFn: async ({ is_liked } : { is_liked: boolean }) => {
       if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
       const {data, error } = await supabase
@@ -82,7 +82,7 @@ export function MovieLikeAction({ movieId }: MovieLikeActionProps) {
     },
   });
 
-  const { mutateAsync: updateActivityMutation } = useMutation({
+  const { mutateAsync: updateActivityMutation, isPending: isUpdatePending } = useMutation({
     mutationFn: async ({ is_liked } : { is_liked: boolean }) => {
       if (!activity?.id) throw Error('Missing profile id or movie id');
       const {data, error } = await supabase
@@ -154,7 +154,7 @@ return (
           onClick={() => {
             activity?.is_liked ? handleUnlike() : handleLike();
           }}
-          disabled={isLoading || isError || activity === undefined}
+          disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
           size="icon"
           variant={'action'}
           className="rounded-full"

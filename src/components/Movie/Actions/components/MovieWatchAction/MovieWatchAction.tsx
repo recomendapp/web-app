@@ -65,7 +65,7 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
     enabled: !!user?.id && !!movieId,
   });
 
-  const { mutateAsync: insertActivityMutation } = useMutation({
+  const { mutateAsync: insertActivityMutation, isPending: isInsertPending } = useMutation({
     mutationFn: async () => {
       if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
       const {data, error } = await supabase
@@ -96,7 +96,7 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
     },
   });
 
-  const { mutateAsync: deleteActivityMutation } = useMutation({
+  const { mutateAsync: deleteActivityMutation, isPending: isDeletePending } = useMutation({
     mutationFn: async () => {
       if (!activity?.id) throw Error('Missing activity id');
       const { error } = await supabase
@@ -147,7 +147,7 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
           {!activity ? (
             <Button
               onClick={async () => !activity && await insertActivityMutation()}
-              disabled={isLoading || isError || activity === undefined}
+              disabled={isLoading || isError || activity === undefined || isInsertPending || isDeletePending}
               size="icon"
               variant={'action'}
               className={`rounded-full hover:text-foreground`}

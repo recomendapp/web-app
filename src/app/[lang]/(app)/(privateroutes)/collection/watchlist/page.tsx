@@ -37,6 +37,7 @@ export default function Watchlist() {
           )
         `)
         .eq('user_id', user.id)
+        .eq('status', 'active')
         .eq('movie.language', locale)
         .eq('movie.genres.genre.data.language', locale)
         .eq('movie.directors.job', 'Director')

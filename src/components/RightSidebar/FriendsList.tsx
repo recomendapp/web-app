@@ -21,7 +21,8 @@ export default function FriendsList() {
       const { data, error } = await supabase
         .from('user_follower')
         .select('*, friend:followee_id(*)')
-        .eq('user_id', user.id);
+        .eq('user_id', user.id)
+        .eq('is_pending', false);
       if (error) throw error;
       return (data);
     },

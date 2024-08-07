@@ -8,11 +8,11 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 
 // ICONS
 import { HiSparkles } from "react-icons/hi2";
-import { User } from '@/types/type.db';
+import { UserProfile } from '@/types/type.db';
 import { ProfileFollowersButton } from './ProfileFollowersButton/ProfileFollowersButton';
 import { ProfileFolloweesButton } from './ProfileFolloweesButton/ProfileFolloweesButton';
 
-export default async function ProfileHeader({ profile }: { profile: User }) {
+export default async function ProfileHeader({ profile }: { profile: UserProfile }) {
   const supabase = createServerClient();
   const {
     data: { user },

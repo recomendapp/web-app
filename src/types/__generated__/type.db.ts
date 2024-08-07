@@ -87,6 +87,13 @@ export type Database = {
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "playlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       playlist_guest: {
@@ -124,6 +131,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_guest_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
         ]
@@ -185,6 +199,13 @@ export type Database = {
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "playlist_item_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       playlist_like: {
@@ -219,6 +240,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_like_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
         ]
@@ -368,6 +396,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
         ]
@@ -1296,19 +1331,16 @@ export type Database = {
         Row: {
           avatar_url: string | null
           background_url: string | null
-          billing_address: Json | null
           bio: string | null
           created_at: string
           favorite_color: string | null
           followers_count: number
           following_count: number
-          friends_count: number
           full_name: string
           id: string
           language: Database["public"]["Enums"]["language"]
-          payment_method: Json | null
           premium: boolean
-          updated_at: string | null
+          private: boolean
           username: string
           username_updated_at: string | null
           website: string | null
@@ -1316,19 +1348,16 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           background_url?: string | null
-          billing_address?: Json | null
           bio?: string | null
           created_at?: string
           favorite_color?: string | null
           followers_count?: number
           following_count?: number
-          friends_count?: number
           full_name: string
           id: string
           language?: Database["public"]["Enums"]["language"]
-          payment_method?: Json | null
           premium?: boolean
-          updated_at?: string | null
+          private?: boolean
           username: string
           username_updated_at?: string | null
           website?: string | null
@@ -1336,19 +1365,16 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           background_url?: string | null
-          billing_address?: Json | null
           bio?: string | null
           created_at?: string
           favorite_color?: string | null
           followers_count?: number
           following_count?: number
-          friends_count?: number
           full_name?: string
           id?: string
           language?: Database["public"]["Enums"]["language"]
-          payment_method?: Json | null
           premium?: boolean
-          updated_at?: string | null
+          private?: boolean
           username?: string
           username_updated_at?: string | null
           website?: string | null
@@ -1387,22 +1413,35 @@ export type Database = {
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "user_billing_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_follower: {
         Row: {
+          created_at: string
           followee_id: string
           id: number
+          is_pending: boolean
           user_id: string
         }
         Insert: {
+          created_at?: string
           followee_id: string
           id?: number
+          is_pending?: boolean
           user_id: string
         }
         Update: {
+          created_at?: string
           followee_id?: string
           id?: number
+          is_pending?: boolean
           user_id?: string
         }
         Relationships: [
@@ -1414,26 +1453,43 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "user_follower_followee_id_fkey"
+            columns: ["followee_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "user_follower_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "user_follower_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_friend: {
         Row: {
+          created_at: string
           friend_id: string
           id: number
           user_id: string
         }
         Insert: {
+          created_at?: string
           friend_id: string
           id?: number
           user_id: string
         }
         Update: {
+          created_at?: string
           friend_id?: string
           id?: number
           user_id?: string
@@ -1447,10 +1503,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "user_friend_friend_id_fkey"
+            columns: ["friend_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "user_friend_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_friend_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
         ]
@@ -1463,7 +1533,7 @@ export type Database = {
           is_liked: boolean
           movie_id: number
           rating: number | null
-          updated_at: string
+          updated_at: string | null
           user_id: string
         }
         Insert: {
@@ -1473,7 +1543,7 @@ export type Database = {
           is_liked?: boolean
           movie_id: number
           rating?: number | null
-          updated_at?: string
+          updated_at?: string | null
           user_id: string
         }
         Update: {
@@ -1483,7 +1553,7 @@ export type Database = {
           is_liked?: boolean
           movie_id?: number
           rating?: number | null
-          updated_at?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: [
@@ -1506,6 +1576,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
         ]
@@ -1549,6 +1626,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_favorite_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
         ]
@@ -1604,10 +1688,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "user_movie_guidelist_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "user_movie_guidelist_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
         ]
@@ -1678,6 +1776,13 @@ export type Database = {
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "user_movie_review_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_movie_review_comment: {
@@ -1733,6 +1838,13 @@ export type Database = {
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "user_movie_review_comment_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_movie_review_comment_like: {
@@ -1767,6 +1879,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_comment_like_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
         ]
@@ -1805,6 +1924,13 @@ export type Database = {
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "user_movie_review_like_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_movie_watchlist: {
@@ -1812,18 +1938,21 @@ export type Database = {
           created_at: string
           id: number
           movie_id: number
+          status: Database["public"]["Enums"]["watchlist_status"]
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: number
           movie_id: number
+          status?: Database["public"]["Enums"]["watchlist_status"]
           user_id: string
         }
         Update: {
           created_at?: string
           id?: number
           movie_id?: number
+          status?: Database["public"]["Enums"]["watchlist_status"]
           user_id?: string
         }
         Relationships: [
@@ -1846,6 +1975,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
         ]
@@ -1889,6 +2025,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_person_follower_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
         ]
@@ -2062,6 +2205,13 @@ export type Database = {
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_movie_guidelist_view: {
@@ -2094,6 +2244,13 @@ export type Database = {
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_movie_watchlist_random: {
@@ -2101,18 +2258,21 @@ export type Database = {
           created_at: string | null
           id: number | null
           movie_id: number | null
+          status: Database["public"]["Enums"]["watchlist_status"] | null
           user_id: string | null
         }
         Insert: {
           created_at?: string | null
           id?: number | null
           movie_id?: number | null
+          status?: Database["public"]["Enums"]["watchlist_status"] | null
           user_id?: string | null
         }
         Update: {
           created_at?: string | null
           id?: number | null
           movie_id?: number | null
+          status?: Database["public"]["Enums"]["watchlist_status"] | null
           user_id?: string | null
         }
         Relationships: [
@@ -2135,6 +2295,78 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_profile: {
+        Row: {
+          avatar_url: string | null
+          background_url: string | null
+          bio: string | null
+          created_at: string | null
+          favorite_color: string | null
+          followers_count: number | null
+          following_count: number | null
+          full_name: string | null
+          id: string | null
+          language: Database["public"]["Enums"]["language"] | null
+          premium: boolean | null
+          private: boolean | null
+          username: string | null
+          username_updated_at: string | null
+          visible: boolean | null
+          website: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          background_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          favorite_color?: string | null
+          followers_count?: number | null
+          following_count?: number | null
+          full_name?: string | null
+          id?: string | null
+          language?: Database["public"]["Enums"]["language"] | null
+          premium?: boolean | null
+          private?: boolean | null
+          username?: string | null
+          username_updated_at?: string | null
+          visible?: never
+          website?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          background_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          favorite_color?: string | null
+          followers_count?: number | null
+          following_count?: number | null
+          full_name?: string | null
+          id?: string | null
+          language?: Database["public"]["Enums"]["language"] | null
+          premium?: boolean | null
+          private?: boolean | null
+          username?: string | null
+          username_updated_at?: string | null
+          visible?: never
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -2182,15 +2414,6 @@ export type Database = {
           directors: Json
         }[]
       }
-      insert_user_movie_guidelist: {
-        Args: {
-          movieid: number
-          comment: string
-          sender_user_id: string
-          receiver_user_ids: string[]
-        }
-        Returns: undefined
-      }
       rls_playlist_guest: {
         Args: {
           p_playlist_id: number
@@ -2230,6 +2453,26 @@ export type Database = {
         }
         Returns: undefined
       }
+      utils_check_user_following: {
+        Args: {
+          p_follower_id: string
+          p_followee_id: string
+        }
+        Returns: boolean
+      }
+      utils_check_user_friendship: {
+        Args: {
+          user_id_1: string
+          user_id_2: string
+        }
+        Returns: boolean
+      }
+      utils_check_user_privacy: {
+        Args: {
+          user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       eventType: "INSERT" | "DELETE" | "UPDATE"
@@ -2254,6 +2497,7 @@ export type Database = {
         | "language"
         | "country"
         | "genre"
+      watchlist_status: "active" | "completed"
     }
     CompositeTypes: {
       [_ in never]: never

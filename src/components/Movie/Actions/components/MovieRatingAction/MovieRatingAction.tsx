@@ -56,7 +56,7 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
     enabled: !!user?.id && !!movieId,
   });
 
-  const { mutateAsync: insertActivityMutation } = useMutation({
+  const { mutateAsync: insertActivityMutation, isPending: isInsertPending } = useMutation({
     mutationFn: async ({ rating } : { rating: number }) => {
       if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
       const {data, error } = await supabase
@@ -88,7 +88,7 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
     },
   });
 
-  const { mutateAsync: updateRating } = useMutation({
+  const { mutateAsync: updateRating, isPending: isUpdatePending } = useMutation({
     mutationFn: async ({ rating } : { rating: number | null }) => {
       if (!activity?.id ) throw Error('Missing activity id');
       if (rating === undefined ) throw Error('Missing rating');
@@ -160,7 +160,7 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
         <TooltipTrigger asChild>
           <DialogTrigger asChild>
             <Button
-              disabled={isLoading || isError || activity === undefined}
+              disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
               variant={activity?.rating ? 'rating-enabled' : 'rating'}
             >
               {(isLoading || activity === undefined) ? (

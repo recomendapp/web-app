@@ -11,10 +11,10 @@ import {
 } from '@/components/ui/hover-card';
 import UserAvatar from '../UserAvatar/UserAvatar';
 
-import { User } from '@/types/type.db';
+import { User, UserProfile } from '@/types/type.db';
 
 interface UserCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  user: User;
+  user: User | UserProfile;
   icon?: boolean;
   full?: boolean;
 }
@@ -67,7 +67,7 @@ export default function UserCard({
 }
 
 interface UserLinkProps extends React.HTMLAttributes<HTMLDivElement> {
-  user: User;
+  user: User | UserProfile;
   icon?: boolean;
 }
 

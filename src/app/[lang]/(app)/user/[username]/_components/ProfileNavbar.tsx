@@ -1,7 +1,7 @@
 'use client';
 import UserCard from '@/components/User/UserCard/UserCard';
 import { cn } from '@/lib/utils';
-import { User } from '@/types/type.db';
+import { User, UserProfile } from '@/types/type.db';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
@@ -11,7 +11,7 @@ export default function ProfileNavbar({
   className,
   withProfile = false,
 }: {
-  profile: User;
+  profile: UserProfile;
   className?: string;
   withProfile?: boolean;
 }) {

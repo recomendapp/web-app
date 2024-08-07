@@ -47,6 +47,7 @@ export function ProfileFollowersModal({
 				.from('user_follower')
 				.select('id, follower:user_id!inner(*)')
 				.eq('followee_id', userId)
+				.eq('is_pending', false)
 				.range(from, to)
 
 			if (debouncedSearch) {

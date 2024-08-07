@@ -21,6 +21,7 @@ import { Icons } from '@/components/icons';
 import { useEffect, useState } from 'react';
 import Loader from '@/components/Loader/Loader';
 import { useMutation } from '@tanstack/react-query';
+import { Switch } from '@/components/ui/switch';
 
 // This can come from your database or API.
 
@@ -78,6 +79,7 @@ export function AccountForm() {
           message: "Cet username n'est pas disponible.",
         }
       ),
+    private: z.boolean(),
     email: z.string().email(),
   });
 
@@ -85,6 +87,7 @@ export function AccountForm() {
 
   const defaultValues: Partial<ProfileFormValues> = {
     username: user?.username,
+    private: user?.private,
     email: session?.user.email,
   };
 
@@ -97,21 +100,22 @@ export function AccountForm() {
   useEffect(() => {
     user &&
       form.reset({
-        username: user?.username,
+        username: user.username,
+        private: user.private,
         email: session?.user.email,
       });
   }, [form, session?.user.email, user]);
 
   async function onSubmit(data: ProfileFormValues) {
-    if (user?.username === data.username) {
-      toast.error('Aucun changement');
-      return;
-    }
+    // if (user?.username === data.username) {
+    //   toast.error('Aucun changement');
+    //   return;
+    // }
     try {
       setLoading(true);
       await updateProfile({
         username: data.username,
-        username_updated_at: user?.username !== data.username ? date : null,
+        private: data.private,
       });
       toast.success('Enregistré');
     } catch (error) {
@@ -152,6 +156,25 @@ export function AccountForm() {
                 Ceci est votre nom d&apos;utilisateur par lequel les autres
                 personnes peuvent vous trouver et accéder à votre profil. Vous
                 ne pouvez le modifier qu&apos;une fois tous les 30 jours.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="private"
+          render={({ field }) => (
+            <FormItem className='flex items-center gap-2'>
+              <FormLabel>Compte privé</FormLabel>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+              <FormDescription className="text-justify">
+
               </FormDescription>
               <FormMessage />
             </FormItem>

@@ -61,6 +61,7 @@ export function MovieWatchlistAction({
         .select(`*`)
         .eq('user_id', user.id)
         .eq('movie_id', movieId)
+        .eq('status', 'active')
         .maybeSingle()
       if (error) throw error;
       return data ? true : false;
@@ -71,7 +72,7 @@ export function MovieWatchlistAction({
     enabled: !!user?.id && !!movieId,
   });
 
-  const { mutateAsync: insertWatchlistMutation } = useMutation({
+  const { mutateAsync: insertWatchlistMutation, isPending: isInsertPending } = useMutation({
     mutationFn: async () => {
       if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
       const { error } = await supabase
@@ -98,7 +99,7 @@ export function MovieWatchlistAction({
     },
   });
 
-  const { mutateAsync: deleteWatchlistMutation } = useMutation({
+  const { mutateAsync: deleteWatchlistMutation, isPending: isDeletePending } = useMutation({
     mutationFn: async () => {
       if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
       const { error } = await supabase
@@ -106,6 +107,7 @@ export function MovieWatchlistAction({
         .delete()
         .eq('user_id', user.id)
         .eq('movie_id', movieId)
+        .eq('status', 'active')
       if (error) throw error;
       return false;
     },
@@ -147,7 +149,7 @@ export function MovieWatchlistAction({
       <TooltipTrigger asChild>
         <Button
           onClick={async () => isWatchlisted ? await deleteWatchlistMutation() : await insertWatchlistMutation()}
-          disabled={isLoading || isError || activity === undefined}
+          disabled={isLoading || isError || activity === undefined || isInsertPending || isDeletePending}
           size="icon"
           variant={'action'}
           className={`rounded-full`}

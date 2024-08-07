@@ -62,6 +62,7 @@ export function DataTableRowActions({
         .delete()
         .eq('user_id', user.id)
         .eq('movie_id', data.movie_id)
+        .eq('status', 'active')
       if (error) throw error;
       return data;
     },

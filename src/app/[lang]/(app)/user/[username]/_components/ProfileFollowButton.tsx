@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase/client';
+import { is } from 'date-fns/locale';
 
 interface UserFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   profileId: string;
@@ -26,7 +27,7 @@ export function ProfileFollowButton({
     queryFn: async () => {
       const { data, error } = await supabase
         .from('user_follower')
-        .select('followee_id')
+        .select('*')
         .eq('followee_id', profileId)
         .eq('user_id', user!.id)
         .maybeSingle();
@@ -56,10 +57,10 @@ export function ProfileFollowButton({
       // Update follow status
       queryClient.setQueryData(
         ['user', variables.user_id, 'followers', variables.followee_id],
-        true
+        data
       );
-      // Add the followee to the user's following list
-      queryClient.setQueryData(
+      // Add the followee to the user's following list only if the follow is not pending
+      !data.is_pending && queryClient.setQueryData(
         ['user', variables.user_id, 'followings'],
         (existData: any) => {
           return existData ? [...existData, data] : [data];
@@ -130,7 +131,11 @@ export function ProfileFollowButton({
           onClick={() => (isFollow ? unfollowUser() : followUser())}
           className="rounded-full py-0"
         >
-          {isFollow ? 'Suivi(e)' : 'Suivre'}
+          {isFollow ? (
+            isFollow.is_pending ? 'Demande envoyée' : 'Suivi(e)'
+          ) : (
+            'Suivre'
+          )}
         </Button>
       )}
     </div>

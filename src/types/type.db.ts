@@ -5,6 +5,10 @@ export type User = Database['public']['Tables']['user']['Row'] & {
 	favorite_movies?: Movie[] | any;
 } | null | undefined;
 
+export type UserProfile = Database['public']['Views']['user_profile']['Row'] & {
+
+};
+
 // *========== USER_FRIEND ==========* //
 export type UserFriend = Database['public']['Tables']['user_friend']['Row'] & {
 	friend: User;
