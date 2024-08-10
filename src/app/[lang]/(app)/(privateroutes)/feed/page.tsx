@@ -54,7 +54,7 @@ export default function Feed() {
             *,
             user(*)
           ),
-          movie:movies(*)
+          movie(*)
         `)
         .in('user_id', following || [])
         .eq('movie.language', locale)

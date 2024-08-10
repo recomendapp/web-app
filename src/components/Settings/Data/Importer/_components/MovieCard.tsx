@@ -2,7 +2,7 @@ import MoviePoster from "@/components/Movie/MoviePoster";
 import ActivityIcon from "@/components/Review/ActivityIcon";
 import { Button } from "@/components/ui/button";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
-import { Movie, Person } from "@/types/type.db";
+import { Json, Movie, Person } from "@/types/type.db";
 import { HeartIcon } from "lucide-react";
 
 export default function MovieCard({
@@ -18,7 +18,7 @@ export default function MovieCard({
 	title: string | null | undefined;
 	poster_url: string | null | undefined;
 	release_date: string | null | undefined;
-	directors: any[] | null | undefined;
+	directors: any | null | undefined;
 	rating?: number | null;
 	liked?: boolean | null;
 }) {

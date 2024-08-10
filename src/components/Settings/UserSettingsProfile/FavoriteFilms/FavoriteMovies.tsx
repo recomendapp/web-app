@@ -28,11 +28,19 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { Plus, X } from 'lucide-react';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { ControllerRenderProps } from 'react-hook-form';
 import SearchFavoriteFilms from './components/SearchFavoriteFilms';
 import { toast } from 'react-hot-toast';
 
-export function FavoriteFilms({
+// UI
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { ControllerRenderProps } from 'react-hook-form';
+
+export function FavoriteMovies({
   onChange,
   onBlur,
   disabled,
@@ -62,7 +70,15 @@ export function FavoriteFilms({
 
   return (
     <>
-      <div className="grid grid-cols-4 gap-2">
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="1">
+          <AccordionTrigger>Films favoris</AccordionTrigger>
+          <AccordionContent>
+          
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+      {/* <div className="grid grid-cols-4 gap-2">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -101,7 +117,7 @@ export function FavoriteFilms({
         setOpen={setModalIsOpen}
         value={value}
         onChange={onChange}
-      />
+      /> */}
     </>
   );
 }

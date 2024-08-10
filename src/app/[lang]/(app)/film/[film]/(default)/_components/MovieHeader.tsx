@@ -70,17 +70,17 @@ export default function MovieHeader({
                   className="w-full"
                   tooltip='Note moyenne'
                 />
-                {/* {movie.follower_avg_rating && <ActivityIcon
+                {movie.follower_avg_rating && <ActivityIcon
                   movieId={movie.id}
                   rating={movie.follower_avg_rating}
                   variant="follower"
                   className="w-full"
                   tooltip='Note followers'
-                />} */}
-                <MovieFollowerAverageRating
+                />}
+                {/* <MovieFollowerAverageRating
                   movieId={movie.id}
                   className="w-full"
-                />
+                /> */}
               </div>
             )}
             {movie?.videos?.length > 0 && (

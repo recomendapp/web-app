@@ -31,27 +31,14 @@ export const MovieWidget = () => {
 		queryFn: async () => {
 			if (!movieId) throw new Error('No movieId');
 			const { data: movie, error } = await supabase
-				.from('movies')
+				.from('movie')
 				.select(`
 					*,
-					genres:tmdb_movie_genre(
-						id,
-						genre:tmdb_genre(
-							*,
-							data:tmdb_genre_translation(*)
-						)
-					),
-					directors:tmdb_movie_credits(
-						id,
-						director:tmdb_person(*)
-					),
 					videos:tmdb_movie_videos(*)
 				`)
 				.eq('id', movieId)
 				.eq('language', locale)
-				.eq('genres.genre.data.language', locale)
 				.eq('videos.iso_639_1', locale)
-				.eq('directors.job', 'Director')
 				.single();
 			if (error) throw error;
 			return movie;
@@ -117,7 +104,7 @@ export const MovieWidget = () => {
 							<div className=" line-clamp-1">
 							<span className='text-accent-1'>Film</span>
 							<span className=" before:content-['_|_']">
-								{movie.genres?.map(({ genre } : { genre: any }, index: number) => (
+								{movie.genres?.map((genre: any, index: number) => (
 								<span key={genre.id}>
 									<Button
 										variant="link"
@@ -125,7 +112,7 @@ export const MovieWidget = () => {
 										asChild
 									>
 									<Link href={`/genre/${genre.id}`}>
-										{genre.data[0].name}
+										{genre.name}
 									</Link>
 									</Button>
 									{index !== movie.genres?.length! - 1 && (
@@ -153,17 +140,17 @@ export const MovieWidget = () => {
 							</div>
 							<div className=" space-y-2">
 							<div className="line-clamp-1">
-								{movie.directors?.map(({ director }, index: number) => (
+								{movie.directors?.map((person: any, index: number) => (
 								<>
 									{index > 0 && <span>, </span>}
-									<span key={director?.id}>
+									<span key={person?.id}>
 									<Button
 										variant="link"
 										className="w-fit p-0 h-full hover:text-accent-1 transition"
 										asChild
 									>
-										<Link href={`/person/${director?.id}`}>
-										{director?.name}
+										<Link href={`/person/${person?.id}`}>
+										{person?.name}
 										</Link>
 									</Button>
 									</span>

@@ -151,7 +151,7 @@ export function ShowDirectorsButton({
   if (movie.directors.length == 1) {
     return (
       <DropdownMenuItem asChild>
-        <Link href={`/person/${movie.directors[0].person.id}`}>
+        <Link href={`/person/${movie.directors[0].id}`}>
           Voir le réalisateur
         </Link>
       </DropdownMenuItem>
@@ -180,7 +180,7 @@ export function ShowDirectorsModal({
           <DialogTitle className="text-center">Réalisateur</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4">
-          {movie?.directors?.map(({ person } : { person: Person }) => (
+          {movie?.directors?.map((person: any) => (
             <Button key={person?.id} variant={'ghost'} asChild>
               <Link href={`/person/${person?.id}`}>{person?.name}</Link>
             </Button>

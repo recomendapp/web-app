@@ -39,7 +39,7 @@ export const UserMovieGuidelistWidget = () => {
         .from('user_movie_guidelist_random')
         .select(`
           *,
-          movie:movies(*)
+          movie(*)
         `)
         .eq('user_id', user.id)
         .eq('status', 'active')

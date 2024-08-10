@@ -9,8 +9,8 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 // ICONS
 import { HiSparkles } from "react-icons/hi2";
 import { UserProfile } from '@/types/type.db';
-import { ProfileFollowersButton } from './ProfileFollowersButton/ProfileFollowersButton';
-import { ProfileFolloweesButton } from './ProfileFolloweesButton/ProfileFolloweesButton';
+import { ProfileFollowersButton } from './ProfileFollowersButton';
+import { ProfileFolloweesButton } from './ProfileFolloweesButton';
 
 export default async function ProfileHeader({ profile }: { profile: UserProfile }) {
   const supabase = createServerClient();
@@ -31,8 +31,8 @@ export default async function ProfileHeader({ profile }: { profile: UserProfile 
         />
         <div className="flex flex-col gap-2 items-end">
           <div className="flex items-center @lg/profile-header:hidden">
-            <ProfileFollowersButton userId={profile?.id!} />
-            <ProfileFolloweesButton userId={profile?.id!} />
+            <ProfileFollowersButton userId={profile?.id!} disabled={!profile.visible ? true : false} />
+            <ProfileFolloweesButton userId={profile?.id!} disabled={!profile.visible ? true : false} />
             {user?.id == profile?.id && (
               <Button variant={'action'} asChild>
                 <Link href={'/settings/profile'}>
@@ -61,8 +61,8 @@ export default async function ProfileHeader({ profile }: { profile: UserProfile 
             <span className="text-muted-foreground">@{profile?.username}</span>
           </Link>
           <div className="hidden @lg/profile-header:flex items-center gap-2">
-            <ProfileFollowersButton userId={profile?.id!} className="hidden sm:block" />
-            <ProfileFolloweesButton userId={profile?.id!} className="hidden sm:block" />
+            <ProfileFollowersButton userId={profile?.id!} className="hidden sm:block" disabled={!profile.visible ? true : false} />
+            <ProfileFolloweesButton userId={profile?.id!} className="hidden sm:block" disabled={!profile.visible ? true : false} />
             {/* <Button variant={'action'}>
               suivi(e)s
             </Button> */}

@@ -39,7 +39,7 @@ export const UserMovieWatchlistWidget = () => {
         .from('user_movie_watchlist_random')
         .select(`
           *,
-          movie:movies(*)
+          movie(*)
         `)
         .eq('user_id', user.id)
         .eq('status', 'active')

@@ -57,7 +57,7 @@ export async function getSubscriptionByUserId() {
   const supabase = createServerClient();
   try {
     const { data: subscription } = await supabase
-      .from('subscriptions')
+      .from('user_subscriptions')
       .select('*, prices(*, products(*))')
       .in('status', ['trialing', 'active'])
       .maybeSingle()

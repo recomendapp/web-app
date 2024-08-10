@@ -32,7 +32,7 @@ export default function Review({
 					activity:user_movie_activity(
 						*,
 						user(*),
-						movie:movies(*)
+						movie(*)
 					)
 				`)
 				.eq('id', reviewId)

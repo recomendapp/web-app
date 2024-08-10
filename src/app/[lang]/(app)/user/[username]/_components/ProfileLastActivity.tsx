@@ -40,7 +40,7 @@ export default function ProfileLastActivity({ profile }: { profile: UserProfile 
           *,
           user(*),
           review:user_movie_review(*),
-          movie:movies(*)
+          movie(*)
         `)
         .eq('user_id', profile.id)
         .eq('movie.language', locale)

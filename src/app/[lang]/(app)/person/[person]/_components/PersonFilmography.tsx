@@ -69,7 +69,7 @@ export default function PersonFilmography({
         .from('tmdb_movie_credits')
         .select(`
           *,
-          movie:movies(*)
+          movie(*)
         `)
         .eq('person_id', person.id)
         .eq('movie.language', locale)

@@ -56,7 +56,7 @@ export default async function CreateReview({
   if (review) redirect(`/film/${params.film}/review/${review.id}`);
 
   const { data: movie } = await supabase
-    .from('movies')
+    .from('movie')
     .select(`*`)
     .eq('id', params.film)
     .eq('language', params.lang)

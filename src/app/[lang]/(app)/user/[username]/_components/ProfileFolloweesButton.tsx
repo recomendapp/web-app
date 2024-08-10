@@ -12,17 +12,18 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Modal } from '@/components/Modals/Modal';
 import { cn } from '@/lib/utils';
-import { ProfileFollowersModal } from '@/components/Modals/Profile/ProfileFollowersModal';
 import { ProfileFolloweesModal } from '@/components/Modals/Profile/ProfileFolloweesModal';
 
 interface ProfileFolloweesButtonProps {
   userId: string;
   className?: string;
+  disabled?: boolean;
 }
 
 export function ProfileFolloweesButton({
 	userId,
 	className,
+  disabled = false,
 } : ProfileFolloweesButtonProps) {
   const [ openSendModal, setOpenSendModal ] = useState(false);
 
@@ -34,6 +35,7 @@ export function ProfileFolloweesButton({
             variant={'action'}
             onClick={() => setOpenSendModal(true)}
 			      className={cn(className)}
+            disabled={disabled}
           >
             suivi(e)s
           </Button>

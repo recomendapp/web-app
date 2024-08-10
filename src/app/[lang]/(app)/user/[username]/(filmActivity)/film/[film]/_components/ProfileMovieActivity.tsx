@@ -35,7 +35,7 @@ export default function ProfileMovieActivity({
 						*,
 						user(*)
 					),
-					movie:movies(*)
+					movie(*)
 				`)
 				.eq('user_id', userId)
 				.eq('movie_id', movieId)

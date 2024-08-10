@@ -24,18 +24,42 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import compressPicture from '@/lib/utils/compressPicture';
 import Loader from '@/components/Loader/Loader';
-import { useTranslations } from 'next-intl';
-import { FavoriteFilms } from '@/components/Settings/UserSettingsProfile/FavoriteFilms/FavoriteFilms';
-import { useMutation } from '@tanstack/react-query';
+import { useLocale, useTranslations } from 'next-intl';
+import { FavoriteMovies } from '@/components/Settings/UserSettingsProfile/FavoriteFilms/FavoriteMovies';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export function ProfileForm() {
   const t = useTranslations('settings');
   const { user, loading: userLoading } = useAuth();
+  const locale = useLocale();
   const [loading, setLoading] = useState(false);
 
+  const {
+    data: userFavoriteMovies,
+  } = useQuery({
+    queryKey: ['user', user?.id, 'favorite_movies'],
+    queryFn: async () => {
+      if (!user?.id) throw Error('Missing user id');
+      const { data, error } = await supabase
+        .from('user_movie_favorite')
+        .select(`
+          *,
+          movie(*)
+        `)
+        .eq('user_id', user?.id)
+        .eq('movie.language', locale);
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user?.id && !!locale,
+  });
+
+   console.log('userFavoriteMovies', userFavoriteMovies);
+
   const { mutateAsync: updateProfile } = useMutation({
-    mutationFn: async (payload: any) => {
+    mutationFn: async (payload: Record<string, any>) => {
       if (!user?.id) throw new Error('No user id');
+      // Update user profile
       const {
         data,
         error
@@ -46,6 +70,42 @@ export function ProfileForm() {
         .select('*');
       if (error) throw error;
       return data;
+    },
+    // onSuccess: () => {
+    //   toast.success('Enregistré');
+    // },
+    onError: (error) => {
+      // toast.error('Une erreur s\'est produite');
+      throw new Error(error.message);
+    }
+  });
+
+  const { mutateAsync: updateFavoriteMovies } = useMutation({
+    mutationFn: async (movies: number[]) => {
+      if (!user?.id) throw new Error('No user id');
+      console.log('movies', movies);
+      // Update user favorite movies
+      const {
+        data,
+        error
+      } = await supabase
+        .from('user_movie_favorite')
+        .upsert(
+          movies.map((movie_id: number, i: number) => ({
+            user_id: user?.id,
+            movie_id,
+            position: i + 1,
+          }))
+        );
+      if (error) throw error;
+      return data;
+    },
+    // onSuccess: () => {
+    //   toast.success('Enregistré');
+    // },
+    onError: (error) => {
+      // toast.error('Une erreur s\'est produite');
+      throw new Error(error.message);
     }
   });
   const [newAvatar, setNewAvatar] = useState<File>();
@@ -67,12 +127,17 @@ export function ProfileForm() {
         message: 'La bio ne doit pas dépasser 150 caractères.',
       })
       .optional(),
-    // favorite_films: z.array(z.number()),
+    favorite_movies: z
+      .array(z.number())
+      .max(4, {
+        message: 'Vous ne pouvez pas ajouter plus de 4 films.',
+      }),
     website: z
       .string()
       .url({
         message: 'Veuillez entrer une URL valide.',
       })
+      .or(z.literal(''))
       .optional(),
   });
 
@@ -81,7 +146,7 @@ export function ProfileForm() {
   const defaultValues: Partial<ProfileFormValues> = {
     full_name: user?.full_name,
     bio: user?.bio ?? undefined,
-    // favorite_films: user?.favorite_films ?? [],
+    favorite_movies: userFavoriteMovies ? userFavoriteMovies.map(({ movie_id }) => movie_id) : [],
     website: user?.website ?? undefined,
   };
 
@@ -92,14 +157,21 @@ export function ProfileForm() {
   });
 
   useEffect(() => {
-    user &&
-      form.reset({
-        full_name: user.full_name,
-        bio: user?.bio ?? undefined,
-        // favorite_films: user?.favorite_films ?? [],
-        website: user?.website ?? undefined,
-      });
+    if (user)
+    {
+      form.setValue('full_name', user.full_name);
+      form.setValue('bio', user?.bio ?? undefined);
+      form.setValue('website', user?.website ?? undefined);
+    }
   }, [form, user]);
+
+  useEffect(() => {
+    userFavoriteMovies &&
+      form.setValue(
+        'favorite_movies',
+        userFavoriteMovies.map(({ movie_id }) => movie_id)
+      );
+  }, [form, userFavoriteMovies]);
 
   async function onSubmit(data: ProfileFormValues) {
     try {
@@ -107,21 +179,27 @@ export function ProfileForm() {
 
       setLoading(true);
 
-      const payload: Record<string, any> = {
-        full_name: data.full_name,
-        bio: data.bio,
-        // favorite_films: data.favorite_films,
-        website: data.website,
-      };
-      if (newAvatar) {
-        const newAvatarUrl = await uploadAvatar(newAvatar, user.id);
-        payload.avatar_url = newAvatarUrl;
+      // check if profile has been updated
+      if (newAvatar || user.full_name !== data.full_name || user.bio !== data.bio || user.website !== data.website) {
+        const userPayload: Record<string, any> = {
+          full_name: data.full_name,
+          bio: data.bio?.trim() ?? null,
+          website: data.website?.trim() || null,
+        };
+        if (newAvatar) {
+          const newAvatarUrl = await uploadAvatar(newAvatar, user.id);
+          userPayload.avatar_url = newAvatarUrl;
+        }
+        await updateProfile(userPayload);
       }
+      
+      // check if favorite movies has been updated
+      if (userFavoriteMovies && JSON.stringify(userFavoriteMovies.map(({ movie_id }) => movie_id)) !== JSON.stringify(data.favorite_movies))
+        await updateFavoriteMovies(data.favorite_movies);
 
-      await updateProfile(payload);
       toast.success('Enregistré');
-    } catch (error) {
-      toast.error("Une erreur s'est produite");
+    } catch (error: any) {
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -218,11 +296,11 @@ export function ProfileForm() {
         />
         {/* <FormField
           control={form.control}
-          name={'favorite_films'}
+          name={'favorite_movies'}
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex justify-between gap-4">
-                <p>{t('profile.favorite_films.label')}</p>
+                <p>{t('profile.favorite_movies.label')}</p>
                 <p className="text-muted-foreground">
                   {field?.value?.length ?? 0} / 4
                 </p>
@@ -245,20 +323,18 @@ export function ProfileForm() {
                   placeholder="https://examples.com"
                   {...field}
                 />
-                {/* <div className="flex items-center gap-4">
-                  <Input {...field} />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className=" rounded-full"
-                    onClick={() => remove(index)}
-                  >
-                    <X />
-                  </Button>
-                </div> */}
               </FormControl>
 
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={'favorite_movies'}
+          render={({ field }) => (
+            <FormItem>
+              <FavoriteMovies {...field} />
             </FormItem>
           )}
         />

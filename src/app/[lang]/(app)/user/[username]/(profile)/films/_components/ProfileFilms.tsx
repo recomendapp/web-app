@@ -58,7 +58,7 @@ export default function ProfileFilms({
           *,
           user(*),
           review:user_movie_review(*),
-          movie:movies(
+          movie(
             *,
             directors:tmdb_movie_credits(
               *,

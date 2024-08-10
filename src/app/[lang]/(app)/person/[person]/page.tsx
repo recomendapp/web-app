@@ -52,9 +52,10 @@ export default async function Film({
     .from('tmdb_movie_credits_random')
     .select(`
       *,
-      movie:movies(*)
+      movie(*)
     `)
-    .eq('person_id', params.person);
+    .eq('person_id', params.person)
+    .eq('movie.language', params.lang);
   
   if (person.known_for_department) {
     queryBackground = queryBackground.eq('department', person.known_for_department)

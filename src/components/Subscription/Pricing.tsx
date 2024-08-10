@@ -164,7 +164,7 @@ const OfferCard = ({
     queryFn: async () => {
       if (!user?.id) return;
       const { data, error } = await supabase
-        .from('subscriptions')
+        .from('user_subscriptions')
         .select(`
           *,
           price:prices(

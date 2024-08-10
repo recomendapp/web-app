@@ -21,26 +21,11 @@ export default function Watchlist() {
         .from('user_movie_watchlist')
         .select(`
           *,
-          movie:movies(
-            *,
-            genres:tmdb_movie_genre(
-              id,
-              genre:tmdb_genre(
-                *,
-                data:tmdb_genre_translation(*)
-              )
-            ),
-            directors:tmdb_movie_credits(
-              id,
-              person:tmdb_person(*)
-            )
-          )
+          movie(*)
         `)
         .eq('user_id', user.id)
         .eq('status', 'active')
         .eq('movie.language', locale)
-        .eq('movie.genres.genre.data.language', locale)
-        .eq('movie.directors.job', 'Director')
         .order('created_at', { ascending: true });
       return data;
     },

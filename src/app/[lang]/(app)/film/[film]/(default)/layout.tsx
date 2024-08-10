@@ -15,7 +15,7 @@ export async function generateMetadata({
 }) {
 	const supabase = createServerClient();
 	const { data: movie } = await supabase
-		.from('movies')
+		.from('movie')
 		.select('title')
 		.eq('id', params.film)
 		.eq('language', params.lang)
@@ -41,7 +41,7 @@ export default async function MovieLayout({
 }) {
 	const supabase = createServerClient();
 	const { data: movie } = await supabase
-		.from('movies')
+		.from('movie')
 		.select(`
 			*,
 			genres:tmdb_movie_genre(

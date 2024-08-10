@@ -8,6 +8,11 @@ type OverriddenDBSupabase = DBSupabase & {
           id: number;
         };
       };
+      movie: {
+        Row: Omit<DBSupabase['public']['Views']['movie']['Row'], 'id'> & {
+          id: number;
+        };
+      };
     };
   };
 };

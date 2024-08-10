@@ -35,20 +35,7 @@ export default function PlaylistPage({
           user(*),
           items:playlist_item(
             *,
-            movie:movies(
-              *,
-              genres:tmdb_movie_genre(
-                id,
-                genre:tmdb_genre(
-                  *,
-                  data:tmdb_genre_translation(*)
-                )
-              ),
-              directors:tmdb_movie_credits(
-                id,
-                person:tmdb_person(*)
-              )
-            )
+            movie(*)
           ),
           guests:playlist_guest(
             *,
@@ -57,8 +44,6 @@ export default function PlaylistPage({
         `)
         .eq('id', params.playlist)
         .eq('playlist_item.movie.language', params.lang)
-        .eq('playlist_item.movie.genres.genre.data.language', params.lang)
-        .eq('playlist_item.movie.directors.job', 'Director')
         .order('rank', { ascending: true, referencedTable: 'playlist_item' })
         .returns<Playlist[]>()
         .single();
@@ -108,22 +93,10 @@ export default function PlaylistPage({
             .from('playlist_item')
             .select(`
               *,
-              movie:movies(
-                *,
-                genres:tmdb_movie_genre(
-                  id,
-                  genre:tmdb_genre(
-                    *,
-                    data:tmdb_genre_translation(*)
-                  )
-                ),
-                directors:tmdb_movie_credits(
-                  id,
-                  person:tmdb_person(*)
-                )
-              )
+              movie(*)
             `)
             .eq('id', payload.new.id)
+            .eq('movie.language', params.lang)
             .single();
           if (insertError || !insertData) return false;
           newPlaylistItems.push(insertData);

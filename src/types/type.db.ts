@@ -1,7 +1,10 @@
+import { Json as JsonGenerated } from "./__generated__/type.db";
+
+export type Json = JsonGenerated;
 
 // *========== USER ==========* //
 export type User = Database['public']['Tables']['user']['Row'] & {
-	subscriptions?: Subscriptions[] | any;
+	subscriptions?: UserSubscriptions[] | any;
 	favorite_movies?: Movie[] | any;
 } | null | undefined;
 
@@ -46,7 +49,7 @@ export type UserMovieReview = Database['public']['Tables']['user_movie_review'][
 } | null | undefined;
 
 // *========== SUBSCRIPTION ==========* //
-export type Subscriptions = Database['public']['Tables']['subscriptions']['Row'] & {
+export type UserSubscriptions = Database['public']['Tables']['user_subscriptions']['Row'] & {
 	prices?: Prices[];
 } | null | undefined;
 
@@ -61,9 +64,20 @@ export type Products = Database['public']['Tables']['products']['Row'] & {
 } | null | undefined;
 
 // *========== MOVIE ==========* //
-export type Movie = Database['public']['Views']['movies']['Row'] & {
+export type Movie = Database['public']['Views']['movie']['Row'] & {
 	// data?: MovieTranslation[] | any;
-	directors?: MoviePerson[] | any;
+	directors?: {
+		id: number;
+		gender: number;
+		known_for_department: string;
+		name: string;
+		profile_path: string;
+	}[] | any;
+	genres?: {
+		id: number;
+		name: string;
+	}[] | any;
+	// directors?: MoviePerson[] | any;
 } | null | undefined;
 
 // *========== MOVIE_TRANSLATION ==========* //

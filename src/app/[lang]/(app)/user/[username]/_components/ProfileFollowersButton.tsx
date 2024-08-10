@@ -24,11 +24,13 @@ import { ProfileFollowersModal } from '@/components/Modals/Profile/ProfileFollow
 interface ProfileFollowersButtonProps {
   userId: string;
   className?: string;
+  disabled?: boolean;
 }
 
 export function ProfileFollowersButton({
 	userId,
 	className,
+  disabled = false,
 } : ProfileFollowersButtonProps) {
   const [ openSendModal, setOpenSendModal ] = useState(false);
 
@@ -39,7 +41,8 @@ export function ProfileFollowersButton({
           <Button
             variant={'action'}
             onClick={() => setOpenSendModal(true)}
-			className={cn(className)}
+			      className={cn(className)}
+            disabled={disabled}
           >
 			followers
           </Button>
@@ -55,9 +58,9 @@ export function ProfileFollowersButton({
           title: 'Followers',
         }}
         content={
-			<ProfileFollowersModal
-				userId={userId}
-			/>
+          <ProfileFollowersModal
+            userId={userId}
+          />
         }
       />
     </>

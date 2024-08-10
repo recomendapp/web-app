@@ -205,16 +205,16 @@ export function MovieCardRow({
         <h2 className="text-xl font-bold line-clamp-2">{movie?.title}</h2>
 
         <div className="line-clamp-1">
-          {movie?.directors?.map((director: MoviePerson, index: number) => (
+          {movie?.directors?.map((person: any, index: number) => (
             <>
               {index > 0 && <span>, </span>}
-              <span key={director?.id}>
+              <span key={person?.id}>
                 <Button
                   variant="link"
                   className="w-fit p-0 h-full hover:underline text-muted-foreground hover:text-accent-1 italic"
                   asChild
                 >
-                  <Link href={`/person/${director?.person?.id}`}>{director?.person?.name}</Link>
+                  <Link href={`/person/${person?.id}`}>{person?.name}</Link>
                 </Button>
               </span>
             </>

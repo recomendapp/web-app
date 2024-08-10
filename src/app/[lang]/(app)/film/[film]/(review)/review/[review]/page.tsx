@@ -13,7 +13,7 @@ export async function generateMetadata({
   const supabase = createServerClient();
   const { data: review, error } = await supabase
     .from('user_movie_review')
-    .select('*, user(username), movie:movies(id, title)')
+    .select('*, user(username), movie(id, title)')
     .eq('id', params.review)
     .eq('movie.language', params.lang)
     .single();
