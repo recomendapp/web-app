@@ -21,8 +21,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 // ICONS
 import { PlusIcon, Search, SparklesIcon, TrashIcon, X, XIcon } from 'lucide-react';
-
-import { useLocale } from 'next-intl';
 import type { Playlist, PlaylistGuest, User } from '@/types/type.db';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase/client';

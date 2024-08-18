@@ -31,7 +31,6 @@ import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import ActivityIcon from '@/components/Review/ActivityIcon';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { MovieFollowerAverageRating } from './MovieFollowerAverageRating';
 
 export default function MovieHeader({
   movie,
@@ -77,10 +76,6 @@ export default function MovieHeader({
                   className="w-full"
                   tooltip='Note followers'
                 />}
-                {/* <MovieFollowerAverageRating
-                  movieId={movie.id}
-                  className="w-full"
-                /> */}
               </div>
             )}
             {movie?.videos?.length > 0 && (

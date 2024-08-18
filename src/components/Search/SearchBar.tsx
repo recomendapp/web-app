@@ -39,7 +39,7 @@ export default function SearchBar({ className }: SearchBarProps) {
     if (searchQuery) {
       queryString += `q=${searchQuery}`;
     }
-    const url = queryString ? `${pathname}?${queryString}` : pathname;
+    const url = queryString ? `/search?${queryString}` : pathname
     url && router.push(url);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm]);
@@ -51,7 +51,7 @@ export default function SearchBar({ className }: SearchBarProps) {
     >
       <form
         onSubmit={handleSubmit}
-        className={` w-full h-full flex items-center rounded-full bg-secondary text-foreground border border-solid border-transparent ${
+        className={` w-full h-full flex items-center rounded-full bg-muted text-foreground border border-solid border-transparent ${
           isSearching && 'border-white'
         }`}
       >

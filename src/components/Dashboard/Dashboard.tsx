@@ -22,8 +22,8 @@ export default function Dashboard() {
       </div>
       <UserMovieGuidelistWidget />
       <UserMovieWatchlistWidget />
-      <MovieNowPlayingWidget />
-      <MovieUpcomingWidget />
+      {/* <MovieNowPlayingWidget /> */}
+      {/* <MovieUpcomingWidget /> */}
     </main>
   );
 }

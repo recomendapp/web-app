@@ -2,6 +2,7 @@
 import { Separator } from '@/components/ui/separator';
 import { ProfileForm } from '@/app/[lang]/(app)/(privateroutes)/settings/profile/_components/profileForm';
 import { useTranslations } from 'next-intl';
+import { FavoriteMovies } from '@/components/Settings/UserSettingsProfile/FavoriteFilms/FavoriteMovies';
 
 export default function SettingsProfilePage() {
   const t = useTranslations('settings');
@@ -15,6 +16,8 @@ export default function SettingsProfilePage() {
       </div>
       <Separator />
       <ProfileForm />
+      <Separator />
+      <FavoriteMovies />
     </div>
   );
 }

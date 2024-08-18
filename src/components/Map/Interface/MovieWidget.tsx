@@ -7,7 +7,6 @@ import { supabase } from "@/lib/supabase/client";
 import { useLocale } from "next-intl";
 import Loader from "@/components/Loader/Loader";
 import ActivityIcon from "@/components/Review/ActivityIcon";
-import { MovieFollowerAverageRating } from "@/app/[lang]/(app)/film/[film]/(default)/_components/MovieFollowerAverageRating";
 import { MovieTrailerButton } from "@/app/[lang]/(app)/film/[film]/(default)/_components/MovieHeader";
 import Link from "next/link";
 import { RuntimeTooltip } from "@/components/utils/RuntimeTooltip";
@@ -86,10 +85,13 @@ export const MovieWidget = () => {
 									className="w-full"
 									tooltip='Note moyenne'
 								/>
-								<MovieFollowerAverageRating
+								{movie.follower_avg_rating && <ActivityIcon
 									movieId={movie.id}
+									rating={movie.follower_avg_rating}
+									variant="follower"
 									className="w-full"
-								/>
+									tooltip='Note followers'
+								/>}
 							</div>
 							)}
 							{movie?.videos?.length > 0 && (

@@ -4,7 +4,7 @@ import SUBSCRIPTION_FRAGMENT from '@/graphql/User/Subscriptions/fragments/subscr
 export default gql`
   fragment User on user {
     id
-    updated_at
+    created_at
     username
     username_updated_at
     full_name
@@ -16,14 +16,8 @@ export default gql`
     favorite_color
     followers_count
     following_count
-    friends_count
-    subscriptions: subscriptionsCollection(filter: { status: { eq: active } }) {
-      edges {
-        node {
-          ...Subscription
-        }
-      }
-    }
+    premium
+    private
   }
   ${SUBSCRIPTION_FRAGMENT}
 `;

@@ -15,11 +15,13 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Film } from 'lucide-react';
 import { getLocale } from 'next-intl/server';
 import { useLocale } from 'next-intl';
+import { Movie } from '@/types/type.db';
+import { supabase } from '@/lib/supabase/client';
 
 export default function SearchFavoriteFilms({
   onClick,
 }: {
-  onClick: (filmid: number) => void;
+  onClick: (movie: Movie) => void;
 }) {
   const { user } = useAuth();
 
@@ -39,7 +41,21 @@ export default function SearchFavoriteFilms({
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ['search', query, 'films'],
-    queryFn: ({ pageParam = 1 }) => handleSearchMovies(query, local, pageParam),
+    queryFn: async ({ pageParam = 1 }) => {
+      // handleSearchMovies(query, local, pageParam)
+      const {
+        data: results,
+        error,
+      } = await supabase
+        .from('movie')
+        .select('*, movies(*)')
+        .eq('language', local)
+        .ilike('title', `%${query}%`)
+        .eq('movies.language', local)
+      if (error) throw error;
+      console.log('search', results);
+      return results;
+    },
     initialPageParam: 1,
     getNextPageParam: (results, pages) => {
       return results?.length == numberOfResult ? pages.length + 1 : undefined;
@@ -91,83 +107,84 @@ export default function SearchFavoriteFilms({
           ) : !loading && !films?.pages[0].length && query ? (
             <div>Aucun résultat.</div>
           ) : (
-            <div className="flex flex-col gap-2">
-              {films?.pages.map((page, i) => (
-                <Fragment key={i}>
-                  {page?.map((film: any, index) => (
-                    <Button
-                      variant={'ghost'}
-                      key={film.id}
-                      className="h-full text-sm flex justify-between p-2 !hover:bg-muted rounded-md"
-                      {...(i === films.pages.length - 1 &&
-                      index === page.length - 1
-                        ? { ref: ref }
-                        : {})}
-                      onClick={() => onClick(film.id)}
-                    >
-                      <div className="flex items-center gap-2">
-                        {/* MOVIE COVER */}
-                        <div className="w-[50px]">
-                          <AspectRatio ratio={2 / 3}>
-                            <ImageWithFallback
-                              src={
-                                'https://image.tmdb.org/t/p/original/' +
-                                film.poster_path
-                              }
-                              alt={film.title}
-                              fill
-                              className="rounded-md object-cover"
-                            />
-                          </AspectRatio>
-                        </div>
-                        {/* MOVIE DATA */}
-                        <div className="flex flex-col text-left">
-                          <Button
-                            variant="link"
-                            className="w-fit p-0 h-full text-base"
-                          >
-                            {film.title}
-                          </Button>
-                          <div>
-                            {film.credits.directors.length ? (
-                              film.credits.directors.map(
-                                (director: any, index: number) => (
-                                  <span key={director.id}>
-                                    <Button
-                                      variant="link"
-                                      className="w-fit p-0 h-full text-accent-1 font-normal italic"
-                                      asChild
-                                    >
-                                      <Link href={`/person/${director.id}`}>
-                                        {director.name}
-                                      </Link>
-                                    </Button>
-                                    {index !==
-                                      film.credits.directors.length - 1 && (
-                                      <span>, </span>
-                                    )}
-                                  </span>
-                                )
-                              )
-                            ) : (
-                              <span className="w-fit p-0 h-full text-accent-1 font-normal italic">
-                                Unknown
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        {film.release_date
-                          ? film.release_date.split('-')[0]
-                          : 'n/a'}
-                      </div>
-                    </Button>
-                  ))}
-                </Fragment>
-              ))}
-              {isFetchingNextPage && <Loader />}
-            </div>
+            <></>
+            // <div className="flex flex-col gap-2">
+            //   {films?.pages.map((page, i) => (
+            //     <Fragment key={i}>
+            //       {page?.map((film: any, index) => (
+            //         <Button
+            //           variant={'ghost'}
+            //           key={film.id}
+            //           className="h-full text-sm flex justify-between p-2 !hover:bg-muted rounded-md"
+            //           {...(i === films.pages.length - 1 &&
+            //           index === page.length - 1
+            //             ? { ref: ref }
+            //             : {})}
+            //           onClick={() => onClick(film.id)}
+            //         >
+            //           <div className="flex items-center gap-2">
+            //             {/* MOVIE COVER */}
+            //             <div className="w-[50px]">
+            //               <AspectRatio ratio={2 / 3}>
+            //                 <ImageWithFallback
+            //                   src={
+            //                     'https://image.tmdb.org/t/p/original/' +
+            //                     film.poster_path
+            //                   }
+            //                   alt={film.title}
+            //                   fill
+            //                   className="rounded-md object-cover"
+            //                 />
+            //               </AspectRatio>
+            //             </div>
+            //             {/* MOVIE DATA */}
+            //             <div className="flex flex-col text-left">
+            //               <Button
+            //                 variant="link"
+            //                 className="w-fit p-0 h-full text-base"
+            //               >
+            //                 {film.title}
+            //               </Button>
+            //               <div>
+            //                 {film.credits.directors.length ? (
+            //                   film.credits.directors.map(
+            //                     (director: any, index: number) => (
+            //                       <span key={director.id}>
+            //                         <Button
+            //                           variant="link"
+            //                           className="w-fit p-0 h-full text-accent-1 font-normal italic"
+            //                           asChild
+            //                         >
+            //                           <Link href={`/person/${director.id}`}>
+            //                             {director.name}
+            //                           </Link>
+            //                         </Button>
+            //                         {index !==
+            //                           film.credits.directors.length - 1 && (
+            //                           <span>, </span>
+            //                         )}
+            //                       </span>
+            //                     )
+            //                   )
+            //                 ) : (
+            //                   <span className="w-fit p-0 h-full text-accent-1 font-normal italic">
+            //                     Unknown
+            //                   </span>
+            //                 )}
+            //               </div>
+            //             </div>
+            //           </div>
+            //           <div className="flex items-center">
+            //             {film.release_date
+            //               ? film.release_date.split('-')[0]
+            //               : 'n/a'}
+            //           </div>
+            //         </Button>
+            //       ))}
+            //     </Fragment>
+            //   ))}
+            //   {isFetchingNextPage && <Loader />}
+            // </div>
           )}
           <ScrollBar />
         </ScrollArea>

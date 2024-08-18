@@ -42,7 +42,8 @@ export function JustWatchWidget({
 	className?: string,
 }) {
 	const locale = useLocale();
-	const country = locale.split('-')[1];
+	// country in upper case
+	const country = locale.toUpperCase();
 	const [open, setOpen] = useState(false);
 	
 	const {

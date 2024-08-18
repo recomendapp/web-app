@@ -50,7 +50,7 @@ export async function HeaderMinimal({ className }: HeaderMinimalProps) {
             </Link>
           </Button>
         ) : (
-          <UserNav following={false} />
+          <UserNav />
         )}
       </div>
     </header>

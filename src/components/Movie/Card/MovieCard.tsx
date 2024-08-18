@@ -43,6 +43,8 @@ interface MovieCardProps {
   height?: number;
   fill?: boolean;
   sizes?: string;
+  disabledActions?: boolean;
+  clickable?: boolean;
 }
 
 export default function MovieCard({
@@ -51,6 +53,8 @@ export default function MovieCard({
   link = true,
   movieActivity,
   job,
+  disabledActions = false,
+  clickable = true,
   ...props
 }: MovieCardProps) {
   const [isHovered, setIsHovered] = useState(false);
@@ -68,16 +72,27 @@ export default function MovieCard({
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
               >
-                <Link href={`/film/${movie.id}`} className="w-full">
+                {clickable ? (
+                  <Link href={`/film/${movie.id}`} className="w-full">
+                    <MoviePoster
+                      src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+                      alt={movie.title ?? ''}
+                      width={props.width}
+                      height={props.height}
+                      fill={props.fill}
+                      sizes={props.sizes}
+                    />
+                  </Link>
+                ) : (
                   <MoviePoster
-                    src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+                    src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
                     alt={movie.title ?? ''}
                     width={props.width}
                     height={props.height}
                     fill={props.fill}
                     sizes={props.sizes}
                   />
-                </Link>
+                )}
                 {(movieActivity?.is_liked ||
                   movieActivity?.rating ||
                   movieActivity?.review) && (
@@ -97,7 +112,7 @@ export default function MovieCard({
                 )}
                 <div className="hidden absolute bottom-8 group-hover:lg:flex w-full justify-center pointer-events-none">
                   <div className="bg-background rounded-md w-fit pointer-events-auto">
-                  {isHovered && (
+                  {isHovered && !disabledActions && (
                     <MovieAction filmId={movie.id!} watch watchlist dropdown />
                   )}
                   </div>
@@ -193,7 +208,7 @@ export function MovieCardRow({
     <>
       <MoviePoster
         className=" w-14 lg:w-[100px]"
-        src={`https://image.tmdb.org/t/p/original/${movie?.poster_path}`}
+        src={`https://image.tmdb.org/t/p/original${movie?.poster_path}`}
         alt={movie?.title ?? ''}
         width={props.width}
         height={props.height}

@@ -1,7 +1,6 @@
 import UserCard from "@/components/User/UserCard/UserCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FeedActivity } from "./FeedActivity";
-import MovieCard from "@/components/Movie/Card/MovieCard";
 import Link from "next/link";
 import MoviePoster from "@/components/Movie/MoviePoster";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
