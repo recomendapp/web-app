@@ -12,7 +12,7 @@ export async function generateMetadata({
 }) {
   const supabase = createServerClient();
   const { data: review, error } = await supabase
-    .from('user_movie_review')
+    .from('user_movie_review_view')
     .select('*, user(username), movie(id, title)')
     .eq('id', params.review)
     .eq('movie.language', params.lang)
@@ -39,12 +39,13 @@ export default async function ReviewPage({
 }) {
   const supabase = createServerClient();
   const { data: review, error } = await supabase
-    .from('user_movie_review')
-    .select('*')
+    .from('user_movie_review_view')
+    .select('*, user(*), movie(*)')
     .eq('id', params.review)
+    .eq('movie.language', params.lang)
     .single();
 
   if (!review || error) notFound();
 
-  return (<Review reviewId={params.review} />)
+  return (<Review reviewServer={review} />);
 }

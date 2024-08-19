@@ -31,7 +31,7 @@ export default function ProfileMovieActivity({
 				.select(`
 					*,
 					user(*),
-					review:user_movie_review(
+					review:user_movie_review_view(
 						*,
 						user(*)
 					),
@@ -40,7 +40,6 @@ export default function ProfileMovieActivity({
 				.eq('user_id', userId)
 				.eq('movie_id', movieId)
 				.eq('movie.language', locale)
-				.returns<UserMovieActivity[]>()
 				.single()
 			if (error) throw error;
 			return data;

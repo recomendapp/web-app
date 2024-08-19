@@ -49,7 +49,7 @@ export default function Reviews({
       if (tablePart === 'like') {
         column = 'likes_count';
       } else if (tablePart == 'rating') {
-        column = 'activity.rating';
+        column = 'rating';
       } else {
         column = 'updated_at';
       }
@@ -58,8 +58,8 @@ export default function Reviews({
       else ascending = true;
 
       const { data } = await supabase
-        .from('user_movie_review')
-        .select('*, user(*), activity:user_movie_activity(*)')
+        .from('user_movie_review_view')
+        .select('*, user(*)')
         .eq('movie_id', params.film)
         .range(from, to)
         .order(column, { ascending });
@@ -110,7 +110,6 @@ export default function Reviews({
                 {page?.map((review: any, index) => (
                   <MovieReviewOverview
                     key={review.id}
-                    activity={review.activity}
                     review={review}
                     {...(i === reviews.pages.length - 1 &&
                       index === page.length - 1

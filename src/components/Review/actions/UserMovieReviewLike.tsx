@@ -30,7 +30,7 @@ export default function UserMovieReviewLike({
 		isLoading,
 		isError,
 	} = useQuery({
-		queryKey: ['user', user?.id, 'movie_review_like', { reviewId }],
+		queryKey: ['user', user?.id, 'movie_review_like', reviewId],
 		queryFn: async () => {
 			if (!user?.id || !reviewId) throw Error('Missing profile id or review id');
 			const { data, error } = await supabase
@@ -58,11 +58,11 @@ export default function UserMovieReviewLike({
 		  return true;
 		},
 		onSuccess: (data) => {
-		  queryClient.setQueryData(['user', user?.id, 'movie_review_like', { reviewId }], data);
+		  queryClient.setQueryData(['user', user?.id, 'movie_review_like', reviewId], data);
 		},
 		onError: (error) => {
 		  if ('code' in error && error.code === "23505") { // Duplicate key value violates unique constraint
-			queryClient.setQueryData(['user', user?.id, 'movie_review_like', { reviewId }], true)
+			queryClient.setQueryData(['user', user?.id, 'movie_review_like', reviewId], true)
 		  } else {
 			toast.error('Une erreur s\'est produite');
 		  }
@@ -81,7 +81,7 @@ export default function UserMovieReviewLike({
 			return false;
 		},
 		onSuccess: (data) => {
-		  queryClient.setQueryData(['user', user?.id, 'movie_review_like', { reviewId }], data);
+		  queryClient.setQueryData(['user', user?.id, 'movie_review_like', reviewId], data);
 		},
 		onError: () => {
 		  toast.error('Une erreur s\'est produite');

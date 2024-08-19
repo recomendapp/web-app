@@ -74,16 +74,15 @@ export default function CreateReviewForm({
 
     try {
       setLoading(true);
-      const { data, error } = await supabase.from('user_movie_review').insert({
+      if (!activity) throw Error('Missing activity');
+      const { error } = await supabase.from('user_movie_review').insert({
         id: Number(activity?.id),
-        movie_id: Number(movie?.id),
-        user_id: user.id,
         title: title.trim(),
         body: JSON.stringify(body),
-      }).select('id').single();
-      if (error || !data) throw error;
+      });
+      if (error) throw error;
       toast.success('Votre critique a été publié avec succès');
-      router.push(`/film/${movie?.id}/review/${data.id}`);
+      router.push(`/film/${movie?.id}/review/${activity?.id}`);
     } catch (error) {
       toast.error("Une erreur s'est produite");
     } finally {

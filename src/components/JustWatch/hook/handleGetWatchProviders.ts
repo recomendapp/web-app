@@ -38,6 +38,5 @@ export const handleGetWatchProviders = async (
 		acc[country] = sortedProviders;
 		return acc;
 	}, {} as { [key: string]: any[] });
-
 	return providers;
 }

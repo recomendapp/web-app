@@ -14,17 +14,15 @@ import { JSONContent } from '@tiptap/react';
 import { MovieReviewSettings } from './MovieReviewSettings';
 import { cn } from '@/lib/utils';
 import Rating from './ActivityIcon';
-import { UserMovieActivity, UserMovieReview } from '@/types/type.db';
+import { UserMovieActivity, UserMovieReviewView } from '@/types/type.db';
 import UserMovieReviewLike from './actions/UserMovieReviewLike';
 import { useFormatter, useNow } from 'next-intl';
 
 export default function MovieReviewOverview({
   review,
-  activity,
   className,
 }: {
-  review: UserMovieReview;
-  activity: UserMovieActivity;
+  review: UserMovieReviewView;
   className?: string;
 }) {
   const now = useNow({
@@ -45,12 +43,12 @@ export default function MovieReviewOverview({
         {/* HEADER */}
         <div className='w-full flex justify-between gap-2'>
           <div className="flex gap-2 items-center w-full">
-            <Rating movieId={activity?.movie_id!} rating={activity?.rating} is_liked={activity?.is_liked} />
+            <Rating movieId={review.movie_id!} rating={review.rating} is_liked={review.is_liked} />
             <p className="font-semibold line-clamp-1">{review?.title}</p>
           </div>
           <div className="hidden @md/review:flex justify-center items-center shrink-0">
             <div className='text-sm text-muted-foreground'>
-              {format.relativeTime(new Date(review.created_at), now)}
+              {format.relativeTime(new Date(review.created_at ?? ''), now)}
             </div>
             {/* <MovieReviewSettings review={review} /> */}
           </div>
@@ -70,7 +68,7 @@ export default function MovieReviewOverview({
           </div>
           {/* Actions */}
           <div>
-            <UserMovieReviewLike reviewId={review?.id} />
+            <UserMovieReviewLike reviewId={review?.id!} />
           </div>
         </div>
       {/* </div> */}

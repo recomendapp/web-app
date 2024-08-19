@@ -50,10 +50,7 @@ export default function Feed() {
         .select(`
           *,
           user(*),
-          review:user_movie_review(
-            *,
-            user(*)
-          ),
+          review:user_movie_review_view(*, user(*)),
           movie(*)
         `)
         .in('user_id', following || [])

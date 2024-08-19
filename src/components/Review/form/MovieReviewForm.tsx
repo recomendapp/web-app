@@ -18,12 +18,12 @@ import toast from 'react-hot-toast';
 import { Icons } from '@/components/icons';
 import { useAuth } from '@/context/auth-context';
 
-import { UserMovieReview } from '@/types/type.db';
+import { UserMovieReviewView } from '@/types/type.db';
 import { useMutation } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase/client';
 
 interface MovieReviewFormProps {
-  review: UserMovieReview;
+  review: UserMovieReviewView;
 }
 
 export default function MovieReviewForm({ review }: MovieReviewFormProps) {
@@ -37,8 +37,8 @@ export default function MovieReviewForm({ review }: MovieReviewFormProps) {
     mutationFn: async (payload: { title: string, body: string }) => {
       if (!review?.id) throw new Error('No user id');
       const { data, error } = await supabase
-        .from('user_movie_review')
-        .update(payload)
+        .from('user_movie_review_view')
+        .update(payload as never) // supabase-js types are wrong
         .eq('id', review.id)
         .select('*');
       if (error) throw error;
@@ -122,8 +122,8 @@ export function ReviewTitle({
   setTitle,
   editable,
 }: {
-  title: string | undefined;
-  setTitle: Dispatch<SetStateAction<string | undefined>>;
+  title: string | null | undefined;
+  setTitle: Dispatch<SetStateAction<string | null | undefined>>;
   editable: boolean;
 }) {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -142,7 +142,7 @@ export function ReviewTitle({
       onChange={(e) =>
         setTitle(e.target.value.replace(/\s+/g, ' ').trimStart())
       }
-      value={title}
+      value={title ?? ''}
       readOnly={!editable}
       placeholder="Titre"
       maxLength={50}

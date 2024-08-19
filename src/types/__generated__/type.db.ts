@@ -1728,10 +1728,8 @@ export type Database = {
           created_at: string
           id: number
           likes_count: number
-          movie_id: number
           title: string
           updated_at: string | null
-          user_id: string
           views_count: number
         }
         Insert: {
@@ -1740,10 +1738,8 @@ export type Database = {
           created_at?: string
           id?: number
           likes_count?: number
-          movie_id: number
           title: string
           updated_at?: string | null
-          user_id: string
           views_count?: number
         }
         Update: {
@@ -1752,10 +1748,8 @@ export type Database = {
           created_at?: string
           id?: number
           likes_count?: number
-          movie_id?: number
           title?: string
           updated_at?: string | null
-          user_id?: string
           views_count?: number
         }
         Relationships: [
@@ -1764,41 +1758,6 @@ export type Database = {
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "user_movie_activity"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_movie_id_fkey"
-            columns: ["movie_id"]
-            isOneToOne: false
-            referencedRelation: "movie"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_movie_id_fkey"
-            columns: ["movie_id"]
-            isOneToOne: false
-            referencedRelation: "movies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_movie_id_fkey"
-            columns: ["movie_id"]
-            isOneToOne: false
-            referencedRelation: "tmdb_movie"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
         ]
@@ -1847,6 +1806,13 @@ export type Database = {
             columns: ["review_id"]
             isOneToOne: false
             referencedRelation: "user_movie_review"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_comment_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "user_movie_review_view"
             referencedColumns: ["id"]
           },
           {
@@ -1933,6 +1899,13 @@ export type Database = {
             columns: ["review_id"]
             isOneToOne: false
             referencedRelation: "user_movie_review"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_like_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "user_movie_review_view"
             referencedColumns: ["id"]
           },
           {
@@ -2139,6 +2112,15 @@ export type Database = {
       }
     }
     Views: {
+      _view: {
+        Row: {
+          foreign_keys: string[] | null
+          indices: string[] | null
+          primary_keys: string[] | null
+          table_name: string | null
+        }
+        Relationships: []
+      }
       movie: {
         Row: {
           adult: boolean | null
@@ -2412,6 +2394,66 @@ export type Database = {
           },
         ]
       }
+      user_movie_review_view: {
+        Row: {
+          body: string | null
+          comments_count: number | null
+          created_at: string | null
+          id: number | null
+          is_liked: boolean | null
+          likes_count: number | null
+          movie_id: number | null
+          rating: number | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+          views_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_movie_activity"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_movie_watchlist_random: {
         Row: {
           created_at: string | null
@@ -2602,6 +2644,76 @@ export type Database = {
           p_user_id: string
         }
         Returns: boolean
+      }
+      search_movie_2: {
+        Args: {
+          search_query: string
+          lang: string
+          page_number?: number
+          page_size?: number
+          similarity_threshold?: number
+        }
+        Returns: {
+          adult: boolean | null
+          backdrop_path: string | null
+          budget: number | null
+          collection_id: number | null
+          directors: Json[] | null
+          follower_avg_rating: number | null
+          genres: Json[] | null
+          homepage: string | null
+          id: number | null
+          imdb_id: string | null
+          language: Database["public"]["Enums"]["language"] | null
+          original_language: string | null
+          original_title: string | null
+          overview: string | null
+          popularity: number | null
+          poster_path: string | null
+          release_date: string | null
+          revenue: number | null
+          runtime: number | null
+          status: string | null
+          tagline: string | null
+          title: string | null
+          vote_average: number | null
+          vote_count: number | null
+        }[]
+      }
+      search_movies: {
+        Args: {
+          search_query: string
+          lang: string
+          page_number?: number
+          page_size?: number
+          similarity_threshold?: number
+        }
+        Returns: {
+          id: number
+          adult: boolean
+          backdrop_path: string
+          budget: number
+          homepage: string
+          imdb_id: string
+          original_language: string
+          original_title: string
+          popularity: number
+          release_date: string
+          revenue: number
+          runtime: number
+          status: string
+          vote_average: number
+          vote_count: number
+          collection_id: number
+          language: Database["public"]["Enums"]["language"]
+          overview: string
+          poster_path: string
+          tagline: string
+          title: string
+          follower_avg_rating: number
+          directors: Json[]
+          genres: Json[]
+        }[]
       }
       user_movie_follower_average_rating: {
         Args: {

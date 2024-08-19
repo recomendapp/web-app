@@ -49,7 +49,6 @@ const FeedItem = ({ activity }: { activity?: any }) => {
 			{activity.review ? (
 				<MovieReviewOverview
 				className="bg-background"
-				activity={activity}
 				review={activity.review}
 				/>
 			) : (

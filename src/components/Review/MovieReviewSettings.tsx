@@ -31,33 +31,48 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 // GRAPHQL
-import { useLocale } from 'next-intl';
-import { UserMovieReview } from '@/types/type.db';
+import { UserMovieReviewView } from '@/types/type.db';
 import { useMutation } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase/client';
 
 export function MovieReviewSettings({
   review,
 }: {
-  review: UserMovieReview;
+  review: UserMovieReviewView;
 }) {
   const { user } = useAuth();
+  const pathname = usePathname();
+  const router = useRouter();
 
-  const locale = useLocale();
+  const [open, setIsOpen] = useState(false);
+  
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const { mutateAsync: deleteReviewMutation } = useMutation({
     mutationFn: async () => {
-      if (!review?.id) throw new Error('No user id');
+      if (!review?.id) throw new Error('No review id');
       const {
         data,
         error
       } = await supabase
-        .from('user_movie_review')
+        .from('user_movie_review_view')
         .delete()
         .eq('id', review.id)
         .select('*');
       if (error) throw error;
       return data;
+    },
+    onError: (error) => {
+      toast.error("Une erreur s\'est produite");
+    },
+    onSuccess: () => {
+      toast.success('Supprimée');
+      setShowDeleteDialog(false);
+      if (pathname.startsWith(`@${review?.user?.username}/film/${review?.movie_id}`)) {
+        router.refresh();
+      } else if (pathname.startsWith(`/film/${review?.movie_id}/review/${review?.id}`)) {
+        router.push(`/film/${review?.movie_id}`);
+      }
     }
   });
 
@@ -107,28 +122,6 @@ export function MovieReviewSettings({
   //     }
   //   },
   // });
-
-  const pathname = usePathname();
-  const router = useRouter();
-
-  const [open, setIsOpen] = useState(false);
-  
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-
-  const handleDeleteReview = async () => {
-    try {
-      await deleteReviewMutation();
-      setShowDeleteDialog(false);
-      if (
-        pathname == `/@${user?.username}/film/${review?.movie_id}` || 
-        pathname == `/film/${review?.movie_id}/review/${review?.id} `
-      )
-        router.push(`/film/${review?.movie_id}`);
-      toast.success('Supprimée');
-    } catch (error) {
-      toast.error("Une erreur s\'est produite");
-    }
-  };
 
   return (
     <>
@@ -203,7 +196,7 @@ export function MovieReviewSettings({
             <AlertDialogCancel>Annuler</AlertDialogCancel>
             <Button
               variant="destructive"
-              onClick={handleDeleteReview}
+              onClick={async () => {deleteReviewMutation()}}
             >
               Supprimer
             </Button>
