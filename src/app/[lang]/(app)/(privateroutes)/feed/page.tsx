@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/context/auth-context";
 import { supabase } from "@/lib/supabase/client";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import FeedItem from "./_components/FeedItem";
 import { useEffect } from "react";
@@ -19,20 +19,6 @@ export default function Feed() {
 
   const numberOfResult = 10;
 
-  const { data: following, isLoading: followingLoading } = useQuery({
-    queryKey: ['user', user?.id, 'followers'],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('user_follower')
-        .select('id,followee_id')
-        .eq('user_id', user!.id);
-      const followeeIds = data?.map((item) => item.followee_id) || [];
-      followeeIds.push(user!.id);
-      return followeeIds;
-    },
-    enabled: !!user?.id,
-  });
-
   const {
     data: feed,
     isLoading,
@@ -46,14 +32,13 @@ export default function Feed() {
       let to = from - 1 + numberOfResult;
 
       const { data, error } = await supabase
-        .from('user_movie_activity')
+        .from('user_movie_activity_feed')
         .select(`
           *,
           user(*),
           review:user_movie_review_view(*, user(*)),
           movie(*)
         `)
-        .in('user_id', following || [])
         .eq('movie.language', locale)
         .range(from, to)
         .order('created_at', { ascending: false });
@@ -64,7 +49,7 @@ export default function Feed() {
     getNextPageParam: (lastPage, pages) => {
       return lastPage?.length == numberOfResult ? pages.length + 1 : undefined;
     },
-    enabled: !!following && !!user?.id && !!locale,
+    enabled: !!user?.id && !!locale,
   });
 
   useEffect(() => {
