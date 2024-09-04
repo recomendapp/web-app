@@ -40,7 +40,7 @@ export default function PersonFilmography({
   mainDepartment,
 } : {
   person: Person,
-  departments: { department: string | null }[] | null,
+  departments: string[] | null,
   mainDepartment: string | undefined,
 }) {
   const locale = useLocale();
@@ -64,7 +64,7 @@ export default function PersonFilmography({
       order: selectedOrder
     }],
     queryFn: async () => {
-      if (!person) throw new Error('No person provided');
+      if (!person?.id) throw new Error('No person id');
       let query = supabase
         .from('tmdb_movie_credits')
         .select(`
@@ -88,7 +88,7 @@ export default function PersonFilmography({
       if (error) throw error;
       return (data);
     },
-    enabled: !!person && !!selectedDepartment && !!locale,
+    enabled: !!person?.id && !!selectedDepartment && !!locale,
   });
 
   return (
@@ -102,7 +102,7 @@ export default function PersonFilmography({
             <SelectContent align="end">
               <SelectGroup>
                 <SelectLabel>Department</SelectLabel>
-                {departments?.map(({ department }) => (
+                {departments?.map((department) => (
                   <SelectItem key={department} value={department!}>
                     {department}
                   </SelectItem>

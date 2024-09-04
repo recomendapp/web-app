@@ -23,7 +23,7 @@ export function PersonAbout({
         onClick={() => setOpenAbout(true)}
       >
         <p className="line-clamp-2">
-          {person?.data[0].biography?.length ? person.data[0].biography : 'No biography available'}
+          {person?.biography?.length ? person.biography : 'No biography available'}
         </p>
         <p className="">
           Voir plus
@@ -111,7 +111,7 @@ export function PersonAbout({
             <div className=''>
               <h3 className=" text-lg font-semibold">Biographie</h3>
               <p className="text-justify text-muted-foreground">
-                {person?.data[0].biography?.length ? person?.data[0].biography : 'No biography available'}
+                {person?.biography?.length ? person?.biography : 'No biography available'}
               </p>
             </div>
           </div>

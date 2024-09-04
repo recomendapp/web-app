@@ -12,7 +12,7 @@ export default function PersonHeader({
   background,
 } : {
   person: any
-  background?: string
+  background?: string | null
 }) {
   return (
     <HeaderBox

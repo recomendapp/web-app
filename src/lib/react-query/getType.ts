@@ -2,9 +2,9 @@ export const getType = (obj: any) => {
 	// USER
 	if ('username' in obj && 'full_name' in obj) return ('user');
 	// FRIENDS
-	else if ('friend' in obj) return ('fuser_riend');
+	else if ('friend' in obj) return ('user_riend');
 	// PLAYLIST
-	else if ('user_id' in obj && 'title' in obj && 'description' in obj && 'is_public' in obj && 'poster_url' in obj && 'featured' in obj) return ('playlist');
+	else if ('user_id' in obj && 'title' in obj && 'description' in obj && 'private' in obj && 'poster_url' in obj && 'featured' in obj) return ('playlist');
 	// PLAYLIST_GUEST
 	else if ('playlist_id' in obj && 'user_id' in obj && 'created_at' in obj && 'edit' in obj) return ('playlist_guest');
 	// PLAYLIST_ITEM

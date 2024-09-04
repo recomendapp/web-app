@@ -77,7 +77,7 @@ export default function PlaylistHeader({ playlist } : { playlist: Playlist }) {
             <div>
               <span className='text-accent-1'>Playlist</span>
               <span className=" before:content-['_|_']">
-                {playlist?.is_public ? 'Publique' : 'Privée'}
+                {playlist?.private ? 'Privée' : 'Publique'}
               </span>
             </div>
             <div>

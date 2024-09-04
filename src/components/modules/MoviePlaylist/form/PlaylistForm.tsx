@@ -82,7 +82,7 @@ export function PlaylistForm({
         user_id: string;
         title: string;
         description: string;
-        is_public: boolean;
+        private: boolean;
       }
     ) => {
       const {data: response, error } = await supabase
@@ -117,7 +117,7 @@ export function PlaylistForm({
       payload: {
         title?: string;
         description?: string;
-        is_public?: boolean;
+        private?: boolean;
         poster_url?: string | null;
       }
     }) => {
@@ -177,7 +177,7 @@ export function PlaylistForm({
         message: 'La description ne doit pas dépasser 300 caractères.',
       })
       .optional(),
-    is_public: z.boolean().default(true),
+    private: z.boolean().default(false),
   });
 
   type CreatePlaylistFormValues = z.infer<typeof CreatePlaylistFormSchema>;
@@ -185,7 +185,7 @@ export function PlaylistForm({
   const defaultValues: Partial<CreatePlaylistFormValues> = {
     title: playlist?.title ?? '',
     description: playlist?.description ?? '',
-    is_public: playlist?.is_public ?? true,
+    private: playlist?.private ?? false,
   };
 
   const form = useForm<CreatePlaylistFormValues>({
@@ -207,7 +207,7 @@ export function PlaylistForm({
         //   ?.replace(/[\r\n]+/g, '\n') // Multiple new lines
         //   .replace(/[^\S\r\n]+/g, ' ') // Multiple spaces
         //   .trim() ?? '',
-        is_public: data.is_public,
+        private: data.private,
       });
       // if (filmId) {
       //   await insertPlaylistItemMutation({
@@ -250,7 +250,7 @@ export function PlaylistForm({
         //   ?.replace(/[\r\n]+/g, '\n') // Multiple new lines
         //   .replace(/[^\S\r\n]+/g, ' ') // Multiple spaces
         //   .trim() ?? '',
-        is_public: data.is_public,
+        private: data.private,
         poster_url: playlist?.poster_url,
       };
       if (newPoster) {
@@ -363,7 +363,7 @@ export function PlaylistForm({
             />
             <FormField
               control={form.control}
-              name="is_public"
+              name="private"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Visibilité</FormLabel>
@@ -374,7 +374,7 @@ export function PlaylistForm({
                         onCheckedChange={field.onChange}
                       />
                       <Label htmlFor="airplane-mode">
-                        {field.value ? 'Public' : 'Privée'}
+                        {field.value ? 'Privée' : 'Public'}
                       </Label>
                     </div>
                   </FormControl>

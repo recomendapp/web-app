@@ -8,11 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useAuth } from '@/context/auth-context';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useLocale } from 'next-intl';
-
-// import { useRouter, usePathname } from 'next-intl/client';
 
 export default function LanguageSwticher() {
   const router = useRouter();

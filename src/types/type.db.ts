@@ -95,8 +95,10 @@ export type MoviePerson = Database['public']['Tables']['tmdb_movie_credits']['Ro
 } | null | undefined;
 
 // *========== PERSON ==========* //
-export type Person = Database['public']['Tables']['tmdb_person']['Row'] & {
-	data?: PersonTranslation[] | any;
+// export type Person = Database['public']['Tables']['tmdb_person']['Row'] & {
+// 	data?: PersonTranslation[] | any;
+// } | null | undefined;
+export type Person = Database['public']['Views']['person']['Row'] & {
 } | null | undefined;
 
 // *========== PERSON_TRANSLATION ==========* //
