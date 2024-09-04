@@ -1,5 +1,4 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const createMiddlewareClient = ({
@@ -9,7 +8,6 @@ export const createMiddlewareClient = ({
   request: NextRequest;
   response: NextResponse;
 }) => {
-  const cookieStore = cookies();
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

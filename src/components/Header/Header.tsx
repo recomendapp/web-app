@@ -10,8 +10,8 @@ export async function Header({ className }: HeaderProps) {
   const supabase = createServerClient();
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <header
@@ -22,7 +22,7 @@ export async function Header({ className }: HeaderProps) {
     >
       <HeaderLeftSide />
       <HeaderCenterSide className='justify-center'/>
-      <HeaderRightSide session={session} className='justify-end'/>
+      <HeaderRightSide isLogged={!!user} className='justify-end'/>
     </header>
   );
 }

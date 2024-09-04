@@ -38,7 +38,7 @@ export default function SidebarCollection({
   if (!user) return <SidebarCollectionNotConnected />;
 
   return (
-    <Box className={cn('p-0 h-full', className)}>
+    <Box className={cn('p-0 h-full overflow-hidden', className)}>
       <div className='px-2 pt-2'>
         {isSidebarCollapsed ? (
           <Tooltip>

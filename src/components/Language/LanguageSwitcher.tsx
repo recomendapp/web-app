@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useAuth } from '@/context/auth-context';
-import { usePathname, useRouter } from '@/lib/next-intl/navigation';
+import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useLocale } from 'next-intl';
 
 // import { useRouter, usePathname } from 'next-intl/client';
@@ -20,7 +20,7 @@ export default function LanguageSwticher() {
   const locale = useLocale();
 
   const handleChange = (e: string) => {
-    router.push(pathname, { locale: e });
+    router.push(pathname, { locale: e as any});
   };
 
   return (

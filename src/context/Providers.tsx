@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 
@@ -64,7 +63,6 @@ export default async function Provider({
                             },
                           }}
                         />
-                        <SpeedInsights />
                         {children}
                       </RightSidebarContext>
                     </MapContext>

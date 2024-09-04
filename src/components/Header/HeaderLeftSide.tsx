@@ -15,8 +15,8 @@ export default function HeaderLeftSide({
   return (
     <div className={cn("flex items-center gap-4", className)}>
       <NavigationButton />
-      {/* {pathname.startsWith('/search') && <SearchBar />} */}
-      <SearchBar />
+      {pathname.startsWith('/search') && <SearchBar />}
+      {/* <SearchBar /> */}
       {pathname == '/collection' && <PlaylistCreateButton />}
     </div>
   );

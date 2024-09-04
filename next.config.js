@@ -6,7 +6,7 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   disable: process.env.NODE_ENV === 'development',
 });
 
-const withNextIntl = require('next-intl/plugin')('./src/i18n.ts');
+const withNextIntl = require('next-intl/plugin')('./src/lib/i18n/request.ts');
 
 
 /** @type {import('next').NextConfig} */

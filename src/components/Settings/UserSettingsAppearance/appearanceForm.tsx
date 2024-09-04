@@ -31,13 +31,13 @@ import { useTheme } from 'next-themes';
 // import { usePathname, useRouter } from "next-intl/client"
 import { createSharedPathnamesNavigation } from 'next-intl/navigation';
 import { Theme } from '@/types/type.theme';
-import { usePathname, useRouter } from '@/lib/next-intl/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import { supabase } from '@/lib/supabase/client';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { Icons } from '@/components/icons';
+import { usePathname, useRouter } from '@/lib/i18n/routing';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
