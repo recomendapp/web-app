@@ -88,6 +88,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/auth',
+        destination: '/auth/login',
+        permanent: true,
+      },
+      {
         source: '/user/:username/:path*',
         destination: '/@:username/:path*',
         permanent: true,

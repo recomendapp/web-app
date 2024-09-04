@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
-import CreateReviewForm from '@/app/[lang]/(app)/(privateroutes)/film/[film]/review/create/_components/CreateReviewFrom';
 import { createServerClient } from '@/lib/supabase/server';
+import CreateReviewForm from './_components/CreateReviewFrom';
 
 export async function generateMetadata({
   params,
