@@ -2,7 +2,7 @@
 import { Separator } from '@/components/ui/separator';
 import { AccountForm } from '@/app/[lang]/(app)/(privateroutes)/settings/account/_components/accountForm';
 import { useTranslations } from 'next-intl';
-import { AppearanceForm } from '@/components/Settings/UserSettingsAppearance/appearanceForm';
+import { AppearanceForm } from './_components/appearanceForm';
 
 export default function SettingsAppearancePage() {
   const t = useTranslations('settings');

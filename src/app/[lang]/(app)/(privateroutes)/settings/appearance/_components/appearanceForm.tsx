@@ -35,9 +35,10 @@ import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import { supabase } from '@/lib/supabase/client';
 import toast from 'react-hot-toast';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Icons } from '@/components/icons';
-import { usePathname, useRouter } from '@/lib/i18n/routing';
+import { useRouter } from 'next/navigation';
+import Loader from '@/components/Loader/Loader';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
@@ -59,7 +60,6 @@ export function AppearanceForm() {
   const [loading, setLoading] = useState(false);
   const { setTheme, theme } = useTheme();
   const router = useRouter();
-  const pathname = usePathname();
   const { user, loading: userLoading } = useAuth();
 
   const { mutateAsync: updateProfile } = useMutation({
@@ -87,6 +87,11 @@ export function AppearanceForm() {
     defaultValues,
   });
 
+  useEffect(() => {
+    form.reset(defaultValues);
+  }, [locale, theme, user]);
+
+
   async function onSubmit(data: AppearanceFormValues) {
     try {
       setLoading(true);
@@ -94,7 +99,7 @@ export function AppearanceForm() {
       if (locale != data.language)
       {
         await updateProfile({ language: data.language });
-        router.push(pathname, { locale: data.language });
+        router.refresh();
       }
       toast.success('Enregistré');
     } catch (error) {
@@ -103,6 +108,8 @@ export function AppearanceForm() {
       setLoading(false);
     }
   }
+
+  if (!user) return <Loader />;
 
   return (
     <Form {...form}>
