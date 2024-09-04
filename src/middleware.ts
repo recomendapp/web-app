@@ -9,10 +9,15 @@ const intlMiddleware = createIntlMiddleware(routing);
 export async function middleware(request: NextRequest) {
   let response = intlMiddleware(request);
 
+  console.log('\n');
   const url = request.nextUrl.clone();
-  const locale = url.pathname.split('/')[1];
-  const hasLocale = routing.locales.includes(locale as any);
-  if (hasLocale) url.pathname = url.pathname.replace(`/${locale}`, '');
+  console.log('url.pathname', url.pathname);
+  const localeMatch = url.pathname.split('/')[1];
+  console.log('localeMatch', localeMatch);
+  const hasLocale = routing.locales.includes(localeMatch as any);
+  console.log('hasLocale', hasLocale);
+  if (hasLocale) url.pathname = url.pathname.replace(`/${localeMatch}`, '');
+  console.log('url.pathname', url.pathname);
   
   // IMPORTANT: Avoid writing any logic between createServerClient and
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
@@ -21,6 +26,18 @@ export async function middleware(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  /**
+   * Check locale if user is logged in
+   */
+  const localeHeader = response.headers.get('x-middleware-request-x-next-intl-locale');
+  if (user && (hasLocale || localeHeader)) {
+    const { data: user_data } = await supabase.from('user').select('language').eq('id', user.id).single();
+    if (user_data?.language && ((hasLocale && localeMatch !== user_data.language) || (localeHeader && localeHeader !== user_data.language))) {
+      url.pathname = `/${user_data.language}${url.pathname}`;
+      return (NextResponse.redirect(url));
+    }
+  }
 
   /**
    * Check maintenance mode
