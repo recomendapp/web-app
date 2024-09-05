@@ -20,8 +20,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Checkbox } from '@/components/ui/checkbox';
 
 // ICONS
-import { PlusIcon, Search, SparklesIcon, TrashIcon, X, XIcon } from 'lucide-react';
-import type { Playlist, PlaylistGuest, User } from '@/types/type.db';
+import { PlusIcon, Search, TrashIcon, XIcon } from 'lucide-react';
+import type { Playlist, PlaylistGuest, UserFriend } from '@/types/type.db';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase/client';
 import useDebounce from '@/hooks/use-debounce';
@@ -152,7 +152,7 @@ const AddUser = ({
 
       let query = supabase
         .from('user_friend')
-        .select('id, friend:user!inner(*)')
+        .select('id, friend:friend_id!inner(*)')
         .eq('user_id', user?.id ?? '')
         .range(from, to)
 
@@ -160,7 +160,9 @@ const AddUser = ({
         query = query
           .ilike(`friend.username`, `${debouncedSearch}%`)
       }
-      const { data } = await query;
+      const { data } = await query
+        .returns<UserFriend[]>();
+      console.log('friends', data);
       return data;
     },
     initialPageParam: 1,

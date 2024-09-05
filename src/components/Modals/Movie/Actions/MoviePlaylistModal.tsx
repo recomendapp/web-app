@@ -32,6 +32,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TabsContent } from '@radix-ui/react-tabs';
 import { Playlist } from '@/types/type.db';
+import { Badge } from '@/components/ui/badge';
 
 const sendFormSchema = z.object({
 	playlists: z.array(
@@ -174,10 +175,10 @@ export function MoviePlaylistModal({
 									<TabsTrigger value="external">Enregistré</TabsTrigger>
 								</TabsList>
 								<TabsContent value="personal">
-									<UserMoviePlaylist search={debouncedSearch} form={form} />
+									<UserMoviePlaylist movieId={movieId} search={debouncedSearch} form={form} />
 								</TabsContent>
 								<TabsContent value="external">
-									<UserMoviePlaylistLike search={debouncedSearch} form={form} />
+									<UserMoviePlaylistLike movieId={movieId} search={debouncedSearch} form={form} />
 								</TabsContent>
 							</>
 						)}
@@ -203,7 +204,7 @@ export function MoviePlaylistModal({
 							disabled={!form.getValues('playlists').length}
 							type="submit"
 						>
-							Envoyer
+							Ajouter
 						</Button>
 					</form>
 				</Form>
@@ -214,9 +215,11 @@ export function MoviePlaylistModal({
 }
 
 const UserMoviePlaylist = ({
+	movieId,
 	search,
 	form,
 }: {
+	movieId: number;
 	search: string | null;
 	form: any;
 }) => {
@@ -240,10 +243,12 @@ const UserMoviePlaylist = ({
 			let from = (pageParam - 1) * numberOfResult;
 			let to = from - 1 + numberOfResult;
 
+			// check if there is already the movieid in the playlist
 			let query = supabase
 				.from('playlist')
-				.select('*')
+				.select('*, isAlready:playlist_item(count)')
 				.eq('user_id', user?.id)
+				.eq('isAlready.movie_id', movieId)
 				.order('updated_at', { ascending: false})
 				.range(from, to)
 
@@ -252,6 +257,7 @@ const UserMoviePlaylist = ({
 					.ilike(`title`, `${search}%`)
 			}
 			const { data } = await query;
+			// console.log('playlists content', data);
 			return (data);
 		},
 		initialPageParam: 1,
@@ -284,22 +290,25 @@ const UserMoviePlaylist = ({
 									ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
 								>
 									<FormLabel className="flex flex-row w-full justify-between items-center space-x-3 space-y-0 hover:bg-muted p-2">
-										<div className="font-normal flex gap-2 items-center w-full">
-											<div className={`w-[40px] shadow-2xl`}>
-												<AspectRatio ratio={1 / 1}>
-													<ImageWithFallback
-														src={playlist?.poster_url ?? ''}
-														alt={playlist?.title ?? ''}
-														fill
-														className="rounded-md object-cover"
-														type="playlist"
-													/>
-												</AspectRatio>
+										<div className='flex items-center w-full justify-between'>
+											<div className="font-normal flex gap-2 items-center">
+												<div className={`w-[40px] shadow-2xl`}>
+													<AspectRatio ratio={1 / 1}>
+														<ImageWithFallback
+															src={playlist?.poster_url ?? ''}
+															alt={playlist?.title ?? ''}
+															fill
+															className="rounded-md object-cover"
+															type="playlist"
+														/>
+													</AspectRatio>
+												</div>
+												<div>
+													<p className="line-clamp-1">{playlist?.title}</p>
+													<p className="text-muted-foreground line-clamp-1">{playlist?.items_count} film{playlist?.items_count! > 1 && 's'}</p>
+												</div>
 											</div>
-											<div>
-												<p className="line-clamp-1">{playlist?.title}</p>
-												<p className="text-muted-foreground line-clamp-1">{playlist?.items_count} film{playlist?.items_count! > 1 && 's'}</p>
-											</div>
+											{playlist.isAlready[0].count > 0 && <Badge variant={'destructive'}>Déjà ajouté</Badge>}
 										</div>
 										<FormControl>
 											<Checkbox
@@ -346,9 +355,11 @@ const UserMoviePlaylist = ({
 }
 
 const UserMoviePlaylistLike = ({
+	movieId,
 	search,
 	form,
 }: {
+	movieId: number;
 	search: string | null;
 	form: any;
 }) => {
@@ -375,12 +386,13 @@ const UserMoviePlaylistLike = ({
 				.from('playlist_like')
 				.select(`
 					id, 
-					playlist!inner(*, playlist_guest!inner(*), user!inner(*))
+					playlist!inner(*, playlist_guest!inner(*), user!inner(*), isAlready:playlist_item(count))
 				`)
 				.eq('user_id', user?.id)
 				.eq('playlist.playlist_guest.user_id', user?.id)
 				.eq('playlist.playlist_guest.edit', true)
-				.eq('playlist.user.premium', true)	
+				.eq('playlist.user.premium', true)
+				.eq('playlist.isAlready.movie_id', movieId)
 				.range(from, to)
 
 			if (search) {
@@ -423,22 +435,25 @@ const UserMoviePlaylistLike = ({
 										: {})}
 								>
 									<FormLabel className="flex flex-row w-full justify-between items-center space-x-3 space-y-0 hover:bg-muted p-2">
-										<div className="font-normal flex gap-2 items-center w-full">
-											<div className={`w-[40px] shadow-2xl`}>
-												<AspectRatio ratio={1 / 1}>
-													<ImageWithFallback
-														src={playlist?.poster_url ?? ''}
-														alt={playlist?.title ?? ''}
-														fill
-														className="rounded-md object-cover"
-														type="playlist"
-													/>
-												</AspectRatio>
+										<div className='flex items-center w-full justify-between'>
+											<div className="font-normal flex gap-2 items-center">
+												<div className={`w-[40px] shadow-2xl`}>
+													<AspectRatio ratio={1 / 1}>
+														<ImageWithFallback
+															src={playlist?.poster_url ?? ''}
+															alt={playlist?.title ?? ''}
+															fill
+															className="rounded-md object-cover"
+															type="playlist"
+														/>
+													</AspectRatio>
+												</div>
+												<div>
+													<p className="line-clamp-1">{playlist?.title}</p>
+													<p className="text-muted-foreground line-clamp-1">{playlist?.items_count} film{playlist?.items_count! > 1 && 's'}</p>
+												</div>
 											</div>
-											<div>
-												<p className="line-clamp-1">{playlist?.title}</p>
-												<p className="text-muted-foreground line-clamp-1">{playlist?.items_count} film{playlist?.items_count! > 1 && 's'}</p>
-											</div>
+											{playlist.isAlready[0].count > 0 && <Badge variant={'destructive'}>Déjà ajouté</Badge>}
 										</div>
 										<FormControl>
 											<Checkbox

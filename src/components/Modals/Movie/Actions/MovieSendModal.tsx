@@ -126,13 +126,6 @@ export function MovieSendModal({
 		}
 
 		try {
-			// const { error, } = await supabase
-			// 	.rpc('insert_user_movie_guidelist', {
-			// 		movieid: movieId,
-			// 		receiver_user_ids: data.friends.map(({ friend }) => friend.id),
-			// 		sender_user_id: user?.id,
-			// 		comment: data.comment ?? '',
-			// 	});
 			const { error } = await supabase
 				.rpc('user_movie_guidelist_insert', {
 					movieid: movieId,
@@ -140,15 +133,6 @@ export function MovieSendModal({
 					sender_user_id: user?.id,
 					comment: data.comment ?? '',
 				});
-
-			// const { error } = await supabase
-			// 	.from('user_movie_guidelist_new')
-			// 	.upsert(data.friends.map(({ friend }) => ({
-			// 			movie_id: movieId,
-			// 			user_id: friend.id,
-			// 			sender_id: user.id,
-			// 			comment: data.comment ?? '',
-			// 	})))
  			if (error) throw error;
 			form.reset();
 			toast.success('Envoyé');

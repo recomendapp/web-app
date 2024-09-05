@@ -41,15 +41,15 @@ export default async function CreateReview({
   const supabase = createServerClient();
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session) redirect('/auth/login');
+  if (!user) redirect('/auth/login');
 
   const { data: review } = await supabase
     .from('user_movie_review')
     .select(`id`)
-    .eq('user_id', session?.user.id)
+    .eq('user_id', user.id)
     .eq('movie_id', params.film)
     .single();
 
