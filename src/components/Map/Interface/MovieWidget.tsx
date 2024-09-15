@@ -107,7 +107,7 @@ export const MovieWidget = () => {
 							<span className='text-accent-1'>Film</span>
 							<span className=" before:content-['_|_']">
 								{movie.genres?.map((genre: any, index: number) => (
-								<span key={genre.id}>
+								<span key={index}>
 									<Button
 										variant="link"
 										className="w-fit p-0 h-full font-normal"
@@ -145,16 +145,16 @@ export const MovieWidget = () => {
 								{movie.directors?.map((person: any, index: number) => (
 								<>
 									{index > 0 && <span>, </span>}
-									<span key={person?.id}>
-									<Button
-										variant="link"
-										className="w-fit p-0 h-full hover:text-accent-1 transition"
-										asChild
-									>
-										<Link href={`/person/${person?.id}`}>
-										{person?.name}
-										</Link>
-									</Button>
+									<span key={index}>
+										<Button
+											variant="link"
+											className="w-fit p-0 h-full hover:text-accent-1 transition"
+											asChild
+										>
+											<Link href={`/person/${person?.id}`}>
+											{person?.name}
+											</Link>
+										</Button>
 									</span>
 								</>
 								)) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}

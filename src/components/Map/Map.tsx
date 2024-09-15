@@ -34,6 +34,11 @@ export function Map() {
       [">=", ["get", "runtime"], filters.runtime.value[0]],
       ["<=", ["get", "runtime"], filters.runtime.value[1]],
     ];
+    if (filters.genres.value.length > 0) {
+      filters.genres.value.forEach((genreId) => {
+        filtersRendered.push(['in', genreId, ['get', 'genres']]);
+      });
+    }
     return filtersRendered;
   }, [filters]);
 

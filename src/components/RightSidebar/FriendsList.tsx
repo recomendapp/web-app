@@ -34,9 +34,9 @@ export default function FriendsList() {
   if (isLoading)
     return (
       <div>
-        {Array.from({ length: 20 }).map((item: any) => (
+        {Array.from({ length: 20 }).map((item: any, i) => (
           <div
-            key={item}
+            key={i}
             className="text-sm flex justify-between p-2 rounded-md"
           >
             <div className="flex items-center gap-2">

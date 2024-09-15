@@ -55,7 +55,7 @@ export default function Collection() {
     []
   );
   return (
-    <main className="h-full @container/collection">
+    <main className="h-full @container/collection overflow-y-auto">
       <div className="flex justify-between items-center w-full lg:hidden p-4">
         <div className="flex gap-2 items-center">
           <div className="text-2xl font-bold">Bibliothèque</div>

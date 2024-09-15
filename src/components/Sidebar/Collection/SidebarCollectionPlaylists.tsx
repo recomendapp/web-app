@@ -69,7 +69,7 @@ export default function SidebarCollectionPlaylists() {
       {playlists?.pages.map((page, i) => (
         page?.map((playlist: Playlist, index) => (
 			isSidebarCollapsed ? (
-				<Tooltip key={i}>
+				<Tooltip key={index}>
 					<TooltipTrigger asChild>
 					<Button
 						key={playlist?.id}
@@ -111,7 +111,7 @@ export default function SidebarCollectionPlaylists() {
 				</Tooltip>
 			) : (
 				<Button
-					key={i}
+					key={index}
 					variant={pathname === `/playlist/${playlist?.id}` ? 'secondary' : 'ghost'}
 					className={`justify-start p-2`}
 					ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }

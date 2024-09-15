@@ -60,8 +60,6 @@ export const handleGetWatchlist = async (
 		// 	.eq('directors.job', 'Director')
 		// 	.order('popularity', { ascending: false })
 		// 	.limit(1);
-		console.log('data', data);
-		console.log('error', error);
 		if (error) {
 			failed.push(movie);
 			continue;

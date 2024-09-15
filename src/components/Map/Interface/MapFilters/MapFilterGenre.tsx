@@ -56,7 +56,7 @@ export const MapFilterGenre = () => {
 						}}
 						className={`
 							rounded-full  text-sm py-1 px-3 h-fit
-							${filters.genres.value.includes(genre.id) && 'bg-accent-1 text-primary hover:bg-accent-1'}
+							${filters.genres.value.includes(genre.id) && 'bg-accent-1 text-primary-foreground hover:bg-accent-1'}
 						`}
 					>
 						{genre.name}

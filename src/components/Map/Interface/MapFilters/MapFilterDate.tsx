@@ -24,14 +24,15 @@ export const MapFilterDate = () => {
 			<Label className=" inline-flex items-center">
 				Date
 				{!value.every((value, index) => value === filters.date.defaultValue[index]) &&
-				<TooltipBox tooltip="Reset">
-					<RotateCcwIcon
-						onClick={() => {
-							setValue(filters.date.defaultValue)
-						}}
-						className="w-3 h-3 ml-1 text-muted-foreground hover:text-primary-foreground cursor-pointer"
-					/>
-				</TooltipBox>}
+					<TooltipBox tooltip="Reset">
+						<RotateCcwIcon
+							onClick={() => {
+								setValue(filters.date.defaultValue)
+							}}
+							className="w-3 h-3 ml-1 text-muted-foreground hover:text-primary-foreground cursor-pointer"
+						/>
+					</TooltipBox>
+				}
 			</Label>
 			<SliderRange
 				min={filters.date.defaultValue[0]}

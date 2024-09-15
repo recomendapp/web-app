@@ -2,7 +2,8 @@
 
 import { usePathname } from 'next/navigation';
 import NavigationButton from '../NavigationButton/NavigationButton';
-import SearchBar from '@/components/Search/SearchBar';
+// import SearchBar from '@/components/Search/SearchBar';
+import SearchBar from '@/components/Search/SearchBarOLD';
 import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
 import { cn } from '@/lib/utils';
 

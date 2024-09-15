@@ -162,7 +162,6 @@ const AddUser = ({
       }
       const { data } = await query
         .returns<UserFriend[]>();
-      console.log('friends', data);
       return data;
     },
     initialPageParam: 1,

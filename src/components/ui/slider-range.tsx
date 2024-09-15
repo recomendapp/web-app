@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 
 import { cn } from "@/lib/utils"
@@ -29,6 +29,10 @@ const SliderRange = React.forwardRef<
             onValueChange(newValues);
         }
     };
+
+	useEffect(() => {
+		Array.isArray(value) && setLocalValues(value);
+	}, [value]);
 
     return (
 		<React.Fragment>

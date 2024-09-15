@@ -56,7 +56,6 @@ export function DataTableRowActions({
   const { mutateAsync: deleteGuidelistMutation } = useMutation({
     mutationFn: async () => {
       if (!data?.movie_id || !data.user_id) throw Error('Missing movie id or user id');
-      console.log('deleteGuidelistMutation', data);
       const { error } = await supabase
         .from('user_movie_guidelist')
         .update({ status: 'deleted' })

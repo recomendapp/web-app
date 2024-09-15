@@ -96,12 +96,13 @@ export const MapContext = ({
 		// show duplicate movies
 		// const duplicateMovies = movies.filter((movie, index, self) => self.findIndex(m => m.id === movie.id) !== index);
 		// console.log('duplicateMovies', duplicateMovies);
+		// order genres alphabetically
 		const genres = genresDataset.map((genre) => {
 			return {
 				id: genre.id,
 				name: locale === 'fr' ? genre["fr"] : genre["en"],
 			}
-		});
+		}).sort((a, b) => a.name.localeCompare(b.name));
 		return {
 			moviesDataset,
 			movies,
