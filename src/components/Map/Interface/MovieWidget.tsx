@@ -15,8 +15,8 @@ import { MovieAction } from "@/components/Movie/Actions/MovieAction";
 
 export const MovieWidget = () => {
 	const {
-		movieId,
-		setMovieId,
+		selectedMovie,
+		setSelectedMovie,
 	} = useMap();
 
 	const locale = useLocale();
@@ -26,33 +26,33 @@ export const MovieWidget = () => {
 		isLoading,
 		isError,
 	} = useQuery({
-		queryKey: ['movie', movieId],
+		queryKey: ['movie', selectedMovie?.movie.id],
 		queryFn: async () => {
-			if (!movieId) throw new Error('No movieId');
+			if (!selectedMovie?.movie.id) throw new Error('No movieId');
 			const { data: movie, error } = await supabase
 				.from('movie')
 				.select(`
 					*,
 					videos:tmdb_movie_videos(*)
 				`)
-				.eq('id', movieId)
+				.eq('id', selectedMovie?.movie.id)
 				.eq('language', locale)
 				.eq('videos.iso_639_1', locale)
 				.single();
 			if (error) throw error;
 			return movie;
 		},
-		enabled: !!movieId && !!locale,
+		enabled: !!selectedMovie?.movie.id && !!locale,
 	});
 
-	if (!movieId) return null;
+	if (!selectedMovie?.movie.id) return null;
 
 	return (
 		<div className="p-2 relative bg-background rounded-md md:max-w-sm w-full max-h-48 md:max-h-52 h-full pointer-events-auto overflow-hidden overflow-y-scroll">
 			<Button
 				variant={'ghost'}
 				size={'icon'}
-				onClick={() => setMovieId(null)}
+				onClick={() => setSelectedMovie(null)}
 				className="absolute top-2 right-2 rounded-full w-5 h-5"
 			>
 				<XIcon className="h-4 w-4"/>

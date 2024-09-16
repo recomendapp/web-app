@@ -4,9 +4,11 @@ import React, { useState, useRef, useMemo } from 'react';
 import { useMap } from '@/context/map-context';
 import { Interface } from './Interface';
 import { Icons } from '../icons';
-import MapContainer, { Layer, Source } from 'react-map-gl/maplibre';
+import MapContainer, { Layer, Marker, Popup, Source } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useLocale } from 'next-intl';
+import { id } from 'date-fns/locale';
+import { title } from 'process';
 
 export function Map() {
   const locale = useLocale();
@@ -14,8 +16,12 @@ export function Map() {
     mapInitialized,
     setMapInitialized,
     data,
-    setMovieId,
+    selectedMovie,
+    setSelectedMovie,
+    // movieId,
+    // setMovieId,
     filters,
+    user,
   } = useMap();
 
   const [cursor, setCursor] = useState<string>('auto');
@@ -39,6 +45,7 @@ export function Map() {
         filtersRendered.push(['in', genreId, ['get', 'genres']]);
       });
     }
+    // if (selectedMovie) filtersRendered.push(['!=', ['get', 'id'], selectedMovie.movie.id]);
     return filtersRendered;
   }, [filters]);
 
@@ -52,11 +59,7 @@ export function Map() {
         </div>
       )}
       <MapContainer
-        initialViewState={{
-          longitude: 2.5,
-          latitude: 48.5,
-          zoom: 8,
-        }}
+        initialViewState={user.position}
         maxBounds={[
           [0.5, 47],
           [4.5, 50]
@@ -65,20 +68,25 @@ export function Map() {
         minZoom={6}
         bearing={0}
         pitch={0}
-        padding={{
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0
-        }}
+        padding={user.padding}
         mapStyle="/map/style.json"
         attributionControl={false}
         interactiveLayerIds={['movies']}
         onClick={(e) => {
           const isMoviesLayer = e.features?.find((feature) => feature.layer.id === 'movies');
           if (isMoviesLayer) {
-            const movieId = isMoviesLayer.properties.id;
-            setMovieId(movieId);
+            const parsedLocaleData = JSON.parse(isMoviesLayer.properties[locale]);
+            console.log('e', isMoviesLayer.geometry);
+            setSelectedMovie({
+              movie: {
+                id: isMoviesLayer.properties.id,
+                title: parsedLocaleData.title,
+              },
+              location: {
+                longitude: (isMoviesLayer.geometry as any).coordinates[0],
+                latitude: (isMoviesLayer.geometry as any).coordinates[1],
+              }
+            });
           }
         }}
         onMouseMove={(e) => {
@@ -88,6 +96,10 @@ export function Map() {
           } else {
             setCursor('auto');
           } 
+        }}
+        onMoveEnd={(e) => {
+          // Save the current position of the user
+          user.setPosition(e.viewState);
         }}
         cursor={cursor}
         onLoad={() => {
@@ -132,7 +144,13 @@ export function Map() {
                 ]
               }}
               paint={{
-                'text-color': '#ffe974',
+                // if movie is selected change color to black
+                'text-color': [
+                  'case',
+                  ['==', ['get', 'id'], selectedMovie?.movie.id ?? -1],
+                  '#3b82f6',
+                  '#ffe974'
+                ],
                 'text-halo-color': 'black',
                 'text-halo-width': [
                   'interpolate',
@@ -148,6 +166,19 @@ export function Map() {
               filter={filtersRendered}
             />
           </Source>
+          {/* {selectedMovie && (
+            <Marker
+              longitude={selectedMovie.location.longitude}
+              latitude={selectedMovie.location.latitude}
+              anchor='center'
+              // closeOnClick={false}
+              // change backgorund of the popup
+              className="bg-background px-4 py-2 rounded-full text-accent-1 text-lg font-semibold max-w-xs line-clamp-2 text-center"
+              // onClose={() => setSelectedMovie(null)}
+            >
+              {selectedMovie.movie.title}
+            </Marker>
+          )} */}
           <Interface />
       </MapContainer>
     </div>

@@ -29,6 +29,7 @@ export const MapFilterActivity = () => {
 						onCheckedChange={(value) => {
 							setHideWatched(value)
 						}}
+						disabled
 					/>
 					<label
 						htmlFor="terms"

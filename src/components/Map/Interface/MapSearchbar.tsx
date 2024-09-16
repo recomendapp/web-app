@@ -11,7 +11,7 @@ import {LngLatLike, useMap as useMapContext} from 'react-map-gl/maplibre';
 
 export const MapSearchbar = () => {
 	const {
-		setMovieId,
+		setSelectedMovie,
 		data,
 	} = useMap();
 	const {
@@ -95,7 +95,17 @@ export const MapSearchbar = () => {
 					<div
 						key={i}
 						onClick={() => {
-							setMovieId(movie.id)
+							// setMovieId(movie.id)
+							setSelectedMovie({
+								movie: {
+									id: movie.id,
+									title: movie.title,
+								},
+								location: {
+									longitude: movie.position[0],
+									latitude: movie.position[1],
+								}
+							})
 							setOnFocus(false)
 							map?.flyTo({
 								center: movie.position as LngLatLike,

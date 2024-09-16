@@ -7,12 +7,33 @@ import moviesDataset from "@/components/Map/Data/movies.json"
 import genresDataset from "@/components/Map/Data/genres.json"
 // import biomesDataset from "@/components/Map/Data/biomes.json"
 import { useLocale } from "next-intl";
+import { PaddingOptions } from "react-map-gl/dist/esm/types";
 
 interface ModalContextProps {
 	mapInitialized: boolean;
 	setMapInitialized: (value: boolean) => void;
-	movieId: number | null;
-	setMovieId: (movieId: number | null) => void;
+	selectedMovie: {
+		movie: {
+			id: number;
+			title: string;
+		},
+		location: {
+			latitude: number;
+			longitude: number;
+		};
+	} | null;
+	setSelectedMovie: (value: {
+		movie: {
+			id: number;
+			title: string;
+		},
+		location: {
+			latitude: number;
+			longitude: number;
+		};
+	} | null) => void;
+	// movieId: number | null;
+	// setMovieId: (movieId: number | null) => void;
 	filters: {
 		date: {
 			defaultValue: number[];
@@ -59,8 +80,22 @@ interface ModalContextProps {
 		}[];
 	};
 	user: {
-		position: number[];
-		setPosition: (position: number[]) => void;
+		position: {
+			bearing?: number;
+			latitude: number;
+			longitude: number;
+			pitch?: number;
+			zoom: number;
+		},
+		setPosition: (position: {
+			bearing?: number;
+			latitude: number;
+			longitude: number;
+			pitch?: number;
+			zoom: number;
+		}) => void;
+		padding: PaddingOptions;
+		setPadding: (padding: PaddingOptions) => void;
 	}
 	debug?: boolean;
 }
@@ -109,7 +144,18 @@ export const MapContext = ({
 			genres,
 		}
 	}, [locale]);
-	const [movieId, setMovieId] = useState<number | null>(null);
+	/* Movie */
+	const [selectedMovie, setSelectedMovie] = useState<{
+		movie: {
+			id: number;
+			title: string;
+		},
+		location: {
+			latitude: number;
+			longitude: number;
+		};
+	} | null>(null);
+	// const [movieId, setMovieId] = useState<number | null>(null);
 	/* Filters */
 	const defaultFilterDate = [data.movies.reduce((acc, movie) => Math.min(acc, new Date(movie.release_date).getFullYear()), Infinity), data.movies.reduce((acc, movie) => Math.max(acc, new Date(movie.release_date).getFullYear()), 0)];
 	const [filterDate, setFilterDate] = useState<number[]>(defaultFilterDate);
@@ -118,15 +164,27 @@ export const MapContext = ({
 	const [filterRuntime, setFilterRuntime] = useState<number[]>(defaultFilterRuntime);
 	const [filterActivityHideWatched, setFilterActivityHideWatched] = useState<CheckedState>(false);
 	/* User */
-	const [userPosition, setUserPosition] = useState<number[]>([-80, 70, 0]);
+	const [userPosition, setUserPosition] = useState({
+		latitude: 48.5,
+		longitude: 2.5,
+		zoom: 8,
+	});
+	const [userPadding, setUserPadding] = useState({
+		top: 0,
+		right: 0,
+		bottom: 0,
+		left: 0,
+	});
 	/* Debug */
 	const debug = process.env.NODE_ENV === 'development';
 	return (
 		<MapProvider.Provider value={{
 			mapInitialized,
 			setMapInitialized,
-			movieId,
-			setMovieId,
+			selectedMovie,
+			setSelectedMovie,
+			// movieId,
+			// setMovieId,
 			filters: {
 				date: {
 					defaultValue: defaultFilterDate,
@@ -153,6 +211,8 @@ export const MapContext = ({
 			user: {
 				position: userPosition,
 				setPosition: setUserPosition,
+				padding: userPadding,
+				setPadding: setUserPadding,
 			},
 			debug: debug,
 		}}>
