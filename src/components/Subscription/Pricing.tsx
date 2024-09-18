@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { postData } from '@/lib/stripe/stripe-helpers';
 import { getStripe } from '@/lib/stripe/stripeClient';
 import { Session } from '@supabase/supabase-js';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import {
@@ -37,6 +37,7 @@ export default function Pricing({
   title = true,
 }: Props) {
   const { user } = useAuth();
+  const pathname = usePathname();
   const locale = useLocale();
   const intervals = Array.from(
     new Set(
@@ -53,7 +54,7 @@ export default function Pricing({
   const handleCheckout = async (price: Prices) => {
     setPriceIdLoading(price?.id);
     if (!session) {
-      return router.push('/auth/login');
+      return router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
     }
     if (user?.premium|| price?.unit_amount === 0) {
       return router.push('/settings/subscription');

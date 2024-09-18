@@ -1,4 +1,3 @@
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 
@@ -16,6 +15,7 @@ import { Icons } from '../../../../icons';
 import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase/client';
+import { usePathname } from 'next/navigation';
 
 interface MovieLikeActionProps extends React.HTMLAttributes<HTMLDivElement> {
   movieId: number;
@@ -24,6 +24,7 @@ interface MovieLikeActionProps extends React.HTMLAttributes<HTMLDivElement> {
 export function MovieLikeAction({ movieId }: MovieLikeActionProps) {
 
   const { user } = useAuth();
+  const pathname = usePathname();
 
   const queryClient = useQueryClient();
 
@@ -135,7 +136,7 @@ export function MovieLikeAction({ movieId }: MovieLikeActionProps) {
             className="rounded-full"
             asChild
           >
-            <Link href={'/auth/login'}>
+            <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
               <Heart className={`transition hover:text-accent-pink`} />
             </Link>
           </Button>

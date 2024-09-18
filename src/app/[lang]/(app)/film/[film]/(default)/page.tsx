@@ -13,7 +13,6 @@ export default async function MoviePage({
   };
 }) {
   const supabase = createServerClient();
-  const time = new Date().getTime();
   const { data: movie } = await supabase
 		.from('movie')
 		.select(`

@@ -1,3 +1,5 @@
+"use client";
+
 import { addMinutes } from 'date-fns';
 
 // UI

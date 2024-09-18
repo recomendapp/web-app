@@ -14,7 +14,6 @@ export function DateOnlyYearTooltip({
   date: string | null | undefined;
   className?: string;
 }) {
-  const locale = useLocale();
   const format = useFormatter();
   if (!date) return;
   return (

@@ -1,3 +1,5 @@
+"use client";
+
 import UserCard from "@/components/User/UserCard/UserCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FeedActivity } from "./FeedActivity";

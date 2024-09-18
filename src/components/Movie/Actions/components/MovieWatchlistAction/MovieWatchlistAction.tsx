@@ -15,6 +15,7 @@ import {
 import { AlertCircle, Bookmark } from 'lucide-react';
 import { Icons } from '../../../../icons';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface MovieWatchlistActionProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -27,6 +28,7 @@ export function MovieWatchlistAction({
 : MovieWatchlistActionProps) {
 
   const { user } = useAuth();
+  const pathname = usePathname();
 
   const queryClient = useQueryClient();
 
@@ -132,7 +134,7 @@ export function MovieWatchlistAction({
             className={`rounded-full`}
             asChild
           >
-            <Link href={'/auth/login'}>
+            <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
               <Bookmark />
             </Link>
           </Button>

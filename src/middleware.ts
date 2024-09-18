@@ -57,7 +57,11 @@ export async function middleware(request: NextRequest) {
     '/auth'
   ];
   if (user && anonUserOnly.some((path) => request.nextUrl.pathname.startsWith(path))) {
+    // if /auth/login and there is redirect query param, go to redirect
+    if (url.pathname === '/auth/login' && url.searchParams.has('redirect'))
+      return (NextResponse.redirect(new URL(url.searchParams.get('redirect')!, request.url)));
     url.pathname = '/';
+    url.search = '';
     return (NextResponse.redirect(url));
   }
 
@@ -71,20 +75,11 @@ export async function middleware(request: NextRequest) {
   ];
   if (!user && authentifiedUserOnly.some((path) => request.nextUrl.pathname.startsWith(path))) {
     url.pathname = '/auth/login';
+    url.searchParams.set('redirect', request.nextUrl.href);
     return (NextResponse.redirect(url));
   }
 
   return (response);
-
-  // CHECK APP SETTINGS
-  // const { data: app_settings } = await supabase.from('app_settings').select('*').single();
-  // if (app_settings?.maintenance_mode && process.env.NODE_ENV !== 'development') {
-  //   request.nextUrl.pathname = `/maintenance`;
-  // } else if (request.nextUrl.pathname === '/maintenance' && !app_settings?.maintenance_mode) {
-  //   request.nextUrl.pathname = '/';
-  // }
-  
-  // return intlMiddleware(request);
 }
 
 export const config = {

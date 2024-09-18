@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/tooltip';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Icons } from '../../../../icons';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Dialog,
   DialogContent,
@@ -31,6 +31,7 @@ interface MovieRatingActionProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
   const { user } = useAuth();
+  const pathname = usePathname();
 
   const queryClient = useQueryClient();
 
@@ -142,7 +143,7 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
             variant={'rating'}
             asChild
           >
-            <Link href={'/auth/login'}>
+            <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
               <Star />
             </Link>
           </Button>

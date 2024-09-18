@@ -7,7 +7,6 @@ import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/context/auth-context';
 import { AuthError, Provider } from '@supabase/supabase-js';

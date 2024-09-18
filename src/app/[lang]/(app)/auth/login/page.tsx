@@ -1,14 +1,14 @@
+"use client";
+
 import { LoginForm } from '@/app/[lang]/(app)/auth/login/_components/LoginForm';
 import { siteConfig } from '@/config/site';
-import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-
-export const metadata: Metadata = {
-  title: 'Se connecter',
-};
+import { useSearchParams } from 'next/navigation';
 
 export default function Login() {
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get('redirect') || '/';
   return (
     <main className="container h-full relative flex flex-col items-center justify-center">
       <div className="lg:p-8">
@@ -30,7 +30,7 @@ export default function Login() {
           <p className="px-8 text-center text-sm text-muted-foreground">
             Pas encore de compte ?{' '}
             <Link
-              href="/auth/signup"
+              href={`/auth/signup?redirect=${encodeURIComponent(redirectTo)}`}
               className="underline underline-offset-4 hover:text-foreground"
             >
               S&apos;inscrire

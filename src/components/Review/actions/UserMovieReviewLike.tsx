@@ -13,6 +13,7 @@ import Link from "next/link";
 import { AlertCircleIcon, HeartIcon } from "lucide-react";
 import { Icons } from "@/components/icons";
 import toast from "react-hot-toast";
+import { usePathname } from "next/navigation";
 
 export default function UserMovieReviewLike({
 	reviewId,
@@ -23,6 +24,7 @@ export default function UserMovieReviewLike({
 }) {
 
 	const { user } = useAuth();
+	const pathname = usePathname();
 	const queryClient = useQueryClient();
 
 	const {
@@ -98,7 +100,7 @@ export default function UserMovieReviewLike({
 				className={`rounded-full`}
 				asChild
 			  >
-				<Link href={'/auth/login'}>
+				<Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
 				  <HeartIcon />
 				</Link>
 			  </Button>

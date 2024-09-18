@@ -7,7 +7,6 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 
 import { useModal } from '@/context/modal-context';
@@ -15,6 +14,8 @@ import { MoviePlaylistModal } from '@/components/Modals/Movie/Actions/MoviePlayl
 import { Icons } from '@/components/icons';
 import { Modal } from '@/components/Modals/Modal';
 import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface MoviePlaylistActionProps {
   movieId: number;
@@ -23,10 +24,9 @@ interface MoviePlaylistActionProps {
 export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
   
   const { user, loading } = useAuth();
+  const pathname = usePathname();
 
   const { openModal } = useModal();
-
-  const router = useRouter();
 
   const [ openAddPlaylistModal, setOpenAddPlaylistModal ] = useState(false);
 
@@ -35,13 +35,14 @@ export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              onClick={() => router.push('/auth/login')}
-              disabled={loading}
               size="icon"
               variant={'action'}
               className="rounded-full"
+              asChild
             >
-              <ListPlus />
+              <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
+                <ListPlus />
+              </Link>
             </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">Connectez-vous</TooltipContent>

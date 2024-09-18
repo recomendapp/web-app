@@ -1,4 +1,4 @@
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 
@@ -33,7 +33,7 @@ export function PlaylistLikeAction({ playlistId }: MovieLikeActionProps) {
 
   const { user } = useAuth();
 
-  const router = useRouter();
+  const pathname = usePathname();
 
   // const {
   //   data: playlistFollowerQuery,
@@ -209,18 +209,10 @@ export function PlaylistLikeAction({ playlistId }: MovieLikeActionProps) {
             className={`rounded-full`}
             asChild
           >
-            <Link href={'/auth/login'}>
+            <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
               <Heart className={`transition hover:text-accent-1`} />
             </Link>
           </Button>
-          {/* <Button
-            onClick={() => router.push('/auth/login')}
-            size="icon"
-            variant={'action'}
-            className="rounded-full"
-          > */}
-            {/* <Heart className={`transition hover:text-accent-1`} /> */}
-          {/* </Button> */}
         </TooltipTrigger>
         <TooltipContent side="bottom">
           <p>Connectez-vous</p>

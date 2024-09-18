@@ -17,7 +17,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { redirect } from 'next/navigation';
+import { redirect, usePathname } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -42,6 +42,7 @@ interface MovieWatchActionProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
   const { user } = useAuth();
+  const pathname = usePathname();
 
   const queryClient = useQueryClient();
 
@@ -124,7 +125,7 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
             className={`rounded-full hover:text-foreground`}
             asChild
           >
-            <Link href={'/auth/login'}>
+            <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
               <div
                 className={`transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[2px]`}
               >

@@ -1,5 +1,5 @@
 'use client';
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 // AUTH
 import { useAuth } from '@/context/auth-context';
@@ -18,6 +18,7 @@ import { Icons } from '@/components/icons';
 import { MovieSendModal } from '@/components/Modals/Movie/Actions/MovieSendModal';
 import { useState } from 'react';
 import { Modal } from '@/components/Modals/Modal';
+import Link from 'next/link';
 
 interface MovieSendActionProps {
   movieId: number;
@@ -25,8 +26,7 @@ interface MovieSendActionProps {
 
 export function MovieSendAction({ movieId }: MovieSendActionProps) {
   const { user, loading } = useAuth();
-
-  const router = useRouter();
+  const pathname = usePathname();
 
   const [ openSendModal, setOpenSendModal ] = useState(false);
 
@@ -35,13 +35,14 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            onClick={() => router.push('/auth/login')}
-            disabled={loading}
             size="icon"
             variant={'action'}
             className="rounded-full"
+            asChild
           >
-            <Send />
+            <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
+              <Send />
+            </Link>
           </Button>
         </TooltipTrigger>
         <TooltipContent side="bottom">Connectez-vous</TooltipContent>
