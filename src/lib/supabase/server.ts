@@ -71,6 +71,7 @@ export const getActiveProductsWithPrices = async () => {
     .order('unit_amount', {
       referencedTable: 'prices',
       ascending: true,
+      nullsFirst: true,
     });
   if (error) console.error(error);
   return data || [];

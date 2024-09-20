@@ -27,13 +27,12 @@ export async function POST(request: Request) {
   const sig = request.headers.get('stripe-signature') as string;
   const webhookSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET;
   let event: Stripe.Event;
-  console.log(`🔔 Webhook received:\n\tsig:${sig}\n\tbody:${body}\n\twebhookSecret:${webhookSecret}`);
   
   try {
     if (!sig || !webhookSecret)
       return new Response('Webhook secret not found.', { status: 400 });
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
-    console.log(`🔔  Webhook received: ${event.type}`);
+    // console.log(`🔔  Webhook received: ${event.type}`);
   } catch (err: any) {
     console.log(`❌ Error message: ${err.message}`);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });
