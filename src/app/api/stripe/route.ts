@@ -1,12 +1,13 @@
 import Stripe from 'stripe';
 import { NextResponse } from 'next/server';
-import { headers } from 'next/headers';
 
 import { stripe } from '@/lib/stripe/stripe';
 import {
   upsertProductRecord,
   upsertPriceRecord,
   manageSubscriptionStatusChange,
+  deletePriceRecord,
+  deleteProductRecord,
 } from '@/lib/supabase/supabase-admin';
 
 const relevantEvents = new Set([
@@ -22,16 +23,19 @@ const relevantEvents = new Set([
 
 export async function POST(request: Request) {
   const body = await request.text();
-  const sig = headers().get('Stripe-Signature') as string;
-  const webhookSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET!;
+  const sig = request.headers.get('stripe-signature') as string;
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   let event: Stripe.Event;
   console.log(`🔔 Webhook received: sig:${sig}, body:${body}, webhookSecret:${webhookSecret}`);
   
   try {
+    if (!sig || !webhookSecret)
+      return new Response('Webhook secret not found.', { status: 400 });
     event = stripe.webhooks.constructEvent(body, sig, webhookSecret);
+    console.log(`🔔  Webhook received: ${event.type}`);
   } catch (err: any) {
     console.log(`❌ Error message: ${err.message}`);
-    return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
+    return new Response(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
   if (relevantEvents.has(event.type)) {
@@ -44,6 +48,12 @@ export async function POST(request: Request) {
         case 'price.created':
         case 'price.updated':
           await upsertPriceRecord(event.data.object as Stripe.Price);
+          break;
+        case 'price.deleted':
+          await deletePriceRecord(event.data.object as Stripe.Price);
+          break;
+        case 'product.deleted':
+          await deleteProductRecord(event.data.object as Stripe.Product);
           break;
         case 'customer.subscription.created':
         case 'customer.subscription.updated':
@@ -71,12 +81,17 @@ export async function POST(request: Request) {
       }
     } catch (error) {
       console.log(error);
-      return new NextResponse(
-        'Webhook error: "Webhook handler failed. View logs."',
-        { status: 400 }
+      return new Response(
+        'Webhook handler failed. View your Next.js function logs.',
+        {
+          status: 400
+        }
       );
     }
+  } else {
+    return new Response(`Unsupported event type: ${event.type}`, {
+      status: 400
+    });
   }
-
-  return NextResponse.json({ received: true }, { status: 200 });
+  return new Response(JSON.stringify({ received: true }));
 }
