@@ -12,8 +12,8 @@ export async function HeaderMinimal({ className }: HeaderMinimalProps) {
   const supabase = createServerClient();
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <header
@@ -43,14 +43,14 @@ export async function HeaderMinimal({ className }: HeaderMinimalProps) {
         </Link>
       </div>
       <div>
-        {!session ? (
+        {user ? (
+          <UserNav />
+        ) : (
           <Button asChild>
             <Link href={'/auth/login'} className="whitespace-nowrap">
               Se connecter
             </Link>
           </Button>
-        ) : (
-          <UserNav />
         )}
       </div>
     </header>

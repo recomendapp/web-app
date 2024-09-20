@@ -75,7 +75,7 @@ export async function middleware(request: NextRequest) {
   ];
   if (!user && authentifiedUserOnly.some((path) => request.nextUrl.pathname.startsWith(path))) {
     url.pathname = '/auth/login';
-    url.searchParams.set('redirect', request.nextUrl.href);
+    url.searchParams.set('redirect', request.nextUrl.pathname);
     return (NextResponse.redirect(url));
   }
 
