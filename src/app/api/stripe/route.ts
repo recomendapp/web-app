@@ -1,5 +1,4 @@
 import Stripe from 'stripe';
-import { NextResponse } from 'next/server';
 
 import { stripe } from '@/lib/stripe/stripe';
 import {
@@ -13,12 +12,14 @@ import {
 const relevantEvents = new Set([
   'product.created',
   'product.updated',
+  'product.deleted',
   'price.created',
   'price.updated',
+  'price.deleted',
   'checkout.session.completed',
   'customer.subscription.created',
   'customer.subscription.updated',
-  'customer.subscription.deleted',
+  'customer.subscription.deleted'
 ]);
 
 export async function POST(request: Request) {
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
   const sig = request.headers.get('stripe-signature') as string;
   const webhookSecret = process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET;
   let event: Stripe.Event;
-  console.log(`🔔 Webhook received: sig:${sig}, body:${body}, webhookSecret:${webhookSecret}`);
+  console.log(`🔔 Webhook received:\n\tsig:${sig}\n\tbody:${body}\n\twebhookSecret:${webhookSecret}`);
   
   try {
     if (!sig || !webhookSecret)

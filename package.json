@@ -104,7 +104,7 @@
     "react-responsive": "^9.0.2",
     "run": "^1.4.0",
     "sharp": "^0.33.3",
-    "stripe": "^13.8.0",
+    "stripe": "^16.12.0",
     "tailwind-merge": "^1.13.2",
     "tailwindcss": "3.3.2",
     "tailwindcss-animate": "^1.0.6",

@@ -1,13 +1,12 @@
 import Stripe from 'stripe';
-import { Json } from '@/types/__generated__/type.db';
 
 export interface Product {
   id: string;
   active?: boolean;
   description?: string;
-  features: Stripe.Product.Feature[];
+  features: Stripe.Product.MarketingFeature[];
   image?: string;
-  metadata?: Stripe.Product.Feature[];
+  metadata?: Stripe.Product.MarketingFeature[];
   name?: string;
 }
 
