@@ -74,7 +74,7 @@ export default async function MovieLayout({
 		.eq('id', params.film)
 		.eq('language', params.lang)
 		.eq('genres.genre.data.language', params.lang)
-		.eq('production_countries.country.data.iso_639_1', params.lang)
+		.eq('production_countries.country.data.language', params.lang)
 		.eq('spoken_languages.language.data.language', params.lang)
 		.eq('videos.iso_639_1', params.lang)
 		.eq('directors.job', 'Director')
