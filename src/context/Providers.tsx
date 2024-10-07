@@ -1,5 +1,6 @@
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
+import deepmerge from 'deepmerge';
 
 // PROVIDERS
 import { ReactQueryContext } from '@/context/react-query-context';
@@ -14,6 +15,7 @@ import { cookies } from 'next/headers';
 import { UiContext } from './ui-context';
 import { MapContext } from './map-context';
 import { getMessages } from 'next-intl/server';
+import { getFallbackLanguage } from '@/lib/i18n/fallback';
 
 export default async function Provider({
   children,
@@ -23,7 +25,9 @@ export default async function Provider({
   locale: string;
 }) {
   // NEXT-INTL
-  const messages = await getMessages({ locale });
+  const userMessages = await getMessages({ locale });
+  const fallbackMessages = await getMessages({ locale: getFallbackLanguage({ locale }) });
+  const messages = deepmerge(fallbackMessages, userMessages);
   // UI
   const layout = cookies().get("ui:layout");
   const sidebarCollapsed = cookies().get("ui-sidebar:collapsed");

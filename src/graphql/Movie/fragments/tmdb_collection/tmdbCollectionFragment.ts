@@ -4,9 +4,8 @@ import TMDB_COLLECTION_TRANSLATION_FRAGMENT from '@/graphql/Movie/fragments/tmdb
 export default gql`
   fragment TmdbCollection on tmdb_collection {
     id
-    backdrop_path
     data: tmdb_collection_translationCollection(
-      filter: { language: { eq: $locale } }
+      filter: { iso_639_1: { eq: $locale } }
       first: 1
     ) {
       edges {

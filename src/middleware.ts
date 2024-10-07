@@ -41,11 +41,11 @@ export async function middleware(request: NextRequest) {
    * If the app is not in maintenance mode, redirect all users to the home page
    * 
    */
-  const { data: app_settings } = await supabase.from('app_settings').select('*').single();
-  if (app_settings?.maintenance_mode && url.pathname !== '/maintenance' && process.env.NODE_ENV !== 'development') {
+  const { data: app_settings } = await supabase.from('app_config').select('value').eq('key', 'maintenance_mode').maybeSingle();
+  if (app_settings?.value === 'true' && url.pathname !== '/maintenance' && process.env.NODE_ENV !== 'development') {
     url.pathname = `/maintenance`;
     return (NextResponse.redirect(url));
-  } else if (url.pathname === '/maintenance' && !app_settings?.maintenance_mode) {
+  } else if (url.pathname === '/maintenance' && app_settings?.value !== 'true') {
     url.pathname = '/';
     return (NextResponse.redirect(url));
   }
