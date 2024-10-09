@@ -5,7 +5,6 @@ export default gql`
   fragment TmdbPerson on tmdb_person {
     id
     adult
-    also_known_as
     birthday
     deathday
     gender: tmdb_gender {
@@ -17,7 +16,6 @@ export default gql`
     name
     place_of_birth
     popularity
-    profile_path
   }
   ${TMDB_GENDER_FRAGMENT}
 `;
