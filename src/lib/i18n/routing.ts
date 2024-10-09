@@ -1,13 +1,13 @@
 import {defineRouting} from 'next-intl/routing';
 import {createSharedPathnamesNavigation} from 'next-intl/navigation';
 
-export const locales = ['en', 'fr'];
+export const locales = ['en-US', 'fr-FR'];
  
 export const routing = defineRouting({
   // A list of all locales that are supported
   locales,
   // Used when no locale matches
-  defaultLocale: 'en',
+  defaultLocale: 'en-US',
   // Prefix for all locale-aware routes
   localePrefix: 'never',
 });

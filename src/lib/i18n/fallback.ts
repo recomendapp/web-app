@@ -1,3 +1,4 @@
+import { routing } from '@/lib/i18n/routing';
 /**
  * Get the fallback language for a given locale
  * 
@@ -22,6 +23,6 @@ export function getFallbackLanguage({
 }) {
 	switch (locale) {
 		default:
-			return 'en';
+			return routing.defaultLocale;
 	}
 }
