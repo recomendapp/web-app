@@ -32,7 +32,7 @@ export const handleSearchMovies = async (query: string, language = "en", page = 
 	const moviesWithDirectors = await Promise.all(
 		tmdbResults.results.map(async (movie: any) => {
 			const { data:directors } = await supabase.from('tmdb_movie_credits')
-				.select('person:tmdb_person(*)')
+				.select('person(*)')
 				.eq('movie_id', movie.id)
 				.eq('job', 'Director');
 		  	const movieWithCredits = {

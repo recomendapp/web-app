@@ -37,7 +37,7 @@ export default async function Film({
   // const person = await getPersonDetails(params.person, params.lang);
 
   const { data: person } = await supabase
-		.from('person')
+		.from('person_details')
 		.select(`*`)
 		.eq('id', params.person)
 		.eq('language', params.lang)

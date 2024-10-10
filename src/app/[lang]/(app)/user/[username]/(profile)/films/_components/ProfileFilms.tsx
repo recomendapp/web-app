@@ -62,7 +62,7 @@ export default function ProfileFilms({
             *,
             directors:tmdb_movie_credits(
               *,
-              person:tmdb_person(*)
+              person:person(*)
             )
           )
         `)

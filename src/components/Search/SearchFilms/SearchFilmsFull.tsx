@@ -62,7 +62,7 @@ export default function SearchFilmsFull({ query }: { query: string }) {
       //     data: tmdb_movie_translation!inner(*),
       //     directors:tmdb_movie_credits(
       //       id,
-      //       person:tmdb_person(*)
+      //       person(*)
       //     )
       //   `)
       //   .ilike(`original_title`, `%${query}%`)

@@ -60,7 +60,7 @@ export const handleGetWatched = async (
 		//   	*,
 		// 	directors:tmdb_movie_credits(
 		// 		id,
-		// 		person:tmdb_person(*)
+		// 		person(*)
 		// 	)
 		//   `)
 		//   .eq('language', 'en')

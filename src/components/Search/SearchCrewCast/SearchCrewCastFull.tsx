@@ -32,7 +32,7 @@ export default function SearchCrewCastFull({ query }: { query: string }) {
 			let to = from - 1 + numberOfResult;
 
 			const { data } = await supabase
-        .from('tmdb_person')
+        .from('person')
         .select('*')
         .ilike(`name`, `%${query}%`)
         .order('popularity', { ascending: false})

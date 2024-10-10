@@ -19,7 +19,7 @@ export default async function MoviePage({
 			*,
 			cast:tmdb_movie_credits(
 				id,
-				person:tmdb_person(*),
+				person:person(*),
 				role:tmdb_movie_role(*)
 			)
 		`)

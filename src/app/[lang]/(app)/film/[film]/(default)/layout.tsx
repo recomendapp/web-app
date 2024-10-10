@@ -53,7 +53,7 @@ export default async function MovieLayout({
 			),
 			directors:tmdb_movie_credits(
 				id,
-				director:tmdb_person(*)
+				director:person(*)
 			),
 			production_countries:tmdb_movie_country(
 				id,
