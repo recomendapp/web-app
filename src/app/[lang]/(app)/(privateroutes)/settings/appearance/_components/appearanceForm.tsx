@@ -39,12 +39,13 @@ import { useEffect, useState } from 'react';
 import { Icons } from '@/components/icons';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/Loader/Loader';
+import { locales } from '@/lib/i18n/routing';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
     required_error: 'Please select a theme.',
   }),
-  language: z.enum(['en', 'fr'], {
+  language: z.enum(locales as [string, ...string[]], {
     invalid_type_error: 'Select a language',
     required_error: 'Please select a language.',
   }),
@@ -129,8 +130,8 @@ export function AppearanceForm() {
                     )}
                     {...field}
                   >
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
+                    <option value="en-US">English</option>
+                    <option value="fr-FR">Français</option>
                   </select>
                 </FormControl>
                 <ChevronDownIcon className="absolute right-3 top-2.5 h-4 w-4 opacity-50" />

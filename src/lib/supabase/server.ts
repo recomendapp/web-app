@@ -3,8 +3,9 @@ import {
   createServerClient as createServerClientSupabase,
   type CookieOptions,
 } from '@supabase/ssr';
+import { routing } from '../i18n/routing';
 
-export const createServerClient = () => {
+export const createServerClient = (locale?: string) => {
   const cookieStore = cookies();
   
   return createServerClientSupabase(
@@ -27,25 +28,13 @@ export const createServerClient = () => {
           }
         },
       },
-    }
+      global: {
+        headers: {
+          'X-Language': locale ?? routing.defaultLocale,
+        }
+      }
+    },
   );
-  // return createServerClientSupabase<Database>(
-  //   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  //   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  //   {
-  //     cookies: {
-  //       get(name: string) {
-  //         return cookieStore.get(name)?.value;
-  //       },
-  //       set(name: string, value: string, options: CookieOptions) {
-  //         cookieStore.set({ name, value, ...options });
-  //       },
-  //       remove(name: string, options: CookieOptions) {
-  //         cookieStore.set({ name, value: '', ...options });
-  //       },
-  //     },
-  //   }
-  // );
 };
 
 export async function getSession() {

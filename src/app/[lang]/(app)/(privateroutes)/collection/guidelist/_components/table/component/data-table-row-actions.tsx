@@ -29,7 +29,7 @@ import ButtonShare from '@/components/utils/ButtonShare';
 import { useAuth } from '@/context/auth-context';
 
 import toast from 'react-hot-toast';
-import GuidelistSendersModal from '@/components/Modals/Guidelist/GuidelistSendersModal';
+import { GuidelistSendersModal } from '@/components/Modals/Guidelist/GuidelistSendersModal';
 import { useModal } from '@/context/modal-context';
 import { Movie, Person, UserMovieGuidelistView } from '@/types/type.db';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -104,13 +104,14 @@ export function DataTableRowActions({
           />
           {data?.senders?.length! > 0 && (
             <DropdownMenuItem
-              onClick={() => openModal({
-                id: `guidelist-${row.original?.movie_id}-senders`,
-                header: {
-                  title: 'Reco par',
-                },
-                content: <GuidelistSendersModal comments={row.original?.senders}/>,
-              })}
+              // onClick={() => openModal({
+              //   id: `guidelist-${row.original?.movie_id}-senders`,
+              //   header: {
+              //     title: 'Reco par',
+              //   },
+              //   content: <GuidelistSendersModal comments={row.original?.senders}/>,
+              // })}
+              onClick={() => openModal(GuidelistSendersModal, { comments: row.original?.senders })}
             >
               Voir les recos
             </DropdownMenuItem>

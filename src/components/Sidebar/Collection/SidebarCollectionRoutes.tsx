@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 // CONTEXT
-import { useUiContext } from '@/context/ui-context';
+import { useUI } from '@/context/ui-context';
 // COMPONENTS
 import SidebarCollectionContainerIcon from '@/components/Sidebar/Collection/SidebarCollectionContainerIcon';
 // UI
@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 
 export default function SidebarCollectionRoutes() {
-  const { isSidebarCollapsed } = useUiContext();
+  const { isSidebarCollapsed } = useUI();
   const pathname = usePathname();
   const collectionRoutes = useMemo(
     () => [

@@ -11,7 +11,6 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
-	FormMessage,
 } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
@@ -32,7 +31,7 @@ import { Search } from 'lucide-react';
 import useDebounce from '@/hooks/use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { UserFriend } from '@/types/type.db';
-import { da } from 'date-fns/locale';
+import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from '../../Modal';
 
 const sendFormSchema = z.object({
 	friends: z.array(
@@ -47,14 +46,14 @@ const sendFormSchema = z.object({
   
 type SendFormValues = z.infer<typeof sendFormSchema>;
 
+interface MovieSendModalProps extends ModalType {
+	movieId: number;
+}
 
 export function MovieSendModal({
-	onClose,
 	movieId,
-} : {
-	onClose: () => void;
-	movieId: number;
-}) {
+	...props
+} : MovieSendModalProps) {
 	const { user } = useAuth();
 
 	const { closeModal } = useModal();
@@ -136,6 +135,7 @@ export function MovieSendModal({
  			if (error) throw error;
 			form.reset();
 			toast.success('Envoyé');
+			closeModal(props.id);
 		} catch (error: any) {
 			switch (error.code) {
 				case '23505':
@@ -148,144 +148,150 @@ export function MovieSendModal({
 					toast.error("Une erreur s'est produite");
 					break;
 			}
-		} finally {
-			onClose();
 		}
 	}
 
 	return (
-		<>
-			<div className="relative">
-				<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-				<Input
-					value={search ?? ''}
-					onChange={(e) => setSearch(e.target.value)}
-					placeholder='Rechercher un ami...'
-					autoFocus={false}
-					className="pl-8"
-				/>
-			</div>
-			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="flex flex-col space-y-2"
-				>
-					<FormField
-					control={form.control}
-					name="friends"
-					render={() => (
-						<ScrollArea className="border-2 rounded-md h-[40vh]">
-						{friends?.pages[0]?.length ? (
-							friends?.pages.map((page, i) => (
-								<Fragment key={i}>
-									{page?.map(({ friend }, index) => (
-										<FormField
-										key={friend?.id}
-										control={form.control}
-										name="friends"
-										render={({ field }) => {
-											return (
-											<FormItem
-												key={friend?.id}
-												{...(i === friends.pages.length - 1 &&
-												index === page.length - 1
-													? { ref: ref }
-													: {})}
-											>
-												<FormLabel className="flex flex-row w-full justify-between items-center space-x-3 space-y-0 hover:bg-muted p-2">
-													<div className='flex items-center w-full justify-between gap-4'>
-														<div className="font-normal flex gap-2 items-center">
-															<Avatar className="h-[40px] w-[4	0px] shadow-2xl">
-																<AvatarImage
-																	src={friend?.avatar_url ?? ''}
-																	alt={friend?.username}
-																/>
-																<AvatarFallback className="text-primary-foreground bg-muted text-[20px]">
-																	{getInitiales(friend?.username ?? '')}
-																</AvatarFallback>
-															</Avatar>
-															<div>
-																<p className="line-clamp-1">{friend?.full_name}</p>
-																<p className="text-muted-foreground line-clamp-1">
-																	@{friend?.username}
-																</p>
-															</div>
-														</div>
-														{/*
-														// @ts-ignore */}
-														{friend?.user_movie_activity[0].count > 0 && <Badge variant={'destructive'}>Déjà vu</Badge>}
-													</div>
-
-													<FormControl>
-														<Checkbox
-															checked={field.value?.some(
-															(friendSelected) =>
-																friendSelected.friend.id === friend?.id
-															)}
-															// @ts-ignore
-															disabled={friend?.user_movie_activity[0].count > 0}
-															onCheckedChange={(checked) => {
-															if (checked) {
-																field.onChange([
-																...(field.value || []),
-																{ friend: { ...friend } },
-																]);
-															} else {
-																field.onChange(
-																field.value?.filter(
-																	(friendSelected) =>
-																	friendSelected.friend.id !== friend?.id
-																)
-																);
-															}
-															}}
-															className="rounded-full"
-														/>
-													</FormControl>
-												</FormLabel>
-											</FormItem>
-											);
-										}}
-										/>
-									))}
-								</Fragment>
-							))
-						) : (debouncedSearch && !loading && !isFetchingNextPage) ? (
-							<p className="text-center p-2">Aucun résultat</p>
-						) : friends != null ? (
-							<p className="text-center p-2">Aucun ami</p>
-						) : (
-							<></>
-						)}
-						{(loading || isFetchingNextPage) && <Loader />}
-						</ScrollArea>
-					)}
+		<Modal
+			open={props.open}
+			onOpenChange={(open) => !open && closeModal(props.id)}
+		>
+			<ModalHeader>
+				<ModalTitle>Envoyer à un ami</ModalTitle>
+			</ModalHeader>
+			<ModalBody>
+				<div className="relative">
+					<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+					<Input
+						value={search ?? ''}
+						onChange={(e) => setSearch(e.target.value)}
+						placeholder='Rechercher un ami...'
+						autoFocus={false}
+						className="pl-8"
 					/>
-					<FormField
-						control={form.control}
-						name="comment"
-						render={({ field }) => (
-							<FormItem>
-							<FormLabel className="sr-only">Bio</FormLabel>
-							<FormControl>
-								<Input
-									placeholder="Écrire un commentaire..."
-									maxLength={180}
-									autoComplete='off'
-									{...field}
-								/>
-							</FormControl>
-							</FormItem>
-						)}
-					/>
-					<Button
-						disabled={!form.getValues('friends').length}
-						type="submit"
+				</div>
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(onSubmit)}
+						className="flex flex-col space-y-2"
 					>
-						Envoyer
-					</Button>
-				</form>
-			</Form>
-		</>
+						<FormField
+						control={form.control}
+						name="friends"
+						render={() => (
+							<ScrollArea className="border-2 rounded-md h-[40vh]">
+							{friends?.pages[0]?.length ? (
+								friends?.pages.map((page, i) => (
+									<Fragment key={i}>
+										{page?.map(({ friend }, index) => (
+											<FormField
+											key={friend?.id}
+											control={form.control}
+											name="friends"
+											render={({ field }) => {
+												return (
+												<FormItem
+													key={friend?.id}
+													{...(i === friends.pages.length - 1 &&
+													index === page.length - 1
+														? { ref: ref }
+														: {})}
+												>
+													<FormLabel className="flex flex-row w-full justify-between items-center space-x-3 space-y-0 hover:bg-muted p-2">
+														<div className='flex items-center w-full justify-between gap-4'>
+															<div className="font-normal flex gap-2 items-center">
+																<Avatar className="h-[40px] w-[4	0px] shadow-2xl">
+																	<AvatarImage
+																		src={friend?.avatar_url ?? ''}
+																		alt={friend?.username}
+																	/>
+																	<AvatarFallback className="text-primary-foreground bg-muted text-[20px]">
+																		{getInitiales(friend?.username ?? '')}
+																	</AvatarFallback>
+																</Avatar>
+																<div>
+																	<p className="line-clamp-1">{friend?.full_name}</p>
+																	<p className="text-muted-foreground line-clamp-1">
+																		@{friend?.username}
+																	</p>
+																</div>
+															</div>
+															{/*
+															// @ts-ignore */}
+															{friend?.user_movie_activity[0].count > 0 && <Badge variant={'destructive'}>Déjà vu</Badge>}
+														</div>
+
+														<FormControl>
+															<Checkbox
+																checked={field.value?.some(
+																(friendSelected) =>
+																	friendSelected.friend.id === friend?.id
+																)}
+																// @ts-ignore
+																disabled={friend?.user_movie_activity[0].count > 0}
+																onCheckedChange={(checked) => {
+																if (checked) {
+																	field.onChange([
+																	...(field.value || []),
+																	{ friend: { ...friend } },
+																	]);
+																} else {
+																	field.onChange(
+																	field.value?.filter(
+																		(friendSelected) =>
+																		friendSelected.friend.id !== friend?.id
+																	)
+																	);
+																}
+																}}
+																className="rounded-full"
+															/>
+														</FormControl>
+													</FormLabel>
+												</FormItem>
+												);
+											}}
+											/>
+										))}
+									</Fragment>
+								))
+							) : (debouncedSearch && !loading && !isFetchingNextPage) ? (
+								<p className="text-center p-2">Aucun résultat</p>
+							) : friends != null ? (
+								<p className="text-center p-2">Aucun ami</p>
+							) : (
+								<></>
+							)}
+							{(loading || isFetchingNextPage) && <Loader />}
+							</ScrollArea>
+						)}
+						/>
+						<FormField
+							control={form.control}
+							name="comment"
+							render={({ field }) => (
+								<FormItem>
+								<FormLabel className="sr-only">Bio</FormLabel>
+								<FormControl>
+									<Input
+										placeholder="Écrire un commentaire..."
+										maxLength={180}
+										autoComplete='off'
+										{...field}
+									/>
+								</FormControl>
+								</FormItem>
+							)}
+						/>
+						<Button
+							disabled={!form.getValues('friends').length}
+							type="submit"
+						>
+							Envoyer
+						</Button>
+					</form>
+				</Form>
+			</ModalBody>
+		</Modal>
 	);
 }

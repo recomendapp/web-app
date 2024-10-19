@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import LanguageSwticher from '../Language/LanguageSwitcher';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Box } from '@/components/Box/Box';
-import { useUiContext } from '@/context/ui-context';
+import { useUI } from '@/context/ui-context';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
@@ -13,7 +13,7 @@ export default function SidebarFooter({
   className?: string;
 }) {
 
-  const { isSidebarCollapsed, expandSidebar, collapseSidebar } = useUiContext();
+  const { isSidebarCollapsed, expandSidebar, collapseSidebar } = useUI();
   return (
     <Box
       className={cn('', className)}

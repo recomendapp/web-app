@@ -4,15 +4,15 @@ import { useRightSidebar } from '@/context/right-sidebar-context';
 import { Box } from '../Box/Box';
 import { Button } from '../ui/button';
 import { X } from 'lucide-react';
-import { useUiContext } from '@/context/ui-context';
+import { useUI } from '@/context/ui-context';
 
 export default function RightSidebar() {
-  const { collapseRightPanel, rightPanelContent, rightPanelTitle } = useUiContext();
+  const { collapseRightPanel, rightPanelContent, rightPanelTitle } = useUI();
 
   // if (!isOpen) return null;
 
   return (
-    <Box className="h-full w-full relative p-0">
+    <Box className="h-full w-full relative p-0 overflow-hidden">
       {/* <Button
             variant={'ghost'}
             size={'icon'}
@@ -21,7 +21,6 @@ export default function RightSidebar() {
           >
           <X size={10}/>
       </Button> */}
-      <aside className='w-full h-full'>
         {/* HEADER */}
         <div className="h-header p-4 flex items-center justify-between">
           <h3 className="text-xl line-clamp-1">{rightPanelTitle}</h3>
@@ -34,9 +33,7 @@ export default function RightSidebar() {
             <X />
           </Button>
         </div>
-        <div className="p-4 overflow-y-auto">{rightPanelContent}</div>
-
-      </aside>
+        <div className="p-4 h-full overflow-hidden">{rightPanelContent}</div>
     </Box>
   );
 }

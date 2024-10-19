@@ -12,7 +12,7 @@ import { ThemeContext } from '@/context/theme-context';
 import { OneSignalContext } from '@/context/one-signal-context';
 import { RightSidebarContext } from '@/context/right-sidebar-context';
 import { cookies } from 'next/headers';
-import { UiContext } from './ui-context';
+import { UIContext } from './ui-context';
 import { MapContext } from './map-context';
 import { getMessages } from 'next-intl/server';
 import { getFallbackLanguage } from '@/lib/i18n/fallback';
@@ -36,46 +36,46 @@ export default async function Provider({
   const cookieSidebarCollapsed = sidebarCollapsed ? JSON.parse(sidebarCollapsed.value) : undefined
   const cookieRightPanelCollapsed = rightPanelCollapsed ? JSON.parse(rightPanelCollapsed.value) : undefined
   return (
-    <ReactQueryContext>
-      <ApolloClientContext>
-        <AuthContext>
-          <NextIntlClientProvider locale={locale} messages={messages}>
-            <ModalProvider>
-              <ThemeContext attribute="class" defaultTheme="dark" enableSystem>
-                <OneSignalContext>
-                  <UiContext
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <ReactQueryContext>
+        <ApolloClientContext>
+          <AuthContext>
+              <OneSignalContext>
+                <ThemeContext attribute="class" defaultTheme="dark" enableSystem>
+                  <UIContext
                     defaultLayout={defaultLayout}
                     cookieSidebarCollapsed={cookieSidebarCollapsed}
                     cookieRightPanelCollapsed={cookieRightPanelCollapsed}
                   >
-                    <MapContext>
-                      <RightSidebarContext>
-                        <NextTopLoader
-                          showSpinner={false}
-                          easing="ease"
-                          color="#FFE974"
-                          height={2}
-                        />
-                        <Toaster
-                          position="top-center"
-                          toastOptions={{
-                            style: {
-                              borderRadius: '10px',
-                              background: '#333',
-                              color: '#fff',
-                            },
-                          }}
-                        />
-                        {children}
-                      </RightSidebarContext>
-                    </MapContext>
-                  </UiContext>
-                </OneSignalContext>
-              </ThemeContext>
-            </ModalProvider>
-          </NextIntlClientProvider>
-        </AuthContext>
-      </ApolloClientContext>
-    </ReactQueryContext>
+                  <ModalProvider>
+                      <MapContext>
+                        <RightSidebarContext>
+                          <NextTopLoader
+                            showSpinner={false}
+                            easing="ease"
+                            color="#FFE974"
+                            height={2}
+                          />
+                          <Toaster
+                            position="top-center"
+                            toastOptions={{
+                              style: {
+                                borderRadius: '10px',
+                                background: '#333',
+                                color: '#fff',
+                              },
+                            }}
+                          />
+                          {children}
+                        </RightSidebarContext>
+                      </MapContext>
+                    </ModalProvider>
+                  </UIContext>
+                </ThemeContext>
+              </OneSignalContext>
+          </AuthContext>
+        </ApolloClientContext>
+      </ReactQueryContext>
+    </NextIntlClientProvider>
   );
 }

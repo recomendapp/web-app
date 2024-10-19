@@ -33,6 +33,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TabsContent } from '@radix-ui/react-tabs';
 import { Playlist } from '@/types/type.db';
 import { Badge } from '@/components/ui/badge';
+import { Modal, ModalBody, ModalHeader, ModalType } from '../../Modal';
+import { title } from 'process';
 
 const sendFormSchema = z.object({
 	playlists: z.array(
@@ -47,13 +49,14 @@ const sendFormSchema = z.object({
   
 type SendFormValues = z.infer<typeof sendFormSchema>;
 
-export function MoviePlaylistModal({
-	onClose,
-	movieId,
-} : {
-	onClose: () => void;
+interface MoviePlaylistModalProps extends ModalType {
 	movieId: number;
-}) {
+}
+
+export function MoviePlaylistModal({
+	movieId,
+	...props
+} : MoviePlaylistModalProps) {
 	const { user } = useAuth();
 
 	const queryClient = useQueryClient();
@@ -126,7 +129,7 @@ export function MoviePlaylistModal({
 			});
 			toast.success('Ajouté');
 			form.reset();
-			onClose();
+			closeModal(props.id);
 		},
 		onError: () => {
 			toast.error("Une erreur s\'est produite");
@@ -148,69 +151,76 @@ export function MoviePlaylistModal({
 	}
 
 	return (
-		<>
-			<div className="relative">
-				<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-				<Input
-					value={search ?? ''}
-					onChange={(e) => setSearch(e.target.value)}
-					placeholder='Rechercher une playlist...'
-					autoFocus={false}
-					className="pl-8"
-				/>
-			</div>
-			<Tabs onValueChange={setPlaylistView} defaultValue={playlistView} className="w-full">
-				<Form {...form}>
-					<form
-						onSubmit={form.handleSubmit(onSubmit)}
-						className="flex flex-col space-y-2"
-					>
-						<FormField
-						control={form.control}
-						name="playlists"
-						render={() => (
-							<>
-								<TabsList className="grid w-full grid-cols-2">
-									<TabsTrigger value="personal">Mes playlists</TabsTrigger>
-									<TabsTrigger value="external">Enregistré</TabsTrigger>
-								</TabsList>
-								<TabsContent value="personal">
-									<UserMoviePlaylist movieId={movieId} search={debouncedSearch} form={form} />
-								</TabsContent>
-								<TabsContent value="external">
-									<UserMoviePlaylistLike movieId={movieId} search={debouncedSearch} form={form} />
-								</TabsContent>
-							</>
-						)}
-						/>
-						<FormField
-							control={form.control}
-							name="comment"
-							render={({ field }) => (
-								<FormItem>
-								<FormLabel className="sr-only">Bio</FormLabel>
-								<FormControl>
-									<Input
-										placeholder="Écrire un commentaire..."
-										maxLength={180}
-										autoComplete='off'
-										{...field}
-									/>
-								</FormControl>
-								</FormItem>
-							)}
-						/>
-						<Button
-							disabled={!form.getValues('playlists').length}
-							type="submit"
+		<Modal
+			open={props.open}
+			onOpenChange={(open) => !open && closeModal(props.id)}
+		>
+			<ModalHeader>
+				<h2>Ajouter à une playlist</h2>
+			</ModalHeader>
+			<ModalBody>
+				<div className="relative">
+					<Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+					<Input
+						value={search ?? ''}
+						onChange={(e) => setSearch(e.target.value)}
+						placeholder='Rechercher une playlist...'
+						autoFocus={false}
+						className="pl-8"
+					/>
+				</div>
+				<Tabs onValueChange={setPlaylistView} defaultValue={playlistView} className="w-full">
+					<Form {...form}>
+						<form
+							onSubmit={form.handleSubmit(onSubmit)}
+							className="flex flex-col space-y-2"
 						>
-							Ajouter
-						</Button>
-					</form>
-				</Form>
-			</Tabs>
-
-		</>
+							<FormField
+							control={form.control}
+							name="playlists"
+							render={() => (
+								<>
+									<TabsList className="grid w-full grid-cols-2">
+										<TabsTrigger value="personal">Mes playlists</TabsTrigger>
+										<TabsTrigger value="external">Enregistrées</TabsTrigger>
+									</TabsList>
+									<TabsContent value="personal">
+										<UserMoviePlaylist movieId={movieId} search={debouncedSearch} form={form} />
+									</TabsContent>
+									<TabsContent value="external">
+										<UserMoviePlaylistLike movieId={movieId} search={debouncedSearch} form={form} />
+									</TabsContent>
+								</>
+							)}
+							/>
+							<FormField
+								control={form.control}
+								name="comment"
+								render={({ field }) => (
+									<FormItem>
+									<FormLabel className="sr-only">Bio</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="Écrire un commentaire..."
+											maxLength={180}
+											autoComplete='off'
+											{...field}
+										/>
+									</FormControl>
+									</FormItem>
+								)}
+							/>
+							<Button
+								disabled={!form.getValues('playlists').length}
+								type="submit"
+							>
+								Ajouter
+							</Button>
+						</form>
+					</Form>
+				</Tabs>
+			</ModalBody>
+		</Modal>
 	);
 }
 
@@ -236,7 +246,7 @@ const UserMoviePlaylist = ({
 		isFetchingNextPage,
 		hasNextPage,
 	} = useInfiniteQuery({
-		queryKey: search ? ['user', user?.id, 'playlist', { search: search }] : ['user', user?.id, 'playlist'],
+		queryKey: ['add_playlist', { search: search, movieId: movieId, location: 'personal' }],
 		queryFn: async ({ pageParam = 1 }) => {
 			if (!user?.id) throw new Error('User not found');
 
@@ -376,7 +386,7 @@ const UserMoviePlaylistLike = ({
 		isFetchingNextPage,
 		hasNextPage,
 	} = useInfiniteQuery({
-		queryKey: search ? ['user', user?.id, 'playlist_like', { search: search }] : ['user', user?.id, 'playlist_like'],
+		queryKey: ['add_playlist', { search: search, movieId: movieId, location: 'like' }],
 		queryFn: async ({ pageParam = 1 }) => {
 			if (!user?.id) throw new Error('User not found');
 			let from = (pageParam - 1) * numberOfResult;
@@ -406,6 +416,7 @@ const UserMoviePlaylistLike = ({
 		getNextPageParam: (data, pages) => {
 			return data?.length == numberOfResult ? pages.length + 1 : undefined;
 		},
+		refetchOnReconnect: true,
 		enabled: !!user?.id,
 	});
 

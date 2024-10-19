@@ -9,18 +9,18 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      app_settings: {
+      app_config: {
         Row: {
-          id: number
-          maintenance_mode: boolean
+          key: string
+          value: string
         }
         Insert: {
-          id?: number
-          maintenance_mode?: boolean
+          key: string
+          value: string
         }
         Update: {
-          id?: number
-          maintenance_mode?: boolean
+          key?: string
+          value?: string
         }
         Relationships: []
       }
@@ -331,47 +331,138 @@ export type Database = {
         }
         Relationships: []
       }
-      tmdb_collection: {
+      sync_logs: {
         Row: {
-          backdrop_path: string | null
+          created_at: string
+          date: string
           id: number
+          status: Database["public"]["Enums"]["sync_logs_status"]
+          type: Database["public"]["Enums"]["sync_logs_type"]
+          updated_at: string | null
         }
         Insert: {
-          backdrop_path?: string | null
+          created_at?: string
+          date?: string
           id?: number
+          status?: Database["public"]["Enums"]["sync_logs_status"]
+          type: Database["public"]["Enums"]["sync_logs_type"]
+          updated_at?: string | null
         }
         Update: {
-          backdrop_path?: string | null
+          created_at?: string
+          date?: string
           id?: number
+          status?: Database["public"]["Enums"]["sync_logs_status"]
+          type?: Database["public"]["Enums"]["sync_logs_type"]
+          updated_at?: string | null
         }
         Relationships: []
+      }
+      tmdb_collection: {
+        Row: {
+          id: number
+          name: string | null
+        }
+        Insert: {
+          id?: number
+          name?: string | null
+        }
+        Update: {
+          id?: number
+          name?: string | null
+        }
+        Relationships: []
+      }
+      tmdb_collection_image: {
+        Row: {
+          aspect_ratio: number | null
+          collection: number
+          file_path: string
+          height: number | null
+          id: number
+          iso_639_1: string | null
+          type: Database["public"]["Enums"]["image_type"]
+          vote_average: number | null
+          vote_count: number | null
+          width: number | null
+        }
+        Insert: {
+          aspect_ratio?: number | null
+          collection: number
+          file_path: string
+          height?: number | null
+          id?: number
+          iso_639_1?: string | null
+          type: Database["public"]["Enums"]["image_type"]
+          vote_average?: number | null
+          vote_count?: number | null
+          width?: number | null
+        }
+        Update: {
+          aspect_ratio?: number | null
+          collection?: number
+          file_path?: string
+          height?: number | null
+          id?: number
+          iso_639_1?: string | null
+          type?: Database["public"]["Enums"]["image_type"]
+          vote_average?: number | null
+          vote_count?: number | null
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_collection_image_collection_fkey"
+            columns: ["collection"]
+            isOneToOne: false
+            referencedRelation: "collection"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_collection_image_collection_fkey"
+            columns: ["collection"]
+            isOneToOne: false
+            referencedRelation: "tmdb_collection"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tmdb_collection_translation: {
         Row: {
           collection: number
+          homepage: string | null
           id: number
-          language: Database["public"]["Enums"]["language"]
-          name: string
+          iso_3166_1: string
+          iso_639_1: string
           overview: string | null
-          poster_path: string | null
+          title: string | null
         }
         Insert: {
           collection: number
+          homepage?: string | null
           id?: number
-          language: Database["public"]["Enums"]["language"]
-          name: string
+          iso_3166_1: string
+          iso_639_1: string
           overview?: string | null
-          poster_path?: string | null
+          title?: string | null
         }
         Update: {
           collection?: number
+          homepage?: string | null
           id?: number
-          language?: Database["public"]["Enums"]["language"]
-          name?: string
+          iso_3166_1?: string
+          iso_639_1?: string
           overview?: string | null
-          poster_path?: string | null
+          title?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "tmdb_collection_translation_collection_fkey"
+            columns: ["collection"]
+            isOneToOne: false
+            referencedRelation: "collection"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tmdb_collection_translation_collection_fkey"
             columns: ["collection"]
@@ -387,7 +478,6 @@ export type Database = {
           headquarters: string | null
           homepage: string | null
           id: number
-          logo_path: string | null
           name: string | null
           origin_country: string | null
           parent_company: number | null
@@ -397,7 +487,6 @@ export type Database = {
           headquarters?: string | null
           homepage?: string | null
           id?: number
-          logo_path?: string | null
           name?: string | null
           origin_country?: string | null
           parent_company?: number | null
@@ -407,7 +496,6 @@ export type Database = {
           headquarters?: string | null
           homepage?: string | null
           id?: number
-          logo_path?: string | null
           name?: string | null
           origin_country?: string | null
           parent_company?: number | null
@@ -416,6 +504,97 @@ export type Database = {
           {
             foreignKeyName: "tmdb_company_parent_company_fkey"
             columns: ["parent_company"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_company_parent_company_fkey"
+            columns: ["parent_company"]
+            isOneToOne: false
+            referencedRelation: "tmdb_company"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tmdb_company_alternative_name: {
+        Row: {
+          company: number
+          id: number
+          name: string
+        }
+        Insert: {
+          company: number
+          id?: number
+          name: string
+        }
+        Update: {
+          company?: number
+          id?: number
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_company_alternative_name_company_fkey"
+            columns: ["company"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_company_alternative_name_company_fkey"
+            columns: ["company"]
+            isOneToOne: false
+            referencedRelation: "tmdb_company"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tmdb_company_image: {
+        Row: {
+          aspect_ratio: number | null
+          company: number
+          file_path: string
+          file_type: string
+          height: number | null
+          id: string
+          vote_average: number | null
+          vote_count: number | null
+          width: number | null
+        }
+        Insert: {
+          aspect_ratio?: number | null
+          company: number
+          file_path: string
+          file_type: string
+          height?: number | null
+          id: string
+          vote_average?: number | null
+          vote_count?: number | null
+          width?: number | null
+        }
+        Update: {
+          aspect_ratio?: number | null
+          company?: number
+          file_path?: string
+          file_type?: string
+          height?: number | null
+          id?: string
+          vote_average?: number | null
+          vote_count?: number | null
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_company_image_company_fkey"
+            columns: ["company"]
+            isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_company_image_company_fkey"
+            columns: ["company"]
             isOneToOne: false
             referencedRelation: "tmdb_company"
             referencedColumns: ["id"]
@@ -438,19 +617,19 @@ export type Database = {
         Row: {
           id: number
           iso_3166_1: string
-          iso_639_1: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language"]
           name: string
         }
         Insert: {
           id?: number
           iso_3166_1: string
-          iso_639_1: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language"]
           name: string
         }
         Update: {
           id?: number
           iso_3166_1?: string
-          iso_639_1?: Database["public"]["Enums"]["language"]
+          language?: Database["public"]["Enums"]["language"]
           name?: string
         }
         Relationships: [
@@ -680,7 +859,7 @@ export type Database = {
           adult: boolean
           backdrop_path: string | null
           budget: number | null
-          collection_id: number | null
+          collection: number | null
           homepage: string | null
           id: number
           imdb_id: string | null
@@ -691,6 +870,7 @@ export type Database = {
           revenue: number | null
           runtime: number | null
           status: string | null
+          updated_at: string | null
           vote_average: number | null
           vote_count: number | null
         }
@@ -698,7 +878,7 @@ export type Database = {
           adult?: boolean
           backdrop_path?: string | null
           budget?: number | null
-          collection_id?: number | null
+          collection?: number | null
           homepage?: string | null
           id?: number
           imdb_id?: string | null
@@ -709,6 +889,7 @@ export type Database = {
           revenue?: number | null
           runtime?: number | null
           status?: string | null
+          updated_at?: string | null
           vote_average?: number | null
           vote_count?: number | null
         }
@@ -716,7 +897,7 @@ export type Database = {
           adult?: boolean
           backdrop_path?: string | null
           budget?: number | null
-          collection_id?: number | null
+          collection?: number | null
           homepage?: string | null
           id?: number
           imdb_id?: string | null
@@ -727,53 +908,100 @@ export type Database = {
           revenue?: number | null
           runtime?: number | null
           status?: string | null
+          updated_at?: string | null
           vote_average?: number | null
           vote_count?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "tmdb_movie_collection_id_fkey"
-            columns: ["collection_id"]
+            foreignKeyName: "tmdb_movie_collection_fkey"
+            columns: ["collection"]
+            isOneToOne: false
+            referencedRelation: "collection"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_collection_fkey"
+            columns: ["collection"]
             isOneToOne: false
             referencedRelation: "tmdb_collection"
             referencedColumns: ["id"]
           },
         ]
       }
-      tmdb_movie_country: {
+      tmdb_movie_alternative_title: {
         Row: {
-          country_id: string
           id: number
-          movie_id: number
+          iso_3166_1: string
+          movie: number
+          title: string
+          type: string
         }
         Insert: {
-          country_id: string
           id?: number
-          movie_id: number
+          iso_3166_1: string
+          movie: number
+          title: string
+          type: string
         }
         Update: {
-          country_id?: string
           id?: number
-          movie_id?: number
+          iso_3166_1?: string
+          movie?: number
+          title?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_movie_alternative_title_movie_fkey"
+            columns: ["movie"]
+            isOneToOne: false
+            referencedRelation: "movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_alternative_title_movie_fkey"
+            columns: ["movie"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tmdb_movie_country: {
+        Row: {
+          country: string
+          id: number
+          movie: number
+        }
+        Insert: {
+          country: string
+          id?: number
+          movie: number
+        }
+        Update: {
+          country?: string
+          id?: number
+          movie?: number
         }
         Relationships: [
           {
             foreignKeyName: "tmdb_movie_country_country_id_fkey"
-            columns: ["country_id"]
+            columns: ["country"]
             isOneToOne: false
             referencedRelation: "tmdb_country"
             referencedColumns: ["iso_3166_1"]
           },
           {
             foreignKeyName: "tmdb_movie_country_movie_id_fkey"
-            columns: ["movie_id"]
+            columns: ["movie"]
             isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_movie_country_movie_id_fkey"
-            columns: ["movie_id"]
+            columns: ["movie"]
             isOneToOne: false
             referencedRelation: "tmdb_movie"
             referencedColumns: ["id"]
@@ -822,6 +1050,13 @@ export type Database = {
             columns: ["person_id"]
             isOneToOne: false
             referencedRelation: "person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "person_details"
             referencedColumns: ["id"]
           },
           {
@@ -974,6 +1209,13 @@ export type Database = {
             foreignKeyName: "tmdb_movie_production_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
+            referencedRelation: "company"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_production_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_company"
             referencedColumns: ["id"]
           },
@@ -1076,7 +1318,7 @@ export type Database = {
           created_at: string
           id: string
           iso_3166_1: string
-          iso_639_1: Database["public"]["Enums"]["language"]
+          iso_639_1: string
           key: string
           movie_id: number
           name: string
@@ -1089,7 +1331,7 @@ export type Database = {
           created_at?: string
           id: string
           iso_3166_1: string
-          iso_639_1: Database["public"]["Enums"]["language"]
+          iso_639_1: string
           key: string
           movie_id: number
           name: string
@@ -1102,7 +1344,7 @@ export type Database = {
           created_at?: string
           id?: string
           iso_3166_1?: string
-          iso_639_1?: Database["public"]["Enums"]["language"]
+          iso_639_1?: string
           key?: string
           movie_id?: number
           name?: string
@@ -1138,7 +1380,6 @@ export type Database = {
       tmdb_person: {
         Row: {
           adult: boolean
-          also_known_as: string[] | null
           birthday: string | null
           deathday: string | null
           gender: number | null
@@ -1149,11 +1390,9 @@ export type Database = {
           name: string | null
           place_of_birth: string | null
           popularity: number | null
-          profile_path: string | null
         }
         Insert: {
           adult?: boolean
-          also_known_as?: string[] | null
           birthday?: string | null
           deathday?: string | null
           gender?: number | null
@@ -1164,11 +1403,9 @@ export type Database = {
           name?: string | null
           place_of_birth?: string | null
           popularity?: number | null
-          profile_path?: string | null
         }
         Update: {
           adult?: boolean
-          also_known_as?: string[] | null
           birthday?: string | null
           deathday?: string | null
           gender?: number | null
@@ -1179,7 +1416,6 @@ export type Database = {
           name?: string | null
           place_of_birth?: string | null
           popularity?: number | null
-          profile_path?: string | null
         }
         Relationships: [
           {
@@ -1191,23 +1427,164 @@ export type Database = {
           },
         ]
       }
+      tmdb_person_also_known_as: {
+        Row: {
+          id: number
+          name: string
+          person: number
+        }
+        Insert: {
+          id?: number
+          name: string
+          person: number
+        }
+        Update: {
+          id?: number
+          name?: string
+          person?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_person_also_known_as_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_person_also_known_as_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "person_details"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_person_also_known_as_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "tmdb_person"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tmdb_person_external_id: {
+        Row: {
+          id: number
+          person: number
+          source: string
+          value: string
+        }
+        Insert: {
+          id?: number
+          person: number
+          source: string
+          value: string
+        }
+        Update: {
+          id?: number
+          person?: number
+          source?: string
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_person_external_id_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_person_external_id_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "person_details"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_person_external_id_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "tmdb_person"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tmdb_person_image: {
+        Row: {
+          aspect_ratio: number | null
+          file_path: string
+          height: number | null
+          id: number
+          person: number
+          vote_average: number | null
+          vote_count: number | null
+          width: number | null
+        }
+        Insert: {
+          aspect_ratio?: number | null
+          file_path: string
+          height?: number | null
+          id?: number
+          person: number
+          vote_average?: number | null
+          vote_count?: number | null
+          width?: number | null
+        }
+        Update: {
+          aspect_ratio?: number | null
+          file_path?: string
+          height?: number | null
+          id?: number
+          person?: number
+          vote_average?: number | null
+          vote_count?: number | null
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_person_image_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_person_image_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "person_details"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_person_image_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "tmdb_person"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tmdb_person_translation: {
         Row: {
           biography: string | null
           id: number
-          language: Database["public"]["Enums"]["language"]
+          iso_3166_1: string | null
+          iso_639_1: string | null
           person: number | null
         }
         Insert: {
           biography?: string | null
           id?: number
-          language: Database["public"]["Enums"]["language"]
+          iso_3166_1?: string | null
+          iso_639_1?: string | null
           person?: number | null
         }
         Update: {
           biography?: string | null
           id?: number
-          language?: Database["public"]["Enums"]["language"]
+          iso_3166_1?: string | null
+          iso_639_1?: string | null
           person?: number | null
         }
         Relationships: [
@@ -1216,6 +1593,13 @@ export type Database = {
             columns: ["person"]
             isOneToOne: false
             referencedRelation: "person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_person_translation_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "person_details"
             referencedColumns: ["id"]
           },
           {
@@ -1931,6 +2315,13 @@ export type Database = {
             foreignKeyName: "user_person_follower_person_id_fkey"
             columns: ["person_id"]
             isOneToOne: false
+            referencedRelation: "person_details"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_person_follower_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_person"
             referencedColumns: ["id"]
           },
@@ -2037,6 +2428,71 @@ export type Database = {
         }
         Relationships: []
       }
+      collection: {
+        Row: {
+          backdrop_path: string | null
+          homepage: string | null
+          id: number | null
+          language: string | null
+          name: string | null
+          overview: string | null
+          poster_path: string | null
+        }
+        Relationships: []
+      }
+      company: {
+        Row: {
+          alternative_names: Json | null
+          description: string | null
+          headquarters: string | null
+          homepage: string | null
+          id: number | null
+          logo_path: string | null
+          name: string | null
+          origin_country: string | null
+          parent_company: Json | null
+        }
+        Relationships: []
+      }
+      guidelist: {
+        Row: {
+          created_at: string | null
+          movie_id: number | null
+          senders: Json[] | null
+          status: Database["public"]["Enums"]["guidelist_status"] | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       movie: {
         Row: {
           adult: boolean | null
@@ -2066,18 +2522,104 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "tmdb_movie_collection_id_fkey"
+            foreignKeyName: "tmdb_movie_collection_fkey"
             columns: ["collection_id"]
             isOneToOne: false
             referencedRelation: "tmdb_collection"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_collection_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collection"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      movies_recommended: {
+        Row: {
+          movie_id: number | null
+          recommendation_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movie"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      movies_trending: {
+        Row: {
+          activity_count: number | null
+          movie_id: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movie"
             referencedColumns: ["id"]
           },
         ]
       }
       person: {
         Row: {
+          gender: number | null
+          id: number | null
+          known_for_department: string | null
+          name: string | null
+          popularity: number | null
+          profile_path: string | null
+        }
+        Insert: {
+          gender?: number | null
+          id?: number | null
+          known_for_department?: string | null
+          name?: string | null
+          popularity?: number | null
+          profile_path?: never
+        }
+        Update: {
+          gender?: number | null
+          id?: number | null
+          known_for_department?: string | null
+          name?: string | null
+          popularity?: number | null
+          profile_path?: never
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_person_gender_fkey"
+            columns: ["gender"]
+            isOneToOne: false
+            referencedRelation: "tmdb_gender"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      person_details: {
+        Row: {
           adult: boolean | null
-          also_known_as: string[] | null
+          also_known_as: Json | null
           backdrop_path: string | null
           biography: string | null
           birthday: string | null
@@ -2088,7 +2630,7 @@ export type Database = {
           id: number | null
           imdb_id: string | null
           known_for_department: string | null
-          language: Database["public"]["Enums"]["language"] | null
+          language: string | null
           name: string | null
           place_of_birth: string | null
           popularity: number | null
@@ -2155,6 +2697,13 @@ export type Database = {
             referencedRelation: "person"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "person_details"
+            referencedColumns: ["id"]
+          },
         ]
       }
       tmdb_person_department: {
@@ -2175,6 +2724,13 @@ export type Database = {
             columns: ["person_id"]
             isOneToOne: false
             referencedRelation: "person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "person_details"
             referencedColumns: ["id"]
           },
         ]
@@ -2666,7 +3222,8 @@ export type Database = {
     Enums: {
       eventType: "INSERT" | "DELETE" | "UPDATE"
       guidelist_status: "active" | "completed" | "deleted"
-      language: "en" | "fr"
+      image_type: "backdrop" | "poster" | "logo" | "profile"
+      language: "en-US" | "fr-FR"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"
       subscription_status:
@@ -2677,6 +3234,22 @@ export type Database = {
         | "incomplete_expired"
         | "past_due"
         | "unpaid"
+      sync_logs_status:
+        | "initialized"
+        | "fetching_data"
+        | "data_fetched"
+        | "syncing_to_db"
+        | "success"
+        | "failed"
+      sync_logs_type:
+        | "tmdb_movie"
+        | "tmdb_person"
+        | "tmdb_collection"
+        | "tmdb_keyword"
+        | "tmdb_company"
+        | "tmdb_language"
+        | "tmdb_country"
+        | "tmdb_genre"
       tmdb_update_logs_type:
         | "movie"
         | "person"

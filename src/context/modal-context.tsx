@@ -1,90 +1,126 @@
 'use client';
 
-import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { useMediaQuery } from 'react-responsive';
-import { cn } from '@/lib/utils';
+import React, { createContext, useContext, ReactNode, useState, useEffect, use } from 'react';
 import { usePathname } from 'next/navigation';
+import { ModalTemplate, ModalTemplateProps } from '@/components/Modals/templates/ModalTemplate';
+import { ConfirmModalTemplate, ConfirmModalTemplateProps } from '@/components/Modals/templates/ConfirmModalTemplate';
 
-interface ModalInfo {
+interface Modal<T = any> {
   id: string;
-  header?: {
-    title?: ReactNode;
-    description?: ReactNode;
-  }
-  content: ReactNode;
-  isOpen: boolean;
-  autoClose?: boolean; // Ajouter autoClose ici
-  className?: string;
+  open: boolean;
+  onOpenChange?: (open: boolean) => void;
+  component: React.ComponentType<T>;
+  props?: T;
 }
 
 interface ModalContextProps {
-  modals: ModalInfo[];
-  openModal: (args: Omit<ModalInfo, 'isOpen'>) => void; // Exclure isOpen ici
+  modals: Modal[];
+  openModal: <T>(component: React.ComponentType<T>, props: Omit<T, 'id' | 'open' | 'onOpenChange'>) => void;
+  createModal: (props: Omit<ModalTemplateProps, 'id' | 'open' | 'onOpenChange'>) => void;
+  createConfirmModal: (props: Omit<ConfirmModalTemplateProps, 'id' | 'open' | 'onOpenChange'>) => void;
   closeModal: (id: string) => void;
+  closeAllModals: () => void;
 }
 
 const ModalContext = createContext<ModalContextProps | undefined>(undefined);
 
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
-  const [modals, setModals] = useState<ModalInfo[]>([]);
+  const [modals, setModals] = useState<Modal[]>([]);
   const pathname = usePathname();
-  const isMobile = useMediaQuery({ maxWidth: 1024 });
 
-  const openModal = (modal: Omit<ModalInfo, 'isOpen'>) => {
+  /**
+   * Open a modal
+   * @param modal - The modal to open
+   * @returns void
+   */
+  const openModal = <T,>(component: React.ComponentType<T>, props: Omit<T, 'id' | 'open' | 'onOpenChange'>) => {
     setModals((prevModals) => {
-      // Vérifier si une modal avec le même id existe déjà
-      const modalIndex = prevModals.findIndex((m) => m.id === modal.id);
-
-      if (modalIndex !== -1) {
-        // Remplacer la modal existante
-        const updatedModals = [...prevModals];
-        updatedModals[modalIndex] = { ...modal, isOpen: true, autoClose: modal.autoClose ?? true };
-        return updatedModals;
-      } else {
-        // Ajouter une nouvelle modal
-        return [...prevModals, { ...modal, isOpen: true, autoClose: modal.autoClose ?? true }];
-      }
+        const newModalId = Math.random().toString(36).substring(7);
+        const newModal = {
+          id: newModalId,
+          open: true,
+          component,
+          props
+        }
+        return [...prevModals, newModal];
     });
   };
 
+  /**
+   * Create a new modal
+   */
+  const createModal = ({
+    ...props
+  } : Omit<ModalTemplateProps, 'id' | 'open' | 'onOpenChange'>) => {
+    openModal(ModalTemplate, {
+      ...props
+    });
+  }
+
+  const createConfirmModal = ({
+    ...props
+  } : Omit<ConfirmModalTemplateProps, 'id' | 'open' | 'onOpenChange'>) => {
+    openModal(ConfirmModalTemplate, {
+      ...props
+    });
+  }
+
+  /**
+   * Delete a modal
+   * @param id - The id of the modal to delete
+   * @returns void
+   */
+  const deleteModal = (id: string) => {
+    setModals((prevModals) => prevModals.filter((modal) => modal.id !== id));
+  }
+
+  /**
+   * Close a modal
+   * @param id - The id of the modal to close
+   * @returns void
+   */
   const closeModal = (id: string) => {
-    setModals((prevModals) => {
-      const updatedModals = prevModals.map((modal) =>
-        modal.id === id ? { ...modal, isOpen: false } : modal
-      );
-      return updatedModals;
-    });
+    setModals((prevModals) =>
+      prevModals.map((modal) =>
+        modal.id === id ? { ...modal, open: false } : modal
+      )
+    );
+
+    setTimeout(() => {
+      deleteModal(id);
+    }, 300);
   };
 
-  // auto close modals on route change only if autoClose is true
+  /**
+   * Close all modals
+   * @returns void
+   */
+  const closeAllModals = () => {
+    setModals([]);
+  }
+
+  // Close all modals when navigating to a new page
   useEffect(() => {
-    setModals((prevModals) => {
-      const updatedModals = prevModals.map((modal) =>
-        modal.autoClose ? { ...modal, isOpen: false } : modal
-      );
-      return updatedModals;
-    });
+    closeAllModals();
   }, [pathname]);
 
   return (
-    <ModalContext.Provider value={{ modals, openModal, closeModal }}>
+    <ModalContext.Provider value={{
+      modals,
+      openModal,
+      createModal,
+      createConfirmModal,
+      closeModal,
+      closeAllModals
+      }}>
       {children}
       {modals.map((modal) => (
-        <Dialog key={modal.id} open={modal.isOpen} onOpenChange={() => closeModal(modal.id)}>
-          <DialogContent className={cn("", modal.className)}>
-            {modal.header && <DialogHeader>
-              {modal.header.title && <DialogTitle>
-                {modal.header.title}
-              </DialogTitle>}
-              {modal.header.description && <DialogDescription>
-                {modal.header.description}
-              </DialogDescription>}
-            </DialogHeader>}
-            {modal.content}
-          </DialogContent>
-        </Dialog>
+        <modal.component
+          id={modal.id}
+          open={modal.open}
+          key={modal.id}
+          {...modal.props}
+        />
       ))}
     </ModalContext.Provider>
   );
@@ -96,4 +132,4 @@ export const useModal = () => {
     throw new Error('useModal must be used within a ModalProvider');
   }
   return context;
-};
+}

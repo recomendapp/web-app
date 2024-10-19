@@ -14,6 +14,7 @@ import { useInView } from 'react-intersection-observer';
 import { Search } from 'lucide-react';
 import useDebounce from '@/hooks/use-debounce';
 import Link from 'next/link';
+import { useInfiniteUserFollowers } from '@/features/user/userQueries';
 
 
 export function ProfileFollowersModal({
@@ -28,41 +29,52 @@ export function ProfileFollowersModal({
 
 	const { ref, inView } = useInView();
 
-	const numberOfResult = 20;
-
 	const {
 		data: followers,
 		isLoading: loading,
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useInfiniteQuery({
-		queryKey: debouncedSearch ? ['user', userId, 'followers', { search: debouncedSearch }] : ['user', userId, 'followers'],
-		queryFn: async ({ pageParam = 1 }) => {
-			if (!userId) throw Error('Missing user id');
-			let from = (pageParam - 1) * numberOfResult;
-			let to = from - 1 + numberOfResult;
+	} = useInfiniteUserFollowers({
+		userId: userId,
+		filters: {
+			search: debouncedSearch,
+		}
+	})
 
-			let query = supabase
-				.from('user_follower')
-				.select('id, follower:user_id!inner(*)')
-				.eq('followee_id', userId)
-				.eq('is_pending', false)
-				.range(from, to)
+	// const {
+	// 	data: followers,
+	// 	isLoading: loading,
+	// 	fetchNextPage,
+	// 	isFetchingNextPage,
+	// 	hasNextPage,
+	// } = useInfiniteQuery({
+	// 	queryKey: debouncedSearch ? ['user', userId, 'followers', { search: debouncedSearch }] : ['user', userId, 'followers'],
+	// 	queryFn: async ({ pageParam = 1 }) => {
+	// 		if (!userId) throw Error('Missing user id');
+	// 		let from = (pageParam - 1) * numberOfResult;
+	// 		let to = from - 1 + numberOfResult;
 
-			if (debouncedSearch) {
-				query = query
-					.ilike(`follower.username`, `${debouncedSearch}%`)
-			}
-			const { data } = await query;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (data, pages) => {
-			return data?.length == numberOfResult ? pages.length + 1 : undefined;
-		},
-		enabled: !!userId,
-	});
+	// 		let query = supabase
+	// 			.from('user_follower')
+	// 			.select('id, follower:user_id!inner(*)')
+	// 			.eq('followee_id', userId)
+	// 			.eq('is_pending', false)
+	// 			.range(from, to)
+
+	// 		if (debouncedSearch) {
+	// 			query = query
+	// 				.ilike(`follower.username`, `${debouncedSearch}%`)
+	// 		}
+	// 		const { data } = await query;
+	// 		return data;
+	// 	},
+	// 	initialPageParam: 1,
+	// 	getNextPageParam: (data, pages) => {
+	// 		return data?.length == numberOfResult ? pages.length + 1 : undefined;
+	// 	},
+	// 	enabled: !!userId,
+	// });
 
 	useEffect(() => {
 		if (inView && hasNextPage) {

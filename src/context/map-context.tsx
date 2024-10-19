@@ -9,7 +9,7 @@ import genresDataset from "@/components/Map/Data/genres.json"
 import { useLocale } from "next-intl";
 import { PaddingOptions } from "react-map-gl/dist/esm/types";
 
-interface ModalContextProps {
+interface MapContextProps {
 	mapInitialized: boolean;
 	setMapInitialized: (value: boolean) => void;
 	selectedMovie: {
@@ -100,7 +100,7 @@ interface ModalContextProps {
 	debug?: boolean;
 }
 
-const MapProvider = createContext<ModalContextProps | undefined>(undefined);
+const MapProvider = createContext<MapContextProps | undefined>(undefined);
 
 export const MapContext = ({
 	children

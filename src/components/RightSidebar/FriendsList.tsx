@@ -6,32 +6,35 @@ import UserCard from '../User/UserCard/UserCard';
 import { Skeleton } from '../ui/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase/client';
+import { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { ScrollArea, ScrollBar } from '../ui/scroll-area';
+import { useInfiniteUserFollowees } from '@/features/user/userQueries';
+import Loader from '../Loader/Loader';
 // import { GetUserFriendsQuery } from '@/graphql/__generated__/graphql';
 
 export default function FriendsList() {
   const { user } = useAuth();
+  const { ref, inView } = useInView();
   const {
-    data: followings,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['user', user?.id, 'followings'],
-    queryFn: async () => {
-      if (!user) throw new Error('User not found');
-      const { data, error } = await supabase
-        .from('user_follower')
-        .select('*, friend:followee_id(*)')
-        .eq('user_id', user.id)
-        .eq('is_pending', false);
-      if (error) throw error;
-      return (data);
-    },
-    enabled: !!user,
-  })
+		data: followees,
+		isLoading,
+		fetchNextPage,
+		isFetchingNextPage,
+		hasNextPage,
+	} = useInfiniteUserFollowees({
+		userId: user?.id,
+	});
+
+  useEffect(() => {
+		if (inView && hasNextPage) {
+			fetchNextPage();
+		}
+	}, [inView, hasNextPage, followees, fetchNextPage]);
 
   if (!user) return null;
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <div>
         {Array.from({ length: 20 }).map((item: any, i) => (
@@ -40,30 +43,37 @@ export default function FriendsList() {
             className="text-sm flex justify-between p-2 rounded-md"
           >
             <div className="flex items-center gap-2">
-              {/* MOVIE COVER */}
+              {/* USER AVATAR */}
               <Skeleton className="h-[50px] w-[50px] rounded-full" />
-              {/* MOVIE DATA */}
+              {/* USER NAME */}
               <Skeleton className="h-6 w-32" />
             </div>
           </div>
         ))}
       </div>
     );
+  }
 
   return (
-    <div className='space-y-2'>
-      {followings?.map(({ friend } : { friend: any }) => (
-        // <Link
-        //   key={friend.id}
-        //   href={`/@${friend.username}`}
-        //   className="flex items-center gap-2"
-        // >
-        <UserCard
-          key={friend.id}
-          user={friend}
-        />
-        // </Link>
-      ))}
-    </div>
+    <ScrollArea className="space-y-4 h-full">
+      {followees?.pages[0]?.length ? (
+				followees?.pages.map((page, i) => (
+					page?.map(({ followee } : { followee: any }, index) => (
+            <UserCard
+              key={followee?.id}
+              user={followee}
+              {...(i === followees.pages.length - 1 &&
+                index === page.length - 1
+                  ? { ref: ref }
+                  : {})}
+            />
+          ))
+        ))
+      ) : (
+        <p className="text-muted-foreground">Aucune personne suivie</p>
+      )}
+      {(isLoading || isFetchingNextPage) && <Loader />}
+      <ScrollBar orientation="vertical" />
+    </ScrollArea>
   );
 }

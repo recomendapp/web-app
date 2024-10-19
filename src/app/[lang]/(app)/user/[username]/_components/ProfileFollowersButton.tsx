@@ -1,25 +1,10 @@
 'use client';
-import { useRouter } from 'next/navigation';
 
-// AUTH
-import { useAuth } from '@/context/auth-context';
-
-// COMPONENTS
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
-
-// ICONS
-import { Send } from 'lucide-react';
-import { Icons } from '@/components/icons';
-import { MovieSendModal } from '@/components/Modals/Movie/Actions/MovieSendModal';
-import { useState } from 'react';
-import { Modal } from '@/components/Modals/Modal';
 import { cn } from '@/lib/utils';
 import { ProfileFollowersModal } from '@/components/Modals/Profile/ProfileFollowersModal';
+import { useModal } from '@/context/modal-context';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 interface ProfileFollowersButtonProps {
   userId: string;
@@ -32,37 +17,23 @@ export function ProfileFollowersButton({
 	className,
   disabled = false,
 } : ProfileFollowersButtonProps) {
-  const [ openSendModal, setOpenSendModal ] = useState(false);
+  const { createModal } = useModal();
 
   return (
-    <>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant={'action'}
-            onClick={() => setOpenSendModal(true)}
-			      className={cn(className)}
-            disabled={disabled}
-          >
-			followers
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-			Voir ses followers
-		</TooltipContent>
-      </Tooltip>
-      <Modal
-        open={openSendModal}
-        setOpen={setOpenSendModal}
-        header={{
-          title: 'Followers',
-        }}
-        content={
-          <ProfileFollowersModal
-            userId={userId}
-          />
-        }
-      />
-    </>
+      <TooltipBox tooltip='Voir ses followers'>
+        <Button
+          variant={'action'}
+          onClick={() => createModal({
+            header: {
+              title: 'Followers',
+            },
+            content: <ProfileFollowersModal userId={userId} />,
+          })}
+          className={cn(className)}
+          disabled={disabled}
+        >
+          followers
+        </Button>
+      </TooltipBox>
   );
 }

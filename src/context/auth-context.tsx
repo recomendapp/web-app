@@ -3,11 +3,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { redirect, useRouter } from 'next/navigation';
 import { Provider, Session } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase/client';
+// import { supabase } from '@/lib/supabase/client';
 
 import { useQuery } from '@tanstack/react-query';
 import { User } from '@/types/type.db';
 import { headers } from 'next/headers';
+import { useUserDetails } from '@/features/user/userQueries';
+import { useSupabaseClient } from '@/lib/supabase/hook';
 
 export interface UserState {
   user: User | null | undefined;
@@ -43,27 +45,32 @@ const AuthProvider = createContext<UserState>(defaultState);
 // create the provider component
 export const AuthContext = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
+  const supabase = useSupabaseClient();
   // const [ user, setUser ] = useState<User | null | undefined>();
   const [session, setSession] = useState<Session | null>();
   const [sessionLoading, setSessionLoading] = useState(true);
   const [loading, setLoading] = useState(true);
-  const {
-    data: user,
-    isLoading: userLoading,
-  } = useQuery({
-    queryKey: ['user', session?.user?.id],
-    queryFn: async () => {
-      if (session === null || !session?.user.id) return (null);
-      const { data, error } = await supabase
-        .from('user')
-        .select('*')
-        .eq('id', session.user.id)
-        .single();
-      if (error) throw error;
-      return data;
-    },
-    enabled: session !== undefined,
-  })
+  // const {
+  //   data: user,
+  //   isLoading: userLoading,
+  // } = useQuery({
+  //   queryKey: ['user', session?.user?.id],
+  //   queryFn: async () => {
+  //     if (session === null || !session?.user.id) return (null);
+  //     const { data, error } = await supabase
+  //       .from('user')
+  //       .select('*')
+  //       .eq('id', session.user.id)
+  //       .single();
+  //     if (error) throw error;
+  //     return null;
+  //   },
+  //   enabled: session !== undefined,
+  // })
+
+  const { data:user, isLoading: userLoading } = useUserDetails({
+    userId: session?.user?.id,
+  });
 
   const init = async () => {
     const setData = async () => {

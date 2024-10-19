@@ -1,33 +1,18 @@
 'use client';
 
 import { useAuth } from '@/context/auth-context';
-import { useEffect, useState } from 'react';
-import { PlaylistEditButton } from '@/components/Playlist/Button/PlaylistEditButton';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-
-// GRAPHQL
-import { PlaylistFragment, PlaylistItemFragment } from '@/graphql/__generated__/graphql';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { ConvertHoursMinutes } from '@/lib/utils';
 import UserCard from '@/components/User/UserCard/UserCard';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { DialogTitle, DialogTrigger } from '@radix-ui/react-dialog';
 import { useModal } from '@/context/modal-context';
 import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
 import { Playlist, PlaylistItem } from '@/types/type.db';
-import { Modal } from '@/components/Modals/Modal';
-import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
-import { Button } from '@/components/ui/button';
-import { UserCogIcon } from 'lucide-react';
-import PlaylistGuest from './guest/PlaylistGuest'
 
 export default function PlaylistHeader({ playlist } : { playlist: Playlist }) {
   const { user } = useAuth();
-  const [ openPlaylistModal, setOpenPlaylistModal ] = useState(false);
-  const [ openPlaylistGuestModal, setOpenPlaylistGuestModal ] = useState(false);
-  const [ openDescriptionModal, setOpenDescriptionModal ] = useState(false);
-  // const { openModal } = useModal();
+  const { openModal, createModal } = useModal();
 
   const randomBackdrop = (object: PlaylistItem[]) => {
     const itemsWithBackdrop = object.filter(
@@ -45,123 +30,77 @@ export default function PlaylistHeader({ playlist } : { playlist: Playlist }) {
     0
   );
 
+  const openPlaylistModal = () => {
+    if (playlist?.user_id !== user?.id) return;
+    openModal(PlaylistModal, {
+      playlist,
+    })
+  }
+
   return (
-    <>
-      <HeaderBox
-        style={{
-          backgroundImage:  playlist?.items?.length ? `url(https://image.tmdb.org/t/p/w1280/${randomBackdrop(playlist?.items)})` : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')",
-        }}
-      >
-        <div className="flex flex-col w-full gap-4 items-center md:flex-row">
-          <div
-            className="w-[250px] shadow-md cursor-pointer shrink-0 aspect-square"
-            onClick={() => playlist?.user_id === user?.id && setOpenPlaylistModal(true)}
-            // onClick={() => playlist?.user_id === user?.id && openModal({
-            //   id: `playlist-${playlist?.id}-edit`,
-            //   content: <PlaylistModal id={`playlist-${playlist?.id}-edit`} playlist={playlist} />,
-            //   className: "max-w-3xl h-[98%] lg:h-2/3"
-            // })}
-          >
-            <AspectRatio ratio={1 / 1}>
-              <ImageWithFallback
-                src={playlist?.poster_url ?? ''}
-                alt={playlist?.title ?? ''}
-                fill
-                className="rounded-md object-cover"
-                type="playlist"
-              />
-            </AspectRatio>
+    <HeaderBox
+      style={{
+        backgroundImage:  playlist?.items?.length ? `url(https://image.tmdb.org/t/p/w1280/${randomBackdrop(playlist?.items)})` : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')",
+      }}
+    >
+      <div className="flex flex-col w-full gap-4 items-center md:flex-row">
+        <div
+          className="w-[250px] shadow-md cursor-pointer shrink-0 aspect-square"
+          onClick={() => openPlaylistModal()}
+        >
+          <AspectRatio ratio={1 / 1}>
+            <ImageWithFallback
+              src={playlist?.poster_url ?? ''}
+              alt={playlist?.title ?? ''}
+              fill
+              className="rounded-md object-cover"
+              type="playlist"
+            />
+          </AspectRatio>
+        </div>
+        <div className="flex flex-col justify-between gap-2 w-full">
+          {/* TYPE & GENRES */}
+          <div>
+            <span className='text-accent-1'>Playlist</span>
+            <span className=" before:content-['_|_']">
+              {playlist?.private ? 'Privée' : 'Publique'}
+            </span>
           </div>
-          <div className="flex flex-col justify-between gap-2 w-full">
-            {/* TYPE & GENRES */}
-            <div>
-              <span className='text-accent-1'>Playlist</span>
-              <span className=" before:content-['_|_']">
-                {playlist?.private ? 'Privée' : 'Publique'}
-              </span>
-            </div>
-            <div>
-              <h2
-                onClick={() => playlist?.user_id === user?.id && setOpenPlaylistModal(true)}
-                // onClick={() => playlist?.user_id === user?.id && openModal({
-                //   id: `playlist-${playlist?.id}-edit`,
-                //   content: <PlaylistModal id={`playlist-${playlist?.id}-edit`} playlist={playlist} />,
-                //   className: "max-w-3xl h-[98%] lg:h-2/3"
-                // })}
-                className="w-fit text-clamp font-bold line-clamp-2 cursor-pointer"
-              >
-                {playlist?.title}
-              </h2>
-            </div>
-            <div className='space-y-2'>
-              {/* DESCRIPTION */}
-              <p
-                className='cursor-pointer text-muted-foreground font-light line-clamp-2'
-                onClick={() => setOpenDescriptionModal(true)}
-              >
-                {playlist?.description}
-              </p>
-              {/* ITEMS & TOTAL RUNTIME */}
-              <div className="flex gap-1 font-light">
-                <UserCard user={playlist?.user} />
-                <div className=" before:content-['_•_']" >
-                  {Number(playlist?.items_count) ?? 0} film
-                  {Number(playlist?.items_count) > 1 && 's'}
-                </div>
-                <div className=" before:content-['_•_']" >
-                  {ConvertHoursMinutes(totalRuntime)}
-                </div>
+          <div>
+            <h2
+              onClick={() => openPlaylistModal()}
+              className="w-fit text-clamp font-bold line-clamp-2 cursor-pointer"
+            >
+              {playlist?.title}
+            </h2>
+          </div>
+          <div className='space-y-2'>
+            {/* DESCRIPTION */}
+            <p
+              className='cursor-pointer text-muted-foreground font-light line-clamp-2'
+              onClick={() => createModal({
+                header: {
+                  title: 'Description',
+                },
+                content: <p className='p-4 bg-muted rounded-md'>{playlist?.description}</p>
+              })}
+            >
+              {playlist?.description}
+            </p>
+            {/* ITEMS & TOTAL RUNTIME */}
+            <div className="flex gap-1 font-light">
+              <UserCard user={playlist?.user} />
+              <div className=" before:content-['_•_']" >
+                {Number(playlist?.items_count) ?? 0} film
+                {Number(playlist?.items_count) > 1 && 's'}
+              </div>
+              <div className=" before:content-['_•_']" >
+                {ConvertHoursMinutes(totalRuntime)}
               </div>
             </div>
           </div>
         </div>
-      </HeaderBox>
-      <Modal
-        open={openPlaylistModal}
-        setOpen={setOpenPlaylistModal}
-        header={{
-          title: (
-            <div className='flex gap-4 items-center'>
-              <h2>Modifier la playlist</h2>
-              <Button
-                variant={'muted'}
-                size={'icon'}
-                onClick={() => setOpenPlaylistGuestModal(true)}
-              >
-                <UserCogIcon size={20}/>
-              </Button>
-            </div>
-          ),
-          description: 'Modifiez les informations de votre playlist',
-        }}
-        content={
-          <PlaylistForm
-            success={() => setOpenPlaylistModal(false)}
-            playlist={playlist}
-          />
-        }
-        // className="max-w-3xl min-h-[50%] lg:h-2/3"
-      />
-      <Modal
-        open={openPlaylistGuestModal}
-        setOpen={setOpenPlaylistGuestModal}
-        header={{
-          title: 'Membres de la playlist',
-        }}
-        content={
-          <PlaylistGuest
-            playlist={playlist}
-          />
-        }
-      />
-      <Modal
-        open={openDescriptionModal}
-        setOpen={setOpenDescriptionModal}
-        header={{
-          title: 'Description',
-        }}
-        content={<p className='p-4 bg-muted rounded-md'>{playlist?.description}</p>}
-      />
-    </>
+      </div>
+    </HeaderBox>
   );
 }

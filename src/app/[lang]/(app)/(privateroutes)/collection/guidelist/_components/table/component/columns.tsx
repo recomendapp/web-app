@@ -26,7 +26,7 @@ export const columns: ColumnDef<UserMovieGuidelistView>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Film" />
     ),
-    cell: ({ row }) => <MovieCardSmall movie={row.original?.movie} />,
+    cell: ({ row }) => <MovieCardSmall key={row.index} movie={row.original?.movie} />,
     enableHiding: false,
   },
   {

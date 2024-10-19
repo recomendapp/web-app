@@ -33,10 +33,7 @@ export function DataComment({ playlistItem }: { playlistItem: PlaylistItem }) {
   return (
     <>
       <p
-        onClick={() => openModal({
-          id: `playlist-item-${playlistItem?.id}-comment`,
-          content: <PlaylistCommentModal id={`playlist-item-${playlistItem?.id}-comment`} playlistItem={playlistItem} />,
-        })}
+        onClick={() => openModal(PlaylistCommentModal, { playlistItem })}
         className={` cursor-pointer
           text-muted-foreground
         `}

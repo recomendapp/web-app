@@ -3,10 +3,10 @@
 import FriendsList from '@/components/RightSidebar/FriendsList';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { setCookie } from 'cookies-next';
-import React, { createContext, useContext, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { ImperativePanelHandle } from 'react-resizable-panels';
 
-export interface UiContextType {
+export interface UiContextProps {
   uiLayout: number[];
   setUiLayout: (layout: number[]) => void;
   isSidebarCollapsed: boolean;
@@ -29,36 +29,38 @@ export interface UiContextType {
   setRightPanelContent: (content: React.ReactNode) => void;
   rightPanelTitle: string | null;
   setRightPanelTitle: (title: string) => void;
+  device: "mobile" | "tablet" | "desktop";
 }
 
-const defaultState: UiContextType = {
-  uiLayout: [],
-  setUiLayout: () => {},
-  isSidebarCollapsed: false,
-  setIsSidebarCollapsed: () => {},
-  sidebarCollapsedSize: 5,
-  collapseSidebar: () => {},
-  expandSidebar: () => {},
-  sidebarRef: undefined,
-  sidebarMinSize: 14,
-  sidebarMaxSize: 20,
-  isRightPanelCollapsed: true,
-  setIsRightPanelCollapsed: () => {},
-  rightPanelCollapsedSize: 0,
-  collapseRightPanel: () => {},
-  expandRightPanel: () => {},
-  rightPanelRef: undefined,
-  rightPanelMinSize: 0,
-  rightPanelMaxSize: 20,
-  rightPanelContent: null,
-  setRightPanelContent: () => {},
-  rightPanelTitle: null,
-  setRightPanelTitle: () => {},
-};
+// const defaultState: UiContextProps = {
+//   uiLayout: [],
+//   setUiLayout: () => {},
+//   isSidebarCollapsed: false,
+//   setIsSidebarCollapsed: () => {},
+//   sidebarCollapsedSize: 5,
+//   collapseSidebar: () => {},
+//   expandSidebar: () => {},
+//   sidebarRef: undefined,
+//   sidebarMinSize: 14,
+//   sidebarMaxSize: 20,
+//   isRightPanelCollapsed: true,
+//   setIsRightPanelCollapsed: () => {},
+//   rightPanelCollapsedSize: 0,
+//   collapseRightPanel: () => {},
+//   expandRightPanel: () => {},
+//   rightPanelRef: undefined,
+//   rightPanelMinSize: 0,
+//   rightPanelMaxSize: 20,
+//   rightPanelContent: null,
+//   setRightPanelContent: () => {},
+//   rightPanelTitle: null,
+//   setRightPanelTitle: () => {},
+// };
 
-const UiContextProvider = createContext(defaultState);
+// const UiContextProvider = createContext(defaultState);
+const UIProvider = createContext<UiContextProps | undefined>(undefined);
 
-export function UiContext({
+export function UIContext({
   children,
   defaultLayout = [265, 440, 0],
 	cookieSidebarCollapsed = false,
@@ -73,7 +75,7 @@ export function UiContext({
   const [ uiLayout, setUiLayout ] = useState(defaultLayout);
   // *========== START SIDEBAR ==========*
   const [ isSidebarCollapsed, setIsSidebarCollapsed ] = useState(cookieSidebarCollapsed);
-  const sidebarCollapsedSize = 4;
+  const sidebarCollapsedSize = 2;
   const sidebarMinSize = 14;
   const sidebarMaxSize = 20;
   const sidebarRef = useRef<ImperativePanelHandle >(null);
@@ -84,7 +86,6 @@ export function UiContext({
       setCookie("ui-sidebar:collapsed", JSON.stringify(true), {
         path: "/",
       });
-      // document.cookie = `ui-sidebar:collapsed=${JSON.stringify(true)}; path=/`
     }
   }
   const expandSidebar = () => {
@@ -94,7 +95,6 @@ export function UiContext({
       setCookie("ui-sidebar:collapsed", JSON.stringify(false), {
         path: "/",
       });
-      // document.cookie = `ui-sidebar:collapsed=${JSON.stringify(false)}; path=/`
     }
   }
   // *========== END SIDEBAR ==========*
@@ -127,8 +127,34 @@ export function UiContext({
   const [rightPanelTitle, setRightPanelTitle] = useState<string | null>('Suivis');
   // *========== END RIGHTPANEL ==========*
 
+  // *========== START DEVICE ==========*
+  
+  const getDevice = () => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isMobile = /iphone|ipad|ipod|android|blackberry|windows phone/g.test(userAgent);
+    const isTablet = /(ipad|tablet|playbook|silk)|(android(?!.*mobile))/g.test(userAgent);
+    
+    if (isMobile) {
+      return "mobile";
+    } else if (isTablet) {
+      return "tablet";
+    } else {
+      return "desktop";
+    }
+  }
+  const [device, setDevice] = useState<"mobile" | "tablet" | "desktop">(getDevice());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDevice(getDevice());
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <UiContextProvider.Provider
+    <UIProvider.Provider
       value={{
         uiLayout,
         setUiLayout,
@@ -152,13 +178,20 @@ export function UiContext({
         setRightPanelContent,
         rightPanelTitle,
         setRightPanelTitle,
+        device,
       }}
     >
       <TooltipProvider delayDuration={100}>
         {children}
       </TooltipProvider>
-    </UiContextProvider.Provider>
+    </UIProvider.Provider>
   );
 }
 
-export const useUiContext = () => useContext(UiContextProvider);
+export const useUI = () => {
+  const context = useContext(UIProvider);
+  if (context === undefined) {
+    throw new Error('useUI must be used within a UIProvider');
+  }
+  return context;
+}

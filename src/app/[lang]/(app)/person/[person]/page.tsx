@@ -34,8 +34,7 @@ export default async function Film({
   };
 }) {
   const supabase = createServerClient();
-  // const person = await getPersonDetails(params.person, params.lang);
-
+  
   const { data: person } = await supabase
 		.from('person_details')
 		.select(`*`)
@@ -44,26 +43,6 @@ export default async function Film({
 		.single();
 
   if (!person) notFound();
-
-  // let queryBackground = supabase
-  //   .from('tmdb_movie_credits_random')
-  //   .select(`
-  //     *,
-  //     movie(*)
-  //   `)
-  //   .eq('person_id', params.person)
-  //   .eq('movie.language', params.lang);
-  
-  // if (person.known_for_department) {
-  //   queryBackground = queryBackground.eq('department', person.known_for_department)
-  // }
-
-  // const { data: backgrounds } = await queryBackground.limit(1)
-
-  // const { data: departments } = await supabase
-  //   .from('tmdb_person_department')
-  //   .select('department')
-  //   .eq('person_id', params.person);
 
   return (
     <main>

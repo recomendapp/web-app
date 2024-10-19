@@ -12,7 +12,7 @@ export default async function MoviePage({
     film: number;
   };
 }) {
-  const supabase = createServerClient();
+  const supabase = createServerClient(params.lang);
   const { data: movie } = await supabase
 		.from('movie')
 		.select(`

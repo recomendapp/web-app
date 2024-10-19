@@ -13,6 +13,8 @@ import { useState } from 'react';
 import { Modal } from '@/components/Modals/Modal';
 import { cn } from '@/lib/utils';
 import { ProfileFolloweesModal } from '@/components/Modals/Profile/ProfileFolloweesModal';
+import { useModal } from '@/context/modal-context';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 interface ProfileFolloweesButtonProps {
   userId: string;
@@ -25,37 +27,24 @@ export function ProfileFolloweesButton({
 	className,
   disabled = false,
 } : ProfileFolloweesButtonProps) {
+  const { createModal } = useModal();
   const [ openSendModal, setOpenSendModal ] = useState(false);
 
   return (
-    <>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant={'action'}
-            onClick={() => setOpenSendModal(true)}
-			      className={cn(className)}
-            disabled={disabled}
-          >
-            suivi(e)s
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-			    Voir ses suivis
-		    </TooltipContent>
-      </Tooltip>
-      <Modal
-        open={openSendModal}
-        setOpen={setOpenSendModal}
-        header={{
-          title: 'Suivi(e)s',
-        }}
-        content={
-          <ProfileFolloweesModal
-            userId={userId}
-          />
-        }
-      />
-    </>
+    <TooltipBox tooltip='Voir ses suivis'>
+      <Button
+        variant={'action'}
+        onClick={() => createModal({
+          header: {
+            title: 'Followees',
+          },
+          content: <ProfileFolloweesModal userId={userId} />,
+        })}
+        className={cn(className)}
+        disabled={disabled}
+      >
+        suivi(e)s
+      </Button>
+    </TooltipBox>
   );
 }

@@ -6,14 +6,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Loader from '@/components/Loader/Loader';
 
 import { getInitiales } from '@/lib/utils';
-import { supabase } from '@/lib/supabase/client';
-import { Fragment, useEffect, useState } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { useInView } from 'react-intersection-observer';
 import { Search } from 'lucide-react';
 import useDebounce from '@/hooks/use-debounce';
 import Link from 'next/link';
+import { useInfiniteUserFollowees } from '@/features/user/userQueries';
 
 
 export function ProfileFolloweesModal({
@@ -28,40 +27,17 @@ export function ProfileFolloweesModal({
 
 	const { ref, inView } = useInView();
 
-	const numberOfResult = 20;
-
 	const {
 		data: followees,
 		isLoading: loading,
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useInfiniteQuery({
-		queryKey: debouncedSearch ? ['user', userId, 'followees', { search: debouncedSearch }] : ['user', userId, 'followees'],
-		queryFn: async ({ pageParam = 1 }) => {
-			if (!userId) throw Error('Missing user id');
-			let from = (pageParam - 1) * numberOfResult;
-			let to = from - 1 + numberOfResult;
-
-			let query = supabase
-				.from('user_follower')
-				.select('id, followee:followee_id!inner(*)')
-				.eq('user_id', userId)
-				.eq('is_pending', false)
-				.range(from, to)
-
-			if (debouncedSearch) {
-				query = query
-					.ilike(`followee.username`, `${debouncedSearch}%`)
-			}
-			const { data } = await query;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (data, pages) => {
-			return data?.length == numberOfResult ? pages.length + 1 : undefined;
-		},
-		enabled: !!userId,
+	} = useInfiniteUserFollowees({
+		userId: userId,
+		filters: {
+			search: debouncedSearch,
+		}
 	});
 
 	useEffect(() => {

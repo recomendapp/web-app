@@ -5,7 +5,6 @@ import toast from "react-hot-toast";
 
 // COMPONENTS
 import { Button } from "@/components/ui/button";
-import { DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 
 import { useAuth } from "@/context/auth-context";
@@ -13,14 +12,16 @@ import { useModal } from "@/context/modal-context";
 import { Playlist, PlaylistGuest, PlaylistItem } from "@/types/type.db";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/lib/supabase/client";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
+
+interface PlaylistCommentModalProps extends ModalType {
+	playlistItem: PlaylistItem;
+}
 
 const PlaylistCommentModal = ({
-	id,
 	playlistItem,
-  } : {
-	id: string,
-	playlistItem: PlaylistItem,
-  }) => {
+	...props
+} : PlaylistCommentModalProps) => {
 
 	const { closeModal } = useModal();
 
@@ -67,18 +68,16 @@ const PlaylistCommentModal = ({
 		setComment(playlistItem?.comment ?? '');
 	}, [playlistItem?.comment]);
 
-	async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-	  event.preventDefault();
-  
+	async function onSubmit() {  
 	  if (comment == playlistItem?.comment) {
-		closeModal(id);
+		closeModal(props.id);
 		return;
 	  }
 	  try {
 		setIsLoading(true);      
 		await updatePlaylistItem({ comment });
 		toast.success("Enregistré");
-		closeModal(id);
+		closeModal(props.id);
 	  } catch (error) {
 		toast.error("Une erreur s\'est produite");
 	  } finally {
@@ -87,11 +86,11 @@ const PlaylistCommentModal = ({
 	}
   
 	return (
-		<>
-			<DialogHeader>
-			<DialogTitle>Commentaire</DialogTitle>
-			</DialogHeader>
-			<form onSubmit={onSubmit} className="space-y-2">
+		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
+			<ModalHeader>
+				<ModalTitle>Commentaire</ModalTitle>
+			</ModalHeader>
+			<ModalBody>
 				<Textarea
 				id="name"
 				value={comment}
@@ -104,13 +103,13 @@ const PlaylistCommentModal = ({
 				placeholder='Ajouter un commentaire...'
 				readOnly={!isAllowedToEdit}
 				/>
-				{isAllowedToEdit &&
-				<DialogFooter>
-					<Button type="submit">Save changes</Button>
-				</DialogFooter>
-				}
-			</form>
-		</>
+			</ModalBody>
+			{isAllowedToEdit &&
+				<ModalFooter>
+					<Button type="submit" onClick={onSubmit}>Enregistrer</Button>
+				</ModalFooter>
+			}
+		</Modal>
 	);
 };
 

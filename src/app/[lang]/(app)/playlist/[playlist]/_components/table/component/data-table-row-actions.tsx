@@ -32,6 +32,8 @@ import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentMo
 import { Movie, Person, Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase/client';
+import { MoviePlaylistModal } from '@/components/Modals/Movie/Actions/MoviePlaylistModal';
+import { Modal } from '@/components/Modals/Modal';
 
 
 interface DataTableRowActionsProps {
@@ -40,7 +42,7 @@ interface DataTableRowActionsProps {
 
 export function DataTableRowActions({ data }: DataTableRowActionsProps) {
   
-  const { openModal } = useModal();
+  const { openModal, createConfirmModal } = useModal();
   
   const [openShowDirectors, setOpenShowDirectors] = useState(false);
 
@@ -63,6 +65,21 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
       )
     )
   );
+
+  const { mutateAsync: deletePlaylistItem } = useMutation({
+    mutationFn: async () => {
+			if (!data?.id) throw Error('Missing id');
+			const { error } = await supabase
+			  .from('playlist_item')
+			  .delete()
+			  .eq('id', data.id)
+			if (error) throw error;
+			return null;
+		},
+    onError: () => {
+      toast.error('Une erreur s\'est produite');
+    }
+  })
 
   return (
     <>
@@ -91,12 +108,13 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
             setOpen={setOpenShowDirectors}
           />
           {/* COMMENT */}
-          {isAllowedToEdit && (
+          {/* {isAllowedToEdit && (
             <DropdownMenuItem
-              onClick={() => openModal({
-                id: `playlist-item-${data?.id}-comment`,
-                content: <PlaylistCommentModal id={`playlist-item-${data?.id}-comment`} playlistItem={data!} />,
-              })}
+              // onClick={() => openModal({
+              //   id: `playlist-item-${data?.id}-comment`,
+              //   content: <PlaylistCommentModal id={`playlist-item-${data?.id}-comment`} playlistItem={data!} />,
+              // })}
+              onClick={() => openModal(PlaylistCommentModal, { playlistItem: data! })}
             >
               {data?.comment ? 'Voir le commentaire' : 'Ajouter un commentaire'}
             </DropdownMenuItem>
@@ -110,6 +128,21 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
             >
               Voir le commentaire
             </DropdownMenuItem>
+          )} */}
+          {(isAllowedToEdit || data?.comment) && (
+            <DropdownMenuItem
+              onClick={() => openModal(PlaylistCommentModal, { playlistItem: data! })}
+            >
+              {data?.comment ? 'Voir le commentaire' : 'Ajouter un commentaire'}
+            </DropdownMenuItem>
+          )}
+          {/* PLAYLIST */}
+          {user?.id && (
+            <DropdownMenuItem
+              onClick={() => openModal(MoviePlaylistModal, { movieId: data?.movie_id! })}
+            >
+              Ajouter à une playlist
+            </DropdownMenuItem>
           )}
 
           <DropdownMenuSeparator />
@@ -118,9 +151,10 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
           </DropdownMenuItem>
           {isAllowedToEdit && (
             <DropdownMenuItem
-              onClick={() => openModal({
-                id: `playlist-item-${data?.id}-delete`,
-                content: <DeleteModal id={`playlist-item-${data?.id}-delete`} playlistItem={data} />,
+              onClick={() => createConfirmModal({
+                title: 'Supprimer le film',
+                description: `Êtes-vous sûr de vouloir supprimer ${data?.movie?.title} de la playlist ?`,
+                onConfirm: deletePlaylistItem,
               })}
             >
               Delete
@@ -191,50 +225,5 @@ export function ShowDirectorsModal({
         </div>
       </DialogContent>
     </Dialog>
-  );
-}
-
-export function DeleteModal({
-  id,
-  playlistItem,
-}: {
-  id: string;
-  playlistItem: PlaylistItem;
-}) {
-  const { closeModal } = useModal();
-
-  const { mutateAsync: deletePlaylistItem } = useMutation({
-    mutationFn: async () => {
-			if (!playlistItem?.id) throw Error('Missing id');
-			const { error } = await supabase
-			  .from('playlist_item')
-			  .delete()
-			  .eq('id', playlistItem.id)
-			if (error) throw error;
-			return null;
-		},
-  })
-
-  async function handleDelete() {
-    try {
-      await deletePlaylistItem();
-      closeModal(id);
-    } catch (error) {
-      toast.error("Une erreur s\'est produite");
-    }
-  }
-
-  return (
-    <>
-      <p>Êtes-vous sûr de vouloir supprimer ce film ?</p>
-      <DialogFooter>
-        <Button variant="ghost" onClick={() => closeModal(id)}>
-          Annuler
-        </Button>
-        <Button variant="destructive" onClick={handleDelete}>
-          Supprimer
-        </Button>
-      </DialogFooter>
-    </>
   );
 }

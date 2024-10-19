@@ -20,7 +20,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 // ICONS
 import { HelpCircle, Info, Store } from 'lucide-react';
 import { Library } from 'lucide-react';
-import { useUiContext } from '@/context/ui-context';
+import { useUI } from '@/context/ui-context';
 import { cn } from '@/lib/utils';
 import SidebarCollectionPlaylists from './SidebarCollectionPlaylists';
 
@@ -29,7 +29,7 @@ export default function SidebarCollection({
 }: {
   className?: string;
 }) {
-  const { isSidebarCollapsed } = useUiContext();
+  const { isSidebarCollapsed } = useUI();
   const { user, loading } = useAuth();
   const pathname = usePathname();
 
@@ -101,7 +101,7 @@ export default function SidebarCollection({
 
 export function SidebarCollectionNotConnected() {
   const t = useTranslations('routes');
-  const { isSidebarCollapsed } = useUiContext();
+  const { isSidebarCollapsed } = useUI();
   const pathname = usePathname();
   const mainRoutes = useMemo(
     () => [

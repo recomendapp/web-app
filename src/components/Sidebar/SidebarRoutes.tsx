@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {  useTranslations } from 'next-intl';
 // CONTEXT
-import { useUiContext } from '@/context/ui-context';
+import { useUI } from '@/context/ui-context';
 // COMPONENTS
 import { Box } from '@/components/Box/Box';
 // UI
@@ -18,7 +18,7 @@ export function SidebarRoutes({
 }: {
   className?: string
 }) {
-  const { isSidebarCollapsed } = useUiContext();
+  const { isSidebarCollapsed } = useUI();
   const t = useTranslations('routes');
   const pathname = usePathname();
   const mainRoutes = useMemo(

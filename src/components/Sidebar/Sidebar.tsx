@@ -5,10 +5,10 @@ import SidebarCollection from './Collection/SidebarCollection';
 import SidebarFooter from './SidebarFooter';
 import SidebarHeader from './SidebarHeader';
 import { TooltipProvider } from '../ui/tooltip';
-import { useUiContext } from '@/context/ui-context';
+import { useUI } from '@/context/ui-context';
 
 export function Sidebar() {
-  const { isSidebarCollapsed } = useUiContext();
+  const { isSidebarCollapsed } = useUI();
   return (
     <TooltipProvider delayDuration={0}>
       <aside

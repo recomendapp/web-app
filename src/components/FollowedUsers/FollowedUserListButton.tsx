@@ -12,8 +12,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog';
-import { useUiContext } from '@/context/ui-context';
+import { useUI } from '@/context/ui-context';
 import { Modal } from '../Modals/Modal';
+import { useModal } from '@/context/modal-context';
 
 export default function FollowedUserListButton() {
   const {
@@ -23,7 +24,7 @@ export default function FollowedUserListButton() {
     rightPanelTitle,
     setRightPanelTitle,
     setRightPanelContent,
-  } = useUiContext();
+  } = useUI();
   return (
     <Fragment>
       <Button
@@ -51,28 +52,25 @@ export default function FollowedUserListButton() {
 }
 
 export function FollowedUserListBottomSheet() {
+  const { createModal } = useModal();
   const [openFollowing, setOpenFollowing] = useState(false);
+
   
   return (
     <div className='lg:hidden'>
       <Button
         variant={'ghost'}
         size={'icon'}
-        onClick={() => setOpenFollowing(true)}
+        onClick={() => createModal({
+          header: {
+            title: 'Suivis',
+          },
+          content: <FriendsList />,
+        })}
         className="rounded-full"
       >
         <Users />
       </Button>
-      <Modal
-        open={openFollowing}
-        setOpen={setOpenFollowing}
-        header={{
-          title: 'Suivis',
-        }}
-        content={
-          <FriendsList />
-        }
-      />
     </div>
     // <div className="lg:hidden">
     //   <Dialog>

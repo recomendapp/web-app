@@ -1,4 +1,4 @@
-import GuidelistSendersModal from "@/components/Modals/Guidelist/GuidelistSendersModal";
+import { GuidelistSendersModal } from "@/components/Modals/Guidelist/GuidelistSendersModal";
 import UserAvatar from "@/components/User/UserAvatar/UserAvatar";
 import { useModal } from "@/context/modal-context";
 import { UserMovieGuidelistView } from "@/types/type.db";
@@ -16,13 +16,7 @@ export default function Senders({
 
 	return (
 		<div
-			onClick={() => openModal({
-				id: `guidelist-${row.original?.movie_id}-senders`,
-				header: {
-					title: 'Reco par',
-				},
-				content: <GuidelistSendersModal comments={row.original?.senders}/>,
-			})}
+			onClick={() => openModal(GuidelistSendersModal, { comments: row.original?.senders })}
 			className="flex w-fit items-center -space-x-2  cursor-pointer "
 		>
 			<div className="flex justify-end flex-row-reverse -space-x-4 space-x-reverse">

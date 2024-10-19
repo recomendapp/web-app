@@ -11,6 +11,9 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Modal } from '@/components/Modals/Modal';
+import { useModal } from '@/context/modal-context';
+import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 export function PlaylistCreateButton({
   icon = true,
@@ -20,38 +23,21 @@ export function PlaylistCreateButton({
   filmId?: string;
 }) {
   const { user } = useAuth();
+  const { openModal } = useModal();
   const [open, setOpen] = useState(false);
 
   if (!user) return null;
 
   return (
-    <>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant={'ghost'}
-            size={'icon'}
-            className="rounded-full shrink-0"
-            onClick={() => setOpen(!open)}
-          >
-            {icon ? <Plus /> : 'Créer une playlist'}
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">Créer une playlist</TooltipContent>
-      </Tooltip>
-      <Modal
-        open={open}
-        setOpen={setOpen}
-        header={{
-          title: 'Créer une playlist',
-        }}
-        content={
-          <PlaylistForm
-            success={() => setOpen(false)}
-            filmId={filmId}
-          />
-        }
-      />
-    </>
+      <TooltipBox tooltip='Créer une playlist'>
+        <Button
+          variant={'ghost'}
+          size={'icon'}
+          className="rounded-full shrink-0"
+          onClick={() => openModal(PlaylistModal, { filmId })}
+        >
+          {icon ? <Plus /> : 'Créer une playlist'}
+        </Button>
+      </TooltipBox>
   )
 }

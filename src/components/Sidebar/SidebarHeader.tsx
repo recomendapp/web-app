@@ -2,7 +2,7 @@ import { Box } from '@/components/Box/Box';
 import { siteConfig } from '@/config/site';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useUiContext } from '@/context/ui-context';
+import { useUI } from '@/context/ui-context';
 import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 
@@ -11,7 +11,7 @@ export default function SidebarHeader({
 }: {
   className?: string;
 }) {
-  const { isSidebarCollapsed, expandSidebar, collapseSidebar } = useUiContext();
+  const { isSidebarCollapsed, expandSidebar, collapseSidebar } = useUI();
   return (
     <Box className={cn('', className)}>
       {/* {isCollapsed ? (

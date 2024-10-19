@@ -4,7 +4,7 @@ import { Box } from '@/components/Box/Box';
 import { Header } from '@/components/Header/Header';
 import { Sidebar } from '@/components/Sidebar/Sidebar';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
-import { useUiContext } from '@/context/ui-context';
+import { useUI } from '@/context/ui-context';
 import { cn } from '@/lib/utils';
 import RightSidebar from "../RightSidebar/RightSidebar";
 
@@ -33,7 +33,7 @@ export default function AppLayout({
 		rightPanelRef,
 		rightPanelMinSize,
 		rightPanelMaxSize,
-	} = useUiContext()
+	} = useUI()
 
 	return (
 		<div className={cn('', className)}>

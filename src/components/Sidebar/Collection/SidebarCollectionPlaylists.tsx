@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 // CONTEXT
-import { useUiContext } from '@/context/ui-context';
+import { useUI } from '@/context/ui-context';
 // UI
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -18,7 +18,7 @@ import { Playlist } from '@/types/type.db';
 
 export default function SidebarCollectionPlaylists() {
 	const { user } = useAuth();
-	const { isSidebarCollapsed } = useUiContext();
+	const { isSidebarCollapsed } = useUI();
 	const pathname = usePathname();
 	const { ref, inView } = useInView();
 	const numberOfResult = 20;

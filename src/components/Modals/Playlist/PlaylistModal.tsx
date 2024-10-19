@@ -1,77 +1,55 @@
 'use client';
 
-import {
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-
-import React, { useState } from 'react';
 import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
 import { useAuth } from '@/context/auth-context';
-import PlaylistGuest from '@/app/[lang]/(app)/playlist/[playlist]/_components/guest/PlaylistGuest';
 import { useModal } from '@/context/modal-context';
 import { Playlist } from '@/types/type.db';
+import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from '../Modal';
+import { Button } from '@/components/ui/button';
+import { UserCogIcon } from 'lucide-react';
+import { TooltipBox } from '@/components/Box/TooltipBox';
+import { PlaylistGuestModal } from './PlaylistGuestModal';
+
+interface PlaylistModalProps extends ModalType {
+  playlist?: Playlist;
+  filmId?: string;
+}
 
 export function PlaylistModal({
-  id,
   filmId,
   playlist,
-}: {
-  id: string;
-  filmId?: string;
-  playlist?: Playlist;
-}) {
+  ...props
+} : PlaylistModalProps) {
   const { user } = useAuth();
-  const [view, setView] = useState('general');
-  const { closeModal } = useModal();
+  const { openModal, closeModal } = useModal();
 
   if (!user) return null;
 
   return (
-    <>
-      {!playlist ? (
-        <>
-          <DialogHeader>
-            <DialogTitle>Créer une playlist</DialogTitle>
-          </DialogHeader>
-          <PlaylistForm
-            success={() => closeModal(id)}
-            filmId={filmId}
-            playlist={playlist}
-          />
-        </>
-      ) : (
-        <>
-          <DialogHeader className="flex-row space-y-0">
-            <DialogTitle
-              className={`py-2 px-4 border-b-2 cursor-pointer
-                ${view == 'general' ? 'border-accent-1' : 'border-muted'}
-              `}
-              onClick={() => setView('general')}
-            >
-              General
-            </DialogTitle>
-            <DialogTitle
-              className={`py-2 px-4 border-b-2 cursor-pointer
-                ${view == 'guest' ? 'border-accent-1' : 'border-muted'}
-              `}
-              onClick={() => setView('guest')}
-            >
-              Members
-            </DialogTitle>
-          </DialogHeader>
-          {view == 'general' && (
-            <PlaylistForm
-              success={() => closeModal(id)}
-              filmId={filmId}
-              playlist={playlist}
-            />
+    <Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
+      <ModalHeader>
+        <ModalTitle className='flex gap-4 items-center'>
+          {playlist ? 'Edit playlist' : 'Create playlist'}
+          {playlist && (
+            <TooltipBox tooltip='Members'>
+              <Button
+                variant={'muted'}
+                size={'icon'}
+                onClick={() => openModal(PlaylistGuestModal, { playlist })}
+              >
+                <UserCogIcon size={20}/>
+              </Button>
+            </TooltipBox>
           )}
-          {view == 'guest' && (
-              <PlaylistGuest playlist={playlist} />
-          )}
-        </>
-      )}
-    </>
-  );
+        </ModalTitle>
+      </ModalHeader>
+      <ModalBody>
+        <PlaylistForm
+          success={() => closeModal(props.id)}
+          filmId={filmId}
+          playlist={playlist}
+        />
+      </ModalBody>
+    </Modal>
+  )
 }

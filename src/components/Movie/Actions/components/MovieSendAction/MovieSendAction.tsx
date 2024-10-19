@@ -19,6 +19,7 @@ import { MovieSendModal } from '@/components/Modals/Movie/Actions/MovieSendModal
 import { useState } from 'react';
 import { Modal } from '@/components/Modals/Modal';
 import Link from 'next/link';
+import { useModal } from '@/context/modal-context';
 
 interface MovieSendActionProps {
   movieId: number;
@@ -26,6 +27,7 @@ interface MovieSendActionProps {
 
 export function MovieSendAction({ movieId }: MovieSendActionProps) {
   const { user, loading } = useAuth();
+  const { openModal } = useModal();
   const pathname = usePathname();
 
   const [ openSendModal, setOpenSendModal ] = useState(false);
@@ -59,16 +61,17 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
             size="icon"
             variant={'action'}
             className="rounded-full"
-            onClick={() => setOpenSendModal(true)}
+            // onClick={() => setOpenSendModal(true)}
+            onClick={() => openModal(MovieSendModal, { movieId })}
           >
             {loading ? <Icons.spinner className="animate-spin" /> : <Send />}
           </Button>
         </TooltipTrigger>
         <TooltipContent side="bottom">Envoyer à un(e) ami(e)</TooltipContent>
       </Tooltip>
-      <Modal
+      {/* <Modal
         open={openSendModal}
-        setOpen={setOpenSendModal}
+        onOpenChange={setOpenSendModal}
         header={{
           title: 'Envoyer à',
         }}
@@ -78,7 +81,7 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
             movieId={movieId} 
           />
         }
-      />
+      /> */}
     </>
   );
 }

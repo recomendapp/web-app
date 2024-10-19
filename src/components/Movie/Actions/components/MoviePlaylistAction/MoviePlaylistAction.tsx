@@ -28,8 +28,6 @@ export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
 
   const { openModal } = useModal();
 
-  const [ openAddPlaylistModal, setOpenAddPlaylistModal ] = useState(false);
-
   if (user === null) {
     return (
         <Tooltip>
@@ -59,7 +57,7 @@ export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
             size="icon"
             variant={'action'}
             className="rounded-full"
-            onClick={() => setOpenAddPlaylistModal(true)}
+            onClick={() => openModal(MoviePlaylistModal, { movieId })}
           >
             {loading ? <Icons.spinner className="animate-spin" /> : <ListPlus />}
           </Button>
@@ -68,19 +66,6 @@ export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
           Ajouter à une playlist
         </TooltipContent>
       </Tooltip>
-      <Modal
-        open={openAddPlaylistModal}
-        setOpen={setOpenAddPlaylistModal}
-        header={{
-          title: 'Ajouter à',
-        }}
-        content={
-          <MoviePlaylistModal
-            onClose={() => setOpenAddPlaylistModal(false)}
-            movieId={movieId} 
-          />
-        }
-      />
     </>
   );
 }
