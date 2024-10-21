@@ -22,6 +22,8 @@ import { useMutation } from '@tanstack/react-query';
 import { Switch } from '@/components/ui/switch';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { supabase } from '@/lib/supabase/client';
+import { SupabaseClient } from '@supabase/supabase-js';
+import checkUsernameExist from '@/components/Auth/hooks/checkUsernameExist';
 
 // This can come from your database or API.
 
@@ -73,7 +75,7 @@ export function AccountForm() {
           if (value === user?.username) {
             return true;
           }
-          const isUsernameExist = await checkUsernameExist(value);
+          const isUsernameExist = await checkUsernameExist(supabase, value);
           return !isUsernameExist;
         },
         {
@@ -206,17 +208,4 @@ export function AccountForm() {
       </form>
     </Form>
   );
-}
-
-export async function checkUsernameExist(username: string) {
-  const { data, error } = await supabase
-    .from('user')
-    .select('*')
-    .eq('username', username);
-  if (error) throw error;
-  if (data?.length) {
-    return true;
-  } else {
-    return false;
-  }
 }

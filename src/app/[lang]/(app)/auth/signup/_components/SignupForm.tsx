@@ -22,8 +22,10 @@ import { Icons } from '@/components/icons';
 import checkUsernameExist from '@/components/Auth/hooks/checkUsernameExist';
 import { useAuth } from '@/context/auth-context';
 import { useLocale } from 'next-intl';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export function SignupForm() {
+  const supabase = useSupabaseClient();
   const locale = useLocale();
   const router = useRouter();
 
@@ -58,7 +60,7 @@ export function SignupForm() {
       })
       .refine(
         async (value) => {
-          const isUsernameExist = await checkUsernameExist(value);
+          const isUsernameExist = await checkUsernameExist(supabase, value);
           return !isUsernameExist;
         },
         {
@@ -117,7 +119,7 @@ export function SignupForm() {
     }
 
     try {
-      const isUsernameExist = await checkUsernameExist(data.username);
+      const isUsernameExist = await checkUsernameExist(supabase, data.username);
       if (!isUsernameExist) {
         try {
           setIsLoading(true);
