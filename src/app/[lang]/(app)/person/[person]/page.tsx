@@ -33,13 +33,11 @@ export default async function Film({
     person: string;
   };
 }) {
-  const supabase = createServerClient();
-  
+  const supabase = createServerClient(params.lang);
   const { data: person } = await supabase
-		.from('person_details')
+		.from('person_full')
 		.select(`*`)
 		.eq('id', params.person)
-		.eq('language', params.lang)
 		.single();
 
   if (!person) notFound();

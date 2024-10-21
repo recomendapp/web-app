@@ -16,9 +16,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import toast from 'react-hot-toast';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export function SecurityForm() {
+  const supabase = useSupabaseClient();
   const profileFormSchema = z.object({
     newpassword: z
       .string()

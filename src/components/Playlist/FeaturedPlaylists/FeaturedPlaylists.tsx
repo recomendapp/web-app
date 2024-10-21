@@ -5,11 +5,11 @@ import { useInView } from 'react-intersection-observer';
 
 import { useEffect, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
-import { Playlist } from '@/types/type.db';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 
 export default function FeaturedPlaylists() {
+  const supabase = useSupabaseClient();
 
   const [selectedOrder, setSelectedOrder] = useState('date-desc');
 

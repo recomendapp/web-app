@@ -1,22 +1,19 @@
 'use client';
-import { handleSearchPersons } from '@/lib/tmdb/tmdb';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import { Badge } from '@/components/ui/badge';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { useLocale } from 'next-intl';
-import toast from 'react-hot-toast';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function SearchCrewCastSmall({
   query,
 }: {
   query: string | undefined;
 }) {
+  const supabase = useSupabaseClient();
   const numberOfResult = 8;
 
   const {

@@ -12,21 +12,17 @@ import {
 } from '@/components/ui/select';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useQuery } from '@apollo/client';
 
-// GRAPHQL
-import { GetPlaylistsByUserIdQuery } from '@/graphql/__generated__/graphql';
-import GET_PLAYLISTS_BY_USER_ID from '@/graphql/Playlist/Playlist/queries/GetPlaylistsByUserId';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { User } from '@/types/type.db';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface UserPlaylistsProps {
   profile: User;
 }
 
 export default function ProfilePlaylists({ profile }: UserPlaylistsProps) {
-
+  const supabase = useSupabaseClient();
   const [selectedOrder, setSelectedOrder] = useState('date-desc');
 
   const [order, setOrder] = useState('updated_at-desc');

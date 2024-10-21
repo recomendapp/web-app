@@ -617,19 +617,19 @@ export type Database = {
         Row: {
           id: number
           iso_3166_1: string
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
           name: string
         }
         Insert: {
           id?: number
           iso_3166_1: string
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
           name: string
         }
         Update: {
           id?: number
           iso_3166_1?: string
-          language?: Database["public"]["Enums"]["language"]
+          language?: Database["public"]["Enums"]["language_app"]
           name?: string
         }
         Relationships: [
@@ -658,17 +658,17 @@ export type Database = {
         Row: {
           department: string
           id: number
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
         }
         Insert: {
           department: string
           id?: number
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
         }
         Update: {
           department?: string
           id?: number
-          language?: Database["public"]["Enums"]["language"]
+          language?: Database["public"]["Enums"]["language_app"]
         }
         Relationships: []
       }
@@ -688,19 +688,19 @@ export type Database = {
         Row: {
           gender: number
           id: number
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
           name: string
         }
         Insert: {
           gender: number
           id?: number
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
           name: string
         }
         Update: {
           gender?: number
           id?: number
-          language?: Database["public"]["Enums"]["language"]
+          language?: Database["public"]["Enums"]["language_app"]
           name?: string
         }
         Relationships: [
@@ -729,19 +729,19 @@ export type Database = {
         Row: {
           genre: number
           id: number
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
           name: string
         }
         Insert: {
           genre: number
           id?: number
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
           name: string
         }
         Update: {
           genre?: number
           id?: number
-          language?: Database["public"]["Enums"]["language"]
+          language?: Database["public"]["Enums"]["language_app"]
           name?: string
         }
         Relationships: [
@@ -771,19 +771,19 @@ export type Database = {
           department_id: number
           id: number
           job: string
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
         }
         Insert: {
           department_id: number
           id?: number
           job: string
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
         }
         Update: {
           department_id?: number
           id?: number
           job?: string
-          language?: Database["public"]["Enums"]["language"]
+          language?: Database["public"]["Enums"]["language_app"]
         }
         Relationships: [
           {
@@ -829,19 +829,19 @@ export type Database = {
         Row: {
           id: number
           iso_639_1: string
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
           name: string
         }
         Insert: {
           id?: number
           iso_639_1: string
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
           name: string
         }
         Update: {
           id?: number
           iso_639_1?: string
-          language?: Database["public"]["Enums"]["language"]
+          language?: Database["public"]["Enums"]["language_app"]
           name?: string
         }
         Relationships: [
@@ -1056,7 +1056,7 @@ export type Database = {
             foreignKeyName: "tmdb_movie_credits_person_id_fkey"
             columns: ["person_id"]
             isOneToOne: false
-            referencedRelation: "person_details"
+            referencedRelation: "person_full"
             referencedColumns: ["id"]
           },
           {
@@ -1271,7 +1271,7 @@ export type Database = {
       tmdb_movie_translation: {
         Row: {
           id: number
-          language_id: Database["public"]["Enums"]["language"]
+          language_id: Database["public"]["Enums"]["language_app"]
           movie_id: number
           overview: string | null
           poster_path: string | null
@@ -1280,7 +1280,7 @@ export type Database = {
         }
         Insert: {
           id?: number
-          language_id: Database["public"]["Enums"]["language"]
+          language_id: Database["public"]["Enums"]["language_app"]
           movie_id: number
           overview?: string | null
           poster_path?: string | null
@@ -1289,7 +1289,7 @@ export type Database = {
         }
         Update: {
           id?: number
-          language_id?: Database["public"]["Enums"]["language"]
+          language_id?: Database["public"]["Enums"]["language_app"]
           movie_id?: number
           overview?: string | null
           poster_path?: string | null
@@ -1455,7 +1455,7 @@ export type Database = {
             foreignKeyName: "tmdb_person_also_known_as_person_fkey"
             columns: ["person"]
             isOneToOne: false
-            referencedRelation: "person_details"
+            referencedRelation: "person_full"
             referencedColumns: ["id"]
           },
           {
@@ -1498,7 +1498,7 @@ export type Database = {
             foreignKeyName: "tmdb_person_external_id_person_fkey"
             columns: ["person"]
             isOneToOne: false
-            referencedRelation: "person_details"
+            referencedRelation: "person_full"
             referencedColumns: ["id"]
           },
           {
@@ -1553,7 +1553,7 @@ export type Database = {
             foreignKeyName: "tmdb_person_image_person_fkey"
             columns: ["person"]
             isOneToOne: false
-            referencedRelation: "person_details"
+            referencedRelation: "person_full"
             referencedColumns: ["id"]
           },
           {
@@ -1599,7 +1599,7 @@ export type Database = {
             foreignKeyName: "tmdb_person_translation_person_fkey"
             columns: ["person"]
             isOneToOne: false
-            referencedRelation: "person_details"
+            referencedRelation: "person_full"
             referencedColumns: ["id"]
           },
           {
@@ -1646,7 +1646,7 @@ export type Database = {
           following_count: number
           full_name: string
           id: string
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
           premium: boolean
           private: boolean
           username: string
@@ -1663,7 +1663,7 @@ export type Database = {
           following_count?: number
           full_name: string
           id: string
-          language?: Database["public"]["Enums"]["language"]
+          language?: Database["public"]["Enums"]["language_app"]
           premium?: boolean
           private?: boolean
           username: string
@@ -1680,7 +1680,7 @@ export type Database = {
           following_count?: number
           full_name?: string
           id?: string
-          language?: Database["public"]["Enums"]["language"]
+          language?: Database["public"]["Enums"]["language_app"]
           premium?: boolean
           private?: boolean
           username?: string
@@ -2315,7 +2315,7 @@ export type Database = {
             foreignKeyName: "user_person_follower_person_id_fkey"
             columns: ["person_id"]
             isOneToOne: false
-            referencedRelation: "person_details"
+            referencedRelation: "person_full"
             referencedColumns: ["id"]
           },
           {
@@ -2505,7 +2505,7 @@ export type Database = {
           homepage: string | null
           id: number | null
           imdb_id: string | null
-          language: Database["public"]["Enums"]["language"] | null
+          language: Database["public"]["Enums"]["language_app"] | null
           original_language: string | null
           original_title: string | null
           overview: string | null
@@ -2616,7 +2616,7 @@ export type Database = {
           },
         ]
       }
-      person_details: {
+      person_full: {
         Row: {
           adult: boolean | null
           also_known_as: Json | null
@@ -2630,7 +2630,6 @@ export type Database = {
           id: number | null
           imdb_id: string | null
           known_for_department: string | null
-          language: string | null
           name: string | null
           place_of_birth: string | null
           popularity: number | null
@@ -2701,7 +2700,7 @@ export type Database = {
             foreignKeyName: "tmdb_movie_credits_person_id_fkey"
             columns: ["person_id"]
             isOneToOne: false
-            referencedRelation: "person_details"
+            referencedRelation: "person_full"
             referencedColumns: ["id"]
           },
         ]
@@ -2730,7 +2729,7 @@ export type Database = {
             foreignKeyName: "tmdb_movie_credits_person_id_fkey"
             columns: ["person_id"]
             isOneToOne: false
-            referencedRelation: "person_details"
+            referencedRelation: "person_full"
             referencedColumns: ["id"]
           },
         ]
@@ -2979,7 +2978,7 @@ export type Database = {
           following_count: number | null
           full_name: string | null
           id: string | null
-          language: Database["public"]["Enums"]["language"] | null
+          language: Database["public"]["Enums"]["language_app"] | null
           premium: boolean | null
           private: boolean | null
           username: string | null
@@ -2997,7 +2996,7 @@ export type Database = {
           following_count?: number | null
           full_name?: string | null
           id?: string | null
-          language?: Database["public"]["Enums"]["language"] | null
+          language?: Database["public"]["Enums"]["language_app"] | null
           premium?: boolean | null
           private?: boolean | null
           username?: string | null
@@ -3015,7 +3014,7 @@ export type Database = {
           following_count?: number | null
           full_name?: string | null
           id?: string | null
-          language?: Database["public"]["Enums"]["language"] | null
+          language?: Database["public"]["Enums"]["language_app"] | null
           premium?: boolean | null
           private?: boolean | null
           username?: string | null
@@ -3118,7 +3117,7 @@ export type Database = {
           homepage: string | null
           id: number | null
           imdb_id: string | null
-          language: Database["public"]["Enums"]["language"] | null
+          language: Database["public"]["Enums"]["language_app"] | null
           original_language: string | null
           original_title: string | null
           overview: string | null
@@ -3159,7 +3158,7 @@ export type Database = {
           vote_average: number
           vote_count: number
           collection_id: number
-          language: Database["public"]["Enums"]["language"]
+          language: Database["public"]["Enums"]["language_app"]
           overview: string
           poster_path: string
           tagline: string
@@ -3223,7 +3222,7 @@ export type Database = {
       eventType: "INSERT" | "DELETE" | "UPDATE"
       guidelist_status: "active" | "completed" | "deleted"
       image_type: "backdrop" | "poster" | "logo" | "profile"
-      language: "en-US" | "fr-FR"
+      language_app: "en-US" | "fr-FR"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"
       subscription_status:

@@ -1,17 +1,5 @@
 'use client';
 
-import Image from 'next/image';
-import Link from 'next/link';
-
-// UI
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
@@ -22,17 +10,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Button } from '@/components/ui/button';
 import MovieCard from '@/components/Movie/Card/MovieCard';
 import { LayoutGrid, List } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Person } from '@/types/type.db';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
 import { useLocale } from 'next-intl';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function PersonFilmography({
   person,
@@ -43,6 +29,7 @@ export default function PersonFilmography({
   departments: string[] | null,
   mainDepartment: string | undefined,
 }) {
+  const supabase = useSupabaseClient();
   const locale = useLocale();
   const [ selectedDepartment, setSelectedDepartment ] = useState<string | undefined>(mainDepartment);
   const [ selectedFilter, setSelectedFilter ] = useState({

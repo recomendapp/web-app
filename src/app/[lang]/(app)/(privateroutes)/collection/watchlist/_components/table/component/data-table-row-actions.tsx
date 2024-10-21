@@ -29,11 +29,10 @@ import ButtonShare from '@/components/utils/ButtonShare';
 import { useAuth } from '@/context/auth-context';
 
 // GRAPHQL
-import { useLocale } from 'next-intl';
 import toast from 'react-hot-toast';
 import { Movie, Person, UserMovieWatchlist } from '@/types/type.db';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface DataTableRowActionsProps {
   table: Table<UserMovieWatchlist>;
@@ -48,6 +47,7 @@ export function DataTableRowActions({
   column,
   data,
 }: DataTableRowActionsProps) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
   
   const queryClient = useQueryClient();

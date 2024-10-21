@@ -9,19 +9,20 @@ import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import { MovieAction } from '@/components/Movie/Actions/MovieAction';
 import { Textarea } from '@/components/ui/textarea';
-import { supabase } from '@/lib/supabase/client';
-import MovieCard, { MovieCardRow } from '@/components/Movie/Card/MovieCard';
+import MovieCard from '@/components/Movie/Card/MovieCard';
 
 // GRAPHQL
 import { useQuery } from '@tanstack/react-query';
 import { Movie, User } from '@/types/type.db';
 import { useAuth } from '@/context/auth-context';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function CreateReviewForm({
   movie,
 }: {
   movie: Movie;
 }) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
 
   const {

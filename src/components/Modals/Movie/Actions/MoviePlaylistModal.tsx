@@ -20,7 +20,6 @@ import Loader from '@/components/Loader/Loader';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
 import { useModal } from '@/context/modal-context';
-import { supabase } from '@/lib/supabase/client';
 import { Fragment, useEffect, useState } from 'react';
 import { InfiniteData, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
@@ -34,7 +33,7 @@ import { TabsContent } from '@radix-ui/react-tabs';
 import { Playlist } from '@/types/type.db';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalHeader, ModalType } from '../../Modal';
-import { title } from 'process';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 const sendFormSchema = z.object({
 	playlists: z.array(
@@ -57,6 +56,7 @@ export function MoviePlaylistModal({
 	movieId,
 	...props
 } : MoviePlaylistModalProps) {
+	const supabase = useSupabaseClient();
 	const { user } = useAuth();
 
 	const queryClient = useQueryClient();
@@ -233,6 +233,7 @@ const UserMoviePlaylist = ({
 	search: string | null;
 	form: any;
 }) => {
+	const supabase = useSupabaseClient();
 	const { user } = useAuth();
 
 	const { ref, inView } = useInView();
@@ -373,6 +374,7 @@ const UserMoviePlaylistLike = ({
 	search: string | null;
 	form: any;
 }) => {
+	const supabase = useSupabaseClient();
 	const { user } = useAuth();
 
 	const { ref, inView } = useInView();

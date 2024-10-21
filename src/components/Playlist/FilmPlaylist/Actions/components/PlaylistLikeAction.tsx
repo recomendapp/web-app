@@ -22,15 +22,15 @@ import {
 import { AlertCircle, Heart } from 'lucide-react';
 import { Icons } from '../../../../icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
 import Link from 'next/link';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface MovieLikeActionProps extends React.HTMLAttributes<HTMLDivElement> {
   playlistId: number;
 }
 
 export function PlaylistLikeAction({ playlistId }: MovieLikeActionProps) {
-
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
 
   const pathname = usePathname();

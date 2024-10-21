@@ -1,6 +1,5 @@
 "use server"
 
-// import { supabase } from "@/lib/supabase/client";
 import { createServerClient } from "@/lib/supabase/server";
 import { Movie } from "@/types/type.db";
 

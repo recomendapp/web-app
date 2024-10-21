@@ -2,7 +2,6 @@ import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
 
 // COMPONENTS
 import {
@@ -16,6 +15,7 @@ import { AlertCircle, Bookmark } from 'lucide-react';
 import { Icons } from '../../../../icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface MovieWatchlistActionProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -26,6 +26,7 @@ export function MovieWatchlistAction({
   movieId
 }
 : MovieWatchlistActionProps) {
+  const supabase = useSupabaseClient();
 
   const { user } = useAuth();
   const pathname = usePathname();

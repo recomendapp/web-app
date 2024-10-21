@@ -10,8 +10,8 @@ import Loader from '@/components/Loader/Loader';
 import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
 import { Playlist } from '@/types/type.db';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export function UserPlaylistsLiked({
   sidebarExpanded,
@@ -20,6 +20,7 @@ export function UserPlaylistsLiked({
   sidebarExpanded: boolean;
   grid?: boolean;
 }) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
 	const pathname = usePathname();
 	const { ref, inView } = useInView();
@@ -71,7 +72,7 @@ export function UserPlaylistsLiked({
     return (
       <Fragment>
         {playlists?.pages.map((page, i) => (
-          page?.map(({ playlist } : { playlist: Playlist}, index) => (
+          page?.map(({ playlist } : { playlist: Playlist}) => (
             <MoviePlaylistCard playlist={playlist} key={playlist?.id} />
           ))
         ))}

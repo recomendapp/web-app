@@ -33,13 +33,14 @@ import toast from 'react-hot-toast';
 // GRAPHQL
 import { UserMovieReviewView } from '@/types/type.db';
 import { useMutation } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export function MovieReviewSettings({
   review,
 }: {
   review: UserMovieReviewView;
 }) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
   const pathname = usePathname();
   const router = useRouter();

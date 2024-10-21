@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ImportResults } from "../ImporterInitiator";
 import Loader from "@/components/Loader/Loader";
 import { useAuth } from "@/context/auth-context";
-import { supabase } from "@/lib/supabase/client";
+import { useSupabaseClient } from '@/context/supabase-context';
 
 const ImporterResults = ({
 	importResults,
@@ -11,6 +11,7 @@ const ImporterResults = ({
 	importResults: ImportResults,
 	setStep: (step: number) => void,
 }) => {
+	const supabase = useSupabaseClient();
 	const { user } = useAuth();
 	const [loadingDots, setLoadingDots] = useState(".");
 	const [importStep, setImportStep] = useState(1);

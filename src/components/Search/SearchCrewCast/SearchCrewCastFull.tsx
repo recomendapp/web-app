@@ -1,17 +1,16 @@
 'use client';
-import { handleSearchPersons } from '@/lib/tmdb/tmdb';
 import Link from 'next/link';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '../../ui/skeleton';
 import { ImageWithFallback } from '../../utils/ImageWithFallback';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function SearchCrewCastFull({ query }: { query: string }) {
-
+  const supabase = useSupabaseClient();
   const [order, setOrder] = useState('popular');
 
   const { ref, inView } = useInView();

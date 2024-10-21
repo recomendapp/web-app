@@ -22,7 +22,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { getInitiales } from '@/lib/utils';
 import toast from 'react-hot-toast';
 import { useModal } from '@/context/modal-context';
-import { supabase } from '@/lib/supabase/client';
 import { Fragment, useEffect, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
@@ -32,6 +31,7 @@ import useDebounce from '@/hooks/use-debounce';
 import { Badge } from '@/components/ui/badge';
 import { UserFriend } from '@/types/type.db';
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from '../../Modal';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 const sendFormSchema = z.object({
 	friends: z.array(
@@ -54,6 +54,7 @@ export function MovieSendModal({
 	movieId,
 	...props
 } : MovieSendModalProps) {
+	const supabase = useSupabaseClient();
 	const { user } = useAuth();
 
 	const { closeModal } = useModal();

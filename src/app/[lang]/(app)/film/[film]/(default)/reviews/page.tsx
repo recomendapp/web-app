@@ -11,10 +11,10 @@ import {
 import MovieReviewOverview from '@/components/Review/MovieReviewOverview';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 import { MyReviewButton } from './_components/MyReviewButton';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function Reviews({
   params,
@@ -24,6 +24,7 @@ export default function Reviews({
     film: number;
   }
 }) {
+  const supabase = useSupabaseClient();
   const [order, setOrder] = useState('recent');
 
   const { ref, inView } = useInView();

@@ -38,9 +38,8 @@ export type UserMovieGuidelist = Database['public']['Tables']['user_movie_guidel
 	sender?: User;
 } | null | undefined;
 
-export type UserMovieGuidelistView = Database['public']['Views']['user_movie_guidelist_view']['Row'] & {
+export type UserMovieGuidelistView = Database['public']['Views']['guidelist']['Row'] & {
 	movie?: Movie;
-	user?: User;
 };
 
 // *========== USER_MOVIE_REVIEW ==========* //
@@ -98,7 +97,7 @@ export type MoviePerson = Database['public']['Tables']['tmdb_movie_credits']['Ro
 // export type Person = Database['public']['Tables']['tmdb_person']['Row'] & {
 // 	data?: PersonTranslation[] | any;
 // } | null | undefined;
-export type Person = Database['public']['Views']['person_details']['Row'] & {
+export type Person = Database['public']['Views']['person_full']['Row'] & {
 } | null | undefined;
 
 // *========== PERSON_TRANSLATION ==========* //

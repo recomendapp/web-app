@@ -1,5 +1,4 @@
 import { useAuth } from "@/context/auth-context";
-import { supabase } from "@/lib/supabase/client";
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // COMPONENTS
@@ -16,12 +15,14 @@ import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function MovieReviewComments({
 	reviewId,
 }: {
 	reviewId: number;
 }) {
+	const supabase = useSupabaseClient();
 	const { user } = useAuth();
 	const { ref, inView } = useInView();
 	const queryClient = useQueryClient();

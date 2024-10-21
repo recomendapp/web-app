@@ -1,6 +1,7 @@
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default async function checkUsernameExist(username: string) {
+  const supabase = useSupabaseClient();
   const { data, error } = await supabase
     .from('user')
     .select('*')

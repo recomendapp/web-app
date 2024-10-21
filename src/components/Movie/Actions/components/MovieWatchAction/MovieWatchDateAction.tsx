@@ -19,7 +19,7 @@ import { useAuth } from '@/context/auth-context';
 import { useFormatter, useLocale } from 'next-intl';
 import toast from 'react-hot-toast';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface MovieWatchedDateActionProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -27,6 +27,7 @@ interface MovieWatchedDateActionProps
 }
 
 export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
 
   const locale = useLocale();

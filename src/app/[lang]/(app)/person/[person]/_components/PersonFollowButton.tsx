@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import { cn } from '@/lib/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface PersonFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   personId: number;
@@ -17,6 +17,7 @@ export function PersonFollowButton({
   className,
   personId,
 }: PersonFollowButtonProps) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
 
   const queryClient = useQueryClient();

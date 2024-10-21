@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { userKeys } from "./userKeys"
 // import { supabase } from "@/lib/supabase/client";
-import { useSupabaseClient } from "@/lib/supabase/hook";
+import { useSupabaseClient } from '@/context/supabase-context';
 
 /**
  * Fetches the user details
@@ -49,7 +49,6 @@ export const useInfiniteUserFollowers = ({
 	numPerPage?: number;
 }) => {
 	const supabase = useSupabaseClient();
-	console.log('supabase useInfiniteUserFollowers', supabase);
 	return useInfiniteQuery({
 		queryKey: userKeys.followers(userId as string, filters),
 		queryFn: async ({ pageParam = 1 }) => {

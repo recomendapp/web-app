@@ -9,14 +9,15 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useAuth } from '@/context/auth-context';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
 // COMPONENTS
 import SidebarCollectionContainerIcon from '@/components/Sidebar/Collection/SidebarCollectionContainerIcon';
 import Loader from '@/components/Loader/Loader';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Playlist } from '@/types/type.db';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function SidebarCollectionPlaylists() {
+	const supabase = useSupabaseClient();
 	const { user } = useAuth();
 	const { isSidebarCollapsed } = useUI();
 	const pathname = usePathname();

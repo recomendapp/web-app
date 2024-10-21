@@ -16,6 +16,7 @@ import { UIContext } from './ui-context';
 import { MapContext } from './map-context';
 import { getMessages } from 'next-intl/server';
 import { getFallbackLanguage } from '@/lib/i18n/fallback';
+import { SupabaseProvider } from './supabase-context';
 
 export default async function Provider({
   children,
@@ -37,45 +38,47 @@ export default async function Provider({
   const cookieRightPanelCollapsed = rightPanelCollapsed ? JSON.parse(rightPanelCollapsed.value) : undefined
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <ReactQueryContext>
-        <ApolloClientContext>
-          <AuthContext>
-              <OneSignalContext>
-                <ThemeContext attribute="class" defaultTheme="dark" enableSystem>
-                  <UIContext
-                    defaultLayout={defaultLayout}
-                    cookieSidebarCollapsed={cookieSidebarCollapsed}
-                    cookieRightPanelCollapsed={cookieRightPanelCollapsed}
-                  >
-                  <ModalProvider>
-                      <MapContext>
-                        <RightSidebarContext>
-                          <NextTopLoader
-                            showSpinner={false}
-                            easing="ease"
-                            color="#FFE974"
-                            height={2}
-                          />
-                          <Toaster
-                            position="top-center"
-                            toastOptions={{
-                              style: {
-                                borderRadius: '10px',
-                                background: '#333',
-                                color: '#fff',
-                              },
-                            }}
-                          />
-                          {children}
-                        </RightSidebarContext>
-                      </MapContext>
-                    </ModalProvider>
-                  </UIContext>
-                </ThemeContext>
-              </OneSignalContext>
-          </AuthContext>
-        </ApolloClientContext>
-      </ReactQueryContext>
+      <SupabaseProvider locale={locale}>
+        <ReactQueryContext>
+          {/* <ApolloClientContext> */}
+            <AuthContext>
+                <OneSignalContext>
+                  <ThemeContext attribute="class" defaultTheme="dark" enableSystem>
+                    <UIContext
+                      defaultLayout={defaultLayout}
+                      cookieSidebarCollapsed={cookieSidebarCollapsed}
+                      cookieRightPanelCollapsed={cookieRightPanelCollapsed}
+                    >
+                    <ModalProvider>
+                        <MapContext>
+                          <RightSidebarContext>
+                            <NextTopLoader
+                              showSpinner={false}
+                              easing="ease"
+                              color="#FFE974"
+                              height={2}
+                            />
+                            <Toaster
+                              position="top-center"
+                              toastOptions={{
+                                style: {
+                                  borderRadius: '10px',
+                                  background: '#333',
+                                  color: '#fff',
+                                },
+                              }}
+                            />
+                            {children}
+                          </RightSidebarContext>
+                        </MapContext>
+                      </ModalProvider>
+                    </UIContext>
+                  </ThemeContext>
+                </OneSignalContext>
+            </AuthContext>
+          {/* </ApolloClientContext> */}
+        </ReactQueryContext>
+      </SupabaseProvider>
     </NextIntlClientProvider>
   );
 }

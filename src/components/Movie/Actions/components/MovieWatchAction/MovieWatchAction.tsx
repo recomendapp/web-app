@@ -17,12 +17,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { redirect, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
 import Link from 'next/link';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 // GRAPHQL
 // import { useQuery, useMutation } from '@apollo/client';
@@ -41,6 +41,7 @@ interface MovieWatchActionProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
   const pathname = usePathname();
 

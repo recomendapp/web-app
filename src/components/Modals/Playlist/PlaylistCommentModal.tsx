@@ -11,8 +11,8 @@ import { useAuth } from "@/context/auth-context";
 import { useModal } from "@/context/modal-context";
 import { Playlist, PlaylistGuest, PlaylistItem } from "@/types/type.db";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase/client";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface PlaylistCommentModalProps extends ModalType {
 	playlistItem: PlaylistItem;
@@ -22,6 +22,8 @@ const PlaylistCommentModal = ({
 	playlistItem,
 	...props
 } : PlaylistCommentModalProps) => {
+
+	const supabase = useSupabaseClient();
 
 	const { closeModal } = useModal();
 

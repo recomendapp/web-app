@@ -8,7 +8,7 @@ import { routing } from '../i18n/routing';
 export const createServerClient = (locale?: string) => {
   const cookieStore = cookies();
   
-  return createServerClientSupabase(
+  return createServerClientSupabase<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -30,7 +30,7 @@ export const createServerClient = (locale?: string) => {
       },
       global: {
         headers: {
-          'X-Language': locale ?? routing.defaultLocale,
+          'language': locale ?? routing.defaultLocale,
         }
       }
     },

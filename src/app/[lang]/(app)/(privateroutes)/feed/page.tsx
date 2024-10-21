@@ -1,16 +1,16 @@
 'use client'
 
 import { useAuth } from "@/context/auth-context";
-import { supabase } from "@/lib/supabase/client";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import FeedItem from "./_components/FeedItem";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import Loader from "@/components/Loader/Loader";
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function Feed() {
-
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
   
   const locale = useLocale();

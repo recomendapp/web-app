@@ -20,13 +20,14 @@ import { useAuth } from '@/context/auth-context';
 
 import { UserMovieReviewView } from '@/types/type.db';
 import { useMutation } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface MovieReviewFormProps {
   review: UserMovieReviewView;
 }
 
 export default function MovieReviewForm({ review }: MovieReviewFormProps) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
   const [title, setTitle] = useState(review?.title);
   const [body, setBody] = useState<JSONContent>(JSON.parse(review?.body ?? ''));

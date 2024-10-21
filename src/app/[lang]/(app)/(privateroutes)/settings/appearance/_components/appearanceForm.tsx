@@ -33,13 +33,13 @@ import { createSharedPathnamesNavigation } from 'next-intl/navigation';
 import { Theme } from '@/types/type.theme';
 import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
-import { supabase } from '@/lib/supabase/client';
 import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import { Icons } from '@/components/icons';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/Loader/Loader';
 import { locales } from '@/lib/i18n/routing';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
@@ -56,6 +56,7 @@ type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 // This can come from your database or API.
 
 export function AppearanceForm() {
+  const supabase = useSupabaseClient();
   const t = useTranslations('settings');
   const locale = useLocale();
   const [loading, setLoading] = useState(false);

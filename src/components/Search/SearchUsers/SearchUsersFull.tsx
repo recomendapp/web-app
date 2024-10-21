@@ -1,22 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Skeleton } from '../../ui/skeleton';
 import { useInView } from 'react-intersection-observer';
-import { useQuery } from '@apollo/client';
 import UserCard from '@/components/User/UserCard/UserCard';
-
-import SEARCH_USERS_QUERY from '@/graphql/Search/SearchUsers';
-import { SearchUsersQuery } from '@/graphql/__generated__/graphql';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function SearchUsersFull({
   query,
 }: {
   query: string | undefined;
 }) {
-
+  const supabase = useSupabaseClient();
   const { ref, inView } = useInView();
 
   const numberOfResult = 20;

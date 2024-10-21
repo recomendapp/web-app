@@ -21,13 +21,14 @@ import PictureUpload from './pictureUpload';
 import { useAuth } from '@/context/auth-context';
 import { Icons } from '@/components/icons';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase/client';
 import compressPicture from '@/lib/utils/compressPicture';
 import Loader from '@/components/Loader/Loader';
 import { useLocale, useTranslations } from 'next-intl';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export function ProfileForm() {
+  const supabase = useSupabaseClient();
   const t = useTranslations('settings');
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);

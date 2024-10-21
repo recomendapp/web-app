@@ -47,10 +47,12 @@ import { MouseSensor, TouchSensor } from '@/components/DragNDrop/CustomSensor';
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 // GRAPHQL
-import { useMutation } from '@apollo/client';
-import UPDATE_PLAYLIST_ITEM from '@/graphql/Playlist/PlaylistItem/mutations/UpdatePlaylistItem';
-import { UpdatePlaylistItemMutation } from '@/graphql/__generated__/graphql';
+// import { useMutation } from '@apollo/client';
+// import UPDATE_PLAYLIST_ITEM from '@/graphql/Playlist/PlaylistItem/mutations/UpdatePlaylistItem';
+// import { UpdatePlaylistItemMutation } from '@/graphql/__generated__/graphql';
 import { Playlist, PlaylistItem } from '@/types/type.db';
+import { useSupabaseClient } from '@/context/supabase-context';
+import { useMutation } from '@tanstack/react-query';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -71,13 +73,26 @@ export default function PlaylistTable({
   setPlaylistItems,
   isAllowedToEdit
 }: DataTableProps) {
+  const supabase = useSupabaseClient();
 
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
-  const [updatePlaylistItem] = useMutation<UpdatePlaylistItemMutation>(UPDATE_PLAYLIST_ITEM);
+  const { mutateAsync: updatePlaylistItem } = useMutation({
+    mutationFn: async ({ id, rank } : { id: UniqueIdentifier, rank: number }) => {
+      if (!id || !rank) throw Error('Missing id or rank');
+      const { data, error } = await supabase
+        .from('playlist_item')
+        .update({ rank })
+        .eq('id', id)
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  // const [updatePlaylistItem] = useMutation<UpdatePlaylistItemMutation>(UPDATE_PLAYLIST_ITEM);
 
   const [activeId, setActiveId] = React.useState<UniqueIdentifier | null>(null);
 
@@ -171,13 +186,10 @@ export default function PlaylistTable({
           return arrayMove(data, oldIndex, newIndex);
         });
         
-        const { data } = await updatePlaylistItem({
-          variables: {
-            id: active.id,
-            rank: over?.data.current?.sortable.index + 1
-          }
+        await updatePlaylistItem({
+          id: active.id,
+          rank: over?.data.current?.sortable.index + 1
         })
-        if (!data?.updateplaylist_itemCollection.records.length) throw new Error('Nothing updated');
       } catch (error) {
         setPlaylistItems((data) => {
           const oldIndex = items.indexOf(active.id);

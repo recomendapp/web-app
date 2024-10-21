@@ -1,5 +1,4 @@
 import { useAuth } from "@/context/auth-context";
-import { supabase } from "@/lib/supabase/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // COMPONENTS
@@ -14,6 +13,7 @@ import { AlertCircleIcon, HeartIcon } from "lucide-react";
 import { Icons } from "@/components/icons";
 import toast from "react-hot-toast";
 import { usePathname } from "next/navigation";
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function UserMovieReviewLike({
 	reviewId,
@@ -22,7 +22,7 @@ export default function UserMovieReviewLike({
 	reviewId: number;
 	classNames?: string;
 }) {
-
+	const supabase = useSupabaseClient();
 	const { user } = useAuth();
 	const pathname = usePathname();
 	const queryClient = useQueryClient();

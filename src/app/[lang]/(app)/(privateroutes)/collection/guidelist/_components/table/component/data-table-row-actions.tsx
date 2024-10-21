@@ -33,7 +33,7 @@ import { GuidelistSendersModal } from '@/components/Modals/Guidelist/GuidelistSe
 import { useModal } from '@/context/modal-context';
 import { Movie, Person, UserMovieGuidelistView } from '@/types/type.db';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface DataTableRowActionsProps {
   table: Table<UserMovieGuidelistView>;
@@ -48,6 +48,7 @@ export function DataTableRowActions({
   column,
   data,
 }: DataTableRowActionsProps) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const { openModal } = useModal();

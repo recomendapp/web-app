@@ -12,14 +12,15 @@ import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistC
 import { GetPlaylistsByUserIdQuery } from '@/graphql/__generated__/graphql';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-import { supabase } from '@/lib/supabase/client';
 import { Playlist } from '@/types/type.db';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export function UserPlaylists({
   grid = false,
 }: {
   grid?: boolean;
 }) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
 	const pathname = usePathname();
 	const { ref, inView } = useInView();

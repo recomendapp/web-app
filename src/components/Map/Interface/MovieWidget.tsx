@@ -3,7 +3,6 @@ import { useMap } from "../../../context/map-context"
 import { TriangleAlert, XIcon } from "lucide-react";
 import MoviePoster from "@/components/Movie/MoviePoster";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase/client";
 import { useLocale } from "next-intl";
 import Loader from "@/components/Loader/Loader";
 import ActivityIcon from "@/components/Review/ActivityIcon";
@@ -12,8 +11,10 @@ import Link from "next/link";
 import { RuntimeTooltip } from "@/components/utils/RuntimeTooltip";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { MovieAction } from "@/components/Movie/Actions/MovieAction";
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export const MovieWidget = () => {
+	const supabase = useSupabaseClient();
 	const {
 		selectedMovie,
 		setSelectedMovie,

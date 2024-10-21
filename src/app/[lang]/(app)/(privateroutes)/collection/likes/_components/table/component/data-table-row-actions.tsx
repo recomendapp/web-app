@@ -30,7 +30,7 @@ import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { Movie, Person, UserMovieActivity } from '@/types/type.db';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface DataTableRowActionsProps {
   table: Table<UserMovieActivity>;
@@ -45,6 +45,7 @@ export function DataTableRowActions({
   column,
   data,
 }: DataTableRowActionsProps) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
 
   const queryClient = useQueryClient();

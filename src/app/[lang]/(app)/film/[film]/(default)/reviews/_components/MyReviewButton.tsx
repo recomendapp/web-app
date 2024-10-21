@@ -1,12 +1,14 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/context/auth-context";
-import { supabase } from "@/lib/supabase/client";
+import { useSupabaseClient } from '@/context/supabase-context';
 import { UserMovieActivity } from "@/types/type.db";
 import { useQuery } from "@tanstack/react-query";
 import { FileEdit } from "lucide-react";
 import Link from "next/link";
 
 export function MyReviewButton({ filmId }: { filmId: number }) {
+	const supabase = useSupabaseClient();
+	
 	const { user } = useAuth();
   
 	const {

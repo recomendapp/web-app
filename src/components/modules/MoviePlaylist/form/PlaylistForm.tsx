@@ -25,7 +25,6 @@ import PlaylistPictureUpload from '../components/PlaylistPictureUpload';
 import { usePathname, useRouter } from 'next/navigation';
 
 import compressPicture from '@/lib/utils/compressPicture';
-import { supabase } from '@/lib/supabase/client';
 import { Icons } from '@/components/icons';
 
 import {
@@ -51,7 +50,7 @@ import {
 import { Playlist } from '@/types/type.db';
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
-import { set } from 'lodash';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -64,6 +63,7 @@ export function PlaylistForm({
   filmId,
   playlist,
 }: PlaylistFormProps) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
 
   const router = useRouter();

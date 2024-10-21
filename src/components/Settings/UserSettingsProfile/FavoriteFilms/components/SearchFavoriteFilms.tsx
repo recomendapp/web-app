@@ -1,28 +1,22 @@
 'use client';
-import { handleSearchMovies } from '@/lib/tmdb/tmdb';
-import Link from 'next/link';
-import React, { Fragment, useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useEffect, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import { useInView } from 'react-intersection-observer';
-import Loader from '@/components/Loader/Loader';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Film } from 'lucide-react';
-import { getLocale } from 'next-intl/server';
 import { useLocale } from 'next-intl';
 import { Movie } from '@/types/type.db';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function SearchFavoriteFilms({
   onClick,
 }: {
   onClick: (movie: Movie) => void;
 }) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
 
   const local = useLocale();

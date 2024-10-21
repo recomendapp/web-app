@@ -14,18 +14,19 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
-import { supabase } from '@/lib/supabase/client';
 import { Icons } from '@/components/icons';
 import { useEffect, useState } from 'react';
 import Loader from '@/components/Loader/Loader';
 import { useMutation } from '@tanstack/react-query';
 import { Switch } from '@/components/ui/switch';
+import { useSupabaseClient } from '@/context/supabase-context';
+import { supabase } from '@/lib/supabase/client';
 
 // This can come from your database or API.
 
 export function AccountForm() {
+  const supabase = useSupabaseClient();
 
   const { user, session } = useAuth();
 

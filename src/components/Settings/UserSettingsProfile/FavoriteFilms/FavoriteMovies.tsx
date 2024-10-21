@@ -38,15 +38,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { ControllerRenderProps } from 'react-hook-form';
 import { Movie } from '@/types/type.db';
 import Loader from '@/components/Loader/Loader';
-import { supabase } from '@/lib/supabase/client';
 import { useLocale } from 'next-intl';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export function FavoriteMovies() {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
   const locale = useLocale();
   const [modalIsOpen, setModalIsOpen] = useState(false);

@@ -1,7 +1,6 @@
 'use client';
 
 import { useLocale } from "next-intl";
-import { supabase } from "@/lib/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
 // COMPONENTS
@@ -16,9 +15,6 @@ export default function Review({
 } : {
 	reviewServer: UserMovieReviewView;
 }) {
-	
-	const locale = useLocale();
-
 	const {
 		data: review
 	} = useQuery({

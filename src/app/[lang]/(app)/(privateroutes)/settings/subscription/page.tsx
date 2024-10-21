@@ -3,19 +3,18 @@ import Loader from '@/components/Loader/Loader';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/auth-context';
-import { postData } from '@/lib/stripe/stripe-helpers';
-import { supabase } from '@/lib/supabase/client';
 import { Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import { useQuery } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
 import { createOrRetrieveCustomer } from '@/lib/supabase/supabase-admin';
 import { stripe } from '@/lib/stripe/stripe';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function SettingsAccountPage() {
+  const supabase = useSupabaseClient();
   const { user, session } = useAuth();
   const t = useTranslations('settings');
   const router = useRouter();
@@ -44,18 +43,6 @@ export default function SettingsAccountPage() {
     },
     enabled: !!user?.id,
   })
-
-  // const redirectToCustomerPortal = async () => {
-  //   try {
-  //     const { url } = await postData({
-  //       url: '/api/stripe/create-portal-link'
-  //     });
-  //     router.push(url);
-  //   } catch (error) {
-  //     toast.error('Could not open customer portal');
-  //     if (error) console.log((error as Error).message);
-  //   }
-  // };
 
   const redirectToCustomerPortal = async () => {
     try {

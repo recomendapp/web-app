@@ -2,18 +2,16 @@
 import { useEffect, useState } from 'react';
 import { Skeleton } from '../../ui/skeleton';
 import { useInView } from 'react-intersection-observer';
-import { useQuery } from '@apollo/client';
-import SEARCH_PLAYLIST_QUERY from '../../../graphql/Search/SearchPlaylists';
 import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
-import { SearchPlaylistsQuery } from '@/graphql/__generated__/graphql';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function SearchPlaylistsFull({
   query,
 }: {
   query: string | undefined;
 }) {
+  const supabase = useSupabaseClient();
   const [order, setOrder] = useState('popular');
 
   const { ref, inView } = useInView();

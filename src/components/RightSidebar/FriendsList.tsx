@@ -1,19 +1,15 @@
 import { useAuth } from '@/context/auth-context';
-// import { useQuery } from '@apollo/client';
-// import USER_FRIENDS_QUERY from '@/graphql/User/Friends/queries/GetUserFriends';
-import Link from 'next/link';
 import UserCard from '../User/UserCard/UserCard';
 import { Skeleton } from '../ui/skeleton';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 import { useInfiniteUserFollowees } from '@/features/user/userQueries';
 import Loader from '../Loader/Loader';
-// import { GetUserFriendsQuery } from '@/graphql/__generated__/graphql';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function FriendsList() {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
   const { ref, inView } = useInView();
   const {

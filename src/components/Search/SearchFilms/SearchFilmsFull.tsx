@@ -11,7 +11,6 @@ import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 import { useLocale } from 'next-intl';
 import { handleSearchMovies } from './_actions/handleSearchMovies';
-import { supabase } from '@/lib/supabase/client';
 
 export default function SearchFilmsFull({ query }: { query: string }) {
   const { user } = useAuth();

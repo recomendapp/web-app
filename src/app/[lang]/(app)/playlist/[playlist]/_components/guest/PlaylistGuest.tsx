@@ -23,7 +23,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { PlusIcon, Search, TrashIcon, XIcon } from 'lucide-react';
 import type { Playlist, PlaylistGuest, UserFriend } from '@/types/type.db';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
 import useDebounce from '@/hooks/use-debounce';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -42,6 +41,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getInitiales } from '@/lib/utils';
 import Loader from '@/components/Loader/Loader';
 import { Badge } from '@/components/ui/badge';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 const addUserFormSchema = z.object({
 	friends: z.array(
@@ -123,6 +123,7 @@ const AddUser = ({
   playlist: Playlist;
   setView: Dispatch<SetStateAction<string>>;
 }) => {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
 
   const queryClient = useQueryClient();
@@ -368,6 +369,7 @@ const GuestManageAccess = ({
   guest: PlaylistGuest;
   playlist: Playlist;
 }) => {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
 
   const queryClient = useQueryClient();

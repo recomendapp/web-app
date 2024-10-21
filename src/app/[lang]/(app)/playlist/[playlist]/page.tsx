@@ -6,17 +6,18 @@ import { useEffect, useRef, useState } from 'react';
 import PlaylistTable from '@/app/[lang]/(app)/playlist/[playlist]/_components/table/PlaylistTable';
 import PlaylistHeader from '@/app/[lang]/(app)/playlist/[playlist]/_components/PlaylistHeader';
 import { useAuth } from '@/context/auth-context';
-import { supabase } from '@/lib/supabase/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
 import useDebounce from '@/hooks/use-debounce';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function PlaylistPage({
   params,
 }: {
   params: {lang: string, playlist: number };
 }) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [shouldRefresh, setShouldRefresh] = useState(false);

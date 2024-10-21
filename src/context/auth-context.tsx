@@ -1,15 +1,12 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Provider, Session } from '@supabase/supabase-js';
-// import { supabase } from '@/lib/supabase/client';
 
-import { useQuery } from '@tanstack/react-query';
 import { User } from '@/types/type.db';
-import { headers } from 'next/headers';
 import { useUserDetails } from '@/features/user/userQueries';
-import { useSupabaseClient } from '@/lib/supabase/hook';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export interface UserState {
   user: User | null | undefined;

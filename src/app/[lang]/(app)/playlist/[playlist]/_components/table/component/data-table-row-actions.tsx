@@ -15,7 +15,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -29,11 +28,10 @@ import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { useModal } from '@/context/modal-context';
 import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentModal';
-import { Movie, Person, Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
+import { Movie, Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
 import { MoviePlaylistModal } from '@/components/Modals/Movie/Actions/MoviePlaylistModal';
-import { Modal } from '@/components/Modals/Modal';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 
 interface DataTableRowActionsProps {
@@ -41,7 +39,7 @@ interface DataTableRowActionsProps {
 }
 
 export function DataTableRowActions({ data }: DataTableRowActionsProps) {
-  
+  const supabase = useSupabaseClient();
   const { openModal, createConfirmModal } = useModal();
   
   const [openShowDirectors, setOpenShowDirectors] = useState(false);

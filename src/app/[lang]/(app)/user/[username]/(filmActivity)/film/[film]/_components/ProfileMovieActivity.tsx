@@ -7,8 +7,8 @@ import MovieCard from "@/components/Movie/Card/MovieCard";
 
 import MovieReviewForm from "@/components/Review/form/MovieReviewForm";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase/client";
 import { UserMovieActivity } from "@/types/type.db";
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function ProfileMovieActivity({
 	movieId,
@@ -17,6 +17,7 @@ export default function ProfileMovieActivity({
 	movieId: string,
 	userId: string
 }) {
+	const supabase = useSupabaseClient();
 	
 	const locale = useLocale();
 

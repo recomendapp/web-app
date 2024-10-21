@@ -19,15 +19,15 @@ import {
 
 // GRAPHQL
 import { useLocale } from 'next-intl';
-import { supabase } from '@/lib/supabase/client';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function ProfileFilms({
   userId
 } : {
   userId: string,
 }) {
-
+  const supabase = useSupabaseClient();
   const locale = useLocale();
 
   const [selectedOrder, setSelectedOrder] = useState('watch-desc');

@@ -7,11 +7,6 @@ import { Session } from '@supabase/supabase-js';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import {
-  Price,
-  ProductWithPrices,
-  SubscriptionWithProduct,
-} from '@/types/type.stripe';
 import { Check } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import { useLocale } from 'next-intl';
@@ -19,7 +14,7 @@ import { useAuth } from '@/context/auth-context';
 import { Icons } from '../icons';
 import { Prices, Products } from '@/types/type.db';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface Props {
   session: Session | null;
@@ -155,6 +150,7 @@ const OfferCard = ({
   session?: Session | null;
   priceIdLoading?: string;
 }) => {
+  const supabase = useSupabaseClient();
   const { user, loading } = useAuth();
 
   const {

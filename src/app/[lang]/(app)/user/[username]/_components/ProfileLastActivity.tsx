@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase/client';
 import MovieCard from '@/components/Movie/Card/MovieCard';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useEffect } from 'react';
@@ -12,9 +11,10 @@ import { useLocale } from 'next-intl';
 // QUERY
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { UserMovieActivity, UserProfile } from '@/types/type.db';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function ProfileLastActivity({ profile }: { profile: UserProfile }) {
-  
+  const supabase = useSupabaseClient();
   const locale = useLocale();
 
   const { ref, inView } = useInView();

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import toast from 'react-hot-toast';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface ForgotPasswordFormProps
   extends React.HTMLAttributes<HTMLDivElement> {}
@@ -15,6 +15,7 @@ export function ForgotPasswordForm({
   className,
   ...props
 }: ForgotPasswordFormProps) {
+  const supabase = useSupabaseClient();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const [userPasswordRecovery, setUserPasswordRecovery] = useState({

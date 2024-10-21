@@ -10,12 +10,13 @@ import {
 } from '../../../../../../../../components/ui/select';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
 import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 import MoviePlaylistCard from '../../../../../../../../components/Playlist/FilmPlaylist/MoviePlaylistCard';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export function ShowPlaylists({ filmId }: { filmId: string }) {
+  const supabase = useSupabaseClient();
   const [order, setOrder] = useState('recent');
 
   const { ref, inView } = useInView();

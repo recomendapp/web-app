@@ -2,19 +2,17 @@
 import { Skeleton } from '../../ui/skeleton';
 import Link from 'next/link';
 import { Button } from '../../ui/button';
-import { useQuery } from '@apollo/client';
-import SEARCH_PLAYLIST_QUERY from '../../../graphql/Search/SearchPlaylists';
 import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { SearchPlaylistsQuery } from '@/graphql/__generated__/graphql';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function SearchPlaylistsSmall({
   query,
 }: {
   query: string | undefined;
 }) {
+  const supabase = useSupabaseClient();
   const numberOfResult = 8;
 
   const {

@@ -22,14 +22,15 @@ import { DialogClose } from '@radix-ui/react-dialog';
 
 import toast from 'react-hot-toast';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
 import Link from 'next/link';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface MovieRatingActionProps extends React.HTMLAttributes<HTMLDivElement> {
   movieId: number;
 }
 
 export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
   const pathname = usePathname();
 

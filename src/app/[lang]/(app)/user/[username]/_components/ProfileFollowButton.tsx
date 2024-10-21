@@ -7,8 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 import { cn } from '@/lib/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase/client';
-import { is } from 'date-fns/locale';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 interface UserFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   profileId: string;
@@ -18,6 +17,7 @@ export function ProfileFollowButton({
   className,
   profileId,
 }: UserFollowButtonProps) {
+  const supabase = useSupabaseClient();
   const { user } = useAuth();
 
   const queryClient = useQueryClient();

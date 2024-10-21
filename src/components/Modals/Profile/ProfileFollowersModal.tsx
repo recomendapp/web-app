@@ -6,7 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Loader from '@/components/Loader/Loader';
 
 import { getInitiales } from '@/lib/utils';
-import { supabase } from '@/lib/supabase/client';
 import { Fragment, useEffect, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Input } from '@/components/ui/input';
@@ -15,6 +14,7 @@ import { Search } from 'lucide-react';
 import useDebounce from '@/hooks/use-debounce';
 import Link from 'next/link';
 import { useInfiniteUserFollowers } from '@/features/user/userQueries';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 
 export function ProfileFollowersModal({
@@ -22,7 +22,7 @@ export function ProfileFollowersModal({
 } : {
 	userId: string;
 }) {
-
+	const supabase = useSupabaseClient();
 	const [ search, setSearch ] = useState<null | string>(null);
 
 	const debouncedSearch = useDebounce(search);

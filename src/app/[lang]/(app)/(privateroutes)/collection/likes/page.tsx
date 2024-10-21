@@ -5,9 +5,10 @@ import { TableLikes } from './_components/table/TableLikes';
 import { LikesHeader } from './_components/LikesHeader';
 import { useAuth } from '@/context/auth-context';
 import { useLocale } from 'next-intl';
-import { supabase } from '@/lib/supabase/client';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function Likes() {
+  const supabase = useSupabaseClient();
   const locale = useLocale();
   const { user } = useAuth();
 
