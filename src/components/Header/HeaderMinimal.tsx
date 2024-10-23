@@ -5,6 +5,7 @@ import { UserNav } from '@/components/User/UserNav/UserNav';
 import Image from 'next/image';
 import { siteConfig } from '@/config/site';
 import { createServerClient } from '@/lib/supabase/server';
+import { Icons } from '@/config/icons';
 
 interface HeaderMinimalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -24,22 +25,8 @@ export async function HeaderMinimal({ className }: HeaderMinimalProps) {
     >
       <div className="flex gap-4 w-full items-center">
         <Link href={'/'} className={'py-1 px-1 lg:p-4'}>
-          <Image
-            src={siteConfig.logo.href}
-            alt={siteConfig.logo.alt}
-            width={200}
-            height={200}
-            priority
-            className="hidden lg:block"
-          />
-          <Image
-            src={siteConfig.icon.href}
-            alt={siteConfig.logo.alt}
-            width={40}
-            height={40}
-            priority
-            className="lg:hidden"
-          />
+          <Icons.site.logo className="hidden lg:block fill-accent-1 w-48" />
+          <Icons.site.icon className="lg:hidden fill-accent-1 w-10" />
         </Link>
       </div>
       <div>

@@ -35,7 +35,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { useEffect, useState } from 'react';
-import { Icons } from '@/components/icons';
+import { Icons } from '@/config/icons';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/Loader/Loader';
 import { locales } from '@/lib/i18n/routing';

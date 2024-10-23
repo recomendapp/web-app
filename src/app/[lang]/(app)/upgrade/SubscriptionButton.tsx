@@ -1,6 +1,6 @@
 'use client';
 
-import { Icons } from '@/components/icons';
+import { Icons } from '@/config/icons';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
 import { postData } from '@/lib/stripe/stripe-helpers';

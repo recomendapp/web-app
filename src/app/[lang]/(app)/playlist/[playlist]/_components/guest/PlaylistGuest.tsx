@@ -42,6 +42,7 @@ import { getInitiales } from '@/lib/utils';
 import Loader from '@/components/Loader/Loader';
 import { Badge } from '@/components/ui/badge';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { playlistKeys } from '@/features/playlist/playlistKeys';
 
 const addUserFormSchema = z.object({
 	friends: z.array(
@@ -186,7 +187,7 @@ const AddUser = ({
       return data;
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['playlist', playlist?.id], (oldData: Playlist) => {
+      queryClient.setQueryData(playlistKeys.detail(playlist?.id as number), (oldData: Playlist) => {
         if (!oldData) return oldData;
         return {
           ...oldData,
@@ -402,7 +403,7 @@ const GuestManageAccess = ({
       return null;
     },
     onSuccess: () => {
-      queryClient.setQueryData(['playlist', playlist?.id], (oldData: Playlist) => {
+      queryClient.setQueryData(playlistKeys.detail(playlist?.id as number), (oldData: Playlist) => {
         if (!oldData) return oldData;
         return {
           ...oldData,

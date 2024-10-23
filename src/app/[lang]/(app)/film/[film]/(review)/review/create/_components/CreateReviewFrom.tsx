@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
-import { Icons } from '@/components/icons';
+import { Icons } from '@/config/icons';
 import { MovieAction } from '@/components/Movie/Actions/MovieAction';
 import { Textarea } from '@/components/ui/textarea';
 import MovieCard from '@/components/Movie/Card/MovieCard';

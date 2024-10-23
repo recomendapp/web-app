@@ -13,6 +13,7 @@ import { Playlist, PlaylistGuest, PlaylistItem } from "@/types/type.db";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useSupabaseClient } from '@/context/supabase-context';
+import { playlistKeys } from "@/features/playlist/playlistKeys";
 
 interface PlaylistCommentModalProps extends ModalType {
 	playlistItem: PlaylistItem;
@@ -31,7 +32,7 @@ const PlaylistCommentModal = ({
 
 	const queryClient = useQueryClient();
 
-  	const playlist = queryClient.getQueryData<Playlist>(['playlist', playlistItem?.playlist_id]);
+  	const playlist = queryClient.getQueryData<Playlist>(playlistKeys.detail(playlistItem?.playlist_id as number));
 	
 	const isAllowedToEdit = Boolean(
 		user?.id &&

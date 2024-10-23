@@ -20,8 +20,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { UserPlaylistsLiked } from './_components/UserPlaylistsLiked';
 import CollectionIcon from '@/components/Collection/CollectionIcon';
+import { useUI } from '@/context/ui-context';
 
 export default function Collection() {
+  const { device } = useUI();
   const collectionRoutes = useMemo(
     () => [
       {
@@ -55,14 +57,14 @@ export default function Collection() {
     []
   );
   return (
-    <main className="h-full @container/collection overflow-y-auto">
-      <div className="flex justify-between items-center w-full lg:hidden p-4">
+    <main className="h-full @container/collection overflow-y-auto relative">
+      {device === "mobile" ? <div className="flex justify-between items-center w-full p-4 sticky top-0">
         <div className="flex gap-2 items-center">
           <div className="text-2xl font-bold">Bibliothèque</div>
           <PlaylistCreateButton />
         </div>
         <UserNav />
-      </div>
+      </div> : null}
       <Tabs defaultValue="personal" className='p-4'>
         <TabsList className="grid grid-cols-2 max-w-[400px]">
           <TabsTrigger value="personal">Ma Bibliothèque</TabsTrigger>

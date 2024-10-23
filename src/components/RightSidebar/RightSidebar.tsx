@@ -1,6 +1,5 @@
 'use client';
 
-import { useRightSidebar } from '@/context/right-sidebar-context';
 import { Box } from '../Box/Box';
 import { Button } from '../ui/button';
 import { X } from 'lucide-react';

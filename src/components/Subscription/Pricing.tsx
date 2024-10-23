@@ -11,7 +11,7 @@ import { Check } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import { useLocale } from 'next-intl';
 import { useAuth } from '@/context/auth-context';
-import { Icons } from '../icons';
+import { Icons } from '../../config/icons';
 import { Prices, Products } from '@/types/type.db';
 import { useQuery } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';

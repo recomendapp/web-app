@@ -1,7 +1,7 @@
 'use client';
 
 import FriendsList from '@/components/RightSidebar/FriendsList';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import { Device, useDevice } from '@/hooks/use-device';
 import { setCookie } from 'cookies-next';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { ImperativePanelHandle } from 'react-resizable-panels';
@@ -29,7 +29,7 @@ export interface UiContextProps {
   setRightPanelContent: (content: React.ReactNode) => void;
   rightPanelTitle: string | null;
   setRightPanelTitle: (title: string) => void;
-  device: "mobile" | "tablet" | "desktop";
+  device: Device;
 }
 
 // const defaultState: UiContextProps = {
@@ -58,19 +58,19 @@ export interface UiContextProps {
 // };
 
 // const UiContextProvider = createContext(defaultState);
-const UIProvider = createContext<UiContextProps | undefined>(undefined);
+const UIContext = createContext<UiContextProps | undefined>(undefined);
 
-export function UIContext({
+export const UIProvider = ({
   children,
   defaultLayout = [265, 440, 0],
 	cookieSidebarCollapsed = false,
   cookieRightPanelCollapsed = true,
-}: {
+} : {
   children: React.ReactNode;
   defaultLayout: number[] | undefined
 	cookieSidebarCollapsed?: boolean
   cookieRightPanelCollapsed?: boolean
-}) {
+}) => {
   // LAYOUT
   const [ uiLayout, setUiLayout ] = useState(defaultLayout);
   // *========== START SIDEBAR ==========*
@@ -127,34 +127,14 @@ export function UIContext({
   const [rightPanelTitle, setRightPanelTitle] = useState<string | null>('Suivis');
   // *========== END RIGHTPANEL ==========*
 
-  // *========== START DEVICE ==========*
-  
-  const getDevice = () => {
-    const userAgent = navigator.userAgent.toLowerCase();
-    const isMobile = /iphone|ipad|ipod|android|blackberry|windows phone/g.test(userAgent);
-    const isTablet = /(ipad|tablet|playbook|silk)|(android(?!.*mobile))/g.test(userAgent);
-    
-    if (isMobile) {
-      return "mobile";
-    } else if (isTablet) {
-      return "tablet";
-    } else {
-      return "desktop";
-    }
-  }
-  const [device, setDevice] = useState<"mobile" | "tablet" | "desktop">(getDevice());
+  // *========== IS MOBILE ==========*
 
-  useEffect(() => {
-    const handleResize = () => {
-      setDevice(getDevice());
-    }
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const device = useDevice();
+
+  // *========== END IS MOBILE ==========*
 
   return (
-    <UIProvider.Provider
+    <UIContext.Provider
       value={{
         uiLayout,
         setUiLayout,
@@ -181,17 +161,15 @@ export function UIContext({
         device,
       }}
     >
-      <TooltipProvider delayDuration={100}>
         {children}
-      </TooltipProvider>
-    </UIProvider.Provider>
+    </UIContext.Provider>
   );
 }
 
 export const useUI = () => {
-  const context = useContext(UIProvider);
+  const context = useContext(UIContext);
   if (context === undefined) {
-    throw new Error('useUI must be used within a UIProvider');
+    throw new Error('useUI must be used within a UIContext');
   }
   return context;
 }

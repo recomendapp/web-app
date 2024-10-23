@@ -1,20 +1,7 @@
 import { useAuth } from "@/context/auth-context";
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
-// COMPONENTS
-import {
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-  } from '@/components/ui/tooltip';
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { AlertCircleIcon, HeartIcon } from "lucide-react";
-import { Icons } from "@/components/icons";
-import toast from "react-hot-toast";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function MovieReviewComments({
@@ -25,7 +12,6 @@ export default function MovieReviewComments({
 	const supabase = useSupabaseClient();
 	const { user } = useAuth();
 	const { ref, inView } = useInView();
-	const queryClient = useQueryClient();
 
 	const numberOfResult = 8;
 

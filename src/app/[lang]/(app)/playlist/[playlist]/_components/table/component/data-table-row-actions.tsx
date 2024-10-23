@@ -32,6 +32,9 @@ import { Movie, Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { MoviePlaylistModal } from '@/components/Modals/Movie/Actions/MoviePlaylistModal';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { BinaryIcon, EyeIcon, ListPlusIcon, TextIcon } from 'lucide-react';
+import { Icons } from '@/config/icons';
+import { playlistKeys } from '@/features/playlist/playlistKeys';
 
 
 interface DataTableRowActionsProps {
@@ -48,7 +51,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
 
   const queryClient = useQueryClient();
 
-  const playlist = queryClient.getQueryData<Playlist>(['playlist', data?.playlist_id]);
+  const playlist = queryClient.getQueryData<Playlist>(playlistKeys.detail(data?.playlist_id as number));
 
   const isAllowedToEdit = Boolean(
     user?.id &&
@@ -97,9 +100,12 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
           </DropdownMenuTrigger>
         </div>
 
-        <DropdownMenuContent align="end" className="w-[160px]">
+        <DropdownMenuContent align="end" className="max-w-sm">
           <DropdownMenuItem asChild>
-            <Link href={`/film/${data?.movie_id}`}>Voir le film</Link>
+            <Link href={`/film/${data?.movie_id}`}>
+              <EyeIcon className='w-4' />
+              Voir le film
+            </Link>
           </DropdownMenuItem>
           <ShowDirectorsButton
             movie={data?.movie}
@@ -131,6 +137,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
             <DropdownMenuItem
               onClick={() => openModal(PlaylistCommentModal, { playlistItem: data! })}
             >
+              <TextIcon className='w-4' />
               {data?.comment ? 'Voir le commentaire' : 'Ajouter un commentaire'}
             </DropdownMenuItem>
           )}
@@ -139,12 +146,14 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
             <DropdownMenuItem
               onClick={() => openModal(MoviePlaylistModal, { movieId: data?.movie_id! })}
             >
+              <Icons.actions.addPlaylist className='w-4' />
               Ajouter à une playlist
             </DropdownMenuItem>
           )}
 
           <DropdownMenuSeparator />
           <DropdownMenuItem>
+            <Icons.share className='w-4' />
             <ButtonShare url={`${location.origin}/film/${data?.movie_id}`} />
           </DropdownMenuItem>
           {isAllowedToEdit && (
@@ -155,6 +164,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
                 onConfirm: deletePlaylistItem,
               })}
             >
+              <Icons.trash />
               Delete
             </DropdownMenuItem>
           )}

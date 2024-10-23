@@ -20,7 +20,7 @@ import {
 
 // ICONS
 import { AlertCircle, Heart } from 'lucide-react';
-import { Icons } from '../../../../icons';
+import { Icons } from '../../../../../config/icons';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useSupabaseClient } from '@/context/supabase-context';

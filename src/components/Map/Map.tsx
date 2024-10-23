@@ -3,7 +3,7 @@
 import React, { useState, useRef, useMemo } from 'react';
 import { useMap } from '@/context/map-context';
 import { Interface } from './Interface';
-import { Icons } from '../icons';
+import { Icons } from '../../config/icons';
 import MapContainer, { Layer, Marker, Popup, Source } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useLocale } from 'next-intl';

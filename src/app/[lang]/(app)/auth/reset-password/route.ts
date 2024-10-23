@@ -14,14 +14,9 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (error) throw error;
 
-    // URL to redirect to after sign in process completes
     return NextResponse.redirect(`${proto}//${host}/settings/security`);
-    // return NextResponse.redirect(new URL('/settings/security', requestUrl));
   } catch (error) {
-    // return the user to the password reset page
-    return NextResponse.redirect(`${proto}//${host}/auth/error?error=${error}`);
-    // const errorUrl = new URL('/auth/forgotPassword', requestUrl);
-    // errorUrl.searchParams.set('error', `${error}`);
-    // return NextResponse.redirect(errorUrl);
+    const errorMessage = (error instanceof Error) ? error.message : 'Une erreur est survenue';
+    return NextResponse.redirect(`${proto}//${host}/auth/error?error=${errorMessage}`);
   }
 }

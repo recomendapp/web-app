@@ -4,12 +4,11 @@ import { Skeleton } from '../ui/skeleton';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
-import { useInfiniteUserFollowees } from '@/features/user/userQueries';
+import { useUserFolloweesInfinite } from '@/features/user/userQueries';
 import Loader from '../Loader/Loader';
 import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function FriendsList() {
-  const supabase = useSupabaseClient();
   const { user } = useAuth();
   const { ref, inView } = useInView();
   const {
@@ -18,7 +17,7 @@ export default function FriendsList() {
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useInfiniteUserFollowees({
+	} = useUserFolloweesInfinite({
 		userId: user?.id,
 	});
 

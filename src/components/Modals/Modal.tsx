@@ -119,18 +119,19 @@ export interface ModalType {
  */
 const Modal = ({
 	children,
+	className,
 	...props
-}: React.ComponentProps<typeof Dialog>) => {
+}: React.ComponentProps<typeof Dialog> & { className?: string }) => {
 	const { device } = useUI();
 	return device === 'desktop' ? (
 		<Dialog {...props}>
-			<ModalContent>
+			<ModalContent className={cn('', className)}>
 				{children}
 			</ModalContent>
 		</Dialog>
 	) : (
 		<Drawer {...props}>
-			<ModalContent>
+			<ModalContent className={cn('', className)}>
 				{children}
 			</ModalContent>
 		</Drawer>

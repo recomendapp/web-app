@@ -13,7 +13,7 @@ export async function generateMetadata({
 	  film: number;
 	};
 }) {
-	const supabase = createServerClient();
+	const supabase = createServerClient(params.lang);
 	const { data: movie } = await supabase
 		.from('movie')
 		.select('title')
@@ -83,12 +83,12 @@ export default async function MovieLayout({
 	if (!movie) notFound();
 
 	return (
-		<main>
+		<div>
 			<MovieHeader movie={movie} />
 			<div className="px-4 pb-4">
 				<MovieNavbar movieId={String(params.film)} />
 				{children}
 			</div>
-		</main>
+		</div>
 	);
 };

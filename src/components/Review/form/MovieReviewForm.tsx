@@ -15,7 +15,7 @@ import { FileEdit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import toast from 'react-hot-toast';
-import { Icons } from '@/components/icons';
+import { Icons } from '@/config/icons';
 import { useAuth } from '@/context/auth-context';
 
 import { UserMovieReviewView } from '@/types/type.db';

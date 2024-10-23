@@ -3,20 +3,20 @@ import { Toaster } from 'react-hot-toast';
 import deepmerge from 'deepmerge';
 
 // PROVIDERS
-import { ReactQueryContext } from '@/context/react-query-context';
+import { ReactQueryProvider } from '@/context/react-query-context';
 import { ApolloClientContext } from '@/context/apollo-client-context';
-import { AuthContext } from '@/context/auth-context';
+import { AuthProvider } from '@/context/auth-context';
 import { NextIntlClientProvider } from 'next-intl';
-import { ModalProvider } from '@/context/modal-context';
-import { ThemeContext } from '@/context/theme-context';
+import { ThemeProvider } from '@/context/theme-context';
 import { OneSignalContext } from '@/context/one-signal-context';
-import { RightSidebarContext } from '@/context/right-sidebar-context';
 import { cookies } from 'next/headers';
-import { UIContext } from './ui-context';
+import { UIProvider } from './ui-context';
 import { MapContext } from './map-context';
 import { getMessages } from 'next-intl/server';
 import { getFallbackLanguage } from '@/lib/i18n/fallback';
 import { SupabaseProvider } from './supabase-context';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { ModalProvider } from './modal-context';
 
 export default async function Provider({
   children,
@@ -39,45 +39,28 @@ export default async function Provider({
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <SupabaseProvider locale={locale}>
-        <ReactQueryContext>
+        <ReactQueryProvider>
           {/* <ApolloClientContext> */}
-            <AuthContext>
-                <OneSignalContext>
-                  <ThemeContext attribute="class" defaultTheme="dark" enableSystem>
-                    <UIContext
-                      defaultLayout={defaultLayout}
-                      cookieSidebarCollapsed={cookieSidebarCollapsed}
-                      cookieRightPanelCollapsed={cookieRightPanelCollapsed}
-                    >
-                    <ModalProvider>
-                        <MapContext>
-                          <RightSidebarContext>
-                            <NextTopLoader
-                              showSpinner={false}
-                              easing="ease"
-                              color="#FFE974"
-                              height={2}
-                            />
-                            <Toaster
-                              position="top-center"
-                              toastOptions={{
-                                style: {
-                                  borderRadius: '10px',
-                                  background: '#333',
-                                  color: '#fff',
-                                },
-                              }}
-                            />
-                            {children}
-                          </RightSidebarContext>
-                        </MapContext>
-                      </ModalProvider>
-                    </UIContext>
-                  </ThemeContext>
-                </OneSignalContext>
-            </AuthContext>
+            <AuthProvider>
+              <OneSignalContext>
+                <MapContext>
+                  <ThemeProvider
+                    // NextThemesProvider
+                    attribute="class"
+                    defaultTheme="dark"
+                    enableSystem
+                    // UIProvider
+                    defaultLayout={defaultLayout}
+                    cookieSidebarCollapsed={cookieSidebarCollapsed}
+                    cookieRightPanelCollapsed={cookieRightPanelCollapsed}
+                  >
+                    {children}
+                  </ThemeProvider>
+                </MapContext> 
+              </OneSignalContext>
+            </AuthProvider>
           {/* </ApolloClientContext> */}
-        </ReactQueryContext>
+        </ReactQueryProvider>
       </SupabaseProvider>
     </NextIntlClientProvider>
   );

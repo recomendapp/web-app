@@ -5,6 +5,7 @@ import { Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
 import { useQueryClient } from '@tanstack/react-query';
 import { MessageSquarePlusIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
+import { playlistKeys } from '@/features/playlist/playlistKeys';
 
 export function DataComment({ playlistItem }: { playlistItem: PlaylistItem }) {
 
@@ -14,7 +15,7 @@ export function DataComment({ playlistItem }: { playlistItem: PlaylistItem }) {
 
   const queryClient = useQueryClient();
 
-  const playlist = queryClient.getQueryData<Playlist>(['playlist', playlistItem?.playlist_id]);
+  const playlist = queryClient.getQueryData<Playlist>(playlistKeys.detail(playlistItem?.playlist_id as number));
 
   const isAllowedToEdit = Boolean(
     user?.id &&

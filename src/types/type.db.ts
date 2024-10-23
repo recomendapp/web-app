@@ -111,6 +111,8 @@ export type Playlist = Database['public']['Tables']['playlist']['Row'] & {
 	items?: PlaylistItem[] | any;
 } | null | undefined;
 
+export type PlaylistType = 'personal' | 'shared';
+
 // *========== PLAYLIST_ITEM ==========* //
 export type PlaylistItem = Database['public']['Tables']['playlist_item']['Row'] & {
 	movie?: Movie;

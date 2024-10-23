@@ -1,15 +1,9 @@
 "use client";
 
 import { addMinutes } from 'date-fns';
-
-// UI
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { useFormatter } from 'next-intl';
 import { ConvertHoursMinutes, cn } from '@/lib/utils';
+import { TooltipBox } from '../Box/TooltipBox';
 
 export function RuntimeTooltip({
   runtime,
@@ -30,13 +24,8 @@ export function RuntimeTooltip({
   });
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <span className={cn('w-fit cursor-pointer', className)}>{ConvertHoursMinutes(runtime ?? 0)}</span>
-      </TooltipTrigger>
-      <TooltipContent align="center" side="bottom">
-        {runtime ? `Se termine à ${formattedEndTime}` : 'Unknown'}
-      </TooltipContent>
-    </Tooltip>
-  );
+    <TooltipBox tooltip={runtime ? `Se termine à ${formattedEndTime}` : 'Unknown'}>
+      <span className={cn('w-fit cursor-pointer', className)}>{ConvertHoursMinutes(runtime ?? 0)}</span>
+    </TooltipBox>
+  )
 }

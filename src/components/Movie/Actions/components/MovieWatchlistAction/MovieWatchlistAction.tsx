@@ -12,7 +12,7 @@ import {
 
 // ICONS
 import { AlertCircle, Bookmark } from 'lucide-react';
-import { Icons } from '../../../../icons';
+import { Icons } from '../../../../../config/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSupabaseClient } from '@/context/supabase-context';

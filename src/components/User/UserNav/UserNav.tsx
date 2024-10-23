@@ -7,6 +7,7 @@ import {
   Settings,
   Sparkles,
   Store,
+  StoreIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,6 +25,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth-context';
 import UserAvatar from '../UserAvatar/UserAvatar';
 import { useTranslations } from 'next-intl';
+import { useMemo } from 'react';
 
 export function UserNav({
   className,
@@ -32,6 +34,49 @@ export function UserNav({
 }) {
   const { user, loading, logout } = useAuth();
   const t = useTranslations('routes');
+
+  const routes = useMemo(() => [
+    {
+      icon: StoreIcon,
+      label: 'shop',
+      href: 'https://shop.recomend.app/',
+      shortcut: '↗',
+      target: '_blank',
+      visble: true,
+    },
+    {
+      icon: HelpCircle,
+      label: 'help',
+      href: 'https://help.recomend.app/',
+      shortcut: '↗',
+      target: '_blank',
+      visble: true,
+    },
+    {
+      icon: Info,
+      label: 'about',
+      href: '/about',
+      shortcut: null,
+      target: undefined,
+      visble: true,
+    },
+    {
+      icon: Sparkles,
+      label: 'upgrade',
+      href: '/upgrade',
+      shortcut: null,
+      target: undefined,
+      visble: !user?.premium,
+    },
+    {
+      icon: Settings,
+      label: 'settings',
+      href: '/settings/profile',
+      shortcut: null,
+      target: undefined,
+      visble: true,
+    },
+  ], [user]);
 
   if (!user) {
     return <Skeleton className="h-8 w-8 rounded-full" />;
@@ -62,46 +107,21 @@ export function UserNav({
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <Link href={'https://shop.recomend.app/'} target="_blank">
-              <Store className="mr-2 h-4 w-4" />
-              <span>{t('shop')}</span>
-              <DropdownMenuShortcut>↗</DropdownMenuShortcut>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href={'https://help.recomend.app/'} target="_blank">
-              <HelpCircle className="mr-2 h-4 w-4" />
-              <span>{t('help')}</span>
-              <DropdownMenuShortcut>↗</DropdownMenuShortcut>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href={'/about'}>
-              <Info className="mr-2 h-4 w-4" />
-              <span>{t('about')}</span>
-              {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
-            </Link>
-          </DropdownMenuItem>
-          {!user.premium && (
-            <DropdownMenuItem asChild>
-              <Link href={'/upgrade'} className="text-accent-1">
-                <Sparkles className="mr-2 h-4 w-4" />
-                <span>Upgrade to Premium</span>
-              </Link>
-            </DropdownMenuItem>
-          )}
-          <DropdownMenuItem asChild>
-            <Link href={'/settings/profile'}>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>{t('settings')}</span>
-              {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
-            </Link>
-          </DropdownMenuItem>
+          {routes.map((route, i) => (
+            route.visble && (
+              <DropdownMenuItem key={i} asChild>
+                <Link href={route.href} target={route.target}>
+                  <route.icon className="w-4" />
+                  <span>{t(route.label)}</span>
+                  {route.shortcut ? <DropdownMenuShortcut>{route.shortcut}</DropdownMenuShortcut> : null}
+                </Link>
+              </DropdownMenuItem>
+            )
+          ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout}>
-          <LogOut className="mr-2 h-4 w-4" />
+          <LogOut className="w-4" />
           <span>{t('logout')}</span>
           {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
         </DropdownMenuItem>

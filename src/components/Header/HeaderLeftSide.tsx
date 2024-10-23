@@ -6,6 +6,7 @@ import NavigationButton from '../NavigationButton/NavigationButton';
 import SearchBar from '@/components/Search/SearchBarOLD';
 import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
 import { cn } from '@/lib/utils';
+import { SidebarTrigger } from '../ui/sidebar';
 
 export default function HeaderLeftSide({
   className,
@@ -15,6 +16,7 @@ export default function HeaderLeftSide({
   const pathname = usePathname();
   return (
     <div className={cn("flex items-center gap-4", className)}>
+      <SidebarTrigger className='md:hidden'/>
       <NavigationButton />
       {pathname.startsWith('/search') && <SearchBar />}
       {/* <SearchBar /> */}

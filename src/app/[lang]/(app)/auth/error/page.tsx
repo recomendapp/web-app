@@ -1,39 +1,56 @@
-import { LoginForm } from '@/app/[lang]/(app)/auth/login/_components/LoginForm';
-import { siteConfig } from '@/config/site';
-import { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
+'use client';
 
-export const metadata: Metadata = {
-  title: "Une erreur s\'est produite",
-};
+import { Icons } from '@/config/icons';
+import { Images } from '@/config/images';
+import { useRandomImage } from '@/hooks/use-random-image';
+import Link from 'next/link';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Alert, AlertTitle } from '@/components/ui/alert';
+import { useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 export default function AuthError() {
+  const searchParams = useSearchParams();
+  const errorMsg = searchParams.get('error');
+  const bgImage = useRandomImage(Images.auth.error.background);
   return (
-    <main className="container h-full relative flex flex-col items-center justify-center">
-      <div className="lg:p-8">
-        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <div className="flex justify-center">
-            <Image
-              src={siteConfig.logo.href}
-              alt={siteConfig.logo.alt}
-              width={400}
-              height={400}
-            />
-          </div>
-          <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Une erreur s&apos;est produite
-            </h1>
-          </div>
-          <Link
-            href="/auth/login"
-            className="text-center underline underline-offset-4 hover:-foreground"
-          >
-            Réessayer
-          </Link>{' '}
-        </div>
-      </div>
-    </main>
+    <div
+      className="h-full w-full flex flex-col items-center justify-center"
+      style={{
+        backgroundImage: `url(${bgImage?.src})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      <Card className="w-full max-w-[400px]">
+        <CardHeader className='gap-2'>
+          <CardTitle className='inline-flex gap-2 items-center justify-center'>
+            <Icons.site.icon className='fill-accent-1 w-8' />
+            Erreur
+          </CardTitle>
+          <CardDescription>
+            Une erreur s&apos;est produite durant un processus d&apos;authentification.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className='grid gap-4'>
+          <Alert>
+            <AlertTitle>{errorMsg}</AlertTitle>
+          </Alert>
+        </CardContent>
+        <CardFooter>
+          <Button className='w-full' asChild>
+            <Link href="/auth/login">Revenir en lieu sûr</Link>
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

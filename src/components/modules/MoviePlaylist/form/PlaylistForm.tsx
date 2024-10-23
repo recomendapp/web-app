@@ -25,7 +25,7 @@ import PlaylistPictureUpload from '../components/PlaylistPictureUpload';
 import { usePathname, useRouter } from 'next/navigation';
 
 import compressPicture from '@/lib/utils/compressPicture';
-import { Icons } from '@/components/icons';
+import { Icons } from '@/config/icons';
 
 import {
   AlertDialog,
@@ -51,6 +51,7 @@ import { Playlist } from '@/types/type.db';
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { playlistKeys } from '@/features/playlist/playlistKeys';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -157,7 +158,7 @@ export function PlaylistForm({
         });
         return { ...oldData, pages: updatedPages };
       });
-      queryClient.setQueryData(['playlist', data?.id], null);
+      queryClient.setQueryData(playlistKeys.detail(data?.id as number), null);
     }
   });
 

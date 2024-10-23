@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Icons } from '../../../../icons';
+import { Icons } from '../../../../../config/icons';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   Dialog,

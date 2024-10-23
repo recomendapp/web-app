@@ -1,4 +1,3 @@
-import { useRightSidebar } from '@/context/right-sidebar-context';
 import { Button } from '../ui/button';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import FriendsList from '../RightSidebar/FriendsList';

@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/context/auth-context';
-import { Icons } from '@/components/icons';
+import { Icons } from '@/config/icons';
 import { useEffect, useState } from 'react';
 import Loader from '@/components/Loader/Loader';
 import { useMutation } from '@tanstack/react-query';

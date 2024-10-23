@@ -7,12 +7,12 @@ import { Fragment } from 'react';
 export default function NavigationButton() {
   const router = useRouter();
   return (
-    <Fragment>
+    <>
       <Button
         onClick={router.back}
         variant="ghost"
         size="icon"
-        className="rounded-full hidden lg:flex justify-center"
+        className="rounded-full justify-center"
       >
         <ChevronLeft />
       </Button>
@@ -20,10 +20,10 @@ export default function NavigationButton() {
         onClick={router.forward}
         variant="ghost"
         size="icon"
-        className="rounded-full hidden lg:flex justify-center"
+        className="rounded-full justify-center"
       >
         <ChevronRight />
       </Button>
-    </Fragment>
+    </>
   );
 }

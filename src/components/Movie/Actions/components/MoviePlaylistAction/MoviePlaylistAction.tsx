@@ -1,5 +1,4 @@
 'use client';
-import { ListPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -11,7 +10,7 @@ import { useAuth } from '@/context/auth-context';
 
 import { useModal } from '@/context/modal-context';
 import { MoviePlaylistModal } from '@/components/Modals/Movie/Actions/MoviePlaylistModal';
-import { Icons } from '@/components/icons';
+import { Icons } from '@/config/icons';
 import { Modal } from '@/components/Modals/Modal';
 import { useState } from 'react';
 import Link from 'next/link';
@@ -39,7 +38,7 @@ export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
               asChild
             >
               <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
-                <ListPlus />
+                <Icons.actions.addPlaylist />
               </Link>
             </Button>
           </TooltipTrigger>
@@ -59,7 +58,7 @@ export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
             className="rounded-full"
             onClick={() => openModal(MoviePlaylistModal, { movieId })}
           >
-            {loading ? <Icons.spinner className="animate-spin" /> : <ListPlus />}
+            {loading ? <Icons.spinner className="animate-spin" /> : <Icons.actions.addPlaylist />}
           </Button>
         </TooltipTrigger>
         <TooltipContent side="bottom">

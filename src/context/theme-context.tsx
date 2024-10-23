@@ -2,8 +2,58 @@
 
 import * as React from 'react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import { ThemeProviderProps } from 'next-themes/dist/types';
+import { ThemeProviderProps as ThemeProviderPropsPrimitive} from 'next-themes/dist/types';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { UIProvider } from './ui-context';
+import NextTopLoader from 'nextjs-toploader';
+import { Toaster } from 'react-hot-toast';
+import { ModalProvider } from './modal-context';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
-export function ThemeContext({ children, ...props }: ThemeProviderProps) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+interface ThemeProviderProps extends ThemeProviderPropsPrimitive {
+  defaultLayout?: number[];
+  cookieSidebarCollapsed?: boolean;
+  cookieRightPanelCollapsed?: boolean;
+}
+
+export const ThemeProvider = ({
+  children,
+  defaultLayout,
+  cookieSidebarCollapsed,
+  cookieRightPanelCollapsed,
+  ...props
+} : ThemeProviderProps) => {
+  return (
+    <NextThemesProvider {...props}>
+      <UIProvider
+        defaultLayout={defaultLayout}
+        cookieSidebarCollapsed={cookieSidebarCollapsed}
+        cookieRightPanelCollapsed={cookieRightPanelCollapsed}
+      >
+        {/* <SidebarProvider> */}
+          <TooltipProvider delayDuration={100}>
+            <ModalProvider>
+              <NextTopLoader
+                showSpinner={false}
+                easing="ease"
+                color="#FFE974"
+                height={2}
+                />
+              <Toaster
+                position="top-center"
+                toastOptions={{
+                  style: {
+                    borderRadius: '10px',
+                    background: '#333',
+                    color: '#fff',
+                  },
+                }}
+              />
+              {children}
+            </ModalProvider>
+          </TooltipProvider>
+        {/* </SidebarProvider> */}
+      </UIProvider>
+    </NextThemesProvider>
+  );
 }

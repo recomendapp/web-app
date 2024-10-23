@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 
 // ICONS
 import { Send } from 'lucide-react';
-import { Icons } from '@/components/icons';
+import { Icons } from '@/config/icons';
 import { MovieSendModal } from '@/components/Modals/Movie/Actions/MovieSendModal';
 import { useState } from 'react';
 import { Modal } from '@/components/Modals/Modal';

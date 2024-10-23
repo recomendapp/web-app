@@ -10,10 +10,10 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { AlertCircleIcon, HeartIcon } from "lucide-react";
-import { Icons } from "@/components/icons";
 import toast from "react-hot-toast";
 import { usePathname } from "next/navigation";
 import { useSupabaseClient } from '@/context/supabase-context';
+import { Icons } from "@/config/icons";
 
 export default function UserMovieReviewLike({
 	reviewId,
@@ -127,7 +127,7 @@ export default function UserMovieReviewLike({
 				className={`rounded-full`}
 			>
 				{(isLoading || isLiked === undefined)  ? (
-				<Icons.spinner className="animate-spin" />
+				<Icons.loader />
 				) : isError ? (
 				<AlertCircleIcon />
 				) : (

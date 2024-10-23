@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea';
 import toast from 'react-hot-toast';
 import PictureUpload from './pictureUpload';
 import { useAuth } from '@/context/auth-context';
-import { Icons } from '@/components/icons';
+import { Icons } from '@/config/icons';
 import { useEffect, useState } from 'react';
 import compressPicture from '@/lib/utils/compressPicture';
 import Loader from '@/components/Loader/Loader';

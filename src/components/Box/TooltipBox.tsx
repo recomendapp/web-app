@@ -2,38 +2,39 @@ import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-  } from '@/components/ui/tooltip';
-import { TooltipContentProps, TooltipTriggerProps } from '@radix-ui/react-tooltip';
+} from '@/components/ui/tooltip';
+import { TooltipContentProps, TooltipPortal, TooltipTriggerProps } from '@radix-ui/react-tooltip';
 
 interface TooltipBoxProps extends React.HTMLAttributes<HTMLDivElement> {
 	children: React.ReactNode;
-	tooltip?: string;
+	tooltip?: string | TooltipContentProps;
 	tooltipTrigger?: TooltipTriggerProps;
-	tooltipContent?: TooltipContentProps;
 }
-  
+
 export const TooltipBox: React.FC<TooltipBoxProps> = ({
 	children,
 	tooltip,
 	tooltipTrigger,
-	tooltipContent,
+	...props
 }) => {
 	if (!tooltip) return children as JSX.Element;
 
+	let tooltipContentProps: TooltipContentProps = {};
+
+	if (typeof tooltip === 'string') {
+		tooltipContentProps.children = tooltip;
+	} else {
+		tooltipContentProps = { ...tooltip };
+	}
+
 	return (
 		<Tooltip>
-			<TooltipTrigger
-				asChild
-				{...tooltipTrigger}
-			>
+			<TooltipTrigger asChild {...tooltipTrigger}>
 				{children}
 			</TooltipTrigger>
-			<TooltipContent
-				side="bottom"
-				{...tooltipContent}
-			>
-				{tooltip}
-			</TooltipContent>
+			<TooltipPortal>
+				<TooltipContent side="bottom" align="center" {...tooltipContentProps} {...props} />
+			</TooltipPortal>
 		</Tooltip>
 	);
-  }
+};

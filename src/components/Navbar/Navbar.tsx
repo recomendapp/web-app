@@ -54,9 +54,7 @@ export function Navbar({ className }: NavbarProps) {
         label: 'Bibliothèque',
         active:
           pathname.startsWith('/collection') ||
-          pathname.startsWith('/auth/login') ||
-          pathname.startsWith('/auth/signup') ||
-          pathname.startsWith('/auth/forgotPassword') ||
+          pathname.startsWith('/auth') ||
           pathname.startsWith('/resetPassword') ||
           pathname.startsWith('/verifyEmail'),
         href: user ? '/collection' : '/auth/login',
@@ -68,24 +66,22 @@ export function Navbar({ className }: NavbarProps) {
   return (
     <div
       className={cn(
-        'bg-navbar justify-around items-center flex border-t',
+        `h-navbar bg-navbar border-t w-full grid grid-cols-5 rounded-t-lg`,
         className
       )}
     >
-      {routes.map((item) => (
-        <Link
-          key={item.label}
-          href={item.href}
-          className={` opacity-100 ${
-            !item.active && ' opacity-70'
-          } w-full h-full flex items-center justify-center`}
-        >
-          <div className="flex flex-col items-center gap-1">
-            <item.icon className="h-6 w-6" />
-            <div className=" text-xs">{item.label}</div>
-          </div>
-        </Link>
-      ))}
+    {routes.map((item) => (
+      <Link
+        key={item.label}
+        href={item.href}
+        className={` opacity-100 ${
+          !item.active && ' opacity-70'
+        } w-full h-full flex flex-col items-center justify-center text-center`}
+      >
+        <item.icon className="w-8" />
+        {item.label}
+      </Link>
+    ))}
     </div>
   );
 }

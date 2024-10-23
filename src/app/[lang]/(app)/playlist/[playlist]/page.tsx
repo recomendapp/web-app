@@ -11,6 +11,7 @@ import { Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
 import useDebounce from '@/hooks/use-debounce';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { playlistKeys } from '@/features/playlist/playlistKeys';
 
 export default function PlaylistPage({
   params,
@@ -26,7 +27,7 @@ export default function PlaylistPage({
     data: playlist,
     refetch,
   } = useQuery({
-    queryKey: ['playlist', Number(params.playlist)],
+    queryKey: playlistKeys.detail(Number(params.playlist)),
     queryFn: async () => {
       if (!params.playlist || !params.lang) throw new Error('No playlist id or locale');
       const { data } = await supabase
@@ -127,7 +128,7 @@ export default function PlaylistPage({
     }
 
     newPlaylistItems.sort((a, b) => a!.rank - b!.rank);
-    queryClient.setQueryData(['playlist', Number(params.playlist)], (oldData: Playlist) => {
+    queryClient.setQueryData(playlistKeys.detail(Number(params.playlist)), (oldData: Playlist) => {
       if (!oldData) return null;
       return {
         ...oldData,

@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Icons } from '../../../../icons';
+import { Icons } from '../../../../../config/icons';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -128,9 +128,9 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
           >
             <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
               <div
-                className={`transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[2px]`}
+                className={`transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[0.5px]`}
               >
-                <Check size={16} />
+                <Check />
               </div>
             </Link>
           </Button>
@@ -161,11 +161,11 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
               ) : (
                 <div
                   className={`
-                      transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[2px]
+                      transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[0.5px]
                       ${activity && 'bg-blue-500 border-blue-500'}
                     `}
                 >
-                  <Check size={16} />
+                  <Check />
                 </div>
               )}
             </Button>
@@ -184,11 +184,11 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
                 ) : (
                   <div
                     className={`
-                      border-2 hover:border-blue-500 rounded-full p-[2px]
+                      border-2 hover:border-blue-500 rounded-full p-[0.5px]
                       ${activity && 'bg-blue-500 border-blue-500'}
                     `}
                   >
-                    <Check size={16} />
+                    <Check />
                   </div>
                 )}
               </Button>

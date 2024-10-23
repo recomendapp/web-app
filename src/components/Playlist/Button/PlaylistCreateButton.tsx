@@ -14,11 +14,14 @@ import { Modal } from '@/components/Modals/Modal';
 import { useModal } from '@/context/modal-context';
 import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
 import { TooltipBox } from '@/components/Box/TooltipBox';
+import { cn } from '@/lib/utils';
 
 export function PlaylistCreateButton({
+  className,
   icon = true,
   filmId,
 }: {
+  className?: string;
   icon?: boolean;
   filmId?: string;
 }) {
@@ -33,7 +36,7 @@ export function PlaylistCreateButton({
         <Button
           variant={'ghost'}
           size={'icon'}
-          className="rounded-full shrink-0"
+          className={cn("rounded-full shrink-0", className)}
           onClick={() => openModal(PlaylistModal, { filmId })}
         >
           {icon ? <Plus /> : 'Créer une playlist'}

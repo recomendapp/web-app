@@ -1,3 +1,5 @@
+import { PlaylistType } from "@/types/type.db"
+
 export const userKeys = {
 	all: ['user'] as const,
 	details: () => [...userKeys.all, 'details'] as const,
@@ -8,9 +10,53 @@ export const userKeys = {
 	 */
 	detail: (userId: string) => [...userKeys.details(), userId] as const,
 	/**
+	 * Fetches friends of a user
+	 * @param userId The user id
+	 * @param filters The filters (optional)
+	 * @returns List of friends
+	 */
+	friends: (
+		userId: string,
+		filters?: {
+			search?: string | null
+		}
+	) => filters ? [...userKeys.detail(userId), 'friends', filters] : [...userKeys.detail(userId), 'friends'] as const,
+	/**
+	 * Fetches friends of a user to send a movie
+	 * @param userId The user id
+	 * @param movieId The movie id
+	 * @returns List of friends
+	 */
+	sendMovie: (
+		userId: string,
+		movieId: number,
+	) => [...userKeys.detail(userId), 'friends', 'send', movieId] as const,
+	/**
+	 * Fetches playlists to add a movie
+	 * @param userId The user id
+	 * @param movieId The movie id
+	 * @returns List of playlists
+	 */
+	addMovieToPlaylist: (
+		userId: string,
+		movieId: number,
+	) => [...userKeys.detail(userId), 'playlists', 'add', movieId] as const,
+	/**
+	 * Fetches playlists to add a movie with a type
+	 * @param userId The user id
+	 * @param movieId The movie id
+	 * @param type The playlist type
+	 * @returns List of playlists
+	 */
+	addMovieToPlaylistType: (
+		userId: string,
+		movieId: number,
+		type: PlaylistType,
+	) => [...userKeys.addMovieToPlaylist(userId, movieId), type] as const,
+	/**
 	 * Fetches followers of a user
 	 * @param userId The user id
-	 * @param filters The filters
+	 * @param filters The filters (optional)
 	 * @returns List of followers
 	 */
 	followers: (
@@ -22,7 +68,7 @@ export const userKeys = {
 	/**
 	 * Fetches followees of a user
 	 * @param userId The user id
-	 * @param filters The filters
+	 * @param filters The filters (optional)
 	 * @returns List of followees
 	 */
 	followees: (
@@ -41,4 +87,17 @@ export const userKeys = {
 	 * @returns The user's guidelist
 	 */
 	guidelist: (userId: string) => [...userKeys.detail(userId), 'guidelist'] as const,
+
+	/**
+	 * Fetches the user's playlists
+	 * @param userId The user id
+	 * @param filters The filters (optional)
+	 * @returns The user's playlists
+	 */
+	playlists: (
+		userId: string,
+		filters?: {
+			order?: 'updated_at-desc' | 'updated_at-asc'
+		}
+	) => filters ? [...userKeys.detail(userId), 'playlists', filters] : [...userKeys.detail(userId), 'playlists'] as const,
 };

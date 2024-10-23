@@ -11,7 +11,7 @@ import {
 
 // ICONS
 import { AlertCircle, Heart } from 'lucide-react';
-import { Icons } from '../../../../icons';
+import { Icons } from '../../../../../config/icons';
 import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';

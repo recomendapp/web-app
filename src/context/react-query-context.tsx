@@ -1,12 +1,12 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { matchQuery, MutationCache, QueryClient, QueryClientProvider, QueryKey } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryNormalizerProvider } from '@normy/react-query';
 import { getType } from '@/lib/react-query/getType';
 // import { broadcastQueryClient } from '@tanstack/query-broadcast-client-experimental'
 
-export const ReactQueryContext = ({
+export const ReactQueryProvider = ({
   children,
 }: {
   children: React.ReactNode;
@@ -18,7 +18,18 @@ export const ReactQueryContext = ({
         staleTime: 60_000,
       },
     },
-  });
+    mutationCache: new MutationCache({
+      onSuccess: (_data, _variables, _context, mutation) => {
+        queryClient.invalidateQueries({
+          predicate: (query) =>
+            Array.isArray(mutation.options.meta?.invalidates) &&
+            (mutation.options.meta?.invalidates as QueryKey[]).some((queryKey) =>
+              matchQuery({ queryKey }, query),
+            ),
+        })
+      }
+    })
+  })
   // broadcastQueryClient({
   //   queryClient: queryClient as any,
   //   broadcastChannel: 'recomend'
@@ -34,7 +45,7 @@ export const ReactQueryContext = ({
             return `${obj.id}`
           }
         },
-        devLogging: true
+        devLogging: false
       }}
     >
       <QueryClientProvider client={queryClient}>
