@@ -18,7 +18,7 @@ export default async function UserPage({
 }) {
   const supabase = createServerClient();
   const { data: user } = await supabase
-    .from('user_profile')
+    .from('profile')
     .select('*')
     .eq('username', params.username)
     .single();

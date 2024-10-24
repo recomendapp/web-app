@@ -24,7 +24,6 @@ export default async function MoviePage({
 			)
 		`)
 		.eq('id', params.film)
-		.eq('language', params.lang)
 		.eq('cast.job', 'Actor')
 		.single();
 

@@ -83,7 +83,11 @@ export const useAddMovieToPlaylist = ({
 						}))
 				);
 			if (error) throw error;
-			return playlists;
+			const updatedPlaylists = playlists.map((playlist) => ({
+				...playlist,
+				items_count: (playlist?.items_count ?? 0) + 1,
+			}));
+			return updatedPlaylists;
 		},
 		onSuccess: (playlists) => {
 			queryClient.invalidateQueries({

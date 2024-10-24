@@ -212,7 +212,7 @@ export const useUserFollowersInfinite = ({
 	filters,
 	numPerPage = 20,
 } : {
-	userId: string | undefined;
+	userId?: string;
 	filters?: {
 		search?: string | null;
 	};
@@ -263,7 +263,7 @@ export const useUserFolloweesInfinite = ({
 	filters,
 	numPerPage = 20,
 } : {
-	userId: string | undefined;
+	userId?: string;
 	filters?: {
 		search?: string | null;
 	};
@@ -302,30 +302,114 @@ export const useUserFolloweesInfinite = ({
 	});
 };
 
+/**
+ * Fetches the user guidelist
+ * @param userId The user id
+ * @param locale The locale
+ */
 export const useUserGuidelist = ({
 	userId,
-	locale,
+	filters,
 } : {
-	userId: string | undefined;
-	locale: string;
+	userId?: string;
+	filters?: {
+		order?: 'created_at-desc' | 'created_at-asc' | 'random';
+		limit?: number;
+	};
 }) => {
 	const supabase = useSupabaseClient();
 	return useQuery({
-		queryKey: userKeys.guidelist(userId as string),
+		queryKey: userKeys.guidelist(userId as string, filters),
 		queryFn: async () => {
 			if (!userId) throw Error('Missing user id');
-			if (!locale) throw Error('Missing locale');
-			const { data, error } = await supabase
-				.from('guidelist')
+			let request = supabase
+				.from(filters?.order === 'random' ? 'guidelist_random' : 'guidelist')
 				.select('*, movie(*)')
+				.eq('user_id', userId)
 				.eq('status', 'active')
-				.eq('movie.language', locale)
+			
+			if (filters) {
+				if (filters?.order !== 'random' && filters.order) {
+					switch (filters.order) {
+						case 'created_at-desc':
+							request = request.order('created_at', { ascending: false });
+							break;
+						case 'created_at-asc':
+							request = request.order('created_at', { ascending: true });
+							break;
+					}
+				}
+				if (filters.limit) {
+					request = request.limit(filters.limit);
+				}
+			}
+			const { data, error } = await request;
 			if (error) throw error;
 			return data;
 		},
-		enabled: !!userId && !!locale,
+		enabled: !!userId,
 	});
 }
+
+/**
+ * Fetches the user watchlist
+ * @param userId The user id
+ * @param filters The filters
+ * @returns The user watchlist
+ */
+export const useUserWatchlist = ({
+	userId,
+	filters,
+} : {
+	userId?: string;
+	filters?: {
+		order?: 'created_at-desc' | 'created_at-asc' | 'random';
+		limit?: number;
+	};
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.watchlist(userId as string, filters),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			let request;
+			if (filters?.order === 'random') {
+				request = supabase
+					.from('watchlist_random')
+					.select('*, movie(*)')
+			} else {
+				request = supabase
+					.from('user_movie_watchlist')
+					.select('*, movie(*)')
+			}
+			request = request
+				.eq('user_id', userId)
+				.eq('status', 'active')
+			
+			if (filters) {
+				if (filters?.order !== 'random' && filters.order) {
+					switch (filters.order) {
+						case 'created_at-desc':
+							request = request.order('created_at', { ascending: false });
+							break;
+						case 'created_at-asc':
+							request = request.order('created_at', { ascending: true });
+							break;
+					}
+				}
+				if (filters.limit) {
+					request = request.limit(filters.limit);
+				}
+			}
+			const { data, error } = await request;
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId,
+	});
+}
+
+
 
 
 /**

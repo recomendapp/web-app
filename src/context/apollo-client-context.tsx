@@ -1,13 +1,21 @@
 'use client';
 
-import React from 'react';
-import apolloClient from '@/lib/apollo/client';
+import React, { useMemo } from 'react';
 import { ApolloProvider } from '@apollo/client';
+import { useSupabaseClient } from './supabase-context';
+import { createApolloClient } from '@/lib/apollo/client';
 
-export function ApolloClientContext({
+export function ApolloClientProvider({
+  locale,
   children,
+  ...props
 }: {
+  locale: string;
   children: React.ReactNode;
 }) {
-  return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>;
+  const supabase = useSupabaseClient();
+  const apolloClient = useMemo(() => {
+    return createApolloClient(supabase, locale);
+  }, [supabase, locale]);
+  return <ApolloProvider client={apolloClient} {...props}>{children}</ApolloProvider>;
 }

@@ -10,7 +10,6 @@ import { Clock, Text } from 'lucide-react';
 import MovieCardSmall from '@/components/Movie/MovieCardSmall';
 import { UserMovieGuidelistFragment } from '@/graphql/__generated__/graphql';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
-import UserAvatar from '@/components/User/UserAvatar/UserAvatar';
 import Senders from './data-table-senders';
 import { UserMovieGuidelistView } from '@/types/type.db';
 

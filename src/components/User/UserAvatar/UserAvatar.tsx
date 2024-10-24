@@ -1,25 +1,27 @@
 'use client';
 
-// UI
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-// TYPES
 import { User, UserProfile } from '@/types/type.db';
-// UTILS
 import { cn, getInitiales } from '@/lib/utils';
 
 interface UserAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
-  user: User | UserProfile;
+  avatar_url?: string | null;
+  username?: string | null;
 }
 
-export default function UserAvatar({ user, className }: UserAvatarProps) {
+export const UserAvatar = ({
+  avatar_url,
+  username,
+  className,
+  ...props
+} : UserAvatarProps) => {
+  const avatarUrlRender = avatar_url ?? '';
+  const usernameRender = username ?? '';
   return (
     <Avatar className={cn('h-8 w-8', className)}>
-      <AvatarImage src={user?.avatar_url ?? ''} alt={user?.username ?? undefined} />
-      {/* <AvatarFallback className="text-clamp">
-            <UserIcon color="#fff" className='w-2/4 h-2/4'/>
-          </AvatarFallback> */}
+      <AvatarImage src={avatarUrlRender} alt={usernameRender} />
       <AvatarFallback className="text-clamp">
-        {getInitiales(user?.username ?? '')}
+        {getInitiales(usernameRender)}
       </AvatarFallback>
     </Avatar>
   );

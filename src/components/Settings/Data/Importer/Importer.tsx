@@ -45,7 +45,7 @@ export function Importer() {
 			name: 'Letterboxd',
 			description: 'Import your data from Letterboxd',
 			icon: 'letterboxd_vertical',
-			enabled: true,
+			enabled: false,
 			fileTypes:  "zip, application/zip, application/x-zip-compressed, multipart/x-zip"
 		},
 		{

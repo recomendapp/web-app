@@ -77,7 +77,7 @@ export const handleGetWatched = async (
 			success.push({
 				date: movie.date,
 				source: movie.movie,
-				movie: data[0] as Movie,
+				movie: data[0] as any, // as Movie
 				liked: movie.liked,
 				rating: movie.rating,
 			});

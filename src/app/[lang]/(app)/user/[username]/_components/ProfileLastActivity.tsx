@@ -43,7 +43,6 @@ export default function ProfileLastActivity({ profile }: { profile: UserProfile 
           movie(*)
         `)
         .eq('user_id', profile.id)
-        .eq('movie.language', locale)
         .range(from, to)
         .order('updated_at', { ascending: false})
         .returns<UserMovieActivity[]>();

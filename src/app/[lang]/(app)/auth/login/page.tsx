@@ -31,7 +31,7 @@ export default function Login() {
   async function handleLoginOAuth2(provider: Provider) {
     try {
       setIsLoading(true);
-      await loginOAuth2(provider);
+      await loginOAuth2(provider, redirectTo);
     } catch (error) {
       toast.error("Une erreur s'est produite");
     } finally {

@@ -2,10 +2,12 @@ import * as React from "react"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { ArrowLeft, ArrowRight, PauseIcon, PlayIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { AutoplayType } from "embla-carousel-autoplay"
+import { is } from "date-fns/locale"
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -250,6 +252,52 @@ const CarouselNext = React.forwardRef<
 })
 CarouselNext.displayName = "CarouselNext"
 
+// Build play and pause button
+const CarouselPlayPause = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentProps<typeof Button> & {
+    autoplay: AutoplayType,
+    defaultIsPlaying?: boolean,
+    isPlaylistCallback?: (isPlaying: boolean) => void
+  }
+>(({ autoplay, defaultIsPlaying, isPlaylistCallback, className, variant = "outline", size = "icon", ...props }, ref) => {
+  const [isPlaying, setIsPlaying] = React.useState(defaultIsPlaying ?? true)
+  const { orientation } = useCarousel();
+
+  const togglePlayPause = () => {
+    if (isPlaying) {
+      autoplay.stop()
+    } else {
+      autoplay.play()
+    }
+    setIsPlaying(!isPlaying)
+    isPlaylistCallback && isPlaylistCallback(!isPlaying)
+  }
+
+  return (
+    <Button
+      ref={ref}
+      variant={variant}
+      size={size}
+      className={cn(
+        "absolute h-8 w-8 rounded-full",
+        orientation === "horizontal"
+          ? "-right-12 top-1/2 -translate-y-1/2"
+          : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
+        className
+      )}
+      onClick={togglePlayPause}
+      {...props}
+    >
+      {isPlaying ? <PauseIcon className="h-4 w-4" /> : <PlayIcon className="h-4 w-4" />}
+      <span className="sr-only">{isPlaying ? 'Pause autoplay' : 'Play autoplay'}</span>
+    </Button>
+  )
+})
+
+CarouselPlayPause.displayName = "CarouselPlayPause"
+
+
 export {
   type CarouselApi,
   Carousel,
@@ -257,4 +305,5 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  CarouselPlayPause,
 }

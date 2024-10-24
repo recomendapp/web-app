@@ -40,18 +40,20 @@ export const ImageWithFallback = ({
           {...rest}
         />
       ) : (
-        <Fallback type={type} from="#363636" to="#363636" alt={alt} />
+        <Fallback className={cn('', className)} type={type} from="#363636" to="#363636" alt={alt} />
       )}
     </>
   );
 };
 
 export function Fallback({
+  className,
   type,
   from,
   to,
   alt,
 }: {
+  className?: string;
   type?: string;
   from: string;
   to: string;
@@ -62,7 +64,7 @@ export function Fallback({
       style={{
         backgroundImage: `linear-gradient(to top right, ${from}, ${to})`,
       }}
-      className={`w-full rounded-md flex items-center justify-center h-full`}
+      className={cn(`w-full rounded-md flex items-center justify-center h-full`, className)}
     >
       {type == 'playlist' ? (
         <ListVideo color="#fff" className="w-2/5 h-2/5" />

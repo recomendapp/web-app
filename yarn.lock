@@ -2007,20 +2007,20 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@normy/core@~0.9.1":
-  version "0.9.1"
-  resolved "https://registry.npmjs.org/@normy/core/-/core-0.9.1.tgz"
-  integrity sha512-Mi3+aKFq1ykpgyP/iSz/nDZ3TaTwwM3sS5Q++GIDku3/iqCYJPC6402/D2ZT8KfFqn+nYL+N87Z7kNwTPKGEOw==
+"@normy/core@0.10.1":
+  version "0.10.1"
+  resolved "https://registry.npmjs.org/@normy/core/-/core-0.10.1.tgz"
+  integrity sha512-/ozUM1hESDODqaiMy5nXgct/QGUaavfBott2TEXJeeQ8+79/HPqCNytI/tGpoL9eWd7S0SQ5M1A3kaZqkcon/w==
   dependencies:
     "@babel/runtime" "^7.23.5"
-    deepmerge "4.0.0"
+    deepmerge "4.3.1"
 
-"@normy/react-query@^0.13.1":
-  version "0.13.1"
-  resolved "https://registry.npmjs.org/@normy/react-query/-/react-query-0.13.1.tgz"
-  integrity sha512-QYXY5jeKWtaqrorq3UNbSh6hvuoQKHrKoG9bPSl7yh+wGb6svFmVRlgmxqGwwKZ2vlma8vqJeyMVL4K5LO3QJw==
+"@normy/react-query@^0.15.0":
+  version "0.15.0"
+  resolved "https://registry.npmjs.org/@normy/react-query/-/react-query-0.15.0.tgz"
+  integrity sha512-8JGHpsA3dCTmamrP4+LMVoLO4FjLpNLAxFMODAjFIUPgiRTh1mTwltcdJhQ0RyUeM4cDpHYqb0+/rjDtr7CUWQ==
   dependencies:
-    "@normy/core" "~0.9.1"
+    "@normy/core" "0.10.1"
 
 "@peculiar/asn1-schema@^2.3.6":
   version "2.3.8"
@@ -4846,15 +4846,10 @@ deep-is@^0.1.3:
   resolved "https://registry.npmjs.org/deep-is/-/deep-is-0.1.4.tgz"
   integrity sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==
 
-deepmerge@^4.2.2, deepmerge@^4.3.1:
+deepmerge@^4.2.2, deepmerge@^4.3.1, deepmerge@4.3.1:
   version "4.3.1"
   resolved "https://registry.npmjs.org/deepmerge/-/deepmerge-4.3.1.tgz"
   integrity sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==
-
-deepmerge@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/deepmerge/-/deepmerge-4.0.0.tgz"
-  integrity sha512-YZ1rOP5+kHor4hMAH+HRQnBQHg+wvS1un1hAOuIcxcBy0hzcUf6Jg2a1w65kpoOUnurOfZbERwjI1TfZxNjcww==
 
 defaults@^1.0.3:
   version "1.0.4"
@@ -5007,6 +5002,11 @@ electron-to-chromium@^1.4.535:
   version "1.4.588"
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.588.tgz"
   integrity sha512-soytjxwbgcCu7nh5Pf4S2/4wa6UIu+A3p03U2yVr53qGxi1/VTR3ENI+p50v+UxqqZAfl48j3z55ud7VHIOr9w==
+
+embla-carousel-autoplay@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.npmjs.org/embla-carousel-autoplay/-/embla-carousel-autoplay-8.3.0.tgz"
+  integrity sha512-h7DFJLf9uQD+XDxr1NwA3/oFIjsnj/iED2RjET5u6/svMec46IbF1CYPhmB5Q/1Fc0WkcvhPpsEsrtVXQLxNzA==
 
 embla-carousel-react@^8.3.0:
   version "8.3.0"

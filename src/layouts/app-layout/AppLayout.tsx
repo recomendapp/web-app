@@ -44,7 +44,7 @@ export function AppLayout({
 	return (
 		<SidebarProvider className="min-h-screen">
 			<SidebarLeft />
-			<SidebarInset className={`${device === "mobile" ? "pb-navbar md:pb-0" : ""}`}>
+			<SidebarInset className={`@container/main ${device === "mobile" ? "pb-navbar md:pb-0" : ""}`}>
 				{device !== "mobile" ? <Header isLogged={isLogged} /> : null}
 				{children}
 			</SidebarInset>

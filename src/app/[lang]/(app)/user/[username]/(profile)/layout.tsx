@@ -15,7 +15,7 @@ export default async function UserLayout({
 }: UserLayoutProps) {
   const supabase = createServerClient();
   const { data: user } = await supabase
-    .from('user_profile')
+    .from('profile')
     .select('*')
     .eq('username', params.username)
     .single();

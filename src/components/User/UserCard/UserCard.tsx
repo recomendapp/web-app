@@ -9,7 +9,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
-import UserAvatar from '../UserAvatar/UserAvatar';
+import { UserAvatar } from '../UserAvatar/UserAvatar';
 
 import { User, UserProfile } from '@/types/type.db';
 
@@ -32,7 +32,7 @@ export default function UserCard({
         href={'/@' + user?.username}
         className="flex flex-col items-center bg-muted hover:bg-muted-hover h-full rounded-xl p-2 gap-2 transition"
       >
-        <UserAvatar className="w-[150px] h-[150px]" user={user} />
+        <UserAvatar className="w-[150px] h-[150px]" avatar_url={user?.avatar_url} username={user?.username} />
         <div className="text-center">
           <p>{user?.full_name}</p>
           <p className="text-muted-foreground">@{user?.username}</p>
@@ -47,7 +47,7 @@ export default function UserCard({
       </HoverCardTrigger>
       <HoverCardContent>
         <div className="flex justify-between space-x-4">
-          <UserAvatar user={user} />
+          <UserAvatar avatar_url={user?.avatar_url} username={user?.username}/>
           <div className="space-y-1">
             <h4 className="text-sm font-semibold">@nextjs</h4>
             <p className="text-sm">
@@ -77,7 +77,7 @@ function UserLink({ user, className, icon }: UserLinkProps) {
       href={'/@' + user?.username}
       className={cn('flex items-center gap-2 w-fit', className)}
     >
-      <UserAvatar className="w-[25px] h-[25px]" user={user} />
+      <UserAvatar className="w-[25px] h-[25px]" avatar_url={user?.avatar_url} username={user?.username} />
       {!icon && (
         <div
           className={`flex justify-center items-center gap-1

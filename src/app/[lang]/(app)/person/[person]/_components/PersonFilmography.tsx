@@ -58,8 +58,7 @@ export default function PersonFilmography({
           *,
           movie(*)
         `)
-        .eq('person_id', person.id)
-        .eq('movie.language', locale)
+        .eq('person_id', person.id);
         
       if (selectedDepartment) {
         query = query.eq('department', selectedDepartment)

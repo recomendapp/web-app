@@ -18,7 +18,6 @@ export async function generateMetadata({
 		.from('movie')
 		.select('title')
 		.eq('id', params.film)
-		.eq('language', params.lang)
 		.single();
 	
 	if (!movie) return { title: 'Film introuvable' };
@@ -39,7 +38,7 @@ export default async function MovieLayout({
 	  film: number;
 	};
 }) {
-	const supabase = createServerClient();
+	const supabase = createServerClient(params.lang);
 	const { data: movie } = await supabase
 		.from('movie')
 		.select(`
@@ -72,7 +71,6 @@ export default async function MovieLayout({
 			videos:tmdb_movie_videos(*)
 		`)
 		.eq('id', params.film)
-		.eq('language', params.lang)
 		.eq('genres.genre.data.language', params.lang)
 		.eq('production_countries.country.data.language', params.lang)
 		.eq('spoken_languages.language.data.language', params.lang)

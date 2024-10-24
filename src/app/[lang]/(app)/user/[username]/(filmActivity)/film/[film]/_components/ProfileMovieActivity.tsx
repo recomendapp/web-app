@@ -40,7 +40,6 @@ export default function ProfileMovieActivity({
 				`)
 				.eq('user_id', userId)
 				.eq('movie_id', movieId)
-				.eq('movie.language', locale)
 				.single()
 			if (error) throw error;
 			return data;

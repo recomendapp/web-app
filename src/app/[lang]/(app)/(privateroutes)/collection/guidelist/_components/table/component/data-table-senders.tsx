@@ -1,5 +1,5 @@
 import { GuidelistSendersModal } from "@/components/Modals/Guidelist/GuidelistSendersModal";
-import UserAvatar from "@/components/User/UserAvatar/UserAvatar";
+import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
 import { useModal } from "@/context/modal-context";
 import { UserMovieGuidelistView } from "@/types/type.db";
 import { Row } from "@tanstack/react-table";
@@ -22,7 +22,7 @@ export default function Senders({
 			<div className="flex justify-end flex-row-reverse -space-x-4 space-x-reverse">
 				{row.original?.senders?.slice(0, senderToShow).reverse().map((item: any) => (
 				<div key={item?.id} className='relative'>
-					<UserAvatar user={item?.user} className=" border-2 border-background"/>
+					<UserAvatar className=" border-2 border-background" avatar_url={item.user.avatar_url} username={item.user.username} />
 					{item?.comment && <Text size={15} className='absolute -top-1 -right-1 rounded-full bg-background text-accent-1 p-1'/>}
 				</div>
 				))}

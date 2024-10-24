@@ -67,7 +67,6 @@ export default function ProfileFilms({
           )
         `)
         .eq('user_id', userId)
-        .eq('movie.language', locale)
         .eq('movie.directors.job', 'Director')
         .range(from, to)
         .order('updated_at', { ascending: false});

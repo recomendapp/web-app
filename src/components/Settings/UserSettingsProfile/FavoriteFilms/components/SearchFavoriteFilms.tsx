@@ -43,9 +43,7 @@ export default function SearchFavoriteFilms({
       } = await supabase
         .from('movie')
         .select('*, movies(*)')
-        .eq('language', local)
         .ilike('title', `%${query}%`)
-        .eq('movies.language', local)
       if (error) throw error;
       console.log('search', results);
       return results;

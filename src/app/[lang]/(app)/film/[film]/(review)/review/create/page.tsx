@@ -10,13 +10,12 @@ export async function generateMetadata({
     film: number;
   };
 }) {
-  const supabase = createServerClient();
+  const supabase = createServerClient(params.lang);
 
   const { data: movie } = await supabase
-    .from('tmdb_movie_translation')
+    .from('movie')
     .select(`title`)
     .eq('movie_id', params.film)
-    .eq('language_id', params.lang)
     .single();
 
   if (!movie) {
@@ -38,7 +37,7 @@ export default async function CreateReview({
     film: number;
   };
 }) {
-  const supabase = createServerClient();
+  const supabase = createServerClient(params.lang);
 
   const {
     data: { user },
@@ -59,7 +58,6 @@ export default async function CreateReview({
     .from('movie')
     .select(`*`)
     .eq('id', params.film)
-    .eq('language', params.lang)
     .single();
 
   if (!movie) notFound();

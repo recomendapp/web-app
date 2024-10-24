@@ -1,5 +1,5 @@
 import { ProfileFollowButton } from '@/app/[lang]/(app)/user/[username]/_components/ProfileFollowButton';
-import UserAvatar from '@/components/User/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/components/User/UserAvatar/UserAvatar';
 import { Button } from '@/components/ui/button';
 import { LinkIcon, Settings } from 'lucide-react';
 import Link from 'next/link';
@@ -27,7 +27,8 @@ export default async function ProfileHeader({ profile }: { profile: UserProfile 
       <div className="flex gap-4 shrink-0 items-start justify-between w-full @lg/profile-header:w-fit">
         <UserAvatar
           className=" h-20 w-20 @md:h-28 @md:w-28 xl:h-36 xl:w-36"
-          user={profile}
+          avatar_url={profile?.avatar_url}
+          username={profile?.username}
         />
         <div className="flex flex-col gap-2 items-end">
           <div className="flex items-center @lg/profile-header:hidden">

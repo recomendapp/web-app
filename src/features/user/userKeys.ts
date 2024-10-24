@@ -86,8 +86,27 @@ export const userKeys = {
 	 * @param userId The user id
 	 * @returns The user's guidelist
 	 */
-	guidelist: (userId: string) => [...userKeys.detail(userId), 'guidelist'] as const,
+	guidelist: (
+		userId: string,
+		filters?: {
+			order?: 'created_at-desc' | 'created_at-asc' | 'random';
+			limit?: number;
+		}
+	) => filters ? [...userKeys.detail(userId), 'guidelist', filters] : [...userKeys.detail(userId), 'guidelist'] as const,
 
+	/**
+	 * Fetches the user's watchlist
+	 * @param userId The user id
+	 * @param filters The filters (optional)
+	 * @returns The user's watchlist
+	 */
+	watchlist: (
+		userId: string,
+		filters?: {
+			order?: 'created_at-desc' | 'created_at-asc' | 'random';
+			limit?: number;
+		}
+	) => filters ? [...userKeys.detail(userId), 'watchlist', filters] : [...userKeys.detail(userId), 'watchlist'] as const,
 	/**
 	 * Fetches the user's playlists
 	 * @param userId The user id

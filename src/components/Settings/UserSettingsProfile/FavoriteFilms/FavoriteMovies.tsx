@@ -67,7 +67,6 @@ export function FavoriteMovies() {
           movie(*)
         `)
         .eq('user_id', user?.id)
-        .eq('movie.language', locale);
       if (error) throw error;
       return data;
     },

@@ -13,7 +13,7 @@ export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) 
 					<SidebarMenuItem>
 						<SidebarMenuButton
 						size="lg"
-						className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex justify-center items-center"
+						className={`data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex items-center ${open ? "justify-start" : "justify-center"}`}
 						onClick={toggleSidebar}
 						>
 							{open ? (

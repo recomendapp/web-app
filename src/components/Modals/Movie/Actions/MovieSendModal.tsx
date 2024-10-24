@@ -13,7 +13,7 @@ import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitl
 import { useUserSendMovie } from '@/features/user/userQueries';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Icons } from '@/config/icons';
-import UserAvatar from '@/components/User/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/components/User/UserAvatar/UserAvatar';
 import { useSendMovie } from '@/features/user/userMutations';
 
 interface MovieSendModalProps extends ModalType {
@@ -107,7 +107,7 @@ export function MovieSendModal({
 									}}
 								>
 									<div className="flex items-center">
-										<UserAvatar user={friend} />
+										<UserAvatar avatar_url={friend.avatar_url} username={friend.username} />
 										<div className="ml-2">
 										<p className="text-sm font-medium leading-none line-clamp-1">
 											{friend.full_name}
@@ -143,7 +143,7 @@ export function MovieSendModal({
 					{selectedUsers.map((friend) => (
 					<UserAvatar
 						key={friend?.id}
-						user={friend}
+						{...friend}
 					/>
 					))}
 				</div>

@@ -45,7 +45,6 @@ export default function PlaylistPage({
           )
         `)
         .eq('id', params.playlist)
-        .eq('playlist_item.movie.language', params.lang)
         .order('rank', { ascending: true, referencedTable: 'playlist_item' })
         .returns<Playlist[]>()
         .single();
@@ -98,7 +97,6 @@ export default function PlaylistPage({
               movie(*)
             `)
             .eq('id', payload.new.id)
-            .eq('movie.language', params.lang)
             .single();
           if (insertError || !insertData) return false;
           newPlaylistItems.push(insertData);

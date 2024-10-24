@@ -8,7 +8,7 @@ export type User = Database['public']['Tables']['user']['Row'] & {
 	favorite_movies?: Movie[] | any;
 } | null | undefined;
 
-export type UserProfile = Database['public']['Views']['user_profile']['Row'] & {
+export type UserProfile = Database['public']['Views']['profile']['Row'] & {
 
 };
 

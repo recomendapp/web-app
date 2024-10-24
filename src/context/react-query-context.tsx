@@ -45,7 +45,7 @@ export const ReactQueryProvider = ({
             return `${obj.id}`
           }
         },
-        devLogging: false
+        devLogging: true,
       }}
     >
       <QueryClientProvider client={queryClient}>

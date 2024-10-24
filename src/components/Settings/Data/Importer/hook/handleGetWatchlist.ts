@@ -68,7 +68,7 @@ export const handleGetWatchlist = async (
 			success.push({
 				date: movie.date,
 				source: movie,
-				movie: data[0] as Movie,
+				movie: data[0] as any // as Movie,
 			});
 		else
 			failed.push(movie);

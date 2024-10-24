@@ -39,7 +39,6 @@ export default function Feed() {
           review:user_movie_review_view(*, user(*)),
           movie(*)
         `)
-        .eq('movie.language', locale)
         .range(from, to)
         .order('created_at', { ascending: false });
       if (error) throw error;

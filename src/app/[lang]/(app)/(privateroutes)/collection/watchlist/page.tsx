@@ -26,7 +26,6 @@ export default function Watchlist() {
         `)
         .eq('user_id', user.id)
         .eq('status', 'active')
-        .eq('movie.language', locale)
         .order('created_at', { ascending: true });
       return data;
     },

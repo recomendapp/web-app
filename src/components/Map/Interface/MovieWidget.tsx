@@ -37,7 +37,6 @@ export const MovieWidget = () => {
 					videos:tmdb_movie_videos(*)
 				`)
 				.eq('id', selectedMovie?.movie.id)
-				.eq('language', locale)
 				.eq('videos.iso_639_1', locale)
 				.single();
 			if (error) throw error;

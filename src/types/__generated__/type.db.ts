@@ -84,6 +84,13 @@ export type Database = {
             foreignKeyName: "playlist_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -124,6 +131,13 @@ export type Database = {
             columns: ["playlist_id"]
             isOneToOne: false
             referencedRelation: "playlist"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_guest_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
@@ -196,6 +210,13 @@ export type Database = {
             foreignKeyName: "playlist_item_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_item_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -233,6 +254,13 @@ export type Database = {
             columns: ["playlist_id"]
             isOneToOne: false
             referencedRelation: "playlist"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_like_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
@@ -729,19 +757,19 @@ export type Database = {
         Row: {
           genre: number
           id: number
-          language: Database["public"]["Enums"]["language_app"]
+          language: string
           name: string
         }
         Insert: {
           genre: number
           id?: number
-          language: Database["public"]["Enums"]["language_app"]
+          language: string
           name: string
         }
         Update: {
           genre?: number
           id?: number
-          language?: Database["public"]["Enums"]["language_app"]
+          language?: string
           name?: string
         }
         Relationships: [
@@ -1271,7 +1299,7 @@ export type Database = {
       tmdb_movie_translation: {
         Row: {
           id: number
-          language_id: Database["public"]["Enums"]["language_app"]
+          language_id: string
           movie_id: number
           overview: string | null
           poster_path: string | null
@@ -1280,7 +1308,7 @@ export type Database = {
         }
         Insert: {
           id?: number
-          language_id: Database["public"]["Enums"]["language_app"]
+          language_id: string
           movie_id: number
           overview?: string | null
           poster_path?: string | null
@@ -1289,7 +1317,7 @@ export type Database = {
         }
         Update: {
           id?: number
-          language_id?: Database["public"]["Enums"]["language_app"]
+          language_id?: string
           movie_id?: number
           overview?: string | null
           poster_path?: string | null
@@ -1646,7 +1674,7 @@ export type Database = {
           following_count: number
           full_name: string
           id: string
-          language: Database["public"]["Enums"]["language_app"]
+          language: string
           premium: boolean
           private: boolean
           username: string
@@ -1663,7 +1691,7 @@ export type Database = {
           following_count?: number
           full_name: string
           id: string
-          language?: Database["public"]["Enums"]["language_app"]
+          language?: string
           premium?: boolean
           private?: boolean
           username: string
@@ -1680,7 +1708,7 @@ export type Database = {
           following_count?: number
           full_name?: string
           id?: string
-          language?: Database["public"]["Enums"]["language_app"]
+          language?: string
           premium?: boolean
           private?: boolean
           username?: string
@@ -1694,6 +1722,13 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_language_fkey"
+            columns: ["language"]
+            isOneToOne: false
+            referencedRelation: "supported_languages"
+            referencedColumns: ["language"]
           },
         ]
       }
@@ -1714,6 +1749,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "user_billing_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "user_billing_user_id_fkey"
             columns: ["user_id"]
@@ -1757,6 +1799,13 @@ export type Database = {
             foreignKeyName: "user_follower_followee_id_fkey"
             columns: ["followee_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_follower_followee_id_fkey"
+            columns: ["followee_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -1765,6 +1814,13 @@ export type Database = {
             columns: ["followee_id"]
             isOneToOne: false
             referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_follower_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
@@ -1807,6 +1863,13 @@ export type Database = {
             foreignKeyName: "user_friend_friend_id_fkey"
             columns: ["friend_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_friend_friend_id_fkey"
+            columns: ["friend_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -1815,6 +1878,13 @@ export type Database = {
             columns: ["friend_id"]
             isOneToOne: false
             referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_friend_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
@@ -1883,6 +1953,13 @@ export type Database = {
             foreignKeyName: "user_movie_activity_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -1930,6 +2007,13 @@ export type Database = {
             columns: ["movie_id"]
             isOneToOne: false
             referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_favorite_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
@@ -1995,6 +2079,13 @@ export type Database = {
             foreignKeyName: "user_movie_guidelist_sender_id_fkey"
             columns: ["sender_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -2003,6 +2094,13 @@ export type Database = {
             columns: ["sender_id"]
             isOneToOne: false
             referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
@@ -2126,6 +2224,13 @@ export type Database = {
             foreignKeyName: "user_movie_review_comment_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_comment_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -2163,6 +2268,13 @@ export type Database = {
             columns: ["comment_id"]
             isOneToOne: false
             referencedRelation: "user_movie_review_comment"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_comment_like_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
@@ -2213,6 +2325,13 @@ export type Database = {
             columns: ["review_id"]
             isOneToOne: false
             referencedRelation: "user_movie_review_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_like_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
@@ -2272,6 +2391,13 @@ export type Database = {
             foreignKeyName: "user_movie_watchlist_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -2323,6 +2449,13 @@ export type Database = {
             columns: ["person_id"]
             isOneToOne: false
             referencedRelation: "tmdb_person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_person_follower_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
@@ -2405,6 +2538,13 @@ export type Database = {
             foreignKeyName: "user_subscriptions_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user"
             referencedColumns: ["id"]
           },
@@ -2433,7 +2573,6 @@ export type Database = {
           backdrop_path: string | null
           homepage: string | null
           id: number | null
-          language: string | null
           name: string | null
           overview: string | null
           poster_path: string | null
@@ -2488,6 +2627,59 @@ export type Database = {
             foreignKeyName: "user_movie_guidelist_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guidelist_random: {
+        Row: {
+          created_at: string | null
+          movie_id: number | null
+          senders: Json[] | null
+          status: Database["public"]["Enums"]["guidelist_status"] | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
@@ -2505,7 +2697,6 @@ export type Database = {
           homepage: string | null
           id: number | null
           imdb_id: string | null
-          language: Database["public"]["Enums"]["language_app"] | null
           original_language: string | null
           original_title: string | null
           overview: string | null
@@ -2645,6 +2836,78 @@ export type Database = {
           },
         ]
       }
+      profile: {
+        Row: {
+          avatar_url: string | null
+          background_url: string | null
+          bio: string | null
+          created_at: string | null
+          favorite_color: string | null
+          followers_count: number | null
+          following_count: number | null
+          full_name: string | null
+          id: string | null
+          language: string | null
+          premium: boolean | null
+          private: boolean | null
+          username: string | null
+          username_updated_at: string | null
+          visible: boolean | null
+          website: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          background_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          favorite_color?: string | null
+          followers_count?: number | null
+          following_count?: number | null
+          full_name?: string | null
+          id?: string | null
+          language?: string | null
+          premium?: boolean | null
+          private?: boolean | null
+          username?: string | null
+          username_updated_at?: string | null
+          visible?: never
+          website?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          background_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          favorite_color?: string | null
+          followers_count?: number | null
+          following_count?: number | null
+          full_name?: string | null
+          id?: string | null
+          language?: string | null
+          premium?: boolean | null
+          private?: boolean | null
+          username?: string | null
+          username_updated_at?: string | null
+          visible?: never
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_language_fkey"
+            columns: ["language"]
+            isOneToOne: false
+            referencedRelation: "supported_languages"
+            referencedColumns: ["language"]
+          },
+        ]
+      }
       tmdb_movie_credits_random: {
         Row: {
           department: string | null
@@ -2771,6 +3034,13 @@ export type Database = {
             foreignKeyName: "user_movie_activity_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
@@ -2810,6 +3080,13 @@ export type Database = {
             foreignKeyName: "user_movie_guidelist_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
@@ -2843,6 +3120,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
@@ -2889,6 +3173,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
             referencedColumns: ["id"]
           },
           {
@@ -2962,6 +3253,13 @@ export type Database = {
             foreignKeyName: "user_movie_watchlist_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
@@ -2978,7 +3276,7 @@ export type Database = {
           following_count: number | null
           full_name: string | null
           id: string | null
-          language: Database["public"]["Enums"]["language_app"] | null
+          language: string | null
           premium: boolean | null
           private: boolean | null
           username: string | null
@@ -2996,7 +3294,7 @@ export type Database = {
           following_count?: number | null
           full_name?: string | null
           id?: string | null
-          language?: Database["public"]["Enums"]["language_app"] | null
+          language?: string | null
           premium?: boolean | null
           private?: boolean | null
           username?: string | null
@@ -3014,7 +3312,7 @@ export type Database = {
           following_count?: number | null
           full_name?: string | null
           id?: string | null
-          language?: Database["public"]["Enums"]["language_app"] | null
+          language?: string | null
           premium?: boolean | null
           private?: boolean | null
           username?: string | null
@@ -3028,6 +3326,73 @@ export type Database = {
             columns: ["id"]
             isOneToOne: true
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_language_fkey"
+            columns: ["language"]
+            isOneToOne: false
+            referencedRelation: "supported_languages"
+            referencedColumns: ["language"]
+          },
+        ]
+      }
+      watchlist_random: {
+        Row: {
+          created_at: string | null
+          id: number | null
+          movie_id: number | null
+          status: Database["public"]["Enums"]["watchlist_status"] | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number | null
+          movie_id?: number | null
+          status?: Database["public"]["Enums"]["watchlist_status"] | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number | null
+          movie_id?: number | null
+          status?: Database["public"]["Enums"]["watchlist_status"] | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_watchlist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_watchlist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profile"
             referencedColumns: ["id"]
           },
         ]
@@ -3097,41 +3462,6 @@ export type Database = {
           p_user_id: string
         }
         Returns: boolean
-      }
-      search_movie_2: {
-        Args: {
-          search_query: string
-          lang: string
-          page_number?: number
-          page_size?: number
-          similarity_threshold?: number
-        }
-        Returns: {
-          adult: boolean | null
-          backdrop_path: string | null
-          budget: number | null
-          collection_id: number | null
-          directors: Json[] | null
-          follower_avg_rating: number | null
-          genres: Json[] | null
-          homepage: string | null
-          id: number | null
-          imdb_id: string | null
-          language: Database["public"]["Enums"]["language_app"] | null
-          original_language: string | null
-          original_title: string | null
-          overview: string | null
-          popularity: number | null
-          poster_path: string | null
-          release_date: string | null
-          revenue: number | null
-          runtime: number | null
-          status: string | null
-          tagline: string | null
-          title: string | null
-          vote_average: number | null
-          vote_count: number | null
-        }[]
       }
       search_movies: {
         Args: {

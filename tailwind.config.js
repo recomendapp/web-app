@@ -81,7 +81,7 @@ module.exports = {
   		},
   		fontSize: {
   			clamp: 'clamp(1rem, 5vw, 3rem)',
-  			'clamp-title': 'clamp(1rem, 5vw, 3rem)'
+  			'clamp-title': 'clamp(2rem, 5vw, 3rem)'
   		},
   		height: {
   			header: 'var(--height-header)',

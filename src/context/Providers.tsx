@@ -4,7 +4,7 @@ import deepmerge from 'deepmerge';
 
 // PROVIDERS
 import { ReactQueryProvider } from '@/context/react-query-context';
-import { ApolloClientContext } from '@/context/apollo-client-context';
+import { ApolloClientProvider } from '@/context/apollo-client-context';
 import { AuthProvider } from '@/context/auth-context';
 import { NextIntlClientProvider } from 'next-intl';
 import { ThemeProvider } from '@/context/theme-context';
@@ -40,7 +40,7 @@ export default async function Provider({
     <NextIntlClientProvider locale={locale} messages={messages}>
       <SupabaseProvider locale={locale}>
         <ReactQueryProvider>
-          {/* <ApolloClientContext> */}
+          {/* <ApolloClientProvider locale={locale}> */}
             <AuthProvider>
               <OneSignalContext>
                 <MapContext>
@@ -59,7 +59,7 @@ export default async function Provider({
                 </MapContext> 
               </OneSignalContext>
             </AuthProvider>
-          {/* </ApolloClientContext> */}
+          {/* </ApolloClientProvider> */}
         </ReactQueryProvider>
       </SupabaseProvider>
     </NextIntlClientProvider>

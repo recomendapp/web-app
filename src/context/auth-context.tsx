@@ -22,12 +22,14 @@ export interface UserState {
       username,
       password,
       language,
+      redirectTo,
   } : {
       email: string,
       name: string,
       username: string,
       password: string,
       language: string,
+      redirectTo?: string | null,
   }) => Promise<void>;
   loginOAuth2: (provider: Provider, redirectTo?: string | null) => Promise<void>;
   loginWithOtp: (email: string, redirectTo?: string | null) => Promise<void>;
@@ -138,18 +140,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     username,
     password,
     language,
+    redirectTo,
   } : {
     email: string,
     name: string,
     username: string,
     password: string,
     language: string,
+    redirectTo?: string | null,
   }) => {
     const { error } = await supabase.auth.signUp({
       email: email,
       password: password,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
+        emailRedirectTo: `${location.origin}/auth/callback${redirectTo ? `?redirect=${redirectTo}` : ''}`,
         data: {
           full_name: name,
           username: username,
