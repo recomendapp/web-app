@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 export default function MovieNavbar({
   movieId,
 }: {
-  movieId: string;
+  movieId: number;
 }) {
   const pathname = usePathname();
   const focus = pathname.split('/').pop();

@@ -12,11 +12,13 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Playlist, PlaylistType } from '@/types/type.db';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { useUserAddMovieToPlaylist } from '@/features/user/userQueries';
 import { useAddMovieToPlaylist } from '@/features/user/userMutations';
 import { Icons } from '@/config/icons';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Label } from '@/components/ui/label';
+
+const COMMENT_MAX_LENGTH = 180;
 
 interface MoviePlaylistModalProps extends ModalType {
 	movieId: number;
@@ -26,7 +28,6 @@ export function MoviePlaylistModal({
 	movieId,
 	...props
 } : MoviePlaylistModalProps) {
-	const supabase = useSupabaseClient();
 	const { user } = useAuth();
 	const { closeModal } = useModal();
 	const [selectedPlaylists, setSelectedPlaylists] = useState<Playlist[]>([]);
@@ -93,6 +94,7 @@ export function MoviePlaylistModal({
 							{playlists?.map(({playlist, already_added }) => (
 								<CommandItem
 									key={playlist.id}
+									value={`${playlist.title} ${playlist.id}`}
 									className="flex items-center justify-between px-2"
 									onSelect={() => {
 										if (selectedPlaylists.includes(playlist)) {
@@ -121,7 +123,6 @@ export function MoviePlaylistModal({
 										</p>
 										<p className="text-sm text-muted-foreground line-clamp-1">
 											{playlist.items_count} film{playlist.items_count! > 1 && 's'}
-											<span className='hidden'>{playlist.id}</span>
 										</p>
 										</div>
 									</div>
@@ -139,7 +140,15 @@ export function MoviePlaylistModal({
 					</CommandList>
 				</Command>
 			</ModalBody>
-			<Input value={comment} onChange={(e) => setComment(e.target.value)} placeholder='Écrire un commentaire...' className='border-x-0 rounded-none' />
+			<div className='px-2 pt-2'>
+				<Label htmlFor="comment" className='sr-only'>Commentaire</Label>
+				<Input
+				value={comment}
+				onChange={(e) => setComment(e.target.value)}
+				placeholder='Écrire un commentaire...'
+				maxLength={COMMENT_MAX_LENGTH}
+				/>
+			</div>
 			<ModalFooter className="flex items-center p-4 sm:justify-between">
 				{selectedPlaylists.length > 0 ? (
 				<div className="flex -space-x-2 overflow-hidden">

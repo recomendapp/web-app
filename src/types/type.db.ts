@@ -71,17 +71,20 @@ export type Products = Database['public']['Tables']['products']['Row'] & {
 // *========== MOVIE ==========* //
 export type Movie = Database['public']['Views']['movie']['Row'] & {
 	// data?: MovieTranslation[] | any;
-	directors?: {
-		id: number;
-		gender: number;
-		known_for_department: string;
-		name: string;
-		profile_path: string;
-	}[] | any;
-	genres?: {
-		id: number;
-		name: string;
-	}[] | any;
+	// directors?: {
+	// 	id: number;
+	// 	gender: number;
+	// 	known_for_department: string;
+	// 	name: string;
+	// 	profile_path: string;
+	// }[] | Json[] | null;
+	// genres?: {
+	// 	id: number;
+	// 	name: string;
+	// }[] | Json[] | null;
+	videos?: Database['public']['Tables']['tmdb_movie_videos']['Row'][];
+	production_countries?: Database['public']['Tables']['tmdb_movie_country']['Row'][];
+	spoken_languages?: Database['public']['Tables']['tmdb_movie_language']['Row'][];
 	// directors?: MoviePerson[] | any;
 } | null | undefined;
 

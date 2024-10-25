@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
 import { createMiddlewareClient } from './lib/supabase/middleware';
 import { routing } from './lib/i18n/routing';
-import { NextURL } from 'next/dist/server/web/next-url';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -26,10 +25,16 @@ export async function middleware(request: NextRequest) {
    * Check locale if user is logged in
    */
   const localeHeader = response.headers.get('x-middleware-request-x-next-intl-locale');
-  if (user && (hasLocale || localeHeader)) {
-    const { data: user_data } = await supabase.from('user').select('language').eq('id', user.id).single();
-    if (user_data?.language && ((hasLocale && localeMatch !== user_data.language) || (localeHeader && localeHeader !== user_data.language))) {
-      url.pathname = `/${user_data.language}${url.pathname}`;
+  const { data: config } = await supabase.rpc('get_config', {
+    user_id: user?.id,
+  }).single();
+
+  if (user && config?.user_language && routing.locales.includes(config.user_language)) {
+    const wrongLocale =
+      (hasLocale && localeMatch !== config.user_language) ||
+      (localeHeader && localeHeader !== config.user_language);
+    if (wrongLocale) {
+      url.pathname = `/${config.user_language}${url.pathname}`;
       return (NextResponse.redirect(url));
     }
   }
@@ -41,11 +46,10 @@ export async function middleware(request: NextRequest) {
    * If the app is not in maintenance mode, redirect all users to the home page
    * 
    */
-  const { data: app_settings } = await supabase.from('app_config').select('value').eq('key', 'maintenance_mode').maybeSingle();
-  if (app_settings?.value === 'true' && url.pathname !== '/maintenance' && process.env.NODE_ENV !== 'development') {
+  if (config?.maintenance_mode && url.pathname !== '/maintenance' && process.env.NODE_ENV !== 'development') {
     url.pathname = `/maintenance`;
     return (NextResponse.redirect(url));
-  } else if (url.pathname === '/maintenance' && app_settings?.value !== 'true') {
+  } else if (url.pathname === '/maintenance' && !config?.maintenance_mode) {
     url.pathname = '/';
     return (NextResponse.redirect(url));
   }

@@ -11,8 +11,8 @@ import {
 } from '@/components/ui/tooltip';
 
 // ICONS
-import { AlertCircle, Bookmark } from 'lucide-react';
-import { Icons } from '../../../../../config/icons';
+import { AlertCircle } from 'lucide-react';
+import { Icons } from '@/config/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSupabaseClient } from '@/context/supabase-context';
@@ -136,7 +136,7 @@ export function MovieWatchlistAction({
             asChild
           >
             <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
-              <Bookmark />
+              <Icons.watchlist />
             </Link>
           </Button>
         </TooltipTrigger>
@@ -162,7 +162,7 @@ export function MovieWatchlistAction({
           ) : isError ? (
             <AlertCircle />
           ) : (
-            <Bookmark className={`${isWatchlisted && 'fill-foreground'}`} />
+            <Icons.watchlist className={`${isWatchlisted && 'fill-foreground'}`} />
           )}
         </Button>
       </TooltipTrigger>

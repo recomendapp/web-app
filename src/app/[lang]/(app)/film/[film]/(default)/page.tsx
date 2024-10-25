@@ -3,17 +3,19 @@ import MovieDescription from './_components/MovieDescription';
 
 // SUPABASE
 import { createServerClient } from '@/lib/supabase/server';
+import { getMovieId } from '@/hooks/get-movie-id';
 
 export default async function MoviePage({
   params,
 }: {
   params: {
     lang: string;
-    film: number;
+    film: string;
   };
 }) {
-  const supabase = createServerClient(params.lang);
-  const { data: movie } = await supabase
+	const { movieId } = getMovieId(params.film);
+	const supabase = createServerClient(params.lang);
+	const { data: movie } = await supabase
 		.from('movie')
 		.select(`
 			*,
@@ -23,7 +25,7 @@ export default async function MoviePage({
 				role:tmdb_movie_role(*)
 			)
 		`)
-		.eq('id', params.film)
+		.eq('id', movieId)
 		.eq('cast.job', 'Actor')
 		.single();
 

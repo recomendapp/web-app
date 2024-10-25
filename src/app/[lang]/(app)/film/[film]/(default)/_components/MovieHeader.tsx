@@ -31,11 +31,12 @@ import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import ActivityIcon from '@/components/Review/ActivityIcon';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
+import { Movie } from '@/types/type.db';
 
 export default function MovieHeader({
   movie,
 }: {
-  movie: any;
+  movie: Movie;
 }) {
   if (!movie) return null;
 
@@ -78,7 +79,7 @@ export default function MovieHeader({
                 />}
               </div>
             )}
-            {movie?.videos?.length > 0 && (
+            {movie?.videos && movie.videos.length > 0 && (
               <MovieTrailerButton
                 videos={movie.videos}
                 className="absolute bottom-2 right-2"
@@ -91,15 +92,15 @@ export default function MovieHeader({
             <div>
               <span className='text-accent-1'>Film</span>
               <span className=" before:content-['_|_']">
-                {movie.genres?.map(({ genre } : { genre: any }, index: number) => (
-                  <span key={genre.id}>
+                {movie.genres?.map((genre, index: number) => (
+                  <span key={index}>
                     <Button
                       variant="link"
                       className="w-fit p-0 h-full font-normal"
                       asChild
                     >
-                      <Link href={`/genre/${genre.data[0].id}`}>
-                        {genre.data[0].name}
+                      <Link href={`/genre/${genre.id}`}>
+                        {genre.name}
                       </Link>
                     </Button>
                     {index !== movie.genres?.length! - 1 && (
@@ -129,17 +130,17 @@ export default function MovieHeader({
             {/* </div> */}
             <div className=" space-y-2">
               <div>
-                {movie.directors?.map(({ director } : { director: Database['public']['Tables']['tmdb_person']['Row']}, index: number) => (
+                {movie.directors?.map((director, index: number) => (
                   <>
                     {index > 0 && <span>, </span>}
-                    <span key={director.id}>
+                    <span key={index}>
                       <Button
                         variant="link"
                         className="w-fit p-0 h-full hover:text-accent-1 transition"
                         asChild
                       >
-                        <Link href={`/person/${director.id}`}>
-                          {director.name}
+                        <Link href={`/person/${director?.id}`}>
+                          {director?.name}
                         </Link>
                       </Button>
                     </span>

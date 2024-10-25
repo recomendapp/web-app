@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
@@ -27,6 +26,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
 import { useTheme } from 'next-themes';
 // import { usePathname, useRouter } from "next-intl/client"
 import { createSharedPathnamesNavigation } from 'next-intl/navigation';
@@ -38,14 +45,17 @@ import { useEffect, useState } from 'react';
 import { Icons } from '@/config/icons';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/Loader/Loader';
-import { locales } from '@/lib/i18n/routing';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { routing } from '@/lib/i18n/routing';
+import { useLocalizedLanguageName } from '@/hooks/use-localized-language-name';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ChevronsUpDown } from 'lucide-react';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
     required_error: 'Please select a theme.',
   }),
-  language: z.enum(locales as [string, ...string[]], {
+  language: z.enum(routing.locales as [string, ...string[]], {
     invalid_type_error: 'Select a language',
     required_error: 'Please select a language.',
   }),
@@ -63,6 +73,7 @@ export function AppearanceForm() {
   const { setTheme, theme } = useTheme();
   const router = useRouter();
   const { user, loading: userLoading } = useAuth();
+  const locales = useLocalizedLanguageName(routing.locales);
 
   const { mutateAsync: updateProfile } = useMutation({
     mutationFn: async (payload: any) => {
@@ -120,23 +131,59 @@ export function AppearanceForm() {
           control={form.control}
           name="language"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className='flex flex-col'>
               <FormLabel>{t('appearance.language.label')}</FormLabel>
-              <div className="relative w-max">
-                <FormControl>
-                  <select
-                    className={cn(
-                      buttonVariants({ variant: 'outline' }),
-                      'w-[200px] appearance-none bg-transparent font-normal'
-                    )}
-                    {...field}
-                  >
-                    <option value="en-US">English</option>
-                    <option value="fr-FR">Français</option>
-                  </select>
-                </FormControl>
-                <ChevronDownIcon className="absolute right-3 top-2.5 h-4 w-4 opacity-50" />
-              </div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={'outline'}
+                      role="combobox"
+                      className={cn(
+                        "max-w-[250px] justify-between",
+                        !field.value && 'text-muted-foreground',
+                      )}
+                    >
+                      <span className='line-clamp-1'>
+                      {field.value ? (
+                        (() => {
+                          const locale = locales.find((locale) => locale.language === field.value);
+                          return `${locale?.flag} ${locale?.iso_639_1} (${locale?.iso_3166_1})`;
+                        })()
+                      ) : t('appearance.language.placeholder')}
+                      </span>
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent align='start' className='max-w-xs p-0'>
+                  <Command>
+                    <CommandInput placeholder='Search language...' />
+                    <CommandList>
+                      <CommandEmpty>No language found.</CommandEmpty>
+                      <CommandGroup>
+                        {locales.map((locale, i) => (
+                          <CommandItem
+                          key={i}
+                          value={`${locale.iso_639_1} ${locale.iso_3166_1}`}
+                          onSelect={() => form.setValue('language', locale.language)}
+                          >
+                            <Icons.check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                locale.language === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {locale.flag} {locale.iso_639_1} ({locale.iso_3166_1})
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               <FormDescription>
                 {t('appearance.language.description')}
               </FormDescription>
@@ -219,7 +266,6 @@ export function AppearanceForm() {
           {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
           {t('appearance.update_preferences')}
         </Button>
-        {/* <Button type="submit">{t('appearance.update_preferences')}</Button> */}
       </form>
     </Form>
   );

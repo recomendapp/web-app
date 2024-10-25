@@ -146,7 +146,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
             <DropdownMenuItem
               onClick={() => openModal(MoviePlaylistModal, { movieId: data?.movie_id! })}
             >
-              <Icons.actions.addPlaylist className='w-4' />
+              <Icons.addPlaylist className='w-4' />
               Ajouter à une playlist
             </DropdownMenuItem>
           )}
@@ -196,7 +196,7 @@ export function ShowDirectorsButton({
   if (movie?.directors.length == 1) {
     return (
       <DropdownMenuItem asChild>
-        <Link href={`/person/${movie.directors[0].id}`}>
+        <Link href={`/person/${movie.directors[0]?.id}`}>
           Voir le réalisateur
         </Link>
       </DropdownMenuItem>

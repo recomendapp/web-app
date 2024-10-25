@@ -97,7 +97,7 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem asChild>
-            <Link href={`/film/${data?.movie_id}`}>Voir le film</Link>
+            <Link href={`/film/${data?.movie?.slug ?? data.movie_id}`}>Voir le film</Link>
           </DropdownMenuItem>
           <ShowDirectorsButton
             movie={data?.movie}
@@ -152,7 +152,7 @@ export function ShowDirectorsButton({
   if (movie.directors.length == 1) {
     return (
       <DropdownMenuItem asChild>
-        <Link href={`/person/${movie.directors[0].id}`}>
+        <Link href={`/person/${movie.directors[0]?.id}`}>
           Voir le réalisateur
         </Link>
       </DropdownMenuItem>

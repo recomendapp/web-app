@@ -15,6 +15,9 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Icons } from '@/config/icons';
 import { UserAvatar } from '@/components/User/UserAvatar/UserAvatar';
 import { useSendMovie } from '@/features/user/userMutations';
+import { Label } from '@/components/ui/label';
+
+const COMMENT_MAX_LENGTH = 180;
 
 interface MovieSendModalProps extends ModalType {
 	movieId: number;
@@ -35,7 +38,6 @@ export function MovieSendModal({
 		userId: user?.id,
 		movieId,
 	});
-
 	const sendMovie = useSendMovie({
 		movieId,
 		senderId: user?.id,
@@ -56,13 +58,13 @@ export function MovieSendModal({
 				} else {
 					switch (error.code) {
 						case '23505':
-							if (selectedUsers.length === 1)
-								toast.error('Vous avez déjà envoyé ce film à cet ami(e)');
-							else
-								toast.error('Vous avez déjà envoyé ce film à un ou plusieurs de ces amis');
+							toast.error(`Vous avez déjà envoyé ce film à ${selectedUsers.length === 1 ? 'cet ami(e)' : 'un ou plusieurs de ces amis'}`);
+							break;
+						case '23514':
+							toast.error(`Le commentaire est trop long (max ${COMMENT_MAX_LENGTH} caractère${COMMENT_MAX_LENGTH > 1 ? 's' : ''})`);
 							break;
 						default:
-							toast.error("Une erreur s'est produite");
+							toast.error(error.message);
 							break;
 					}
 				}
@@ -96,6 +98,7 @@ export function MovieSendModal({
 							{friends?.map(({friend, as_watched, already_sent}) => (
 								<CommandItem
 									key={friend.id}
+									value={`@${friend.full_name} ${friend.username}`}
 									className="flex items-center justify-between px-2"
 									onSelect={() => {
 										if (selectedUsers.includes(friend)) {
@@ -136,7 +139,15 @@ export function MovieSendModal({
 						</CommandList>
 				</Command>
 			</ModalBody>
-			<Input value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Écrire un commentaire..." className='border-x-0 rounded-none' />
+			<div className='px-2 pt-2'>
+				<Label htmlFor="comment" className='sr-only'>Commentaire</Label>
+				<Input
+				value={comment}
+				onChange={(e) => setComment(e.target.value)}
+				placeholder="Écrire un commentaire..."
+				maxLength={COMMENT_MAX_LENGTH}
+				/>
+			</div>
 			<ModalFooter className="flex items-center p-4 sm:justify-between">
 				{selectedUsers.length > 0 ? (
 				<div className="flex -space-x-2 overflow-hidden">

@@ -15,7 +15,7 @@ import Loader from '@/components/Loader/Loader';
 import MoviePlaylistCard from '../../../../../../../../components/Playlist/FilmPlaylist/MoviePlaylistCard';
 import { useSupabaseClient } from '@/context/supabase-context';
 
-export function ShowPlaylists({ filmId }: { filmId: string }) {
+export function ShowPlaylists({ filmId }: { filmId: number }) {
   const supabase = useSupabaseClient();
   const [order, setOrder] = useState('recent');
 

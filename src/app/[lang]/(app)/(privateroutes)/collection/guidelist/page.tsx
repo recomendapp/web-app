@@ -19,7 +19,7 @@ export default function Guidelist() {
     queryFn: async () => {
       if (!user?.id || !locale) throw new Error('No user or locale');
       const { data } = await supabase
-        .from('user_movie_guidelist_view')
+        .from('guidelist')
         .select(`
           *,
           movie(*)

@@ -15,15 +15,17 @@ import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 import { MyReviewButton } from './_components/MyReviewButton';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { getMovieId } from '@/hooks/get-movie-id';
 
 export default function Reviews({
   params,
 }: {
   params: {
     lang: string;
-    film: number;
+    film: string;
   }
 }) {
+  const { movieId } = getMovieId(params.film);
   const supabase = useSupabaseClient();
   const [order, setOrder] = useState('recent');
 
@@ -38,7 +40,7 @@ export default function Reviews({
     isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery({
-    queryKey: ['film', params.film, 'reviews', order],
+    queryKey: ['film', movieId, 'reviews', order],
     queryFn: async ({ pageParam = 1 }) => {
       let from = (pageParam - 1) * numberOfResult;
       let to = from - 1 + numberOfResult;
@@ -61,7 +63,7 @@ export default function Reviews({
       const { data } = await supabase
         .from('user_movie_review_view')
         .select('*, user(*)')
-        .eq('movie_id', params.film)
+        .eq('movie_id', movieId)
         .range(from, to)
         .order(column, { ascending });
       return data;
@@ -70,7 +72,7 @@ export default function Reviews({
     getNextPageParam: (data, pages) => {
       return data?.length == numberOfResult ? pages.length + 1 : undefined;
     },
-    enabled: !!params.film,
+    enabled: !!movieId,
   });
 
   useEffect(() => {
@@ -80,7 +82,7 @@ export default function Reviews({
   return (
     <div className="w-full h-full flex flex-col items-center gap-2">
       <div className="w-full flex flex-col gap-4 justify-between lg:flex-row">
-        <MyReviewButton filmId={params.film} />
+        <MyReviewButton filmId={movieId} />
         <div className="flex flex-1 justify-end gap-2 items-center">
           Trier par
           <Select onValueChange={setOrder} defaultValue={order}>

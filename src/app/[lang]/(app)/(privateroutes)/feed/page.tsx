@@ -32,7 +32,7 @@ export default function Feed() {
       let to = from - 1 + numberOfResult;
 
       const { data, error } = await supabase
-        .from('user_movie_activity_feed')
+        .from('feed')
         .select(`
           *,
           user(*),

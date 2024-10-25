@@ -9,7 +9,7 @@ import {
 	CarouselPlayPause,
 	CarouselPrevious,
   } from "@/components/ui/carousel"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { DateOnlyYearTooltip } from "../utils/Date";
@@ -20,6 +20,7 @@ import Autoplay from "embla-carousel-autoplay"
 import { useRef, useState } from "react";
 import { TooltipBox } from "../Box/TooltipBox";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "../ui/skeleton";
 
 interface WidgetMoviesMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {
 	isLogged: boolean;
@@ -30,14 +31,17 @@ export const WidgetMoviesMostRecommended = ({
 	className,
 } : WidgetMoviesMostRecommendedProps) => {
 	const { openModal } = useModal();
-	const { data, error, isLoading } = useMovieMostRecommended();
+	const { data, isLoading } = useMovieMostRecommended();
 	const [isPlaying, setIsPlaying] = useState(true);
 	const autoplay = useRef(
 		Autoplay({
 			delay: 8000,
 		})
 	)
-	if (!data) return null;
+
+	if (data === undefined || isLoading) {
+		return <Skeleton className={cn("w-full h-80", className)} />
+	} else if (!data.length) return null;
 	return (
 	<Carousel
 	opts={{
@@ -70,7 +74,7 @@ export const WidgetMoviesMostRecommended = ({
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<Link href={`/film/${movie?.id}`} className="text-white text-clamp-title font-semibold">
+							<Link href={`/film/${movie?.slug ?? movie?.id}`} className="text-white text-clamp-title line-clamp-2 font-semibold">
 								{movie?.title}
 								<sup className="ml-2">
 									<DateOnlyYearTooltip date={movie?.release_date ?? ''} className="text-base font-medium" />
@@ -94,7 +98,6 @@ export const WidgetMoviesMostRecommended = ({
 								</span>
 								))}
 							</div>
-							{/* OVERVIEW */}
 							{movie?.overview ? <div className="max-w-xl line-clamp-2 pt-2">
 								{movie.overview}
 							</div> : null}

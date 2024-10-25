@@ -1,21 +1,23 @@
 import { notFound, redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import CreateReviewForm from './_components/CreateReviewFrom';
+import { getMovieId } from '@/hooks/get-movie-id';
 
 export async function generateMetadata({
   params,
 }: {
   params: {
     lang: string;
-    film: number;
+    film: string;
   };
 }) {
+  const { movieId } = getMovieId(params.film);
   const supabase = createServerClient(params.lang);
 
   const { data: movie } = await supabase
     .from('movie')
     .select(`title`)
-    .eq('movie_id', params.film)
+    .eq('movie_id', movieId)
     .single();
 
   if (!movie) {
@@ -34,30 +36,31 @@ export default async function CreateReview({
 }: {
   params: {
     lang: string;
-    film: number;
+    film: string;
   };
 }) {
+  const { movieId } = getMovieId(params.film);
   const supabase = createServerClient(params.lang);
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect(`/auth/login?redirect=${encodeURIComponent("/film/${params.film}/review/create")}`);
+  if (!user) redirect(`/auth/login?redirect=${encodeURIComponent(`/film/${movieId}/review/create`)}`);
 
   const { data: review } = await supabase
     .from('user_movie_review')
     .select(`id`)
     .eq('user_id', user.id)
-    .eq('movie_id', params.film)
+    .eq('movie_id', movieId)
     .single();
 
-  if (review) redirect(`/film/${params.film}/review/${review.id}`);
+  if (review) redirect(`/film/${movieId}/review/${review.id}`);
 
   const { data: movie } = await supabase
     .from('movie')
     .select(`*`)
-    .eq('id', params.film)
+    .eq('id', movieId)
     .single();
 
   if (!movie) notFound();

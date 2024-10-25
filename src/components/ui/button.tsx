@@ -25,7 +25,7 @@ const buttonVariants = cva(
         'muted-background': 'bg-background hover:bg-muted',
         // ACCENT
         'accent-1':
-          'bg-accent-1 text-accent-1-foreground hover:bg-background hover:text-accent-1',
+          'bg-accent-1 text-accent-1-foreground hover:bg-muted hover:text-accent-1 border',
         'accent-1-enabled': 'bg-accent-1-foreground text-accent-1',
         'accent-1-hover':
           'bg-accent-1 text-accent-1-foreground hover:bg-accent-1-hover',

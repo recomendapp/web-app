@@ -4,20 +4,23 @@ import { notFound } from 'next/navigation';
 import MovieHeader from './_components/MovieHeader';
 import MovieNavbar from './_components/MovieNavbar';
 import { createServerClient } from '@/lib/supabase/server';
+import { getMovieId } from '@/hooks/get-movie-id';
+import { Movie } from '@/types/type.db';
 
 export async function generateMetadata({
 	params,
 }: {
 	params: {
 	  lang: string;
-	  film: number;
+	  film: string;
 	};
 }) {
+	const { movieId } = getMovieId(params.film);
 	const supabase = createServerClient(params.lang);
 	const { data: movie } = await supabase
 		.from('movie')
 		.select('title')
-		.eq('id', params.film)
+		.eq('id', movieId)
 		.single();
 	
 	if (!movie) return { title: 'Film introuvable' };
@@ -35,25 +38,15 @@ export default async function MovieLayout({
 	children: React.ReactNode;
 	params: {
 	  lang: string;
-	  film: number;
+	  film: string;
 	};
 }) {
+	const { movieId } = getMovieId(params.film);
 	const supabase = createServerClient(params.lang);
-	const { data: movie } = await supabase
+	const { data: movie, error } = await supabase
 		.from('movie')
 		.select(`
 			*,
-			genres:tmdb_movie_genre(
-				id,
-				genre:tmdb_genre(
-					*,
-					data:tmdb_genre_translation(*)
-				)
-			),
-			directors:tmdb_movie_credits(
-				id,
-				director:person(*)
-			),
 			production_countries:tmdb_movie_country(
 				id,
 				country:tmdb_country(
@@ -70,13 +63,12 @@ export default async function MovieLayout({
 			),
 			videos:tmdb_movie_videos(*)
 		`)
-		.eq('id', params.film)
-		.eq('genres.genre.data.language', params.lang)
+		.eq('id', movieId)
 		.eq('production_countries.country.data.language', params.lang)
 		.eq('spoken_languages.language.data.language', params.lang)
 		.eq('videos.iso_639_1', params.lang)
-		.eq('directors.job', 'Director')
-		.single();
+		.returns<Movie>()
+		.single()
 
 	if (!movie) notFound();
 
@@ -84,7 +76,7 @@ export default async function MovieLayout({
 		<div>
 			<MovieHeader movie={movie} />
 			<div className="px-4 pb-4">
-				<MovieNavbar movieId={String(params.film)} />
+				<MovieNavbar movieId={movieId} />
 				{children}
 			</div>
 		</div>

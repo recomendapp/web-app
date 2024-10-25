@@ -17,15 +17,15 @@
     --background-border: 0 0% 0%;
     --foreground: 0 100% 100%;
 
-    --muted: 0 0% 12%;
-    --muted-hover: 0 0% 8%;
+    --muted: 0 0% 8%;
+    --muted-hover: 0 0% 12%;
     --muted-foreground: 0 0% 57%;
 
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 100%;
 
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
@@ -150,9 +150,6 @@
 
 
 @layer base {
-  * {
-    @apply transition-colors;
-  }
   body {
     font-feature-settings:
       'rlig' 1,

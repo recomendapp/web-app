@@ -1,12 +1,14 @@
 import { ShowPlaylists } from '@/app/[lang]/(app)/film/[film]/(default)/playlists/_components/ShowPlaylists';
+import { getMovieId } from '@/hooks/get-movie-id';
 
 export default async function Reviews({
   params,
 }: {
   params: {
     lang: string;
-    film: number;
+    film: string;
   };
 }) {
-  return (<ShowPlaylists filmId={String(params.film)} />);
+  const { movieId } = getMovieId(params.film);
+  return (<ShowPlaylists filmId={movieId} />);
 }

@@ -38,5 +38,17 @@ export const siteConfig = {
       icon: Icons.google,
       enabled: false,
     },
+  ],
+  features: [
+    { icon: Icons.check, label: 'Tracking', description: 'Keep an eye on the films you have seen', iconClass: '' },
+		{ icon: Icons.send, label: 'Recos', description: 'Send films recommendations to your friends', iconClass: '' },
+		{ icon: Icons.explore, label: 'Explore', description: 'Discover new films on Paradise Pictures, an interactive map with more than 1400 films', iconClass: '' },
+		{ icon: Icons.like, label: 'Like', description: 'Show your love for your favorite films, playlists and critics', iconClass: '' },
+		{ icon: Icons.rating, label: 'Rating', description: 'Rate the films you have seen', iconClass: '' },
+		{ icon: Icons.watchlist, label: 'Watchlist', description: 'Save films you want to see', iconClass: '' },
+		{ icon: Icons.addPlaylist, label: 'Playlists', description: 'Organize your films in playlists and share them', iconClass: '' },
+		{ icon: Icons.movieReview, label: 'Review', description: 'Write critics on films', iconClass: '' },
+		{ icon: Icons.feed, label: 'Feed', description: 'Follow your friends\'s activities', iconClass: '' },
+		{ icon: Icons.lock, label: 'Ads free', description: 'Enjoy Recomend without ads, forever', iconClass: '' },
   ]
 };

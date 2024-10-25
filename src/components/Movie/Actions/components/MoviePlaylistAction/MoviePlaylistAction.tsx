@@ -38,7 +38,7 @@ export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
               asChild
             >
               <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
-                <Icons.actions.addPlaylist />
+                <Icons.addPlaylist />
               </Link>
             </Button>
           </TooltipTrigger>
@@ -58,7 +58,7 @@ export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
             className="rounded-full"
             onClick={() => openModal(MoviePlaylistModal, { movieId })}
           >
-            {loading ? <Icons.spinner className="animate-spin" /> : <Icons.actions.addPlaylist />}
+            {loading ? <Icons.spinner className="animate-spin" /> : <Icons.addPlaylist />}
           </Button>
         </TooltipTrigger>
         <TooltipContent side="bottom">

@@ -2,6 +2,7 @@ import { PlaylistCreateButton } from "@/components/Playlist/Button/PlaylistCreat
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator, useSidebar } from "@/components/ui/sidebar";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
+import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
 import { useUserPlaylists } from "@/features/user/userQueries";
 import { cn } from "@/lib/utils";
@@ -47,25 +48,25 @@ export const SidebarLeftRoutes = () => {
 	const routes = useMemo(
 		() => [
 		  {
-			icon: HomeIcon,
+			icon: Icons.home,
 			label: t('home'),
 			active: pathname === '/',
 			href: '/',
 		  },
 		  {
-			icon: CompassIcon,
+			icon: Icons.explore,
 			label: t('explore'),
 			active: pathname === '/explore',
 			href: '/explore',
 		  },
 		  {
-			icon: ZapIcon,
+			icon: Icons.feed,
 			label: t('feed'),
 			active: pathname.startsWith('/feed'),
 			href: '/feed',
 		  },
 		  {
-			icon: SearchIcon,
+			icon: Icons.search,
 			label: t('search'),
 			active: pathname.startsWith('/search') || pathname.startsWith('/movie'),
 			href: '/search',
