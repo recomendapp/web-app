@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { useAuth } from '@/context/auth-context';
 import { useUserWatchlist } from '@/features/user/userQueries';
 import { cn } from '@/lib/utils';
-import { MovieCard } from '../Movie/MovieCard';
+import { CardMovie } from '../card/CardMovie';
+import { Button } from '../ui/button';
 
 export const WidgetUserMovieWatchlist = ({
   className,
@@ -25,14 +26,14 @@ export const WidgetUserMovieWatchlist = ({
 
   return (
   <div className={cn('@container/widget-user-movie-watchlist space-y-4', className)}>
-    <Link href={'/collection/guidelist'}>
-        <h3 className="font-semibold text-xl">À voir</h3>
-    </Link>
+    <Button variant={'link'} className="p-0 w-fit font-semibold text-xl" asChild>
+			<Link href={'/collection/watchlist'}>
+        À voir
+			</Link>
+		</Button>
     <div className='grid grid-cols-2 @2xl/widget-user-movie-watchlist:grid-cols-3 gap-4'>
       {watchlist.map((item, index) => (
-      <Link key={index} href={`/film/${item.movie?.slug ?? item.movie_id}`}>
-        <MovieCard movie={item.movie} />
-      </Link>
+      <CardMovie key={index} movie={item.movie} />
       ))}
     </div>
   </div>

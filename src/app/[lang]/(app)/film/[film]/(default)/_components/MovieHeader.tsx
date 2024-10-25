@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/select';
 
 // ICONS
-import { Play, Star } from 'lucide-react';
+import { Play } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MoviePoster from '@/components/Movie/MoviePoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';

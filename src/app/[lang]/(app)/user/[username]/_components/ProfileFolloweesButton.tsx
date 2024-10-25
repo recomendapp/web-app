@@ -10,9 +10,9 @@ import { Button } from '@/components/ui/button';
 
 // ICONS
 import { useState } from 'react';
-import { Modal } from '@/components/Modals/Modal';
+import { Modal } from '@/components/modals/Modal';
 import { cn } from '@/lib/utils';
-import { ProfileFolloweesModal } from '@/components/Modals/Profile/ProfileFolloweesModal';
+import { ProfileFolloweesModal } from '@/components/modals/Profile/ProfileFolloweesModal';
 import { useModal } from '@/context/modal-context';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 

@@ -1,5 +1,5 @@
 import { TooltipBox } from "@/components/Box/TooltipBox";
-import { Modal } from "@/components/Modals/Modal";
+import { Modal } from "@/components/modals/Modal";
 import { Person } from "@/types/type.db";
 import { CakeIcon, IconNode, PersonStanding } from "lucide-react";
 import { useFormatter } from "next-intl";
@@ -7,7 +7,7 @@ import { useState } from "react";
 import { TbGrave } from "react-icons/tb";
 import { MapPin } from 'lucide-react';
 import { useModal } from "@/context/modal-context";
-import { PersonAboutModal } from "@/components/Modals/Person/PersonAboutModal";
+import { PersonAboutModal } from "@/components/modals/Person/PersonAboutModal";
 
 export function PersonAbout({
   person,

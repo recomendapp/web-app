@@ -1,8 +1,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { userKeys } from "./userKeys"
-// import { supabase } from "@/lib/supabase/client";
 import { useSupabaseClient } from '@/context/supabase-context';
-import { PlaylistType, UserFriend } from "@/types/type.db";
+import { PlaylistType, UserFriend, UserMovieActivity } from "@/types/type.db";
 
 /**
  * Fetches the user details
@@ -409,9 +408,6 @@ export const useUserWatchlist = ({
 	});
 }
 
-
-
-
 /**
  * Fetches the user playlists
  * @param userId The user id
@@ -457,3 +453,58 @@ export const useUserPlaylists = ({
 	});
 }
 
+export const useUserFeedInfinite = ({
+	userId,
+	filters,
+} : {
+	userId?: string;
+	filters?: {
+		resultsPerPage?: number;
+		order?: 'created_at-desc' | 'created_at-asc';
+	};
+}) => {
+	const mergedFilters = {
+		resultsPerPage: 20,
+		order: 'created_at-desc',
+		...filters,
+	};
+	const supabase = useSupabaseClient();
+	return useInfiniteQuery({
+		queryKey: userKeys.feed(userId as string, mergedFilters),
+		queryFn: async ({ pageParam = 1 }) => {
+			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
+      		let to = from - 1 + mergedFilters.resultsPerPage;
+			let request = supabase
+				.from('feed')
+				.select(`
+					*,
+					movie(*),
+					user(*),
+					review(*, user(*))
+				`)
+				.range(from, to)
+				.returns<UserMovieActivity[]>();
+			
+			if (mergedFilters) {
+				if (mergedFilters.order) {
+					switch (mergedFilters.order) {
+						case 'created_at-desc':
+							request = request.order('created_at', { ascending: false });
+							break;
+						case 'created_at-asc':
+							request = request.order('created_at', { ascending: true });
+							break;
+					}
+				}
+			}
+			const { data, error } = await request;
+			if (error) throw error;
+			return data;
+		},
+		initialPageParam: 1,
+		getNextPageParam: (lastPage, pages) => {
+			return lastPage?.length == mergedFilters.resultsPerPage ? pages.length + 1 : undefined;
+		},
+		enabled: !!userId,
+	});
+}

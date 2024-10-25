@@ -2,8 +2,8 @@
 
 import React, { createContext, useContext, ReactNode, useState, useEffect, use } from 'react';
 import { usePathname } from 'next/navigation';
-import { ModalTemplate, ModalTemplateProps } from '@/components/Modals/templates/ModalTemplate';
-import { ConfirmModalTemplate, ConfirmModalTemplateProps } from '@/components/Modals/templates/ConfirmModalTemplate';
+import { ModalTemplate, ModalTemplateProps } from '@/components/modals/templates/ModalTemplate';
+import { ConfirmModalTemplate, ConfirmModalTemplateProps } from '@/components/modals/templates/ConfirmModalTemplate';
 
 interface Modal<T = any> {
   id: string;

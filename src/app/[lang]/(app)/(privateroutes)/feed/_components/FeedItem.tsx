@@ -40,7 +40,7 @@ const FeedItem = ({ activity }: { activity?: any }) => {
 		<div className="flex flex-col gap-4 w-full">
 			<div className="flex justify-between">
 				{/* USER */}
-				<div className="flex gap-2">
+				<div className="flex items-center gap-2">
 					<UserCard user={activity.user} icon />
 					<FeedActivity activity={activity} className="text-sm @md/feed-item:text-base text-muted-foreground"/>
 				</div>
@@ -54,7 +54,7 @@ const FeedItem = ({ activity }: { activity?: any }) => {
 				review={activity.review}
 				/>
 			) : (
-				<Link href={`/film/${activity.movie.id}`} className="space-y-2">
+				<Link href={`/film/${activity.movie.slug ?? activity.movie_id}`} className="space-y-2">
 					{/* TITLE */}
 					<div className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
 						<span className='font-bold'>{activity.movie.title}</span>

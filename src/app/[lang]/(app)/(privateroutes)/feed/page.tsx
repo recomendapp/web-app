@@ -1,23 +1,16 @@
 'use client'
 
 import { useAuth } from "@/context/auth-context";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useLocale } from "next-intl";
 import FeedItem from "./_components/FeedItem";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import Loader from "@/components/Loader/Loader";
-import { useSupabaseClient } from '@/context/supabase-context';
+import { useUserFeedInfinite } from "@/features/user/userQueries";
 
 export default function Feed() {
-  const supabase = useSupabaseClient();
   const { user } = useAuth();
-  
-  const locale = useLocale();
 
   const { ref, inView } = useInView();
-
-  const numberOfResult = 10;
 
   const {
     data: feed,
@@ -25,30 +18,8 @@ export default function Feed() {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['user', user?.id, 'feed'],
-    queryFn: async ({ pageParam = 1 }) => {
-      let from = (pageParam - 1) * numberOfResult;
-      let to = from - 1 + numberOfResult;
-
-      const { data, error } = await supabase
-        .from('feed')
-        .select(`
-          *,
-          user(*),
-          review:user_movie_review_view(*, user(*)),
-          movie(*)
-        `)
-        .range(from, to)
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      return data;
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => {
-      return lastPage?.length == numberOfResult ? pages.length + 1 : undefined;
-    },
-    enabled: !!user?.id && !!locale,
+  } = useUserFeedInfinite({
+    userId: user?.id,
   });
 
   useEffect(() => {

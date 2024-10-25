@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from '../ui/dialog';
 import { useUI } from '@/context/ui-context';
-import { Modal } from '../Modals/Modal';
+import { Modal } from '../modals/Modal';
 import { useModal } from '@/context/modal-context';
 
 export default function FollowedUserListButton() {

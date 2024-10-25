@@ -2,12 +2,13 @@
 
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils"
-import { WidgetMoviesMostRecommended } from "../Widget/WidgetMoviesMostRecommended";
-import { WidgetRecomendShowcase } from "../Widget/WidgetRecomendShowcase";
-import { WidgetUserMovieGuidelist } from "../Widget/WidgetUserMovieGuidelist";
-import { WidgetUserMovieWatchlist } from "../Widget/WidgetUserMovieWatchlist";
+import { WidgetMoviesMostRecommended } from "../widget/WidgetMoviesMostRecommended";
+import { WidgetRecomendShowcase } from "../widget/WidgetRecomendShowcase";
+import { WidgetUserMovieGuidelist } from "../widget/WidgetUserMovieGuidelist";
+import { WidgetUserMovieWatchlist } from "../widget/WidgetUserMovieWatchlist";
 import { siteConfig } from "@/config/site";
 import { useTranslations } from "next-intl";
+import { WidgetUserFeed } from "../widget/WidgetUserFeed";
 
 export const Dashboard = ({
 	isLogged,
@@ -22,8 +23,13 @@ export const Dashboard = ({
 			</div>
 			<WidgetMoviesMostRecommended isLogged={isLogged} className='col-span-full' />
 			{!isLogged ? <WidgetRecomendShowcase className='col-span-full'/> : null}
-			{isLogged ? <WidgetUserMovieGuidelist /> : null}
-			{isLogged ? <WidgetUserMovieWatchlist /> : null}
+			{isLogged ? (
+				<>
+				<WidgetUserMovieGuidelist />
+				<WidgetUserMovieWatchlist />
+				<WidgetUserFeed />
+				</>
+			) : null}
 		</div>
 	);
 }

@@ -7,7 +7,7 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 import { ConvertHoursMinutes } from '@/lib/utils';
 import UserCard from '@/components/User/UserCard/UserCard';
 import { useModal } from '@/context/modal-context';
-import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
+import { PlaylistModal } from '@/components/modals/Playlist/PlaylistModal';
 import { Playlist, PlaylistItem } from '@/types/type.db';
 
 export default function PlaylistHeader({ playlist } : { playlist: Playlist }) {

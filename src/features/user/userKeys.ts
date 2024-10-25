@@ -80,7 +80,7 @@ export const userKeys = {
 
 	movies: (userId: string) => [...userKeys.detail(userId), 'movies'] as const,
 	movie: (userId: string, movieId: string) => [...userKeys.movies(userId), movieId] as const,
-
+	movieActivity: (userId: string, movieId: string) => [...userKeys.movie(userId, movieId), 'activity'] as const,
 	/**
 	 * Fetches the user's guidelist
 	 * @param userId The user id
@@ -119,4 +119,18 @@ export const userKeys = {
 			order?: 'updated_at-desc' | 'updated_at-asc'
 		}
 	) => filters ? [...userKeys.detail(userId), 'playlists', filters] : [...userKeys.detail(userId), 'playlists'] as const,
+
+	/**
+	 * Fetches the user's feed
+	 * @param userId The user id
+	 * @param filters The filters (optional)
+	 * @returns The user's feed
+	 */
+	feed: (
+		userId: string,
+		filters: any
+		// filters?: {
+		// 	limit?: number;
+		// }
+	) => filters ? [...userKeys.detail(userId), 'feed', filters] : [...userKeys.detail(userId), 'feed'] as const,
 };

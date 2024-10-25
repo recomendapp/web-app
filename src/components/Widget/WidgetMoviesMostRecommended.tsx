@@ -14,7 +14,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { DateOnlyYearTooltip } from "../utils/Date";
 import { SendIcon } from "lucide-react";
-import { MovieSendModal } from "../Modals/Movie/Actions/MovieSendModal";
+import { MovieSendModal } from "../modals/Movie/Actions/MovieSendModal";
 import { useModal } from "@/context/modal-context";
 import Autoplay from "embla-carousel-autoplay"
 import { useRef, useState } from "react";
@@ -74,7 +74,7 @@ export const WidgetMoviesMostRecommended = ({
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<Link href={`/film/${movie?.slug ?? movie?.id}`} className="text-white text-clamp-title line-clamp-2 font-semibold">
+							<Link href={`/film/${movie?.slug ?? movie?.id}`} className="w-fit text-clamp-title line-clamp-2 font-semibold">
 								{movie?.title}
 								<sup className="ml-2">
 									<DateOnlyYearTooltip date={movie?.release_date ?? ''} className="text-base font-medium" />

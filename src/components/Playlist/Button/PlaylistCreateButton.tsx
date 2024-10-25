@@ -10,9 +10,9 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Modal } from '@/components/Modals/Modal';
+import { Modal } from '@/components/modals/Modal';
 import { useModal } from '@/context/modal-context';
-import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
+import { PlaylistModal } from '@/components/modals/Playlist/PlaylistModal';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { cn } from '@/lib/utils';
 

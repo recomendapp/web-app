@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { ProfileFollowersModal } from '@/components/Modals/Profile/ProfileFollowersModal';
+import { ProfileFollowersModal } from '@/components/modals/Profile/ProfileFollowersModal';
 import { useModal } from '@/context/modal-context';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 

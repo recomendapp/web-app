@@ -3,16 +3,17 @@ import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
 import { Movie } from "@/types/type.db";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
+import Link from "next/link";
 
-interface MovieCardProps
+interface CardMovieProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default";
 		movie: Movie;
 	}
 
-const MovieCardDefault = React.forwardRef<
+const CardMovieDefault = React.forwardRef<
 	HTMLDivElement,
-	Omit<MovieCardProps, "variant">
+	Omit<CardMovieProps, "variant">
 >(({ className, movie, children, ...props }, ref) => {
 	return (
 		<Card
@@ -44,23 +45,24 @@ const MovieCardDefault = React.forwardRef<
 		</Card>
 	);
 });
-MovieCardDefault.displayName = "MovieCardDefault";
+CardMovieDefault.displayName = "CardMovieDefault";
 
-const MovieCard = React.forwardRef<
+const CardMovie = React.forwardRef<
 	HTMLDivElement,
-	MovieCardProps
->(({ className, variant = "default", ...props }, ref) => {
-	switch (variant) {
-		case "default":
-			return <MovieCardDefault ref={ref} className={className} {...props} />;
-		default:
-			return null;
-	}
+	CardMovieProps
+>(({ className, movie, variant = "default", ...props }, ref) => {
+	return (
+		<Link href={`/film/${movie?.slug ?? movie?.id}`}>
+			{variant === "default" ? (
+				<CardMovieDefault ref={ref} className={className} movie={movie} {...props} />
+			) : null}
+		</Link>
+	);
 });
-MovieCard.displayName = "MovieCard";
+CardMovie.displayName = "CardMovie";
 
 export {
-	type MovieCardProps,
-	MovieCard,
-	MovieCardDefault,
+	type CardMovieProps,
+	CardMovie,
+	CardMovieDefault,
 }
