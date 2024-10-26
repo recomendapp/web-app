@@ -1,6 +1,6 @@
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
-import PlaylistCommentModal from '@/components/modals/Playlist/PlaylistCommentModal';
+import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentModal';
 import { Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
 import { useQueryClient } from '@tanstack/react-query';
 import { MessageSquarePlusIcon } from 'lucide-react';

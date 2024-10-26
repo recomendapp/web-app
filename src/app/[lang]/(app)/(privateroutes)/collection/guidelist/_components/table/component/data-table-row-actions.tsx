@@ -29,9 +29,9 @@ import ButtonShare from '@/components/utils/ButtonShare';
 import { useAuth } from '@/context/auth-context';
 
 import toast from 'react-hot-toast';
-import { GuidelistSendersModal } from '@/components/modals/Guidelist/GuidelistSendersModal';
+import { GuidelistSendersModal } from '@/components/Modals/Guidelist/GuidelistSendersModal';
 import { useModal } from '@/context/modal-context';
-import { Movie, Person, UserMovieGuidelistView } from '@/types/type.db';
+import { Movie, UserMovieGuidelistView } from '@/types/type.db';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
 

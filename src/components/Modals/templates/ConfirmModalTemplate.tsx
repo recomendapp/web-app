@@ -1,4 +1,4 @@
-import { ModalType } from "@/components/modals/Modal";
+import { ModalType } from "@/components/Modals/Modal";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useModal } from "@/context/modal-context";
 

@@ -14,7 +14,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { DateOnlyYearTooltip } from "../utils/Date";
 import { SendIcon } from "lucide-react";
-import { MovieSendModal } from "../modals/Movie/Actions/MovieSendModal";
+import { MovieSendModal } from "../Modals/Movie/Actions/MovieSendModal";
 import { useModal } from "@/context/modal-context";
 import Autoplay from "embla-carousel-autoplay"
 import { useRef, useState } from "react";

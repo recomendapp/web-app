@@ -3,7 +3,7 @@ import { Person } from "@/types/type.db";
 import { useFormatter } from "next-intl";
 import { useState } from "react";
 import { useModal } from "@/context/modal-context";
-import { PersonAboutModal } from "@/components/modals/Person/PersonAboutModal";
+import { PersonAboutModal } from "@/components/Modals/Person/PersonAboutModal";
 
 export function PersonAbout({
   person,

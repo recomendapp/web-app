@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 // ICONS
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { ProfileFolloweesModal } from '@/components/modals/Profile/ProfileFolloweesModal';
+import { ProfileFolloweesModal } from '@/components/Modals/Profile/ProfileFolloweesModal';
 import { useModal } from '@/context/modal-context';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 

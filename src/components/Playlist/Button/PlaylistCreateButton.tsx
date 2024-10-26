@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
-import { PlaylistModal } from '@/components/modals/Playlist/PlaylistModal';
+import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { cn } from '@/lib/utils';
 

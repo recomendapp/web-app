@@ -1,4 +1,4 @@
-import { GuidelistSendersModal } from "@/components/modals/Guidelist/GuidelistSendersModal";
+import { GuidelistSendersModal } from "@/components/Modals/Guidelist/GuidelistSendersModal";
 import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
 import { useModal } from "@/context/modal-context";
 import { UserMovieGuidelistView } from "@/types/type.db";
