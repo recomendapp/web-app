@@ -6,6 +6,7 @@ import { Icons } from './icons';
 export const siteConfig = {
   name: 'Recomend',
   description: 'An other way to discover movies',
+  domain: 'recomend.app',
   mainNav: [
     {
       title: 'Accueil',
@@ -25,6 +26,12 @@ export const siteConfig = {
   links: {
     twitter: 'https://twitter.com/xmesky',
     github: 'https://github.com/xmesky',
+  },
+  socials: {
+    twitter: {
+      username: 'recomendHD',
+      url: 'https://x.com/recomendHD',
+    }
   },
   colors: ['#eb4034', '#34cfeb', '#ebc034', '#ad00ab'],
   oauth2: [

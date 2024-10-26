@@ -29,7 +29,7 @@ export const Dashboard = ({
 				<WidgetUserMovieGuidelist />
 				<WidgetUserMovieWatchlist />
 				<WidgetUserFriendsPlaylists />
-				<WidgetUserFeed className="h-[500px]"/>
+				<WidgetUserFeed />
 				</>
 			) : null}
 		</div>
