@@ -128,9 +128,20 @@ export const userKeys = {
 	 */
 	feed: (
 		userId: string,
-		filters: any
+		filters?: any
 		// filters?: {
 		// 	limit?: number;
 		// }
 	) => filters ? [...userKeys.detail(userId), 'feed', filters] : [...userKeys.detail(userId), 'feed'] as const,
+
+	/**
+	 * Fetches playlists of friends
+	 * @param userId The user id
+	 * @param filters The filters (optional)
+	 * @returns The playlists of friends
+	 */
+	playlistsFriends: (
+		userId: string,
+		filters?: any
+	) => filters ? [...userKeys.detail(userId), 'playlists-friends', filters] : [...userKeys.detail(userId), 'playlists-friends'] as const,
 };

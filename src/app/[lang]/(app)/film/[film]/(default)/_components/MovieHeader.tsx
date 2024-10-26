@@ -112,7 +112,7 @@ export default function MovieHeader({
             </div>
             {/* TITLE */}
             <div className="text-clamp space-x-1">
-              <span className='font-bold '>{movie.title}</span>
+              <span className='font-bold select-text'>{movie.title}</span>
               {/* DATE */}
               <sup>
                 <DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-base font-medium'/>

@@ -18,12 +18,12 @@ import toast from 'react-hot-toast';
 import { Icons } from '@/config/icons';
 import { useAuth } from '@/context/auth-context';
 
-import { UserMovieReviewView } from '@/types/type.db';
+import { Review } from '@/types/type.db';
 import { useMutation } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
 
 interface MovieReviewFormProps {
-  review: UserMovieReviewView;
+  review: Review;
 }
 
 export default function MovieReviewForm({ review }: MovieReviewFormProps) {
@@ -38,7 +38,7 @@ export default function MovieReviewForm({ review }: MovieReviewFormProps) {
     mutationFn: async (payload: { title: string, body: string }) => {
       if (!review?.id) throw new Error('No user id');
       const { data, error } = await supabase
-        .from('user_movie_review_view')
+        .from('review')
         .update(payload as never) // supabase-js types are wrong
         .eq('id', review.id)
         .select('*');

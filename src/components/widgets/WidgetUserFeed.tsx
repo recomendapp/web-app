@@ -19,7 +19,7 @@ export const WidgetUserFeed = ({
 	if (!user || !feed || !feed.pages[0]?.length) return null;
 
 	return (
-	<div className={cn('h-96 flex flex-col gap-4 overflow-hidden', className)}>
+	<div className={cn('flex flex-col gap-4 overflow-hidden', className)}>
 		<Button variant={'link'} className="p-0 w-fit font-semibold text-xl" asChild>
 			<Link href={'/feed'}>
 				Feed

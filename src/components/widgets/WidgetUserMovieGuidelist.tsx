@@ -3,9 +3,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/context/auth-context';
 import { useUserGuidelist } from '@/features/user/userQueries';
-import { ImageWithFallback } from '../utils/ImageWithFallback';
 import { UserAvatar } from '../User/UserAvatar/UserAvatar';
-import { Card } from '../ui/card';
 import { cn } from '@/lib/utils';
 import { CardMovie } from '../card/CardMovie';
 import { Button } from '../ui/button';

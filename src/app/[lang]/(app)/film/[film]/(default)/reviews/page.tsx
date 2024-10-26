@@ -61,7 +61,7 @@ export default function Reviews({
       else ascending = true;
 
       const { data } = await supabase
-        .from('user_movie_review_view')
+        .from('review')
         .select('*, user(*)')
         .eq('movie_id', movieId)
         .range(from, to)

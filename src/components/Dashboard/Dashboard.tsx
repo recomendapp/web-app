@@ -9,6 +9,7 @@ import { WidgetUserMovieWatchlist } from "../widgets/WidgetUserMovieWatchlist";
 import { siteConfig } from "@/config/site";
 import { useTranslations } from "next-intl";
 import { WidgetUserFeed } from "../widgets/WidgetUserFeed";
+import { WidgetUserFriendsPlaylists } from "../widgets/WIdgetUserFriendsPlaylists";
 
 export const Dashboard = ({
 	isLogged,
@@ -27,7 +28,8 @@ export const Dashboard = ({
 				<>
 				<WidgetUserMovieGuidelist />
 				<WidgetUserMovieWatchlist />
-				<WidgetUserFeed />
+				<WidgetUserFriendsPlaylists />
+				<WidgetUserFeed className="h-[500px]"/>
 				</>
 			) : null}
 		</div>

@@ -9,21 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      app_config: {
-        Row: {
-          key: string
-          value: string
-        }
-        Insert: {
-          key: string
-          value: string
-        }
-        Update: {
-          key?: string
-          value?: string
-        }
-        Relationships: []
-      }
       customers: {
         Row: {
           id: string
@@ -127,6 +112,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "playlist_guest_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists_friends"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "playlist_guest_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -193,6 +185,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "playlist_item_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists_friends"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "playlist_item_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -233,6 +232,13 @@ export type Database = {
             columns: ["playlist_id"]
             isOneToOne: false
             referencedRelation: "playlist"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_like_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists_friends"
             referencedColumns: ["id"]
           },
           {
@@ -2074,13 +2080,6 @@ export type Database = {
             referencedRelation: "user_movie_activity"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "user_movie_review_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "user_movie_activity_feed"
-            referencedColumns: ["id"]
-          },
         ]
       }
       user_movie_review_comment: {
@@ -2126,14 +2125,14 @@ export type Database = {
             foreignKeyName: "user_movie_review_comment_review_id_fkey"
             columns: ["review_id"]
             isOneToOne: false
-            referencedRelation: "user_movie_review"
+            referencedRelation: "review"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_movie_review_comment_review_id_fkey"
             columns: ["review_id"]
             isOneToOne: false
-            referencedRelation: "user_movie_review_view"
+            referencedRelation: "user_movie_review"
             referencedColumns: ["id"]
           },
           {
@@ -2219,14 +2218,14 @@ export type Database = {
             foreignKeyName: "user_movie_review_like_review_id_fkey"
             columns: ["review_id"]
             isOneToOne: false
-            referencedRelation: "user_movie_review"
+            referencedRelation: "review"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "user_movie_review_like_review_id_fkey"
             columns: ["review_id"]
             isOneToOne: false
-            referencedRelation: "user_movie_review_view"
+            referencedRelation: "user_movie_review"
             referencedColumns: ["id"]
           },
           {
@@ -2739,6 +2738,37 @@ export type Database = {
           },
         ]
       }
+      playlists_friends: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          featured: boolean | null
+          id: number | null
+          items_count: number | null
+          likes_count: number | null
+          poster_url: string | null
+          private: boolean | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "playlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profile: {
         Row: {
           avatar_url: string | null
@@ -2808,6 +2838,66 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "supported_languages"
             referencedColumns: ["language"]
+          },
+        ]
+      }
+      review: {
+        Row: {
+          body: string | null
+          comments_count: number | null
+          created_at: string | null
+          id: number | null
+          is_liked: boolean | null
+          likes_count: number | null
+          movie_id: number | null
+          rating: number | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+          views_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_movie_activity"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_review_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "feed"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -2900,115 +2990,6 @@ export type Database = {
           },
         ]
       }
-      user_movie_activity_feed: {
-        Row: {
-          created_at: string | null
-          date: string | null
-          id: number | null
-          is_liked: boolean | null
-          movie_id: number | null
-          rating: number | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_movie_activity_movie_id_fkey"
-            columns: ["movie_id"]
-            isOneToOne: false
-            referencedRelation: "tmdb_movie"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_activity_movie_id_fkey"
-            columns: ["movie_id"]
-            isOneToOne: false
-            referencedRelation: "movie"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_activity_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_activity_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_movie_review_view: {
-        Row: {
-          body: string | null
-          comments_count: number | null
-          created_at: string | null
-          id: number | null
-          is_liked: boolean | null
-          likes_count: number | null
-          movie_id: number | null
-          rating: number | null
-          title: string | null
-          updated_at: string | null
-          user_id: string | null
-          views_count: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_movie_activity_movie_id_fkey"
-            columns: ["movie_id"]
-            isOneToOne: false
-            referencedRelation: "tmdb_movie"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_activity_movie_id_fkey"
-            columns: ["movie_id"]
-            isOneToOne: false
-            referencedRelation: "movie"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_activity_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_activity_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "user_movie_activity"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "feed"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "user_movie_activity_feed"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       watchlist_random: {
         Row: {
           created_at: string | null
@@ -3082,13 +3063,6 @@ export type Database = {
           object: string
         }
         Returns: Record<string, unknown>
-      }
-      generate_slug: {
-        Args: {
-          base_id: number
-          input_text: string
-        }
-        Returns: string
       }
       generate_username: {
         Args: {
@@ -3178,6 +3152,12 @@ export type Database = {
           directors: Json[]
           genres: Json[]
         }[]
+      }
+      slugify: {
+        Args: {
+          value: string
+        }
+        Returns: string
       }
       user_movie_guidelist_insert: {
         Args: {

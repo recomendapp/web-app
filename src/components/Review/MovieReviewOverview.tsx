@@ -14,7 +14,7 @@ import { JSONContent } from '@tiptap/react';
 import { MovieReviewSettings } from './MovieReviewSettings';
 import { cn } from '@/lib/utils';
 import Rating from './ActivityIcon';
-import { UserMovieActivity, UserMovieReviewView } from '@/types/type.db';
+import { UserMovieActivity, Review } from '@/types/type.db';
 import UserMovieReviewLike from './actions/UserMovieReviewLike';
 import { useFormatter, useNow } from 'next-intl';
 
@@ -22,7 +22,7 @@ export default function MovieReviewOverview({
   review,
   className,
 }: {
-  review: UserMovieReviewView;
+  review: Review;
   className?: string;
 }) {
   const now = useNow({

@@ -19,7 +19,7 @@ export function PersonAbout({
         `}
         onClick={() => openModal(PersonAboutModal, { person })}
       >
-        <p className="line-clamp-2">
+        <p className="line-clamp-2 select-text">
           {person?.biography?.length ? person.biography : 'No biography available'}
         </p>
         <p className="">

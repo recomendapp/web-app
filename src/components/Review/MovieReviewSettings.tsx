@@ -31,14 +31,14 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 
 // GRAPHQL
-import { UserMovieReviewView } from '@/types/type.db';
+import { Review } from '@/types/type.db';
 import { useMutation } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
 
 export function MovieReviewSettings({
   review,
 }: {
-  review: UserMovieReviewView;
+  review: Review;
 }) {
   const supabase = useSupabaseClient();
   const { user } = useAuth();
@@ -56,7 +56,7 @@ export function MovieReviewSettings({
         data,
         error
       } = await supabase
-        .from('user_movie_review_view')
+        .from('review')
         .delete()
         .eq('id', review.id)
         .select('*');

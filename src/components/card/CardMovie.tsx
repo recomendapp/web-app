@@ -4,6 +4,7 @@ import { Card } from "../ui/card";
 import { Movie } from "@/types/type.db";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import Link from "next/link";
+import { ContextMenuMovie } from "../context-menu/ContextMenuMovie";
 
 interface CardMovieProps
 	extends React.ComponentProps<typeof Card> {
@@ -52,11 +53,13 @@ const CardMovie = React.forwardRef<
 	CardMovieProps
 >(({ className, movie, variant = "default", ...props }, ref) => {
 	return (
+	<ContextMenuMovie movie={movie}>
 		<Link href={`/film/${movie?.slug ?? movie?.id}`}>
 			{variant === "default" ? (
 				<CardMovieDefault ref={ref} className={className} movie={movie} {...props} />
 			) : null}
 		</Link>
+	</ContextMenuMovie>
 	);
 });
 CardMovie.displayName = "CardMovie";

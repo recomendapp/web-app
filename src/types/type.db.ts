@@ -47,8 +47,8 @@ export type UserMovieReview = Database['public']['Tables']['user_movie_review'][
 	user?: User;
 } | null | undefined;
 
-// *========== USER_MOVIE_REVIEW_VIEW ==========* //
-export type UserMovieReviewView = Database['public']['Views']['user_movie_review_view']['Row'] & {
+// *========== review ==========* //
+export type Review = Database['public']['Views']['review']['Row'] & {
 	user?: User;
 	movie?: Movie;
 } | null | undefined;

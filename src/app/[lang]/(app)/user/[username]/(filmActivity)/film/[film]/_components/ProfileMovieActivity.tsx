@@ -32,7 +32,7 @@ export default function ProfileMovieActivity({
 				.select(`
 					*,
 					user(*),
-					review:user_movie_review_view(
+					review:review(
 						*,
 						user(*)
 					),

@@ -37,7 +37,7 @@ export default function PersonHeader({
             </span>
           </div>
           {/* NAME */}
-          <div className="text-xl @xl/person-header:text-6xl font-bold line-clamp-2">
+          <div className="text-xl select-text @xl/person-header:text-6xl font-bold line-clamp-2">
             {person.name}
           </div>
           <div className='space-y-2'>

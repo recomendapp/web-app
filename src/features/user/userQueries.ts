@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { userKeys } from "./userKeys"
 import { useSupabaseClient } from '@/context/supabase-context';
-import { PlaylistType, UserFriend, UserMovieActivity } from "@/types/type.db";
+import { Playlist, PlaylistType, UserFriend, UserMovieActivity } from "@/types/type.db";
 
 /**
  * Fetches the user details
@@ -493,6 +493,61 @@ export const useUserFeedInfinite = ({
 							break;
 						case 'created_at-asc':
 							request = request.order('created_at', { ascending: true });
+							break;
+					}
+				}
+			}
+			const { data, error } = await request;
+			if (error) throw error;
+			return data;
+		},
+		initialPageParam: 1,
+		getNextPageParam: (lastPage, pages) => {
+			return lastPage?.length == mergedFilters.resultsPerPage ? pages.length + 1 : undefined;
+		},
+		enabled: !!userId,
+	});
+}
+
+export const useUserPlaylistsFriends = ({
+	userId,
+	filters,
+} : {
+	userId?: string;
+	filters?: {
+		resultsPerPage?: number;
+		order?: 'updated_at-desc' | 'updated_at-asc';
+	};
+}) => {
+	const mergedFilters = {
+		resultsPerPage: 20,
+		order: 'updated_at-desc',
+		...filters,
+	};
+	const supabase = useSupabaseClient();
+	return useInfiniteQuery({
+		queryKey: userKeys.playlistsFriends(userId as string, mergedFilters),
+		queryFn: async ({ pageParam = 1 }) => {
+			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
+      		let to = from - 1 + mergedFilters.resultsPerPage;
+			
+			let request = supabase
+				.from('playlists_friends')
+				.select(`
+					*,
+					user(*)
+				`)
+				.range(from, to)
+				.returns<Playlist[]>();
+			
+			if (mergedFilters) {
+				if (mergedFilters.order) {
+					switch (mergedFilters.order) {
+						case 'updated_at-desc':
+							request = request.order('updated_at', { ascending: false });
+							break;
+						case 'updated_at-asc':
+							request = request.order('updated_at', { ascending: true });
 							break;
 					}
 				}
