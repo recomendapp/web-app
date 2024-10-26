@@ -1,14 +1,10 @@
 import { Icons } from '@/config/icons';
-import { siteConfig } from '@/config/site';
-import Image from 'next/image';
+import { Metadata } from 'next';
 import React from 'react';
 
-export async function generateMetadata() {
-	return {
-	  title: `Maintenance`,
-	};
+export const metadata: Metadata = {
+	title: 'Maintenance',
 }
-
 const MaintenancePage: React.FC = () => {
 	return (
 		<div className='h-screen w-screen p-4'>

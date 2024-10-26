@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { User } from '@/types/type.db';
+import { Movie, User } from '@/types/type.db';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
 import { useUserSendMovie } from '@/features/user/userQueries';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
@@ -21,10 +21,12 @@ const COMMENT_MAX_LENGTH = 180;
 
 interface MovieSendModalProps extends ModalType {
 	movieId: number;
+	movie?: Movie
 }
 
 export function MovieSendModal({
 	movieId,
+	movie,
 	...props
 } : MovieSendModalProps) {
 	const { user } = useAuth();
@@ -81,7 +83,7 @@ export function MovieSendModal({
 			<ModalHeader className='px-4 pb-4 pt-5'>
 				<ModalTitle>Envoyer à un ami</ModalTitle>
 				<ModalDescription>
-					Recomendé ce film à un ami pour lui faire découvrir.
+					Recomender {movie?.title ? (<strong>{movie?.title}</strong>) : 'ce film'} à un ami pour lui faire découvrir.
 				</ModalDescription>
 			</ModalHeader>
 			<ModalBody className='!p-0 overflow-hidden'>

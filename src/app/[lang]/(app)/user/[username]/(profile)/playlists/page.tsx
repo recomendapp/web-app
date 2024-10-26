@@ -1,17 +1,11 @@
-import ProfilePlaylists from '@/app/[lang]/(app)/user/[username]/(profile)/playlists/_components/ProfilePlaylists';
-import { createServerClient } from '@/lib/supabase/server';
+import { getProfile } from '../../_components/getProfile';
+import ProfilePlaylists from './_components/ProfilePlaylists';
 
 export default async function Playlists({
   params,
 }: {
   params: { username: string };
 }) {
-  const supabase = createServerClient();
-  const { data: user } = await supabase
-    .from('user')
-    .select('*')
-    .eq('username', params.username)
-    .single();
-    
+  const user = await getProfile(params.username);
   return <ProfilePlaylists profile={user} />;
 }

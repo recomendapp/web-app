@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import Review from './_components/Review';
+import { cache } from 'react';
+import { getReview } from './getReview';
 
 export async function generateMetadata({
   params,
@@ -10,18 +12,8 @@ export async function generateMetadata({
     review: string;
   };
 }) {
-  const supabase = createServerClient(params.lang);
-  const { data: review, error } = await supabase
-    .from('review')
-    .select('*, user(username), movie(id, title)')
-    .eq('id', params.review)
-    .single();
-  
-  if (!review || error) {
-    return {
-      title: 'Oups, utilisateur introuvable !',
-    };
-  }
+  const review = await getReview(params.review, params.lang);
+  if (!review) return { title: 'Oups, utilisateur introuvable !' };
   return {
     title: `${review.title} by (@${review.user?.username})`,
     description: `Critique de ${review.movie?.title} par @${review.user?.username}`,
@@ -36,14 +28,8 @@ export default async function ReviewPage({
 	  review: string;
   };
 }) {
-  const supabase = createServerClient(params.lang);
-  const { data: review, error } = await supabase
-    .from('review')
-    .select('*, user(*), movie(*)')
-    .eq('id', params.review)
-    .single();
+  const review = await getReview(params.review, params.lang);
+  if (!review) notFound();
 
-  if (!review || error) notFound();
-
-  return (<Review reviewServer={review} />);
+  return <Review reviewServer={review} />;
 }

@@ -14,11 +14,11 @@ import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { User } from '@/types/type.db';
+import { User, UserProfile } from '@/types/type.db';
 import { useSupabaseClient } from '@/context/supabase-context';
 
 interface UserPlaylistsProps {
-  profile: User;
+  profile: User | UserProfile;
 }
 
 export default function ProfilePlaylists({ profile }: UserPlaylistsProps) {

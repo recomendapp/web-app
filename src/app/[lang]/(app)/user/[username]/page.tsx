@@ -1,30 +1,17 @@
-import ProfileFavoriteFilms from '@/app/[lang]/(app)/user/[username]/_components/ProfileFavoriteFilms';
-import ProfileHeader from '@/app/[lang]/(app)/user/[username]/_components/ProfileHeader';
-import ProfileNavbar from '@/app/[lang]/(app)/user/[username]/_components/ProfileNavbar';
-import ProfileLastActivity from '@/app/[lang]/(app)/user/[username]/_components/ProfileLastActivity';
-import ProfilePrivateAccountCard from '@/app/[lang]/(app)/user/[username]/_components/ProfilePrivateAccountCard';
-import { createServerClient } from '@/lib/supabase/server';
-import { GetUserByIdQuery, GetUserQuery } from '@/graphql/__generated__/graphql';
-
-// import apolloServer from '@/lib/apollo/server';
-// import GET_USER from '@/graphql/User/User/queries/GetUser';
 import { notFound } from 'next/navigation';
-import { LockIcon } from 'lucide-react';
+import ProfileHeader from './_components/ProfileHeader';
+import ProfileNavbar from './_components/ProfileNavbar';
+import ProfileLastActivity from './_components/ProfileLastActivity';
+import ProfilePrivateAccountCard from './_components/ProfilePrivateAccountCard';
+import { getProfile } from './_components/getProfile';
 
 export default async function UserPage({
   params,
 }: {
   params: { username: string };
 }) {
-  const supabase = createServerClient();
-  const { data: user } = await supabase
-    .from('profile')
-    .select('*')
-    .eq('username', params.username)
-    .single();
-
+  const user = await getProfile(params.username);
   if (!user) notFound();
-  
   return (
     <main>
       <ProfileHeader profile={user} />

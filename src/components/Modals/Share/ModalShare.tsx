@@ -9,12 +9,12 @@ import { siteConfig } from "@/config/site";
 import { FacebookIcon, FacebookShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
 
 interface ModalShareProps extends ModalType {
-	contentId: number | string;
-	contentType: 'movie' | 'playlist';
+	name?: string | null;
+	type: 'movie' | 'playlist';
 	path: string;
 }
 
-export const ModalShare = ({ contentType, ...props }: ModalShareProps) => {
+export const ModalShare = ({ name, type, ...props }: ModalShareProps) => {
 	const { closeModal } = useModal();
 	const [copyDone, setCopyDone] = useState(false);
 	const url = `${location.origin}${props.path}`;
@@ -22,10 +22,10 @@ export const ModalShare = ({ contentType, ...props }: ModalShareProps) => {
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
 			<ModalHeader>
 				<ModalTitle>
-					Partager {contentType}
+					Partager
 				</ModalTitle>
 				<ModalDescription>
-					Partagez ce {contentType} avec vos amis
+					Partagez <strong>{name}</strong> avec vos amis
 				</ModalDescription>
 			</ModalHeader>
 			<ModalBody>

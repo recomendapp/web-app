@@ -142,7 +142,7 @@ export const MovieWidget = () => {
 							</div>
 							<div className=" space-y-2">
 							<div className="line-clamp-1">
-								{movie.directors?.map((person: any, index: number) => (
+								{movie.directors?.map((person, index) => (
 								<>
 									{index > 0 && <span>, </span>}
 									<span key={index}>
@@ -151,7 +151,7 @@ export const MovieWidget = () => {
 											className="w-fit p-0 h-full hover:text-accent-1 transition"
 											asChild
 										>
-											<Link href={`/person/${person?.id}`}>
+											<Link href={`/person/${person.slug ?? person.id}`}>
 											{person?.name}
 											</Link>
 										</Button>

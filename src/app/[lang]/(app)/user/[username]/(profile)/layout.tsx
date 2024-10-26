@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
-import ProfileNavbar from '@/app/[lang]/(app)/user/[username]/_components/ProfileNavbar';
-import { createServerClient } from '@/lib/supabase/server';
 import ProfileHeader from '../_components/ProfileHeader';
 import ProfilePrivateAccountCard from '../_components/ProfilePrivateAccountCard';
+import ProfileNavbar from '../_components/ProfileNavbar';
+import { getProfile } from '../_components/getProfile';
 
 interface UserLayoutProps {
   params: { username: string };
@@ -13,27 +13,20 @@ export default async function UserLayout({
   params,
   children,
 }: UserLayoutProps) {
-  const supabase = createServerClient();
-  const { data: user } = await supabase
-    .from('profile')
-    .select('*')
-    .eq('username', params.username)
-    .single();
-
+  const user = await getProfile(params.username);
   if (!user) notFound();
-  
   if (!user.visible)
   {
     return (
-      <main>
+      <>
         <ProfileHeader profile={user} />
         <ProfilePrivateAccountCard />
-      </main>
+      </>
     )
   }
 
   return (
-    <main className="p-4 space-y-4">
+    <div className="p-4 space-y-4">
       <div className="flex justify-center">
         <ProfileNavbar
           profile={user}
@@ -42,6 +35,6 @@ export default async function UserLayout({
         />
       </div>
       <div className="flex flex-col gap-4">{children}</div>
-    </main>
+    </div>
   );
 }

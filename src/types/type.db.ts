@@ -85,6 +85,7 @@ export type Movie = Database['public']['Views']['movie']['Row'] & {
 	videos?: Database['public']['Tables']['tmdb_movie_videos']['Row'][];
 	production_countries?: Database['public']['Tables']['tmdb_movie_country']['Row'][];
 	spoken_languages?: Database['public']['Tables']['tmdb_movie_language']['Row'][];
+	cast?: MoviePerson[];
 	// directors?: MoviePerson[] | any;
 } | null | undefined;
 

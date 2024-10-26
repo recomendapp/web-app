@@ -21,6 +21,7 @@ import { useRef, useState } from "react";
 import { TooltipBox } from "../Box/TooltipBox";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
+import { ContextMenuMovie } from "../context-menu/ContextMenuMovie";
 
 interface WidgetMoviesMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {
 	isLogged: boolean;
@@ -54,69 +55,69 @@ export const WidgetMoviesMostRecommended = ({
 	>
 		<CarouselContent>
 			{data.map(({movie, recommendation_count}, index) => (
-			<CarouselItem
-			key={index}
-			>
-				<div
-				style={{
-					backgroundImage: movie?.backdrop_path ? `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})` : 'none',
-					backgroundSize: 'cover',
-					backgroundPosition: 'center',
-					backgroundRepeat: 'no-repeat',
-				}}
-				className="rounded-xl h-full"
-				>
-					<Card className="bg-black bg-opacity-40 flex flex-col h-full justify-between gap-2">
-						<CardHeader>
-							<CardTitle className="flex justify-between items-center gap-2 text-xl">
-								<h3>Les plus recommandés.</h3>
-								<div># {index + 1}</div>
-							</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<Link href={`/film/${movie?.slug ?? movie?.id}`} className="w-fit text-clamp-title line-clamp-2 font-semibold">
-								{movie?.title}
-								<sup className="ml-2">
-									<DateOnlyYearTooltip date={movie?.release_date ?? ''} className="text-base font-medium" />
-								</sup>
-							</Link>
-							<div>
-								{movie?.genres?.map((genre: any, index: number) => (
-								<span key={genre.id}>
+			<CarouselItem key={index}>
+				<ContextMenuMovie movie={movie}>
+					<div
+					style={{
+						backgroundImage: movie?.backdrop_path ? `url(https://image.tmdb.org/t/p/original/${movie.backdrop_path})` : 'none',
+						backgroundSize: 'cover',
+						backgroundPosition: 'center',
+						backgroundRepeat: 'no-repeat',
+					}}
+					className="rounded-xl h-full"
+					>
+						<Card className="bg-black bg-opacity-40 flex flex-col h-full justify-between gap-2">
+							<CardHeader>
+								<CardTitle className="flex justify-between items-center gap-2 text-xl">
+									<h3>Les plus recommandés.</h3>
+									<div># {index + 1}</div>
+								</CardTitle>
+							</CardHeader>
+							<CardContent>
+								<Link href={`/film/${movie?.slug ?? movie?.id}`} className="w-fit text-clamp-title line-clamp-2 font-semibold">
+									{movie?.title}
+									<sup className="ml-2">
+										<DateOnlyYearTooltip date={movie?.release_date ?? ''} className="text-base font-medium" />
+									</sup>
+								</Link>
+								<div>
+									{movie?.genres?.map((genre: any, index: number) => (
+									<span key={genre.id}>
+										<Button
+										variant="link"
+										className="w-fit p-0 h-full font-normal"
+										asChild
+										>
+										<Link href={`/genre/${genre.id}`}>
+											{genre.name}
+										</Link>
+										</Button>
+										{index !== movie.genres?.length! - 1 && (
+										<span>, </span>
+										)}
+									</span>
+									))}
+								</div>
+								{movie?.overview ? <div className="max-w-xl line-clamp-2 pt-2">
+									{movie.overview}
+								</div> : null}
+							</CardContent>
+							<CardFooter className="flex items-center gap-2">
+								<TooltipBox tooltip={isLogged ? 'Envoyer à un(e) ami(e)' : undefined}>
 									<Button
-									variant="link"
-									className="w-fit p-0 h-full font-normal"
-									asChild
+									size={"icon"}
+									variant={"muted"}
+									className="bg-muted/60"
+									onClick={() => (isLogged && movie) && openModal(MovieSendModal, { movieId: movie?.id, movie: movie })}
 									>
-									<Link href={`/genre/${genre.id}`}>
-										{genre.name}
-									</Link>
+										<SendIcon className="w-4 h-4 fill-primary" />
 									</Button>
-									{index !== movie.genres?.length! - 1 && (
-									<span>, </span>
-									)}
-								</span>
-								))}
-							</div>
-							{movie?.overview ? <div className="max-w-xl line-clamp-2 pt-2">
-								{movie.overview}
-							</div> : null}
-						</CardContent>
-						<CardFooter className="flex items-center gap-2">
-							<TooltipBox tooltip={isLogged ? 'Envoyer à un(e) ami(e)' : undefined}>
-								<Button
-								size={"icon"}
-								variant={"muted"}
-								className="bg-muted/60"
-								onClick={() => (isLogged && movie) && openModal(MovieSendModal, { movieId: movie?.id })}
-								>
-									<SendIcon className="w-4 h-4 fill-primary" />
-								</Button>
-							</TooltipBox>
-							{recommendation_count} reco{Number(recommendation_count) > 1 ? 's' : ''}
-						</CardFooter>
-					</Card>
-				</div>
+								</TooltipBox>
+								{recommendation_count} reco{Number(recommendation_count) > 1 ? 's' : ''}
+							</CardFooter>
+						</Card>
+					</div>
+				</ContextMenuMovie>
 			</CarouselItem>
 			))}
 		</CarouselContent>

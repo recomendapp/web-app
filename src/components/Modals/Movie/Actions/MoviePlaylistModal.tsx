@@ -9,7 +9,7 @@ import { Check } from 'lucide-react';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Playlist, PlaylistType } from '@/types/type.db';
+import { Movie, Playlist, PlaylistType } from '@/types/type.db';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
 import { useUserAddMovieToPlaylist } from '@/features/user/userQueries';
@@ -22,10 +22,12 @@ const COMMENT_MAX_LENGTH = 180;
 
 interface MoviePlaylistModalProps extends ModalType {
 	movieId: number;
+	movie?: Movie
 }
 
 export function MoviePlaylistModal({
 	movieId,
+	movie,
 	...props
 } : MoviePlaylistModalProps) {
 	const { user } = useAuth();
@@ -71,7 +73,7 @@ export function MoviePlaylistModal({
 			<ModalHeader className='px-4 pb-4 pt-5'>
 				<ModalTitle>Ajouter à une playlist</ModalTitle>
 				<ModalDescription>
-					Ajouter ce film à une ou plusieurs de vos playlists.
+					Ajouter {movie?.title ? (<strong>{movie?.title}</strong>) : 'ce film'} à une ou plusieurs de vos playlists.
 				</ModalDescription>
 			</ModalHeader>
 			<ModalBody className='!p-0 overflow-hidden'>

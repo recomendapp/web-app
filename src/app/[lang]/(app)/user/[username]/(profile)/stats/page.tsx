@@ -1,16 +1,10 @@
-import { createServerClient } from '@/lib/supabase/server';
-import { notFound } from 'next/navigation';
+import { getProfile } from "../../_components/getProfile";
 
 export default async function Stats({
   params,
 }: {
   params: { username: string };
 }) {
-  const supabase = createServerClient();
-  const { data: user } = await supabase
-    .from('user')
-    .select('*')
-    .eq('username', params.username)
-    .single();
+  const user = await getProfile(params.username);
   return <div>Des stats</div>;
 }

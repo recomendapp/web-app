@@ -4,12 +4,13 @@ import { JustWatchWidget } from "@/components/JustWatch/JustWatchWidget";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
+import { Movie, MoviePerson } from "@/types/type.db";
 import Link from "next/link";
 
 export default function MovieDescription({
   movie,
 }: {
-  movie: any
+  movie: Movie;
 }) {
   if (!movie) return null;
 
@@ -35,7 +36,7 @@ export default function MovieDescription({
         </div>
         <JustWatchWidget
           id={movie.id}
-          title={movie.title}
+          title={movie.title ?? ''}
           type="movie"
           className="min-w-[20%]"
         />
@@ -52,12 +53,12 @@ export default function MovieDescription({
 const MovieCast = ({
 	cast,
 } : {
-	cast: any,
+	cast?: MoviePerson[]
 }) => {
 	return (
 		<div>
 			<h2 className="text-lg font-medium">Casting</h2>
-      {cast.length ? (
+      {(cast && cast?.length > 0) ? (
         <ScrollArea>
           <div className="flex space-x-4 pb-4">
             {cast?.map((actor: any) => (

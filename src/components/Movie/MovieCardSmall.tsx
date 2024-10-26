@@ -40,7 +40,7 @@ export default function MovieCardSmall({ movie }: { movie: Movie }) {
 
         {/* DATE / GENRES / RUNTIME */}
         <div className="line-clamp-1">
-          {movie?.directors.map((person: any, index: number) => (
+          {movie?.directors.map((person, index) => (
             <>
               {index > 0 && <span className='text-muted-foreground'>, </span>}
               <span key={person?.id}>
@@ -49,7 +49,7 @@ export default function MovieCardSmall({ movie }: { movie: Movie }) {
                   className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition"
                   asChild
                 >
-                  <Link href={`/person/${person?.id}`}>
+                  <Link href={`/person/${person?.slug ?? person?.id}`}>
                     {person?.name}
                   </Link>
                 </Button>

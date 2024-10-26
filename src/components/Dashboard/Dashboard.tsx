@@ -10,6 +10,7 @@ import { siteConfig } from "@/config/site";
 import { useTranslations } from "next-intl";
 import { WidgetUserFeed } from "../widgets/WidgetUserFeed";
 import { WidgetUserFriendsPlaylists } from "../widgets/WIdgetUserFriendsPlaylists";
+import { Skeleton } from "../ui/skeleton";
 
 export const Dashboard = ({
 	isLogged,
@@ -19,8 +20,14 @@ export const Dashboard = ({
 	const t = useTranslations('word');
 	return (
 		<div className={cn('p-4 gap-4 grid grid-cols-1 @4xl/main:grid-cols-2', className)}>
-			<div className="text-4xl font-bold col-span-full">
-				{isLogged ? `${t('hello')} ${user?.full_name}` : `Bienvenue sur ${siteConfig.name}.`}
+			<div className="flex text-4xl font-bold col-span-full">
+				{isLogged ?
+				(
+					<>
+						{`${t('hello')} `}
+						{user?.full_name ?? <Skeleton className='w-32' />}
+					</>
+				) : `Bienvenue sur ${siteConfig.name}.`}
 			</div>
 			<WidgetMoviesMostRecommended isLogged={isLogged} className='col-span-full' />
 			{!isLogged ? <WidgetRecomendShowcase className='col-span-full'/> : null}

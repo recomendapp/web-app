@@ -23,6 +23,7 @@ export const PersonAboutModal = ({
 		<Modal
 			open={props.open}
 			onOpenChange={(open) => !open && closeModal(props.id)}
+			className=""
 		>
 			<ModalHeader>
 				<ModalTitle>À propos de {person.name}</ModalTitle>

@@ -1,7 +1,7 @@
 import { notFound, redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import CreateReviewForm from './_components/CreateReviewFrom';
-import { getMovieId } from '@/hooks/get-movie-id';
+import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 
 export async function generateMetadata({
   params,
@@ -11,7 +11,7 @@ export async function generateMetadata({
     film: string;
   };
 }) {
-  const { movieId } = getMovieId(params.film);
+  const { id: movieId } = getIdFromSlug(params.film);
   const supabase = createServerClient(params.lang);
 
   const { data: movie } = await supabase
@@ -39,7 +39,7 @@ export default async function CreateReview({
     film: string;
   };
 }) {
-  const { movieId } = getMovieId(params.film);
+  const { id: movieId } = getIdFromSlug(params.film);
   const supabase = createServerClient(params.lang);
 
   const {

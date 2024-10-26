@@ -1,22 +1,15 @@
 import { Fragment } from 'react';
-import { createServerClient } from '@/lib/supabase/server';
+import { getProfile } from './_components/getProfile';
 
 export async function generateMetadata({
   params,
 }: {
   params: { username: string };
 }) {
-  const supabase = createServerClient();
-  const { data: user } = await supabase
-    .from('user')
-    .select('*')
-    .eq('username', params.username)
-    .single();
-  if (!user) {
-    return {
+  const user = await getProfile(params.username);
+  if (!user) return {
       title: 'Oups, utilisateur introuvable !',
-    };
-  }
+  };
   return {
     title: `${user.full_name} (@${user.username})`,
     description: `This is the page of @${user.username}`,

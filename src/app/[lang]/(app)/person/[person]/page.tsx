@@ -1,9 +1,8 @@
-import { getPersonDetails } from '@/lib/tmdb/tmdb';
 import { notFound } from 'next/navigation';
-import { createServerClient } from '@/lib/supabase/server';
 import PersonHeader from './_components/PersonHeader';
 import PersonNavbar from './_components/PersonNavbar';
 import PersonFilmography from './_components/PersonFilmography';
+import { getPerson } from './getPerson';
 
 export async function generateMetadata({
   params,
@@ -13,11 +12,9 @@ export async function generateMetadata({
     person: string;
   };
 }) {
-  const person = await getPersonDetails(params.person, params.lang);
-  if (!person) {
-    return {
+  const person = await getPerson(params.person, params.lang);
+  if (!person) return {
       title: 'Oups, personne introuvable !',
-    };
   }
   return {
     title: person.name,
@@ -25,7 +22,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Film({
+export default async function Person({
   params,
 }: {
   params: {
@@ -33,17 +30,10 @@ export default async function Film({
     person: string;
   };
 }) {
-  const supabase = createServerClient(params.lang);
-  const { data: person } = await supabase
-		.from('person_full')
-		.select(`*`)
-		.eq('id', params.person)
-		.single();
-
+  const person = await getPerson(params.person, params.lang);
   if (!person) notFound();
-
   return (
-    <main>
+    <>
       <PersonHeader person={person} background={person.backdrop_path} />
       <div className="px-4 pb-4">
         {/* <PersonNavbar focus={"oeuvre"} personId={person.id} /> */}
@@ -53,6 +43,6 @@ export default async function Film({
           mainDepartment={person.known_for_department ?? undefined}
         />
       </div>
-    </main>
+    </>
   );
 }

@@ -26,21 +26,21 @@ export const ContextMenuMovie = ({
 			},
 			{
 				icon: Icons.user,
-				href: movie?.directors && movie.directors.length === 1 ? `/person/${movie.directors[0].id}` : undefined,
+				href: movie?.directors && movie.directors.length === 1 ? `/person/${movie.directors[0].slug ?? movie.directors[0].id}` : undefined,
 				label: `Accéder ${movie?.directors && movie?.directors.length === 1 ? 'au réalisateur' : 'aux réalisateurs'}`,
 				submenu: (movie?.directors && movie.directors.length > 1) ? movie?.directors?.map((director) => ({
-					href: `/person/${director.id}`,
+					href: `/person/${director.slug ?? director.id}`,
 					label: director.name,
 				})) : undefined,
 			},
 			{
 				icon: Icons.addPlaylist,
-				onClick: () => openModal(MoviePlaylistModal, { movieId: movie?.id! }),
+				onClick: () => openModal(MoviePlaylistModal, { movieId: movie?.id!, movie: movie }),
 				label: 'Ajouter à une playlist',
 			},
 			{
 				icon: Icons.send,
-				onClick: () => openModal(MovieSendModal, { movieId: movie?.id! }),
+				onClick: () => openModal(MovieSendModal, { movieId: movie?.id!, movie: movie }),
 				label: 'Envoyer à un ami',
 			}
 		],
@@ -48,8 +48,8 @@ export const ContextMenuMovie = ({
 			{
 				icon: Icons.share,
 				onClick: () => openModal(ModalShare, {
-					contentId: movie?.id!,
-					contentType: 'movie',
+					name: movie?.title,
+					type: 'movie',
 					path: `/film/${movie?.slug ?? movie?.id}`,
 				}),
 				label: 'Partager',

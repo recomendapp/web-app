@@ -2682,6 +2682,7 @@ export type Database = {
           name: string | null
           popularity: number | null
           profile_path: string | null
+          slug: string | null
         }
         Insert: {
           gender?: number | null
@@ -2690,6 +2691,7 @@ export type Database = {
           name?: string | null
           popularity?: number | null
           profile_path?: never
+          slug?: never
         }
         Update: {
           gender?: number | null
@@ -2698,6 +2700,7 @@ export type Database = {
           name?: string | null
           popularity?: number | null
           profile_path?: never
+          slug?: never
         }
         Relationships: [
           {
@@ -2727,6 +2730,7 @@ export type Database = {
           place_of_birth: string | null
           popularity: number | null
           profile_path: string | null
+          slug: string | null
         }
         Relationships: [
           {

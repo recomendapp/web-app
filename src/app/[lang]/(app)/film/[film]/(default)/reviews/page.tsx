@@ -15,7 +15,7 @@ import { useInView } from 'react-intersection-observer';
 import Loader from '@/components/Loader/Loader';
 import { MyReviewButton } from './_components/MyReviewButton';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { getMovieId } from '@/hooks/get-movie-id';
+import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 
 export default function Reviews({
   params,
@@ -25,7 +25,7 @@ export default function Reviews({
     film: string;
   }
 }) {
-  const { movieId } = getMovieId(params.film);
+  const { id: movieId } = getIdFromSlug(params.film);
   const supabase = useSupabaseClient();
   const [order, setOrder] = useState('recent');
 
