@@ -2,13 +2,13 @@
 
 import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils"
-import { WidgetMoviesMostRecommended } from "../widget/WidgetMoviesMostRecommended";
-import { WidgetRecomendShowcase } from "../widget/WidgetRecomendShowcase";
-import { WidgetUserMovieGuidelist } from "../widget/WidgetUserMovieGuidelist";
-import { WidgetUserMovieWatchlist } from "../widget/WidgetUserMovieWatchlist";
+import { WidgetMoviesMostRecommended } from "../widgets/WidgetMoviesMostRecommended";
+import { WidgetRecomendShowcase } from "../widgets/WidgetRecomendShowcase";
+import { WidgetUserMovieGuidelist } from "../widgets/WidgetUserMovieGuidelist";
+import { WidgetUserMovieWatchlist } from "../widgets/WidgetUserMovieWatchlist";
 import { siteConfig } from "@/config/site";
 import { useTranslations } from "next-intl";
-import { WidgetUserFeed } from "../widget/WidgetUserFeed";
+import { WidgetUserFeed } from "../widgets/WidgetUserFeed";
 
 export const Dashboard = ({
 	isLogged,

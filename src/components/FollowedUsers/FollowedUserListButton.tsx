@@ -1,18 +1,10 @@
 import { Button } from '../ui/button';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useState } from 'react';
 import FriendsList from '../RightSidebar/FriendsList';
 import { Users } from 'lucide-react';
 
 import './styles/style.css';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '../ui/dialog';
 import { useUI } from '@/context/ui-context';
-import { Modal } from '../modals/Modal';
 import { useModal } from '@/context/modal-context';
 
 export default function FollowedUserListButton() {

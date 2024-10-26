@@ -1,16 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Modal } from '@/components/modals/Modal';
 import { useModal } from '@/context/modal-context';
 import { PlaylistModal } from '@/components/modals/Playlist/PlaylistModal';
 import { TooltipBox } from '@/components/Box/TooltipBox';

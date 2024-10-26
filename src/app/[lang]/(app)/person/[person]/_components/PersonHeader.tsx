@@ -4,7 +4,6 @@
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import PersonPoster from './PersonPoster';
 import { PersonFollowButton } from './PersonFollowButton';
-import { Modal } from '@/components/modals/Modal';
 import { PersonAbout } from './PersonAbout';
 
 export default function PersonHeader({

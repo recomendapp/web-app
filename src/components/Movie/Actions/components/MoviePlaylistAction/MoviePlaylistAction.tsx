@@ -11,8 +11,6 @@ import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
 import { MoviePlaylistModal } from '@/components/modals/Movie/Actions/MoviePlaylistModal';
 import { Icons } from '@/config/icons';
-import { Modal } from '@/components/modals/Modal';
-import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
