@@ -14,7 +14,6 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { DateOnlyYearTooltip } from "../utils/Date";
 import { SendIcon } from "lucide-react";
-import { MovieSendModal } from "../Modals/Movie/Actions/MovieSendModal";
 import { useModal } from "@/context/modal-context";
 import Autoplay from "embla-carousel-autoplay"
 import { useRef, useState } from "react";
@@ -22,6 +21,7 @@ import { TooltipBox } from "../Box/TooltipBox";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 import { ContextMenuMovie } from "../context-menu/ContextMenuMovie";
+import { ModalMovieSend } from "../Modals/Movie/Actions/ModalMovieSend";
 
 interface WidgetMoviesMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {
 	isLogged: boolean;
@@ -108,7 +108,7 @@ export const WidgetMoviesMostRecommended = ({
 									size={"icon"}
 									variant={"muted"}
 									className="bg-muted/60"
-									onClick={() => (isLogged && movie) && openModal(MovieSendModal, { movieId: movie?.id, movie: movie })}
+									onClick={() => (isLogged && movie) && openModal(ModalMovieSend, { movieId: movie?.id, movie: movie })}
 									>
 										<SendIcon className="w-4 h-4 fill-primary" />
 									</Button>

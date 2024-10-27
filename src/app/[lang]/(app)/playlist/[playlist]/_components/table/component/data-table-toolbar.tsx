@@ -12,6 +12,9 @@ import { DataTableSortOptions } from './data-table-sort-options';
 import { PlaylistAction } from '../../../../../../../../components/Playlist/FilmPlaylist/Actions/PlaylistAction';
 import { useAuth } from '@/context/auth-context';
 import { Playlist } from '@/types/type.db';
+import { Icons } from '@/config/icons';
+import { useModal } from '@/context/modal-context';
+import { ModalPlaylistQuickAdd } from '@/components/Modals/Playlist/ModalPlaylistQuickAdd';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -23,6 +26,7 @@ export function DataTableToolbar<TData>({
   playlist,
 }: DataTableToolbarProps<TData>) {
   const { user } = useAuth();
+  const { openModal } = useModal();
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
@@ -53,8 +57,17 @@ export function DataTableToolbar<TData>({
         )}
       </div>
       <div className="w-full lg:w-fit flex items-center justify-between gap-2">
-        {user?.id !== playlist?.user_id ? <PlaylistAction playlistId={playlist?.id!} /> : <div></div>}
+        {user?.id !== playlist?.user_id ? <PlaylistAction playlistId={playlist?.id!} /> : null}
         <div className="w-fit flex items-center gap-2">
+          <Button
+          variant="outline"
+          size="sm"
+          className='ml-auto h-8'
+          onClick={() => openModal(ModalPlaylistQuickAdd, { playlist: playlist })}
+          >
+            <Icons.add className='mr-2 h-4 w-4' />
+            Ajout rapide
+          </Button>
           <DataTableSortOptions table={table} />
           <DataTableViewOptions table={table} />
         </div>

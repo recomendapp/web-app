@@ -19,16 +19,16 @@ import { Label } from '@/components/ui/label';
 
 const COMMENT_MAX_LENGTH = 180;
 
-interface MovieSendModalProps extends ModalType {
+interface ModalMovieSendProps extends ModalType {
 	movieId: number;
 	movie?: Movie
 }
 
-export function MovieSendModal({
+export function ModalMovieSend({
 	movieId,
 	movie,
 	...props
-} : MovieSendModalProps) {
+} : ModalMovieSendProps) {
 	const { user } = useAuth();
 	const { closeModal } = useModal();
 	const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
@@ -105,7 +105,7 @@ export function MovieSendModal({
 									onSelect={() => {
 										if (selectedUsers.includes(friend)) {
 											return setSelectedUsers((prev) => prev.filter(
-												(selectedUser) => selectedUser !== friend
+												(selectedUser) => selectedUser?.id !== friend?.id
 											))
 										}
 										return setSelectedUsers((prev) => [...prev, friend]);
@@ -133,7 +133,7 @@ export function MovieSendModal({
 												Déjà vu
 											</Badge>
 										)}
-										<Check size={20} className={`text-primary ${!selectedUsers.includes(friend) && 'opacity-0'}`} />
+										<Check size={20} className={`text-primary ${!selectedUsers.includes(friend) ? 'opacity-0' : ''}`} />
 									</div>
 								</CommandItem>
 							))}
@@ -157,6 +157,10 @@ export function MovieSendModal({
 					<UserAvatar
 						key={friend?.id}
 						{...friend}
+						className='cursor-not-allowed'
+						onClick={() => setSelectedUsers((prev) => prev.filter(
+							(selectedUser) => selectedUser?.id !== friend?.id
+						))}
 					/>
 					))}
 				</div>

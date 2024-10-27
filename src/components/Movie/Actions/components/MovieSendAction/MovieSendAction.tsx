@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 // ICONS
 import { Send } from 'lucide-react';
 import { Icons } from '@/config/icons';
-import { MovieSendModal } from '@/components/Modals/Movie/Actions/MovieSendModal';
+import { ModalMovieSend } from '@/components/Modals/Movie/Actions/ModalMovieSend';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useModal } from '@/context/modal-context';
@@ -61,7 +61,7 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
             variant={'action'}
             className="rounded-full"
             // onClick={() => setOpenSendModal(true)}
-            onClick={() => openModal(MovieSendModal, { movieId })}
+            onClick={() => openModal(ModalMovieSend, { movieId })}
           >
             {loading ? <Icons.spinner className="animate-spin" /> : <Send />}
           </Button>
@@ -75,7 +75,7 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
           title: 'Envoyer à',
         }}
         content={
-          <MovieSendModal
+          <ModalMovieSend
             onClose={() => setOpenSendModal(false)}
             movieId={movieId} 
           />

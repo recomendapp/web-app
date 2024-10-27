@@ -30,7 +30,7 @@ import { useModal } from '@/context/modal-context';
 import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentModal';
 import { Movie, Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { MoviePlaylistModal } from '@/components/Modals/Movie/Actions/MoviePlaylistModal';
+import { ModalMoviePlaylist } from '@/components/Modals/Movie/Actions/ModalMoviePlaylist';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { BinaryIcon, EyeIcon, ListPlusIcon, TextIcon } from 'lucide-react';
 import { Icons } from '@/config/icons';
@@ -144,7 +144,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
           {/* PLAYLIST */}
           {user?.id && (
             <DropdownMenuItem
-              onClick={() => openModal(MoviePlaylistModal, { movieId: data?.movie_id!, movie: data?.movie })}
+              onClick={() => openModal(ModalMoviePlaylist, { movieId: data?.movie_id!, movie: data?.movie })}
             >
               <Icons.addPlaylist className='w-4' />
               Ajouter à une playlist

@@ -13,23 +13,23 @@ import { Movie, Playlist, PlaylistType } from '@/types/type.db';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
 import { useUserAddMovieToPlaylist } from '@/features/user/userQueries';
-import { useAddMovieToPlaylist } from '@/features/user/userMutations';
+import { useAddMovieToPlaylists } from '@/features/user/userMutations';
 import { Icons } from '@/config/icons';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Label } from '@/components/ui/label';
 
 const COMMENT_MAX_LENGTH = 180;
 
-interface MoviePlaylistModalProps extends ModalType {
+interface ModalMoviePlaylistProps extends ModalType {
 	movieId: number;
 	movie?: Movie
 }
 
-export function MoviePlaylistModal({
+export function ModalMoviePlaylist({
 	movieId,
 	movie,
 	...props
-} : MoviePlaylistModalProps) {
+} : ModalMoviePlaylistProps) {
 	const { user } = useAuth();
 	const { closeModal } = useModal();
 	const [selectedPlaylists, setSelectedPlaylists] = useState<Playlist[]>([]);
@@ -44,7 +44,7 @@ export function MoviePlaylistModal({
 		type,
 	});
 
-	const addMovieToPlaylist = useAddMovieToPlaylist({
+	const addMovieToPlaylist = useAddMovieToPlaylists({
 		movieId,
 		userId: user?.id,
 	});
@@ -101,7 +101,7 @@ export function MoviePlaylistModal({
 									onSelect={() => {
 										if (selectedPlaylists.includes(playlist)) {
 											return setSelectedPlaylists((prev) => prev.filter(
-												(selectPlaylist) => selectPlaylist !== playlist
+												(selectPlaylist) => selectPlaylist?.id !== playlist.id
 											))
 										}
 										return setSelectedPlaylists((prev) => [...prev, playlist]);
@@ -155,7 +155,13 @@ export function MoviePlaylistModal({
 				{selectedPlaylists.length > 0 ? (
 				<div className="flex -space-x-2 overflow-hidden">
 					{selectedPlaylists.map((playlist) => (
-						<div key={playlist?.id} className={`w-[40px] shadow-2xl`}>
+						<div
+						key={playlist?.id}
+						className={`w-[40px] shadow-2xl cursor-not-allowed`}
+						onClick={() => setSelectedPlaylists((prev) => prev.filter(
+							(selectPlaylist) => selectPlaylist?.id !== playlist?.id
+						))}
+						>
 							<AspectRatio ratio={1 / 1}>
 								<ImageWithFallback
 									src={playlist?.poster_url ?? ''}

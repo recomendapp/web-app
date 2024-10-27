@@ -28,7 +28,7 @@ const CardPlaylistDefault = React.forwardRef<
 			{...props}
 		>
 			<CardHeader className='p-0'>
-        <AspectRatio ratio={1 / 1} className='w-full'>
+        <AspectRatio ratio={1 / 1} className='w-full rounded-xl overflow-hidden'>
           <ImageWithFallback
             src={playlist?.poster_url ?? ''}
             alt={playlist?.title ?? ''}
@@ -38,7 +38,7 @@ const CardPlaylistDefault = React.forwardRef<
               (max-width: 1024px) 120px,
               150px
             `}
-            className="object-cover rounded-xl"
+            className="object-cover"
             type="playlist"
           />
           <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-30 transition-opacity duration-300" />

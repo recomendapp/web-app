@@ -1,5 +1,5 @@
 import { useSupabaseClient } from '@/context/supabase-context';
-import { Playlist, PlaylistType, User } from '@/types/type.db';
+import { Movie, Playlist, PlaylistType, User } from '@/types/type.db';
 import { matchQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { userKeys } from './userKeys';
 import { playlistKeys } from '../playlist/playlistKeys';
@@ -51,7 +51,7 @@ export const useSendMovie = ({
  * @param userId The user id
  * @returns The mutation
  */
-export const useAddMovieToPlaylist = ({
+export const useAddMovieToPlaylists = ({
 	movieId,
 	userId,
 } : {
@@ -66,7 +66,7 @@ export const useAddMovieToPlaylist = ({
 			comment,
 		} : {
 			playlists: Playlist[];
-			comment: string;
+			comment?: string;
 		}) => {
 			if (!userId) throw Error('Vous devez être connecté pour effectuer cette action');
 			if (!playlists || playlists.length === 0) throw Error('Vous devez sélectionner au moins une playlist');
@@ -99,5 +99,45 @@ export const useAddMovieToPlaylist = ({
 				userKeys.addMovieToPlaylist(userId as string, movieId),
 			]
 		}
+	});
+}
+
+export const useAddMoviesToPlaylist = ({
+	userId,
+	playlist,
+} : {
+	userId?: string;
+	playlist: Playlist;
+}) => {
+	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({
+			movies,
+			comment,
+		} : {
+			movies: Movie[];
+			comment?: string;
+		}) => {
+			if (!userId) throw Error('Vous devez être connecté pour effectuer cette action');
+			if (!playlist?.id) throw Error('Missing playlist id');
+			if (!movies || movies.length === 0) throw Error('Missing movie ids');
+			const { error } = await supabase
+				.from('playlist_item')
+				.insert(
+					movies
+						.map((movieId) => ({
+							playlist_id: playlist.id,
+							movie_id: movieId?.id!,
+							user_id: userId,
+							comment: comment,
+							rank: 0,
+						}))
+				);
+			if (error) throw error;
+		},
+		// onSuccess: () => {
+		// 	queryClient.invalidateQueries(playlistKeys.detail(playlistId));
+		// }
 	});
 }

@@ -18,7 +18,7 @@ export const UserAvatar = ({
   const avatarUrlRender = avatar_url ?? '';
   const usernameRender = username ?? '';
   return (
-    <Avatar className={cn('h-8 w-8', className)}>
+    <Avatar className={cn('h-8 w-8', className)} {...props}>
       <AvatarImage src={avatarUrlRender} alt={usernameRender} />
       <AvatarFallback className="text-clamp">
         {getInitiales(usernameRender)}

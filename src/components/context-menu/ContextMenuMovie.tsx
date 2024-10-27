@@ -3,8 +3,8 @@ import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuShortcut, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
 import { WithLink } from "../utils/WithLink";
 import { useModal } from "@/context/modal-context";
-import { MoviePlaylistModal } from "../Modals/Movie/Actions/MoviePlaylistModal";
-import { MovieSendModal } from "../Modals/Movie/Actions/MovieSendModal";
+import { ModalMoviePlaylist } from "../Modals/Movie/Actions/ModalMoviePlaylist";
+import { ModalMovieSend } from "../Modals/Movie/Actions/ModalMovieSend";
 import { ContextMenu as ContextMenuTest } from "./ContextMenu";
 import { Fragment } from "react";
 import { ModalShare } from "../Modals/Share/ModalShare";
@@ -35,12 +35,12 @@ export const ContextMenuMovie = ({
 			},
 			{
 				icon: Icons.addPlaylist,
-				onClick: () => openModal(MoviePlaylistModal, { movieId: movie?.id!, movie: movie }),
+				onClick: () => openModal(ModalMoviePlaylist, { movieId: movie?.id!, movie: movie }),
 				label: 'Ajouter à une playlist',
 			},
 			{
 				icon: Icons.send,
-				onClick: () => openModal(MovieSendModal, { movieId: movie?.id!, movie: movie }),
+				onClick: () => openModal(ModalMovieSend, { movieId: movie?.id!, movie: movie }),
 				label: 'Envoyer à un ami',
 			}
 		],

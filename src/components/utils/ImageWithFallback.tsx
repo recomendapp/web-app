@@ -64,7 +64,7 @@ export function Fallback({
       style={{
         backgroundImage: `linear-gradient(to top right, ${from}, ${to})`,
       }}
-      className={cn(`w-full rounded-md flex items-center justify-center h-full`, className)}
+      className={cn(`w-full flex items-center justify-center h-full`, className)}
     >
       {type == 'playlist' ? (
         <ListVideo color="#fff" className="w-2/5 h-2/5" />

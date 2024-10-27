@@ -9,7 +9,7 @@ import {
 import { useAuth } from '@/context/auth-context';
 
 import { useModal } from '@/context/modal-context';
-import { MoviePlaylistModal } from '@/components/Modals/Movie/Actions/MoviePlaylistModal';
+import { ModalMoviePlaylist } from '@/components/Modals/Movie/Actions/ModalMoviePlaylist';
 import { Icons } from '@/config/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -54,7 +54,7 @@ export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
             size="icon"
             variant={'action'}
             className="rounded-full"
-            onClick={() => openModal(MoviePlaylistModal, { movieId })}
+            onClick={() => openModal(ModalMoviePlaylist, { movieId })}
           >
             {loading ? <Icons.spinner className="animate-spin" /> : <Icons.addPlaylist />}
           </Button>

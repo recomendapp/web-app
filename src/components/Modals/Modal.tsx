@@ -151,7 +151,7 @@ const ModalContent = React.forwardRef<
 	return device === 'desktop' ? (
 		<DialogContent
 			ref={ref}
-			className={cn('max-h-[80%]', className)}
+			className={cn('max-h-[80%] overflow-auto', className)}
 			{...props}
 		/>
 	) : (
@@ -170,9 +170,9 @@ const ModalBody = ({
 }: React.HTMLAttributes<HTMLDivElement>) => {
 	const { device } = useUI();
 	return device === 'desktop' ? (
-		<div className={cn('overflow-y-auto', className)} {...props} />
+		<div className={cn('', className)} {...props} />
 	) : (
-		<div className={cn('p-4 overflow-y-auto', className)} {...props} />
+		<div className={cn('p-4 overflow-auto', className)} {...props} />
 	);
 };
 ModalBody.displayName = 'ModalBody';

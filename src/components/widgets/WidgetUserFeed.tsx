@@ -21,13 +21,13 @@ export const WidgetUserFeed = ({
 	if (!user || !feed || !feed.pages[0]?.length) return null;
 
 	return (
-		<div className={cn('space-y-4', className)}>
+		<div className={cn('@container/widget-user-feed space-y-4', className)}>
 			<Button variant={'link'} className="p-0 w-fit font-semibold text-xl" asChild>
 				<Link href={'/feed'}>
 				Dernières activités
 				</Link>
 			</Button>
-			<div className="grid gap-2">
+			<div className="grid gap-2 grid-cols-1 @5xl/widget-user-feed:grid-cols-2">
 				{feed.pages[0].slice(0, WIDGET_USER_FEED_LIMIT).map((item, index) => (
 				<CardUserMovieActivity key={index} activity={item} />
 				))}
