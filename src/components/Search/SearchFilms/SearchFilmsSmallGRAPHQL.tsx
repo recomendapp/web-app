@@ -137,9 +137,7 @@ export default function SearchFilmsSmall({
           <div className="w-full @sm:w-[250px] shrink-0">
             <AspectRatio ratio={2 / 3}>
               <ImageWithFallback
-                src={
-                  'https://image.tmdb.org/t/p/original/' + movies![0].node.movie.data?.edges[0].node.poster_path ?? ''
-                }
+                src={movies![0].node.movie.data?.edges[0].node.poster_path ? `https://image.tmdb.org/t/p/original/${movies![0].node.movie.data?.edges[0].node.poster_path}` : ''}
                 alt={movies![0].node.movie.data?.edges[0].node.title ?? ''}
                 fill
                 className="rounded-md object-cover"
@@ -201,9 +199,7 @@ export default function SearchFilmsSmall({
                   <div className="w-[50px] shrink-0">
                     <AspectRatio ratio={2 / 3}>
                       <ImageWithFallback
-                        src={
-                          'https://image.tmdb.org/t/p/original/' + node.movie.data?.edges[0].node.poster_path ?? ''
-                        }
+                        src={node.movie.data?.edges[0].node.poster_path ? `https://image.tmdb.org/t/p/original/${node.movie.data?.edges[0].node.poster_path}` : ''}
                         alt={node.movie.data?.edges[0].node.title ?? ''}
                         fill
                         className="rounded-md object-cover"

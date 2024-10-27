@@ -9,9 +9,6 @@ export default async function RootLayout({ children }: AppLayoutProps) {
   const supabase = createServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   return (
-    // <AppLayout
-    //   header={<Header/>}
-    // >
     <AppLayout isLogged={!!user}>
       {children}
     </AppLayout>

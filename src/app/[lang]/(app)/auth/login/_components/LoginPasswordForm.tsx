@@ -10,6 +10,7 @@ import * as z from 'zod';
 import { AuthError } from '@supabase/supabase-js';
 import { useAuth } from '@/context/auth-context';
 import { useState } from 'react';
+import { InputPassword } from '@/components/ui/input-password';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Adresse email invalide' }),
@@ -74,10 +75,8 @@ export function LoginPasswordForm({
           <Label htmlFor="password">
             Password
           </Label>
-          <Input
+          <InputPassword
             id="password"
-            placeholder="●●●●●●●●●●●●●●"
-            type="password"
             autoComplete="current-password"
             disabled={isLoading}
           />

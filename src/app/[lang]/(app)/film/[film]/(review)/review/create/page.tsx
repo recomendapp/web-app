@@ -12,7 +12,7 @@ export async function generateMetadata({
   };
 }) {
   const { id: movieId } = getIdFromSlug(params.film);
-  const supabase = createServerClient(params.lang);
+  const supabase = createServerClient();
 
   const { data: movie } = await supabase
     .from('movie')
@@ -40,7 +40,7 @@ export default async function CreateReview({
   };
 }) {
   const { id: movieId } = getIdFromSlug(params.film);
-  const supabase = createServerClient(params.lang);
+  const supabase = createServerClient();
 
   const {
     data: { user },

@@ -465,13 +465,7 @@
       "sizes": "1024x1024"
     }
   ],
-  "screenshots": [
-    {
-      "src": "assets/screenshots/screen.png",
-      "sizes": "1617x1012",
-      "type": "image/png"
-    }
-  ],
+  "screenshots": [],
   "features": ["Cross Platform", "fast", "simple"],
   "categories": ["entertainment", "social"],
   "shortcuts": [
@@ -480,7 +474,7 @@
       "short_name": "Map",
       "description": "Open the map",
       "url": "/map",
-      "icons": [{ "src": "assets/icons/192x192.png", "sizes": "192x192" }]
+      "icons": []
     },
     {
       "name": "Settings",

@@ -64,7 +64,7 @@ export const userKeys = {
 		filters?: {
 			search?: string | null
 		}
-	) => filters ? [...userKeys.detail(userId), 'followers', filters] : [...userKeys.detail(userId), 'followers'] as const,
+	) => filters ? [...userKeys.detail(userId), 'followers', filters] as const : [...userKeys.detail(userId), 'followers'] as const,
 	/**
 	 * Fetches followees of a user
 	 * @param userId The user id
@@ -76,7 +76,7 @@ export const userKeys = {
 		filters?: {
 			search?: string | null
 		}
-	) => filters ? [...userKeys.detail(userId), 'followees', filters] : [...userKeys.detail(userId), 'followees'] as const,
+	) => filters ? [...userKeys.detail(userId), 'followees', filters] as const : [...userKeys.detail(userId), 'followees'] as const,
 
 	movies: (userId: string) => [...userKeys.detail(userId), 'movies'] as const,
 	movie: (userId: string, movieId: string) => [...userKeys.movies(userId), movieId] as const,
@@ -92,7 +92,7 @@ export const userKeys = {
 			order?: 'created_at-desc' | 'created_at-asc' | 'random';
 			limit?: number;
 		}
-	) => filters ? [...userKeys.detail(userId), 'guidelist', filters] : [...userKeys.detail(userId), 'guidelist'] as const,
+	) => filters ? [...userKeys.detail(userId), 'guidelist', filters] as const : [...userKeys.detail(userId), 'guidelist'] as const,
 
 	/**
 	 * Fetches the user's watchlist
@@ -106,7 +106,7 @@ export const userKeys = {
 			order?: 'created_at-desc' | 'created_at-asc' | 'random';
 			limit?: number;
 		}
-	) => filters ? [...userKeys.detail(userId), 'watchlist', filters] : [...userKeys.detail(userId), 'watchlist'] as const,
+	) => filters ? [...userKeys.detail(userId), 'watchlist', filters] as const : [...userKeys.detail(userId), 'watchlist'] as const,
 	/**
 	 * Fetches the user's playlists
 	 * @param userId The user id
@@ -118,7 +118,7 @@ export const userKeys = {
 		filters?: {
 			order?: 'updated_at-desc' | 'updated_at-asc'
 		}
-	) => filters ? [...userKeys.detail(userId), 'playlists', filters] : [...userKeys.detail(userId), 'playlists'] as const,
+	) => filters ? [...userKeys.detail(userId), 'playlists', filters] as const : [...userKeys.detail(userId), 'playlists'] as const,
 
 	/**
 	 * Fetches the user's feed
@@ -132,7 +132,7 @@ export const userKeys = {
 		// filters?: {
 		// 	limit?: number;
 		// }
-	) => filters ? [...userKeys.detail(userId), 'feed', filters] : [...userKeys.detail(userId), 'feed'] as const,
+	) => filters ? [...userKeys.detail(userId), 'feed', filters] as const : [...userKeys.detail(userId), 'feed'] as const,
 
 	/**
 	 * Fetches playlists of friends
@@ -143,5 +143,5 @@ export const userKeys = {
 	playlistsFriends: (
 		userId: string,
 		filters?: any
-	) => filters ? [...userKeys.detail(userId), 'playlists-friends', filters] : [...userKeys.detail(userId), 'playlists-friends'] as const,
+	) => filters ? [...userKeys.detail(userId), 'playlists-friends', filters] as const : [...userKeys.detail(userId), 'playlists-friends'] as const,
 };

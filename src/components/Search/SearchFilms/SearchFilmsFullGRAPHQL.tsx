@@ -135,9 +135,7 @@ export default function SearchFilmsFull({ query }: { query: string }) {
             <div className="w-[50px]">
               <AspectRatio ratio={2 / 3}>
                 <ImageWithFallback
-                  src={
-                    'https://image.tmdb.org/t/p/original/' + node.movie.data?.edges[0].node.poster_path ?? ''
-                  }
+                  src={node.movie.data?.edges[0].node.poster_path ? `https://image.tmdb.org/t/p/original/${node.movie.data?.edges[0].node.poster_path}` : ''}
                   alt={node.movie.data?.edges[0].node.title ?? ''}
                   fill
                   className="rounded-md object-cover"

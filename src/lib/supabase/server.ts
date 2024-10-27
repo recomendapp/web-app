@@ -5,9 +5,9 @@ import {
 } from '@supabase/ssr';
 import { routing } from '../i18n/routing';
 
-export const createServerClient = (locale?: string) => {
+export const createServerClient = (localeParam?: string) => {
   const cookieStore = cookies();
-  
+  const locale = cookieStore.get('NEXT_LOCALE');
   return createServerClientSupabase<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -30,12 +30,14 @@ export const createServerClient = (locale?: string) => {
       },
       global: {
         headers: {
-          'language': locale ?? routing.defaultLocale,
+          'language': locale?.value ?? localeParam ?? routing.defaultLocale,
         }
       }
     },
   );
 };
+
+// export const supabase = createServerClient();
 
 export async function getSession() {
   const supabase = createServerClient();

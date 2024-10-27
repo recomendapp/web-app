@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import MovieDescription from './_components/MovieDescription';
-import { getMovie } from './getMovie';
+import { getMovie } from '@/data/supabase/movies';
 
 export default async function MoviePage({
   params,

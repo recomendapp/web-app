@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import MovieHeader from './_components/MovieHeader';
 import MovieNavbar from './_components/MovieNavbar';
-import { getMovie } from './getMovie';
+import { getMovie } from '@/data/supabase/movies';
 
 export async function generateMetadata({
 	params,

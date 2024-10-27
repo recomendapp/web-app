@@ -44,7 +44,7 @@ export default function Error({
 		  </CardHeader>
 		  <CardContent className='grid gap-4'>
 			<Alert>
-			  <AlertTitle>{error.message}</AlertTitle>
+			  <AlertTitle className="select-text">{error.message}</AlertTitle>
 			</Alert>
 		  </CardContent>
 		  <CardFooter>

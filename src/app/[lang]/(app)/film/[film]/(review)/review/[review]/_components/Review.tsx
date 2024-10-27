@@ -8,7 +8,7 @@ import MovieCard from "@/components/Movie/Card/MovieCard";
 import MovieReviewForm from "@/components/Review/form/MovieReviewForm";
 import MovieReviewActions from "@/components/Review/actions/MovieReviewActions";
 import MovieReviewComments from "./comments/MovieReviewComments";
-import { Review } from "@/types/type.db";
+import { type Review } from "@/types/type.db";
 
 export default function Review({
 	reviewServer,

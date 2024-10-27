@@ -4,7 +4,7 @@ import { cache } from "react";
 
 export const getPerson = cache(async (id: string, lang: string) => {
 	const { id: personId } = getIdFromSlug(id);
-	const supabase = createServerClient(lang);
+	const supabase = createServerClient();
 	const { data: person, error } = await supabase
 	  .from('person_full')
 	  .select(`*`)

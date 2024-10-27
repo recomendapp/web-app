@@ -1,7 +1,5 @@
 import { notFound } from 'next/navigation';
-import { createServerClient } from '@/lib/supabase/server';
 import Review from './_components/Review';
-import { cache } from 'react';
 import { getReview } from './getReview';
 
 export async function generateMetadata({

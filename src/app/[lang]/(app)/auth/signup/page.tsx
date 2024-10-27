@@ -29,6 +29,7 @@ import { useAuth } from '@/context/auth-context';
 import { Input } from '@/components/ui/input';
 import useDebounce from '@/hooks/use-debounce';
 import { useCheckUsernameAvailability } from '@/hooks/use-check-username-availability';
+import { InputPassword } from '@/components/ui/input-password';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -323,7 +324,7 @@ export default function Signup() {
 							<FormItem>
 							<FormLabel>Mot de passe</FormLabel>
 							<FormControl>
-								<Input
+								<InputPassword
 								disabled={isLoading}
 								type="password"
 								autoComplete="new-password"
@@ -343,7 +344,7 @@ export default function Signup() {
 							<FormItem>
 							<FormLabel>Confirmer le mot de passe</FormLabel>
 							<FormControl>
-								<Input
+								<InputPassword
 								disabled={isLoading}
 								type="password"
 								autoComplete="new-password"
