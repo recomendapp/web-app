@@ -83,14 +83,14 @@ export type Movie = Database['public']['Views']['movie']['Row'] & {
 	// 	name: string;
 	// }[] | Json[] | null;
 	videos?: Database['public']['Tables']['tmdb_movie_videos']['Row'][];
-	production_countries?: Database['public']['Tables']['tmdb_movie_country']['Row'][];
-	spoken_languages?: Database['public']['Tables']['tmdb_movie_language']['Row'][];
+	production_countries?: Database['public']['Tables']['tmdb_movie_production_countries']['Row'][];
+	spoken_languages?: Database['public']['Tables']['tmdb_movie_spoken_languages']['Row'][];
 	cast?: MoviePerson[];
 	// directors?: MoviePerson[] | any;
 } | null | undefined;
 
 // *========== MOVIE_TRANSLATION ==========* //
-export type MovieTranslation = Database['public']['Tables']['tmdb_movie_translation']['Row'] | null | undefined;
+export type MovieTranslation = Database['public']['Tables']['tmdb_movie_translations']['Row'] | null | undefined;
 
 // *========== MOVIE_CREDITS ==========* //
 export type MoviePerson = Database['public']['Tables']['tmdb_movie_credits']['Row'] & {

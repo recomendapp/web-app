@@ -14,7 +14,7 @@ export const getMovie = cache(async (id: string, lang: string) => {
 			cast:tmdb_movie_credits(
 				id,
 				person:person(*),
-				role:tmdb_movie_role(*)
+				role:tmdb_movie_roles(*)
 			),
 			production_countries:tmdb_movie_production_countries(
 				id,
@@ -58,7 +58,7 @@ export const getMovie = cache(async (id: string, lang: string) => {
 // 				cast:tmdb_movie_credits(
 // 					id,
 // 					person:person(*),
-// 					role:tmdb_movie_role(*)
+// 					role:tmdb_movie_roles(*)
 // 				),
 // 				production_countries:tmdb_movie_country(
 // 					id,
