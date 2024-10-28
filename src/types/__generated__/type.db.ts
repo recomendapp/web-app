@@ -619,35 +619,6 @@ export type Database = {
         }
         Relationships: []
       }
-      tmdb_country_translation: {
-        Row: {
-          id: number
-          iso_3166_1: string
-          language: string
-          name: string
-        }
-        Insert: {
-          id?: number
-          iso_3166_1: string
-          language: string
-          name: string
-        }
-        Update: {
-          id?: number
-          iso_3166_1?: string
-          language?: string
-          name?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "tmdb_country_translation_iso_3166_1_fkey"
-            columns: ["iso_3166_1"]
-            isOneToOne: false
-            referencedRelation: "tmdb_country"
-            referencedColumns: ["iso_3166_1"]
-          },
-        ]
-      }
       tmdb_department: {
         Row: {
           id: number
@@ -689,35 +660,6 @@ export type Database = {
           id?: number
         }
         Relationships: []
-      }
-      tmdb_gender_translation: {
-        Row: {
-          gender: number
-          id: number
-          language: Database["public"]["Enums"]["language_app"]
-          name: string
-        }
-        Insert: {
-          gender: number
-          id?: number
-          language: Database["public"]["Enums"]["language_app"]
-          name: string
-        }
-        Update: {
-          gender?: number
-          id?: number
-          language?: Database["public"]["Enums"]["language_app"]
-          name?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "tmdb_gender_translation_gender_fkey"
-            columns: ["gender"]
-            isOneToOne: false
-            referencedRelation: "tmdb_gender"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       tmdb_genre: {
         Row: {
@@ -819,46 +761,14 @@ export type Database = {
       tmdb_language: {
         Row: {
           iso_639_1: string
-          name_in_native_language: string | null
         }
         Insert: {
           iso_639_1: string
-          name_in_native_language?: string | null
         }
         Update: {
           iso_639_1?: string
-          name_in_native_language?: string | null
         }
         Relationships: []
-      }
-      tmdb_language_translation: {
-        Row: {
-          id: number
-          iso_639_1: string
-          language: string
-          name: string
-        }
-        Insert: {
-          id?: number
-          iso_639_1: string
-          language: string
-          name: string
-        }
-        Update: {
-          id?: number
-          iso_639_1?: string
-          language?: string
-          name?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "tmdb_language_translation_iso_639_1_fkey"
-            columns: ["iso_639_1"]
-            isOneToOne: false
-            referencedRelation: "tmdb_language"
-            referencedColumns: ["iso_639_1"]
-          },
-        ]
       }
       tmdb_movie: {
         Row: {

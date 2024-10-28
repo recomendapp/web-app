@@ -16,28 +16,12 @@ export const getMovie = cache(async (id: string, lang: string) => {
 				person:person(*),
 				role:tmdb_movie_roles(*)
 			),
-			production_countries:tmdb_movie_production_countries(
-				id,
-				country:tmdb_country(
-					*,
-					data:tmdb_country_translation(*)
-				)
-			),
-			spoken_languages:tmdb_movie_spoken_languages(
-				id,
-				language:tmdb_language(
-					*,
-					data:tmdb_language_translation(*)
-				)
-			),
 			videos:tmdb_movie_videos(*)
 		`)
 		.match({
 			'id': movieId,
 			'cast.job': 'Actor',
-			'production_countries.country.data.language': lang,
-			'spoken_languages.language.data.language': lang,
-			'videos.iso_639_1': lang
+			'videos.iso_639_1': lang.split('-')[0]
 		})
 		.maybeSingle();
 	if (error) throw error;
