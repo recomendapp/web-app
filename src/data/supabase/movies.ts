@@ -16,14 +16,14 @@ export const getMovie = cache(async (id: string, lang: string) => {
 				person:person(*),
 				role:tmdb_movie_role(*)
 			),
-			production_countries:tmdb_movie_country(
+			production_countries:tmdb_movie_production_countries(
 				id,
 				country:tmdb_country(
 					*,
 					data:tmdb_country_translation(*)
 				)
 			),
-			spoken_languages:tmdb_movie_language(
+			spoken_languages:tmdb_movie_spoken_languages(
 				id,
 				language:tmdb_language(
 					*,
