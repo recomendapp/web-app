@@ -1,130 +1,86 @@
 'use client';
 
-import FriendsList from '@/components/RightSidebar/FriendsList';
 import { Device, useDevice } from '@/hooks/use-device';
-import { setCookie } from 'cookies-next';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { ImperativePanelHandle } from 'react-resizable-panels';
+
+export const SIDEBAR_COOKIE_NAME = "ui-sidebar:open";
+const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
+export const RIGHT_PANEL_COOKIE_NAME = "ui-right-panel:open";
+const RIGHT_PANEL_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
+const SIDEBAR_WIDTH = "16rem"
+const SIDEBAR_WIDTH_MOBILE = "18rem"
+const SIDEBAR_WIDTH_ICON = "5rem"
+const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 export interface UiContextProps {
   uiLayout: number[];
   setUiLayout: (layout: number[]) => void;
-  isSidebarCollapsed: boolean;
-  setIsSidebarCollapsed: (collapsed: boolean) => void;
-  sidebarCollapsedSize: number;
-  collapseSidebar: () => void;
-  expandSidebar: () => void;
-  sidebarRef: React.RefObject<ImperativePanelHandle> | undefined;
-  sidebarMinSize: number;
-  sidebarMaxSize: number;
-  isRightPanelCollapsed: boolean;
-  setIsRightPanelCollapsed: (collapsed: boolean) => void;
-  rightPanelCollapsedSize: number;
-  collapseRightPanel: () => void;
-  expandRightPanel: () => void;
-  rightPanelRef: React.RefObject<ImperativePanelHandle> | undefined;
-  rightPanelMinSize: number;
-  rightPanelMaxSize: number;
-  rightPanelContent: React.ReactNode | null;
-  setRightPanelContent: (content: React.ReactNode) => void;
-  rightPanelTitle: string | null;
-  setRightPanelTitle: (title: string) => void;
+  sidebarOpen: boolean;
+  sidebarOpenChange: (open: boolean) => void;
+  toggleSidebar: () => void;
+  // sidebarCollapsedSize: number;
+  // sidebarMinSize: number;
+  // sidebarMaxSize: number;
+  rightPanelOpen: boolean;
+  rightPanelOpenChange: (open: boolean) => void;
+  toggleRightPanel: () => void;
+  // rightPanelCollapsedSize: number;
+  // rightPanelMinSize: number;
+  // rightPanelMaxSize: number;
+  // rightPanelContent: React.ReactNode | null;
+  // setRightPanelContent: (content: React.ReactNode) => void;
+  // rightPanelTitle: string | null;
+  // setRightPanelTitle: (title: string) => void;
   device: Device;
 }
 
-// const defaultState: UiContextProps = {
-//   uiLayout: [],
-//   setUiLayout: () => {},
-//   isSidebarCollapsed: false,
-//   setIsSidebarCollapsed: () => {},
-//   sidebarCollapsedSize: 5,
-//   collapseSidebar: () => {},
-//   expandSidebar: () => {},
-//   sidebarRef: undefined,
-//   sidebarMinSize: 14,
-//   sidebarMaxSize: 20,
-//   isRightPanelCollapsed: true,
-//   setIsRightPanelCollapsed: () => {},
-//   rightPanelCollapsedSize: 0,
-//   collapseRightPanel: () => {},
-//   expandRightPanel: () => {},
-//   rightPanelRef: undefined,
-//   rightPanelMinSize: 0,
-//   rightPanelMaxSize: 20,
-//   rightPanelContent: null,
-//   setRightPanelContent: () => {},
-//   rightPanelTitle: null,
-//   setRightPanelTitle: () => {},
-// };
-
-// const UiContextProvider = createContext(defaultState);
 const UIContext = createContext<UiContextProps | undefined>(undefined);
 
 export const UIProvider = ({
   children,
   defaultLayout = [265, 440, 0],
-	cookieSidebarCollapsed = false,
-  cookieRightPanelCollapsed = true,
+	cookieSidebarOpen = true,
+  cookieRightPanelOpen = true,
 } : {
   children: React.ReactNode;
   defaultLayout: number[] | undefined
-	cookieSidebarCollapsed?: boolean
-  cookieRightPanelCollapsed?: boolean
+	cookieSidebarOpen?: boolean
+  cookieRightPanelOpen?: boolean
 }) => {
   // LAYOUT
   const [ uiLayout, setUiLayout ] = useState(defaultLayout);
   // *========== START SIDEBAR ==========*
-  const [ isSidebarCollapsed, setIsSidebarCollapsed ] = useState(cookieSidebarCollapsed);
+  const [ sidebarOpen, setSidebarOpen ] = useState(cookieSidebarOpen);
   const sidebarCollapsedSize = 2;
   const sidebarMinSize = 14;
   const sidebarMaxSize = 20;
-  const sidebarRef = useRef<ImperativePanelHandle >(null);
-  const collapseSidebar = () => {
-    if (sidebarRef.current) {
-      sidebarRef.current.collapse();
-      setIsSidebarCollapsed(true);
-      setCookie("ui-sidebar:collapsed", JSON.stringify(true), {
-        path: "/",
-      });
-    }
+  const sidebarOpenChange = (open: boolean) => {
+    setSidebarOpen(open);
+    // Save to cookie
+    document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
   }
-  const expandSidebar = () => {
-    if (sidebarRef.current) {
-      sidebarRef.current.expand();
-      setIsSidebarCollapsed(false);
-      setCookie("ui-sidebar:collapsed", JSON.stringify(false), {
-        path: "/",
-      });
-    }
+  const toggleSidebar = () => {
+    sidebarOpenChange(!sidebarOpen);
   }
   // *========== END SIDEBAR ==========*
 
   // *========== START RIGHTPANEL ==========*
-  const [ isRightPanelCollapsed, setIsRightPanelCollapsed ] = useState(cookieRightPanelCollapsed);
+  const [ rightPanelOpen, setRightPanelOpen ] = useState(cookieRightPanelOpen);
   const rightPanelCollapsedSize = 0;
   const rightPanelMinSize = 20;
   const rightPanelMaxSize = 30;
-  const rightPanelRef = useRef<ImperativePanelHandle >(null);
-  const collapseRightPanel = () => {
-    if (rightPanelRef.current) {
-      rightPanelRef.current.collapse();
-      setIsRightPanelCollapsed(true);
-      setCookie("ui-right-panel:collapsed", JSON.stringify(false), {
-        path: "/",
-      });
-    }
+  const rightPanelOpenChange = (open: boolean) => {
+    setRightPanelOpen(open);
+    // Save to cookie
+    document.cookie = `${RIGHT_PANEL_COOKIE_NAME}=${open}; path=/; max-age=${RIGHT_PANEL_COOKIE_MAX_AGE}`;
   }
-  const expandRightPanel = () => {
-    if (rightPanelRef.current) {
-      rightPanelRef.current.expand();
-      setIsRightPanelCollapsed(false);
-      setCookie("ui-right-panel:collapsed", JSON.stringify(true), {
-        path: "/",
-      });
-    }
+  const toggleRightPanel = () => {
+    rightPanelOpenChange(!rightPanelOpen);
   }
-  const [rightPanelContent, setRightPanelContent] = useState<React.ReactNode | null>(<FriendsList />);
-  const [rightPanelTitle, setRightPanelTitle] = useState<string | null>('Suivis');
+  
+  // const [rightPanelContent, setRightPanelContent] = useState<React.ReactNode | null>(<FriendsList />);
+  // const [rightPanelTitle, setRightPanelTitle] = useState<string | null>('Suivis');
   // *========== END RIGHTPANEL ==========*
 
   // *========== IS MOBILE ==========*
@@ -138,26 +94,23 @@ export const UIProvider = ({
       value={{
         uiLayout,
         setUiLayout,
-        isSidebarCollapsed,
-        setIsSidebarCollapsed,
-        sidebarCollapsedSize,
-        collapseSidebar,
-        expandSidebar,
-        sidebarRef,
-        sidebarMinSize,
-        sidebarMaxSize,
-        isRightPanelCollapsed,
-        setIsRightPanelCollapsed,
-        rightPanelCollapsedSize,
-        collapseRightPanel,
-        expandRightPanel,
-        rightPanelRef,
-        rightPanelMinSize,
-        rightPanelMaxSize,
-        rightPanelContent,
-        setRightPanelContent,
-        rightPanelTitle,
-        setRightPanelTitle,
+        sidebarOpen,
+        sidebarOpenChange,
+        toggleSidebar,
+        // sidebarCollapsedSize,
+        // sidebarMinSize,
+        // sidebarMaxSize,
+        rightPanelOpen,
+        rightPanelOpenChange,
+        toggleRightPanel,
+
+        // rightPanelCollapsedSize,
+        // rightPanelMinSize,
+        // rightPanelMaxSize,
+        // rightPanelContent,
+        // setRightPanelContent,
+        // rightPanelTitle,
+        // setRightPanelTitle,
         device,
       }}
     >

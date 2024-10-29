@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '../../utils/ImageWithFallback';
@@ -8,17 +9,17 @@ import FeaturedPlaylistBadge from '@/components/Badge/FeatuedPlaylistBadge';
 import { Playlist } from '@/types/type.db';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
-interface MoviePlaylistCardProps extends React.HTMLAttributes<HTMLElement> {
+interface MoviePlaylistCardProps extends React.HTMLAttributes<HTMLAnchorElement> {
   playlist: Playlist;
 }
 
-export default function MoviePlaylistCard({
-  className,
-  playlist,
-}: MoviePlaylistCardProps) {
+const MoviePlaylistCard = React.forwardRef<
+HTMLAnchorElement,
+  MoviePlaylistCardProps
+>(({ className, playlist, ...props }, ref) => {
   if (!playlist) return null;
   return (
-  <Link href={`/playlist/${playlist.id}`} className={cn(``, className)}>
+  <Link ref={ref} href={`/playlist/${playlist.id}`} className={cn(``, className)} {...props}>
     <Card className='group border-none bg-transparent'>
       <CardHeader className='p-0'>
         <AspectRatio ratio={1 / 1} className='w-full'>
@@ -102,4 +103,7 @@ export default function MoviePlaylistCard({
   //     </div>
   //   </Link>
   // );
-}
+});
+MoviePlaylistCard.displayName = 'MoviePlaylistCard';
+
+export default MoviePlaylistCard;

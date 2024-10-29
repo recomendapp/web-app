@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { UserPlaylistsLiked } from './_components/UserPlaylistsLiked';
 import CollectionIcon from '@/components/Collection/CollectionIcon';
 import { useUI } from '@/context/ui-context';
+import FollowedUserListButton from '@/components/FollowedUsers/FollowedUserListButton';
 
 export default function Collection() {
   const { device } = useUI();
@@ -63,7 +64,10 @@ export default function Collection() {
           <div className="text-2xl font-bold">Bibliothèque</div>
           <PlaylistCreateButton />
         </div>
-        <UserNav />
+        <div className='flex items-center gap-4'>
+          <FollowedUserListButton />
+          <UserNav />
+        </div>
       </div> : null}
       <Tabs defaultValue="personal" className='p-4'>
         <TabsList className="grid grid-cols-2 max-w-[400px]">

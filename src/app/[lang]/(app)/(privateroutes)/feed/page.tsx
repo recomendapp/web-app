@@ -37,9 +37,9 @@ export default function Feed() {
         ) : !isLoading && feed?.pages[0]?.length ? (
           <div className="flex flex-col gap-4">
             {feed.pages.map((page, i) => (
-              page?.map((activity: any, index) => (
+              page?.map((activity, index) => (
                 <div
-                  key={activity.id}
+                  key={index}
                   ref={(i === feed.pages.length - 1) && (index === page.length - 1) ? ref : undefined }
                 >
                   <FeedItem activity={activity} />

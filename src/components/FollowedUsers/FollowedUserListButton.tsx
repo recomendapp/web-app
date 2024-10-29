@@ -1,43 +1,33 @@
 import { Button } from '../ui/button';
 import { Fragment, useState } from 'react';
-import FriendsList from '../RightSidebar/FriendsList';
 import { Users } from 'lucide-react';
 
-import './styles/style.css';
 import { useUI } from '@/context/ui-context';
 import { useModal } from '@/context/modal-context';
 
 export default function FollowedUserListButton() {
   const {
-    isRightPanelCollapsed,
-    expandRightPanel,
-    collapseRightPanel,
-    rightPanelTitle,
-    setRightPanelTitle,
-    setRightPanelContent,
+    toggleRightPanel,
   } = useUI();
+  // const {
+  //   isRightPanelCollapsed,
+  //   expandRightPanel,
+  //   collapseRightPanel,
+  //   rightPanelTitle,
+  //   setRightPanelTitle,
+  //   setRightPanelContent,
+  // } = useUI();
   return (
     <Fragment>
       <Button
         variant="ghost"
         size={'icon'}
-        className="rounded-full hidden lg:inline-flex"
-        onClick={() => {
-          if (!isRightPanelCollapsed && rightPanelTitle != 'Suivis') {
-            setRightPanelTitle('Suivis');
-            setRightPanelContent(<FriendsList />);
-          } else if (!isRightPanelCollapsed) {
-            collapseRightPanel();
-          } else {
-            setRightPanelTitle('Suivis');
-            setRightPanelContent(<FriendsList />);
-            expandRightPanel();
-          }
-        }}
+        className="rounded-full"
+        onClick={toggleRightPanel}
       >
         <Users />
       </Button>
-      <FollowedUserListBottomSheet />
+      {/* <FollowedUserListBottomSheet /> */}
     </Fragment>
   );
 }
@@ -52,12 +42,12 @@ export function FollowedUserListBottomSheet() {
       <Button
         variant={'ghost'}
         size={'icon'}
-        onClick={() => createModal({
-          header: {
-            title: 'Suivis',
-          },
-          content: <FriendsList />,
-        })}
+        // onClick={() => createModal({
+        //   header: {
+        //     title: 'Suivis',
+        //   },
+        //   content: <FriendsList />,
+        // })}
         className="rounded-full"
       >
         <Users />

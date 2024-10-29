@@ -8,8 +8,9 @@ import MoviePoster from "@/components/Movie/MoviePoster";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import MovieReviewOverview from "@/components/Review/MovieReviewOverview";
 import { useFormatter } from "next-intl";
+import { Review, UserMovieActivity } from "@/types/type.db";
 
-const FeedItem = ({ activity }: { activity?: any }) => {
+const FeedItem = ({ activity }: { activity?: UserMovieActivity }) => {
 	const format = useFormatter();
 
 	if (!activity) {
@@ -29,8 +30,8 @@ const FeedItem = ({ activity }: { activity?: any }) => {
 		{/* <Link href={`/film/${activity.movie.id}`}> */}
 			<MoviePoster
 			className="w-20 @md/feed-item:w-24"
-			src={`https://image.tmdb.org/t/p/original/${activity.movie.poster_path}`}
-			alt={activity.movie.title ?? ''}
+			src={activity.movie?.poster_path ? `https://image.tmdb.org/t/p/original/${activity.movie?.poster_path}` : ''}
+			alt={activity.movie?.title ?? ''}
 			width={96}
 			height={144}
 			classNameFallback="h-full"
@@ -51,26 +52,26 @@ const FeedItem = ({ activity }: { activity?: any }) => {
 			{activity.review ? (
 				<MovieReviewOverview
 				className="bg-background"
-				review={activity.review}
+				review={activity.review as Review}
 				/>
 			) : (
-				<Link href={`/film/${activity.movie.slug ?? activity.movie_id}`} className="space-y-2">
+				<Link href={`/film/${activity.movie?.slug ?? activity.movie_id}`} className="space-y-2">
 					{/* TITLE */}
 					<div className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
-						<span className='font-bold'>{activity.movie.title}</span>
+						<span className='font-bold'>{activity.movie?.title}</span>
 						{/* DATE */}
 						<sup>
-							<DateOnlyYearTooltip date={activity.movie.release_date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
+							<DateOnlyYearTooltip date={activity.movie?.release_date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
 						</sup>
 					</div>
 					{/* DESCRIPTION */}
 					<p
 						className={`
 							text-xs @md/feed-item:text-sm line-clamp-3 text-justify
-							${!activity.movie.overview.length && 'text-muted-foreground'}
+							${!activity.movie?.overview?.length && 'text-muted-foreground'}
 						`}
 					>
-						{activity.movie.overview.length ? activity.movie.overview : 'Aucune description'}
+						{activity.movie?.overview?.length ? activity.movie.overview : 'Aucune description'}
 					</p>
 				</Link>
 			)}

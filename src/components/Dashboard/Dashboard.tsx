@@ -19,7 +19,7 @@ export const Dashboard = ({
 	const { user } = useAuth();
 	const t = useTranslations('word');
 	return (
-		<div className={cn('p-4 gap-4 grid grid-cols-1 @4xl/main:grid-cols-2', className)}>
+		<div className={cn('p-4 gap-4 gap-x-8 grid grid-cols-1 @4xl/main:grid-cols-2', className)}>
 			<div className="flex text-4xl font-bold col-span-full">
 				{isLogged ?
 				(

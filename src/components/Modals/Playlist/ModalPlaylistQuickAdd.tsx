@@ -41,7 +41,7 @@ export function ModalPlaylistQuickAdd({
 	const { closeModal } = useModal();
 	const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
 	const [comment, setComment] = useState<string>('');
-	const [search, setSearch] = useState<string | null>(null);
+	const [search, setSearch] = useState<string>('');
 	const searchQuery = useDebounce(search, 500);
 	const { ref, inView } = useInView();
 
@@ -97,7 +97,7 @@ export function ModalPlaylistQuickAdd({
 			</ModalHeader>
 			<ModalBody className='!p-0 border-t bg-popover text-popover-foreground'>
 				<InputSearch
-				value={search as string}
+				value={search}
 				onChange={(e) => setSearch(e.target.value)}
 				placeholder="Rechercher un film..."
 				/>

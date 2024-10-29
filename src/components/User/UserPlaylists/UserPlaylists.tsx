@@ -57,6 +57,7 @@ export function UserPlaylists({
 
   useEffect(() => {
     if (inView && hasNextPage) {
+      console.log('fetchNextPage');
       fetchNextPage();
     }
   }, [inView, hasNextPage, playlists, fetchNextPage]);
@@ -73,7 +74,11 @@ export function UserPlaylists({
       <Fragment>
         {playlists?.pages.map((page, i) => (
           page?.map((playlist: Playlist, index) => (
-            <MoviePlaylistCard playlist={playlist} key={playlist?.id} />
+            <MoviePlaylistCard
+            ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+            playlist={playlist}
+            key={playlist?.id}
+            />
           ))
         ))}
       </Fragment>

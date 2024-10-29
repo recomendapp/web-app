@@ -1,16 +1,19 @@
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail, SidebarSeparator, useSidebar } from "@/components/ui/sidebar";
-import Link from "next/link";
-import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import { Icons } from "@/config/icons";
-import { SidebarLeftRoutes } from "./SidebarLeftRoutes";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarRail, SidebarSeparator, useSidebar } from "@/components/ui/sidebar";
 import { useUI } from "@/context/ui-context";
 
-export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
-	const { toggleSidebar, sidebarOpen: open } = useUI();
+export const SidebarRight = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
+	const { toggleSidebar, open } = useSidebar();
 	return (
-		<Sidebar collapsible="icon" {...props}>
-			<SidebarHeader>
-				<SidebarMenu>
+		<Sidebar
+		collapsible="offcanvas"
+		side="right"
+		className=""
+		// className="sticky hidden lg:flex top-0 h-full border-l"
+		{...props}
+		>
+			<SidebarHeader className="h-header justify-center">
+				Work in progress
+				{/* <SidebarMenu>
 					<SidebarMenuItem>
 						<SidebarMenuButton
 						size="lg"
@@ -24,20 +27,29 @@ export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) 
 							)}
 						</SidebarMenuButton>
 					</SidebarMenuItem>
-				</SidebarMenu>
+				</SidebarMenu> */}
 			</SidebarHeader>
 			<SidebarSeparator />
 			<SidebarContent>
-				<SidebarLeftRoutes />
+				{/* <SidebarLeftRoutes /> */}
 			</SidebarContent>
 			<SidebarSeparator />
 			<SidebarFooter>
 				<SidebarMenu>
 					<SidebarMenuItem>
 						<SidebarMenuButton
+						onClick={toggleSidebar}
+						>
+							Close
+						</SidebarMenuButton>
+					</SidebarMenuItem>
+				</SidebarMenu>
+				{/* <SidebarMenu>
+					<SidebarMenuItem>
+						<SidebarMenuButton
 						size="lg"
 						className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex justify-center items-center"
-					 	>
+						>
 							<Link
 							href={"https://oneummah.org.uk/appeals/gaza-emergency-appeal/"}
 							target="_blank"
@@ -51,7 +63,7 @@ export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) 
 							</Link>
 						</SidebarMenuButton>
 					</SidebarMenuItem>
-				</SidebarMenu>
+				</SidebarMenu> */}
 			</SidebarFooter>
 			<SidebarRail />
 		</Sidebar>

@@ -12,23 +12,23 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 
 interface ThemeProviderProps extends ThemeProviderPropsPrimitive {
   defaultLayout?: number[];
-  cookieSidebarCollapsed?: boolean;
-  cookieRightPanelCollapsed?: boolean;
+  cookieSidebarOpen?: boolean;
+  cookieRightPanelOpen?: boolean;
 }
 
 export const ThemeProvider = ({
   children,
   defaultLayout,
-  cookieSidebarCollapsed,
-  cookieRightPanelCollapsed,
+  cookieSidebarOpen,
+  cookieRightPanelOpen,
   ...props
 } : ThemeProviderProps) => {
   return (
     <NextThemesProvider {...props}>
       <UIProvider
         defaultLayout={defaultLayout}
-        cookieSidebarCollapsed={cookieSidebarCollapsed}
-        cookieRightPanelCollapsed={cookieRightPanelCollapsed}
+        cookieSidebarOpen={cookieSidebarOpen}
+        cookieRightPanelOpen={cookieRightPanelOpen}
       >
         {/* <SidebarProvider> */}
           <TooltipProvider delayDuration={100}>
