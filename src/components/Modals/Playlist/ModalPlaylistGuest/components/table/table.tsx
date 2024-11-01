@@ -10,9 +10,7 @@ import {
 	TableHeader,
 	TableRow,
   } from "@/components/ui/table"
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { ChevronDownIcon } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/config/icons"
 import { useDeletePlaylistGuests } from "@/features/playlist/playlistMutations"
@@ -149,33 +147,21 @@ export const PlaylistGuestTable = ({
             {table.getFilteredSelectedRowModel().rows.length} of{" "}
             {table.getFilteredRowModel().rows.length} user(s) selected.
           </div>
-          <div className="space-x-2">
-            {/* Add delete button if user are select */}
+          <div className="flex items-center gap-2">
 			{table.getFilteredSelectedRowModel().rows.length > 0 ? (
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button
-							variant="outline"
-							className="h-8"
-						>
-							Actions
-							<ChevronDownIcon className="h-4 w-4" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuItem
-							onClick={() => createConfirmModal({
-								title: 'Delete user(s)',
-								description: 'Are you sure you want to delete the selected user(s)?',
-								onConfirm: handleDelete
-							})}
-							disabled={deletePlaylistGuests.isPending}
-						>
-							<Icons.delete className="h-4 w-4" />
-							Delete
-						</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
+				<Button
+					variant="outline"
+					className="h-8"
+					onClick={() => createConfirmModal({
+						title: 'Delete user(s)',
+						description: 'Are you sure you want to delete the selected user(s)?',
+						onConfirm: handleDelete
+					})}
+					disabled={deletePlaylistGuests.isPending}
+				>
+					<Icons.delete className="h-4 w-4" />
+					<span className="sr-only">Delete</span>
+				</Button>
 			) : null}
 			</div>
         </div>

@@ -84,6 +84,7 @@ export const PlaylistGuestAddView = ({
       userIds: selectedUsers.map((user) => user?.id as string)
     }, {
       onSuccess: () => {
+        toast.success(`Ajouté${selectedUsers.length > 1 ? 's' : ''}`);
         setSelectedUsers([]);
         setView('guests');
       },
