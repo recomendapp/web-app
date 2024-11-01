@@ -54,16 +54,17 @@ export const PlaylistGuestTable = ({
 	const handleDelete = () => {
 		const selectedRows = table.getFilteredSelectedRowModel().rows
 		const ids = selectedRows.map((row) => row.original?.id as number)
-		if (!ids.length) toast.error('No user selected')
+		if (!ids.length) toast.error('Aucun utilisateur sélectionné')
 		deletePlaylistGuests.mutate({
 			ids: ids,
 			playlistId: playlistId
 		}, {
 			onSuccess: () => {
-				toast.success('User(s) deleted')
+				toast.success(`Supprimé${ids.length > 1 ? 's' : ''}`)
+				setRowSelection({})
 			},
 			onError: () => {
-				toast.error('An error occurred')
+				toast.error('Une erreur s\'est produite')
 			}
 		})
 	}
