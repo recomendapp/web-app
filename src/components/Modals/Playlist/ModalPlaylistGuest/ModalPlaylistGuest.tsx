@@ -123,7 +123,7 @@ export const PlaylistGuestAddView = ({
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Rechercher un utilisateur..."
 				/>
-        <ScrollArea className={`min-h-[30vh] h-full max-h-[50vh]`}>
+        <ScrollArea className={`h-[40vh]`}>
 					<div className='p-2 grid justify-items-center'>
 					{(users?.pages && users?.pages[0].length > 0) ? (
 						users?.pages.map((page, i) => (

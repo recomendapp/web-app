@@ -95,7 +95,7 @@ export function ModalPlaylistQuickAdd({
 				onChange={(e) => setSearch(e.target.value)}
 				placeholder="Rechercher un film..."
 				/>
-				<ScrollArea className={`min-h-[30vh] h-full max-h-[50vh]`}>
+				<ScrollArea className={`h-[40vh]`}>
 					<div className='p-2 grid justify-items-center'>
 					{(movies?.pages && movies?.pages[0].length > 0) ? (
 						movies?.pages.map((page, i) => (
