@@ -3,28 +3,22 @@ import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import { useModal } from '@/context/modal-context';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Check } from 'lucide-react';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Movie, Playlist, PlaylistType } from '@/types/type.db';
-import { Badge } from '@/components/ui/badge';
+import { Movie, Playlist } from '@/types/type.db';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modals/Modal';
-import { useUserAddMovieToPlaylist } from '@/features/user/userQueries';
-import { useAddMoviesToPlaylist } from '@/features/user/userMutations';
+import { useAddMoviesToPlaylist } from '@/features/playlist/playlistMutations';
 import { Icons } from '@/config/icons';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
 import { useTmdbSearchMoviesInfinite } from '@/features/tmdb/tmdbQueries';
 import { useLocale } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
-import { CardMovie } from '@/components/card/CardMovie';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
-import { useUI } from '@/context/ui-context';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -110,7 +104,7 @@ export function ModalPlaylistQuickAdd({
 								key={index}
 								className='w-full flex cursor-pointer items-center justify-between py-1.5 px-2 hover:bg-accent rounded-sm'
 								onClick={() => {
-									if (selectedMovies.includes(movie)) {
+									if (selectedMovies.some((selectedMovie) => selectedMovie?.id === movie?.id)) {
 										return setSelectedMovies((prev) => prev.filter(
 											(selectMovie) => selectMovie?.id !== movie?.id
 										))
@@ -147,7 +141,7 @@ export function ModalPlaylistQuickAdd({
 											</p>
 										</div>
 									</div>
-									<Check size={20} className={`text-primary ${!selectedMovies.includes(movie) ? 'opacity-0' : ''}`} />
+									<Check size={20} className={`text-primary ${!selectedMovies.some((selectedMovie) => selectedMovie?.id === movie?.id) ? 'opacity-0' : ''}`} />
 								</div>
 							))
 						))

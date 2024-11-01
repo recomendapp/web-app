@@ -10,7 +10,6 @@ import {
 import React, { useState } from 'react';
 import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
 import { useAuth } from '@/context/auth-context';
-import PlaylistGuest from '@/app/[lang]/(app)/playlist/[playlist]/_components/guest/PlaylistGuest';
 import { Button } from '@/components/ui/button';
 import { PencilIcon } from 'lucide-react';
 import { Playlist } from '@/types/type.db';
@@ -79,11 +78,11 @@ export function PlaylistEditButton({
                 filmId={filmId}
               />
             )}
-            {view == 'guest' && (
+            {/* {view == 'guest' && (
               // <ScrollArea className="border h-full">
                 <PlaylistGuest playlist={playlist} />
               // </ScrollArea>
-            )}
+            )} */}
           </>
         )}
       </DialogContent>

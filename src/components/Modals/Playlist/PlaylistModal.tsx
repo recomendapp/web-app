@@ -8,7 +8,7 @@ import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { Button } from '@/components/ui/button';
 import { UserCogIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { PlaylistGuestModal } from './PlaylistGuestModal';
+import { ModalPlaylistGuest } from './ModalPlaylistGuest/ModalPlaylistGuest';
 
 interface PlaylistModalProps extends ModalType {
   playlist?: Playlist;
@@ -35,7 +35,7 @@ export function PlaylistModal({
               <Button
                 variant={'muted'}
                 size={'icon'}
-                onClick={() => openModal(PlaylistGuestModal, { playlist })}
+                onClick={() => openModal(ModalPlaylistGuest, { playlistId: playlist.id })}
               >
                 <UserCogIcon size={20}/>
               </Button>

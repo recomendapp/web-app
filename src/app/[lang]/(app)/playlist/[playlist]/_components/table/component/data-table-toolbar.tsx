@@ -15,6 +15,7 @@ import { Playlist } from '@/types/type.db';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { ModalPlaylistQuickAdd } from '@/components/Modals/Playlist/ModalPlaylistQuickAdd';
+import { usePlaylistIsAllowedToEdit } from '@/features/playlist/playlistQueries';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -25,6 +26,7 @@ export function DataTableToolbar<TData>({
   table,
   playlist,
 }: DataTableToolbarProps<TData>) {
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(playlist?.id);
   const { user } = useAuth();
   const { openModal } = useModal();
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -59,7 +61,7 @@ export function DataTableToolbar<TData>({
       <div className="w-full lg:w-fit flex items-center justify-between gap-2">
         {user?.id !== playlist?.user_id ? <PlaylistAction playlistId={playlist?.id!} /> : null}
         <div className="w-fit flex items-center gap-2">
-          <Button
+          {isAllowedToEdit ? <Button
           variant="outline"
           size="sm"
           className='ml-auto h-8'
@@ -67,7 +69,7 @@ export function DataTableToolbar<TData>({
           >
             <Icons.add className='mr-2 h-4 w-4' />
             Ajout rapide
-          </Button>
+          </Button> : null}
           <DataTableSortOptions table={table} />
           <DataTableViewOptions table={table} />
         </div>

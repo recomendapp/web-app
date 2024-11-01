@@ -110,7 +110,7 @@ export type PersonTranslation = Database['public']['Tables']['tmdb_person_transl
 // *========== PLAYLIST ==========* //
 export type Playlist = Database['public']['Tables']['playlist']['Row'] & {
 	user?: User;
-	guests?: PlaylistGuest[] | any;
+	guests?: PlaylistGuest[];
 	collaborators?: PlaylistGuest[] | any;
 	items?: PlaylistItem[] | any;
 } | null | undefined;

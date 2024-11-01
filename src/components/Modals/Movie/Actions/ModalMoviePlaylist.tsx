@@ -12,11 +12,11 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Movie, Playlist, PlaylistType } from '@/types/type.db';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
-import { useUserAddMovieToPlaylist } from '@/features/user/userQueries';
-import { useAddMovieToPlaylists } from '@/features/user/userMutations';
+import { useAddMovieToPlaylists } from '@/features/playlist/playlistMutations';
 import { Icons } from '@/config/icons';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Label } from '@/components/ui/label';
+import { useMeAddMovieToPlaylist } from '@/features/me/meQueries';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -38,7 +38,7 @@ export function ModalMoviePlaylist({
 	const {
 		data: playlists,
 		isLoading,
-	} = useUserAddMovieToPlaylist({
+	} = useMeAddMovieToPlaylist({
 		movieId,
 		userId: user?.id,
 		type,

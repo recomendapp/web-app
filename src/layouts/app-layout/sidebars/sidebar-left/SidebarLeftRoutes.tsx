@@ -143,7 +143,7 @@ export const SidebarLeftRoutes = () => {
 			<SidebarMenu className={`${!open ? "items-center" : ""}`}>
 				{routes.map((route, i) => (
 					<SidebarMenuItem key={i}>
-						<SidebarMenuButton tooltip={route.label} asChild>
+						<SidebarMenuButton tooltip={route.label} isActive={route.active} asChild>
 							<Link href={route.href}>
 								<route.icon className="w-4" />
 								<span className={`line-clamp-1 transition-all duration-300 ${!open ? "opacity-0 hidden" : "opacity-100"}`}>

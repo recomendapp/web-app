@@ -23,18 +23,14 @@ import {
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Dispatch, SetStateAction, useState } from 'react';
 import ButtonShare from '@/components/utils/ButtonShare';
-
-import { useAuth } from '@/context/auth-context';
-import toast from 'react-hot-toast';
 import { useModal } from '@/context/modal-context';
 import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentModal';
-import { Movie, Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Movie, PlaylistItem } from '@/types/type.db';
 import { ModalMoviePlaylist } from '@/components/Modals/Movie/Actions/ModalMoviePlaylist';
-import { useSupabaseClient } from '@/context/supabase-context';
-import { BinaryIcon, EyeIcon, ListPlusIcon, TextIcon } from 'lucide-react';
+import { EyeIcon, TextIcon } from 'lucide-react';
 import { Icons } from '@/config/icons';
-import { playlistKeys } from '@/features/playlist/playlistKeys';
+import { useDeletePlaylistItem } from '@/features/playlist/playlistMutations';
+import { usePlaylistIsAllowedToEdit } from '@/features/playlist/playlistQueries';
 
 
 interface DataTableRowActionsProps {
@@ -42,45 +38,27 @@ interface DataTableRowActionsProps {
 }
 
 export function DataTableRowActions({ data }: DataTableRowActionsProps) {
-  const supabase = useSupabaseClient();
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(data?.playlist_id as number);
   const { openModal, createConfirmModal } = useModal();
   
   const [openShowDirectors, setOpenShowDirectors] = useState(false);
 
-  const { user } = useAuth();
+  // const { mutateAsync: deletePlaylistItem } = useMutation({
+  //   mutationFn: async () => {
+	// 		if (!data?.id) throw Error('Missing id');
+	// 		const { error } = await supabase
+	// 		  .from('playlist_item')
+	// 		  .delete()
+	// 		  .eq('id', data.id)
+	// 		if (error) throw error;
+	// 		return null;
+	// 	},
+  //   onError: () => {
+  //     toast.error('Une erreur s\'est produite');
+  //   }
+  // })
 
-  const queryClient = useQueryClient();
-
-  const playlist = queryClient.getQueryData<Playlist>(playlistKeys.detail(data?.playlist_id as number));
-
-  const isAllowedToEdit = Boolean(
-    user?.id &&
-    playlist &&
-    (
-      user?.id === playlist?.user_id ||
-      (
-        playlist?.guests?.some(
-          (guest: PlaylistGuest ) => guest?.user_id === user?.id && guest?.edit
-        ) &&
-        playlist?.user?.premium
-      )
-    )
-  );
-
-  const { mutateAsync: deletePlaylistItem } = useMutation({
-    mutationFn: async () => {
-			if (!data?.id) throw Error('Missing id');
-			const { error } = await supabase
-			  .from('playlist_item')
-			  .delete()
-			  .eq('id', data.id)
-			if (error) throw error;
-			return null;
-		},
-    onError: () => {
-      toast.error('Une erreur s\'est produite');
-    }
-  })
+  const { mutateAsync: deletePlaylistItem } = useDeletePlaylistItem();
 
   return (
     <>
@@ -142,7 +120,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
             </DropdownMenuItem>
           )}
           {/* PLAYLIST */}
-          {user?.id && (
+          {isAllowedToEdit && (
             <DropdownMenuItem
               onClick={() => openModal(ModalMoviePlaylist, { movieId: data?.movie_id!, movie: data?.movie })}
             >
@@ -161,7 +139,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
               onClick={() => createConfirmModal({
                 title: 'Supprimer le film',
                 description: `Êtes-vous sûr de vouloir supprimer ${data?.movie?.title} de la playlist ?`,
-                onConfirm: deletePlaylistItem,
+                onConfirm: () => data && deletePlaylistItem({ playlistItemId: data.id, movieId: data.movie_id }),
               })}
             >
               <Icons.trash />

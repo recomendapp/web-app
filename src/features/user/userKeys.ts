@@ -2,6 +2,9 @@ import { PlaylistType } from "@/types/type.db"
 
 export const userKeys = {
 	all: ['user'] as const,
+	search: (filters?: {
+		search?: string | null;
+	}) => filters ? [...userKeys.all, 'search', filters] as const : [...userKeys.all, 'search'] as const,
 	details: () => [...userKeys.all, 'details'] as const,
 	/**
 	 * Fetches details of a user
@@ -21,38 +24,7 @@ export const userKeys = {
 			search?: string | null
 		}
 	) => filters ? [...userKeys.detail(userId), 'friends', filters] : [...userKeys.detail(userId), 'friends'] as const,
-	/**
-	 * Fetches friends of a user to send a movie
-	 * @param userId The user id
-	 * @param movieId The movie id
-	 * @returns List of friends
-	 */
-	sendMovie: (
-		userId: string,
-		movieId: number,
-	) => [...userKeys.detail(userId), 'friends', 'send', movieId] as const,
-	/**
-	 * Fetches playlists to add a movie
-	 * @param userId The user id
-	 * @param movieId The movie id
-	 * @returns List of playlists
-	 */
-	addMovieToPlaylist: (
-		userId: string,
-		movieId: number,
-	) => [...userKeys.detail(userId), 'playlists', 'add', movieId] as const,
-	/**
-	 * Fetches playlists to add a movie with a type
-	 * @param userId The user id
-	 * @param movieId The movie id
-	 * @param type The playlist type
-	 * @returns List of playlists
-	 */
-	addMovieToPlaylistType: (
-		userId: string,
-		movieId: number,
-		type: PlaylistType,
-	) => [...userKeys.addMovieToPlaylist(userId, movieId), type] as const,
+
 	/**
 	 * Fetches followers of a user
 	 * @param userId The user id

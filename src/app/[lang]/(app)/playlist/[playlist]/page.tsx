@@ -12,6 +12,8 @@ import useDebounce from '@/hooks/use-debounce';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { playlistKeys } from '@/features/playlist/playlistKeys';
+import { usePlaylistFull, usePlaylistIsAllowedToEdit, usePlaylistItems } from '@/features/playlist/playlistQueries';
+import { useUpdatePlaylistItemChanges } from '@/features/playlist/playlistMutations';
 
 export default function PlaylistPage({
   params,
@@ -23,50 +25,13 @@ export default function PlaylistPage({
   const queryClient = useQueryClient();
   const [shouldRefresh, setShouldRefresh] = useState(false);
   const debouncedRefresh = useDebounce(shouldRefresh, 200);
-  const {
-    data: playlist,
-    refetch,
-  } = useQuery({
-    queryKey: playlistKeys.detail(Number(params.playlist)),
-    queryFn: async () => {
-      if (!params.playlist || !params.lang) throw new Error('No playlist id or locale');
-      const { data } = await supabase
-        .from('playlist')
-        .select(`
-          *,
-          user(*),
-          items:playlist_item(
-            *,
-            movie(*)
-          ),
-          guests:playlist_guest(
-            *,
-            user:user(*)
-          )
-        `)
-        .eq('id', params.playlist)
-        .order('rank', { ascending: true, referencedTable: 'playlist_item' })
-        .returns<Playlist[]>()
-        .single();
-      return data;
-    },
-    enabled: !!params.playlist && !!params.lang,
+  const { data: playlist, refetch } = usePlaylistFull(Number(params.playlist));
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(playlist?.id);
+  const { data: playlistItems } = usePlaylistItems(playlist?.id);
+  const [playlistItemsRender, setPlaylistItemsRender] = useState<PlaylistItem[]>(playlistItems || []);
+  const { mutate: updatePlaylistItemChanges } = useUpdatePlaylistItemChanges({
+    playlistId: Number(params.playlist),
   });
-  const [playlistItems, setPlaylistItems] = useState<PlaylistItem[]>(playlist?.items);
-
-  const isAllowedToEdit = Boolean(
-    user?.id &&
-    playlist &&
-    (
-      user?.id === playlist?.user_id ||
-      (
-        playlist?.guests?.some(
-          (guest: PlaylistGuest) => guest?.user_id === user?.id && guest?.edit
-        ) &&
-        playlist?.user?.premium
-      )
-    )
-  );
 
   const eventBuffer = useRef<RealtimePostgresChangesPayload<{
     [key: string]: any;
@@ -79,7 +44,8 @@ export default function PlaylistPage({
     const bufferedEvents = [...eventBuffer.current];
     eventBuffer.current = null;
 
-    const newPlaylistItems = [...playlist?.items];
+    const newPlaylistItems = queryClient.getQueryData<PlaylistItem[]>(playlistKeys.items(Number(params.playlist))) || [];
+    // const newPlaylistItems = [...playlist?.items];
 
     for (const payload of bufferedEvents) {
       switch (payload.eventType) {
@@ -126,13 +92,14 @@ export default function PlaylistPage({
     }
 
     newPlaylistItems.sort((a, b) => a!.rank - b!.rank);
-    queryClient.setQueryData(playlistKeys.detail(Number(params.playlist)), (oldData: Playlist) => {
-      if (!oldData) return null;
-      return {
-        ...oldData,
-        items: newPlaylistItems,
-      };
-    });
+    // queryClient.setQueryData(playlistKeys.detail(Number(params.playlist)), (oldData: Playlist) => {
+    //   if (!oldData) return null;
+    //   return {
+    //     ...oldData,
+    //     items: newPlaylistItems,
+    //   };
+    // });
+    queryClient.setQueryData(playlistKeys.items(Number(params.playlist)), newPlaylistItems);
   };
 
   const handleEventBuffering = (payload: RealtimePostgresChangesPayload<{
@@ -148,12 +115,11 @@ export default function PlaylistPage({
     }
 
     eventBufferTimeout.current = setTimeout(() => {
-      const success = applyBufferedChanges();
-      if (!success) {
-        eventBuffer.current = null;
-        setShouldRefresh(true);
-      }
-    }, 250);
+      updatePlaylistItemChanges({
+        events: eventBuffer.current,
+      });
+      eventBuffer.current = null;
+    }, 10);
   };
 
   useEffect(() => {
@@ -169,6 +135,7 @@ export default function PlaylistPage({
             filter: `playlist_id=eq.${params.playlist }`,
           },
           async (payload) => {
+            console.log('realtime event', payload);
             handleEventBuffering(payload);
           }
         )
@@ -187,19 +154,19 @@ export default function PlaylistPage({
   }, [debouncedRefresh, refetch]);
 
   useEffect(() => {
-    if (playlist?.items) {
-      setPlaylistItems(playlist?.items);
+    if (playlistItems) {
+      setPlaylistItemsRender(playlistItems);
     }
-  }, [playlist?.items]);
+  }, [playlistItems]);
 
   if (!playlist) return null;
 
   return (
-    <main>
-      <PlaylistHeader playlist={playlist} />
+    <>
+      <PlaylistHeader playlist={playlist} totalRuntime={playlistItems?.reduce((total: number, item: PlaylistItem) => total + (item?.movie?.runtime ?? 0), 0)} />
       <div className="p-4">
-        {playlist && playlistItems && <PlaylistTable playlist={playlist} playlistItems={playlistItems} setPlaylistItems={setPlaylistItems} isAllowedToEdit={isAllowedToEdit}/>}
+        {playlistItemsRender ? <PlaylistTable playlist={playlist} playlistItems={playlistItemsRender} setPlaylistItems={setPlaylistItemsRender} /> : null}
       </div>
-    </main>
+    </>
   );
 }

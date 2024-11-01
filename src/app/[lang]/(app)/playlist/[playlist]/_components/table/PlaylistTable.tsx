@@ -52,7 +52,9 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 // import { UpdatePlaylistItemMutation } from '@/graphql/__generated__/graphql';
 import { Playlist, PlaylistItem } from '@/types/type.db';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { usePlaylistIsAllowedToEdit, usePlaylistItems } from '@/features/playlist/playlistQueries';
+import { playlistKeys } from '@/features/playlist/playlistKeys';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -64,17 +66,16 @@ interface DataTableProps {
   playlist: Playlist;
   playlistItems: PlaylistItem[];
   setPlaylistItems: React.Dispatch<React.SetStateAction<PlaylistItem[]>>;
-  isAllowedToEdit: boolean;
 }
 
 export default function PlaylistTable({
   playlist,
   playlistItems,
   setPlaylistItems,
-  isAllowedToEdit
 }: DataTableProps) {
   const supabase = useSupabaseClient();
-
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(playlist?.id);
+  
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -185,7 +186,6 @@ export default function PlaylistTable({
           const newIndex = items.indexOf(over.id);
           return arrayMove(data, oldIndex, newIndex);
         });
-        
         await updatePlaylistItem({
           id: active.id,
           rank: over?.data.current?.sortable.index + 1
@@ -231,7 +231,7 @@ export default function PlaylistTable({
             collisionDetection={closestCenter}
             modifiers={[restrictToVerticalAxis]}
           >
-            <TableContainer table={table} items={items} isAllowedToEdit={isAllowedToEdit}/>
+            <TableContainer table={table} items={items} />
             <DragOverlay>
               {activeId && (
                 <Table style={{ width: "100%" }}>
@@ -243,7 +243,7 @@ export default function PlaylistTable({
             </DragOverlay>
           </DndContext>
         ) : (
-          <TableContainer table={table} items={items} isAllowedToEdit={isAllowedToEdit}/>
+          <TableContainer table={table} items={items} />
         )}
       </div>
     </div>
@@ -253,11 +253,9 @@ export default function PlaylistTable({
 const TableContainer = ({
   table,
   items,
-  isAllowedToEdit
 } : {
   table: TableType<PlaylistItem>;
   items: UniqueIdentifier[];
-  isAllowedToEdit: boolean;
 }) => {
   return (
   <Table>
@@ -281,7 +279,7 @@ const TableContainer = ({
         {table.getRowModel().rows?.length ? (
           <SortableContext items={items} strategy={verticalListSortingStrategy}>
             {table.getRowModel().rows.map((row) => (
-              <DraggableTableRow key={row.original?.id} row={row} isAllowedToEdit={isAllowedToEdit}/>
+              <DraggableTableRow key={row.original?.id} row={row} />
             ))}
           </SortableContext>
         ) : (
@@ -301,11 +299,10 @@ const TableContainer = ({
 
 const DraggableTableRow = ({
   row,
-  isAllowedToEdit,
 } : {
   row: Row<PlaylistItem>;
-  isAllowedToEdit: boolean;
 }) => {
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(row.original?.playlist_id);
   const {
     attributes,
     listeners,

@@ -10,7 +10,13 @@ import { useModal } from '@/context/modal-context';
 import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
 import { Playlist, PlaylistItem } from '@/types/type.db';
 
-export default function PlaylistHeader({ playlist } : { playlist: Playlist }) {
+export default function PlaylistHeader({
+  playlist,
+  totalRuntime,
+} : {
+  playlist: Playlist,
+  totalRuntime?: number,
+}) {
   const { user } = useAuth();
   const { openModal, createModal } = useModal();
 
@@ -24,11 +30,6 @@ export default function PlaylistHeader({ playlist } : { playlist: Playlist }) {
     const randomIndex = Math.floor(Math.random() * itemsWithBackdrop.length);
     return itemsWithBackdrop[randomIndex]?.movie?.backdrop_path;
   };
-
-  const totalRuntime = playlist?.items?.reduce(
-    (total: number, item: PlaylistItem) => total + (item?.movie?.runtime ?? 0),
-    0
-  );
 
   const openPlaylistModal = () => {
     if (playlist?.user_id !== user?.id) return;
