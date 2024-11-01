@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Switch } from "@/components/ui/switch"
 import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar"
 import UserCard from "@/components/User/UserCard/UserCard"
+import { useAuth } from "@/context/auth-context"
 import { useUpdatePlaylistGuest } from "@/features/playlist/playlistMutations"
 import { PlaylistGuest } from "@/types/type.db"
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
@@ -49,77 +50,65 @@ export const columns: ColumnDef<PlaylistGuest>[] = [
 		)
 	  },
 	  cell: ({ row }) => (
-			<div className="flex items-center">
-				<UserAvatar avatar_url={row.original?.user?.avatar_url} username={row.original?.user?.username} />
-				<div className="ml-2">
-				<p className="text-sm font-medium leading-none line-clamp-1">
-					{row.original?.user?.full_name}
-				</p>
-				<p className="text-sm text-muted-foreground line-clamp-1">
-					@{row.original?.user?.username}
-				</p>
-				</div>
+		<div className="flex items-center">
+			<UserAvatar avatar_url={row.original?.user?.avatar_url} username={row.original?.user?.username} />
+			<div className="ml-2">
+			<p className="text-sm font-medium leading-none line-clamp-1">
+				{row.original?.user?.full_name}
+			</p>
+			<p className="text-sm text-muted-foreground line-clamp-1">
+				@{row.original?.user?.username}
+			</p>
 			</div>
-		// <UserCard user={row.original?.user} />
+		</div>
 	  ),
 	},
 	{
 		id: "can_edit",
 	 	accessorKey: "Can Edit",
 		header: () => <div className="text-right">Edit</div>,
-		cell: ({ row }) => {
-			const updatePlaylistGuest = useUpdatePlaylistGuest()
-			const [edit, setEdit] = useState(row.original?.edit);
-
-			const handleEdit = (value: boolean) => {
-				if (!row.original?.playlist_id || !row.original?.user_id) return null;
-				updatePlaylistGuest.mutate({
-					id: row.original.id,
-					playlistId: row.original?.playlist_id,
-					edit: value,
-				}, {
-					onSuccess: () => {
-						setEdit(value)
-					},
-					onError: () => {
-						setEdit(!value)
-						toast.error('Une erreur s\'est produite');
-					}
-				})
-			}
-			return (
+		cell: ({ row }) => (
 			<div className="text-right">
-				<Switch
-					checked={edit}
-					onCheckedChange={handleEdit}
-				/>
+				<EditSwitch id={row.original?.id} playlistId={row.original?.playlist_id} editSate={row.original?.edit} />
 			</div>
-			)
-		},
+		),
 	},
-	// {
-	//   id: "actions",
-	//   enableHiding: false,
-	//   cell: ({ row }) => (
-	// 	  <DropdownMenu>
-	// 		<DropdownMenuTrigger asChild className="text-right">
-	// 		  <Button variant="ghost" className="h-8 w-8 p-0">
-	// 			<span className="sr-only">Open menu</span>
-	// 			<DotsHorizontalIcon className="h-4 w-4" />
-	// 		  </Button>
-	// 		</DropdownMenuTrigger>
-	// 		<DropdownMenuContent align="end">
-	// 		  <DropdownMenuLabel>Actions</DropdownMenuLabel>
-	// 		  <DropdownMenuItem
-	// 			onClick={() => navigator.clipboard.writeText(payment.id)}
-	// 		  >
-	// 			Copy payment ID
-	// 		  </DropdownMenuItem>
-	// 		  <DropdownMenuSeparator />
-	// 		  <DropdownMenuItem>View customer</DropdownMenuItem>
-	// 		  <DropdownMenuItem>View payment details</DropdownMenuItem>
-	// 		</DropdownMenuContent>
-	// 	  </DropdownMenu>
-	//   ),
-	// },
   ]
+
+const EditSwitch = ({
+	id,
+	playlistId,
+	editSate,
+}: {
+	id?: number;
+	playlistId?: number;
+	editSate?: boolean;
+}) => {
+	const { user } = useAuth()
+	const updatePlaylistGuest = useUpdatePlaylistGuest()
+	const [edit, setEdit] = useState(editSate);
+
+	const handleEdit = (value: boolean) => {
+		if (!playlistId || !id) return null;
+		updatePlaylistGuest.mutate({
+			id: id,
+			playlistId: playlistId,
+			edit: value,
+		}, {
+			onSuccess: () => {
+				setEdit(value)
+			},
+			onError: () => {
+				setEdit(!value)
+				toast.error('Une erreur s\'est produite');
+			}
+		})
+	}
+	return (
+	<Switch
+		checked={edit}
+		onCheckedChange={handleEdit}
+		disabled={!user?.premium && !edit}
+	/>
+	)
+}
