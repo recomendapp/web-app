@@ -51,6 +51,8 @@ const SidebarProvider = React.forwardRef<
     defaultOpen?: boolean
     open?: boolean
     onOpenChange?: (open: boolean) => void,
+    openMobile?: boolean
+    setOpenMobile?: (open: boolean) => void,
     shortcut?: string
     noLayout?: boolean
   }
@@ -60,6 +62,8 @@ const SidebarProvider = React.forwardRef<
       defaultOpen = true,
       open: openProp,
       onOpenChange: setOpenProp,
+      openMobile: openMobileProp,
+      setOpenMobile: setOpenMobileProp,
       shortcut,
       noLayout = false,
       className,
@@ -70,11 +74,24 @@ const SidebarProvider = React.forwardRef<
     ref
   ) => {
     const isMobile = useIsMobile()
-    const [openMobile, setOpenMobile] = React.useState(false)
+    const [_openMobile, _setOpenMobile] = React.useState(false)
 
     // This is the internal state of the sidebar.
     // We use openProp and setOpenProp for control from outside the component.
     const [_open, _setOpen] = React.useState(defaultOpen)
+    const openMobile = openMobileProp ?? _openMobile
+    const setOpenMobile = React.useCallback(
+      (value: boolean | ((value: boolean) => boolean)) => {
+        if (setOpenMobileProp) {
+          return setOpenMobileProp?.(
+            typeof value === "function" ? value(openMobile) : value
+          )
+        }
+
+        _setOpenMobile(value)
+      },
+      [setOpenMobileProp, openMobile]
+    )
     const open = openProp ?? _open
     const setOpen = React.useCallback(
       (value: boolean | ((value: boolean) => boolean)) => {
@@ -94,11 +111,10 @@ const SidebarProvider = React.forwardRef<
 
     // Helper to toggle the sidebar.
     const toggleSidebar = React.useCallback(() => {
-      setOpen((open) => !open)
-      // return isMobile
-      //   ? setOpenMobile((open) => !open)
-      //   : setOpen((open) => !open)
-    }, [isMobile, setOpen, setOpenMobile])
+      return isMobile
+        ? setOpenMobile((open) => !open)
+        : setOpen((open) => !open)
+    }, [isMobile, setOpen])
 
     // Adds a keyboard shortcut to toggle the sidebar.
     React.useEffect(() => {
@@ -199,7 +215,7 @@ const Sidebar = React.forwardRef<
 
     if (isMobile) {
       return (
-        <Sheet open={open} onOpenChange={setOpen} {...props}>
+        <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
           <SheetContent
             data-sidebar="sidebar"
             data-mobile="true"

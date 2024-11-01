@@ -1,6 +1,7 @@
 'use client';
 
 import { Device, useDevice } from '@/hooks/use-device';
+import { useIsMobile } from '@/hooks/use-mobile';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { ImperativePanelHandle } from 'react-resizable-panels';
 
@@ -18,12 +19,16 @@ export interface UiContextProps {
   setUiLayout: (layout: number[]) => void;
   sidebarOpen: boolean;
   sidebarOpenChange: (open: boolean) => void;
+  sidebarOpenMobile: boolean;
+  setSidebarOpenMobile: (open: boolean) => void;
   toggleSidebar: () => void;
   // sidebarCollapsedSize: number;
   // sidebarMinSize: number;
   // sidebarMaxSize: number;
   rightPanelOpen: boolean;
   rightPanelOpenChange: (open: boolean) => void;
+  rightPanelOpenMobile: boolean;
+  setRightPanelOpenMobile: (open: boolean) => void;
   toggleRightPanel: () => void;
   // rightPanelCollapsedSize: number;
   // rightPanelMinSize: number;
@@ -48,10 +53,12 @@ export const UIProvider = ({
 	cookieSidebarOpen?: boolean
   cookieRightPanelOpen?: boolean
 }) => {
+  const isMobile = useIsMobile();
   // LAYOUT
   const [ uiLayout, setUiLayout ] = useState(defaultLayout);
   // *========== START SIDEBAR ==========*
   const [ sidebarOpen, setSidebarOpen ] = useState(cookieSidebarOpen);
+  const [ sidebarOpenMobile, setSidebarOpenMobile ] = useState(false);
   const sidebarCollapsedSize = 2;
   const sidebarMinSize = 14;
   const sidebarMaxSize = 20;
@@ -60,13 +67,16 @@ export const UIProvider = ({
     // Save to cookie
     document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
   }
-  const toggleSidebar = () => {
-    sidebarOpenChange(!sidebarOpen);
-  }
+  const toggleSidebar = React.useCallback(() => {
+    return isMobile
+      ? setSidebarOpenMobile((open) => !open)
+      : sidebarOpenChange(!sidebarOpen);
+  }, [isMobile, sidebarOpen, sidebarOpenChange]);
   // *========== END SIDEBAR ==========*
 
   // *========== START RIGHTPANEL ==========*
   const [ rightPanelOpen, setRightPanelOpen ] = useState(cookieRightPanelOpen);
+  const [ rightPanelOpenMobile, setRightPanelOpenMobile ] = useState(false);
   const rightPanelCollapsedSize = 0;
   const rightPanelMinSize = 20;
   const rightPanelMaxSize = 30;
@@ -75,9 +85,11 @@ export const UIProvider = ({
     // Save to cookie
     document.cookie = `${RIGHT_PANEL_COOKIE_NAME}=${open}; path=/; max-age=${RIGHT_PANEL_COOKIE_MAX_AGE}`;
   }
-  const toggleRightPanel = () => {
-    rightPanelOpenChange(!rightPanelOpen);
-  }
+  const toggleRightPanel = React.useCallback(() => {
+    return isMobile
+      ? setRightPanelOpenMobile((open) => !open)
+      : rightPanelOpenChange(!rightPanelOpen);
+  }, [isMobile, rightPanelOpen, rightPanelOpenChange]);
   
   // const [rightPanelContent, setRightPanelContent] = useState<React.ReactNode | null>(<FriendsList />);
   // const [rightPanelTitle, setRightPanelTitle] = useState<string | null>('Suivis');
@@ -95,6 +107,8 @@ export const UIProvider = ({
         uiLayout,
         setUiLayout,
         sidebarOpen,
+        sidebarOpenMobile,
+        setSidebarOpenMobile,
         sidebarOpenChange,
         toggleSidebar,
         // sidebarCollapsedSize,
@@ -102,6 +116,8 @@ export const UIProvider = ({
         // sidebarMaxSize,
         rightPanelOpen,
         rightPanelOpenChange,
+        rightPanelOpenMobile,
+        setRightPanelOpenMobile,
         toggleRightPanel,
 
         // rightPanelCollapsedSize,

@@ -19,9 +19,13 @@ export function AppLayout({
 	const [isMounted, setIsMounted] = React.useState(false)
 	const {
 		sidebarOpen,
+		sidebarOpenMobile,
+		setSidebarOpenMobile,
 		sidebarOpenChange,
 		rightPanelOpen,
 		rightPanelOpenChange,
+		rightPanelOpenMobile,
+		setRightPanelOpenMobile,
 		device,
 	} = useUI();
 
@@ -34,6 +38,8 @@ export function AppLayout({
 		<SidebarProvider
 		open={sidebarOpen}
 		onOpenChange={sidebarOpenChange}
+		openMobile={sidebarOpenMobile}
+		setOpenMobile={setSidebarOpenMobile}
 		className="min-h-screen"
 		>
 			<SidebarLeft />
@@ -41,12 +47,12 @@ export function AppLayout({
 				<Header isLogged={isLogged} className={`${device === "mobile" ? "hidden" : ""}`} />
 				{children}
 			</SidebarInset>
-			{/* ADD RIGHT SIDEBAR HERE */}
 			<SidebarProvider
 			open={rightPanelOpen}
 			onOpenChange={rightPanelOpenChange}
+			openMobile={rightPanelOpenMobile}
+			setOpenMobile={setRightPanelOpenMobile}
 			shortcut='p'
-			// className="min-h-screen"
 			noLayout
 			>
 				<SidebarRight />
