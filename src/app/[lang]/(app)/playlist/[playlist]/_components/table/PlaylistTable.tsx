@@ -160,13 +160,13 @@ export default function PlaylistTable({
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
-        delay: 150,
+        delay: 350,
         tolerance: 200,
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 250,
+        delay: 350,
         tolerance: 5,
       },
     })

@@ -4,44 +4,43 @@
   },
   "about": {
     "about": {
-      "label": "A propos",
-      "marquee": "Rien de plus excitant dans votre vie que de regarder les pages 'À propos' sur Internet ?",
-      "intro": "<strong>Recomend</strong> est un espace dédié à la découverte, à la recommandation et à l'organisation d'œuvres audiovisuelles. Tout y est conçu pour offrir au bouche-à-oreille le meilleur support numérique possible. Notre démarche est axée sur l’humain et ses relations à l’ère de la consommation autocentrée ou plutôt « recommandé pour vous ».",
+      "label": "About",
+      "marquee": "Nothing more exciting in your life than browsing 'About' pages on the Internet?",
+      "intro": "<strong>Recomend</strong> is a space dedicated to discovering, recommending, and organizing movies. Everything is designed to provide word-of-mouth with the best digital support possible. Our approach is focused on people and their relationships in the age of self-centered consumption, or rather 'recommended for you.'",
       "slogan": {
-        "1": "C’est sans publicités ni algorithmes.",
-        "2": "C’est un réseau social et un outil.",
-        "3": "C’est fait maison par des passionnés.",
-        "4": "C’est amateur au sens propre du terme."
+        "1": "It’s ad-free and without dubious promises. 🍆",
+        "2": "It’s both a social network and a tool.",
+        "3": "It’s homemade by enthusiasts.",
+        "4": "It’s amateur in the truest sense of the word."
       },
-      "last": "Recomend peut être utilisé seul ou à plusieurs, en public ou en privé, de jour comme de nuit mais jamais devant un film, concentrez-vous !"
+      "last": "Recomend can be used alone or with others, in public or private, day or night, but never in front of a movie, please focus!"
     },
-    "team": {
-      "label": "L'équipe",
-      "intro": "Recomend a été créé par deux frères passionnés de cinéma qui aiment investir leur temps dans des projets beaucoup trop ambitieux qu’ils ne sont pas sûrs de finir.",
+   "team": {
+      "label": "The Team",
+      "intro": "Recomend was created by two brothers passionate about cinema who love investing their time in overly ambitious projects that may never see the light of day.",
       "members": {
         "yoann": {
           "name": "Yoann",
-          "description": "Architecte-Ingénieur travaillant actuellement dans une agence d’architecture à Paris. Yoann est à l’origine du projet de réaliser une carte de films mais qui n’avait au départ que la modeste ambition de faire un poster à afficher dans ses toilettes. Un peu dépassé par l’ampleur qu’a pris le projet avec Loup, il se charge de toute la dimension graphique de la carte et du site. Il donne aussi son avis quand il peut sur les sujets UX/UI en essayant tant bien que mal de se rappeler de ses cours d’informatique. Il propose aussi beaucoup de fonctionnalités sympas à ajouter au site sans pour autant avoir conscience de la difficulté que cela représente à coder."
+          "description": "A hyperactive Architect-Engineer who can't be satisfied with just one job (the real start-up nation), Yoann is the originator of the idea to create a movie map, which initially had the modest ambition of being a poster for his bathroom. With Loup’s arrival, the goals skyrocketed, and feeling a bit overwhelmed, he handles all the graphic design for the map and the site, as well as all the communications (even though he doesn’t like it). He also shares his opinions on UX/UI and suggests many features without fully grasping how difficult they are to code (he’s made some progress)."
         },
         "loup": {
           "name": "Loup",
-          "description": "Autodidacte complet ayant quand même suivi des études qui ont mené vers le chômage non rémunéré à moins de 25 ans. Véritable couteau suisse, Loup se charge de la partie web design en codant une interface que l’on imagine la plus ergonomique possible. Il essaye également d’adapter la carte de Yoann sous une forme beaucoup plus interactive qu’un bout de papier et ce n’est vraiment pas une mince affaire. Loup aimerait remercier tous les forums de code qui ont répondu à ses (très) nombreuses sollicitations ainsi que tous les youtubeurs indiens qui l’ont accompagné pendant ces quelques mois tels des pères adoptifs."
+          "description": "A complete self-taught individual who still managed to pursue studies that led to unpaid unemployment before the age of 25. A true jack-of-all-trades, Loup handles the web design by coding an interface aimed to be as user-friendly as possible. Loup would like to thank all the coding forums that answered his (very) numerous questions, as well as all the Indian YouTubers who guided him like adoptive fathers throughout these months. His mother, meanwhile, is convinced that he has been enslaved by his brother for this project (he’s fine, mom)."
         }
       },
-      "last": "Pour échanger avec nous ou d’autres membres de la communauté, rejoins notre <link>Discord</link> !"
+      "last": "To connect with us or other community members, join our <link>Discord</link>!"
     },
     "pricing": {
-      "label": "Tarifs",
-      "intro": "Ce principe d’abonnement n’est pas un business mais un soutien pour faire vivre le projet et continuer de le développer.",
-      "subdescription": "*Si le prix extrêmement faible de cet abonnement reste au-dessus de vos moyens, veuillez-vous tourner vers votre gouvernement libéral responsable de votre perte de pouvoir d’achat"
+      "label": "Pricing",
+      "intro": "This subscription model is primarily a way to support the project and help it continue to grow. The premium features are bonuses for advanced use of Recomend, justifying a small financial contribution. We will always maintain the option to access the site for free, without ads, and without feeling restricted.",
+      "subdescription": "*If the extremely low price of this subscription is still beyond your means, please refer to your liberal government responsible for your loss of purchasing power."
     },
     "businessmodel": {
-      "label": "Business model",
+      "label": "Business Model",
       "paragraph": {
-        "1": "Au vu des profils dans l’équipe et de l’idéologie générale du projet, vous pouvez rapidement en déduire qu’il n’existe aucun business model…",
-        "2": "Cependant !",
-        "3": "Nous ne mettons pas de publicités. Ce qui est déjà une certaine forme de business model. Bon on a quand même mis en place un principe d’abonnement histoire de pas non plus couler le projet donc n’hésitez pas à nous soutenir.",
-        "4": "Ah oui, on a un shop aussi pour avoir des objets physiques parce que c’est bien aussi le réel."
+        "1": "As you might guess with our non-commercial profiles, we haven’t quite figured out what a business model could currently do for us...",
+        "2": "If Recomend’s future requires it, we’ll look into it by surrounding ourselves with the right people—or at least people more interested in it than we are.",
+        "3": "In the meantime, let’s be honest, there are other things to focus on."
       }
     },
     "roadmap": {
@@ -50,26 +49,27 @@
     "data": {
       "label": "Data",
       "paragraph": {
-        "1": "Toutes les métadonnées utilisées sur Recomend sont fournies par <link>The Movie Database (TMDb)</link> en utilisant l’API de la plateforme. Nous faisons exactement comme tout le monde.",
-        "2": "Pour toute erreur ou film manquant, veuillez donc vous tourner vers <link>TMDb</link>."
+        "1": "All the metadata used on Recomend is provided by <link>The Movie Database (TMDb)</link> through the platform’s API. We’re doing just like everyone else, like good sheep.",
+        "2": "For any errors or missing films, please refer to <link>TMDb</link>."
       }
     },
-    "ressources": {
-      "label": "Ressources",
-      "intro": "Ceci n’est pas forcément en lien avec le cinéma mais voici une liste non exhaustive de sites que l’on apprécie :"
+    "resources": {
+      "label": "Resources",
+      "intro": "This isn’t really related to cinema, but here’s a list of sites we like:"
     },
     "contact-support": {
       "label": "Contact & Support",
-      "help-center": "Trouve les réponses à tes questions existentielles dans notre <link>Help Center</link>.",
-      "technical-support": "Pour des questions techniques : <link>help@recomend.app</link>",
-      "suggest-a-feature": "Pour des suggestions : <link>ideas@recomend.app</link>",
-      "conact-us": "Pour simplement rentrer en contact avec nous : <link>contact@recomend.app</link>"
+      "help-center": "Find answers to your existential questions in our <link>Help Center</link>.",
+      "technical-support": "For technical questions: <link>help@recomend.app</link>",
+      "suggest-a-feature": "For suggestions: <link>ideas@recomend.app</link>",
+      "contact-us": "To simply get in touch with us: <link>contact@recomend.app</link>"
     },
     "quote": {
-      "label": "Citation",
-      "quote": "« Je déteste le mot professionnel. Tous les comédiens et les autres qui disent : Moi je suis professionnel, je suis un pro ! Qu’est-ce que c’est ça ? Est-ce qu’il y a un mot plus triste que ça ? Parce qu’amateur c’est basé sur le mot amour Il faut faire les choses pour love sinon nous sommes idiots. »",
+      "label": "Quote",
+      "quote": "« I hate the word professional. All the actors and others who say: I’m a professional, I’m a pro! What’s that about? Is there a sadder word? Because amateur comes from the word love. You have to do things for love, otherwise we’re fools. »",
       "author": "Orson Wells",
-      "date": "1972"
+      "date": "1972",
+      "subdescription": "*We hesitated to include it because it can quickly sound pretentious, but it reflects our mood about the project. However, if you don’t like it, we’ll remove it."
     }
   },
   "routes": {

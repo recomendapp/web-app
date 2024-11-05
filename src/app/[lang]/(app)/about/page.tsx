@@ -1,5 +1,6 @@
 import { Lang } from '@/types/type.i18n';
 import { Metadata } from 'next';
+import Marquee from "react-fast-marquee";
 
 import Pricing from '@/components/Subscription/Pricing';
 import {
@@ -24,7 +25,7 @@ export default async function About({
     getActiveProductsWithPrices(),
   ]);
 
-  const ressources = [
+  const resources = [
     {
       name: 'Eyecandy',
       link: 'https://eycndy.co',
@@ -90,17 +91,19 @@ export default async function About({
       link: 'https://www.fontbrief.com',
     },
   ];
+
+  console.log('buisness model', t('businessmodel.paragraph'));
   return (
     <main className="flex flex-col gap-4 items-center text-justify transition-all">
       {/* ABOUT */}
       <section id="about" className="w-full flex flex-col items-center gap-2">
-        {/* <Marquee pauseOnHover className=' bg-blue-700 py-1 uppercase z-0'>
+        <Marquee pauseOnHover className=' bg-blue-500 py-1 uppercase z-0'>
             {Array.from({ length: 3 }).map((_, index) => (
-              <p key={index} className='mr-8'>
+              <p key={index} className='mr-8 font-bold'>
                 {t('about.marquee')}
               </p>
             ))}
-          </Marquee> */}
+          </Marquee>
         <div className="px-4 flex flex-col gap-4 max-w-xl">
           <h2 className="text-center font-semibold text-3xl text-accent-1">
             {t('about.label')}
@@ -186,7 +189,6 @@ export default async function About({
         <p>{t('businessmodel.paragraph.1')}</p>
         <p>{t('businessmodel.paragraph.2')}</p>
         <p>{t('businessmodel.paragraph.3')}</p>
-        <p>{t('businessmodel.paragraph.4')}</p>
       </section>
       {/* ROADMAP */}
       <section
@@ -232,24 +234,24 @@ export default async function About({
           })}
         </p>
       </section>
-      {/* RESSOURCES */}
+      {/* RESOURCES */}
       <section
-        id="ressources"
+        id="resources"
         className="w-full flex flex-col gap-4 px-4 max-w-xl"
       >
         <h2 className="text-center font-semibold text-3xl text-accent-1">
-          {t('ressources.label')}
+          {t('resources.label')}
         </h2>
-        <p>{t('ressources.intro')}</p>
+        <p>{t('resources.intro')}</p>
         <ul className="space-y-2 list-disc">
-          {ressources.map((ressource, index) => (
+          {resources.map((resource, index) => (
             <li key={index}>
               <Link
-                href={ressource.link}
+                href={resource.link}
                 target="_blank"
                 className="underline underline-offset-2 hover:text-accent-pink"
               >
-                {ressource.name}
+                {resource.name}
               </Link>
             </li>
           ))}
@@ -343,6 +345,9 @@ export default async function About({
             </p>
           </div>
         </blockquote>
+        <p className="text-xs italic text-muted-foreground">
+          {t('quote.subdescription')}
+        </p>
       </section>
     </main>
   );
