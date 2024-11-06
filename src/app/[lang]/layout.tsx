@@ -6,6 +6,7 @@ import { fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import Providers from '@/context/Providers';
 import Script from 'next/script';
+import { getLangDir } from 'rtl-detect';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -70,8 +71,9 @@ export default async function LangLayout({
   children,
   params: { lang },
 }: RootLayoutProps) {
+  const direction = getLangDir(lang);
   return (
-    <html lang={lang} suppressHydrationWarning>
+    <html lang={lang} dir={direction} suppressHydrationWarning>
       <Script
         defer
         src={process.env.NEXT_PUBLIC_ANAYLTICS_URL}

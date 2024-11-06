@@ -5,25 +5,26 @@ import MovieReviewOverview from "@/components/Review/MovieReviewOverview";
 import ActivityIcon from '@/components/Review/ActivityIcon';
 import { cn } from "@/lib/utils";
 import { Heart } from "lucide-react";
+import { UserMovieActivity } from "@/types/type.db";
   
 export function FeedActivity({
 activity,
 className,
 }: {
-activity: any;
+activity: UserMovieActivity;
 className?: string;
 }) {
 	const t = useTranslations('feed');
   
 	return (
 	  <div className={cn("space-x-2", className)}>
-		{activity.review ? (
+		{activity?.review ? (
 		  <>
 			<span>
 			  {t.rich('user_movie_activity.reviewed', {
 				name: () => (
-				  <Link href={`/@${activity.user.username}`} className="text-foreground hover:underline">
-					{activity.user.username}
+				  <Link href={`/@${activity.user?.username}`} className="text-foreground hover:underline">
+					{activity.user?.username}
 				  </Link>
 				),
 				movie: () => (
@@ -34,32 +35,32 @@ className?: string;
 		  </>
 		) : (
 		  <>
-			{activity.is_liked && activity.rating ? (
+			{activity?.is_liked && activity?.rating ? (
 			  <span>
 				{t.rich('user_movie_activity.rated_liked', {
 				  name: () => (
-					<Link href={`/@${activity.user.username}`} className="text-foreground hover:underline">
-					  {activity.user.username}
+					<Link href={`/@${activity.user?.username}`} className="text-foreground hover:underline">
+					  {activity.user?.username}
 					</Link>
 				  ),
 				})}
 			  </span>
-			) : activity.is_liked && !activity.rating ? (
+			) : activity?.is_liked && !activity?.rating ? (
 			  <span>
 				{t.rich('user_movie_activity.liked', {
 				  name: () => (
-					<Link href={`/@${activity.user.username}`} className="text-foreground hover:underline">
-					  {activity.user.username}
+					<Link href={`/@${activity.user?.username}`} className="text-foreground hover:underline">
+					  {activity.user?.username}
 					</Link>
 				  ),
 				})}
 			  </span>
-			) : !activity.is_liked && activity.rating ? (
+			) : !activity?.is_liked && activity?.rating ? (
 			  <span>
 				{t.rich('user_movie_activity.rated', {
 				  name: () => (
-					<Link href={`/@${activity.user.username}`} className="text-foreground hover:underline">
-					  {activity.user.username}
+					<Link href={`/@${activity.user?.username}`} className="text-foreground hover:underline">
+					  {activity.user?.username}
 					</Link>
 				  ),
 				})}
@@ -68,17 +69,17 @@ className?: string;
 			  <span>
 				{t.rich('user_movie_activity.watched', {
 				  name: () => (
-					<Link href={`/@${activity.user.username}`} className="text-foreground hover:underline">
-					  {activity.user.username}
+					<Link href={`/@${activity?.user?.username}`} className="text-foreground hover:underline">
+					  {activity?.user?.username}
 					</Link>
 				  ),
 				})}
 			  </span>
 			)}
-		  	{activity.rating && (
+		  	{activity?.rating && (
 				<ActivityIcon movieId={activity.movie_id} rating={activity.rating} className="inline-flex"/>
 			)}
-			{activity.is_liked && (
+			{activity?.is_liked && (
 				<Heart
 					size={24}
 					className="text-background fill-accent-pink inline-flex"

@@ -7,61 +7,38 @@
     "openmaptiles:version": "3.x"
   },
   "sources": {
-    "environment-items": {
+    "paradise-pictures": {
       "type": "vector",
-      "url": "https://martin.recomend.app/environment-items"
-    },
-    "base": {"type": "vector", "url": "https://martin.recomend.app/base"},
-    "beach": {"type": "vector", "url": "https://martin.recomend.app/beach"},
-    "grass": {"type": "vector", "url": "https://martin.recomend.app/grass"},
-    "desert": {"type": "vector", "url": "https://martin.recomend.app/desert"},
-    "sports-field": {
-      "type": "vector",
-      "url": "https://martin.recomend.app/sports-field"
-    },
-    "mountain": {
-      "type": "vector",
-      "url": "https://martin.recomend.app/contour"
-    },
-    "trail": {"type": "vector", "url": "https://martin.recomend.app/trail"},
-    "secondary-road": {
-      "type": "vector",
-      "url": "https://martin.recomend.app/secondary-road"
-    },
-    "primary-road": {
-      "type": "vector",
-      "url": "https://martin.recomend.app/primary-road"
-    },
-    "train": {"type": "vector", "url": "https://martin.recomend.app/train"},
-    "highway": {"type": "vector", "url": "https://martin.recomend.app/highway"},
-    "buildings": {
-      "type": "vector",
-      "url": "https://martin.recomend.app/buildings"
-    },
-    "zones": {"type": "vector", "url": "https://martin.recomend.app/zones"}
+      "url": "https://martin.recomend.app/paradise_pictures"
+    }
   },
-  "sprite": "https://martin.recomend.app/sprite/sprites",
+  "sprite": "https://martin.recomend.app/sprite/paradise-pictures",
   "glyphs": "https://orangemug.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf",
   "layers": [
-    {"id": "background", "type": "background"},
+    {
+      "id": "background",
+      "type": "background",
+      "layout": {"visibility": "visible"}
+    },
     {
       "id": "beach",
       "type": "fill",
-      "source": "beach",
+      "source": "paradise-pictures",
       "source-layer": "beach",
+      "layout": {"visibility": "visible"},
       "paint": {"fill-color": "rgba(43, 47, 48, 1)"}
     },
     {
       "id": "base",
       "type": "fill",
-      "source": "base",
+      "source": "paradise-pictures",
       "source-layer": "base",
       "paint": {"fill-color": "rgba(32, 35, 38, 1)"}
     },
     {
       "id": "grass",
       "type": "fill",
-      "source": "grass",
+      "source": "paradise-pictures",
       "source-layer": "grass",
       "paint": {
         "fill-color": "rgba(87, 82, 59, 1)",
@@ -78,14 +55,14 @@
     {
       "id": "desert",
       "type": "fill",
-      "source": "desert",
+      "source": "paradise-pictures",
       "source-layer": "desert",
       "paint": {"fill-color": "#2b2f30"}
     },
     {
       "id": "sports-field-fill",
       "type": "fill",
-      "source": "sports-field",
+      "source": "paradise-pictures",
       "source-layer": "sports-field",
       "paint": {
         "fill-color": "rgba(87, 82, 59, 1)",
@@ -103,7 +80,7 @@
     {
       "id": "sports-field-line",
       "type": "line",
-      "source": "sports-field",
+      "source": "paradise-pictures",
       "source-layer": "sports-field",
       "paint": {
         "line-color": "rgba(232, 106, 55, 1)",
@@ -121,7 +98,7 @@
     {
       "id": "mountain",
       "type": "line",
-      "source": "mountain",
+      "source": "paradise-pictures",
       "source-layer": "contour",
       "layout": {"line-cap": "round", "line-join": "round"},
       "paint": {
@@ -140,7 +117,7 @@
     {
       "id": "trail",
       "type": "line",
-      "source": "trail",
+      "source": "paradise-pictures",
       "source-layer": "trail",
       "layout": {"line-cap": "round", "line-join": "round"},
       "paint": {
@@ -159,7 +136,7 @@
     {
       "id": "secondary-road",
       "type": "line",
-      "source": "secondary-road",
+      "source": "paradise-pictures",
       "source-layer": "secondary-road",
       "layout": {"line-cap": "round", "line-join": "round"},
       "paint": {
@@ -178,7 +155,7 @@
     {
       "id": "primary-road",
       "type": "line",
-      "source": "primary-road",
+      "source": "paradise-pictures",
       "source-layer": "primary-road",
       "layout": {"line-cap": "round", "line-join": "round"},
       "paint": {
@@ -197,7 +174,7 @@
     {
       "id": "highway-line",
       "type": "line",
-      "source": "highway",
+      "source": "paradise-pictures",
       "source-layer": "highway",
       "layout": {
         "visibility": "visible",
@@ -220,7 +197,7 @@
     {
       "id": "highway-fill",
       "type": "line",
-      "source": "highway",
+      "source": "paradise-pictures",
       "source-layer": "highway",
       "layout": {
         "visibility": "visible",
@@ -243,7 +220,7 @@
     {
       "id": "train",
       "type": "line",
-      "source": "train",
+      "source": "paradise-pictures",
       "source-layer": "train",
       "layout": {
         "line-cap": "round",
@@ -266,7 +243,7 @@
     {
       "id": "environment-items",
       "type": "symbol",
-      "source": "environment-items",
+      "source": "paradise-pictures",
       "source-layer": "environment-items",
       "maxzoom": 24,
       "layout": {
@@ -327,13 +304,14 @@
           8192
         ],
         "icon-allow-overlap": true,
-        "icon-rotation-alignment": "auto"
+        "icon-rotation-alignment": "auto",
+        "visibility": "visible"
       }
     },
     {
       "id": "buildings",
       "type": "symbol",
-      "source": "buildings",
+      "source": "paradise-pictures",
       "source-layer": "buildings",
       "layout": {
         "icon-size": [
@@ -501,13 +479,14 @@
           "none"
         ],
         "icon-allow-overlap": true,
-        "icon-rotation-alignment": "auto"
+        "icon-rotation-alignment": "auto",
+        "visibility": "visible"
       }
     },
     {
       "id": "zones",
       "type": "symbol",
-      "source": "zones",
+      "source": "paradise-pictures",
       "source-layer": "zones",
       "layout": {
         "icon-size": [
@@ -515,9 +494,9 @@
           ["exponential", 2],
           ["zoom"],
           0,
-          0.0015,
+          0.0004,
           24,
-          22937
+          6553.6
         ],
         "icon-allow-overlap": true,
         "icon-ignore-placement": false,
@@ -602,7 +581,8 @@
         ],
         "icon-optional": false,
         "icon-rotation-alignment": "map",
-        "text-field": ""
+        "text-field": "",
+        "visibility": "visible"
       }
     }
   ],

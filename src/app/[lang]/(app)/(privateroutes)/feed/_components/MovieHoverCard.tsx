@@ -1,8 +1,10 @@
 import MoviePoster from "@/components/Movie/MoviePoster";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Movie } from "@/types/type.db";
 import Link from "next/link";
 
-const MovieHoverCard = ({ movie }: { movie: any }) => {
+const MovieHoverCard = ({ movie }: { movie: Movie }) => {
+	if (!movie) return null;
 	return (
 	  <HoverCard>
 		<HoverCardTrigger asChild>
