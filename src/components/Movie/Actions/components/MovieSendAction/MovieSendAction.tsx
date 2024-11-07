@@ -19,6 +19,7 @@ import { ModalMovieSend } from '@/components/Modals/Movie/Actions/ModalMovieSend
 import { useState } from 'react';
 import Link from 'next/link';
 import { useModal } from '@/context/modal-context';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 interface MovieSendActionProps {
   movieId: number;
@@ -33,54 +34,33 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
 
   if (user === null) {
     return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            size="icon"
-            variant={'action'}
-            className="rounded-full"
-            asChild
-          >
-            <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
-              <Send />
-            </Link>
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">Connectez-vous</TooltipContent>
-      </Tooltip>
+      <TooltipBox tooltip={'Connectez-vous'}>
+        <Button
+          size="icon"
+          variant={'action'}
+          className="rounded-full"
+          asChild
+        >
+          <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
+            <Send />
+          </Link>
+        </Button>
+      </TooltipBox>
     );
   }
 
   return (
-    <>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            disabled={loading}
-            size="icon"
-            variant={'action'}
-            className="rounded-full"
-            // onClick={() => setOpenSendModal(true)}
-            onClick={() => openModal(ModalMovieSend, { movieId })}
-          >
-            {loading ? <Icons.spinner className="animate-spin" /> : <Send />}
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">Envoyer à un(e) ami(e)</TooltipContent>
-      </Tooltip>
-      {/* <Modal
-        open={openSendModal}
-        onOpenChange={setOpenSendModal}
-        header={{
-          title: 'Envoyer à',
-        }}
-        content={
-          <ModalMovieSend
-            onClose={() => setOpenSendModal(false)}
-            movieId={movieId} 
-          />
-        }
-      /> */}
-    </>
+    <TooltipBox tooltip={'Envoyer à un(e) ami(e)'}>
+      <Button
+        disabled={loading}
+        size="icon"
+        variant={'action'}
+        className="rounded-full"
+        // onClick={() => setOpenSendModal(true)}
+        onClick={() => openModal(ModalMovieSend, { movieId })}
+      >
+        {loading ? <Icons.spinner className="animate-spin" /> : <Send />}
+      </Button>
+    </TooltipBox>
   );
 }

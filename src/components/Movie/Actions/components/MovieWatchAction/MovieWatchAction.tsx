@@ -23,6 +23,7 @@ import toast from 'react-hot-toast';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 // GRAPHQL
 // import { useQuery, useMutation } from '@apollo/client';
@@ -118,87 +119,77 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
 
   if (user === null) {
     return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            size="icon"
-            variant={'action'}
-            className={`rounded-full hover:text-foreground`}
-            asChild
-          >
-            <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
-              <div
-                className={`transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[0.5px]`}
-              >
-                <Check />
-              </div>
-            </Link>
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          <p>Connectez-vous</p>
-        </TooltipContent>
-      </Tooltip>
+      <TooltipBox tooltip={'Connectez-vous'}>
+        <Button
+          size="icon"
+          variant={'action'}
+          className={`rounded-full hover:text-foreground`}
+          asChild
+        >
+          <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
+            <div
+              className={`transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[0.5px]`}
+            >
+              <Check />
+            </div>
+          </Link>
+        </Button>
+      </TooltipBox>
     );
   }
 
   return (
     <AlertDialog>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          {!activity ? (
+      <TooltipBox tooltip={activity ? 'Retirer des films vus' : 'Marquer comme vu'}>
+        {!activity ? (
+          <Button
+            onClick={async () => !activity && await insertActivityMutation()}
+            disabled={isLoading || isError || activity === undefined || isInsertPending || isDeletePending}
+            size="icon"
+            variant={'action'}
+            className={`rounded-full hover:text-foreground`}
+          >
+            {(isLoading || activity === undefined) ? (
+              <Icons.spinner className="animate-spin" />
+            ) : isError ? (
+              <AlertCircle />
+            ) : (
+              <div
+                className={`
+                    transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[0.5px]
+                    ${activity && 'bg-blue-500 border-blue-500'}
+                  `}
+              >
+                <Check />
+              </div>
+            )}
+          </Button>
+        ) : (
+          <AlertDialogTrigger disabled={!activity}>
             <Button
-              onClick={async () => !activity && await insertActivityMutation()}
-              disabled={isLoading || isError || activity === undefined || isInsertPending || isDeletePending}
+              disabled={(isLoading || isError) && true}
               size="icon"
               variant={'action'}
-              className={`rounded-full hover:text-foreground`}
+              className={`rounded-full`}
             >
-              {(isLoading || activity === undefined) ? (
+              {(isLoading || activity == undefined) ? (
                 <Icons.spinner className="animate-spin" />
               ) : isError ? (
                 <AlertCircle />
               ) : (
                 <div
                   className={`
-                      transition border-2 border-foreground hover:border-blue-500 hover:text-blue-500 rounded-full p-[0.5px]
-                      ${activity && 'bg-blue-500 border-blue-500'}
-                    `}
+                    border-2 hover:border-blue-500 rounded-full p-[0.5px]
+                    ${activity && 'bg-blue-500 border-blue-500'}
+                  `}
                 >
                   <Check />
                 </div>
               )}
             </Button>
-          ) : (
-            <AlertDialogTrigger disabled={!activity}>
-              <Button
-                disabled={(isLoading || isError) && true}
-                size="icon"
-                variant={'action'}
-                className={`rounded-full`}
-              >
-                {(isLoading || activity == undefined) ? (
-                  <Icons.spinner className="animate-spin" />
-                ) : isError ? (
-                  <AlertCircle />
-                ) : (
-                  <div
-                    className={`
-                      border-2 hover:border-blue-500 rounded-full p-[0.5px]
-                      ${activity && 'bg-blue-500 border-blue-500'}
-                    `}
-                  >
-                    <Check />
-                  </div>
-                )}
-              </Button>
-            </AlertDialogTrigger>
-          )}
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          {activity ? <p>Retirer des films vus</p> : <p>Marquer comme vu</p>}
-        </TooltipContent>
-      </Tooltip>
+          </AlertDialogTrigger>
+        )}
+      </TooltipBox>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Oula, tu es sûr ?</AlertDialogTitle>

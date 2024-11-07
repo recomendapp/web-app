@@ -81,7 +81,7 @@ export function ModalMovieSend({
 			className='gap-0 p-0 outline-none'
 		>
 			<ModalHeader className='px-4 pb-4 pt-5'>
-				<ModalTitle>Envoyer à un ami</ModalTitle>
+				<ModalTitle>Envoyer à un(e) ami(e)</ModalTitle>
 				<ModalDescription>
 					Recomender {movie?.title ? (<strong>{movie?.title}</strong>) : 'ce film'} à un ami pour lui faire découvrir.
 				</ModalDescription>

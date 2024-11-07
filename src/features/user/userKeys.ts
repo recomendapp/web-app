@@ -116,4 +116,15 @@ export const userKeys = {
 		userId: string,
 		filters?: any
 	) => filters ? [...userKeys.detail(userId), 'playlists-friends', filters] as const : [...userKeys.detail(userId), 'playlists-friends'] as const,
+
+	/**
+	 * Discover users
+	 * @param filters The filters (optional)
+	 * @returns The discovered users
+	 */
+	discovery: ({
+		filters,
+	} : {
+		filters?: any
+	}) => filters ? [...userKeys.all, 'discovery', filters] as const : [...userKeys.all, 'discovery'] as const,
 };

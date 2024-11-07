@@ -16,6 +16,7 @@ import { Icons } from '@/config/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 interface MovieWatchlistActionProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -127,58 +128,50 @@ export function MovieWatchlistAction({
 
   if (user === null) {
     return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            size="icon"
-            variant={'action'}
-            className={`rounded-full`}
-            asChild
-          >
-            <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
-              <Icons.watchlist />
-            </Link>
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          <p>Connectez-vous</p>
-        </TooltipContent>
-      </Tooltip>
+      <TooltipBox tooltip={'Connectez-vous'}>
+        <Button
+          size="icon"
+          variant={'action'}
+          className={`rounded-full`}
+          asChild
+        >
+          <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
+            <Icons.watchlist />
+          </Link>
+        </Button>
+      </TooltipBox>
     );
   }
 
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          onClick={async () => isWatchlisted ? await deleteWatchlistMutation() : await insertWatchlistMutation()}
-          disabled={isLoading || isError || activity === undefined || isInsertPending || isDeletePending}
-          size="icon"
-          variant={'action'}
-          className={`rounded-full`}
-        >
-          {(isLoading || isWatchlisted === undefined)  ? (
-            <Icons.spinner className="animate-spin" />
-          ) : isError ? (
-            <AlertCircle />
-          ) : (
-            <Icons.watchlist className={`${isWatchlisted && 'fill-foreground'}`} />
-          )}
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent side="bottom">
-        {activity ? (
-          isWatchlisted ? (
-            <p>Supprimer des films à revoir</p>
-          ) : (
-            <p>Envie de le revoir</p>
-          )
-        ) : isWatchlisted ? (
-          <p>Supprimer des films à voir</p>
+    <TooltipBox tooltip={
+      activity ? (
+        isWatchlisted ? (
+          'Supprimer des films à revoir'
         ) : (
-          <p>Envie de le voir</p>
+          'Envie de le revoir'
+        )
+      ) : isWatchlisted ? (
+        'Supprimer des films à voir'
+      ) : (
+        'Envie de le voir'
+      )
+    }>
+      <Button
+        onClick={async () => isWatchlisted ? await deleteWatchlistMutation() : await insertWatchlistMutation()}
+        disabled={isLoading || isError || activity === undefined || isInsertPending || isDeletePending}
+        size="icon"
+        variant={'action'}
+        className={`rounded-full`}
+      >
+        {(isLoading || isWatchlisted === undefined)  ? (
+          <Icons.spinner className="animate-spin" />
+        ) : isError ? (
+          <AlertCircle />
+        ) : (
+          <Icons.watchlist className={`${isWatchlisted && 'fill-foreground'}`} />
         )}
-      </TooltipContent>
-    </Tooltip>
+      </Button>
+    </TooltipBox>
   );
 }

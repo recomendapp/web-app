@@ -87,5 +87,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  // Issue when username contains a dot: https://github.com/lxup/recomend-web-app/issues/3
+  matcher: ["/((?!api|static|_next|favicon.ico|robots.txt)(?!.*\\/[^\\/]*\\.[^\\/]{2,4}$).*)"]
 };

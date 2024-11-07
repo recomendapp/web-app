@@ -31,6 +31,7 @@ import { EyeIcon, TextIcon } from 'lucide-react';
 import { Icons } from '@/config/icons';
 import { useDeletePlaylistItem } from '@/features/playlist/playlistMutations';
 import { usePlaylistIsAllowedToEdit } from '@/features/playlist/playlistQueries';
+import { ModalMovieSend } from '@/components/Modals/Movie/Actions/ModalMovieSend';
 
 
 interface DataTableRowActionsProps {
@@ -81,7 +82,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
         <DropdownMenuContent align="end" className="max-w-sm">
           <DropdownMenuItem asChild>
             <Link href={`/film/${data?.movie_id}`}>
-              <EyeIcon className='w-4' />
+              <Icons.eye className='w-4' />
               Voir le film
             </Link>
           </DropdownMenuItem>
@@ -89,28 +90,6 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
             movie={data?.movie}
             setOpen={setOpenShowDirectors}
           />
-          {/* COMMENT */}
-          {/* {isAllowedToEdit && (
-            <DropdownMenuItem
-              // onClick={() => openModal({
-              //   id: `playlist-item-${data?.id}-comment`,
-              //   content: <PlaylistCommentModal id={`playlist-item-${data?.id}-comment`} playlistItem={data!} />,
-              // })}
-              onClick={() => openModal(PlaylistCommentModal, { playlistItem: data! })}
-            >
-              {data?.comment ? 'Voir le commentaire' : 'Ajouter un commentaire'}
-            </DropdownMenuItem>
-          )}
-          {!isAllowedToEdit && data?.comment && (
-            <DropdownMenuItem
-              onClick={() => openModal({
-                id: `playlist-item-${data?.id}-comment`,
-                content: <PlaylistCommentModal id={`playlist-item-${data?.id}-comment`} playlistItem={data!} />,
-              })}
-            >
-              Voir le commentaire
-            </DropdownMenuItem>
-          )} */}
           {(isAllowedToEdit || data?.comment) && (
             <DropdownMenuItem
               onClick={() => openModal(PlaylistCommentModal, { playlistItem: data! })}
@@ -119,15 +98,18 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
               {data?.comment ? 'Voir le commentaire' : 'Ajouter un commentaire'}
             </DropdownMenuItem>
           )}
-          {/* PLAYLIST */}
-          {isAllowedToEdit && (
-            <DropdownMenuItem
-              onClick={() => openModal(ModalMoviePlaylist, { movieId: data?.movie_id!, movie: data?.movie })}
-            >
-              <Icons.addPlaylist className='w-4' />
-              Ajouter à une playlist
-            </DropdownMenuItem>
-          )}
+          <DropdownMenuItem
+            onClick={() => openModal(ModalMoviePlaylist, { movieId: data?.movie_id!, movie: data?.movie })}
+          >
+            <Icons.addPlaylist className='w-4' />
+            Ajouter à une playlist
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => openModal(ModalMovieSend, { movieId: data?.movie_id!, movie: data?.movie })}
+          >
+            <Icons.send className='w-4' />
+            Envoyer à un ami
+          </DropdownMenuItem>
 
           <DropdownMenuSeparator />
           <DropdownMenuItem>
@@ -142,7 +124,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
                 onConfirm: () => data && deletePlaylistItem({ playlistItemId: data.id, movieId: data.movie_id }),
               })}
             >
-              <Icons.trash />
+              <Icons.delete className='w-4' />
               Delete
             </DropdownMenuItem>
           )}
@@ -175,6 +157,7 @@ export function ShowDirectorsButton({
     return (
       <DropdownMenuItem asChild>
         <Link href={`/person/${movie.directors[0].slug ?? movie.directors[0].id}`}>
+          <Icons.user className='w-4' />
           Voir le réalisateur
         </Link>
       </DropdownMenuItem>
@@ -182,6 +165,7 @@ export function ShowDirectorsButton({
   }
   return (
     <DropdownMenuItem onClick={() => setOpen(true)}>
+      <Icons.user className='w-4' />
       Voir les réalisateurs
     </DropdownMenuItem>
   );

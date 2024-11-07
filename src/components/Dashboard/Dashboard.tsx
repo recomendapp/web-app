@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 import { WidgetUserFeed } from "../widgets/WidgetUserFeed";
 import { WidgetUserFriendsPlaylists } from "../widgets/WIdgetUserFriendsPlaylists";
 import { Skeleton } from "../ui/skeleton";
+import { WidgetUserDiscovery } from "../widgets/WidgetUserDiscovery";
 
 export const Dashboard = ({
 	isLogged,
@@ -30,13 +31,20 @@ export const Dashboard = ({
 				) : `Bienvenue sur ${siteConfig.name}.`}
 			</div>
 			<WidgetMoviesMostRecommended isLogged={isLogged} className='col-span-full' />
-			{!isLogged ? <WidgetRecomendShowcase className='col-span-full'/> : null}
+			{!isLogged ? (
+				// Only non-logged users
+				<>
+				<WidgetRecomendShowcase className='col-span-full'/>
+				</>
+			) : null}
 			{isLogged ? (
+				// Only logged users
 				<>
 				<WidgetUserMovieGuidelist />
 				<WidgetUserMovieWatchlist />
 				<WidgetUserFriendsPlaylists />
 				<WidgetUserFeed />
+				<WidgetUserDiscovery className="h-[600px]" />
 				</>
 			) : null}
 		</div>

@@ -13,6 +13,7 @@ import { ModalMoviePlaylist } from '@/components/Modals/Movie/Actions/ModalMovie
 import { Icons } from '@/config/icons';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 interface MoviePlaylistActionProps {
   movieId: number;
@@ -27,42 +28,32 @@ export function MoviePlaylistAction({ movieId }: MoviePlaylistActionProps) {
 
   if (user === null) {
     return (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              size="icon"
-              variant={'action'}
-              className="rounded-full"
-              asChild
-            >
-              <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
-                <Icons.addPlaylist />
-              </Link>
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">Connectez-vous</TooltipContent>
-        </Tooltip>
+        <TooltipBox tooltip={'Connectez-vous'}>
+          <Button
+            size="icon"
+            variant={'action'}
+            className="rounded-full"
+            asChild
+          >
+            <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
+              <Icons.addPlaylist />
+            </Link>
+          </Button>
+        </TooltipBox>
     );
   }
 
   return (
-  <>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            disabled={loading}
-            size="icon"
-            variant={'action'}
-            className="rounded-full"
-            onClick={() => openModal(ModalMoviePlaylist, { movieId })}
-          >
-            {loading ? <Icons.spinner className="animate-spin" /> : <Icons.addPlaylist />}
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          Ajouter à une playlist
-        </TooltipContent>
-      </Tooltip>
-    </>
+    <TooltipBox tooltip={'Ajouter à une playlist'}>
+      <Button
+        disabled={loading}
+        size="icon"
+        variant={'action'}
+        className="rounded-full"
+        onClick={() => openModal(ModalMoviePlaylist, { movieId })}
+      >
+        {loading ? <Icons.spinner className="animate-spin" /> : <Icons.addPlaylist />}
+      </Button>
+    </TooltipBox>
   );
 }

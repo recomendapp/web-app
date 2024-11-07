@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 interface MovieLikeActionProps extends React.HTMLAttributes<HTMLDivElement> {
   movieId: number;
@@ -128,59 +129,45 @@ export function MovieLikeAction({ movieId }: MovieLikeActionProps) {
 
   if (user === null) {
     return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            size="icon"
-            variant={'action'}
-            className="rounded-full"
-            asChild
-          >
-            <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
-              <Heart className={`transition hover:text-accent-pink`} />
-            </Link>
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          <p>Connectez-vous</p>
-        </TooltipContent>
-      </Tooltip>
+      <TooltipBox tooltip={'Connectez-vous'}>
+        <Button
+          size="icon"
+          variant={'action'}
+          className="rounded-full"
+          asChild
+        >
+          <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
+            <Heart className={`transition hover:text-accent-pink`} />
+          </Link>
+        </Button>
+      </TooltipBox>
     );
   }
 
 return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          onClick={() => {
-            activity?.is_liked ? handleUnlike() : handleLike();
-          }}
-          disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
-          size="icon"
-          variant={'action'}
-          className="rounded-full"
-        >
-          {(isLoading || activity === undefined) ? (
-            <Icons.spinner className="animate-spin" />
-          ) : isError ? (
-            <AlertCircle />
-          ) : (
-            <Heart
-              className={`
-                transition hover:text-accent-pink
-                ${activity?.is_liked && 'text-accent-pink fill-accent-pink'}
-              `}
-            />
-          )}
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent side="bottom">
-        {activity?.is_liked ? (
-          <p>Retirer des coups de coeur</p>
+    <TooltipBox tooltip={activity?.is_liked ? 'Retirer des coups de coeur' : 'Ajouter aux coups de coeur'}>
+      <Button
+        onClick={() => {
+          activity?.is_liked ? handleUnlike() : handleLike();
+        }}
+        disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
+        size="icon"
+        variant={'action'}
+        className="rounded-full"
+      >
+        {(isLoading || activity === undefined) ? (
+          <Icons.spinner className="animate-spin" />
+        ) : isError ? (
+          <AlertCircle />
         ) : (
-          <p>Ajouter aux coups de coeur</p>
+          <Heart
+            className={`
+              transition hover:text-accent-pink
+              ${activity?.is_liked && 'text-accent-pink fill-accent-pink'}
+            `}
+          />
         )}
-      </TooltipContent>
-    </Tooltip>
+      </Button>
+    </TooltipBox>
   );
 }

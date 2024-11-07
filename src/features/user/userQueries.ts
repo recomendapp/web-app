@@ -405,7 +405,7 @@ export const useUserFeedInfinite = ({
 	});
 }
 
-export const useUserPlaylistsFriends = ({
+export const useUserPlaylistsFriendsInfinite = ({
 	userId,
 	filters,
 } : {
@@ -457,5 +457,63 @@ export const useUserPlaylistsFriends = ({
 			return lastPage?.length == mergedFilters.resultsPerPage ? pages.length + 1 : undefined;
 		},
 		enabled: !!userId,
+	});
+}
+
+export const useUserDiscoveryInfinite = ({
+	filters,
+} : {
+	filters?: {
+		resultsPerPage?: number;
+		order?: 'created_at-desc' | 'created_at-asc' | 'popularity-desc' | 'popularity-asc';
+	};
+}) => {
+	const mergedFilters = {
+		resultsPerPage: 20,
+		order: 'created_at-desc',
+		...filters,
+	};
+	const supabase = useSupabaseClient();
+	return useInfiniteQuery({
+		queryKey: userKeys.discovery({
+			filters: mergedFilters,
+		}),
+		queryFn: async ({ pageParam = 1 }) => {
+			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
+	  		let to = from - 1 + mergedFilters.resultsPerPage;
+			let request = supabase
+				.from('user')
+				.select(`*`)
+				.range(from, to);
+
+			if (mergedFilters) {
+				if (mergedFilters.order) {
+					switch (mergedFilters.order) {
+						case 'created_at-desc':
+							request = request.order('created_at', { ascending: false });
+							break;
+						case 'created_at-asc':
+							request = request.order('created_at', { ascending: true });
+							break;
+						case 'popularity-desc':
+							request = request.order('followers_count', { ascending: false });
+							break;
+						case 'popularity-asc':
+							request = request.order('followers_count', { ascending: true });
+							break;
+						default:
+							break;
+					}
+				}
+			}
+			
+			const { data, error } = await request;
+			if (error) throw error;
+			return data;
+		},
+		initialPageParam: 1,
+		getNextPageParam: (lastPage, pages) => {
+			return lastPage?.length == mergedFilters.resultsPerPage ? pages.length + 1 : undefined;
+		},
 	});
 }

@@ -24,6 +24,7 @@ import toast from 'react-hot-toast';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 interface MovieRatingActionProps extends React.HTMLAttributes<HTMLDivElement> {
   movieId: number;
@@ -138,53 +139,39 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
 
   if (user === null) {
     return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant={'rating'}
-            asChild
-          >
-            <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
-              <Star />
-            </Link>
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          <p>Connectez-vous</p>
-        </TooltipContent>
-      </Tooltip>
+      <TooltipBox tooltip={'Connectez-vous'}>
+        <Button
+          variant={'rating'}
+          asChild
+        >
+          <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
+            <Star />
+          </Link>
+        </Button>
+      </TooltipBox>
     );
   }
 
   return (
     <Dialog>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <DialogTrigger asChild>
-            <Button
-              disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
-              variant={activity?.rating ? 'rating-enabled' : 'rating'}
-            >
-              {(isLoading || activity === undefined) ? (
-                <Icons.spinner className="animate-spin" />
-              ) : isError ? (
-                <AlertCircle />
-              ) : activity?.rating ? (
-                <p className="font-bold text-lg">{activity?.rating}</p>
-              ) : (
-                <Star />
-              )}
-            </Button>
-          </DialogTrigger>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          {activity?.rating ? (
-            <p>Modifier la note</p>
-          ) : (
-            <p>Ajouter une note</p>
-          )}
-        </TooltipContent>
-      </Tooltip>
+      <TooltipBox tooltip={activity?.rating ? 'Modifier la note' : 'Ajouter une note'}>
+        <DialogTrigger asChild>
+          <Button
+            disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
+            variant={activity?.rating ? 'rating-enabled' : 'rating'}
+          >
+            {(isLoading || activity === undefined) ? (
+              <Icons.spinner className="animate-spin" />
+            ) : isError ? (
+              <AlertCircle />
+            ) : activity?.rating ? (
+              <p className="font-bold text-lg">{activity?.rating}</p>
+            ) : (
+              <Star />
+            )}
+          </Button>
+        </DialogTrigger>
+      </TooltipBox>
       <DialogContent>
         <DialogHeader className="relative">
           <div className="absolute w-full flex justify-center -top-16">

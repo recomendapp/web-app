@@ -20,6 +20,7 @@ import { useFormatter, useLocale } from 'next-intl';
 import toast from 'react-hot-toast';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 interface MovieWatchedDateActionProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -82,33 +83,28 @@ export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
 
   return (
     <Popover>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <PopoverTrigger asChild>
-            <Button
-              disabled={isLoading || isError}
-              variant="action"
-              className={`rounded-full flex gap-4`}
-            >
-              <CalendarDays />
-              <div className="hidden sm:block">
-                {activity?.date ? (
-                  format.dateTime(new Date(activity?.date), {
-                    month: 'long',
-                    year: 'numeric',
-                    day: 'numeric',
-                  })
-                ) : (
-                  <span>Pick a date</span>
-                )}
-              </div>
-            </Button>
-          </PopoverTrigger>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          <p>Changer la date de visionnage</p>
-        </TooltipContent>
-      </Tooltip>
+      <TooltipBox tooltip={'Changer la date de visionnage'}>
+        <PopoverTrigger asChild>
+          <Button
+            disabled={isLoading || isError}
+            variant="action"
+            className={`rounded-full flex gap-4`}
+          >
+            <CalendarDays />
+            <div className="hidden sm:block">
+              {activity?.date ? (
+                format.dateTime(new Date(activity?.date), {
+                  month: 'long',
+                  year: 'numeric',
+                  day: 'numeric',
+                })
+              ) : (
+                <span>Pick a date</span>
+              )}
+            </div>
+          </Button>
+        </PopoverTrigger>
+      </TooltipBox>
       <PopoverContent className="w-auto p-0 flex flex-col justify-center">
         <Calendar
           locale={locale == 'fr' ? fr : enUS}
