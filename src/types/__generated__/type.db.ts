@@ -27,7 +27,7 @@ export type Database = {
       playlist: {
         Row: {
           created_at: string
-          description: string
+          description: string | null
           featured: boolean
           id: number
           items_count: number
@@ -40,7 +40,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          description: string
+          description?: string | null
           featured?: boolean
           id?: number
           items_count?: number
@@ -53,7 +53,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          description?: string
+          description?: string | null
           featured?: boolean
           id?: number
           items_count?: number
@@ -774,44 +774,44 @@ export type Database = {
         Row: {
           adult: boolean
           belongs_to_collection: number | null
-          budget: number | null
+          budget: number
           id: number
           original_language: string | null
           original_title: string | null
-          popularity: number | null
-          revenue: number | null
+          popularity: number
+          revenue: number
           status: string | null
           updated_at: string | null
-          vote_average: number | null
-          vote_count: number | null
+          vote_average: number
+          vote_count: number
         }
         Insert: {
           adult?: boolean
           belongs_to_collection?: number | null
-          budget?: number | null
+          budget?: number
           id?: number
           original_language?: string | null
           original_title?: string | null
-          popularity?: number | null
-          revenue?: number | null
+          popularity?: number
+          revenue?: number
           status?: string | null
           updated_at?: string | null
-          vote_average?: number | null
-          vote_count?: number | null
+          vote_average?: number
+          vote_count?: number
         }
         Update: {
           adult?: boolean
           belongs_to_collection?: number | null
-          budget?: number | null
+          budget?: number
           id?: number
           original_language?: string | null
           original_title?: string | null
-          popularity?: number | null
-          revenue?: number | null
+          popularity?: number
+          revenue?: number
           status?: string | null
           updated_at?: string | null
-          vote_average?: number | null
-          vote_count?: number | null
+          vote_average?: number
+          vote_count?: number
         }
         Relationships: [
           {
@@ -1007,40 +1007,40 @@ export type Database = {
       }
       tmdb_movie_images: {
         Row: {
-          aspect_ratio: number | null
+          aspect_ratio: number
           file_path: string
-          height: number | null
+          height: number
           id: number
           iso_639_1: string | null
           movie_id: number
           type: Database["public"]["Enums"]["image_type"]
-          vote_average: number | null
-          vote_count: number | null
-          width: number | null
+          vote_average: number
+          vote_count: number
+          width: number
         }
         Insert: {
-          aspect_ratio?: number | null
+          aspect_ratio?: number
           file_path: string
-          height?: number | null
+          height?: number
           id?: number
           iso_639_1?: string | null
           movie_id: number
           type: Database["public"]["Enums"]["image_type"]
-          vote_average?: number | null
-          vote_count?: number | null
-          width?: number | null
+          vote_average?: number
+          vote_count?: number
+          width?: number
         }
         Update: {
-          aspect_ratio?: number | null
+          aspect_ratio?: number
           file_path?: string
-          height?: number | null
+          height?: number
           id?: number
           iso_639_1?: string | null
           movie_id?: number
           type?: Database["public"]["Enums"]["image_type"]
-          vote_average?: number | null
-          vote_count?: number | null
-          width?: number | null
+          vote_average?: number
+          vote_count?: number
+          width?: number
         }
         Relationships: [
           {
@@ -1372,7 +1372,7 @@ export type Database = {
           iso_639_1: string
           movie_id: number
           overview: string | null
-          runtime: number | null
+          runtime: number
           tagline: string | null
           title: string | null
         }
@@ -1383,7 +1383,7 @@ export type Database = {
           iso_639_1: string
           movie_id: number
           overview?: string | null
-          runtime?: number | null
+          runtime?: number
           tagline?: string | null
           title?: string | null
         }
@@ -1394,7 +1394,7 @@ export type Database = {
           iso_639_1?: string
           movie_id?: number
           overview?: string | null
-          runtime?: number | null
+          runtime?: number
           tagline?: string | null
           title?: string | null
         }
@@ -1418,42 +1418,42 @@ export type Database = {
       tmdb_movie_videos: {
         Row: {
           id: string
-          iso_3166_1: string
-          iso_639_1: string
+          iso_3166_1: string | null
+          iso_639_1: string | null
           key: string
           movie_id: number
-          name: string
+          name: string | null
           official: boolean
           published_at: string
           site: string
-          size: number
-          type: string
+          size: number | null
+          type: string | null
         }
         Insert: {
           id: string
-          iso_3166_1: string
-          iso_639_1: string
+          iso_3166_1?: string | null
+          iso_639_1?: string | null
           key: string
           movie_id: number
-          name: string
+          name?: string | null
           official: boolean
           published_at: string
           site: string
-          size: number
-          type: string
+          size?: number | null
+          type?: string | null
         }
         Update: {
           id?: string
-          iso_3166_1?: string
-          iso_639_1?: string
+          iso_3166_1?: string | null
+          iso_639_1?: string | null
           key?: string
           movie_id?: number
-          name?: string
+          name?: string | null
           official?: boolean
           published_at?: string
           site?: string
-          size?: number
-          type?: string
+          size?: number | null
+          type?: string | null
         }
         Relationships: [
           {

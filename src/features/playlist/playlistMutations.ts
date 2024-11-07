@@ -7,6 +7,90 @@ import { meKeys } from '../me/meKeys';
 import toast from 'react-hot-toast';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
+
+/**
+ * Creates a new playlist
+ * @param userId The user id
+ * @returns The mutation
+ */
+export const useCreatePlaylist = ({
+	userId,
+} : {
+	userId?: string;
+}) => {
+	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({
+			title,
+			description,
+			private: isPrivate,
+			poster_url,
+		} : {
+			title: string;
+			description?: string;
+			private?: boolean;
+			poster_url?: string;
+		}) => {
+			if (!userId) throw Error('User id is missing');
+			const { data, error } = await supabase
+				.from('playlist')
+				.insert({
+					title,
+					description,
+					private: isPrivate,
+					poster_url,
+					user_id: userId,
+				})
+				.select(`*`)
+				.single();
+			if (error) throw error;
+			return data;
+		},
+		onSuccess: (data) => {
+			queryClient.invalidateQueries({
+				queryKey: userKeys.playlists(userId as string),
+			});
+			// Maybe update cache manually to avoid a new query
+		}
+	});
+}
+
+/**
+ * Deletes a playlist
+ * @param userId The user id
+ * @returns The mutation
+ */
+export const useDeletePlaylist = ({
+	userId,
+} : {
+	userId?: string;
+}) => {
+	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({
+			playlistId,
+		} : {
+			playlistId: number;
+		}) => {
+			if (!userId) throw Error('User id is missing');
+			const { error } = await supabase
+				.from('playlist')
+				.delete()
+				.eq('id', playlistId)
+			if (error) throw error;
+			return playlistId;
+		},
+		onSuccess: (playlistId) => {
+			queryClient.invalidateQueries({
+				queryKey: userKeys.playlists(userId as string),
+			});
+		}
+	});
+}
+
+
 /**
  * Adds a movie to a playlist
  * @param movieId The movie id

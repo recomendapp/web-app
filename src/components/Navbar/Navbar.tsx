@@ -76,7 +76,7 @@ export function Navbar({ className }: NavbarProps) {
         href={item.href}
         className={` opacity-100 ${
           !item.active && ' opacity-70'
-        } w-full h-full flex flex-col items-center justify-center text-center`}
+        } w-full h-full flex flex-col items-center justify-center text-center text-xs gap-1`}
       >
         <item.icon className="w-8" />
         {item.label}

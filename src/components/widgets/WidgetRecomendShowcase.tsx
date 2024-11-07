@@ -3,10 +3,12 @@ import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { siteConfig } from "@/config/site";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export const WidgetRecomendShowcase = ({
 	className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
+	const t = useTranslations('features');
 	if (!siteConfig.features.length) return null;
 	return (
 		<div className={cn('@container/widget-recomend-showcase space-y-4', className)}>
@@ -24,9 +26,10 @@ export const WidgetRecomendShowcase = ({
 					<CardHeader>
 						<CardTitle className="flex gap-2 items-center text-xl">
 							<feature.icon className={cn("w-4 text-accent-1", feature.iconClass)} />
-							{feature.label}
+							{/* {feature.label} */}
+							{t(`${feature.key}.label`)}
 						</CardTitle>
-						<CardDescription className="ml-6">{feature.description}</CardDescription>
+						<CardDescription className="ml-6">{t(`${feature.key}.description`)}</CardDescription>
 					</CardHeader>
 				</Card>
 			))}

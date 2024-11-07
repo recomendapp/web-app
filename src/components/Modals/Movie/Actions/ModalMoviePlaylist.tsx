@@ -12,11 +12,14 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Movie, Playlist, PlaylistType } from '@/types/type.db';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
-import { useAddMovieToPlaylists } from '@/features/playlist/playlistMutations';
+import { useAddMovieToPlaylists, useCreatePlaylist } from '@/features/playlist/playlistMutations';
 import { Icons } from '@/config/icons';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Label } from '@/components/ui/label';
 import { useMeAddMovieToPlaylist } from '@/features/me/meQueries';
+import { useQueryClient } from '@tanstack/react-query';
+import { meKeys } from '@/features/me/meKeys';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -31,10 +34,13 @@ export function ModalMoviePlaylist({
 	...props
 } : ModalMoviePlaylistProps) {
 	const { user } = useAuth();
+	const queryClient = useQueryClient();
 	const { closeModal } = useModal();
 	const [selectedPlaylists, setSelectedPlaylists] = useState<Playlist[]>([]);
 	const [comment, setComment] = useState<string>('');
 	const [type, setType] = useState<PlaylistType>('personal');
+	const [createPlaylist, setCreatePlaylist] = useState<boolean>(false);
+	const [createPlaylistName, setCreatePlaylistName] = useState<string>('');
 	const {
 		data: playlists,
 		isLoading,
@@ -49,6 +55,10 @@ export function ModalMoviePlaylist({
 		userId: user?.id,
 	});
 
+	const createPlaylistMutation = useCreatePlaylist({
+		userId: user?.id,
+	})
+
 	function submit() {
 		addMovieToPlaylist.mutate({
 			playlists: selectedPlaylists,
@@ -59,6 +69,32 @@ export function ModalMoviePlaylist({
 				closeModal(props.id);
 			},
 			onError: () => {
+				toast.error("Une erreur s\'est produite");
+			}
+		});
+	}
+
+	function handleCreatePlaylist() {
+		createPlaylistMutation.mutate({
+			title: createPlaylistName,
+		}, {
+			onSuccess: (playlist) => {
+				// Update the cache
+				queryClient.setQueryData(meKeys.addMovieToPlaylistType({
+					movieId: movieId,
+					type: 'personal',
+				}), (prev: { playlist: Playlist; already_added: boolean }[] | undefined) => {
+					if (!prev) return [{ playlist, already_added: false }];
+					return [
+						{ playlist, already_added: false },
+						...prev,
+					];
+				});
+				setSelectedPlaylists((prev) => [...prev, playlist]);
+				setCreatePlaylist(false);
+				setCreatePlaylistName('');
+			},
+			onError: (error: any) => {
 				toast.error("Une erreur s\'est produite");
 			}
 		});
@@ -86,20 +122,63 @@ export function ModalMoviePlaylist({
 						</TabsList>
 					</Tabs>
 					<CommandList>
-						{isLoading && (
-							<div className="flex items-center justify-center p-4">
-								<Icons.loader />
-							</div>
-						)}
-						<CommandEmpty>No playlists found.</CommandEmpty>
 						<CommandGroup className="p-2">
+							{/* QUICK CREATE PLAYLIST */}
+							{type === 'personal' ? (
+								<>
+								{createPlaylist ? (
+									<>
+									<Label htmlFor="playlist" className="sr-only">Playlist Name</Label>
+									<div className='relative'>
+										<Input
+											placeholder="Nom de la playlist"
+											className="w-full pr-20"
+											value={createPlaylistName}
+											onChange={(e) => setCreatePlaylistName(e.target.value)}
+										/>
+										<div className='absolute top-1/2 right-2 transform -translate-y-1/2 flex items-center gap-2'>
+											<TooltipBox tooltip='Créer'>
+												<Button
+												variant={'ghost'}
+												size={'icon'}
+												className="text-muted-foreground hover:text-primary h-6 w-6"
+												onClick={handleCreatePlaylist}
+												>
+													<Icons.check size={20} />
+												</Button>
+											</TooltipBox>
+											<TooltipBox tooltip='Annuler'>
+												<Button
+												variant={'ghost'}
+												size={'icon'}
+												className="text-muted-foreground hover:text-primary h-6 w-6"
+												onClick={() => setCreatePlaylist(false)}
+												>
+													<Icons.close size={20} />
+												</Button>
+											</TooltipBox>
+										</div>
+									</div>
+									</>
+								) : (
+								<Button
+								variant={'ghost'}
+								className=" w-full"
+								onClick={() => setCreatePlaylist(true)}
+								>
+									<Icons.add size={20} className="mr-2" />
+									Créer une nouvelle playlist
+								</Button>
+								)}
+								<CommandSeparator className='my-1' />
+							</>) : null}
 							{playlists?.map(({playlist, already_added }) => (
 								<CommandItem
 									key={playlist.id}
 									value={`${playlist.title} ${playlist.id}`}
 									className="flex items-center justify-between px-2"
 									onSelect={() => {
-										if (selectedPlaylists.includes(playlist)) {
+										if (selectedPlaylists.some((selectPlaylist) => selectPlaylist?.id === playlist.id)) {
 											return setSelectedPlaylists((prev) => prev.filter(
 												(selectPlaylist) => selectPlaylist?.id !== playlist.id
 											))
@@ -108,7 +187,7 @@ export function ModalMoviePlaylist({
 									}}
 								>
 									<div className="flex items-center">
-										<div className={`w-[40px] shadow-2xl`}>
+										<div className={`w-[40px] shadow-2xl shrink-0`}>
 											<AspectRatio ratio={1 / 1}>
 												<ImageWithFallback
 													src={playlist?.poster_url ?? ''}
@@ -134,11 +213,17 @@ export function ModalMoviePlaylist({
 												Déjà ajouté
 											</Badge>
 										)}
-										<Check size={20} className={`text-primary ${!selectedPlaylists.includes(playlist) && 'opacity-0'}`} />
+										<Check size={20} className={`text-primary ${!selectedPlaylists.some((selectedPlaylist) => selectedPlaylist?.id === playlist?.id) ? 'opacity-0' : ''}`} />
 									</div>
 								</CommandItem>
 							))}
 						</CommandGroup>
+						{isLoading && (
+							<div className="flex items-center justify-center p-4">
+								<Icons.loader />
+							</div>
+						)}
+						<CommandEmpty>No playlists found.</CommandEmpty>
 					</CommandList>
 				</Command>
 			</ModalBody>

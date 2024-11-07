@@ -156,5 +156,47 @@
       "rated_liked": "<name></name> liked and rated",
       "reviewed": "<name></name> reviewed"
     }
+  },
+  "features": {
+    "tracking": {
+      "label": "Tracking",
+      "description": "Keep an eye on the films you have seen"
+    },
+    "recos": {
+      "label": "Recos",
+      "description": "Send films recommendations to your friends"
+    },
+    "explore": {
+      "label": "Explore",
+      "description": "Discover new films on Paradise Pictures, an interactive map with more than 1400 films"
+    },
+    "like": {
+      "label": "Like",
+      "description": "Show your love for your favorite films, playlists and reviews"
+    },
+    "rating": {
+      "label": "Rating",
+      "description": "Rate the films you have seen"
+    },
+    "watchlist": {
+      "label": "Watchlist",
+      "description": "Save films you want to see"
+    },
+    "playlists": {
+      "label": "Playlists",
+      "description": "Organize your films in playlists and share them"
+    },
+    "reviews": {
+      "label": "Reviews",
+      "description": "Write reviews to bring out the bitter cinephile in you"
+    },
+    "feed": {
+      "label": "Feed",
+      "description": "Follow your friends' activity"
+    },
+    "adsFree": {
+      "label": "Sans publicités",
+      "description": "Enjoy Recomend without ads, forever"
+    }
   }
 }

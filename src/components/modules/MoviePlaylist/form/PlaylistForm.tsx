@@ -39,19 +39,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-// GRAPHQL
-// import { useMutation } from '@apollo/client';
-// import CREATE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/CreatePlaylist';
-// import UPDATE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/UpdatePlaylist';
-// import DELETE_PLAYLIST_MUTATION from '@/graphql/Playlist/Playlist/mutations/DeletePlaylist';
-// import GET_PLAYLISTS_BY_USER_ID from '@/graphql/Playlist/Playlist/queries/GetPlaylistsByUserId';
-// import INSERT_PLAYLIST_ITEM_MUATION from '@/graphql/Playlist/PlaylistItem/mutations/InsertPlaylistItemMutation';
-// import { CreatePlaylistMutation, DeletePlaylistMutation, GetPlaylistsByUserIdQuery, PlaylistFragment, UpdatePlaylistMutation } from '@/graphql/__generated__/graphql';
 import { Playlist } from '@/types/type.db';
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { playlistKeys } from '@/features/playlist/playlistKeys';
+import { useDeletePlaylist } from '@/features/playlist/playlistMutations';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -76,6 +68,10 @@ export function PlaylistForm({
   const [loading, setLoading] = useState(false);
 
   const [newPoster, setNewPoster] = useState<File>();
+
+  const deletePlaylistMutation = useDeletePlaylist({
+    userId: user?.id,
+  })
 
   const { mutateAsync: insertPlaylistMutation } = useMutation({
     mutationFn: async (
@@ -134,33 +130,33 @@ export function PlaylistForm({
     }
   });
 
-  const { mutateAsync: deletePlaylistMutation } = useMutation({
-    mutationFn: async ({
-      playlistId
-    } : {
-      playlistId: number
-    }) => {
-      if (!playlistId) throw Error('Missing playlist id');
-      const { error } = await supabase
-        .from('playlist')
-        .delete()
-        .eq('id', playlistId)
-      if (error) throw error;
-      return (playlist);
-    },
-    onSuccess: (data, variables) => {
-      queryClient.setQueryData(['user', user?.id, 'playlists', { order: 'updated_at-desc'}], (oldData: any) => {
-        if (!oldData || !oldData.pages) {
-            return oldData;
-        }
-        const updatedPages = oldData.pages.map((page: Playlist[]) => {
-            return page.filter((playlist) => playlist?.id !== data?.id);
-        });
-        return { ...oldData, pages: updatedPages };
-      });
-      queryClient.setQueryData(playlistKeys.detail(data?.id as number), null);
-    }
-  });
+  // const { mutateAsync: deletePlaylistMutation } = useMutation({
+  //   mutationFn: async ({
+  //     playlistId
+  //   } : {
+  //     playlistId: number
+  //   }) => {
+  //     if (!playlistId) throw Error('Missing playlist id');
+  //     const { error } = await supabase
+  //       .from('playlist')
+  //       .delete()
+  //       .eq('id', playlistId)
+  //     if (error) throw error;
+  //     return (playlist);
+  //   },
+  //   onSuccess: (data, variables) => {
+  //     queryClient.setQueryData(['user', user?.id, 'playlists', { order: 'updated_at-desc'}], (oldData: any) => {
+  //       if (!oldData || !oldData.pages) {
+  //           return oldData;
+  //       }
+  //       const updatedPages = oldData.pages.map((page: Playlist[]) => {
+  //           return page.filter((playlist) => playlist?.id !== data?.id);
+  //       });
+  //       return { ...oldData, pages: updatedPages };
+  //     });
+  //     queryClient.setQueryData(playlistKeys.detail(data?.id as number), null);
+  //   }
+  // });
 
   const CreatePlaylistFormSchema = z.object({
     title: z
@@ -272,17 +268,21 @@ export function PlaylistForm({
   }
 
   async function handleDeletePlaylist() {
-    if (!playlist?.id) throw Error('Missing activity id');
     try {
       setLoading(true);
-      const deletedPlaylist = await deletePlaylistMutation({
-        playlistId: playlist?.id,
+      if (!playlist?.id) throw Error('Missing activity id');
+      await deletePlaylistMutation.mutateAsync({
+        playlistId: playlist.id,
+      }, {
+        onSuccess: () => {
+          if (pathname.startsWith(`/playlist/${playlist.id}`)) router.push('/');
+          toast.success('Supprimé');
+          success();
+        },
+        onError: () => {
+          toast.error("Une erreur s'est produite");
+        }
       });
-      if (pathname.startsWith(`/playlist/${playlist.id}`)) router.push('/');
-      toast.success('Supprimé');
-      success();
-    } catch(error) {
-      toast.error("Une erreur s'est produite");
     } finally {
       setLoading(false);
     }

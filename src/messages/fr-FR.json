@@ -155,5 +155,47 @@
       "rated_liked": "<name></name> a liké et noté",
       "reviewed": "<name></name> a écrit une critique"
     }
+  },
+  "features": {
+    "tracking": {
+      "label": "Suivi",
+      "description": "Gardez un œil sur les films que vous avez vus"
+    },
+    "recos": {
+      "label": "Recos",
+      "description": "Envoyez des recommandations de films à vos amis"
+    },
+    "explore": {
+      "label": "Explorer",
+      "description": "Découvrez de nouveaux films sur Paradise Pictures, une carte interactive avec plus de 1400 films"
+    },
+    "like": {
+      "label": "Like",
+      "description": "Montrez votre amour pour vos films, playlists et critiques préférés"
+    },
+    "rating": {
+      "label": "Notation",
+      "description": "Notez les films que vous avez vus"
+    },
+    "watchlist": {
+      "label": "Watchlist",
+      "description": "Ajoutez des films à votre liste de films à voir"
+    },
+    "playlists": {
+      "label": "Playlists",
+      "description": "Organisez vos films dans des playlists et partagez-les"
+    },
+    "reviews": {
+      "label": "Critiques",
+      "description": "Écrivez des critiques pour faire ressortir le cinéphile aigri qui est en vous"
+    },
+    "feed": {
+      "label": "Feed",
+      "description": "Suivez l'activité de vos amis"
+    },
+    "adsFree": {
+      "label": "Sans publicités",
+      "description": "Profitez de Recomend sans publicités, pour toujours"
+    }
   }
 }

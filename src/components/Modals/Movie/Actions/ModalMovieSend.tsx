@@ -103,7 +103,7 @@ export function ModalMovieSend({
 									value={`@${friend.full_name} ${friend.username}`}
 									className="flex items-center justify-between px-2"
 									onSelect={() => {
-										if (selectedUsers.includes(friend)) {
+										if (selectedUsers.some((selectedUser) => selectedUser?.id === friend?.id)) {
 											return setSelectedUsers((prev) => prev.filter(
 												(selectedUser) => selectedUser?.id !== friend?.id
 											))
@@ -133,7 +133,7 @@ export function ModalMovieSend({
 												Déjà vu
 											</Badge>
 										)}
-										<Check size={20} className={`text-primary ${!selectedUsers.includes(friend) ? 'opacity-0' : ''}`} />
+										<Check size={20} className={`text-primary ${!selectedUsers.some((selectedUser) => selectedUser?.id === friend?.id) ? 'opacity-0' : ''}`} />
 									</div>
 								</CommandItem>
 							))}
