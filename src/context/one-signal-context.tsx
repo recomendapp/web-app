@@ -5,8 +5,6 @@ import OneSignal from 'react-onesignal';
 import { useAuth } from './auth-context';
 import Script from 'next/script';
 
-const oneSignalAppId = process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!;
-
 export const OneSignalContext = ({
   children,
 }: {
@@ -25,16 +23,16 @@ export const OneSignalContext = ({
     if (oneSignalInitialized) {
       return;
     }
-    setOneSignalInitialized(true);
     await OneSignal.init({
-      appId: oneSignalAppId,
+      appId: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID!,
+      safari_web_id: process.env.NEXT_PUBLIC_ONESIGNAL_SAFARI_WEB_ID,
       // notifyButton: {
-      //     enable: true,
-      // },
-      allowLocalhostAsSecureOrigin: true,
-    });
-    await OneSignal.login(uid);
-    OneSignal.Slidedown.promptPush();
+        //     enable: true,
+        // },
+        allowLocalhostAsSecureOrigin: true,
+      });
+      await OneSignal.login(uid);
+      setOneSignalInitialized(true);
   };
 
   useEffect(() => {
@@ -44,8 +42,7 @@ export const OneSignalContext = ({
 
   return (
     <>
-      {/* <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer /> */}
-      {/* <Script async src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" /> */}
+      {/* <Script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer /> */}
       {children}
     </>
   );

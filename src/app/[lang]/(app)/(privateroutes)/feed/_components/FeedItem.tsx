@@ -46,7 +46,7 @@ const FeedItem = ({ activity }: { activity?: UserMovieActivity }) => {
 					<FeedActivity activity={activity} className="text-sm @md/feed-item:text-base text-muted-foreground"/>
 				</div>
 				<div className='hidden @md/feed-item:block text-sm text-muted-foreground opacity-0 group-hover:opacity-100 duration-500'>
-					{format.relativeTime(new Date(activity.created_at), new Date())}
+					{format.relativeTime(new Date(activity.date), new Date())}
 				</div>
 			</div>
 			{activity.review ? (

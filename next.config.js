@@ -1,6 +1,6 @@
 const withPWA = require('@ducanh2912/next-pwa').default({
   dest: 'public',
-  customWorkerSrc: 'service-worker',
+  customWorkerSrc: 'worker',
   register: true,
   skipWaiting: true,
   disable: process.env.NODE_ENV === 'development',

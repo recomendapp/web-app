@@ -91,8 +91,6 @@ export const UIProvider = ({
       : rightPanelOpenChange(!rightPanelOpen);
   }, [isMobile, rightPanelOpen, rightPanelOpenChange]);
   
-  // const [rightPanelContent, setRightPanelContent] = useState<React.ReactNode | null>(<FriendsList />);
-  // const [rightPanelTitle, setRightPanelTitle] = useState<string | null>('Suivis');
   // *========== END RIGHTPANEL ==========*
 
   // *========== IS MOBILE ==========*
@@ -111,22 +109,11 @@ export const UIProvider = ({
         setSidebarOpenMobile,
         sidebarOpenChange,
         toggleSidebar,
-        // sidebarCollapsedSize,
-        // sidebarMinSize,
-        // sidebarMaxSize,
         rightPanelOpen,
         rightPanelOpenChange,
         rightPanelOpenMobile,
         setRightPanelOpenMobile,
         toggleRightPanel,
-
-        // rightPanelCollapsedSize,
-        // rightPanelMinSize,
-        // rightPanelMaxSize,
-        // rightPanelContent,
-        // setRightPanelContent,
-        // rightPanelTitle,
-        // setRightPanelTitle,
         device,
       }}
     >

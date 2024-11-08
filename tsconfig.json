@@ -31,7 +31,7 @@
     "src/components/Editor/Editor.tsx",
     "src/components/elements/ModalFollowers",
     "src/components/RightSidebar",
-    "service-worker/index.js"
+    "worker/index.js"
   ],
   "exclude": ["node_modules"]
 }

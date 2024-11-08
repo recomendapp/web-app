@@ -356,12 +356,12 @@ export const useUserFeedInfinite = ({
 	userId?: string;
 	filters?: {
 		resultsPerPage?: number;
-		order?: 'created_at-desc' | 'created_at-asc';
+		order?: 'created_at-desc' | 'created_at-asc' | 'date-desc' | 'date-asc';
 	};
 }) => {
 	const mergedFilters = {
 		resultsPerPage: 20,
-		order: 'created_at-desc',
+		order: 'date-desc',
 		...filters,
 	};
 	const supabase = useSupabaseClient();
@@ -384,6 +384,12 @@ export const useUserFeedInfinite = ({
 			if (mergedFilters) {
 				if (mergedFilters.order) {
 					switch (mergedFilters.order) {
+						case 'date-desc':
+							request = request.order('date', { ascending: false });
+							break;
+						case 'date-asc':
+							request = request.order('date', { ascending: true });
+							break;
 						case 'created_at-desc':
 							request = request.order('created_at', { ascending: false });
 							break;

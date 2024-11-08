@@ -51,7 +51,7 @@ const CardUserMovieActivityDefault = React.forwardRef<
 						<FeedActivity activity={activity} className="text-sm @md/feed-item:text-base text-muted-foreground"/>
 					</div>
 					<div className='text-sm text-muted-foreground opacity-0 group-hover:opacity-100 duration-500'>
-						{format.relativeTime(new Date(activity?.created_at ?? ''), new Date())}
+						{format.relativeTime(new Date(activity?.date ?? ''), new Date())}
 					</div>
 				</div>
 				<Link href={`/film/${activity?.movie?.slug ?? activity?.movie_id}`} className="space-y-2">
