@@ -37,6 +37,16 @@ export const userKeys = {
 			search?: string | null
 		}
 	) => filters ? [...userKeys.detail(userId), 'followers', filters] as const : [...userKeys.detail(userId), 'followers'] as const,
+
+	/**
+	 * Fetches followers requests of a user
+	 * @param userId The user id
+	 * @returns List of followers requests
+	 */
+	followersRequests: (
+		userId: string,
+	) => [...userKeys.detail(userId), 'followers-requests'] as const,
+
 	/**
 	 * Fetches followees of a user
 	 * @param userId The user id

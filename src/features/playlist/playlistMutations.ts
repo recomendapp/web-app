@@ -164,7 +164,6 @@ export const useAddMoviesToPlaylist = ({
 	playlist: Playlist;
 }) => {
 	const supabase = useSupabaseClient();
-	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async ({
 			movies,
@@ -193,6 +192,11 @@ export const useAddMoviesToPlaylist = ({
 		// onSuccess: () => {
 		// 	queryClient.invalidateQueries(playlistKeys.detail(playlistId));
 		// }
+		meta: {
+			invalidates: [
+				// TODO: Add the playlist key
+			]
+		}
 	});
 }
 

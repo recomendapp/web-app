@@ -5,6 +5,7 @@ import { UserNav } from '../User/UserNav/UserNav';
 import { Button } from '../ui/button';
 import Link from 'next/link';
 import FollowedUserListButton from '../FollowedUsers/FollowedUserListButton';
+// import { NovuInbox } from '../novu/NovuInbox';
 
 export default function HeaderRightSide({
   isLogged,
@@ -17,6 +18,7 @@ export default function HeaderRightSide({
     <div className={cn('flex items-center gap-4', className)}>
       {isLogged ? (
         <>
+          {/* <NovuInbox /> */}
           <FollowedUserListButton />
           <UserNav />
         </>

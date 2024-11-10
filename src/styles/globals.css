@@ -148,7 +148,6 @@
   }
 }
 
-
 @layer base {
   body {
     @apply select-none;

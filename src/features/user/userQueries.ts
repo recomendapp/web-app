@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { userKeys } from "./userKeys"
 import { useSupabaseClient } from '@/context/supabase-context';
-import { Playlist, PlaylistType, UserFriend, UserMovieActivity } from "@/types/type.db";
+import { Playlist, UserFollower, UserMovieActivity } from "@/types/type.db";
 
 export const useUserSearch = ({
 	filters,
@@ -147,6 +147,34 @@ export const useUserFollowersInfinite = ({
 };
 
 /**
+ * Fetches the user followers requests
+ * @param userId The user id
+ * @returns The user followers requests
+*/
+export const useUserFollowersRequests = ({
+	userId,
+} : {
+	userId?: string;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.followersRequests(userId as string),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			const { data, error } = await supabase
+				.from('user_follower')
+				.select('id, user:user_id!inner(*)')
+				.eq('followee_id', userId)
+				.eq('is_pending', true)
+				.returns<UserFollower[]>();
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId,
+	});
+}
+
+/**
  * Fetches the user followees
  * @param userId The user id
  * @param filters The filters
@@ -185,7 +213,8 @@ export const useUserFolloweesInfinite = ({
 						.ilike(`followee.username`, `${filters.search}%`)
 				}
 			}
-			const { data, error } = await query;
+			const { data, error } = await query
+				.returns<UserFollower[]>();
 			if (error) throw error;
 			return data;
 		},

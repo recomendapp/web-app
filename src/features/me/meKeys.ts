@@ -31,7 +31,6 @@ export const meKeys = {
 
 	/**
 	 * Fetches playlists to add a movie with a type
-	 * @param userId The user id
 	 * @param movieId The movie id
 	 * @param type The playlist type
 	 * @returns List of playlists

@@ -42,7 +42,7 @@ export default function AuthError() {
         </CardHeader>
         <CardContent className='grid gap-4'>
           <Alert>
-            <AlertTitle>{errorMsg}</AlertTitle>
+            <AlertTitle className='select-all'>{errorMsg}</AlertTitle>
           </Alert>
         </CardContent>
         <CardFooter>

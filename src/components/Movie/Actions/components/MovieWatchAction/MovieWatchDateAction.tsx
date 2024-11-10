@@ -112,6 +112,9 @@ export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
           selected={new Date(activity?.date)}
           onSelect={async (date) => date && await updateDate(date)}
           initialFocus
+          captionLayout="dropdown-buttons"
+          fromDate={new Date('1900-01-01')}
+          toDate={new Date()}
         />
       </PopoverContent>
     </Popover>

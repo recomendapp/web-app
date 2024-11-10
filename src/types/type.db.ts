@@ -18,6 +18,12 @@ export type UserFriend = Database['public']['Tables']['user_friend']['Row'] & {
 	user: User;
 };
 
+// *========== USER_FOLLOW ==========* //
+export type UserFollower = Database['public']['Tables']['user_follower']['Row'] & {
+	followee: User;
+	user: User;
+};
+
 // *========== USER_MOVIE_ACTIVITY ==========* //
 export type UserMovieActivity = Database['public']['Tables']['user_movie_activity']['Row'] & {
 	movie?: Movie;

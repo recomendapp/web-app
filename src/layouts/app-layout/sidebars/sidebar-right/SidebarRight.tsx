@@ -1,40 +1,35 @@
+import { Button } from "@/components/ui/button";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarRail, SidebarSeparator, useSidebar } from "@/components/ui/sidebar";
+import { Icons } from "@/config/icons";
 import { useUI } from "@/context/ui-context";
 
 export const SidebarRight = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
 	const { toggleSidebar, open } = useSidebar();
+	const { rightPanel } = useUI();
 	return (
 		<Sidebar
 		collapsible="offcanvas"
 		side="right"
-		className=""
-		// className="sticky hidden lg:flex top-0 h-full border-l"
 		{...props}
 		>
-			<SidebarHeader className="h-header justify-center">
-				Work in progress
-				{/* <SidebarMenu>
-					<SidebarMenuItem>
-						<SidebarMenuButton
-						size="lg"
-						className={`data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex items-center ${open ? "justify-start" : "justify-center"}`}
-						onClick={toggleSidebar}
-						>
-							{open ? (
-								<Icons.site.logo className={`fill-accent-1 ${open ? "w-3/4" : "w-0"}`} />
-							) : (
-								<Icons.site.icon className={`fill-accent-1 ${open ? "w-8" : "w-4"}`} />
-							)}
-						</SidebarMenuButton>
-					</SidebarMenuItem>
-				</SidebarMenu> */}
+			<SidebarHeader className="h-header flex-row items-center justify-between">
+				{rightPanel.title}
+				<Button
+				variant={'ghost'}
+				size={'icon'}
+				onClick={toggleSidebar}
+				className="rounded-full h-6 w-6"
+				>
+					<span className="sr-only">Close</span>
+					<Icons.close className="w-4 h-4" />
+				</Button>
 			</SidebarHeader>
 			<SidebarSeparator />
 			<SidebarContent>
-				{/* <SidebarLeftRoutes /> */}
+				<rightPanel.component {...rightPanel.props} />
 			</SidebarContent>
 			<SidebarSeparator />
-			<SidebarFooter>
+			{/* <SidebarFooter>
 				<SidebarMenu>
 					<SidebarMenuItem>
 						<SidebarMenuButton
@@ -44,27 +39,7 @@ export const SidebarRight = ({ ...props }: React.ComponentProps<typeof Sidebar>)
 						</SidebarMenuButton>
 					</SidebarMenuItem>
 				</SidebarMenu>
-				{/* <SidebarMenu>
-					<SidebarMenuItem>
-						<SidebarMenuButton
-						size="lg"
-						className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex justify-center items-center"
-						>
-							<Link
-							href={"https://oneummah.org.uk/appeals/gaza-emergency-appeal/"}
-							target="_blank"
-							>
-								<ImageWithFallback
-								src="/assets/free-palestine-min.webp"
-								alt="Free Palestine"
-								width={80}
-								height={80}
-								/>
-							</Link>
-						</SidebarMenuButton>
-					</SidebarMenuItem>
-				</SidebarMenu> */}
-			</SidebarFooter>
+			</SidebarFooter> */}
 			<SidebarRail />
 		</Sidebar>
 	);

@@ -9,8 +9,12 @@ export async function GET(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   try {
     const code = requestUrl.searchParams.get('code');
+    // Get error from Supabase OAuth2 callback
+    const errorParam = requestUrl.searchParams.get('error');
+    const errorDescriptionParam = requestUrl.searchParams.get('error_description');
     const next = requestUrl.searchParams.get('next');
     const redirect = requestUrl.searchParams.get('redirect');
+    if (errorParam && !code) throw new Error(errorDescriptionParam || 'Something went wrong');
     if (!code) throw new Error('No code provided');
     const supabase = createServerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);

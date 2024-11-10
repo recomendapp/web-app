@@ -61,7 +61,7 @@ export function ProfileFolloweesModal({
 			<ScrollArea className="flex flex-col gap-2 border-2 rounded-md h-[60vh]">
 			{followees?.pages[0]?.length ? (
 				followees?.pages.map((page, i) => (
-					page?.map(({ followee } : { followee: any }, index) => (
+					page?.map(({ followee }, index) => (
 						<Link
 							href={`/@${followee?.username}`}
 							key={followee?.id}

@@ -1,5 +1,6 @@
 'use client';
 
+import { RightPanelSocial } from '@/components/sidebar/right-panel/RightPanelSocial';
 import { Device, useDevice } from '@/hooks/use-device';
 import { useIsMobile } from '@/hooks/use-mobile';
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
@@ -29,7 +30,21 @@ export interface UiContextProps {
   rightPanelOpenChange: (open: boolean) => void;
   rightPanelOpenMobile: boolean;
   setRightPanelOpenMobile: (open: boolean) => void;
-  toggleRightPanel: () => void;
+  rightPanel: {
+    title: string;
+    component: React.ComponentType<any>;
+    props: any;
+  };
+  toggleRightPanel: (open?: boolean) => void;
+  toggleRightPanelContent: <P,>({
+    title,
+    component,
+    props,
+  } : {
+    title: string;
+    component: React.ComponentType<P>;
+    props: P;
+  }) => void;
   // rightPanelCollapsedSize: number;
   // rightPanelMinSize: number;
   // rightPanelMaxSize: number;
@@ -77,6 +92,11 @@ export const UIProvider = ({
   // *========== START RIGHTPANEL ==========*
   const [ rightPanelOpen, setRightPanelOpen ] = useState(cookieRightPanelOpen);
   const [ rightPanelOpenMobile, setRightPanelOpenMobile ] = useState(false);
+  const [ rightPanel, setRightPanel ] = useState<{
+    title: string;
+    component: React.ComponentType<any>;
+    props: any;
+  }>(RightPanelSocial());
   const rightPanelCollapsedSize = 0;
   const rightPanelMinSize = 20;
   const rightPanelMaxSize = 30;
@@ -85,11 +105,29 @@ export const UIProvider = ({
     // Save to cookie
     document.cookie = `${RIGHT_PANEL_COOKIE_NAME}=${open}; path=/; max-age=${RIGHT_PANEL_COOKIE_MAX_AGE}`;
   }
-  const toggleRightPanel = React.useCallback(() => {
-    return isMobile
-      ? setRightPanelOpenMobile((open) => !open)
-      : rightPanelOpenChange(!rightPanelOpen);
+  const toggleRightPanel = React.useCallback((open?: boolean) => {
+    const newState = open !== undefined ? open : !rightPanelOpen;
+    
+    if (isMobile) {
+      setRightPanelOpenMobile(newState);
+    } else {
+      rightPanelOpenChange(newState);
+    }
   }, [isMobile, rightPanelOpen, rightPanelOpenChange]);
+
+  const toggleRightPanelContent = <P,>(content : {
+    title: string;
+    component: React.ComponentType<P>;
+    props: P;
+  }) => {
+    const isSameContent = rightPanel?.title === content.title && rightPanel?.component === content.component && JSON.stringify(rightPanel?.props) === JSON.stringify(content.props);
+    if (isSameContent) {
+      toggleRightPanel();
+    } else {
+      setRightPanel(content)
+      if (!rightPanelOpen) toggleRightPanel(true);
+    }
+  }
   
   // *========== END RIGHTPANEL ==========*
 
@@ -104,16 +142,20 @@ export const UIProvider = ({
       value={{
         uiLayout,
         setUiLayout,
+        // Sidebar
         sidebarOpen,
         sidebarOpenMobile,
         setSidebarOpenMobile,
         sidebarOpenChange,
         toggleSidebar,
+        // RightPanel
         rightPanelOpen,
         rightPanelOpenChange,
         rightPanelOpenMobile,
         setRightPanelOpenMobile,
+        rightPanel,
         toggleRightPanel,
+        toggleRightPanelContent,
         device,
       }}
     >

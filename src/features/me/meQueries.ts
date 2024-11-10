@@ -3,7 +3,6 @@ import { useSupabaseClient } from '@/context/supabase-context';
 import { PlaylistType, UserFriend } from "@/types/type.db";
 import { meKeys } from "./meKeys";
 
-
 /**
  * Fetches the user playlists to add a movie
  * @param userId The user id
