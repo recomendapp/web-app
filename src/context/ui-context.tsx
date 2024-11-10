@@ -106,7 +106,9 @@ export const UIProvider = ({
     document.cookie = `${RIGHT_PANEL_COOKIE_NAME}=${open}; path=/; max-age=${RIGHT_PANEL_COOKIE_MAX_AGE}`;
   }
   const toggleRightPanel = React.useCallback((open?: boolean) => {
-    const newState = open !== undefined ? open : !rightPanelOpen;
+    const newState = open !== undefined ?
+      open :
+      isMobile ? !rightPanelOpenMobile : !rightPanelOpen;
     
     if (isMobile) {
       setRightPanelOpenMobile(newState);
@@ -125,7 +127,7 @@ export const UIProvider = ({
       toggleRightPanel();
     } else {
       setRightPanel(content)
-      if (!rightPanelOpen) toggleRightPanel(true);
+      toggleRightPanel(true);
     }
   }
   

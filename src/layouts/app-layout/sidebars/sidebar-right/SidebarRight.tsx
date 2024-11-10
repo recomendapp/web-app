@@ -4,7 +4,7 @@ import { Icons } from "@/config/icons";
 import { useUI } from "@/context/ui-context";
 
 export const SidebarRight = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
-	const { toggleSidebar, open } = useSidebar();
+	const { toggleSidebar } = useSidebar();
 	const { rightPanel } = useUI();
 	return (
 		<Sidebar
@@ -28,18 +28,6 @@ export const SidebarRight = ({ ...props }: React.ComponentProps<typeof Sidebar>)
 			<SidebarContent>
 				<rightPanel.component {...rightPanel.props} />
 			</SidebarContent>
-			<SidebarSeparator />
-			{/* <SidebarFooter>
-				<SidebarMenu>
-					<SidebarMenuItem>
-						<SidebarMenuButton
-						onClick={toggleSidebar}
-						>
-							Close
-						</SidebarMenuButton>
-					</SidebarMenuItem>
-				</SidebarMenu>
-			</SidebarFooter> */}
 			<SidebarRail />
 		</Sidebar>
 	);
