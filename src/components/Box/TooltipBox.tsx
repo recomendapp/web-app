@@ -5,7 +5,7 @@ import {
 } from '@/components/ui/tooltip';
 import { TooltipContentProps, TooltipPortal, TooltipTriggerProps } from '@radix-ui/react-tooltip';
 
-interface TooltipBoxProps extends React.HTMLAttributes<HTMLDivElement> {
+interface TooltipBoxProps extends React.ComponentProps<typeof TooltipContent> {
 	children: React.ReactNode;
 	tooltip?: string | TooltipContentProps;
 	tooltipTrigger?: TooltipTriggerProps;

@@ -4,8 +4,9 @@ import { cn } from '@/lib/utils';
 import { UserNav } from '../User/UserNav/UserNav';
 import { Button } from '../ui/button';
 import Link from 'next/link';
-import FollowedUserListButton from '../FollowedUsers/FollowedUserListButton';
 // import { NovuInbox } from '../novu/NovuInbox';
+import { SocialButton } from './components/SocialButton';
+import { NotificationsButton } from './components/NotificationsButton';
 
 export default function HeaderRightSide({
   isLogged,
@@ -19,7 +20,8 @@ export default function HeaderRightSide({
       {isLogged ? (
         <>
           {/* <NovuInbox /> */}
-          <FollowedUserListButton />
+          <NotificationsButton />
+          <SocialButton />
           <UserNav />
         </>
       ) : (

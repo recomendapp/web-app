@@ -32,6 +32,7 @@ import { useLocale } from 'next-intl';
 import ActivityIcon from '@/components/Review/ActivityIcon';
 import { Movie, MoviePerson, UserMovieActivity } from '@/types/type.db';
 import { useState } from 'react';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 interface MovieCardProps {
   movie: Movie;
@@ -65,8 +66,7 @@ export default function MovieCard({
     return (
       <ContextMenu>
         <ContextMenuTrigger>
-          <Tooltip delayDuration={500}>
-            <TooltipTrigger asChild>
+          <TooltipBox tooltip={`${movie.title} (${movie.release_date && (new Date(movie.release_date)).getFullYear()})`} side='top'>
               <div
                 className="group transition flex gap-4 items-center relative border-2 border-transparent hover:border-accent-1 rounded-md"
                 onMouseEnter={() => setIsHovered(true)}
@@ -118,14 +118,7 @@ export default function MovieCard({
                   </div>
                 </div>
               </div>
-            </TooltipTrigger>
-            <TooltipContent className="flex flex-col gap-2">
-              <p className=" text-center line-clamp-1 whitespace-nowrap">
-                {movie.title} ({movie.release_date && (new Date(movie.release_date)).getFullYear()})
-              </p>
-              {/* <MovieAction movie.id={movie.id} rating like watch playlist send /> */}
-            </TooltipContent>
-          </Tooltip>
+          </TooltipBox>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-64">
           <ContextMenuItem inset>

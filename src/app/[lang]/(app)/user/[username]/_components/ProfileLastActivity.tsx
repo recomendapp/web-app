@@ -6,20 +6,14 @@ import MovieCard from '@/components/Movie/Card/MovieCard';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useLocale } from 'next-intl';
 
 // QUERY
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { UserMovieActivity, UserProfile } from '@/types/type.db';
-import { useSupabaseClient } from '@/context/supabase-context';
+import { UserProfile } from '@/types/type.db';
+import { useUserMovieActivitiesInfinite } from '@/features/user/userQueries';
 
 export default function ProfileLastActivity({ profile }: { profile: UserProfile }) {
-  const supabase = useSupabaseClient();
-  const locale = useLocale();
 
   const { ref, inView } = useInView();
-
-  const numberOfResult = 10;
 
   const {
     data: activities,
@@ -27,34 +21,9 @@ export default function ProfileLastActivity({ profile }: { profile: UserProfile 
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['user', profile?.id, 'activity', { order: 'updated_at-desc'}],
-    queryFn: async ({ pageParam = 1 }) => {
-      if (!profile?.id || !locale) throw Error('Missing profile id or locale');
-      let from = (pageParam - 1) * numberOfResult;
-      let to = from - 1 + numberOfResult;
-
-      const { data, error } = await supabase
-        .from('user_movie_activity')
-        .select(`
-          *,
-          user(*),
-          review:user_movie_review(*),
-          movie(*)
-        `)
-        .eq('user_id', profile.id)
-        .range(from, to)
-        .order('updated_at', { ascending: false})
-        .returns<UserMovieActivity[]>();
-      if (error) throw error;
-      return data;
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => {
-      return lastPage?.length == numberOfResult ? pages.length + 1 : undefined;
-    },
-    enabled: !!profile?.id && !!locale,
-  });
+  } = useUserMovieActivitiesInfinite({
+    userId: profile?.id ?? undefined,
+  })
 
   useEffect(() => {
     if (inView && hasNextPage)

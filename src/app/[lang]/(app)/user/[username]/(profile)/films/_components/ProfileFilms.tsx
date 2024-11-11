@@ -16,29 +16,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-// GRAPHQL
-import { useLocale } from 'next-intl';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { useSupabaseClient } from '@/context/supabase-context';
+import { useUserMovieActivitiesInfinite } from '@/features/user/userQueries';
 
 export default function ProfileFilms({
   userId
 } : {
   userId: string,
 }) {
-  const supabase = useSupabaseClient();
-  const locale = useLocale();
-
-  const [selectedOrder, setSelectedOrder] = useState('watch-desc');
-
-  const [order, setOrder] = useState<any>([{ date: 'DescNullsFirst' }]);
+  const [order, setOrder] = useState<"date-desc" | "date-asc">("date-desc");
 
   const [displayMode, setDisplayMode] = useState<'grid' | 'row'>('grid');
 
   const { ref, inView } = useInView();
-
-  const numberOfResult = 20;
 
   const {
     data: activities,
@@ -46,75 +35,32 @@ export default function ProfileFilms({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['user', userId, 'activities', { order: 'updated_at-desc'}],
-    queryFn: async ({ pageParam = 1 }) => {
-      let from = (pageParam - 1) * numberOfResult;
-      let to = from - 1 + numberOfResult;
-
-      const { data, error } = await supabase
-        .from('user_movie_activity')
-        .select(`
-          *,
-          user(*),
-          review:user_movie_review(*),
-          movie(
-            *,
-            directors:tmdb_movie_credits(
-              *,
-              person:person(*)
-            )
-          )
-        `)
-        .eq('user_id', userId)
-        .eq('movie.directors.job', 'Director')
-        .range(from, to)
-        .order('updated_at', { ascending: false});
-      if (error) throw error;
-      return data;
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => {
-      return lastPage?.length == numberOfResult ? pages.length + 1 : undefined;
-    },
-    enabled: !!userId && !!locale,
-  });
+  } = useUserMovieActivitiesInfinite({
+    userId: userId,
+    filters: {
+      order: order,
+    }
+  })
 
   useEffect(() => {
     if (inView && hasNextPage)
       fetchNextPage();
    }, [inView, hasNextPage, activities, fetchNextPage]);
 
-  const changeOrder = (orderSelected: string) => {
-    if (orderSelected === 'watch-desc')
-      setOrder([{ date: 'DescNullsFirst' }]);
-    else if (orderSelected === 'watch-asc')
-      setOrder([{ date: 'AscNullsLast' }]);
-    else if (orderSelected === 'rating-desc')
-      setOrder([{ rating: 'DescNullsFirst' }]);
-    else if (orderSelected === 'rating-asc')
-      setOrder([{ rating: 'AscNullsLast' }]);
-    else if (orderSelected === 'like-desc')
-      setOrder([{ created_at: 'DescNullsFirst' }]);
-    else if (orderSelected === 'like-asc')
-      setOrder([{ created_at: 'AscNullsLast' }]);
-    setSelectedOrder(orderSelected);
-  };
-
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between gap-4 items-center">
         <h3 className="font-semibold text-xl">Films</h3>
         <div className="flex gap-2">
-          <Select onValueChange={changeOrder} defaultValue={selectedOrder}>
+          <Select onValueChange={(value) => setOrder(value as any)} defaultValue={order}>
             <SelectTrigger className="w-fit">
               <SelectValue />
             </SelectTrigger>
             <SelectContent align="end">
               <SelectGroup>
                 <SelectLabel>Vus</SelectLabel>
-                <SelectItem value={'watch-desc'}>Plus récents</SelectItem>
-                <SelectItem value={'watch-asc'}>Plus anciens</SelectItem>
+                <SelectItem value={'date-desc'}>Plus récents</SelectItem>
+                <SelectItem value={'date-asc'}>Plus anciens</SelectItem>
               </SelectGroup>
               <SelectSeparator />
               <SelectGroup>
@@ -125,11 +71,11 @@ export default function ProfileFilms({
                 <SelectItem value={'rating-asc'}>Notes croissantes</SelectItem>
               </SelectGroup>
               <SelectSeparator />
-              <SelectGroup>
+              {/* <SelectGroup>
                 <SelectLabel>Coups de coeur</SelectLabel>
                 <SelectItem value={'like-desc'}>Plus récents</SelectItem>
                 <SelectItem value={'like-asc'}>Plus anciens</SelectItem>
-              </SelectGroup>
+              </SelectGroup> */}
               {/* <SelectItem value={"rating-desc"}>Notes décroissantes</SelectItem> */}
             </SelectContent>
           </Select>

@@ -63,6 +63,13 @@ export const userKeys = {
 	movies: (userId: string) => [...userKeys.detail(userId), 'movies'] as const,
 	movie: (userId: string, movieId: string) => [...userKeys.movies(userId), movieId] as const,
 	movieActivity: (userId: string, movieId: string) => [...userKeys.movie(userId, movieId), 'activity'] as const,
+	movieActivities: ({
+		userId,
+		filters,
+	} : {
+		userId: string;
+		filters?: any;
+	}) => filters ? [...userKeys.detail(userId), 'activities', filters] as const : [...userKeys.detail(userId), 'activities'] as const,
 	/**
 	 * Fetches the user's guidelist
 	 * @param userId The user id
@@ -95,12 +102,13 @@ export const userKeys = {
 	 * @param filters The filters (optional)
 	 * @returns The user's playlists
 	 */
-	playlists: (
-		userId: string,
-		filters?: {
-			order?: 'updated_at-desc' | 'updated_at-asc'
-		}
-	) => filters ? [...userKeys.detail(userId), 'playlists', filters] as const : [...userKeys.detail(userId), 'playlists'] as const,
+	playlists: ({
+		userId,
+		filters,
+	} : {
+		userId: string;
+		filters?: any;
+	}) => filters ? [...userKeys.detail(userId), 'playlists', filters] as const : [...userKeys.detail(userId), 'playlists'] as const,
 
 	/**
 	 * Fetches the user's feed
@@ -122,10 +130,13 @@ export const userKeys = {
 	 * @param filters The filters (optional)
 	 * @returns The playlists of friends
 	 */
-	playlistsFriends: (
-		userId: string,
-		filters?: any
-	) => filters ? [...userKeys.detail(userId), 'playlists-friends', filters] as const : [...userKeys.detail(userId), 'playlists-friends'] as const,
+	playlistsFriends: ({
+		userId,
+		filters,
+	} : {
+		userId: string;
+		filters?: any;
+	}) => filters ? [...userKeys.detail(userId), 'playlists-friends', filters] as const : [...userKeys.detail(userId), 'playlists-friends'] as const,
 
 	/**
 	 * Discover users

@@ -32,3 +32,4 @@ export const SidebarRight = ({ ...props }: React.ComponentProps<typeof Sidebar>)
 		</Sidebar>
 	);
 }
+ 

@@ -49,7 +49,9 @@ export const useCreatePlaylist = ({
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({
-				queryKey: userKeys.playlists(userId as string),
+				queryKey: userKeys.playlists({
+					userId: userId as string,
+				}),
 			});
 			// Maybe update cache manually to avoid a new query
 		}
@@ -84,7 +86,9 @@ export const useDeletePlaylist = ({
 		},
 		onSuccess: (playlistId) => {
 			queryClient.invalidateQueries({
-				queryKey: userKeys.playlists(userId as string),
+				queryKey: userKeys.playlists({
+					userId: userId as string,
+				}),
 			});
 		}
 	});

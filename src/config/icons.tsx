@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils';
 import {
   AlertTriangle,
   ArrowRight,
+  BellIcon,
   BookmarkIcon,
   Check,
   CheckIcon,
@@ -185,6 +186,7 @@ export const Icons = {
   loader: ({ className, ...props }: LucideProps) => (
     <Icons.spinner className={cn('animate-spin', className)} {...props} />
   ),
+  bell: BellIcon,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   trash: Trash,

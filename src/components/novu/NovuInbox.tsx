@@ -31,8 +31,8 @@ export const NovuInbox = () => {
 	subscriberId={user.id}
 	subscriberHash={hmac(user.id, process.env.NEXT_PUBLIC_NOVU_API_KEY!)}
 	tabs={tabs}
-	backendUrl="https://eu.api.novu.co"
-  	socketUrl="https://eu.ws.novu.co"
+	// backendUrl="https://eu.api.novu.co"
+  	// socketUrl="https://eu.ws.novu.co"
 	routerPush={(path) =>  router.push(path)}
 	localization={{
 		locale: locale,
