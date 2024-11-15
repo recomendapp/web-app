@@ -10,14 +10,14 @@ import { useUserFolloweesInfinite, useUserFollowersRequests } from "@/features/u
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useInView } from "react-intersection-observer";
+import { createRightPanel } from "./RightPanelUtils";
 
-export const RightPanelSocial = () => {
-	return {
-		title: 'Social',
-		component: RightPanelSocialContent,
-		props: {},
-	}
-}
+export const RightPanelSocial = () => createRightPanel({
+	title: 'Social',
+	component: RightPanelSocialContent,
+	props: {},
+	onlyAuth: true,
+})
 
 const RightPanelSocialContent = () => {
 	return (

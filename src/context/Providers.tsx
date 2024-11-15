@@ -7,11 +7,12 @@ import { MapContext } from '@/context/map-context';
 import { ThemeProvider } from '@/context/theme-context';
 import { NextIntlClientProvider } from 'next-intl';
 import { SupabaseProvider } from '@/context/supabase-context';
-import { NovuProvider } from '@/context/novu-context';
+import { NotificationsProvider } from '@/context/notifications-context';
 import { OneSignalContext } from '@/context/one-signal-context';
 import { cookies } from 'next/headers';
 import { getMessages } from 'next-intl/server';
 import { getFallbackLanguage } from '@/lib/i18n/fallback';
+import { createServerClient } from '@/lib/supabase/server';
 
 export default async function Provider({
   children,
@@ -20,6 +21,8 @@ export default async function Provider({
   children: React.ReactNode;
   locale: string;
 }) {
+  const supabase = createServerClient();
+  const { data: { session } } = await supabase.auth.getSession();
   // NEXT-INTL
   const userMessages = await getMessages({ locale });
   const fallbackMessages = await getMessages({ locale: getFallbackLanguage({ locale }) });
@@ -34,8 +37,8 @@ export default async function Provider({
     <NextIntlClientProvider locale={locale} messages={messages}>
       <SupabaseProvider locale={locale}>
         <ReactQueryProvider>
-          <AuthProvider>
-            {/* <NovuProvider> */}
+          <AuthProvider session={session}>
+            <NotificationsProvider>
           {/* <ApolloClientProvider locale={locale}> */}
               {/* <OneSignalContext> */}
                 <MapContext>
@@ -53,7 +56,7 @@ export default async function Provider({
                   </ThemeProvider>
                 </MapContext> 
               {/* </OneSignalContext> */}
-            {/* </NovuProvider> */}
+            </NotificationsProvider>
           {/* </ApolloClientProvider> */}
           </AuthProvider>
         </ReactQueryProvider>

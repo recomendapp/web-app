@@ -1,10 +1,11 @@
 'use client';
 
 import { RightPanelSocial } from '@/components/sidebar/right-panel/RightPanelSocial';
+import { RightPanel } from '@/components/sidebar/right-panel/RightPanelUtils';
 import { Device, useDevice } from '@/hooks/use-device';
 import { useIsMobile } from '@/hooks/use-mobile';
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { ImperativePanelHandle } from 'react-resizable-panels';
+import React, { createContext, useContext, useState } from 'react';
+import { useAuth } from './auth-context';
 
 export const SIDEBAR_COOKIE_NAME = "ui-sidebar:open";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
@@ -45,13 +46,6 @@ export interface UiContextProps {
     component: React.ComponentType<P>;
     props: P;
   }) => void;
-  // rightPanelCollapsedSize: number;
-  // rightPanelMinSize: number;
-  // rightPanelMaxSize: number;
-  // rightPanelContent: React.ReactNode | null;
-  // setRightPanelContent: (content: React.ReactNode) => void;
-  // rightPanelTitle: string | null;
-  // setRightPanelTitle: (title: string) => void;
   device: Device;
 }
 
@@ -68,6 +62,7 @@ export const UIProvider = ({
 	cookieSidebarOpen?: boolean
   cookieRightPanelOpen?: boolean
 }) => {
+  const { session } = useAuth();
   const isMobile = useIsMobile();
   // LAYOUT
   const [ uiLayout, setUiLayout ] = useState(defaultLayout);
@@ -92,11 +87,7 @@ export const UIProvider = ({
   // *========== START RIGHTPANEL ==========*
   const [ rightPanelOpen, setRightPanelOpen ] = useState(cookieRightPanelOpen);
   const [ rightPanelOpenMobile, setRightPanelOpenMobile ] = useState(false);
-  const [ rightPanel, setRightPanel ] = useState<{
-    title: string;
-    component: React.ComponentType<any>;
-    props: any;
-  }>(RightPanelSocial());
+  const [ rightPanel, setRightPanel ] = useState<RightPanel<any>>(RightPanelSocial());
   const rightPanelCollapsedSize = 0;
   const rightPanelMinSize = 20;
   const rightPanelMaxSize = 30;
@@ -117,11 +108,8 @@ export const UIProvider = ({
     }
   }, [isMobile, rightPanelOpen, rightPanelOpenChange]);
 
-  const toggleRightPanelContent = <P,>(content : {
-    title: string;
-    component: React.ComponentType<P>;
-    props: P;
-  }) => {
+  const toggleRightPanelContent = <P,>(content: RightPanel) => {
+    if (content.onlyAuth && !session) return;
     const isSameContent = rightPanel?.title === content.title && rightPanel?.component === content.component && JSON.stringify(rightPanel?.props) === JSON.stringify(content.props);
     if (isSameContent) {
       toggleRightPanel();

@@ -12,7 +12,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export interface UserState {
   user: User | null | undefined;
-  session: Session | null | undefined;
+  session: Session | null;
   loading: boolean;
   login: (email: string, password: string, redirect?: string | null) => Promise<void>;
   logout: () => Promise<void>;
@@ -36,26 +36,19 @@ export interface UserState {
   userRefresh: () => Promise<void>;
 }
 
-// const defaultState: UserState = {
-//   user: undefined,
-//   session: null,
-//   loading: true,
-//   login: async () => {},
-//   logout: async () => {},
-//   signup: async () => {},
-//   loginOAuth2: async () => {},
-//   userRefresh: async () => {},
-// };
-
 // create the context
 const AuthContext = createContext<UserState | undefined>(undefined);
 
+interface AuthProviderProps {
+  session: Session | null;
+  children: React.ReactNode;
+}
+
 // create the provider component
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({ session: initialSession, children }: AuthProviderProps) => {
   const router = useRouter();
   const supabase = useSupabaseClient();
-  const [session, setSession] = useState<Session | null>();
-  const [sessionLoading, setSessionLoading] = useState(true);
+  const [session, setSession] = useState<Session | null>(initialSession);
   const [loading, setLoading] = useState(true);
   const {
     data: user,
@@ -75,47 +68,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     enabled: session !== undefined,
   })
 
-
-  const init = async () => {
-    const setData = async () => {
-      const {
-        data: { session },
-        error,
-      } = await supabase.auth.getSession();
-      if (error) throw error;
-      // const { data: dataUser, error: errorUser } = await supabase.from('user').select('*').eq('id', session?.user?.id).single();
-
-      if (error) throw error;
-      setSession(session);
-      // setUser(dataUser);
-      // setLoading(false);
-      setSessionLoading(false);
-    };
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (session) {
-          setData();
-        } else {
-          setSession(null);
-          setSessionLoading(false);
-        }
-      }
-    );
-
-    setData();
+  useEffect(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, updatedSession) => {
+      setSession(updatedSession);
+      if (!updatedSession) router.refresh();
+    });
 
     return () => {
       listener?.subscription.unsubscribe();
     };
-  };
+  }, [supabase, router]);
 
   useEffect(() => {
-    init();
-  }, []);
-
-  useEffect(() => {
-    if (!userLoading && !sessionLoading) setLoading(false);
-  }, [sessionLoading, userLoading]);
+    if (!userLoading) setLoading(false);
+  }, [userLoading]);
 
   const login = async (email: string, password: string, redirect?: string | null) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -185,8 +151,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const userRefresh = async () => {
-    init();
-    return;
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error) throw error;
+    setSession(session);
   };
 
   return (

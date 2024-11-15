@@ -50,7 +50,7 @@ export async function JustWatchWidget({
 	//   },[id]);
 
 	return (
-		<div className="bg-red-500 p-2">
+		<div className="p-2">
 			<div data-jw-widget
 				data-api-key={process.env.NEXT_PUBLIC_JUSTWATCH_API_KEY}
 				data-object-type={type}
@@ -60,7 +60,6 @@ export async function JustWatchWidget({
 				data-theme={'dark'}
 				data-language={locale}
 				data-scale="0.8"
-				className="bg-blue-500"
 			/>
 			{/* <div className="text-right">
 				<span className="text-sm text-muted-foreground">Powered by{' '}</span>

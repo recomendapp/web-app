@@ -26,7 +26,7 @@ export function SecurityForm() {
       .min(8, {
         message: 'Le mot de passe doit contenir moins 8 caractères.',
       })
-      .max(50, {
+      .max(128, {
         message: 'Le mot de passe ne doit pas dépasser 128 caractères.',
       })
       .refine((value) => /^[a-zA-Z0-9!@#$%^&*_\-]*$/.test(value), {

@@ -22,15 +22,14 @@ import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 import { ContextMenuMovie } from "../context-menu/ContextMenuMovie";
 import { ModalMovieSend } from "../Modals/Movie/Actions/ModalMovieSend";
+import { useAuth } from "@/context/auth-context";
 
-interface WidgetMoviesMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {
-	isLogged: boolean;
-}
+interface WidgetMoviesMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const WidgetMoviesMostRecommended = ({
-	isLogged,
 	className,
 } : WidgetMoviesMostRecommendedProps) => {
+	const { session } = useAuth();
 	const { openModal } = useModal();
 	const { data, isLoading } = useMovieMostRecommended();
 	const [isPlaying, setIsPlaying] = useState(true);
@@ -67,11 +66,11 @@ export const WidgetMoviesMostRecommended = ({
 					className="rounded-xl h-full"
 					>
 						<Card className="bg-black bg-opacity-40 flex flex-col h-full justify-between gap-2">
-							<CardHeader>
-								<CardTitle className="flex justify-between items-center gap-2 text-xl">
-									<h3>Les plus recommandés.</h3>
-									<div># {index + 1}</div>
-								</CardTitle>
+							<CardHeader className="flex-row justify-between items-center gap-2 text-xl font-semibold leading-none tracking-tight ">
+								<h3 className="text-xl">
+									Les plus recommandés.
+								</h3>
+								<div># {index + 1}</div>
 							</CardHeader>
 							<CardContent>
 								<Link href={`/film/${movie?.slug ?? movie?.id}`} className="w-fit text-clamp-title line-clamp-2 font-semibold">
@@ -103,12 +102,12 @@ export const WidgetMoviesMostRecommended = ({
 								</div> : null}
 							</CardContent>
 							<CardFooter className="flex items-center gap-2">
-								<TooltipBox tooltip={isLogged ? 'Envoyer à un(e) ami(e)' : undefined}>
+								<TooltipBox tooltip={session ? 'Envoyer à un(e) ami(e)' : undefined}>
 									<Button
 									size={"icon"}
 									variant={"muted"}
 									className="bg-muted/60"
-									onClick={() => (isLogged && movie) && openModal(ModalMovieSend, { movieId: movie?.id, movie: movie })}
+									onClick={() => (session && movie) && openModal(ModalMovieSend, { movieId: movie?.id, movie: movie })}
 									>
 										<SendIcon className="w-4 h-4 fill-primary" />
 									</Button>

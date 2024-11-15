@@ -1,6 +1,9 @@
 import { cn } from '@/lib/utils';
+import { el } from 'date-fns/locale';
 import {
   AlertTriangle,
+  ArchiveIcon,
+  ArchiveRestoreIcon,
   ArrowRight,
   BellIcon,
   BookmarkIcon,
@@ -29,6 +32,7 @@ import {
   LucideIcon,
   LucideProps,
   Moon,
+  MoreHorizontalIcon,
   MoreVertical,
   Pizza,
   Plus,
@@ -41,6 +45,7 @@ import {
   Trash,
   Twitter,
   User,
+  UsersIcon,
   X,
   ZapIcon,
 } from 'lucide-react';
@@ -186,6 +191,7 @@ export const Icons = {
   loader: ({ className, ...props }: LucideProps) => (
     <Icons.spinner className={cn('animate-spin', className)} {...props} />
   ),
+  ellipsis: MoreHorizontalIcon,
   bell: BellIcon,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
@@ -195,15 +201,17 @@ export const Icons = {
   media: Image,
   settings: Settings,
   billing: CreditCard,
-  ellipsis: MoreVertical,
   add: Plus,
   lock: LockIcon,
   warning: AlertTriangle,
   user: User,
+  users: UsersIcon,
   arrowRight: ArrowRight,
   help: HelpCircle,
   pizza: Pizza,
   twitter: Twitter,
+  archive: ArchiveIcon,
+  archiveRestore: ArchiveRestoreIcon,
   check: CheckIcon,
   send: SendIcon,
   copy: CopyIcon,

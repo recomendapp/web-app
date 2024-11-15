@@ -9,11 +9,9 @@ import { SidebarRight } from './sidebars/sidebar-right/SidebarRight';
 
 export function AppLayout({
 	children,
-	isLogged,
 	className,
  } : {
 	children: React.ReactNode;
-	isLogged: boolean;
 	className?: string;
  }) {
 	const [isMounted, setIsMounted] = React.useState(false)
@@ -44,7 +42,7 @@ export function AppLayout({
 		>
 			<SidebarLeft />
 			<SidebarInset className={`@container/main ${device === "mobile" ? "pb-navbar md:pb-0" : ""}`}>
-				<Header isLogged={isLogged} className={`${device === "mobile" ? "hidden" : ""}`} />
+				<Header className={`${device === "mobile" ? "hidden" : ""}`} />
 				{children}
 			</SidebarInset>
 			<SidebarProvider

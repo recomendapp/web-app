@@ -4,20 +4,20 @@ import { cn } from '@/lib/utils';
 import { UserNav } from '../User/UserNav/UserNav';
 import { Button } from '../ui/button';
 import Link from 'next/link';
-// import { NovuInbox } from '../novu/NovuInbox';
+import { NovuInbox } from '../novu/NovuInbox';
 import { SocialButton } from './components/SocialButton';
-import { NotificationsButton } from './components/NotificationsButton';
+import { NotificationsButton } from '../notifications/NotificationsButton';
+import { useAuth } from '@/context/auth-context';
 
 export default function HeaderRightSide({
-  isLogged,
   className,
 } : {
-  isLogged: boolean;
   className?: string;
 }) {
+  const { session } = useAuth();
   return (
     <div className={cn('flex items-center gap-4', className)}>
-      {isLogged ? (
+      {session ? (
         <>
           {/* <NovuInbox /> */}
           <NotificationsButton />

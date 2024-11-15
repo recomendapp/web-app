@@ -25,7 +25,7 @@ export const SocialButton = ({
 		onClick={() => toggleRightPanelContent(RightPanelSocial())}
 		{...props}
 		>
-			<Icons.user className='w-4 h-4'/>
+			<Icons.users className='w-4 h-4'/>
 		</Button>
 	);
 }

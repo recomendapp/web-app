@@ -3,6 +3,8 @@ import { PlaylistType } from "@/types/type.db";
 export const meKeys = {
 	all: ['me'] as const,
 
+	notifications: () => [...meKeys.all, 'notifications'] as const,
+
 	playlists: () => [...meKeys.all, 'playlists'] as const,
 
 	/**

@@ -6,10 +6,8 @@ interface AppLayoutProps {
   children: React.ReactNode;
 }
 export default async function RootLayout({ children }: AppLayoutProps) {
-  const supabase = createServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
   return (
-    <AppLayout isLogged={!!user}>
+    <AppLayout>
       {children}
     </AppLayout>
   );
