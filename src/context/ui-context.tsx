@@ -31,11 +31,7 @@ export interface UiContextProps {
   rightPanelOpenChange: (open: boolean) => void;
   rightPanelOpenMobile: boolean;
   setRightPanelOpenMobile: (open: boolean) => void;
-  rightPanel: {
-    title: string;
-    component: React.ComponentType<any>;
-    props: any;
-  };
+  rightPanel: RightPanel<any> | null;
   toggleRightPanel: (open?: boolean) => void;
   toggleRightPanelContent: <P,>({
     title,
@@ -85,9 +81,11 @@ export const UIProvider = ({
   // *========== END SIDEBAR ==========*
 
   // *========== START RIGHTPANEL ==========*
-  const [ rightPanelOpen, setRightPanelOpen ] = useState(cookieRightPanelOpen);
+  const [ rightPanelOpen, setRightPanelOpen ] = useState(
+    session ? cookieRightPanelOpen : false
+  );
   const [ rightPanelOpenMobile, setRightPanelOpenMobile ] = useState(false);
-  const [ rightPanel, setRightPanel ] = useState<RightPanel<any>>(RightPanelSocial());
+  const [ rightPanel, setRightPanel ] = useState<RightPanel<any> | null>(session ? RightPanelSocial : null);
   const rightPanelCollapsedSize = 0;
   const rightPanelMinSize = 20;
   const rightPanelMaxSize = 30;

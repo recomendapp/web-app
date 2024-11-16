@@ -16,6 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { usePathname } from "next/navigation"
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -55,6 +56,7 @@ const SidebarProvider = React.forwardRef<
     setOpenMobile?: (open: boolean) => void,
     shortcut?: string
     noLayout?: boolean
+    autoCloseOnRouteChange?: boolean
   }
 >(
   (
@@ -69,10 +71,12 @@ const SidebarProvider = React.forwardRef<
       className,
       style,
       children,
+      autoCloseOnRouteChange = true,
       ...props
     },
     ref
   ) => {
+    const pathname = usePathname()
     const isMobile = useIsMobile()
     const [_openMobile, _setOpenMobile] = React.useState(false)
 
@@ -149,6 +153,13 @@ const SidebarProvider = React.forwardRef<
       }),
       [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
     )
+
+    // Autoclose the sidebar on mobile when the pathname changes.
+    React.useEffect(() => {
+      if (autoCloseOnRouteChange && isMobile && openMobile) {
+        setOpenMobile(false)
+      }
+    }, [pathname])
 
     return (
       <SidebarContext.Provider value={contextValue}>

@@ -13,7 +13,7 @@ export const SidebarRight = ({ ...props }: React.ComponentProps<typeof Sidebar>)
 		{...props}
 		>
 			<SidebarHeader className="h-header flex-row items-center justify-between">
-				{rightPanel.title}
+				{rightPanel?.title}
 				<Button
 				variant={'ghost'}
 				size={'icon'}
@@ -26,7 +26,7 @@ export const SidebarRight = ({ ...props }: React.ComponentProps<typeof Sidebar>)
 			</SidebarHeader>
 			<SidebarSeparator />
 			<SidebarContent>
-				<rightPanel.component {...rightPanel.props} />
+				{rightPanel ? <rightPanel.component {...rightPanel.props} /> : null}
 			</SidebarContent>
 			<SidebarRail />
 		</Sidebar>
