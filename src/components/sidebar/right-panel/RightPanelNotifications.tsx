@@ -54,7 +54,7 @@ const RightPanelNotificationsContent = () => {
 						</SelectContent>
 					</Select>
 					<DropdownMenu>
-						<DropdownMenuTrigger>
+						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
 								<Icons.ellipsis className="w-4 h-4" />
 							</Button>

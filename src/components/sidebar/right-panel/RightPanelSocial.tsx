@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
-import { useUserAcceptFollowerRequest } from "@/features/user/userMutations";
+import { useUserAcceptFollowerRequest, useUserDeclineFollowerRequest } from "@/features/user/userMutations";
 import { useUserFolloweesInfinite, useUserFollowersRequests } from "@/features/user/userQueries";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
@@ -100,7 +100,7 @@ const RightPanelSocialRequests = () => {
 	const acceptRequest = useUserAcceptFollowerRequest({
 		userId: user?.id,
 	});
-	const declineRequest = useUserAcceptFollowerRequest({
+	const declineRequest = useUserDeclineFollowerRequest({
 		userId: user?.id,
 	});
 
@@ -146,8 +146,8 @@ const RightPanelSocialRequests = () => {
 								</div>
 							</div>
 							<div className="grid grid-cols-2 gap-2">
-								<Button variant="outline" onClick={() => handleAcceptRequest(id)}>Accepter</Button>
-								<Button variant="destructive" onClick={() => handleDeclineRequest(id)}>Refuser</Button>
+								<Button variant="accent-1" onClick={() => handleAcceptRequest(id)}>Accepter</Button>
+								<Button variant="outline" onClick={() => handleDeclineRequest(id)}>Refuser</Button>
 							</div>
 						</Card>
 					))}

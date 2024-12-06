@@ -24,7 +24,6 @@ export const WidgetUserDiscovery = ({
 			order: order,
 		}
 	})
-	console.log('order', order)
 	if (!users || !users.pages[0].length) return null;
 	return (
 	<div className={cn('flex flex-col gap-4 overflow-hidden', className)}>

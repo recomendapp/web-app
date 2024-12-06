@@ -35,6 +35,8 @@ export const useUserAcceptFollowerRequest = ({
 				if (!oldData) return [];
 				return oldData.filter((request) => request.id !== requestId);
 			});
+			// Invalidate the followees cache
+			queryClient.invalidateQueries({queryKey: userKeys.followees(userId as string)});
 		},
 	});
 }

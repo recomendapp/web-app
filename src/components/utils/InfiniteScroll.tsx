@@ -35,7 +35,7 @@ export const InfiniteScroll = ({
 			if (SkeletonComponent === undefined) {
 				return loader;
 			}
-			return Array.from({ length: 5 }).map((_, index) => (
+			return Array.from({ length: 10 }).map((_, index) => (
 				<SkeletonComponent key={index} />
 			));
 		}
