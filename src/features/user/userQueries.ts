@@ -620,3 +620,54 @@ export const useUserMovieActivitiesInfinite = ({
 		enabled: !!userId,
 	});
 }
+
+export const useUserMovieActivity = ({
+	userId,
+	movieId,
+} : {
+	userId?: string;
+	movieId?: number;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.movieActivity(userId as string, movieId as number),
+		queryFn: async () => {
+			if (!userId || !movieId) throw Error('Missing user id or movie id');
+			const { data, error } = await supabase
+				.from('user_movie_activity')
+				.select(`*, review:user_movie_review(*)`)
+				.eq('user_id', userId)
+				.eq('movie_id', movieId)
+				.maybeSingle();
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId && !!movieId,
+	});
+}
+
+export const useUserMovieWatchlist = ({
+	userId,
+	movieId,
+} : {
+	userId?: string;
+	movieId?: number;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.movieWatchlist(userId as string, movieId as number),
+		queryFn: async () => {
+			if (!userId || !movieId) throw Error('Missing user id or movie id');
+			const { data, error } = await supabase
+				.from('user_movie_watchlist')
+				.select(`*`)
+				.eq('user_id', userId)
+				.eq('movie_id', movieId)
+				.eq('status', 'active')
+				.maybeSingle();
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId && !!movieId,
+	});
+}

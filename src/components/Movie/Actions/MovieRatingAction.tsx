@@ -1,13 +1,8 @@
 import { AlertCircle, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Icons } from '../../../../../config/icons';
-import { usePathname, useRouter } from 'next/navigation';
+import { Icons } from '../../../config/icons';
+import { usePathname } from 'next/navigation';
 import {
   Dialog,
   DialogContent,
@@ -21,21 +16,18 @@ import { useAuth } from '@/context/auth-context';
 import { DialogClose } from '@radix-ui/react-dialog';
 
 import toast from 'react-hot-toast';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { TooltipBox } from '@/components/Box/TooltipBox';
+import { useUserMovieActivity } from '@/features/user/userQueries';
+import { useUserMovieActivityInsert, useUserMovieActivityUpdate } from '@/features/user/userMutations';
 
 interface MovieRatingActionProps extends React.HTMLAttributes<HTMLDivElement> {
   movieId: number;
 }
 
 export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
-  const supabase = useSupabaseClient();
   const { user } = useAuth();
   const pathname = usePathname();
-
-  const queryClient = useQueryClient();
 
   const [ratingValue, setRatingValue] = useState(5);
 
@@ -43,76 +35,13 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
     data: activity,
     isLoading,
     isError,
-  } = useQuery({
-    queryKey: ['user', user?.id, 'activity', { movieId }],
-    queryFn: async () => {
-      if (!user?.id || !movieId) throw Error('Missing profile id or locale or movie id');
-      const { data, error } = await supabase
-        .from('user_movie_activity')
-        .select(`*, review:user_movie_review(*)`)
-        .eq('user_id', user.id)
-        .eq('movie_id', movieId)
-        .maybeSingle()
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!user?.id && !!movieId,
+  } = useUserMovieActivity({
+    userId: user?.id,
+    movieId: movieId,
   });
 
-  const { mutateAsync: insertActivityMutation, isPending: isInsertPending } = useMutation({
-    mutationFn: async ({ rating } : { rating: number }) => {
-      if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
-      const {data, error } = await supabase
-        .from('user_movie_activity')
-        .insert({
-          user_id: user?.id,
-          movie_id: movieId,
-          rating: rating,
-        })
-        .select(`*, review:user_movie_review(*)`)
-        .single()
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(['user', user?.id, 'activity', { movieId }], data);
-
-      // UPDATE WATCHLIST
-      queryClient.setQueryData(['user', user?.id, 'watchlist', { movieId }], false);
-      queryClient.invalidateQueries({
-        queryKey: ['user', user?.id, 'collection', 'watchlist']
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['user', user?.id, 'collection', 'guidelist']
-      });
-    },
-    onError: () => {
-      toast.error('Une erreur s\'est produite');
-    },
-  });
-
-  const { mutateAsync: updateRating, isPending: isUpdatePending } = useMutation({
-    mutationFn: async ({ rating } : { rating: number | null }) => {
-      if (!activity?.id ) throw Error('Missing activity id');
-      if (rating === undefined ) throw Error('Missing rating');
-      const { data, error } = await supabase
-        .from('user_movie_activity')
-        .update({
-            rating: rating,
-        })
-        .eq('id', activity?.id)
-        .select(`*, review:user_movie_review(*)`)
-        .single()
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(['user', user?.id, 'activity', { movieId }], data)
-    },
-    onError: () => {
-      toast.error('Une erreur s\'est produite');
-    },
-  });
+  const insertActivity = useUserMovieActivityInsert();
+  const updateActivity = useUserMovieActivityUpdate();
 
   useEffect(() => {
     activity?.rating && setRatingValue(activity?.rating);
@@ -120,11 +49,14 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
 
   const handleRate = async () => {
     if (activity) {
-      await updateRating({
+      await updateActivity.mutateAsync({
+        activityId: activity.id,
         rating: ratingValue,
       });
     } else {
-      await insertActivityMutation({
+      await insertActivity.mutateAsync({
+        userId: user?.id,
+        movieId: movieId,
         rating: ratingValue,
       });
     }
@@ -132,8 +64,9 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
   const handleUnrate = async () => {
     if (activity?.review)
       return toast.error('Impossible car vous avez une critique sur ce film');
-    await updateRating({
-     rating: null,
+    await updateActivity.mutateAsync({
+      activityId: activity!.id,
+      rating: null,
     });
   };
 
@@ -157,7 +90,7 @@ export function MovieRatingAction({ movieId }: MovieRatingActionProps) {
       <TooltipBox tooltip={activity?.rating ? 'Modifier la note' : 'Ajouter une note'}>
         <DialogTrigger asChild>
           <Button
-            disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
+            disabled={isLoading || isError || activity === undefined || insertActivity.isPending || updateActivity.isPending}
             variant={activity?.rating ? 'rating-enabled' : 'rating'}
           >
             {(isLoading || activity === undefined) ? (
@@ -253,9 +186,9 @@ export default function MovieRating({
               onMouseEnter={() => handleMouseEnter(i)}
               onMouseLeave={handleMouseLeave}
               className={`
-                            text-accent-1
-                            ${i <= (hover || rating) && 'fill-accent-1'}
-                          `}
+                text-accent-1
+                ${i <= (hover || rating) && 'fill-accent-1'}
+              `}
             />
           </label>
         );

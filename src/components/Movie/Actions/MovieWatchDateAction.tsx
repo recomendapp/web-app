@@ -1,26 +1,20 @@
 import { CalendarDays } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-// import { format } from 'date-fns';
 import { fr, enUS } from 'date-fns/locale';
 import { useAuth } from '@/context/auth-context';
 
 
 import { useFormatter, useLocale } from 'next-intl';
 import toast from 'react-hot-toast';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { TooltipBox } from '@/components/Box/TooltipBox';
+import { useUserMovieActivity } from '@/features/user/userQueries';
+import { useUserMovieActivityUpdate } from '@/features/user/userMutations';
 
 interface MovieWatchedDateActionProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,56 +22,31 @@ interface MovieWatchedDateActionProps
 }
 
 export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
-  const supabase = useSupabaseClient();
   const { user } = useAuth();
-
   const locale = useLocale();
-
-  const queryClient = useQueryClient();
-
   const format = useFormatter();
 
   const {
-    data: activity,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['user', user?.id, 'activity', { movieId }],
-    queryFn: async () => {
-      if (!user?.id || !movieId) throw Error('Missing profile id or locale or movie id');
-      const { data, error } = await supabase
-        .from('user_movie_activity')
-        .select(`*, review:user_movie_review(*)`)
-        .eq('user_id', user.id)
-        .eq('movie_id', movieId)
-        .maybeSingle()
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!user?.id && !!movieId,
-  });
+      data: activity,
+      isLoading,
+      isError,
+    } = useUserMovieActivity({
+      userId: user?.id,
+      movieId: movieId,
+    });
+  const updateDate = useUserMovieActivityUpdate();
 
-  const { mutateAsync: updateDate } = useMutation({
-    mutationFn: async (date: Date) => {
-      if (!activity?.id) throw Error('Missing activity id');
-      const {data, error } = await supabase
-        .from('user_movie_activity')
-        .update({
-          date: date.toISOString(),
-        })
-        .eq('id', activity?.id)
-        .select(`*, review:user_movie_review(*)`)
-        .single()
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(['user', user?.id, 'activity', { movieId }], data)
-    },
-    onError: () => {
-      toast.error('Une erreur s\'est produite');
-    },
-  });
+  const handleUpdateDate = async (date: Date) => {
+    if (!activity) return;
+    await updateDate.mutateAsync({
+      activityId: activity.id,
+      date: date,
+    }), {
+      onError: () => {
+        toast.error('Une erreur s\'est produite');
+      }
+    };
+  };
 
   if (!activity) return null;
 
@@ -110,7 +79,7 @@ export function MovieWatchDateAction({ movieId }: MovieWatchedDateActionProps) {
           locale={locale == 'fr' ? fr : enUS}
           mode="single"
           selected={new Date(activity?.date)}
-          onSelect={async (date) => date && await updateDate(date)}
+          onSelect={async (date) => date && await handleUpdateDate(date)}
           initialFocus
           captionLayout="dropdown-buttons"
           fromDate={new Date('1900-01-01')}

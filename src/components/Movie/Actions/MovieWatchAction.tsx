@@ -1,11 +1,6 @@
 import { AlertCircle, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { Icons } from '../../../../../config/icons';
+import { Icons } from '../../../config/icons';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,102 +15,53 @@ import {
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-
-// GRAPHQL
-// import { useQuery, useMutation } from '@apollo/client';
-// import GET_USER_MOVIE_ACTIVITY_BY_MOVIE_ID from '@/graphql/User/Movie/Activity/queries/GetUserMovieActivityByMovieId';
-// import GET_USER_MOVIE_WATCHLIST_BY_MOVIE_ID from '@/graphql/User/Movie/Watchlist/queries/GetUserMovieWatchlistByMovieId';
-// import INSERT_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/InsertUserMovieActivity';
-// import DELETE_ACTIVITY_MUTATION from '@/graphql/User/Movie/Activity/mutations/DeleteUserMovieActivity';
-// import type {
-//   DeleteUserMovieActivityMutation,
-//   GetUserMovieActivityByMovieIdQuery,
-//   InsertUserMovieActivityMutation,
-// } from '@/graphql/__generated__/graphql';
+import { useUserMovieActivity } from '@/features/user/userQueries';
+import { useUserMovieActivityDelete, useUserMovieActivityInsert } from '@/features/user/userMutations';
 
 interface MovieWatchActionProps extends React.HTMLAttributes<HTMLDivElement> {
   movieId: number;
 }
 
 export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
-  const supabase = useSupabaseClient();
   const { user } = useAuth();
   const pathname = usePathname();
-
-  const queryClient = useQueryClient();
 
   const {
     data: activity,
     isLoading,
     isError,
-  } = useQuery({
-    queryKey: ['user', user?.id, 'activity', { movieId }],
-    queryFn: async () => {
-      if (!user?.id || !movieId) throw Error('Missing profile id or locale or movie id');
-      const { data, error } = await supabase
-        .from('user_movie_activity')
-        .select(`*, review:user_movie_review(*)`)
-        .eq('user_id', user.id)
-        .eq('movie_id', movieId)
-        .maybeSingle()
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!user?.id && !!movieId,
+  } = useUserMovieActivity({
+    userId: user?.id,
+    movieId: movieId,
   });
 
-  const { mutateAsync: insertActivityMutation, isPending: isInsertPending } = useMutation({
-    mutationFn: async () => {
-      if (!user?.id || !movieId) throw Error('Missing profile id or movie id');
-      const {data, error } = await supabase
-        .from('user_movie_activity')
-        .insert({
-          user_id: user?.id,
-          movie_id: movieId,
-        })
-        .select(`*, review:user_movie_review(*)`)
-        .single()
-        if (error) throw error;
-      return data;
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(['user', user?.id, 'activity', { movieId }], data)
+  const insertActivity = useUserMovieActivityInsert();
+  const deleteActivity = useUserMovieActivityDelete();
 
-      // UPDATE WATCHLIST
-      queryClient.setQueryData(['user', user?.id, 'watchlist', { movieId }], false)
-      queryClient.invalidateQueries({
-        queryKey: ['user', user?.id, 'collection', 'watchlist']
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['user', user?.id, 'collection', 'guidelist']
-      });
-    },
-    onError: () => {
-      toast.error('Une erreur s\'est produite');
-    },
-  });
+  const handleInsertActivity = async () => {
+    if (activity) return;
+    await insertActivity.mutateAsync({
+      userId: user?.id,
+      movieId: movieId,
+    }), {
+      onError: () => {
+        toast.error('Une erreur s\'est produite');
+      }
+    };
+  };
 
-  const { mutateAsync: deleteActivityMutation, isPending: isDeletePending } = useMutation({
-    mutationFn: async () => {
-      if (!activity?.id) throw Error('Missing activity id');
-      const { error } = await supabase
-        .from('user_movie_activity')
-        .delete()
-        .eq('id', activity?.id)
-      if (error) throw error;
-      return null;
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(['user', user?.id, 'activity', { movieId }], data)
-    },
-    onError: () => {
-      toast.error('Une erreur s\'est produite');
-    },
-  });
+  const handleDeleteActivity = async () => {
+    if (!activity) return;
+    await deleteActivity.mutateAsync({
+      activityId: activity.id,
+    }), {
+      onError: () => {
+        toast.error('Une erreur s\'est produite');
+      }
+    };
+  };
 
   if (user === null) {
     return (
@@ -143,8 +89,8 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
       <TooltipBox tooltip={activity ? 'Retirer des films vus' : 'Marquer comme vu'}>
         {!activity ? (
           <Button
-            onClick={async () => !activity && await insertActivityMutation()}
-            disabled={isLoading || isError || activity === undefined || isInsertPending || isDeletePending}
+            onClick={async () => await handleInsertActivity()}
+            disabled={isLoading || isError || activity === undefined || insertActivity.isPending || deleteActivity.isPending}
             size="icon"
             variant={'action'}
             className={`rounded-full hover:text-foreground`}
@@ -201,7 +147,7 @@ export function MovieWatchAction({ movieId }: MovieWatchActionProps) {
         <AlertDialogFooter className="gap-2">
           <AlertDialogCancel>Annuler</AlertDialogCancel>
           <AlertDialogAction
-            onClick={async () => activity && await deleteActivityMutation()}
+            onClick={async () => await handleDeleteActivity()}
             className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
           >
             Continuer

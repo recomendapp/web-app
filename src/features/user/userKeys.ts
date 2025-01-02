@@ -11,7 +11,7 @@ export const userKeys = {
 	 * @param userId The user id
 	 * @returns The user details
 	 */
-	detail: (userId: string) => [...userKeys.details(), userId] as const,
+	detail: (userId: string) => [...userKeys.all, userId] as const,
 	/**
 	 * Fetches friends of a user
 	 * @param userId The user id
@@ -61,8 +61,9 @@ export const userKeys = {
 	) => filters ? [...userKeys.detail(userId), 'followees', filters] as const : [...userKeys.detail(userId), 'followees'] as const,
 
 	movies: (userId: string) => [...userKeys.detail(userId), 'movies'] as const,
-	movie: (userId: string, movieId: string) => [...userKeys.movies(userId), movieId] as const,
-	movieActivity: (userId: string, movieId: string) => [...userKeys.movie(userId, movieId), 'activity'] as const,
+	movie: (userId: string, movieId: number) => [...userKeys.movies(userId), movieId] as const,
+	movieActivity: (userId: string, movieId: number) => [...userKeys.movie(userId, movieId), 'activity'] as const,
+	movieWatchlist: (userId: string, movieId: number) => [...userKeys.movie(userId, movieId), 'watchlist'] as const,
 	movieActivities: ({
 		userId,
 		filters,
@@ -70,6 +71,11 @@ export const userKeys = {
 		userId: string;
 		filters?: any;
 	}) => filters ? [...userKeys.detail(userId), 'activities', filters] as const : [...userKeys.detail(userId), 'activities'] as const,
+
+	collection: (userId: string) => [...userKeys.detail(userId), 'collection'] as const,
+	collectionLikes: (userId: string) => [...userKeys.collection(userId), 'likes'] as const,
+	collectionWatchlist: (userId: string) => [...userKeys.collection(userId), 'watchlist'] as const,
+	collectionGuidelist: (userId: string) => [...userKeys.collection(userId), 'guidelist'] as const,
 	/**
 	 * Fetches the user's guidelist
 	 * @param userId The user id

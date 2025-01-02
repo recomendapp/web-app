@@ -1,12 +1,12 @@
 'use client';
 
-import { MovieLikeAction } from './components/MovieLikeAction/MovieLikeAction';
-import { MovieWatchAction } from './components/MovieWatchAction/MovieWatchAction';
-import { MovieRatingAction } from './components/MovieRatingAction/MovieRatingAction';
-import { MovieWatchDateAction } from './components/MovieWatchAction/MovieWatchDateAction';
-import { MovieWatchlistAction } from './components/MovieWatchlistAction/MovieWatchlistAction';
-import { MoviePlaylistAction } from './components/MoviePlaylistAction/MoviePlaylistAction';
-import { MovieSendAction } from './components/MovieSendAction/MovieSendAction';
+import { MovieLikeAction } from './MovieLikeAction';
+import { MovieWatchAction } from './MovieWatchAction';
+import { MovieRatingAction } from './MovieRatingAction';
+import { MovieWatchDateAction } from './MovieWatchDateAction';
+import { MovieWatchlistAction } from './MovieWatchlistAction';
+import { MoviePlaylistAction } from './MoviePlaylistAction';
+import { MovieSendAction } from './MovieSendAction';
 
 export function MovieAction({
   filmId,

@@ -5,18 +5,12 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/auth-context';
 
 // COMPONENTS
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 
 // ICONS
 import { Send } from 'lucide-react';
 import { Icons } from '@/config/icons';
 import { ModalMovieSend } from '@/components/Modals/Movie/Actions/ModalMovieSend';
-import { useState } from 'react';
 import Link from 'next/link';
 import { useModal } from '@/context/modal-context';
 import { TooltipBox } from '@/components/Box/TooltipBox';
@@ -29,8 +23,6 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
   const { user, loading } = useAuth();
   const { openModal } = useModal();
   const pathname = usePathname();
-
-  const [ openSendModal, setOpenSendModal ] = useState(false);
 
   if (user === null) {
     return (
@@ -56,7 +48,6 @@ export function MovieSendAction({ movieId }: MovieSendActionProps) {
         size="icon"
         variant={'action'}
         className="rounded-full"
-        // onClick={() => setOpenSendModal(true)}
         onClick={() => openModal(ModalMovieSend, { movieId })}
       >
         {loading ? <Icons.spinner className="animate-spin" /> : <Send />}
