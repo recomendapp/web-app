@@ -13,6 +13,8 @@ import { WidgetUserMovieWatchlist } from "@/components/widgets/WidgetUserMovieWa
 import { WidgetUserFriendsPlaylists } from "@/components/widgets/WIdgetUserFriendsPlaylists";
 import { WidgetUserFeed } from "@/components/widgets/WidgetUserFeed";
 import { WidgetUserDiscovery } from "@/components/widgets/WidgetUserDiscovery";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   const { session, user } = useAuth();
@@ -42,6 +44,9 @@ export default function Home() {
 			{!session ? (
 				// Only non-logged users
 				<>
+				<Button variant="accent-1" className="col-span-full m-auto max-w-lg" asChild>
+					<Link href="/auth/login">C&apos;est parti 🎬, c&apos;est gratuit !</Link>
+				</Button>
 				<WidgetRecomendShowcase className='col-span-full'/>
 				</>
 			) : null}
@@ -58,8 +63,3 @@ export default function Home() {
 		</div>
 	);
 }
-
-
-// export default function Home() {
-//   return <Dashboard />;
-// }

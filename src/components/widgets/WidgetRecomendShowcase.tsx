@@ -34,11 +34,6 @@ export const WidgetRecomendShowcase = ({
 				</Card>
 			))}
 			</div>
-			<div className="grid justify-items-center">
-				<Button variant="accent-1" className="w-full max-w-lg" asChild>
-					<Link href="/auth/login">C&apos;est parti !</Link>
-				</Button>
-			</div>
 		</div>
 	);
 };
