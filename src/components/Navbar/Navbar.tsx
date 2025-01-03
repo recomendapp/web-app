@@ -17,6 +17,7 @@ import {
   User,
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
+import { Icons } from '@/config/icons';
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -44,19 +45,22 @@ export function Navbar({ className }: NavbarProps) {
         href: '/explore',
       },
       {
-        icon: Zap,
-        label: 'Feed',
-        active: pathname.startsWith('/feed'),
-        href: '/feed',
+        icon: user ? Zap : Icons.shop,
+        label: user ? 'Feed' : 'Shop',
+        active: user ? pathname.startsWith('/feed') : false,
+        href: user ? '/feed' : 'https://shop.recomend.app',
+        target: '_blank',
       },
       {
-        icon: Library,
-        label: 'Bibliothèque',
+        icon: user ? Library : Icons.user,
+        label: user ? 'Bibliothèque' : 'Se connecter',
         active:
-          pathname.startsWith('/collection') ||
-          pathname.startsWith('/auth') ||
-          pathname.startsWith('/resetPassword') ||
-          pathname.startsWith('/verifyEmail'),
+          user ?
+            pathname.startsWith('/collection') ||
+            pathname.startsWith('/auth') ||
+            pathname.startsWith('/resetPassword') ||
+            pathname.startsWith('/verifyEmail')
+            : pathname.startsWith('/auth'),
         href: user ? '/collection' : '/auth/login',
       },
     ],
@@ -77,6 +81,7 @@ export function Navbar({ className }: NavbarProps) {
         className={` opacity-100 ${
           !item.active && ' opacity-70'
         } w-full h-full flex flex-col items-center justify-center text-center text-xs gap-1`}
+        target={item.target}
       >
         <item.icon className="w-8" />
         {item.label}
