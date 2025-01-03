@@ -42,6 +42,7 @@ import {
   SignatureIcon,
   StarIcon,
   SunMedium,
+  TextIcon,
   Trash,
   Twitter,
   User,
@@ -192,6 +193,7 @@ export const Icons = {
     <Icons.spinner className={cn('animate-spin', className)} {...props} />
   ),
   ellipsis: MoreHorizontalIcon,
+  comment: TextIcon,
   bell: BellIcon,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,

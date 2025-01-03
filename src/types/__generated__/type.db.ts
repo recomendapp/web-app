@@ -2327,6 +2327,7 @@ export type Database = {
       }
       user_movie_watchlist: {
         Row: {
+          comment: string | null
           created_at: string
           id: number
           movie_id: number
@@ -2334,6 +2335,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          comment?: string | null
           created_at?: string
           id?: number
           movie_id: number
@@ -2341,6 +2343,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          comment?: string | null
           created_at?: string
           id?: number
           movie_id?: number

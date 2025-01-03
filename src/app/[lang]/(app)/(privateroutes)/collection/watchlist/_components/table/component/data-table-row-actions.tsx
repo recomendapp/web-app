@@ -30,9 +30,13 @@ import { useAuth } from '@/context/auth-context';
 
 // GRAPHQL
 import toast from 'react-hot-toast';
-import { Movie, Person, UserMovieWatchlist } from '@/types/type.db';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useSupabaseClient } from '@/context/supabase-context';
+import { Movie, UserMovieWatchlist } from '@/types/type.db';
+import { useQueryClient } from '@tanstack/react-query';
+import ModalMovieWatchlistComment from '@/components/Modals/Movie/ModalMovieWatchlistComment';
+import { Icons } from '@/config/icons';
+import { useModal } from '@/context/modal-context';
+import { useUserMovieWatchlistDelete } from '@/features/user/userMutations';
+import { userKeys } from '@/features/user/userKeys';
 
 interface DataTableRowActionsProps {
   table: Table<UserMovieWatchlist>;
@@ -47,35 +51,30 @@ export function DataTableRowActions({
   column,
   data,
 }: DataTableRowActionsProps) {
-  const supabase = useSupabaseClient();
   const { user } = useAuth();
+  const { openModal, createConfirmModal } = useModal();
   
   const queryClient = useQueryClient();
 
   const [openShowDirectors, setOpenShowDirectors] = useState(false);
-  
-  const { mutateAsync: deleteWatchlistMutation } = useMutation({
-    mutationFn: async () => {
-      if (!user?.id || !data?.movie_id) throw Error('Missing user id or movie id');
-      const { error } = await supabase
-        .from('user_movie_watchlist')
-        .delete()
-        .eq('user_id', user.id)
-        .eq('movie_id', data.movie_id)
-        .eq('status', 'active')
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: (response) => {
-      queryClient.setQueryData(['user', user?.id, 'collection', 'watchlist'], (oldData: UserMovieWatchlist[]) => {
-        return (oldData ?? [])?.filter((activity) => activity?.id !== response.id)
-      })
-      queryClient.setQueryData(['user', user?.id, 'watchlist', { movieId: data?.movie_id }], response)
-    },
-    onError: () => {
-      toast.error('Une erreur s\'est produite');
-    },
-  });
+
+  const deleteWatchlist = useUserMovieWatchlistDelete();
+
+  const handleUnwatchlist = async () => {
+    if (!data) return;
+    await deleteWatchlist.mutateAsync({
+      watchlistId: data.id,
+    }, {
+      onSuccess: () => {
+        queryClient.setQueryData(userKeys.watchlist(user?.id as string), (oldData: UserMovieWatchlist[]) => {
+          return (oldData ?? []).filter((activity) => activity?.id !== data.id)
+        });
+      },
+      onError: () => {
+        toast.error('Une erreur s\'est produite');
+      }
+    });
+  }
 
   return (
     <>
@@ -97,17 +96,34 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem asChild>
-            <Link href={`/film/${data?.movie_id}`}>Voir le film</Link>
+            <Link href={`/film/${data?.movie_id}`}>
+              <Icons.eye className='w-4' />
+              Voir le film
+            </Link>
           </DropdownMenuItem>
           <ShowDirectorsButton
             movie={data?.movie}
             setOpen={setOpenShowDirectors}
           />
+          <DropdownMenuItem
+            onClick={() => openModal(ModalMovieWatchlistComment, { watchlistItem: data })}
+          >
+            <Icons.comment className='w-4' />
+            {data?.comment ? 'Voir le commentaire' : 'Ajouter un commentaire'}
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
+            <Icons.share className='w-4' />
             <ButtonShare url={`${location.origin}/film/${data?.movie_id}`} />
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={async () => deleteWatchlistMutation()}>
+          <DropdownMenuItem
+            onClick={async () => createConfirmModal({
+              title: 'Supprimer de la watchlist',
+              description: 'Êtes-vous sûr de vouloir supprimer ce film de votre watchlist ?',
+              onConfirm: async () => data && await handleUnwatchlist(),
+            })}
+          >
+            <Icons.delete className='w-4' />
             Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -138,7 +154,8 @@ export function ShowDirectorsButton({
   if (movie?.directors?.length == 1) {
     return (
       <DropdownMenuItem asChild>
-        <Link href={`/person/${movie.directors[0].id}`}>
+        <Link href={`/person/${movie.directors[0].slug ?? movie.directors[0].id}`}>
+          <Icons.user className='w-4' />
           Voir le réalisateur
         </Link>
       </DropdownMenuItem>
@@ -146,6 +163,7 @@ export function ShowDirectorsButton({
   }
   return (
     <DropdownMenuItem onClick={() => setOpen(true)}>
+      <Icons.user className='w-4' />
       Voir les réalisateurs
     </DropdownMenuItem>
   );

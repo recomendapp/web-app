@@ -8,6 +8,7 @@ import { Clock } from 'lucide-react';
 import MovieCardSmall from '@/components/Movie/MovieCardSmall';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import { UserMovieWatchlist } from '@/types/type.db';
+import { DataComment } from './data-table-comment';
 
 export const columns: ColumnDef<UserMovieWatchlist>[] = [
   {
@@ -47,6 +48,18 @@ export const columns: ColumnDef<UserMovieWatchlist>[] = [
     cell: ({ row }) => (
       <RuntimeTooltip runtime={row.original?.movie?.runtime ?? 0} className='text-muted-foreground'/>
     ),
+  },
+  {
+    id: 'comment',
+    accessorKey: 'comment',
+    meta: {
+      displayName: 'Commentaire',
+    },
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Commentaire" />
+    ),
+    cell: ({ row }) => <DataComment watchlistItem={row.original} />,
+    enableSorting: false,
   },
   {
     id: 'actions',

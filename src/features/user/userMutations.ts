@@ -264,3 +264,29 @@ export const useUserMovieWatchlistDelete = () => {
 		}
 	});
 }
+
+export const useUserMovieWatchlistUpdate = () => {
+	const supabase = useSupabaseClient();
+	return useMutation({
+		mutationFn: async ({
+			watchlistId,
+			comment,
+		} : {
+			watchlistId?: number;
+			comment?: string;
+		}) => {
+			if (!watchlistId) throw Error('Missing watchlist id');
+			const { data, error } = await supabase
+				.from('user_movie_watchlist')
+				.update({
+					comment: comment,
+				})
+				.eq('id', watchlistId)
+				.select()
+				.single()
+			if (error) throw error;
+			console.log(data);
+			return data;
+		}
+	});
+}

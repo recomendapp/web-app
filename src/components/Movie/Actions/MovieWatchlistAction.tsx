@@ -10,6 +10,7 @@ import { usePathname } from 'next/navigation';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useUserMovieActivity, useUserMovieWatchlist } from '@/features/user/userQueries';
 import { useUserMovieWatchlistDelete, useUserMovieWatchlistInsert } from '@/features/user/userMutations';
+import { ContextMenuMovieWatchlistAction } from '@/components/context-menu/ContextMenuMovieWatchlistAction';
 
 interface MovieWatchlistActionProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -82,34 +83,36 @@ export function MovieWatchlistAction({
   }
 
   return (
-    <TooltipBox tooltip={
-      activity ? (
-        watchlist ? (
-          'Supprimer des films à revoir'
+    <ContextMenuMovieWatchlistAction watchlistItem={watchlist}>
+      <TooltipBox tooltip={
+        activity ? (
+          watchlist ? (
+            'Supprimer des films à revoir'
+          ) : (
+            'Envie de le revoir'
+          )
+        ) : watchlist ? (
+          'Supprimer des films à voir'
         ) : (
-          'Envie de le revoir'
+          'Envie de le voir'
         )
-      ) : watchlist ? (
-        'Supprimer des films à voir'
-      ) : (
-        'Envie de le voir'
-      )
-    }>
-      <Button
-        onClick={async () => watchlist ? await handleUnwatchlist() : await handleWatchlist()}
-        disabled={isLoading || isError || activity === undefined || watchlist === undefined || insertWatchlist.isPending || deleteWatchlist.isPending}
-        size="icon"
-        variant={'action'}
-        className={`rounded-full`}
-      >
-        {(isLoading || watchlist === undefined)  ? (
-          <Icons.spinner className="animate-spin" />
-        ) : isError ? (
-          <AlertCircle />
-        ) : (
-          <Icons.watchlist className={`${watchlist && 'fill-foreground'}`} />
-        )}
-      </Button>
-    </TooltipBox>
+      }>
+        <Button
+          onClick={async () => watchlist ? await handleUnwatchlist() : await handleWatchlist()}
+          disabled={isLoading || isError || activity === undefined || watchlist === undefined || insertWatchlist.isPending || deleteWatchlist.isPending}
+          size="icon"
+          variant={'action'}
+          className={`rounded-full`}
+        >
+          {(isLoading || watchlist === undefined)  ? (
+            <Icons.spinner className="animate-spin" />
+          ) : isError ? (
+            <AlertCircle />
+          ) : (
+            <Icons.watchlist className={`${watchlist && 'fill-foreground'}`} />
+          )}
+        </Button>
+      </TooltipBox>
+    </ContextMenuMovieWatchlistAction>
   );
 }

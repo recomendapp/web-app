@@ -241,20 +241,24 @@ export const useUserGuidelist = ({
 		limit?: number;
 	};
 }) => {
+	const mergedFilters = {
+		order: 'created_at-asc',
+		...filters
+	} as typeof filters;
 	const supabase = useSupabaseClient();
 	return useQuery({
-		queryKey: userKeys.guidelist(userId as string, filters),
+		queryKey: userKeys.guidelist(userId as string, mergedFilters),
 		queryFn: async () => {
 			if (!userId) throw Error('Missing user id');
 			let request = supabase
-				.from(filters?.order === 'random' ? 'guidelist_random' : 'guidelist')
+				.from(mergedFilters?.order === 'random' ? 'guidelist_random' : 'guidelist')
 				.select('*, movie(*)')
 				.eq('user_id', userId)
 				.eq('status', 'active')
 			
-			if (filters) {
-				if (filters?.order !== 'random' && filters.order) {
-					switch (filters.order) {
+			if (mergedFilters) {
+				if (mergedFilters?.order !== 'random' && mergedFilters.order) {
+					switch (mergedFilters.order) {
 						case 'created_at-desc':
 							request = request.order('created_at', { ascending: false });
 							break;
@@ -263,8 +267,8 @@ export const useUserGuidelist = ({
 							break;
 					}
 				}
-				if (filters.limit) {
-					request = request.limit(filters.limit);
+				if (mergedFilters.limit) {
+					request = request.limit(mergedFilters.limit);
 				}
 			}
 			const { data, error } = await request;
@@ -291,13 +295,17 @@ export const useUserWatchlist = ({
 		limit?: number;
 	};
 }) => {
+	const mergedFilters = {
+		order: 'created_at-asc',
+		...filters
+	} as typeof filters;
 	const supabase = useSupabaseClient();
 	return useQuery({
-		queryKey: userKeys.watchlist(userId as string, filters),
+		queryKey: userKeys.watchlist(userId as string, mergedFilters),
 		queryFn: async () => {
 			if (!userId) throw Error('Missing user id');
 			let request;
-			if (filters?.order === 'random') {
+			if (mergedFilters?.order === 'random') {
 				request = supabase
 					.from('watchlist_random')
 					.select('*, movie(*)')
@@ -310,9 +318,9 @@ export const useUserWatchlist = ({
 				.eq('user_id', userId)
 				.eq('status', 'active')
 			
-			if (filters) {
-				if (filters?.order !== 'random' && filters.order) {
-					switch (filters.order) {
+			if (mergedFilters) {
+				if (mergedFilters?.order !== 'random' && mergedFilters.order) {
+					switch (mergedFilters.order) {
 						case 'created_at-desc':
 							request = request.order('created_at', { ascending: false });
 							break;
@@ -321,8 +329,8 @@ export const useUserWatchlist = ({
 							break;
 					}
 				}
-				if (filters.limit) {
-					request = request.limit(filters.limit);
+				if (mergedFilters.limit) {
+					request = request.limit(mergedFilters.limit);
 				}
 			}
 			const { data, error } = await request;
