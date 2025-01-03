@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import Link from 'next/link';
 import { MovieActionCounter } from '@/components/Movie/MovieActionCounter';
 import { MovieAction } from '@/components/Movie/Actions/MovieAction';
@@ -32,14 +32,17 @@ import ActivityIcon from '@/components/Review/ActivityIcon';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Movie } from '@/types/type.db';
+import { useModal } from '@/context/modal-context';
+import { ModalMovieFollowersRating } from '@/components/Modals/Movie/ModalMovieFollowersRating';
 
 export default function MovieHeader({
   movie,
 }: {
   movie: Movie;
 }) {
-  if (!movie) return null;
+  const { openModal } = useModal();
 
+  if (!movie) return null;
   return (
     <div>
       <HeaderBox
@@ -76,6 +79,7 @@ export default function MovieHeader({
                   variant="follower"
                   className="w-full"
                   tooltip='Note followers'
+                  onClick={() => openModal(ModalMovieFollowersRating, { movieId: movie.id })}
                 />}
               </div>
             )}
@@ -131,7 +135,7 @@ export default function MovieHeader({
             <div className=" space-y-2">
               <div>
                 {movie.directors?.map((director, index: number) => (
-                  <>
+                  <Fragment key={index}>
                     {index > 0 && <span>, </span>}
                     <span key={index}>
                       <Button
@@ -144,7 +148,7 @@ export default function MovieHeader({
                         </Link>
                       </Button>
                     </span>
-                  </>
+                  </Fragment>
                 )) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
                 {/* RUNTIME */}
                 <RuntimeTooltip runtime={movie.runtime ?? 0} className=" before:content-['_•_']" />

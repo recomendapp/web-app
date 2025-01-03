@@ -22,6 +22,8 @@ export default function ActivityIcon({
   variant = 'user',
   tooltip,
   className,
+  onClick,
+  ...props
 }: RatingProps) {
   if (!rating) return null;
 
@@ -38,14 +40,19 @@ export default function ActivityIcon({
 
   return (
     <TooltipBox tooltip={tooltip}>
-        <div className={cn(`
+        <div
+          className={cn(`
             relative flex shadow-sm w-8 aspect-[3/2] rounded-sm bg-background border-2 justify-center items-center shrink-0
             border-accent-1
+            ${onClick && 'cursor-pointer'}
             ${variant === 'user' && 'border-accent-1'}
             ${variant === 'general' && 'border-accent-pink'}
             ${variant === 'follower' && ' border-blue-500'}
           `,
-          className)}>
+          className)}
+          onClick={onClick}
+          {...props}
+        >
           {is_reviewed && (
             <Link
               href={`/film/${movieId}/review/${is_reviewed}`}

@@ -71,6 +71,7 @@ export const userKeys = {
 		userId: string;
 		filters?: any;
 	}) => filters ? [...userKeys.detail(userId), 'activities', filters] as const : [...userKeys.detail(userId), 'activities'] as const,
+	movieFollowersRating: (userId: string, movieId: number) => [...userKeys.movie(userId, movieId), 'followers-rating'] as const,
 
 	collection: (userId: string) => [...userKeys.detail(userId), 'collection'] as const,
 	collectionLikes: (userId: string) => [...userKeys.collection(userId), 'likes'] as const,

@@ -2561,15 +2561,6 @@ export type Database = {
       }
     }
     Views: {
-      _view: {
-        Row: {
-          foreign_keys: string[] | null
-          indices: string[] | null
-          primary_keys: string[] | null
-          table_name: string | null
-        }
-        Relationships: []
-      }
       collection: {
         Row: {
           backdrop_path: string | null
@@ -2774,6 +2765,44 @@ export type Database = {
             columns: ["belongs_to_collection"]
             isOneToOne: false
             referencedRelation: "tmdb_collection"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      movie_followers_rating: {
+        Row: {
+          created_at: string | null
+          movie_id: number | null
+          rating: number | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
             referencedColumns: ["id"]
           },
         ]
