@@ -26,7 +26,6 @@ export const WidgetRecomendShowcase = ({
 					<CardHeader>
 						<CardTitle className="flex gap-2 items-center text-xl">
 							<feature.icon className={cn("w-4 text-accent-1", feature.iconClass)} />
-							{/* {feature.label} */}
 							{t(`${feature.key}.label`)}
 						</CardTitle>
 						<CardDescription className="ml-6">{t(`${feature.key}.description`)}</CardDescription>

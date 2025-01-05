@@ -11,11 +11,7 @@ import { AuthError } from '@supabase/supabase-js';
 import { useAuth } from '@/context/auth-context';
 import { useState } from 'react';
 import { InputPassword } from '@/components/ui/input-password';
-
-const loginSchema = z.object({
-  email: z.string().email({ message: 'Adresse email invalide' }),
-  password: z.string(),
-});
+import { useTranslations } from 'next-intl';
 
 export function LoginPasswordForm({
   className,
@@ -23,7 +19,14 @@ export function LoginPasswordForm({
   ...props
 } : React.HTMLAttributes<HTMLDivElement> & { redirectTo: string | null }) {
   const { login } = useAuth();
+  const t = useTranslations('pages.auth.login');
+  const common = useTranslations('common');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const loginSchema = z.object({
+    email: z.string().email({ message: common('form.email.error.invalid') }),
+    password: z.string(),
+  });
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -41,13 +44,13 @@ export function LoginPasswordForm({
       } else if (error instanceof AuthError) {
         switch (error.status) {
           case 400:
-            toast.error('Email ou mot de passe incorrect');
+            toast.error(t('form.wrong_credentials'));
             break;
           default:
             toast.error(error.message);
         }
       } else {
-        toast.error("Une erreur s'est produite");
+        toast.error(common('error'));
       }
     } finally {
       setIsLoading(false);
@@ -59,12 +62,12 @@ export function LoginPasswordForm({
       <div className="grid gap-2">
         <div className="grid gap-1">
           <Label htmlFor="email">
-            Email
+            {common('form.email.label')}
           </Label>
           <Input
             id="email"
             type="email"
-            placeholder="jeanluc.godard@gmail.com"
+            placeholder={common('form.email.placeholder')}
             autoCapitalize="none"
             autoComplete="email"
             autoCorrect="off"
@@ -73,17 +76,18 @@ export function LoginPasswordForm({
         </div>
         <div className="grid gap-1">
           <Label htmlFor="password">
-            Password
+            {t('form.password.label')}
           </Label>
           <InputPassword
             id="password"
+            placeholder={t('form.password.placeholder')}
             autoComplete="current-password"
             disabled={isLoading}
           />
         </div>
         <Button disabled={isLoading}>
           {isLoading ? (<Icons.loader />) : null}
-          Se connecter avec un e-mail
+          {t('form.submit')}
         </Button>
         <Link
           href={{
@@ -92,7 +96,7 @@ export function LoginPasswordForm({
           }}
           className="text-right text-sm text-muted-foreground hover:text-foreground"
         >
-          Mot de passe oublié ?
+          {t('form.forgot_password')}
         </Link>
       </div>
     </form>

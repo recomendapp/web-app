@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { AppearanceForm } from './_components/appearanceForm';
 
 export default function SettingsAppearancePage() {
-  const t = useTranslations('settings');
+  const t = useTranslations('pages.settings');
   return (
     <div className="space-y-6">
       <div>

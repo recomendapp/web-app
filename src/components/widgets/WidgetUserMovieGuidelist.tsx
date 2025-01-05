@@ -7,11 +7,13 @@ import { UserAvatar } from '../User/UserAvatar/UserAvatar';
 import { cn } from '@/lib/utils';
 import { CardMovie } from '../card/CardMovie';
 import { Button } from '../ui/button';
+import { useTranslations } from 'next-intl';
 
 export const WidgetUserMovieGuidelist = ({
   className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
   const { user } = useAuth();
+  const t = useTranslations('widgets');
 
   const { data: guidelist } = useUserGuidelist({
     userId: user?.id,
@@ -31,7 +33,7 @@ export const WidgetUserMovieGuidelist = ({
   <div className={cn('@container/widget-user-movie-guidelist space-y-4', className)}>
     <Button variant={'link'} className="p-0 w-fit font-semibold text-xl" asChild>
 			<Link href={'/collection/guidelist'}>
-        Reco par vos amis
+        {t('user_movie_guidelist.label')}
 			</Link>
 		</Button>
     <div className='grid grid-cols-2 @2xl/widget-user-movie-guidelist:grid-cols-3 gap-4'>

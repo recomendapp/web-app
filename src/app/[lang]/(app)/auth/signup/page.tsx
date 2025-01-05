@@ -17,7 +17,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { use, useEffect, useMemo, useState } from 'react';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,6 +30,7 @@ import { Input } from '@/components/ui/input';
 import useDebounce from '@/hooks/use-debounce';
 import { useCheckUsernameAvailability } from '@/hooks/use-check-username-availability';
 import { InputPassword } from '@/components/ui/input-password';
+import { count } from 'console';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -37,84 +38,91 @@ const FULL_NAME_MIN_LENGTH = 1;
 const FULL_NAME_MAX_LENGTH = 50;
 const PASSWORD_MIN_LENGTH = 8;
 
-const signupSchema = z.object({
-	email: z.string().email({
-	  message: 'Adresse email invalide.',
-	}),
-	username: z
-	  .string()
-	  .min(USERNAME_MIN_LENGTH, {
-		message: `${USERNAME_MIN_LENGTH} caractères minimum.`,
-	  })
-	  .max(USERNAME_MAX_LENGTH, {
-		message: `${USERNAME_MAX_LENGTH} caractères maximum.`,
-	  })
-	  .regex(/^[^\W]/, {
-		message: "Le premier caractère doit être une lettre ou un chiffre.",
-	  })
-	  .regex(/^(?!.*\.\.)/, {
-		message: "Deux points consécutifs ne sont pas autorisés.",
-	  })
-	  .regex(/^(?!.*\.$)/, {
-		message: "Un point à la fin n'est pas autorisé.",
-	  })
-	  .regex(/^[\w.]+$/, {
-		message: "Seules les lettres, les chiffres et les symboles '_' et '.' sont autorisés.",
-	  }),
-	full_name: z
-	  .string()
-	  .min(FULL_NAME_MIN_LENGTH, {
-		message: `${FULL_NAME_MIN_LENGTH} caractère minimum.`,
-	  })
-	  .max(FULL_NAME_MAX_LENGTH, {
-		message: `${FULL_NAME_MAX_LENGTH} caractères maximum.`,
-	  })
-	  .regex(/^[a-zA-Z0-9\s\S]*$/, {
-		message: 'Seules les lettres, les chiffres et les espaces sont autorisés.',
-	  }),
-	password: z
-	  .string()
-	  .min(PASSWORD_MIN_LENGTH, {
-		message: `${PASSWORD_MIN_LENGTH} caractères minimum.`,
-	  })
-	  .regex(/[A-Z]/, {
-		message: 'Au moins une lettre majuscule est requise.',
-	  })
-	  .regex(/[a-z]/, {
-		message: 'Au moins une lettre minuscule est requise.',
-	  })
-	  .regex(/[0-9]/, {
-		message: 'Au moins un chiffre est requis.',
-	  })
-	  .regex(/[\W_]/, {
-		message: 'Au moins un caractère spécial est requis.',
-	  }),
-	confirm_password: z
-	  .string()
-}).refine(data => data.password === data.confirm_password, {
-	message: 'Les mots de passe ne correspondent pas.',
-	path: ['confirm_password'],
-});
-
-type SignupFormValues = z.infer<typeof signupSchema>;
-
-const defaultValues: Partial<SignupFormValues> = {
-	email: '',
-	full_name: '',
-	username: '',
-	password: '',
-	confirm_password: '',
-};
-
 export default function Signup() {
 	const supabase = useSupabaseClient();
 	const { signup, loginWithOtp } = useAuth();
+	const t = useTranslations('pages.auth.signup');
+	const common = useTranslations('common');
+	const word = useTranslations('word');
+
 	const locale = useLocale();
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const redirectTo = searchParams.get('redirect');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const bgImage = useRandomImage(Images.auth.signup.background);
+
+	/* ------------------------------- FORM SCHEMA ------------------------------ */
+	const signupSchema = z.object({
+		email: z.string().email({
+		message: common('form.email.error.invalid'),
+		}),
+		username: z
+		.string()
+		.min(USERNAME_MIN_LENGTH, {
+			message: common('form.length.char_min', { count: USERNAME_MIN_LENGTH }),
+		})
+		.max(USERNAME_MAX_LENGTH, {
+			message: common('form.length.char_max', { count: USERNAME_MAX_LENGTH }),
+		})
+		.regex(/^[^\W]/, {
+			message: common('form.username.schema.first_char'),
+		})
+		.regex(/^(?!.*\.\.)/, {
+			message: common('form.username.schema.double_dot'),
+		})
+		.regex(/^(?!.*\.$)/, {
+			message: common('form.username.schema.ends_with_dot'),
+		})
+		.regex(/^[\w.]+$/, {
+			message: common('form.username.schema.format'),
+		}),
+		full_name: z
+		.string()
+		.min(FULL_NAME_MIN_LENGTH, {
+			message: common('form.length.char_min', { count: FULL_NAME_MIN_LENGTH }),
+		})
+		.max(FULL_NAME_MAX_LENGTH, {
+			message: common('form.length.char_max', { count: FULL_NAME_MAX_LENGTH }),
+		})
+		.regex(/^[a-zA-Z0-9\s\S]*$/, {
+			message: common('form.full_name.schema.format'),
+		}),
+		password: z
+		.string()
+		.min(PASSWORD_MIN_LENGTH, {
+			message: common('form.length.char_min', { count: PASSWORD_MIN_LENGTH }),
+		})
+		.regex(/[A-Z]/, {
+			message: common('form.password.schema.uppercase'),
+		})
+		.regex(/[a-z]/, {
+			message: common('form.password.schema.lowercase'),
+		})
+		.regex(/[0-9]/, {
+			message: common('form.password.schema.number'),
+		})
+		.regex(/[\W_]/, {
+			message: common('form.password.schema.special'),
+		}),
+		confirm_password: z
+		.string()
+	}).refine(data => data.password === data.confirm_password, {
+		message: common('form.password.schema.match'),
+		path: ['confirm_password'],
+	});
+
+	type SignupFormValues = z.infer<typeof signupSchema>;
+
+	const defaultValues: Partial<SignupFormValues> = {
+		email: '',
+		full_name: '',
+		username: '',
+		password: '',
+		confirm_password: '',
+	};
+	/* -------------------------------------------------------------------------- */
+
 	const form = useForm<SignupFormValues>({
 		resolver: zodResolver(signupSchema),
 		defaultValues: defaultValues,
@@ -135,7 +143,7 @@ export default function Signup() {
 	useEffect(() => {
 		if (usernameAvailability.isAvailable === false) {
 			form.setError('username', {
-				message: "Ce nom d'utilisateur n'est pas disponible.",
+				message: common('form.username.schema.unavailable'),
 			});
 		}
 	}, [usernameAvailability.isAvailable]);
@@ -150,22 +158,22 @@ export default function Signup() {
 				password: data.password,
 				language: locale,
 			});
-			toast.success('Un email de confirmation vient de vous être envoyé');
+			toast.success(t('form.success', { email: data.email }));
 			setShowOtp(true);
 		} catch (error) {
 			if (error instanceof AuthError) {
 				switch (error.status) {
 					case 422:
-						toast.error('Cette adresse email est déjà utilisée');
+						toast.error(common('form.email.error.unavailable'));
 						break;
 					case 500:
-						toast.error('Ce nom d\'utilisateur n\'est pas disponible');
+						toast.error(common('form.username.schema.unavailable'));
 						break;
 					default:
 						toast.error(error.message);
 				}
 			} else {
-				toast.error("Une erreur s\'est produite");
+				toast.error(common('error'));
 			}
 		} finally {
 			setIsLoading(false);
@@ -176,18 +184,18 @@ export default function Signup() {
 		try {
 			setIsLoading(true);
 			await loginWithOtp(form.getValues('email'), redirectTo);
-			toast.success('Code renvoyé');
+			toast.success(common('form.code_sent'));
 		} catch (error) {
 			if (error instanceof AuthError) {
 				switch (error.status) {
 					case 429:
-						toast.error('Trop de tentatives, réessayez plus tard');
+						toast.error(common('form.error.too_many_attempts'));
 						break;
 					default:
 						toast.error(error.message);
 				}
 			} else {
-				toast.error("Une erreur s\'est produite");
+				toast.error(common('error'));
 			}
 		} finally {
 			setIsLoading(false);
@@ -203,20 +211,20 @@ export default function Signup() {
 			type: 'email',
 		  });
 		  if (error) throw error;
-		  toast.success('Email vérifié');
+		  toast.success(common('form.email.verified'));
 		  router.push(redirectTo || '/');
 		  router.refresh();
 		} catch (error) {
 		  if (error instanceof AuthError) {
 			switch (error.status) {
 			  case 403:
-				toast.error('Code invalide');
+				toast.error(common('form.error.invalid_code'));
 				break
 			  default:
 				toast.error(error.message);
 			}
 		  } else {
-			toast.error("Une erreur s\'est produite");
+			toast.error(common('error'));
 		  }
 		} finally {
 		  setIsLoading(false);
@@ -240,11 +248,9 @@ export default function Signup() {
 					<CardHeader className='gap-2'>
 					<CardTitle className='inline-flex gap-2 items-center justify-center'>
 						<Icons.site.icon className='fill-accent-1 w-8' />
-						S&apos;inscrire
+						{word('signup')}
 					</CardTitle>
-					<CardDescription>
-						Créez un compte pour recomender un film a ton pote qui oublie toujours le titre du film.
-					</CardDescription>
+					<CardDescription className='text-center'>{t('description')}</CardDescription>
 					</CardHeader>
 					<CardContent className='grid gap-2'>
 						<FormField
@@ -252,12 +258,12 @@ export default function Signup() {
 						name="email"
 						render={({ field }) => (
 						<FormItem>
-							<FormLabel>Adresse email</FormLabel>
+							<FormLabel>{common('form.email.label')}</FormLabel>
 							<FormControl>
 								<Input
 								autoComplete="email"
 								disabled={isLoading}
-								placeholder="jeanluc.godard@gmail.com"
+								placeholder={common('form.email.placeholder')}
 								{...field}
 								/>
 							</FormControl>
@@ -271,7 +277,7 @@ export default function Signup() {
 						render={({ field }) => (
 							<FormItem>
 							<FormLabel className='w-full flex justify-between gap-2'>
-							Nom d&apos;utilisateur
+							{common('form.username.label')}
 							<span className='text-xs text-destructive'>{field?.value?.length > USERNAME_MAX_LENGTH ? `${field.value.length} / ${USERNAME_MAX_LENGTH}` : ''}</span>
 							</FormLabel>
 								<FormControl>
@@ -279,7 +285,7 @@ export default function Signup() {
 										<Input
 										autoComplete="username"
 										disabled={isLoading}
-										placeholder="@jlgodard"
+										placeholder={common('form.username.placeholder')}
 										className={usernameAvailability.isLoading ? 'pr-8' : ''}
 										{...field}
 										/>
@@ -301,14 +307,14 @@ export default function Signup() {
 						render={({ field }) => (
 							<FormItem>
 							<FormLabel className="w-full flex justify-between gap-2">
-							Nom
+							{common('form.full_name.label')}
 							<span className='text-xs text-destructive'>{field?.value?.length > FULL_NAME_MAX_LENGTH ? `${field.value.length} / ${FULL_NAME_MAX_LENGTH}` : ''}</span>
 							</FormLabel>
 							<FormControl>
 								<Input
 								autoComplete="given-name"
 								disabled={isLoading}
-								placeholder="Jean-Luc Godard"
+								placeholder={common('form.full_name.placeholder')}
 								{...field}
 								/>
 							</FormControl>
@@ -322,13 +328,13 @@ export default function Signup() {
 						name="password"
 						render={({ field }) => (
 							<FormItem>
-							<FormLabel>Mot de passe</FormLabel>
+							<FormLabel>{common('form.password.label')}</FormLabel>
 							<FormControl>
 								<InputPassword
 								disabled={isLoading}
 								type="password"
 								autoComplete="new-password"
-								placeholder="Mot de passe"
+								placeholder={common('form.password.placeholder')}
 								{...field}
 								/>
 							</FormControl>
@@ -342,13 +348,13 @@ export default function Signup() {
 						name="confirm_password"
 						render={({ field }) => (
 							<FormItem>
-							<FormLabel>Confirmer le mot de passe</FormLabel>
+							<FormLabel>{common('form.password.confirm.label')}</FormLabel>
 							<FormControl>
 								<InputPassword
 								disabled={isLoading}
 								type="password"
 								autoComplete="new-password"
-								placeholder="Confirmer le mot de passe"
+								placeholder={common('form.password.confirm.placeholder')}
 								{...field}
 								/>
 							</FormControl>
@@ -362,10 +368,10 @@ export default function Signup() {
 					<CardFooter className='grid gap-2'>
 						<Button className="w-full" disabled={isLoading}>
 							{isLoading ? (<Icons.loader />) : null}
-							Envoyer
+							{word('signup')}
 						</Button>
 						<p className="px-8 text-center text-sm text-muted-foreground">
-							Oups, finalement j&apos;ai déjà un compte.{' '}
+							{t('return_to_login')}{' '}
 							<Button
 								variant={'link-accent-1'}
 								className='inline p-0' 
@@ -377,7 +383,7 @@ export default function Signup() {
 										query: redirectTo ? { redirect: redirectTo } : undefined,
 									}}
 								>
-									Se connecter
+								{word('login')}
 								</Link>
 							</Button>
 						</p>
@@ -390,11 +396,9 @@ export default function Signup() {
 			<CardHeader className='gap-2'>
 				<CardTitle className='inline-flex gap-2 items-center justify-center'>
 					<Icons.site.icon className='fill-accent-1 w-8' />
-					Confirmation de l&apos;email
+					{t('confirm_form.label')}
 				</CardTitle>
-				<CardDescription>
-					Un email contenant un code de vérification a été envoyé à votre adresse email.
-				</CardDescription>
+				<CardDescription>{t('confirm_form.description', { email: form.getValues('email') })}</CardDescription>
 			</CardHeader>
 			<CardContent className='grid gap-2 justify-items-center'>
 				<InputOTP disabled={isLoading} maxLength={numberOfDigits} onChange={(e) => e.length === numberOfDigits && handleVerifyOtp(e)}>
@@ -407,14 +411,14 @@ export default function Signup() {
 			</CardContent>
 			<CardFooter>
 				<p className="px-8 text-center text-sm text-muted-foreground">
-					Vous n&apos;avez pas reçu de code ?{' '}
+					{common('form.error.not_received_code')}{' '}
 					<Button
 					variant={"link-accent-1"}
 					className='p-0'
 					disabled={isLoading}
 					onClick={resendOtp}
 					>
-						Renvoyer le code
+					{common('form.resend_code')}
 					</Button>
 				</p>
 			</CardFooter>

@@ -17,29 +17,40 @@ import {
 import { Input } from '@/components/ui/input';
 import toast from 'react-hot-toast';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { useTranslations } from 'next-intl';
 
 export function SecurityForm() {
   const supabase = useSupabaseClient();
+  const t = useTranslations('pages.settings');
+  const word = useTranslations('word');
+  const common = useTranslations('common');
   const profileFormSchema = z.object({
     newpassword: z
       .string()
       .min(8, {
-        message: 'Le mot de passe doit contenir moins 8 caractères.',
+        message: t('security.new_password.form.min_length'),
       })
-      .max(128, {
-        message: 'Le mot de passe ne doit pas dépasser 128 caractères.',
+      .regex(/[A-Z]/, {
+        message: t('security.new_password.form.uppercase'),
       })
-      .refine((value) => /^[a-zA-Z0-9!@#$%^&*_\-]*$/.test(value), {
-        message:
-          'Le mot de passe peut inclure des caractères alphabétiques, numériques et spéciaux.',
+      .regex(/[a-z]/, {
+        message: t('security.new_password.form.lowercase'),
+      })
+      .regex(/[0-9]/, {
+        message: t('security.new_password.form.number'),
+      })
+      .regex(/[\W_]/, {
+        message: t('security.new_password.form.special'),
       }),
     confirmnewpassword: z.string(),
+  }).refine((data) => data.newpassword === data.confirmnewpassword, {
+    message: t('security.confirm_password.form.match'),
+    path: ['confirmnewpassword'],
   });
 
   type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
   const defaultValues: Partial<ProfileFormValues> = {
-    // password: '',
     newpassword: '',
     confirmnewpassword: '',
   };
@@ -51,24 +62,15 @@ export function SecurityForm() {
   });
 
   async function onSubmit(data: ProfileFormValues) {
-    if (data.newpassword !== data.confirmnewpassword) {
-      form.setError('newpassword', {
-        message: '',
-      });
-      form.setError('confirmnewpassword', {
-        message: 'Les mots de passe ne correspondent pas.',
-      });
-      return;
-    }
     try {
       const { error } = await supabase.auth.updateUser({
         password: data.newpassword,
       });
       if (error) throw error;
-      toast.success('Enregistré');
+      toast.success(word('saved'));
       form.reset();
     } catch (error) {
-      toast.error("Une erreur s'est produite");
+      toast.error(common('error'));
     }
   }
 
@@ -80,12 +82,12 @@ export function SecurityForm() {
           name="newpassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nouveau mot de passe</FormLabel>
+              <FormLabel>{t('security.new_password.label')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoComplete="new-password"
-                  placeholder={'Nouveau mot de passe'}
+                  placeholder={t('security.new_password.placeholder')}
                   {...field}
                 />
               </FormControl>
@@ -99,12 +101,12 @@ export function SecurityForm() {
           name="confirmnewpassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirmer le nouveau mot de passe</FormLabel>
+              <FormLabel>{t('security.confirm_password.label')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoComplete="new-password"
-                  placeholder={'Confirmer le nouveau mot de passe'}
+                  placeholder={t('security.confirm_password.placeholder')}
                   {...field}
                 />
               </FormControl>
@@ -113,7 +115,7 @@ export function SecurityForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Enregistrer</Button>
+        <Button type="submit">{word('save')}</Button>
       </form>
     </Form>
   );

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CardUserMovieActivity } from "@/components/card/CardUserMovieActivity";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "../ui/button";
+import { useTranslations } from "next-intl";
 
 const WIDGET_USER_FEED_LIMIT = 4;
 
@@ -12,6 +13,7 @@ export const WidgetUserFeed = ({
 	className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
 	const { user } = useAuth();
+	const t = useTranslations('widgets');
 	const {
 		data: feed,
 		isLoading,
@@ -24,7 +26,7 @@ export const WidgetUserFeed = ({
 		<div className={cn('@container/widget-user-feed space-y-4', className)}>
 			<Button variant={'link'} className="p-0 w-fit font-semibold text-xl" asChild>
 				<Link href={'/feed'}>
-				Dernières activités
+				{t('user_feed.label')}
 				</Link>
 			</Button>
 			<div className="grid gap-2 grid-cols-1 @5xl/widget-user-feed:grid-cols-2">

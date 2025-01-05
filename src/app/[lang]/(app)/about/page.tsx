@@ -19,7 +19,7 @@ export default async function About({
 }: {
   params: { lang: Lang };
 }) {
-  const t = await getTranslations('about');
+  const t = await getTranslations('pages.about');
   const [session, products] = await Promise.all([
     getSession(),
     getActiveProductsWithPrices(),

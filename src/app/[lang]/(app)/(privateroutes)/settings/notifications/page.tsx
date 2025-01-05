@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { NotificationsForm } from "./_components/notificationsForm";
 
 export default function SettingsNotificationsPage() {
-  const t = useTranslations('settings');
+  const t = useTranslations('pages.settings');
   return (
     <div className="space-y-6">
       <div>

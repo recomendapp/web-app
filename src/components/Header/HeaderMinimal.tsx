@@ -2,15 +2,15 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { UserNav } from '@/components/User/UserNav/UserNav';
-import Image from 'next/image';
-import { siteConfig } from '@/config/site';
 import { createServerClient } from '@/lib/supabase/server';
 import { Icons } from '@/config/icons';
+import { getTranslations } from 'next-intl/server';
 
 interface HeaderMinimalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export async function HeaderMinimal({ className }: HeaderMinimalProps) {
   const supabase = createServerClient();
+  const word = await getTranslations('word');
 
   const {
     data: { user },
@@ -35,7 +35,7 @@ export async function HeaderMinimal({ className }: HeaderMinimalProps) {
         ) : (
           <Button asChild>
             <Link href={'/auth/login'} className="whitespace-nowrap">
-              Se connecter
+              {word('login')}
             </Link>
           </Button>
         )}

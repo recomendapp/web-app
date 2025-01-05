@@ -11,7 +11,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {}
 
 export function SettingsNav({ className, ...props }: SidebarNavProps) {
-  const t = useTranslations('settings');
+  const t = useTranslations('pages.settings');
   const pathname = usePathname();
 
   const settingsNavItems = [

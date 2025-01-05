@@ -1,7 +1,7 @@
 "use client";
+
 import { Icons } from '@/config/icons';
 import { Images } from '@/config/images';
-import { siteConfig } from '@/config/site';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -12,15 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Provider } from '@supabase/supabase-js';
-import { useAuth } from '@/context/auth-context';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { LoginOtpForm } from './_components/LoginOtpForm';
+import { useTranslations } from 'next-intl';
 
 export default function Login() {
+  const t = useTranslations('pages.auth.login');
+  const common = useTranslations('common');
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
   const bgImage = useRandomImage(Images.auth.login.background);
@@ -39,18 +38,16 @@ export default function Login() {
         <CardHeader className='gap-2'>
           <CardTitle className='inline-flex gap-2 items-center justify-center'>
             <Icons.site.icon className='fill-accent-1 w-8' />
-            Se connecter
+            {t('label')}
           </CardTitle>
-          <CardDescription>
-            Découvrez les meilleures recommandations de films.
-          </CardDescription>
+          <CardDescription className='text-center'>{t('description')}</CardDescription>
         </CardHeader>
         <CardContent className='grid gap-4'>
           <LoginOtpForm redirectTo={redirectTo} />
         </CardContent>
         <CardFooter>
           <p className="px-8 text-center text-sm text-muted-foreground">
-            Vous préférez vous connecter avec un mot de passe ?{' '}
+            {t('otp.password_login')}{' '}
             <Button
               variant={'link-accent-1'}
               className='inline p-0' 
@@ -62,7 +59,7 @@ export default function Login() {
                   query: redirectTo ? { redirect: redirectTo } : undefined,
                 }}
               >
-                Ici
+                {common('click_here')}
               </Link>
             </Button>
           </p>

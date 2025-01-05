@@ -24,11 +24,15 @@ import { useSupabaseClient } from '@/context/supabase-context';
 import { supabase } from '@/lib/supabase/client';
 import { SupabaseClient } from '@supabase/supabase-js';
 import checkUsernameExist from '@/components/Auth/hooks/checkUsernameExist';
+import { useTranslations } from 'next-intl';
 
 // This can come from your database or API.
 
 export function AccountForm() {
   const supabase = useSupabaseClient();
+  const t = useTranslations('pages.settings');
+  const word = useTranslations('word');
+  const common = useTranslations('common');
 
   const { user, session } = useAuth();
 
@@ -57,18 +61,17 @@ export function AccountForm() {
     ? new Date(user.username_updated_at)
     : new Date('01/01/1970');
 
-  const profileFormSchema = z.object({
+  const accountFormSchema = z.object({
     username: z
       .string()
       .min(3, {
-        message: "Le nom d'utilisateur doit comporter au moins 3 caractères.",
+        message: t('account.username.form.min_length'),
       })
       .max(15, {
-        message: "Le nom d'utilisateur ne doit pas dépasser 15 caractères.",
+        message: t('account.username.form.max_length'),
       })
       .refine((value) => /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{2,14}$/.test(value), {
-        message:
-          "L'username ne doit contenir que des lettres, des chiffres et les symbole '_' et '.'",
+        message: t('account.username.form.invalid'),
       })
       .refine(
         async (value) => {
@@ -79,23 +82,26 @@ export function AccountForm() {
           return !isUsernameExist;
         },
         {
-          message: "Cet username n'est pas disponible.",
+          message: t('account.username.form.unavailable'),
         }
       ),
     private: z.boolean(),
-    email: z.string().email(),
+    email: z.string()
+      .email({
+        message: common('form.email.error.invalid'),
+      })
   });
 
-  type ProfileFormValues = z.infer<typeof profileFormSchema>;
+  type AccountFormValues = z.infer<typeof accountFormSchema>;
 
-  const defaultValues: Partial<ProfileFormValues> = {
+  const defaultValues: Partial<AccountFormValues> = {
     username: user?.username,
     private: user?.private,
     email: session?.user.email,
   };
 
-  const form = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileFormSchema),
+  const form = useForm<AccountFormValues>({
+    resolver: zodResolver(accountFormSchema),
     defaultValues,
     mode: 'onChange',
   });
@@ -109,20 +115,16 @@ export function AccountForm() {
       });
   }, [form, session?.user.email, user]);
 
-  async function onSubmit(data: ProfileFormValues) {
-    // if (user?.username === data.username) {
-    //   toast.error('Aucun changement');
-    //   return;
-    // }
+  async function onSubmit(data: AccountFormValues) {
     try {
       setLoading(true);
       await updateProfile({
         username: data.username,
         private: data.private,
       });
-      toast.success('Enregistré');
+      toast.success(word('saved'));
     } catch (error) {
-      toast.error("Une erreur s'est produite");
+      toast.error(common('error'));
     } finally {
       setLoading(false);
     }
@@ -139,7 +141,7 @@ export function AccountForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex justify-between gap-4">
-                <p>Nom d&apos;utilisateur</p>
+                <p>{t('account.username.label')}</p>
                 <p className="">{field?.value?.length ?? 0} / 15</p>
               </FormLabel>
               <FormControl>
@@ -151,15 +153,11 @@ export function AccountForm() {
                       ? true
                       : false
                   }
-                  placeholder={"Nom d'utilisateur"}
+                  placeholder={t('account.username.placeholder')}
                   {...field}
                 />
               </FormControl>
-              <FormDescription className="text-justify">
-                Ceci est votre nom d&apos;utilisateur par lequel les autres
-                personnes peuvent vous trouver et accéder à votre profil. Vous
-                ne pouvez le modifier qu&apos;une fois tous les 30 jours.
-              </FormDescription>
+              <FormDescription className="text-justify">{t('account.username.description')}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -169,16 +167,14 @@ export function AccountForm() {
           name="private"
           render={({ field }) => (
             <FormItem className='flex items-center gap-2'>
-              <FormLabel>Compte privé</FormLabel>
+              <FormLabel>{t('account.private.label')}</FormLabel>
               <FormControl>
                 <Switch
                   checked={field.value}
                   onCheckedChange={field.onChange}
                 />
               </FormControl>
-              <FormDescription className="text-justify">
-
-              </FormDescription>
+              {/* <FormDescription className="text-justify">{t('account.private.description')}</FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
@@ -188,22 +184,18 @@ export function AccountForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Adresse email </FormLabel>
+              <FormLabel>{common('form.email.label')}</FormLabel>
               <FormControl>
-                <Input placeholder={'Adresse mail'} {...field} disabled />
+                <Input placeholder={common('form.email.placeholder')} {...field} disabled />
               </FormControl>
-              <FormDescription className="flex flex-col md:flex-row w-full justify-between gap-4">
-                <div className="text-justify">
-                  Pour modifier votre adresse email contactez nous.
-                </div>
-              </FormDescription>
+              <FormDescription className="flex flex-col md:flex-row w-full justify-between gap-4">{t('account.email.description')}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <Button type="submit" disabled={loading}>
           {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          Enregistrer
+          {word('save')}
         </Button>
       </form>
     </Form>

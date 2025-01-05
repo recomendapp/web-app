@@ -1,8 +1,17 @@
-import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: "Une erreur s\'est produite",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: {
+    lang: string;
+  };
+}) {
+  const t = await getTranslations({ locale: params.lang, namespace: 'common' });
+  return {
+    title: t('error'),
+  }
+}
 
 interface AuthErrorLayoutProps {
   children: React.ReactNode;

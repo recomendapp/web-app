@@ -6,11 +6,13 @@ import { useUserWatchlist } from '@/features/user/userQueries';
 import { cn } from '@/lib/utils';
 import { CardMovie } from '../card/CardMovie';
 import { Button } from '../ui/button';
+import { useTranslations } from 'next-intl';
 
 export const WidgetUserMovieWatchlist = ({
   className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
   const { user } = useAuth();
+  const t = useTranslations('widgets');
 
   const { data: watchlist } = useUserWatchlist({
     userId: user?.id,
@@ -28,7 +30,7 @@ export const WidgetUserMovieWatchlist = ({
   <div className={cn('@container/widget-user-movie-watchlist space-y-4', className)}>
     <Button variant={'link'} className="p-0 w-fit font-semibold text-xl" asChild>
 			<Link href={'/collection/watchlist'}>
-        À voir
+        {t('user_movie_watchlist.label')}
 			</Link>
 		</Button>
     <div className='grid grid-cols-2 @2xl/widget-user-movie-watchlist:grid-cols-3 gap-4'>

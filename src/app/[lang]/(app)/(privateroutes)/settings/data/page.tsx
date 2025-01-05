@@ -6,7 +6,7 @@ import { Importer } from "../../../../../../components/Settings/Data/Importer/Im
 import { Exporter } from "@/components/Settings/Data/Exporter/Exporter";
 
 export default function SettingsDataPage() {
-  const t = useTranslations('settings');
+  const t = useTranslations('pages.settings');
   return (
     <div className="space-y-6">
       <div>

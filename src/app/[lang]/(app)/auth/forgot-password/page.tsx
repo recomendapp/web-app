@@ -28,16 +28,14 @@ import {
 } from "@/components/ui/input-otp"
 import { ArrowLeftIcon } from 'lucide-react';
 import { AuthError } from '@supabase/supabase-js';
-
-const emailSchema = z
-  .string()
-  .email({
-    message: 'Adresse email invalide',
-  });
+import { useTranslations } from 'next-intl';
 
 export default function ForgotPassword() {
   const supabase = useSupabaseClient();
   const router = useRouter();
+  const t = useTranslations('pages.auth.forgot_password');
+  const common = useTranslations('common');
+  const word = useTranslations('word');
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
   const [email, setEmail] = useState<string>('');
@@ -46,6 +44,12 @@ export default function ForgotPassword() {
   // OTP
   const numberOfDigits = 6;
   const [showOtp, setShowOtp] = useState<boolean>(false);
+
+  const emailSchema = z
+    .string()
+    .email({
+      message: common('form.email.error.invalid'),
+    });
 
   const handleSubmit = async (event?: React.SyntheticEvent) => {
     event?.preventDefault();
@@ -56,7 +60,7 @@ export default function ForgotPassword() {
         redirectTo: `${location.origin}/auth/reset-password`,
       });
       if (error) throw error;
-      toast.success('Demande envoyée');
+      toast.success(t('form.code_sent'));
       setShowOtp(true);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -66,13 +70,13 @@ export default function ForgotPassword() {
       } else if (error instanceof AuthError) {
         switch (error.status) {
           case 429:
-            toast.error('Trop de tentatives, réessayez plus tard');
+            toast.error(common('form.error.too_many_attempts'));
             break;
           default:
             toast.error(error.message);
         }
       } else {
-        toast.error("Une erreur s\'est produite");
+        toast.error(common('error'));
       }
     } finally {
       setIsLoading(false);
@@ -88,20 +92,20 @@ export default function ForgotPassword() {
         type: 'recovery',
       });
       if (error) throw error;
-      toast.success('Code vérifié');
+      toast.success(common('form.code_verified'));
       router.push('/settings/security');
       router.refresh();
     } catch (error) {
       if (error instanceof AuthError) {
         switch (error.status) {
           case 403:
-            toast.error('Code invalide');
+            toast.error(common('form.error.invalid_code'));
             break
           default:
             toast.error(error.message);
         }
       } else {
-        toast.error("Une erreur s\'est produite");
+        toast.error(common('error'));
       }
     } finally {
       setIsLoading(false);
@@ -124,18 +128,16 @@ export default function ForgotPassword() {
         <CardHeader className='gap-2'>
           <CardTitle className='inline-flex gap-2 items-center justify-center'>
             <Icons.site.icon className='fill-accent-1 w-8' />
-            Mot de passe oublié ?
+            {t('label')}
           </CardTitle>
-          <CardDescription>
-            Utilises un gestionnaire de mot de passe, c&apos;est vachement pratique.
-          </CardDescription>
+          <CardDescription>{t('description')}</CardDescription>
         </CardHeader>
         <CardContent className='grid gap-2'>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{common('form.email.label')}</Label>
               <Input
               id="email"
               type="email"
-              placeholder="jason.bourne@cia.com"
+              placeholder={t('form.email.placeholder')}
               autoCapitalize='none'
               autoComplete='email'
               autoCorrect='off'
@@ -146,10 +148,10 @@ export default function ForgotPassword() {
         <CardFooter className='grid gap-2'>
           <Button className="w-full" disabled={isLoading}>
             {isLoading ? (<Icons.loader />) : null}
-            Envoyer
+            {t('form.submit')}
           </Button>
           <p className="px-8 text-center text-sm text-muted-foreground">
-            Oups, finalement je connais mon mot de passe.{' '}
+            {t('return_to_login')}{' '}
             <Button
               variant={'link-accent-1'}
               className='inline p-0' 
@@ -161,7 +163,7 @@ export default function ForgotPassword() {
                   query: redirectTo ? { redirect: redirectTo } : undefined,
                 }}
               >
-                Se connecter
+                {word('login')}
               </Link>
 
             </Button>
@@ -176,10 +178,10 @@ export default function ForgotPassword() {
           <Button variant={"ghost"} onClick={() => setShowOtp(false)}>
             <ArrowLeftIcon className='w-6' />
           </Button>
-          Code de vérification
+          {t('confirm_form.label')}
         </CardTitle>
         <CardDescription>
-          Un code de vérification a été envoyé à l&apos;adresse <strong>{email}</strong>
+          {t('confirm_form.description', { email })}
         </CardDescription>
       </CardHeader>
       <CardContent className='grid gap-2 justify-items-center'>
@@ -191,9 +193,9 @@ export default function ForgotPassword() {
           </InputOTPGroup>
         </InputOTP>
         <p className="px-8 text-center text-sm text-muted-foreground">
-          Vous n&apos;avez pas reçu de code ?{' '}
+          {common('form.error.not_received_code')}{' '}
           <Button variant={"link-accent-1"} className='p-0' onClick={() => handleSubmit()} disabled={isLoading}>
-            Renvoyer le code
+            {common('form.resend_code')}
           </Button>
         </p>
       </CardContent>

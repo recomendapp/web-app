@@ -23,20 +23,21 @@ import { Icons } from '@/config/icons';
 import { useEffect, useState } from 'react';
 import compressPicture from '@/lib/utils/compressPicture';
 import Loader from '@/components/Loader/Loader';
-import { useLocale, useTranslations } from 'next-intl';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useMutation } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
 
 export function ProfileForm() {
   const supabase = useSupabaseClient();
-  const t = useTranslations('settings');
+  const t = useTranslations('pages.settings');
+  const word = useTranslations('word');
+  const common = useTranslations('common');
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const { mutateAsync: updateProfile } = useMutation({
     mutationFn: async (payload: Record<string, any>) => {
       if (!user?.id) throw new Error('No user id');
-      // Update user profile
       const {
         data,
         error
@@ -60,22 +61,22 @@ export function ProfileForm() {
     full_name: z
       .string()
       .min(1, {
-        message: 'Le nom doit comporter au moins 1 caractère.',
+        message: t('profile.full_name.form.min_length'),
       })
       .max(50, {
-        message: 'Le nom ne doit pas dépasser 50 caractères.',
+        message: t('profile.full_name.form.max_length'),
       })
       .regex(/^(?!\s+$)[a-zA-Z0-9\s\S]*$/),
     bio: z
       .string()
       .max(150, {
-        message: 'La bio ne doit pas dépasser 150 caractères.',
+        message: t('profile.bio.form.max_length'),
       })
       .optional(),
     website: z
       .string()
       .url({
-        message: 'Veuillez entrer une URL valide.',
+        message: t('profile.url.form.invalid'),
       })
       .or(z.literal(''))
       .optional(),
@@ -125,7 +126,7 @@ export function ProfileForm() {
         await updateProfile(userPayload);
       }
 
-      toast.success('Enregistré');
+      toast.success(t('saved'));
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -138,9 +139,9 @@ export function ProfileForm() {
       await updateProfile({
         avatar_url: null,
       });
-      toast.success('Enregistré');
+      toast.success(t('saved'));
     } catch (error) {
-      toast.error("Une erreur s'est produite");
+      toast.error(common('error'));
     } finally {
       setLoading(false);
     }
@@ -189,16 +190,16 @@ export function ProfileForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex justify-between gap-4">
-                <p>{t('profile.name.label')}</p>
+                <p>{t('profile.full_name.label')}</p>
                 <p className="">{field?.value?.length ?? 0} / 50</p>
               </FormLabel>
               <FormControl>
-                <Input placeholder="Nom" {...field} />
+                <Input placeholder={t('profile.full_name.placeholder')} {...field} />
               </FormControl>
               <FormDescription className="text-justify">
-                {t('profile.name.description')}
+                {t('profile.full_name.description')}
               </FormDescription>
-              {/* <FormMessage /> */}
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -213,32 +214,14 @@ export function ProfileForm() {
               </FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Dites-nous un peu à votre sujet."
+                  placeholder={t('profile.bio.placeholder')}
                   className="resize-none h-32"
                   {...field}
                 />
               </FormControl>
-              {/* <FormMessage /> */}
             </FormItem>
           )}
         />
-        {/* <FormField
-          control={form.control}
-          name={'favorite_movies'}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="flex justify-between gap-4">
-                <p>{t('profile.favorite_movies.label')}</p>
-                <p className="text-muted-foreground">
-                  {field?.value?.length ?? 0} / 4
-                </p>
-              </FormLabel>
-              <FormControl>
-                <FavoriteFilms {...field} />
-              </FormControl>
-            </FormItem>
-          )}
-        /> */}
         <FormField
           control={form.control}
           name={'website'}
@@ -259,7 +242,7 @@ export function ProfileForm() {
         />
         <Button type="submit" disabled={loading}>
           {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          Enregistrer
+          {word('save')}
         </Button>
       </form>
     </Form>

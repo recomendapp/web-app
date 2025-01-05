@@ -15,9 +15,11 @@ import {
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 export default function AuthError() {
   const searchParams = useSearchParams();
+  const t = useTranslations('pages.auth.error');
   const errorMsg = searchParams.get('error');
   const bgImage = useRandomImage(Images.auth.error.background);
   return (
@@ -34,11 +36,9 @@ export default function AuthError() {
         <CardHeader className='gap-2'>
           <CardTitle className='inline-flex gap-2 items-center justify-center'>
             <Icons.site.icon className='fill-accent-1 w-8' />
-            Erreur
+            {t('label')}
           </CardTitle>
-          <CardDescription>
-            Une erreur s&apos;est produite durant un processus d&apos;authentification.
-          </CardDescription>
+          <CardDescription>{t('description')}</CardDescription>
         </CardHeader>
         <CardContent className='grid gap-4'>
           <Alert>
@@ -47,7 +47,7 @@ export default function AuthError() {
         </CardContent>
         <CardFooter>
           <Button className='w-full' asChild>
-            <Link href="/auth/login">Revenir en lieu sûr</Link>
+            <Link href="/auth/login">{t('return_to_login')}</Link>
           </Button>
         </CardFooter>
       </Card>

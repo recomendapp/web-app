@@ -1,7 +1,6 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
 import Link from 'next/link';
@@ -9,51 +8,50 @@ import {
   Search,
   Home,
   Library,
-  Rss,
   Zap,
-  Music2,
   Compass,
-  Radio,
-  User,
 } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
 import { Icons } from '@/config/icons';
+import { useTranslations } from 'next-intl';
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function Navbar({ className }: NavbarProps) {
   const { user } = useAuth();
+  const routesDic = useTranslations('routes');
+  const word = useTranslations('word');
   const pathname = usePathname();
   const routes = useMemo(
     () => [
       {
         icon: Home,
-        label: 'Accueil',
+        label: routesDic('home'),
         active: pathname === '/',
         href: '/',
       },
       {
         icon: Search,
-        label: 'Recherche',
+        label: routesDic('search'),
         active: pathname.startsWith('/search') || pathname.startsWith('/movie'),
         href: '/search',
       },
       {
         icon: Compass,
-        label: 'Carte',
+        label: routesDic('explore'),
         active: pathname === '/map',
         href: '/explore',
       },
       {
         icon: user ? Zap : Icons.shop,
-        label: user ? 'Feed' : 'Shop',
+        label: user ? routesDic('feed') : routesDic('shop'),
         active: user ? pathname.startsWith('/feed') : false,
         href: user ? '/feed' : 'https://shop.recomend.app',
         target: '_blank',
       },
       {
         icon: user ? Library : Icons.user,
-        label: user ? 'Bibliothèque' : 'Se connecter',
+        label: user ? routesDic('library') : word('login'),
         active:
           user ?
             pathname.startsWith('/collection') ||

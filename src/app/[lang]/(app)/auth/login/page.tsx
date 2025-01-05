@@ -20,9 +20,13 @@ import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { RectangleEllipsisIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function Login() {
   const { loginOAuth2 } = useAuth();
+  const t = useTranslations('pages.auth.login');
+  const word = useTranslations('word');
+  const common = useTranslations('common');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
@@ -33,7 +37,7 @@ export default function Login() {
       setIsLoading(true);
       await loginOAuth2(provider, redirectTo);
     } catch (error) {
-      toast.error("Une erreur s'est produite");
+      toast.error(common('error'));
     } finally {
       setIsLoading(false);
     }
@@ -53,11 +57,9 @@ export default function Login() {
         <CardHeader className='gap-2'>
           <CardTitle className='inline-flex gap-2 items-center justify-center'>
             <Icons.site.icon className='fill-accent-1 w-8' />
-            Se connecter
+            {t('label')}
           </CardTitle>
-          <CardDescription>
-            Découvrez les meilleures recommandations de films.
-          </CardDescription>
+          <CardDescription className='text-center'>{t('description')}</CardDescription>
         </CardHeader>
         <CardContent className='grid gap-4'>
           <LoginPasswordForm redirectTo={redirectTo} />
@@ -66,8 +68,8 @@ export default function Login() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Ou continuer avec
+              <span className="bg-muted px-2 text-muted-foreground">
+                {t('or_continue_with')}
               </span>
             </div>
           </div>
@@ -102,7 +104,7 @@ export default function Login() {
             ))}
           </div>
           <p className="px-8 text-center text-sm text-muted-foreground">
-            Pas encore de compte ?{' '}
+            {t('no_account_yet')}{' '}
             <Button
               variant={'link-accent-1'}
               className='inline p-0' 
@@ -114,7 +116,7 @@ export default function Login() {
                   query: redirectTo ? { redirect: redirectTo } : undefined,
                 }}
               >
-                S&apos;inscrire
+              {word('signup')}
               </Link>
             </Button>
           </p>

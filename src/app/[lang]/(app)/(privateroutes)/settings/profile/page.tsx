@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { FavoriteMovies } from '@/components/Settings/UserSettingsProfile/FavoriteFilms/FavoriteMovies';
 
 export default function SettingsProfilePage() {
-  const t = useTranslations('settings');
+  const t = useTranslations('pages.settings');
   return (
     <div className="space-y-6">
       <div>

@@ -23,6 +23,7 @@ import { Skeleton } from "../ui/skeleton";
 import { ContextMenuMovie } from "../context-menu/ContextMenuMovie";
 import { ModalMovieSend } from "../Modals/Movie/Actions/ModalMovieSend";
 import { useAuth } from "@/context/auth-context";
+import { useTranslations } from "next-intl";
 
 interface WidgetMoviesMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -31,6 +32,7 @@ export const WidgetMoviesMostRecommended = ({
 } : WidgetMoviesMostRecommendedProps) => {
 	const { session } = useAuth();
 	const { openModal } = useModal();
+	const t = useTranslations('widgets');
 	const { data, isLoading } = useMovieMostRecommended();
 	const [isPlaying, setIsPlaying] = useState(true);
 	const autoplay = useRef(
@@ -68,7 +70,7 @@ export const WidgetMoviesMostRecommended = ({
 						<Card className="bg-black bg-opacity-40 flex flex-col h-full justify-between gap-2">
 							<CardHeader className="flex-row justify-between items-center gap-2 text-xl font-semibold leading-none tracking-tight ">
 								<h3 className="text-xl">
-									Les plus recommandés.
+									{t('movies_most_recommended.label')}
 								</h3>
 								<div># {index + 1}</div>
 							</CardHeader>

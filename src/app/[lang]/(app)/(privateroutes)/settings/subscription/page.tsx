@@ -16,7 +16,7 @@ import { useSupabaseClient } from '@/context/supabase-context';
 export default function SettingsAccountPage() {
   const supabase = useSupabaseClient();
   const { user, session } = useAuth();
-  const t = useTranslations('settings');
+  const t = useTranslations('pages.settings');
   const router = useRouter();
 
   const {

@@ -4,7 +4,7 @@ import { AccountForm } from '@/app/[lang]/(app)/(privateroutes)/settings/account
 import { useTranslations } from 'next-intl';
 
 export default function SettingsAccountPage() {
-  const t = useTranslations('settings');
+  const t = useTranslations('pages.settings');
   return (
     <div className="space-y-6">
       <div>

@@ -1,8 +1,18 @@
-import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: "Mot de passe oublié",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: {
+    lang: string;
+  };
+}) {
+  const t = await getTranslations({ locale: params.lang, namespace: 'pages.auth.forgot_password' });
+  return {
+    title: t('metadata.title'),
+    description: t('metadata.description'),
+  };
+}
 
 interface ForgotPasswordLayoutProps {
   children: React.ReactNode;

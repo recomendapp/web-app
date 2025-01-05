@@ -18,9 +18,13 @@ import toast from 'react-hot-toast';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { useNotifications } from '@/context/notifications-context';
 import { Switch } from '@/components/ui/switch';
+import { useTranslations } from 'next-intl';
 
 export function NotificationsForm() {
 	const { permission } = useNotifications();
+  const t = useTranslations('pages.settings');
+  const word = useTranslations('word');
+  const common = useTranslations('common');
 	const supabase = useSupabaseClient();
 	const notificationsFormSchema = z.object({
 		pushNotifications: z.boolean(),
@@ -44,9 +48,9 @@ export function NotificationsForm() {
       data.pushNotifications ?
         await permission.enableNotifications() :
         permission.disableNotifications();
-		  toast.success('Enregistré');
+		  toast.success(word('saved'));
     } catch (error) {
-    	toast.error("Une erreur s'est produite");
+    	toast.error(common('error'));
       form.reset();
     }
   }
@@ -54,14 +58,14 @@ export function NotificationsForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <h2>Push Notifications</h2>
+        <h2>{t('notifications.push_notifications.label')}</h2>
 		    {permission.permission === 'default' ? (
           <FormField
             control={form.control}
             name="pushNotifications"
             render={({ field }) => (
               <FormItem className='space-y-0 flex flex-row items-center gap-2'>
-                <FormLabel>Activer</FormLabel>
+                <FormLabel>{t('notifications.push_notifications.form.enable')}</FormLabel>
                 <FormControl>
                   <Switch
                   checked={field.value}
@@ -74,15 +78,13 @@ export function NotificationsForm() {
             )}
           />
         ) : (
-          <p className='text-muted-foreground'>
-            Une demande de notification a déjà été faite, pour la modifier, veuillez aller dans les paramètres de votre navigateur.
-          </p>
+          <p className='text-muted-foreground'>{t('notifications.push_notifications.already_granted')}</p>
         )}
         <Button
         type="submit"
         disabled={form.formState.isSubmitting || (permission.permission === 'granted' || permission.permission === 'denied')}
         >
-          Enregistrer
+          {word('save')}
         </Button>
       </form>
     </Form>

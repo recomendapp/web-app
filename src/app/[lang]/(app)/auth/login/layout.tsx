@@ -1,8 +1,20 @@
-import { Metadata } from 'next';
+import { siteConfig } from '@/config/site';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: "Se connecter",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: {
+    lang: string;
+  };
+}) {
+  const t = await getTranslations({ locale: params.lang, namespace: 'pages.auth.login' });
+  const word = await getTranslations({ locale: params.lang, namespace: 'word' });
+  return {
+    title: word('login'),
+    description: t('metadata.description', { app: siteConfig.name }),
+  };
+}
 
 interface LoginLayoutProps {
   children: React.ReactNode;

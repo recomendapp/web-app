@@ -67,7 +67,9 @@ type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
 export function AppearanceForm() {
   const supabase = useSupabaseClient();
-  const t = useTranslations('settings');
+  const t = useTranslations('pages.settings');
+  const word = useTranslations('word');
+  const common = useTranslations('common');
   const locale = useLocale();
   const [loading, setLoading] = useState(false);
   const { setTheme, theme } = useTheme();
@@ -114,9 +116,9 @@ export function AppearanceForm() {
         await updateProfile({ language: data.language });
         router.refresh();
       }
-      toast.success('Enregistré');
+      toast.success(word('saved'));
     } catch (error) {
-      toast.error("Une erreur s'est produite");
+      toast.error(common('error'));
     } finally {
       setLoading(false);
     }
@@ -158,9 +160,9 @@ export function AppearanceForm() {
                 </PopoverTrigger>
                 <PopoverContent align='start' className='max-w-xs p-0'>
                   <Command>
-                    <CommandInput placeholder='Search language...' />
+                    <CommandInput placeholder={t('appearance.language.placeholder')} />
                     <CommandList>
-                      <CommandEmpty>No language found.</CommandEmpty>
+                      <CommandEmpty>{t('appearance.language.not_found')}</CommandEmpty>
                       <CommandGroup>
                         {locales.map((locale, i) => (
                           <CommandItem
@@ -264,7 +266,7 @@ export function AppearanceForm() {
         />
         <Button type="submit" disabled={loading}>
           {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          {t('appearance.update_preferences')}
+          {word('save')}
         </Button>
       </form>
     </Form>
