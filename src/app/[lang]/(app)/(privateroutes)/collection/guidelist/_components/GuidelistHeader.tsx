@@ -1,6 +1,7 @@
 import { HeaderBox } from "@/components/Box/HeaderBox";
 import { UserMovieGuidelistFragment } from "@/graphql/__generated__/graphql";
 import { UserMovieGuidelistView } from "@/types/type.db";
+import { capitalize } from "lodash";
 import { useTranslations } from "next-intl";
 
 export function GuidelistHeader({ data }: { data: UserMovieGuidelistView[] }) {
@@ -28,7 +29,7 @@ export function GuidelistHeader({ data }: { data: UserMovieGuidelistView[] }) {
     >
       <div className="w-full h-full flex flex-col justify-center items-center text-center px-4 py-8 ">
         <h2 className="text-6xl font-bold text-accent-1">
-        {common('library.collection.guidelist.label')}
+        {capitalize(common('library.collection.guidelist.label'))}
         </h2>
         <p className="text-muted-foreground">
         {data.length} {common('word.film', { count: data?.length })}

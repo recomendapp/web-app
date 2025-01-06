@@ -23,6 +23,7 @@ import CollectionIcon from '@/components/Collection/CollectionIcon';
 import { useUI } from '@/context/ui-context';
 import HeaderRightSide from '@/components/Header/HeaderRightSide';
 import { useTranslations } from 'next-intl';
+import { capitalize } from 'lodash';
 
 export default function Collection() {
   const { device } = useUI();
@@ -35,7 +36,7 @@ export default function Collection() {
             <Send fill="#fff" className="w-2/5 h-2/5" />
           </CollectionIcon>
         ),
-        label: common('library.collection.guidelist.label'),
+        label: capitalize(common('library.collection.guidelist.label')),
         href: '/collection/guidelist',
       },
       {
@@ -44,7 +45,7 @@ export default function Collection() {
             <Bookmark fill="#fff" className="w-2/5 h-2/5" />
           </CollectionIcon>
         ),
-        label: common('library.collection.watchlist.label'),
+        label: capitalize(common('library.collection.watchlist.label')),
         href: '/collection/watchlist',
       },
       {
@@ -53,7 +54,7 @@ export default function Collection() {
             <Heart fill="#fff" className="w-2/5 h-2/5" />
           </CollectionIcon>
         ),
-        label: common('library.collection.likes.label'),
+        label: capitalize(common('library.collection.likes.label')),
         href: '/collection/likes',
       },
     ],

@@ -31,6 +31,11 @@ import toast from 'react-hot-toast';
 import { Movie, Person, UserMovieActivity } from '@/types/type.db';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { useTranslations } from 'next-intl';
+import { capitalize } from 'lodash';
+import { Icons } from '@/config/icons';
+import { ModalShare } from '@/components/Modals/Share/ModalShare';
+import { useModal } from '@/context/modal-context';
 
 interface DataTableRowActionsProps {
   table: Table<UserMovieActivity>;
@@ -45,11 +50,11 @@ export function DataTableRowActions({
   column,
   data,
 }: DataTableRowActionsProps) {
-  const supabase = useSupabaseClient();
   const { user } = useAuth();
-
+  const supabase = useSupabaseClient();
+  const common = useTranslations('common');
+  const { openModal, createConfirmModal } = useModal();
   const queryClient = useQueryClient();
-
   const [openShowDirectors, setOpenShowDirectors] = useState(false);
 
   const { mutateAsync: updateActivityMutation } = useMutation({
@@ -71,9 +76,10 @@ export function DataTableRowActions({
         return (oldData ?? [])?.filter((activity) => activity?.id !== response.id)
       })
       queryClient.setQueryData(['user', user?.id, 'activity', { movieId: data?.movie_id }], response)
+      toast.success(capitalize(common('word.deleted')));
     },
     onError: () => {
-      toast.error('Une erreur s\'est produite');
+      toast.error(capitalize(common('errors.an_error_occurred')));
     },
   });
 
@@ -90,27 +96,45 @@ export function DataTableRowActions({
               className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
             >
               <DotsHorizontalIcon className="h-4 w-4 text-accent-1" />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">{capitalize(common('sr.open_menu'))}</span>
             </Button>
           </DropdownMenuTrigger>
         </div>
 
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem asChild>
-            <Link href={`/film/${data?.movie_id}`}>Voir le film</Link>
+          <Link href={`/film/${data?.movie?.slug ?? data?.movie_id}`}>
+              <Icons.eye className='w-4' />
+              {capitalize(common('messages.go_to_film'))}
+            </Link>
           </DropdownMenuItem>
           <ShowDirectorsButton
             movie={data?.movie}
             setOpen={setOpenShowDirectors}
           />
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <ButtonShare url={`${location.origin}/film/${data?.movie_id}`} />
+          <DropdownMenuItem
+            onClick={() => openModal(ModalShare, {
+              name: data?.movie?.title,
+              type: 'movie',
+              path: `/film/${data?.movie?.slug ?? data?.movie_id}`,
+            })}
+          >
+            <Icons.share className='w-4' />
+            {capitalize(common('word.share'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={async () => updateActivityMutation({ is_liked: false })}
+            onClick={async () => createConfirmModal({
+              title: capitalize(common('library.collection.likes.modal.delete_confirm.title')),
+              description: common.rich('library.collection.likes.modal.delete_confirm.description', {
+                film: data?.movie?.title,
+                important: (chunk) => <b>{chunk}</b>,
+              }),
+              onConfirm: async () => data && await updateActivityMutation({ is_liked: false }),
+            })}
           >
-            Delete
+            <Icons.delete className='w-4' />
+            {capitalize(common('word.delete'))}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -130,10 +154,12 @@ export function ShowDirectorsButton({
   movie: Movie;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const common = useTranslations('common');
   if (!movie?.directors?.length) {
     return (
-      <DropdownMenuItem asChild>
-        <p>Unknow</p>
+      <DropdownMenuItem>
+        <Icons.user className='w-4' />
+        {capitalize(common('messages.no_director'))}
       </DropdownMenuItem>
     );
   }
@@ -141,14 +167,16 @@ export function ShowDirectorsButton({
     return (
       <DropdownMenuItem asChild>
         <Link href={`/person/${movie.directors[0].id}`}>
-          Voir le réalisateur
+          <Icons.user className='w-4' />
+          {capitalize(common('messages.view_directors', { count: movie.directors.length }))}
         </Link>
       </DropdownMenuItem>
     );
   }
   return (
     <DropdownMenuItem onClick={() => setOpen(true)}>
-      Voir les réalisateurs
+      <Icons.users className='w-4' />
+      {capitalize(common('messages.view_directors', { count: movie.directors.length }))}
     </DropdownMenuItem>
   );
 }

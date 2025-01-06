@@ -11,7 +11,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -37,6 +36,10 @@ import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { useUserMovieWatchlistDelete } from '@/features/user/userMutations';
 import { userKeys } from '@/features/user/userKeys';
+import { useTranslations } from 'next-intl';
+import { capitalize } from 'lodash';
+import { cp } from 'fs';
+import { ModalShare } from '@/components/Modals/Share/ModalShare';
 
 interface DataTableRowActionsProps {
   table: Table<UserMovieWatchlist>;
@@ -51,13 +54,11 @@ export function DataTableRowActions({
   column,
   data,
 }: DataTableRowActionsProps) {
+  const common = useTranslations('common');
   const { user } = useAuth();
   const { openModal, createConfirmModal } = useModal();
-  
   const queryClient = useQueryClient();
-
   const [openShowDirectors, setOpenShowDirectors] = useState(false);
-
   const deleteWatchlist = useUserMovieWatchlistDelete();
 
   const handleUnwatchlist = async () => {
@@ -69,9 +70,10 @@ export function DataTableRowActions({
         queryClient.setQueryData(userKeys.watchlist(user?.id as string), (oldData: UserMovieWatchlist[]) => {
           return (oldData ?? []).filter((activity) => activity?.id !== data.id)
         });
+        toast.success(capitalize(common('word.deleted')));
       },
       onError: () => {
-        toast.error('Une erreur s\'est produite');
+        toast.error(capitalize(common('errors.an_error_occurred')));
       }
     });
   }
@@ -89,16 +91,16 @@ export function DataTableRowActions({
               className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
             >
               <DotsHorizontalIcon className="h-4 w-4 text-accent-1" />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">{capitalize(common('sr.open_menu'))}</span>
             </Button>
           </DropdownMenuTrigger>
         </div>
 
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem asChild>
-            <Link href={`/film/${data?.movie_id}`}>
+            <Link href={`/film/${data?.movie?.slug ?? data?.movie_id}`}>
               <Icons.eye className='w-4' />
-              Voir le film
+              {capitalize(common('messages.go_to_film'))}
             </Link>
           </DropdownMenuItem>
           <ShowDirectorsButton
@@ -109,22 +111,31 @@ export function DataTableRowActions({
             onClick={() => openModal(ModalMovieWatchlistComment, { watchlistItem: data })}
           >
             <Icons.comment className='w-4' />
-            {data?.comment ? 'Voir le commentaire' : 'Ajouter un commentaire'}
+            {data?.comment ? capitalize(common('messages.view_comment', { count: 1 })) : capitalize(common('messages.add_comment'))}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => openModal(ModalShare, {
+              name: data?.movie?.title,
+              type: 'movie',
+              path: `/film/${data?.movie?.slug ?? data?.movie_id}`,
+            })}
+          >
             <Icons.share className='w-4' />
-            <ButtonShare url={`${location.origin}/film/${data?.movie_id}`} />
+            {capitalize(common('word.share'))}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={async () => createConfirmModal({
-              title: 'Supprimer de la watchlist',
-              description: 'Êtes-vous sûr de vouloir supprimer ce film de votre watchlist ?',
+              title: capitalize(common('library.collection.watchlist.modal.delete_confirm.title')),
+              description: common.rich('library.collection.watchlist.modal.delete_confirm.description', {
+                film: data?.movie?.title,
+                important: (chunk) => <b>{chunk}</b>,
+              }),
               onConfirm: async () => data && await handleUnwatchlist(),
             })}
           >
             <Icons.delete className='w-4' />
-            Delete
+            {capitalize(common('word.delete'))}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -144,27 +155,29 @@ export function ShowDirectorsButton({
   movie: Movie;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const common = useTranslations('common');
   if (!movie?.directors?.length) {
     return (
-      <DropdownMenuItem asChild>
-        <p>Unknow</p>
+      <DropdownMenuItem>
+        <Icons.user className='w-4' />
+        {capitalize(common('messages.no_director'))}
       </DropdownMenuItem>
     );
   }
   if (movie?.directors?.length == 1) {
     return (
       <DropdownMenuItem asChild>
-        <Link href={`/person/${movie.directors[0].slug ?? movie.directors[0].id}`}>
+        <Link href={`/person/${movie.directors[0]?.id}`}>
           <Icons.user className='w-4' />
-          Voir le réalisateur
+          {capitalize(common('messages.view_directors', { count: movie.directors.length }))}
         </Link>
       </DropdownMenuItem>
     );
   }
   return (
     <DropdownMenuItem onClick={() => setOpen(true)}>
-      <Icons.user className='w-4' />
-      Voir les réalisateurs
+      <Icons.users className='w-4' />
+      {capitalize(common('messages.view_directors', { count: movie.directors.length }))}
     </DropdownMenuItem>
   );
 }

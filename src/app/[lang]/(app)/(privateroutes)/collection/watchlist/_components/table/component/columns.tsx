@@ -9,67 +9,72 @@ import MovieCardSmall from '@/components/Movie/MovieCardSmall';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import { UserMovieWatchlist } from '@/types/type.db';
 import { DataComment } from './data-table-comment';
+import { useTranslations } from 'next-intl';
+import { capitalize } from 'lodash';
 
-export const columns: ColumnDef<UserMovieWatchlist>[] = [
-  {
-    id: 'movie',
-    accessorFn: (row) => row?.movie?.title,
-    meta: {
-      displayName: 'Film',
+export const columns = (): ColumnDef<UserMovieWatchlist>[] => {
+  const common = useTranslations('common');
+  return [
+    {
+      id: 'movie',
+      accessorFn: (row) => row?.movie?.title,
+      meta: {
+        displayName: capitalize(common('word.film', { count: 1 })),
+      },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={capitalize(common('word.film', { count: 1 }))} />
+      ),
+      cell: ({ row }) => <MovieCardSmall movie={row.original?.movie} />,
+      enableHiding: false,
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Film" />
-    ),
-    cell: ({ row }) => <MovieCardSmall movie={row.original?.movie} />,
-    enableHiding: false,
-  },
-  {
-    id: 'release_date',
-    accessorFn: (row) => row?.movie?.release_date,
-    meta: {
-      displayName: 'Date',
+    {
+      id: 'release_date',
+      accessorFn: (row) => row?.movie?.release_date,
+      meta: {
+        displayName: capitalize(common('word.date')),
+      },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={capitalize(common('word.date'))} />
+      ),
+      cell: ({ row }) => (
+        <DateOnlyYearTooltip date={row.original?.movie?.release_date} className='text-muted-foreground'/>
+      ),
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date" />
-    ),
-    cell: ({ row }) => (
-      <DateOnlyYearTooltip date={row.original?.movie?.release_date} className='text-muted-foreground'/>
-    ),
-  },
-  {
-    id: 'runtime',
-    accessorFn: (row) => row?.movie?.runtime,
-    meta: {
-      displayName: 'Durée',
+    {
+      id: 'runtime',
+      accessorFn: (row) => row?.movie?.runtime,
+      meta: {
+        displayName: capitalize(common('word.duration')),
+      },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} Icon={Clock} />
+      ),
+      cell: ({ row }) => (
+        <RuntimeTooltip runtime={row.original?.movie?.runtime ?? 0} className='text-muted-foreground'/>
+      ),
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} Icon={Clock} />
-    ),
-    cell: ({ row }) => (
-      <RuntimeTooltip runtime={row.original?.movie?.runtime ?? 0} className='text-muted-foreground'/>
-    ),
-  },
-  {
-    id: 'comment',
-    accessorKey: 'comment',
-    meta: {
-      displayName: 'Commentaire',
+    {
+      id: 'comment',
+      accessorKey: 'comment',
+      meta: {
+        displayName: capitalize(common('word.comment', { count: 1 })),
+      },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={capitalize(common('word.comment', { count: 1 }))} />
+      ),
+      cell: ({ row }) => <DataComment watchlistItem={row.original} />,
+      enableSorting: false,
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Commentaire" />
-    ),
-    cell: ({ row }) => <DataComment watchlistItem={row.original} />,
-    enableSorting: false,
-  },
-  {
-    id: 'actions',
-    cell: ({ row, table, column }) => (
-      <DataTableRowActions
-        data={row.original}
-        table={table}
-        row={row}
-        column={column}
-      />
-    ),
-  },
-];
+    {
+      id: 'actions',
+      cell: ({ row, table, column }) => (
+        <DataTableRowActions
+          data={row.original}
+          table={table}
+          row={row}
+          column={column}
+        />
+      ),
+    },
+  ];
+};

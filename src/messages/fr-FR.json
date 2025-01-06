@@ -2,10 +2,18 @@
   "common": {
     "messages": {
       "no_results": "aucun résultat",
-      "added_by": "ajouté par"
+      "added_by": "ajouté par",
+      "sort_by": "trier par",
+      "go_to_film": "accéder au film",
+      "view_recommendations": "voir {count, plural, one {la reco} other {les recos}}",
+      "view_directors": "voir {count, plural, one {le réalisateur} other {les réalisateurs}}",
+      "no_director": "aucun réalisateur",
+      "view_comment": "voir {count, plural, one {le commentaire} other {les commentaires}}",
+      "add_comment": "ajouter un commentaire"
     },
     "errors": {
-      "default": "une erreur s'est produite"
+      "default": "une erreur s'est produite",
+      "an_error_occurred": "une erreur s'est produite"
     },
     "word": {
       "hello": "Bonjour",
@@ -15,9 +23,17 @@
       "login": "Se connecter",
       "signup": "S'inscrire",
       "navigation": "Navigation",
-      "cancel": "Annuler",
+      "delete": "supprimer",
+      "deleted": "supprimé",
+      "share": "partager",
+      "cancel": "annuler",
       "date": "date",
-      "duration": "durée"
+      "duration": "durée",
+      "sort": "trier",
+      "show": "afficher",
+      "column": "{count, plural, one {colonne} other {colonnes}}",
+      "comment": "{count, plural, one {commentaire} other {commentaires}}",
+      "unknown": "inconnu"
     },
     "error": "Une erreur s'est produite",
     "click_here": "Cliquez ici",
@@ -79,16 +95,43 @@
       "code_sent": "Code envoyé"
     },
     "library": {
-      "label": "Bibliothèque",
+      "label": "bibliothèque",
       "collection": {
         "guidelist": {
-          "label": "Guidelist"
+          "label": "guidelist",
+          "search": {
+            "placeholder": "rechercher dans la guidelist..."
+          },
+          "modal": {
+            "delete_confirm": {
+              "title": "supprimer de la guidelist",
+              "description": "Êtes-vous sûr de vouloir supprimer <important>{film}</important> de votre guidelist ?"
+            }
+          }
         },
         "watchlist": {
-          "label": "Watchlist"
+          "label": "watchlist",
+          "search": {
+            "placeholder": "rechercher dans la watchlist..."
+          },
+          "modal": {
+            "delete_confirm": {
+              "title": "supprimer de la watchlist",
+              "description": "Êtes-vous sûr de vouloir supprimer <important>{film}</important> de votre watchlist ?"
+            }
+          }
         },
         "likes": {
-          "label": "Coups de coeur"
+          "label": "coups de coeur",
+          "search": {
+            "placeholder": "rechercher dans les coups de coeur..."
+          },
+          "modal": {
+            "delete_confirm": {
+              "title": "supprimer des coups de coeur",
+              "description": "Êtes-vous sûr de vouloir supprimer <important>{film}</important> de vos coups de coeur ?"
+            }
+          }
         }
       }
     },
@@ -99,6 +142,9 @@
         "edit": "Modifier la playlist",
         "delete": "Supprimer la playlist"
       }
+    },
+    "sr": {
+      "open_menu": "ouvrir le menu"
     }
   },
   "pages": {

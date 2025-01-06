@@ -12,6 +12,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
+import { useTranslations } from 'next-intl';
+import { capitalize } from 'lodash';
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;
@@ -20,6 +22,7 @@ interface DataTableViewOptionsProps<TData> {
 export function DataTableViewOptions<TData>({
   table,
 }: DataTableViewOptionsProps<TData>) {
+  const common = useTranslations('common');
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,11 +32,11 @@ export function DataTableViewOptions<TData>({
           className="ml-auto hidden h-8 lg:flex"
         >
           <MixerHorizontalIcon className="mr-2 h-4 w-4" />
-          Afficher
+          {capitalize(common('word.show'))}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>Colonnes</DropdownMenuLabel>
+        <DropdownMenuLabel>{capitalize(common('word.column', {count:2}))}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()

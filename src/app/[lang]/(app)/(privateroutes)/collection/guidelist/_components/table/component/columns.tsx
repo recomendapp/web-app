@@ -13,8 +13,6 @@ import { UserMovieGuidelistView } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
 import { capitalize } from 'lodash';
 
-const senderToShow = 5;
-
 export const columns = (): ColumnDef<UserMovieGuidelistView>[] => {
   const common = useTranslations('common');
   return [

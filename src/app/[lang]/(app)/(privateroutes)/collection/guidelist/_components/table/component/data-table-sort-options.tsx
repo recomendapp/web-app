@@ -1,7 +1,6 @@
 'use client';
 
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
-import { MixerHorizontalIcon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
 
 import { Button } from '@/components/ui/button';
@@ -14,6 +13,8 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, ChevronUp, Filter } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { capitalize } from 'lodash';
 
 interface DataTableSortOptionsProps<TData> {
   table: Table<TData>;
@@ -22,6 +23,7 @@ interface DataTableSortOptionsProps<TData> {
 export function DataTableSortOptions<TData>({
   table,
 }: DataTableSortOptionsProps<TData>) {
+  const common = useTranslations('common');
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -31,11 +33,11 @@ export function DataTableSortOptions<TData>({
           className="ml-auto flex h-8 lg:hidden"
         >
           <Filter className="mr-2 h-4 w-4" />
-          Trier
+          {capitalize(common('word.sort'))}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>Trier par</DropdownMenuLabel>
+        <DropdownMenuLabel>{capitalize(common('messages.sort_by'))}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()

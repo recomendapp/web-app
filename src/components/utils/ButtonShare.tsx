@@ -2,9 +2,11 @@
 import { Button } from '@/components/ui/button';
 import copyToClipboard from '@/hooks/copy-to-clipboard';
 import { cn } from '@/lib/utils';
+import { capitalize } from 'lodash';
 
 // ICONS
 import { Share2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function ButtonShare({
   url,
@@ -15,6 +17,7 @@ export default function ButtonShare({
   icon?: boolean;
   className?: string;
 }) {
+  const common = useTranslations('common');
   if (icon) {
     return (
       <Button className={cn('', className)} variant={'action'} onClick={() => copyToClipboard(url)}>
@@ -23,5 +26,5 @@ export default function ButtonShare({
     );
   }
 
-  return <p onClick={() => copyToClipboard(url)}>Partager</p>;
+  return <p onClick={() => copyToClipboard(url)}>{capitalize(common('word.share'))}</p>;
 }

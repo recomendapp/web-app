@@ -8,13 +8,6 @@ import { Column, SortingState, flexRender } from '@tanstack/react-table';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, LucideIcon, Triangle } from 'lucide-react';
 
@@ -31,8 +24,6 @@ export function DataTableColumnHeader<TData, TValue>({
   Icon,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
-
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }

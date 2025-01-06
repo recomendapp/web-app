@@ -6,6 +6,7 @@ import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
 import { useUserPlaylists } from "@/features/user/userQueries";
 import { cn } from "@/lib/utils";
+import { capitalize } from "lodash";
 import { BookmarkIcon, HeartIcon, LibraryIcon, SendIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -81,7 +82,7 @@ export const SidebarLeftRoutes = () => {
 			icon: <SendIcon fill="#fff" className="w-2/5 h-2/5" />,
 			bgFrom: '#FBE773',
 			bgTo: '#F18E43',
-			label: common('library.collection.guidelist.label'),
+			label: capitalize(common('library.collection.guidelist.label')),
 			active: pathname.startsWith('/collection/guidelist'),
 			href: '/collection/guidelist',
 		},
@@ -89,7 +90,7 @@ export const SidebarLeftRoutes = () => {
 			icon: <BookmarkIcon fill="#fff" className="w-2/5 h-2/5" />,
 			bgFrom: '#39BAED',
 			bgTo: '#32509e',
-			label: common('library.collection.watchlist.label'),
+			label: capitalize(common('library.collection.watchlist.label')),
 			active: pathname.startsWith('/collection/watchlist'),
 			href: '/collection/watchlist',
 		},
@@ -97,7 +98,7 @@ export const SidebarLeftRoutes = () => {
 			icon: <HeartIcon fill="#fff" className="w-2/5 h-2/5" />,
 			bgFrom: '#e6619b',
 			bgTo: '#e84749',
-			label: common('library.collection.likes.label'),
+			label: capitalize(common('library.collection.likes.label')),
 			active: pathname.startsWith('/collection/likes'),
 			href: '/collection/likes',
 		},
