@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import toast from 'react-hot-toast';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { useNotifications } from '@/context/notifications-context';
 import { Switch } from '@/components/ui/switch';
 import { useTranslations } from 'next-intl';
@@ -23,9 +22,7 @@ import { useTranslations } from 'next-intl';
 export function NotificationsForm() {
 	const { permission } = useNotifications();
   const t = useTranslations('pages.settings');
-  const word = useTranslations('word');
   const common = useTranslations('common');
-	const supabase = useSupabaseClient();
 	const notificationsFormSchema = z.object({
 		pushNotifications: z.boolean(),
 	});
@@ -48,7 +45,7 @@ export function NotificationsForm() {
       data.pushNotifications ?
         await permission.enableNotifications() :
         permission.disableNotifications();
-		  toast.success(word('saved'));
+		  toast.success(common('word.saved'));
     } catch (error) {
     	toast.error(common('error'));
       form.reset();
@@ -84,7 +81,7 @@ export function NotificationsForm() {
         type="submit"
         disabled={form.formState.isSubmitting || (permission.permission === 'granted' || permission.permission === 'denied')}
         >
-          {word('save')}
+          {common('word.save')}
         </Button>
       </form>
     </Form>

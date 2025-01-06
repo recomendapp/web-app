@@ -1,6 +1,4 @@
-import { Header } from "@/components/Header/Header";
 import { AppLayout } from "@/layouts/app-layout/AppLayout";
-import { createServerClient } from "@/lib/supabase/server";
 
 interface AppLayoutProps {
   children: React.ReactNode;

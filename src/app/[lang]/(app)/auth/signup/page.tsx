@@ -43,7 +43,6 @@ export default function Signup() {
 	const { signup, loginWithOtp } = useAuth();
 	const t = useTranslations('pages.auth.signup');
 	const common = useTranslations('common');
-	const word = useTranslations('word');
 
 	const locale = useLocale();
 	const router = useRouter();
@@ -248,7 +247,7 @@ export default function Signup() {
 					<CardHeader className='gap-2'>
 					<CardTitle className='inline-flex gap-2 items-center justify-center'>
 						<Icons.site.icon className='fill-accent-1 w-8' />
-						{word('signup')}
+						{common('word.signup')}
 					</CardTitle>
 					<CardDescription className='text-center'>{t('description')}</CardDescription>
 					</CardHeader>
@@ -368,7 +367,7 @@ export default function Signup() {
 					<CardFooter className='grid gap-2'>
 						<Button className="w-full" disabled={isLoading}>
 							{isLoading ? (<Icons.loader />) : null}
-							{word('signup')}
+							{common('word.signup')}
 						</Button>
 						<p className="px-8 text-center text-sm text-muted-foreground">
 							{t('return_to_login')}{' '}
@@ -383,7 +382,7 @@ export default function Signup() {
 										query: redirectTo ? { redirect: redirectTo } : undefined,
 									}}
 								>
-								{word('login')}
+								{common('word.login')}
 								</Link>
 							</Button>
 						</p>

@@ -30,7 +30,6 @@ import { useSupabaseClient } from '@/context/supabase-context';
 export function ProfileForm() {
   const supabase = useSupabaseClient();
   const t = useTranslations('pages.settings');
-  const word = useTranslations('word');
   const common = useTranslations('common');
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -126,7 +125,7 @@ export function ProfileForm() {
         await updateProfile(userPayload);
       }
 
-      toast.success(t('saved'));
+      toast.success(common('word.saved'));
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -242,7 +241,7 @@ export function ProfileForm() {
         />
         <Button type="submit" disabled={loading}>
           {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          {word('save')}
+          {common('word.save')}
         </Button>
       </form>
     </Form>

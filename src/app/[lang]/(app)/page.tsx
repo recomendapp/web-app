@@ -19,7 +19,7 @@ import Link from "next/link";
 export default function Home() {
   const { session, user } = useAuth();
 	const { device } = useUI();
-	const t = useTranslations('word');
+	const common = useTranslations('common');
 	return (
 		<div className="p-4 gap-4 gap-x-8 grid grid-cols-1 @4xl/main:grid-cols-2">
 			<div className="flex justify-between items-center w-full">
@@ -27,7 +27,7 @@ export default function Home() {
 					{session ?
 					(
 						<span className="line-clamp-1 break-all">
-							{`${t('hello')} `}
+							{`${common('word.hello')} `}
 							{user?.full_name ?? <Skeleton className='w-32' />}
 						</span>
 					) : (

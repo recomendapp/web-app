@@ -20,6 +20,7 @@ import { useMeAddMovieToPlaylist } from '@/features/me/meQueries';
 import { useQueryClient } from '@tanstack/react-query';
 import { meKeys } from '@/features/me/meKeys';
 import { TooltipBox } from '@/components/Box/TooltipBox';
+import { useTranslations } from 'next-intl';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -34,6 +35,7 @@ export function ModalMoviePlaylist({
 	...props
 } : ModalMoviePlaylistProps) {
 	const { user } = useAuth();
+	const common = useTranslations('common');
 	const queryClient = useQueryClient();
 	const { closeModal } = useModal();
 	const [selectedPlaylists, setSelectedPlaylists] = useState<Playlist[]>([]);
@@ -167,7 +169,7 @@ export function ModalMoviePlaylist({
 								onClick={() => setCreatePlaylist(true)}
 								>
 									<Icons.add size={20} className="mr-2" />
-									Créer une nouvelle playlist
+									{common('playlist.actions.create')}
 								</Button>
 								)}
 								<CommandSeparator className='my-1' />

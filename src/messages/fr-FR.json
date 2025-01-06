@@ -1,15 +1,27 @@
 {
-  "word": {
-    "hello": "Bonjour",
-    "save": "Enregistrer",
-    "saved": "Enregistré",
-    "movie": "{count, plural, one {film} other {films}}",
-    "login": "Se connecter",
-    "signup": "S'inscrire"
-  },
   "common": {
+    "messages": {
+      "no_results": "aucun résultat",
+      "added_by": "ajouté par"
+    },
+    "errors": {
+      "default": "une erreur s'est produite"
+    },
+    "word": {
+      "hello": "Bonjour",
+      "save": "Enregistrer",
+      "saved": "Enregistré",
+      "film": "{count, plural, one {film} other {films}}",
+      "login": "Se connecter",
+      "signup": "S'inscrire",
+      "navigation": "Navigation",
+      "cancel": "Annuler",
+      "date": "date",
+      "duration": "durée"
+    },
     "error": "Une erreur s'est produite",
     "click_here": "Cliquez ici",
+    "see_more": "Voir plus",
     "form": {
       "email": {
         "label": "Adresse email",
@@ -65,6 +77,28 @@
       "resend_code": "Renvoyer le code",
       "code_verified": "Code vérifié",
       "code_sent": "Code envoyé"
+    },
+    "library": {
+      "label": "Bibliothèque",
+      "collection": {
+        "guidelist": {
+          "label": "Guidelist"
+        },
+        "watchlist": {
+          "label": "Watchlist"
+        },
+        "likes": {
+          "label": "Coups de coeur"
+        }
+      }
+    },
+    "playlist": {
+      "label": "{count, plural, one {Playlist} other {Playlists}}",
+      "actions": {
+        "create": "Créer une playlist",
+        "edit": "Modifier la playlist",
+        "delete": "Supprimer la playlist"
+      }
     }
   },
   "pages": {
@@ -412,23 +446,6 @@
     },
     "movies_most_recommended": {
       "label": "Les plus recommandés."
-    }
-  },
-  "components": {
-    "sidebar": {
-      "left": {
-        "routes": {
-          "main": {
-            "label": "Navigation"
-          },
-          "collection": {
-            "label": "Ma bibliothèque"
-          },
-          "see_more": {
-            "label": "Voir plus"
-          }
-        }
-      }
     }
   }
 }

@@ -20,7 +20,7 @@ interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function Navbar({ className }: NavbarProps) {
   const { user } = useAuth();
   const routesDic = useTranslations('routes');
-  const word = useTranslations('word');
+  const common = useTranslations('common');
   const pathname = usePathname();
   const routes = useMemo(
     () => [
@@ -51,7 +51,7 @@ export function Navbar({ className }: NavbarProps) {
       },
       {
         icon: user ? Library : Icons.user,
-        label: user ? routesDic('library') : word('login'),
+        label: user ? routesDic('library') : common('word.login'),
         active:
           user ?
             pathname.startsWith('/collection') ||

@@ -2,7 +2,6 @@
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Fragment } from 'react';
 
 export default function NavigationButton() {
   const router = useRouter();

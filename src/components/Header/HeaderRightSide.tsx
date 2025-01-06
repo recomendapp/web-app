@@ -15,7 +15,7 @@ export default function HeaderRightSide({
   className?: string;
 }) {
   const { session } = useAuth();
-  const word = useTranslations('word');
+  const common = useTranslations('common');
   return (
     <div className={cn('flex items-center gap-4', className)}>
       {session ? (
@@ -27,7 +27,7 @@ export default function HeaderRightSide({
       ) : (
         <Button asChild>
           <Link href={'/auth/login'} className="whitespace-nowrap">
-            {word('login')}
+            {common('word.login')}
           </Link>
         </Button>
       )}

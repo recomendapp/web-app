@@ -29,6 +29,8 @@ import { DataTableToolbar } from './component/data-table-toolbar';
 import { columns } from './component/columns';
 import { useMediaQuery } from 'react-responsive';
 import { UserMovieGuidelistView } from '@/types/type.db';
+import { useTranslations } from 'next-intl';
+import { capitalize } from 'lodash';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -41,6 +43,7 @@ interface DataTableProps {
 }
 
 export function TableGuidelist({ data }: DataTableProps) {
+  const common = useTranslations('common');
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -51,7 +54,7 @@ export function TableGuidelist({ data }: DataTableProps) {
 
   const table = useReactTable<UserMovieGuidelistView>({
     data,
-    columns,
+    columns: columns(),
     initialState: {
       pagination: {
         pageSize: 5000,
@@ -145,10 +148,10 @@ export function TableGuidelist({ data }: DataTableProps) {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={table.getTotalSize()}
                   className="h-24 text-center"
                 >
-                  Aucun résultat.
+                {capitalize(common('messages.no_results'))}
                 </TableCell>
               </TableRow>
             )}

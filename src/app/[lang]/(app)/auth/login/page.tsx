@@ -25,7 +25,6 @@ import { useTranslations } from 'next-intl';
 export default function Login() {
   const { loginOAuth2 } = useAuth();
   const t = useTranslations('pages.auth.login');
-  const word = useTranslations('word');
   const common = useTranslations('common');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
@@ -116,7 +115,7 @@ export default function Login() {
                   query: redirectTo ? { redirect: redirectTo } : undefined,
                 }}
               >
-              {word('signup')}
+              {common('word.signup')}
               </Link>
             </Button>
           </p>

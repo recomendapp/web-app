@@ -68,7 +68,6 @@ type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 export function AppearanceForm() {
   const supabase = useSupabaseClient();
   const t = useTranslations('pages.settings');
-  const word = useTranslations('word');
   const common = useTranslations('common');
   const locale = useLocale();
   const [loading, setLoading] = useState(false);
@@ -116,7 +115,7 @@ export function AppearanceForm() {
         await updateProfile({ language: data.language });
         router.refresh();
       }
-      toast.success(word('saved'));
+      toast.success(common('word.saved'));
     } catch (error) {
       toast.error(common('error'));
     } finally {
@@ -266,7 +265,7 @@ export function AppearanceForm() {
         />
         <Button type="submit" disabled={loading}>
           {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          {word('save')}
+          {common('word.save')}
         </Button>
       </form>
     </Form>

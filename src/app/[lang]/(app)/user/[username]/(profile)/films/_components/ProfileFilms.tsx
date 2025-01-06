@@ -71,12 +71,6 @@ export default function ProfileFilms({
                 <SelectItem value={'rating-asc'}>Notes croissantes</SelectItem>
               </SelectGroup>
               <SelectSeparator />
-              {/* <SelectGroup>
-                <SelectLabel>Coups de coeur</SelectLabel>
-                <SelectItem value={'like-desc'}>Plus récents</SelectItem>
-                <SelectItem value={'like-asc'}>Plus anciens</SelectItem>
-              </SelectGroup> */}
-              {/* <SelectItem value={"rating-desc"}>Notes décroissantes</SelectItem> */}
             </SelectContent>
           </Select>
           <Button

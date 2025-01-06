@@ -22,7 +22,6 @@ import { useTranslations } from 'next-intl';
 export function SecurityForm() {
   const supabase = useSupabaseClient();
   const t = useTranslations('pages.settings');
-  const word = useTranslations('word');
   const common = useTranslations('common');
   const profileFormSchema = z.object({
     newpassword: z
@@ -67,7 +66,7 @@ export function SecurityForm() {
         password: data.newpassword,
       });
       if (error) throw error;
-      toast.success(word('saved'));
+      toast.success(common('word.saved'));
       form.reset();
     } catch (error) {
       toast.error(common('error'));
@@ -115,7 +114,7 @@ export function SecurityForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">{word('save')}</Button>
+        <Button type="submit">{common('word.save')}</Button>
       </form>
     </Form>
   );

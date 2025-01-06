@@ -1,9 +1,19 @@
-import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { ReactNode } from 'react';
 
-export const metadata: Metadata = {
-	title: 'Bibliothèque',
-};
+
+export async function generateMetadata({
+	params,
+  }: {
+	params: {
+	  lang: string;
+	};
+  }) {
+	const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+	return {
+	  title: common('library.label'),
+	};
+  }
 
 export default function CollectionLayout ({ children } : { children: ReactNode}) {
 	return (children)

@@ -35,7 +35,6 @@ export default function ForgotPassword() {
   const router = useRouter();
   const t = useTranslations('pages.auth.forgot_password');
   const common = useTranslations('common');
-  const word = useTranslations('word');
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
   const [email, setEmail] = useState<string>('');
@@ -163,7 +162,7 @@ export default function ForgotPassword() {
                   query: redirectTo ? { redirect: redirectTo } : undefined,
                 }}
               >
-                {word('login')}
+                {common('word.login')}
               </Link>
 
             </Button>

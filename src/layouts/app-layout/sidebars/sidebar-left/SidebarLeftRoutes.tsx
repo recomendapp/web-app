@@ -6,7 +6,7 @@ import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
 import { useUserPlaylists } from "@/features/user/userQueries";
 import { cn } from "@/lib/utils";
-import { BookmarkIcon, HeartIcon, HelpCircleIcon, InfoIcon, LibraryIcon, SendIcon, StoreIcon, ZapIcon } from "lucide-react";
+import { BookmarkIcon, HeartIcon, LibraryIcon, SendIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -43,8 +43,7 @@ export const SidebarLeftRoutes = () => {
 	const { user } = useAuth();
 	const { open } = useSidebar();
 	const routesDic = useTranslations('routes');
-	const t = useTranslations('components.sidebar.left');
-	const word = useTranslations('word');
+	const common = useTranslations('common');
 	const pathname = usePathname();
 
 	const routes = useMemo(
@@ -82,7 +81,7 @@ export const SidebarLeftRoutes = () => {
 			icon: <SendIcon fill="#fff" className="w-2/5 h-2/5" />,
 			bgFrom: '#FBE773',
 			bgTo: '#F18E43',
-			label: 'Guidelist',
+			label: common('library.collection.guidelist.label'),
 			active: pathname.startsWith('/collection/guidelist'),
 			href: '/collection/guidelist',
 		},
@@ -90,7 +89,7 @@ export const SidebarLeftRoutes = () => {
 			icon: <BookmarkIcon fill="#fff" className="w-2/5 h-2/5" />,
 			bgFrom: '#39BAED',
 			bgTo: '#32509e',
-			label: 'Watchlist',
+			label: common('library.collection.watchlist.label'),
 			active: pathname.startsWith('/collection/watchlist'),
 			href: '/collection/watchlist',
 		},
@@ -98,7 +97,7 @@ export const SidebarLeftRoutes = () => {
 			icon: <HeartIcon fill="#fff" className="w-2/5 h-2/5" />,
 			bgFrom: '#e6619b',
 			bgTo: '#e84749',
-			label: 'Coups de coeur',
+			label: common('library.collection.likes.label'),
 			active: pathname.startsWith('/collection/likes'),
 			href: '/collection/likes',
 		},
@@ -106,21 +105,21 @@ export const SidebarLeftRoutes = () => {
 
 	const unloggedRoutes = useMemo(() => [
 		{
-			icon: StoreIcon,
+			icon: Icons.shop,
 			label: routesDic('shop'),
 			active: false,
 			href: 'https://shop.recomend.app',
 			target: '_blank',
 		},
 		{
-			icon: HelpCircleIcon,
+			icon: Icons.help,
 			label: routesDic('help'),
 			active: false,
 			href: 'https://help.recomend.app',
 			target: '_blank',
 		  },
 		  {
-			icon: InfoIcon,
+			icon: Icons.about,
 			label: routesDic('about'),
 			active: pathname.startsWith('/about'),
 			href: '/about',
@@ -141,7 +140,7 @@ export const SidebarLeftRoutes = () => {
 	return (
 		<>
 		<SidebarGroup>
-			<SidebarGroupLabel>{t('routes.main.label')}</SidebarGroupLabel>
+			<SidebarGroupLabel>{common('word.navigation')}</SidebarGroupLabel>
 			<SidebarMenu className={`${!open ? "items-center" : ""}`}>
 				{routes.map((route, i) => (
 					<SidebarMenuItem key={i}>
@@ -166,7 +165,7 @@ export const SidebarLeftRoutes = () => {
 						<div>
 							<Link href="/collection" className="flex gap-2 items-center">
 								<LibraryIcon className="w-4" />
-								<span className={`line-clamp-1 transition-all duration-300 ${!open ? "opacity-0 hidden" : "opacity-100"}`}>{t('routes.collection.label')}</span>
+								<span className={`line-clamp-1 transition-all duration-300 ${!open ? "opacity-0 hidden" : "opacity-100"}`}>{routesDic('library')}</span>
 							</Link>
 							{open ? <PlaylistCreateButton className="ml-auto" /> : null}
 						</div>
@@ -216,7 +215,7 @@ export const SidebarLeftRoutes = () => {
 									</SidebarCollectionContainerIcon>
 									<div className={`line-clamp-1 transition-all duration-300 ${!open ? "opacity-0 hidden" : "opacity-100"}`}>
 										<p className="line-clamp-1">{playlist.title}</p>
-										<p className='text-muted-foreground line-clamp-1'>{playlist.items_count} {word('movie', { count: playlist.items_count })}</p>
+										<p className='text-muted-foreground line-clamp-1'>{playlist.items_count} {common('word.film', { count: playlist.items_count })}</p>
 									</div>
 								</Link>
 							</SidebarMenuButton>
@@ -226,7 +225,7 @@ export const SidebarLeftRoutes = () => {
 			</SidebarMenu>
 			) : (
 			<>
-				<SidebarGroupLabel>{t('routes.see_more.label')}</SidebarGroupLabel>
+				<SidebarGroupLabel>{common('see_more')}</SidebarGroupLabel>
 				<SidebarMenu className={`h-full ${!open ? "items-center" : ""}`}>
 					{unloggedRoutes.map((route, i) => (
 						<SidebarMenuItem key={i}>

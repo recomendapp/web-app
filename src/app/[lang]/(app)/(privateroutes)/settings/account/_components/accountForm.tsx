@@ -31,7 +31,6 @@ import { useTranslations } from 'next-intl';
 export function AccountForm() {
   const supabase = useSupabaseClient();
   const t = useTranslations('pages.settings');
-  const word = useTranslations('word');
   const common = useTranslations('common');
 
   const { user, session } = useAuth();
@@ -122,7 +121,7 @@ export function AccountForm() {
         username: data.username,
         private: data.private,
       });
-      toast.success(word('saved'));
+      toast.success(common('word.saved'));
     } catch (error) {
       toast.error(common('error'));
     } finally {
@@ -195,7 +194,7 @@ export function AccountForm() {
         />
         <Button type="submit" disabled={loading}>
           {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          {word('save')}
+          {common('word.save')}
         </Button>
       </form>
     </Form>

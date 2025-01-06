@@ -8,6 +8,7 @@ import { useModal } from '@/context/modal-context';
 import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 export function PlaylistCreateButton({
   className,
@@ -19,20 +20,21 @@ export function PlaylistCreateButton({
   filmId?: string;
 }) {
   const { user } = useAuth();
+  const common = useTranslations('common');
   const { openModal } = useModal();
   const [open, setOpen] = useState(false);
 
   if (!user) return null;
 
   return (
-      <TooltipBox tooltip='Créer une playlist'>
+      <TooltipBox tooltip={common('playlist.actions.create')}>
         <Button
           variant={'ghost'}
           size={'icon'}
           className={cn("rounded-full shrink-0", className)}
           onClick={() => openModal(PlaylistModal, { filmId })}
         >
-          {icon ? <Plus /> : 'Créer une playlist'}
+          {icon ? <Plus /> : common('playlist.actions.create')}
         </Button>
       </TooltipBox>
   )

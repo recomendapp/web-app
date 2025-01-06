@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils';
 import HeaderLeftSide from './HeaderLeftSide';
-import HeaderCenterSide from './HeaderCenterSide';
 import HeaderRightSide from './HeaderRightSide';
 
 export const Header = ({

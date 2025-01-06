@@ -9,9 +9,9 @@ export async function generateMetadata({
   };
 }) {
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.auth.login' });
-  const word = await getTranslations({ locale: params.lang, namespace: 'word' });
+  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   return {
-    title: word('login'),
+    title: common('word.login'),
     description: t('metadata.description', { app: siteConfig.name }),
   };
 }

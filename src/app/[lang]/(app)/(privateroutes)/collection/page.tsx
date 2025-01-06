@@ -22,9 +22,11 @@ import { UserPlaylistsLiked } from './_components/UserPlaylistsLiked';
 import CollectionIcon from '@/components/Collection/CollectionIcon';
 import { useUI } from '@/context/ui-context';
 import HeaderRightSide from '@/components/Header/HeaderRightSide';
+import { useTranslations } from 'next-intl';
 
 export default function Collection() {
   const { device } = useUI();
+  const common = useTranslations('common');
   const collectionRoutes = useMemo(
     () => [
       {
@@ -33,7 +35,7 @@ export default function Collection() {
             <Send fill="#fff" className="w-2/5 h-2/5" />
           </CollectionIcon>
         ),
-        label: 'Guidelist',
+        label: common('library.collection.guidelist.label'),
         href: '/collection/guidelist',
       },
       {
@@ -42,7 +44,7 @@ export default function Collection() {
             <Bookmark fill="#fff" className="w-2/5 h-2/5" />
           </CollectionIcon>
         ),
-        label: 'Watchlist',
+        label: common('library.collection.watchlist.label'),
         href: '/collection/watchlist',
       },
       {
@@ -51,7 +53,7 @@ export default function Collection() {
             <Heart fill="#fff" className="w-2/5 h-2/5" />
           </CollectionIcon>
         ),
-        label: 'Coups de coeur',
+        label: common('library.collection.likes.label'),
         href: '/collection/likes',
       },
     ],

@@ -10,75 +10,79 @@ import MovieCardSmall from '@/components/Movie/MovieCardSmall';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import Senders from './data-table-senders';
 import { UserMovieGuidelistView } from '@/types/type.db';
+import { useTranslations } from 'next-intl';
+import { capitalize } from 'lodash';
 
 const senderToShow = 5;
 
-export const columns: ColumnDef<UserMovieGuidelistView>[] = [
-  {
-    id: 'movie',
-    accessorFn: (row) => row?.movie?.title,
-    meta: {
-      displayName: 'Film',
+export const columns = (): ColumnDef<UserMovieGuidelistView>[] => {
+  const common = useTranslations('common');
+  return [
+    {
+      id: 'movie',
+      accessorFn: (row) => row?.movie?.title,
+      meta: {
+        displayName: capitalize(common('word.film', { count: 1 })),
+      },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={capitalize(common('word.film', { count: 1 }))} />
+      ),
+      cell: ({ row }) => <MovieCardSmall key={row.index} movie={row.original?.movie} />,
+      enableHiding: false,
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Film" />
-    ),
-    cell: ({ row }) => <MovieCardSmall key={row.index} movie={row.original?.movie} />,
-    enableHiding: false,
-  },
-  {
-    id: 'release_date',
-    accessorFn: (row) => row?.movie?.release_date,
-    meta: {
-      displayName: 'Date',
+    {
+      id: 'release_date',
+      accessorFn: (row) => row?.movie?.release_date,
+      meta: {
+        displayName: capitalize(common('word.date')),
+      },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={capitalize(common('word.date'))} />
+      ),
+      cell: ({ row }) => (
+        <DateOnlyYearTooltip date={row.original?.movie?.release_date} className='text-muted-foreground'/>
+      ),
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date" />
-    ),
-    cell: ({ row }) => (
-      <DateOnlyYearTooltip date={row.original?.movie?.release_date} className='text-muted-foreground'/>
-    ),
-  },
-  {
-    id: 'runtime',
-    accessorFn: (row) => row?.movie?.runtime,
-    meta: {
-      displayName: 'Durée',
+    {
+      id: 'runtime',
+      accessorFn: (row) => row?.movie?.runtime,
+      meta: {
+        displayName: capitalize(common('word.duration')),
+      },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} Icon={Clock} />
+      ),
+      cell: ({ row }) => (
+        <RuntimeTooltip runtime={row.original?.movie?.runtime ?? 0} className='text-muted-foreground'/>
+      ),
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} Icon={Clock} />
-    ),
-    cell: ({ row }) => (
-      <RuntimeTooltip runtime={row.original?.movie?.runtime ?? 0} className='text-muted-foreground'/>
-    ),
-  },
-  {
-    id: 'by',
-    accessorFn: (row) => row?.senders?.length,
-    meta: {
-      displayName: 'Ajouté par',
+    {
+      id: 'by',
+      accessorFn: (row) => row?.senders?.length,
+      meta: {
+        displayName: capitalize(common('messages.added_by')),
+      },
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={capitalize(common('messages.added_by'))}
+          className="justify-end hidden lg:block"
+        />
+      ),
+      cell: ({ row }) => (
+        <Senders row={row} />
+      ),
     },
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Ajouté par"
-        className="justify-end hidden lg:block"
-      />
-    ),
-    cell: ({ row }) => (
-      <Senders row={row} />
-    ),
-    enableHiding: false,
-  },
-  {
-    id: 'actions',
-    cell: ({ row, table, column }) => (
-      <DataTableRowActions
-        data={row.original}
-        table={table}
-        row={row}
-        column={column}
-      />
-    ),
-  },
-];
+    {
+      id: 'actions',
+      cell: ({ row, table, column }) => (
+        <DataTableRowActions
+          data={row.original}
+          table={table}
+          row={row}
+          column={column}
+        />
+      ),
+    },
+  ];
+}
