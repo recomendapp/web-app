@@ -4,11 +4,9 @@ import React, { useState, useRef, useMemo } from 'react';
 import { useMap } from '@/context/map-context';
 import { Interface } from './Interface';
 import { Icons } from '../../config/icons';
-import MapContainer, { Layer, Marker, Popup, Source } from 'react-map-gl/maplibre';
+import MapContainer, { Layer, Source } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useLocale } from 'next-intl';
-import { id } from 'date-fns/locale';
-import { title } from 'process';
 
 export function Map() {
   const locale = useLocale();
@@ -75,7 +73,7 @@ export function Map() {
         onClick={(e) => {
           const isMoviesLayer = e.features?.find((feature) => feature.layer.id === 'movies');
           if (isMoviesLayer) {
-            const parsedLocaleData = JSON.parse(isMoviesLayer.properties[locale]);
+            const parsedLocaleData = JSON.parse(isMoviesLayer.properties[locale === 'fr-FR' ? 'fr-FR' : 'en-US']); // TODO: Use local when supported all languages
             console.log('e', isMoviesLayer.geometry);
             setSelectedMovie({
               movie: {
@@ -112,7 +110,7 @@ export function Map() {
               id="movies"
               type="symbol"
               layout={{
-                'text-field': ['get', 'title', ['get', locale]],
+                'text-field': ['get', 'title', ['get', locale === 'fr-FR' ? 'fr-FR' : 'en-US']], // TODO: Use local when supported all languages
                 'text-font': ['Open Sans Bold'],
                 'text-size': [
                   "interpolate",

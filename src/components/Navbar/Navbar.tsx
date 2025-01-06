@@ -47,7 +47,7 @@ export function Navbar({ className }: NavbarProps) {
         label: user ? routesDic('feed') : routesDic('shop'),
         active: user ? pathname.startsWith('/feed') : false,
         href: user ? '/feed' : 'https://shop.recomend.app',
-        target: '_blank',
+        target: user ? undefined : '_blank',
       },
       {
         icon: user ? Library : Icons.user,
