@@ -2,14 +2,11 @@ import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
-import { useQuery } from '@apollo/client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Fragment, useEffect } from 'react';
-import USER_PLAYLISTS_QUERY from '@/graphql/Playlist/Playlist/queries/GetPlaylistsByUserId';
 import Loader from '@/components/Loader/Loader';
 import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
-import { GetPlaylistsByUserIdQuery } from '@/graphql/__generated__/graphql';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import { Playlist } from '@/types/type.db';
@@ -33,7 +30,7 @@ export function UserPlaylists({
     isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery({
-    queryKey: ['user', user?.id, 'playlists', { order: 'updated_at-desc'}],
+    queryKey: ['user', user?.id, 'playlists', { limit: "inifite", order: 'updated_at-desc'}],
     queryFn: async ({ pageParam = 1 }) => {
       if (!user?.id) return;
       let from = (pageParam - 1) * numberOfResult;
@@ -56,10 +53,7 @@ export function UserPlaylists({
   });
 
   useEffect(() => {
-    if (inView && hasNextPage) {
-      console.log('fetchNextPage');
-      fetchNextPage();
-    }
+    if (inView && hasNextPage) fetchNextPage();
   }, [inView, hasNextPage, playlists, fetchNextPage]);
 
   if (isLoading) return <Loader />;
@@ -67,7 +61,6 @@ export function UserPlaylists({
   if (!user) return null;
 
   if (!isLoading && !playlists?.pages[0]?.length) return null;
-
 
   if (grid) {
     return (
