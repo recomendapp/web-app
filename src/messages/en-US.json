@@ -17,6 +17,8 @@
       "save_up_to_percent": "save up to {percent}%"
     },
     "errors": {
+      "not_logged_in": "you are not logged in",
+      "already_premium": "you are already premium",
       "default": "an error occurred",
       "an_error_occurred": "an error occurred"
     },
