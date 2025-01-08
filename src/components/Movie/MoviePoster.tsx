@@ -19,7 +19,7 @@ export default function MoviePoster({
   return (
     <div
       className={cn(
-        'shadow-md relative shrink-0 w-full aspect-[2/3]',
+        'shadow-md relative shrink-0 w-full aspect-[2/3] overflow-hidden',
         className
       )}
     >

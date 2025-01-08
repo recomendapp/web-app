@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { userKeys } from "./userKeys"
 import { useSupabaseClient } from '@/context/supabase-context';
-import { Playlist, UserFollower, UserMovieActivity } from "@/types/type.db";
+import { FeedCastCrew, Playlist, UserFollower, UserMovieActivity } from "@/types/type.db";
 
 export const useUserSearch = ({
 	filters,
@@ -435,6 +435,59 @@ export const useUserFeedInfinite = ({
 							break;
 						case 'created_at-asc':
 							request = request.order('created_at', { ascending: true });
+							break;
+					}
+				}
+			}
+			const { data, error } = await request;
+			if (error) throw error;
+			return data;
+		},
+		initialPageParam: 1,
+		getNextPageParam: (lastPage, pages) => {
+			return lastPage?.length == mergedFilters.resultsPerPage ? pages.length + 1 : undefined;
+		},
+		enabled: !!userId,
+	});
+}
+
+export const useUserFeedCastCrewInifinite = ({
+	userId,
+	filters,
+} : {
+	userId?: string;
+	filters?: {
+		resultsPerPage?: number;
+		order?: 'release_date-desc';
+	};
+}) => {
+	const mergedFilters = {
+		resultsPerPage: 20,
+		order: 'release_date-desc',
+		...filters,
+	};
+	const supabase = useSupabaseClient();
+	return useInfiniteQuery({
+		queryKey: userKeys.feedCastCrew(userId as string, mergedFilters),
+		queryFn: async ({ pageParam = 1 }) => {
+			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
+	  		let to = from - 1 + mergedFilters.resultsPerPage;
+			let request = supabase
+				.from('feed_cast_crew')
+				.select(`
+					*,
+					movie(*),
+					person(*)
+				`)
+				.range(from, to)
+				.returns<FeedCastCrew[]>();
+			
+			if (mergedFilters) {
+				if (mergedFilters.order) {
+					const [ column, direction ] = mergedFilters.order.split('-');
+					switch (column) {
+						case 'release_date':
+							request = request.order('release_date', { ascending: direction === 'asc' });
 							break;
 					}
 				}

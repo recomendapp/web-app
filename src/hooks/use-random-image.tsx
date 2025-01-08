@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-type ImageObject = {
+export type ImageObject = {
 	src: string;
 	alt?: string;
 };

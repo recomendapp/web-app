@@ -36,5 +36,13 @@ export const Images = {
 				},
 			]
 		}
+	},
+	upgrade: {
+		background: [
+			{
+				src: '/assets/images/upgrade/background/1.gif',
+				alt: 'background image 1 for upgrade page',
+			},
+		]
 	}
 }

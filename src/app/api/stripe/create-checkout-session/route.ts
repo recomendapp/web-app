@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       mode: 'subscription',
       allow_promotion_codes: true,
       subscription_data: {
-        // trial_from_plan: true,
+        trial_period_days: 30, // TODO: Check if its the right way to add trial period
         metadata,
       },
       success_url: `${getURL()}/settings/subscription`,

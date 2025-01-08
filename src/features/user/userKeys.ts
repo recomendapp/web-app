@@ -130,7 +130,10 @@ export const userKeys = {
 		// 	limit?: number;
 		// }
 	) => filters ? [...userKeys.detail(userId), 'feed', filters] as const : [...userKeys.detail(userId), 'feed'] as const,
-
+	feedCastCrew: (
+		userId: string,
+		filters?: any
+	) => filters ? [...userKeys.detail(userId), 'feed-cast-crew', filters] as const : [...userKeys.detail(userId), 'feed-cast-crew'] as const,
 	/**
 	 * Fetches playlists of friends
 	 * @param userId The user id

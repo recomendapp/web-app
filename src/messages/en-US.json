@@ -9,7 +9,12 @@
       "view_directors": "view {count, plural, one {director} other {directors}}",
       "no_director": "no director",
       "view_comment": "view {count, plural, one {comment} other {comments}}",
-      "add_comment": "add a comment"
+      "add_comment": "add a comment",
+      "get_started": "get started",
+      "upgrade_to_plan": "upgrade to {plan}",
+      "choose_subscription_recurrence": "Choose the recurrence of your subscription",
+      "compare_plans": "compare plans",
+      "save_up_to_percent": "save up to {percent}%"
     },
     "errors": {
       "default": "an error occurred",
@@ -33,7 +38,18 @@
       "show": "show",
       "column": "{count, plural, one {column} other {columns}}",
       "comment": "{count, plural, one {comment} other {comments}}",
-      "unknown": "unknown"
+      "unknown": "unknown",
+      "community": "community",
+      "cast_and_crew": "cast & crew",
+      "soon": "soon",
+      "manage": "manage",
+      "upgrade": "upgrade",
+      "monthly": "monthly",
+      "month": "month",
+      "yearly": "yearly",
+      "year": "year",
+      "price": "price",
+      "free": "free"
     },
     "error": "An error occurred",
     "click_here": "Click here",
@@ -141,6 +157,58 @@
         "create": "Create a playlist",
         "edit": "Edit the playlist",
         "delete": "Delete the playlist"
+      }
+    },
+    "feed": {
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> is <important>{roles}</important> in <linkFilm>{film}</linkFilm>"
+      }
+    },
+    "subscription": {
+      "features": {
+        "activities": {
+          "label": "activities",
+          "unlimited_activities": {
+            "label": "unlimited activities",
+            "description": "ratings, likes, reviews, watchlist and recommendations"
+          },
+          "favorites": {
+            "label": "favorites",
+            "description": "add your favorite films to your profile"
+          }
+        },
+        "playlists": {
+          "label": "playlists",
+          "unlimited_playlists": {
+            "label": "unlimited",
+            "description": "create an unlimited number of playlists"
+          },
+          "shared_playlists": {
+            "label": "shared",
+            "description": "share your playlists with other users"
+          }
+        },
+        "feed": {
+          "label": "feed",
+          "followees": {
+            "label": "followed users",
+            "description": "see the activities of the users you follow"
+          },
+          "cast_and_crew": {
+            "label": "cast & crew",
+            "description": "follow the activities of the people involved in the films"
+          }
+        },
+        "support": {
+          "label": "support",
+          "team": {
+            "label": "Support the {app} team"
+          },
+          "credits": {
+            "label": "credits",
+            "description": "your profile in the app credits"
+          }
+        }
       }
     },
     "sr": {
@@ -407,6 +475,12 @@
       "data": {
         "label": "Data",
         "description": "Import or export your data."
+      }
+    },
+    "upgrade": {
+      "header": {
+        "title": "Expand your cinema, share more, support {app}",
+        "subtitle": "Try 1 month for free, then {price}/month"
       }
     }
   },

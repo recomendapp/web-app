@@ -2,20 +2,12 @@ import {
   getActiveProductsWithPrices,
   getSession,
 } from '@/lib/supabase/server';
-import Pricing from '@/components/Subscription/Pricing';
+import { Upgrade } from './_components/Upgrade';
 
-export default async function Upgrade() {
+export default async function UpgradePage() {
   const [session, products] = await Promise.all([
     getSession(),
     getActiveProductsWithPrices(),
   ]);
-
-  return (
-    <main className="h-full w-full flex flex-col gap-8 p-4">
-      <Pricing
-        session={session}
-        products={products}
-      />
-    </main>
-  );
+  return <Upgrade session={session} product={products.find((product) => product.name?.toLowerCase() === 'premium')} />;
 }

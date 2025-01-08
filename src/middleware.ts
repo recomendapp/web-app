@@ -83,6 +83,17 @@ export async function middleware(request: NextRequest) {
     return (NextResponse.redirect(url));
   }
 
+  /**
+   * Redirect user if not premium
+   */
+  const premiumUserOnly = [
+    '/feed/cast-crew',
+  ];
+  if (user && !config?.user_premium && premiumUserOnly.some((path) => request.nextUrl.pathname.startsWith(path))) {
+    url.pathname = '/upgrade';
+    return (NextResponse.redirect(url));
+  }
+  
   return (response);
 }
 

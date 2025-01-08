@@ -9,9 +9,16 @@
       "view_directors": "voir {count, plural, one {le réalisateur} other {les réalisateurs}}",
       "no_director": "aucun réalisateur",
       "view_comment": "voir {count, plural, one {le commentaire} other {les commentaires}}",
-      "add_comment": "ajouter un commentaire"
+      "add_comment": "ajouter un commentaire",
+      "get_started": "commencer",
+      "upgrade_to_plan": "passer à {plan}",
+      "choose_subscription_recurrence": "choisissez la récurrence de votre abonnement",
+      "compare_plans": "comparer les plans",
+      "save_up_to_percent": "économisez jusqu'à {percent}%"
     },
     "errors": {
+      "not_logged_in": "vous n'êtes pas connecté",
+      "already_premium": "vous êtes déjà premium",
       "default": "une erreur s'est produite",
       "an_error_occurred": "une erreur s'est produite"
     },
@@ -33,7 +40,18 @@
       "show": "afficher",
       "column": "{count, plural, one {colonne} other {colonnes}}",
       "comment": "{count, plural, one {commentaire} other {commentaires}}",
-      "unknown": "inconnu"
+      "unknown": "inconnu",
+      "community": "communauté",
+      "cast_and_crew": "cast & crew",
+      "soon": "bientôt",
+      "manage": "gérer",
+      "upgrade": "mise à niveau",
+      "monthly": "mensuel",
+      "month": "mois",
+      "yearly": "annuel",
+      "year": "an",
+      "price": "prix",
+      "free": "gratuit"
     },
     "error": "Une erreur s'est produite",
     "click_here": "Cliquez ici",
@@ -141,6 +159,58 @@
         "create": "Créer une playlist",
         "edit": "Modifier la playlist",
         "delete": "Supprimer la playlist"
+      }
+    },
+    "feed": {
+      "persons": {
+        "new_activity": "<linkPerson>{name}</linkPerson> est <important>{roles}</important> dans <linkFilm>{film}</linkFilm>"
+      }
+    },
+    "subscription": {
+      "features": {
+        "activities": {
+          "label": "activités",
+          "unlimited_activities": {
+            "label": "activités illimitées",
+            "description": "notes, likes, critiques, watchlist et recommandations"
+          },
+          "favorites": {
+            "label": "favoris",
+            "description": "ajoutez vos films favoris à votre profil"
+          }
+        },
+        "playlists": {
+          "label": "playlists",
+          "unlimited_playlists": {
+            "label": "illimitées",
+            "description": "créez un nombre illimité de playlists"
+          },
+          "shared_playlists": {
+            "label": "partagées",
+            "description": "partagez vos playlists avec les autres utilisateurs"
+          }
+        },
+        "feed": {
+          "label": "feed",
+          "followees": {
+            "label": "utilisateurs suivis",
+            "description": "suivez les activités des utilisateurs que vous suivez"
+          },
+          "cast_and_crew": {
+            "label": "cast & crew",
+            "description": "suivez les activités des personnes impliquées dans les films"
+          }
+        },
+        "support": {
+          "label": "support",
+          "team": {
+            "label": "Soutenez l'équipe {app}"
+          },
+          "credits": {
+            "label": "générique",
+            "description": "votre profil dans le générique de l'app"
+          }
+        }
       }
     },
     "sr": {
@@ -407,6 +477,12 @@
       "data": {
         "label": "Données",
         "description": "Importez ou exportez vos données."
+      }
+    },
+    "upgrade": {
+      "header": {
+        "title": "Étendez votre cinéma, partagez plus, soutenez {app}",
+        "subtitle": "Essayez 1 mois gratuitement, puis {price}/mois"
       }
     }
   },

@@ -1,13 +1,13 @@
 'use client'
 
 import { useAuth } from "@/context/auth-context";
-import FeedItem from "./_components/FeedItem";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import Loader from "@/components/Loader/Loader";
-import { useUserFeedInfinite } from "@/features/user/userQueries";
+import { useUserFeedInfinite, useUserFeedCastCrewInifinite } from "@/features/user/userQueries";
+import { FeedCastCrewItem } from "./_components/FeedCastCrewItem";
 
-export default function Feed() {
+export default function FeedPersons() {
   const { user } = useAuth();
 
   const { ref, inView } = useInView();
@@ -18,7 +18,7 @@ export default function Feed() {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useUserFeedInfinite({
+  } = useUserFeedCastCrewInifinite({
     userId: user?.id,
   });
 
@@ -37,12 +37,11 @@ export default function Feed() {
         <div className="flex flex-col gap-4">
           {feed.pages.map((page, i) => (
             page?.map((activity, index) => (
-              <div
-                key={index}
-                ref={(i === feed.pages.length - 1) && (index === page.length - 1) ? ref : undefined }
-              >
-                <FeedItem activity={activity} />
-              </div>
+              <FeedCastCrewItem
+              key={index}
+              ref={(i === feed.pages.length - 1) && (index === page.length - 1) ? ref : undefined }
+              activity={activity}
+              />
             ))
           ))}
         </div>

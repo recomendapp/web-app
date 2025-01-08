@@ -135,3 +135,9 @@ export type PlaylistGuest = Database['public']['Tables']['playlist_guest']['Row'
 	user?: User;
 	playlist?: Playlist;
 } | null | undefined;
+
+// *========== FEED_CAST_CREW ==========* //
+export type FeedCastCrew = Database['public']['Views']['feed_cast_crew']['Row'] & {
+	movie?: Movie;
+	person?: Person;
+} | null | undefined;

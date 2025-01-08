@@ -2651,6 +2651,51 @@ export type Database = {
           },
         ]
       }
+      feed_cast_crew: {
+        Row: {
+          jobs: string[] | null
+          movie_id: number | null
+          person_id: number | null
+          release_date: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "person_full"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_person"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       guidelist: {
         Row: {
           created_at: string | null
@@ -3231,6 +3276,7 @@ export type Database = {
         Returns: {
           maintenance_mode: boolean
           user_language: string
+          user_premium: boolean
         }[]
       }
       importer_best_match_movie: {
