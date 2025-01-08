@@ -13,7 +13,7 @@ export async function generateMetadata({
 	return {
 	  title: capitalize(common('library.label')),
 	};
-  }
+}
 
 export default function CollectionLayout ({ children } : { children: ReactNode}) {
 	return (children)

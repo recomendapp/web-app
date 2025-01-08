@@ -15,6 +15,7 @@ import { WidgetUserFeed } from "@/components/widgets/WidgetUserFeed";
 import { WidgetUserDiscovery } from "@/components/widgets/WidgetUserDiscovery";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { upperFirst } from "lodash";
 
 export default function Home() {
   const { session, user } = useAuth();
@@ -45,7 +46,7 @@ export default function Home() {
 				// Only non-logged users
 				<>
 				<Button variant="accent-1" className="col-span-full m-auto max-w-lg" asChild>
-					<Link href="/auth/login">C&apos;est parti 🎬, c&apos;est gratuit !</Link>
+					<Link href="/auth/login">{upperFirst(common('messages.get_started_its_free'))}</Link>
 				</Button>
 				<WidgetRecomendShowcase className='col-span-full'/>
 				</>

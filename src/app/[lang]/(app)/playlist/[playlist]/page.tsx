@@ -6,12 +6,10 @@ import { useEffect, useRef, useState } from 'react';
 import PlaylistTable from '@/app/[lang]/(app)/playlist/[playlist]/_components/table/PlaylistTable';
 import PlaylistHeader from '@/app/[lang]/(app)/playlist/[playlist]/_components/PlaylistHeader';
 import { useAuth } from '@/context/auth-context';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
+import { PlaylistItem } from '@/types/type.db';
 import useDebounce from '@/hooks/use-debounce';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { playlistKeys } from '@/features/playlist/playlistKeys';
 import { usePlaylistFull, usePlaylistIsAllowedToEdit, usePlaylistItems } from '@/features/playlist/playlistQueries';
 import { useUpdatePlaylistItemChanges } from '@/features/playlist/playlistMutations';
 
@@ -22,7 +20,6 @@ export default function PlaylistPage({
 }) {
   const supabase = useSupabaseClient();
   const { user } = useAuth();
-  const queryClient = useQueryClient();
   const [shouldRefresh, setShouldRefresh] = useState(false);
   const debouncedRefresh = useDebounce(shouldRefresh, 200);
   const { data: playlist, refetch } = usePlaylistFull(Number(params.playlist));
@@ -37,70 +34,6 @@ export default function PlaylistPage({
     [key: string]: any;
   }>[] | null>(null);
   const eventBufferTimeout = useRef<NodeJS.Timeout | null>(null);
-
-  const applyBufferedChanges = async () => {
-    if (!eventBuffer.current) return;
-    
-    const bufferedEvents = [...eventBuffer.current];
-    eventBuffer.current = null;
-
-    const newPlaylistItems = queryClient.getQueryData<PlaylistItem[]>(playlistKeys.items(Number(params.playlist))) || [];
-    // const newPlaylistItems = [...playlist?.items];
-
-    for (const payload of bufferedEvents) {
-      switch (payload.eventType) {
-        /*
-        * INSERT:
-        *  - Check if the new item rank is n + 1 from the last item rank => if not, return false
-        *  - If everything is ok, ask supabase for the new item and add it to the playlist.items
-        */
-        case 'INSERT':
-          if (payload.new.rank !== newPlaylistItems.length + 1) return false;
-          const { error: insertError, data: insertData } = await supabase
-            .from('playlist_item')
-            .select(`
-              *,
-              movie(*)
-            `)
-            .eq('id', payload.new.id)
-            .single();
-          if (insertError || !insertData) return false;
-          newPlaylistItems.push(insertData);
-          break;
-        /*
-        * UPDATE:
-        *  - Check if the item exists in the playlist.items => if not, return false
-        *  - If everything is ok, update the item from payload.new and re-order the playlist.items
-        */
-        case 'UPDATE':
-          const itemIndex = newPlaylistItems.findIndex(item => item?.id === payload.new.id);
-          if (itemIndex === -1) return false;
-          newPlaylistItems[itemIndex] = { ...newPlaylistItems[itemIndex], ...payload.new } as PlaylistItem;
-          break;
-        /*
-        * DELETE:
-        *  - Check if the item exists in the playlist.items => if not, return false
-        */
-        case 'DELETE':
-          const deleteIndex = newPlaylistItems.findIndex(item => item?.id === payload.old.id);
-          if (deleteIndex === -1) return false;
-          newPlaylistItems.splice(deleteIndex, 1);
-          break;
-        default:
-          break;
-      }
-    }
-
-    newPlaylistItems.sort((a, b) => a!.rank - b!.rank);
-    // queryClient.setQueryData(playlistKeys.detail(Number(params.playlist)), (oldData: Playlist) => {
-    //   if (!oldData) return null;
-    //   return {
-    //     ...oldData,
-    //     items: newPlaylistItems,
-    //   };
-    // });
-    queryClient.setQueryData(playlistKeys.items(Number(params.playlist)), newPlaylistItems);
-  };
 
   const handleEventBuffering = (payload: RealtimePostgresChangesPayload<{
     [key: string]: any;
@@ -135,7 +68,6 @@ export default function PlaylistPage({
             filter: `playlist_id=eq.${params.playlist }`,
           },
           async (payload) => {
-            console.log('realtime event', payload);
             handleEventBuffering(payload);
           }
         )

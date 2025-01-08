@@ -46,15 +46,12 @@ import {
 import { MouseSensor, TouchSensor } from '@/components/DragNDrop/CustomSensor';
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
-// GRAPHQL
-// import { useMutation } from '@apollo/client';
-// import UPDATE_PLAYLIST_ITEM from '@/graphql/Playlist/PlaylistItem/mutations/UpdatePlaylistItem';
-// import { UpdatePlaylistItemMutation } from '@/graphql/__generated__/graphql';
 import { Playlist, PlaylistItem } from '@/types/type.db';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { usePlaylistIsAllowedToEdit, usePlaylistItems } from '@/features/playlist/playlistQueries';
-import { playlistKeys } from '@/features/playlist/playlistKeys';
+import { useMutation } from '@tanstack/react-query';
+import { usePlaylistIsAllowedToEdit } from '@/features/playlist/playlistQueries';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -92,18 +89,11 @@ export default function PlaylistTable({
       return data;
     },
   });
-
-  // const [updatePlaylistItem] = useMutation<UpdatePlaylistItemMutation>(UPDATE_PLAYLIST_ITEM);
-
   const [activeId, setActiveId] = React.useState<UniqueIdentifier | null>(null);
-
   const items = React.useMemo<UniqueIdentifier[]>(() => playlistItems?.map((item) => item!.id), [playlistItems]);
-
   const [sorting, setSorting] = React.useState<SortingState>([]);
-
   const [globalFilter, setGlobalFilter] = React.useState();
  
-
   const table = useReactTable({
     data: playlistItems,
     columns,
@@ -257,6 +247,7 @@ const TableContainer = ({
   table: TableType<PlaylistItem>;
   items: UniqueIdentifier[];
 }) => {
+  const common = useTranslations('common');
   return (
   <Table>
       <TableHeader>
@@ -285,10 +276,10 @@ const TableContainer = ({
         ) : (
           <TableRow>
             <TableCell
-              colSpan={columns.length}
+              colSpan={table.getAllColumns().length}
               className="h-24 text-center"
             >
-              Aucun résultat.
+            {upperFirst(common('messages.no_results'))}
             </TableCell>
           </TableRow>
         )}

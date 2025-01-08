@@ -6,9 +6,12 @@ import { useInView } from "react-intersection-observer";
 import Loader from "@/components/Loader/Loader";
 import { useUserFeedInfinite, useUserFeedCastCrewInifinite } from "@/features/user/userQueries";
 import { FeedCastCrewItem } from "./_components/FeedCastCrewItem";
+import { upperFirst } from "lodash";
+import { useTranslations } from "next-intl";
 
 export default function FeedPersons() {
   const { user } = useAuth();
+  const common = useTranslations('common');
 
   const { ref, inView } = useInView();
 
@@ -47,7 +50,7 @@ export default function FeedPersons() {
         </div>
       ) : (
         <div className="text-center text-muted-foreground">
-          C&apos;est un peu vide ici
+        {upperFirst(common('messages.is_empty'))}
         </div>
       )}
     </div>

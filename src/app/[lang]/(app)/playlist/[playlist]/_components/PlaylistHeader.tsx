@@ -9,6 +9,8 @@ import UserCard from '@/components/User/UserCard/UserCard';
 import { useModal } from '@/context/modal-context';
 import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
 import { Playlist, PlaylistItem } from '@/types/type.db';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 export default function PlaylistHeader({
   playlist,
@@ -19,6 +21,7 @@ export default function PlaylistHeader({
 }) {
   const { user } = useAuth();
   const { openModal, createModal } = useModal();
+  const common = useTranslations('common');
 
   const randomBackdrop = (object: PlaylistItem[]) => {
     const itemsWithBackdrop = object.filter(
@@ -62,9 +65,9 @@ export default function PlaylistHeader({
         <div className="flex flex-col justify-between gap-2 w-full">
           {/* TYPE & GENRES */}
           <div>
-            <span className='text-accent-1'>Playlist</span>
+            <span className='text-accent-1'>{upperFirst(common('word.playlist', {count: 1}))}</span>
             <span className=" before:content-['_|_']">
-              {playlist?.private ? 'Privée' : 'Publique'}
+              {playlist?.private ? upperFirst(common('word.private', {gender: 'female', count: 1})) : upperFirst(common('word.public'))}
             </span>
           </div>
           <div>
@@ -81,7 +84,7 @@ export default function PlaylistHeader({
               className='cursor-pointer text-muted-foreground font-light line-clamp-2'
               onClick={() => createModal({
                 header: {
-                  title: 'Description',
+                  title: upperFirst(common('word.description')),
                 },
                 content: <p className='p-4 bg-muted rounded-md'>{playlist?.description}</p>
               })}
@@ -91,13 +94,12 @@ export default function PlaylistHeader({
             {/* ITEMS & TOTAL RUNTIME */}
             <div className="flex gap-1 font-light">
               <UserCard user={playlist?.user} />
-              <div className=" before:content-['_•_']" >
-                {Number(playlist?.items_count) ?? 0} film
-                {Number(playlist?.items_count) > 1 && 's'}
-              </div>
-              <div className=" before:content-['_•_']" >
+              <span className=" before:content-['_•_']" >
+                {common('word.film_count', {count: Number(playlist?.items_count) ?? 0})}
+              </span>
+              <span className=" before:content-['_•_']" >
                 {ConvertHoursMinutes(totalRuntime)}
-              </div>
+              </span>
             </div>
           </div>
         </div>

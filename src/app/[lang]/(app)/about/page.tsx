@@ -1,5 +1,4 @@
 import { Lang } from '@/types/type.i18n';
-import { Metadata } from 'next';
 import Marquee from "react-fast-marquee";
 
 import Pricing from '@/components/Subscription/Pricing';
@@ -9,10 +8,20 @@ import {
 } from '@/lib/supabase/server';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
+import { upperFirst } from 'lodash';
 
-export const metadata: Metadata = {
-  title: 'À propos',
-};
+export async function generateMetadata({
+  params,
+  }: {
+  params: {
+    lang: string;
+  };
+  }) {
+  const common = await getTranslations({ locale: params.lang, namespace: 'routes' });
+  return {
+    title: upperFirst(common('about')),
+  };
+}
 
 export default async function About({
   params: { lang },

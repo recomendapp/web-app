@@ -11,22 +11,26 @@
       "view_comment": "view {count, plural, one {comment} other {comments}}",
       "add_comment": "add a comment",
       "get_started": "get started",
+      "get_started_its_free": "get started 🎬, it's free !",
       "upgrade_to_plan": "upgrade to {plan}",
       "choose_subscription_recurrence": "Choose the recurrence of your subscription",
       "compare_plans": "compare plans",
-      "save_up_to_percent": "save up to {percent}%"
+      "save_up_to_percent": "save up to {percent}%",
+      "is_empty": "it's a bit empty here"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
       "already_premium": "you are already premium",
       "default": "an error occurred",
-      "an_error_occurred": "an error occurred"
+      "an_error_occurred": "an error occurred",
+      "playlist_not_found": "playlist not found"
     },
     "word": {
       "hello": "Hello",
       "save": "Save",
       "saved": "Saved",
       "film": "{count, plural, one {film} other {films}}",
+      "film_count": "{count, plural, one {# film} other {# films}}",
       "login": "Login",
       "signup": "Sign up",
       "navigation": "Navigation",
@@ -51,7 +55,11 @@
       "yearly": "yearly",
       "year": "year",
       "price": "price",
-      "free": "free"
+      "free": "free",
+      "playlist": "{count, plural, one {playlist} other {playlists}}",
+      "public": "public",
+      "private": "private",
+      "description": "description"
     },
     "error": "An error occurred",
     "click_here": "Click here",
@@ -218,6 +226,12 @@
     }
   },
   "pages": {
+    "errors": {
+      "404": {
+        "label": "Page not found",
+        "description": "oops, this page does not exist..."
+      }
+    },
     "auth": {
       "login": {
         "metadata": {
@@ -480,9 +494,19 @@
       }
     },
     "upgrade": {
+      "metadata": {
+        "title": "Upgrade to Premium",
+        "description": "Upgrade to a premium account to access all the features of {app}."
+      },
       "header": {
-        "title": "Expand your cinema, share more, support {app}",
-        "subtitle": "Try 1 month for free, then {price}/month"
+        "title": "expand your cinema, share more, support {app}",
+        "subtitle": "try 1 month for free, then {price}/month"
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - playlist by @{username}",
+        "description": "Discover the playlist of films by @{username} on {app}."
       }
     }
   },

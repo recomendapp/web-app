@@ -11,22 +11,26 @@
       "view_comment": "voir {count, plural, one {le commentaire} other {les commentaires}}",
       "add_comment": "ajouter un commentaire",
       "get_started": "commencer",
+      "get_started_its_free": "c'est parti 🎬, c'est gratuit !",
       "upgrade_to_plan": "passer à {plan}",
       "choose_subscription_recurrence": "choisissez la récurrence de votre abonnement",
       "compare_plans": "comparer les plans",
-      "save_up_to_percent": "économisez jusqu'à {percent}%"
+      "save_up_to_percent": "économisez jusqu'à {percent}%",
+      "is_empty": "c'est un peu vide ici"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",
       "already_premium": "vous êtes déjà premium",
       "default": "une erreur s'est produite",
-      "an_error_occurred": "une erreur s'est produite"
+      "an_error_occurred": "une erreur s'est produite",
+      "playlist_not_found": "playlist introuvable"
     },
     "word": {
       "hello": "Bonjour",
       "save": "Enregistrer",
       "saved": "Enregistré",
       "film": "{count, plural, one {film} other {films}}",
+      "film_count": "{count, plural, one {# film} other {# films}}",
       "login": "Se connecter",
       "signup": "S'inscrire",
       "navigation": "Navigation",
@@ -51,7 +55,11 @@
       "yearly": "annuel",
       "year": "an",
       "price": "prix",
-      "free": "gratuit"
+      "free": "gratuit",
+      "playlist": "{count, plural, one {playlist} other {playlists}}",
+      "public": "public",
+      "private": "{gender, select, female {privée} other {privé}}{count, plural, one {} other {s}}",
+      "description": "description"
     },
     "error": "Une erreur s'est produite",
     "click_here": "Cliquez ici",
@@ -218,6 +226,12 @@
     }
   },
   "pages": {
+    "errors": {
+      "404": {
+        "label": "page introuvable",
+        "description": "oups, cette page n'existe pas..."
+      }
+    },
     "auth": {
       "login": {
         "metadata": {
@@ -480,9 +494,19 @@
       }
     },
     "upgrade": {
+      "metadata": {
+        "title": "passer à Premium",
+        "description": "Passez à un compte premium pour accéder à toutes les fonctionnalités de {app}."
+      },
       "header": {
-        "title": "Étendez votre cinéma, partagez plus, soutenez {app}",
-        "subtitle": "Essayez 1 mois gratuitement, puis {price}/mois"
+        "title": "étendez votre cinéma, partagez plus, soutenez {app}",
+        "subtitle": "essayez 1 mois gratuitement, puis {price}/mois"
+      }
+    },
+    "playlist": {
+      "metadata": {
+        "title": "{title} - playlist de @{username}",
+        "description": "Découvrez la playlist de films de @{username} sur {app}."
       }
     }
   },

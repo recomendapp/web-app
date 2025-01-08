@@ -6,9 +6,12 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import Loader from "@/components/Loader/Loader";
 import { useUserFeedInfinite } from "@/features/user/userQueries";
+import { upperFirst } from "lodash";
+import { useTranslations } from "next-intl";
 
 export default function Feed() {
   const { user } = useAuth();
+  const common = useTranslations('common');
 
   const { ref, inView } = useInView();
 
@@ -48,7 +51,7 @@ export default function Feed() {
         </div>
       ) : (
         <div className="text-center text-muted-foreground">
-          C&apos;est un peu vide ici
+        {upperFirst(common('messages.is_empty'))}
         </div>
       )}
     </div>

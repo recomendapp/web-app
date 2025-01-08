@@ -1,11 +1,20 @@
-import { Metadata } from 'next';
 import { SettingsNav } from '@/app/[lang]/(app)/(privateroutes)/settings/_components/SettingsNav';
 import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
+import { upperFirst } from 'lodash';
 
-export const metadata: Metadata = {
-  title: 'Settings',
-  description: "Recomend's settings",
-};
+export async function generateMetadata({
+	params,
+  }: {
+	params: {
+	  lang: string;
+	};
+  }) {
+	const common = await getTranslations({ locale: params.lang, namespace: 'pages' });
+	return {
+	  title: upperFirst(common('settings.label')),
+	};
+}
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
