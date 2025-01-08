@@ -16,6 +16,8 @@ import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { ModalPlaylistQuickAdd } from '@/components/Modals/Playlist/ModalPlaylistQuickAdd';
 import { usePlaylistIsAllowedToEdit } from '@/features/playlist/playlistQueries';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -26,6 +28,7 @@ export function DataTableToolbar<TData>({
   table,
   playlist,
 }: DataTableToolbarProps<TData>) {
+  const common = useTranslations('common');
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(playlist?.id);
   const { user } = useAuth();
   const { openModal } = useModal();
@@ -35,7 +38,7 @@ export function DataTableToolbar<TData>({
     <div className="flex flex-col-reverse items-end lg:flex-row lg:items-center lg:justify-between gap-4">
       <div className="flex flex-1 items-center gap-2 w-full">
         <Input
-          placeholder={'Rechercher dans la playlist...'}
+          placeholder={upperFirst(common('playlist.search.placeholder'))}
           value={
             (table.getColumn('movie')?.getFilterValue() as string) ??
             ''
@@ -53,7 +56,7 @@ export function DataTableToolbar<TData>({
             onClick={() => table.resetColumnFilters()}
             className="h-8 px-2 lg:px-3"
           >
-            Annuler
+            {upperFirst(common('word.cancel'))}
             <Cross2Icon className="ml-2 h-4 w-4" />
           </Button>
         )}
@@ -68,7 +71,7 @@ export function DataTableToolbar<TData>({
           onClick={() => openModal(ModalPlaylistQuickAdd, { playlist: playlist })}
           >
             <Icons.add className='mr-2 h-4 w-4' />
-            Ajout rapide
+            {upperFirst(common('messages.quick_add'))}
           </Button> : null}
           <DataTableSortOptions table={table} />
           <DataTableViewOptions table={table} />

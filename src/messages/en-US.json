@@ -16,7 +16,11 @@
       "choose_subscription_recurrence": "Choose the recurrence of your subscription",
       "compare_plans": "compare plans",
       "save_up_to_percent": "save up to {percent}%",
-      "is_empty": "it's a bit empty here"
+      "is_empty": "it's a bit empty here",
+      "add_to_playlist": "add to a playlist",
+      "send_to_friend": "send to a friend",
+      "custom_sort": "custom sort",
+      "quick_add": "quick add"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
@@ -167,6 +171,15 @@
         "create": "Create a playlist",
         "edit": "Edit the playlist",
         "delete": "Delete the playlist"
+      },
+      "search": {
+        "placeholder": "search in the playlist..."
+      },
+      "modal": {
+        "delete_confirm": {
+          "title": "delete from the playlist",
+          "description": "Are you sure you want to delete <important>{film}</important> from your playlist?"
+        }
       }
     },
     "feed": {

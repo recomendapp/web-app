@@ -71,6 +71,7 @@ export default function PlaylistTable({
   setPlaylistItems,
 }: DataTableProps) {
   const supabase = useSupabaseClient();
+  const common = useTranslations('common');
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(playlist?.id);
   
   const [rowSelection, setRowSelection] = React.useState({});
@@ -96,7 +97,7 @@ export default function PlaylistTable({
  
   const table = useReactTable({
     data: playlistItems,
-    columns,
+    columns: columns(),
     initialState: {
       pagination: {
         pageSize: 1001,
@@ -186,7 +187,7 @@ export default function PlaylistTable({
           const newIndex = items.indexOf(over.id);
           return arrayMove(data, newIndex, oldIndex);
         });
-        toast.error("Une erreur s\'est produite");
+        toast.error(upperFirst(common('errors.an_error_occurred')));
       }
     }
 

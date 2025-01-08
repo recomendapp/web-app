@@ -12,6 +12,8 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { ArrowDownUp, ChevronDown, ChevronUp } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 interface DataTableSortOptionsProps<TData> {
   table: Table<TData>;
@@ -20,6 +22,7 @@ interface DataTableSortOptionsProps<TData> {
 export function DataTableSortOptions<TData>({
   table,
 }: DataTableSortOptionsProps<TData>) {
+  const common = useTranslations('common');
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,14 +32,14 @@ export function DataTableSortOptions<TData>({
           className="ml-auto flex h-8 lg:hidden"
         >
           <ArrowDownUp className="mr-2 h-4 w-4" />
-          Trier
+          {upperFirst(common('word.sort'))}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>Trier par</DropdownMenuLabel>
+        <DropdownMenuLabel>{upperFirst(common('messages.sort_by'))}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => table.resetSorting()}>
-          Tri personnalisé
+        {upperFirst(common('messages.custom_sort'))}
         </DropdownMenuItem>
         {table
           .getAllColumns()

@@ -4,9 +4,11 @@ import { PlaylistItem } from '@/types/type.db';
 import { MessageSquarePlusIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { usePlaylistIsAllowedToEdit } from '@/features/playlist/playlistQueries';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 export function DataComment({ playlistItem }: { playlistItem: PlaylistItem }) {
-
+  const common = useTranslations('common');
   const { openModal } = useModal();
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(playlistItem?.playlist_id as number);
   return (
@@ -19,7 +21,7 @@ export function DataComment({ playlistItem }: { playlistItem: PlaylistItem }) {
       >
         {playlistItem?.comment && <span className='line-clamp-2 break-all'>{playlistItem.comment}</span>}
         {!playlistItem?.comment && isAllowedToEdit &&
-          <TooltipBox tooltip='Ajouter un commentaire'>
+          <TooltipBox tooltip={upperFirst(common('messages.add_comment'))}>
             <MessageSquarePlusIcon className='w-5 h-5' />
           </TooltipBox>
         }
