@@ -53,7 +53,7 @@ export default function MovieVerticalCard({ movie }: { movie: any }) {
                       className="w-fit p-0 h-full font-bold "
                       asChild
                     >
-                      <Link href={`/person/${director.id}`}>
+                      <Link href={`/person/${director.slug ?? director.id}`}>
                         {director.name}
                       </Link>
                     </Button>

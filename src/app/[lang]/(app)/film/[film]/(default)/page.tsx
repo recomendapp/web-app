@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import MovieDescription from './_components/MovieDescription';
+import MovieDetails from './_components/MovieDetails';
 import { getMovie } from '@/data/supabase/movies';
 
 export default async function MoviePage({
@@ -12,5 +12,5 @@ export default async function MoviePage({
 }) {
 	const { movie } = await getMovie(params.film, params.lang);
 	if (!movie) notFound();
-	return <MovieDescription movie={movie as any} />;
+	return <MovieDetails movie={movie as any} />;
 }

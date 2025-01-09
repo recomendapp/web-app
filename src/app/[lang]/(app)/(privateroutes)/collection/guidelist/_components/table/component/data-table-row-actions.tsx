@@ -167,7 +167,7 @@ export function ShowDirectorsButton({
   if (movie.directors.length == 1) {
     return (
       <DropdownMenuItem asChild>
-        <Link href={`/person/${movie.directors[0]?.id}`}>
+        <Link href={`/person/${movie.directors[0]?.slug ?? movie.directors[0]?.id}`}>
           <Icons.user className='w-4' />
           {capitalize(common('messages.view_directors', { count: movie.directors.length }))}
         </Link>
@@ -200,7 +200,7 @@ export function ShowDirectorsModal({
         <div className="flex flex-col gap-4">
           {movie?.directors?.map((person: any) => (
             <Button key={person?.id} variant={'ghost'} asChild>
-              <Link href={`/person/${person?.id}`}>{person?.name}</Link>
+              <Link href={`/person/${person?.slug ?? person.id}`}>{person?.name}</Link>
             </Button>
           ))}
         </div>

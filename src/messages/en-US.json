@@ -32,7 +32,18 @@
       "last_activities": "last activities",
       "show_all": "show all",
       "this_account_is_private": "this account is private",
-      "follow_to_see_activities": "follow to see activities"
+      "follow_to_see_activities": "follow to see activities",
+      "review": "{count, plural, one {review} other {reviews}}",
+      "no_overview": "no synopsis",
+      "cast": "cast",
+      "no_casting": "no casting",
+      "recent": "recent",
+      "popular": "popular",
+      "no_reviews": "no reviews",
+      "view_activity": "view activity",
+      "comment_count": "{count, plural, one {# comment} other {# comments}}",
+      "write_review": "write a review",
+      "my_review": "{count, plural, one {my review} other {my reviews}}"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
@@ -79,7 +90,8 @@
       "private": "private",
       "description": "description",
       "details": "details",
-      "profile": "profile"
+      "profile": "profile",
+      "overview": "synopsis"
     },
     "error": "An error occurred",
     "click_here": "Click here",

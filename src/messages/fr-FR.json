@@ -32,7 +32,18 @@
       "last_activities": "dernières activités",
       "show_all": "tout afficher",
       "this_account_is_private": "ce compte est privé",
-      "follow_to_see_activities": "suivez pour voir les activités"
+      "follow_to_see_activities": "suivez pour voir les activités",
+      "review": "{count, plural, one {critique} other {critiques}}",
+      "no_overview": "aucun synopsis",
+      "cast": "casting",
+      "no_casting": "aucun casting",
+      "recent": "{gender, select, female {récente} other {récent}}{count, plural, one {} other {s}}",
+      "popular": "{count, plural, one {populaire} other {populaires}}",
+      "no_reviews": "aucune critique",
+      "view_activity": "voir l'activité",
+      "comment_count": "{count, plural, one {# commentaire} other {# commentaires}}",
+      "write_review": "écrire une critique",
+      "my_review": "{count, plural, one {ma critique} other {mes critiques}}"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",
@@ -79,7 +90,8 @@
       "private": "{gender, select, female {privée} other {privé}}{count, plural, one {} other {s}}",
       "description": "description",
       "details": "détails",
-      "profile": "profil"
+      "profile": "profil",
+      "overview": "synopsis"
     },
     "error": "Une erreur s'est produite",
     "click_here": "Cliquez ici",

@@ -12,21 +12,21 @@ export default function MovieNavbar({
 }) {
   const common = useTranslations('common');
   const pathname = usePathname();
-  const focus = pathname.split('/').pop();
+  const regex = `^/film/${movieId}(-[a-z0-9-]*)?`;
   const routes = [
     {
       label: upperFirst(common('word.details')),
-      active: focus != 'reviews' && focus != 'playlists',
+      active: pathname.match(new RegExp(regex + '$')),
       href: `/film/${movieId}`,
     },
     {
-      label: 'Critiques',
-      active: focus === 'reviews',
+      label: upperFirst(common('messages.review', { count: 2 })),
+      active: pathname.match(new RegExp(regex + '/reviews')),
       href: `/film/${movieId}/reviews`,
     },
     {
-      label: 'Playlists',
-      active: focus === 'playlists',
+      label: upperFirst(common('word.playlist', { count: 2 })),
+      active: pathname.match(new RegExp(regex + '/playlists')),
       href: `/film/${movieId}/playlists`,
     },
   ];

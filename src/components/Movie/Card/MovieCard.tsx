@@ -176,7 +176,7 @@ export function MovieCardRow({
                   className="w-fit p-0 h-full hover:underline text-muted-foreground hover:text-accent-1 italic"
                   asChild
                 >
-                  <Link href={`/person/${person?.id}`}>{person?.name}</Link>
+                  <Link href={`/person/${person?.slug ?? person?.id}`}>{person?.name}</Link>
                 </Button>
               </span>
             </>

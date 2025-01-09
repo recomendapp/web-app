@@ -5,34 +5,26 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { Movie, MoviePerson } from "@/types/type.db";
+import { upperFirst } from "lodash";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
-export default function MovieDescription({
+export default function MovieDetails({
   movie,
 }: {
   movie: Movie;
 }) {
+  const common = useTranslations('common');
   if (!movie) return null;
 
   return (
-    <div className="@container/movie-description flex flex-col gap-4">
-      {/* OVERVIEW
-        {movie.data[0].overview &&
-          <div className=" text-justify">
-            {movie.data[0].overview}
-          </div>
-        } */}
-      <div className="flex flex-col @4xl/movie-description:flex-row gap-4 justify-between">
+    <div className="@container/movie-details flex flex-col gap-4">
+      <div className="flex flex-col @4xl/movie-details:flex-row gap-4 justify-between">
         <div>
-          <h2 className="text-lg font-medium">Description</h2>
+          <h2 className="text-lg font-medium">{upperFirst(common('word.overview'))}</h2>
           <div className="text-justify text-muted-foreground">
-            {movie.overview ?? 'No description available'}
+            {movie.overview ?? upperFirst(common('messages.no_overview'))}
           </div>
-          {/* {movie.data[0].overview ? (
-            <div className="text-justify text-muted-foreground">{movie.data[0].overview}</div>
-          ) : (
-            <div className="text-justify text-muted-foreground">No description available</div>
-          )} */}
         </div>
         <JustWatchWidget
           id={movie.id}
@@ -40,9 +32,6 @@ export default function MovieDescription({
           type="movie"
           className="min-w-[20%]"
         />
-        {/* <div className="min-w-[20%]">
-          <h2 className="text-lg font-medium">Voir le film</h2>
-        </div> */}
       </div>
       {/* CASTING */}
       <MovieCast cast={movie.cast} />
@@ -55,9 +44,10 @@ const MovieCast = ({
 } : {
 	cast?: MoviePerson[]
 }) => {
+  const common = useTranslations('common');
 	return (
 		<div>
-			<h2 className="text-lg font-medium">Casting</h2>
+			<h2 className="text-lg font-medium">{upperFirst(common('messages.cast'))}</h2>
       {(cast && cast?.length > 0) ? (
         <ScrollArea>
           <div className="flex space-x-4 pb-4">
@@ -70,7 +60,7 @@ const MovieCast = ({
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       ) : (
-        <div className="text-justify text-muted-foreground">No cast available</div>
+        <div className="text-justify text-muted-foreground">{upperFirst(common('messages.no_cast'))}</div>
       )}
 			{/* <CrewModal crew={movie.credits.crew} /> */}
 		</div>
@@ -84,7 +74,7 @@ function CastPoster({
 }) {
 	return (
 	  <Link
-      href={'/person/' + credit.person?.id}
+      href={`/person/${credit.person?.slug ?? credit.person?.id}`}
       className={`
         flex flex-col items-center
         h-full 

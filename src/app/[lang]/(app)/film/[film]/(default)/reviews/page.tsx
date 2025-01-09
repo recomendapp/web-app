@@ -16,6 +16,8 @@ import Loader from '@/components/Loader/Loader';
 import { MyReviewButton } from './_components/MyReviewButton';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 export default function Reviews({
   params,
@@ -25,6 +27,7 @@ export default function Reviews({
     film: string;
   }
 }) {
+  const common = useTranslations('common');
   const { id: movieId } = getIdFromSlug(params.film);
   const supabase = useSupabaseClient();
   const [order, setOrder] = useState('recent');
@@ -80,29 +83,25 @@ export default function Reviews({
   }, [inView, hasNextPage, fetchNextPage]);
 
   return (
-    <div className="w-full h-full flex flex-col items-center gap-2">
+    <div className="w-full h-full flex flex-col items-center gap-4">
       <div className="w-full flex flex-col gap-4 justify-between lg:flex-row">
         <MyReviewButton filmId={movieId} />
         <div className="flex flex-1 justify-end gap-2 items-center">
-          Trier par
+          {upperFirst(common('messages.sort_by'))}
           <Select onValueChange={setOrder} defaultValue={order}>
             <SelectTrigger className="w-fit">
               <SelectValue placeholder="Langue" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value={'recent'}>Récentes</SelectItem>
-                <SelectItem value={'like-desc'}>Populaires</SelectItem>
-                {/* <SelectItem value={'rating-desc'}>
-                  Notes décroissantes
-                </SelectItem>
-                <SelectItem value={'rating-asc'}>Notes croissantes</SelectItem> */}
+                <SelectItem value={'recent'}>{upperFirst(common('messages.recent', { gender: "female", count: 2 }))}</SelectItem>
+                <SelectItem value={'like-desc'}>{upperFirst(common('messages.popular', { count: 2 }))}</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
       </div>
-      <div className='w-full max-w-lg'>
+      <div className='flex flex-col gap-2 w-full max-w-3xl'>
         {/* ALL */}
         {(loading || reviews === undefined) ? (
           <Loader />
@@ -125,7 +124,7 @@ export default function Reviews({
             {(loading || isFetchingNextPage) && <Loader />}
           </>
         ) : (
-          <p className="text-center font-semibold">Aucune critique.</p>
+          <p className="text-muted-foreground text-center font-semibold">{upperFirst(common('messages.no_reviews'))}</p>
         )}
       </div>
     </div>

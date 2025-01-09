@@ -143,9 +143,7 @@ export default function MovieHeader({
                         className="w-fit p-0 h-full hover:text-accent-1 transition"
                         asChild
                       >
-                        <Link href={`/person/${director?.id}`}>
-                          {director?.name}
-                        </Link>
+                        <Link href={`/person/${director?.slug ?? director?.id}`}>{director?.name}</Link>
                       </Button>
                     </span>
                   </Fragment>

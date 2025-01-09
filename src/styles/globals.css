@@ -150,7 +150,7 @@
 
 @layer base {
   body {
-    @apply select-none;
+    @apply select-none bg-background whitespace-pre-wrap;
     font-feature-settings:
       'rlig' 1,
       'calt' 1;
@@ -162,16 +162,6 @@
 
 * {
   min-width: 0;
-}
-
-html,
-body {
-  background-color: var(--background)!important;
-  white-space: pre-wrap;
-  /* position: fixed;
-  touch-action: none; */
-  /* -webkit-user-select: none; */
-  /* user-select: none; */
 }
 
 /* Scroll bar stylings */
@@ -194,36 +184,3 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--scrollbar-hover); 
   }
-
-/* .lucide {
-  width: 1rem;
-  height: 1rem;
-} */
-
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-} */
