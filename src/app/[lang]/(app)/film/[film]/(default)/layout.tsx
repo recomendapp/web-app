@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import MovieHeader from './_components/MovieHeader';
 import MovieNavbar from './_components/MovieNavbar';
 import { getMovie } from '@/data/supabase/movies';
+import { getTranslations } from 'next-intl/server';
+import { upperFirst } from 'lodash';
 
 export async function generateMetadata({
 	params,
@@ -11,11 +13,18 @@ export async function generateMetadata({
 	  film: string;
 	};
 }) {
+	const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+	const t = await getTranslations({ locale: params.lang, namespace: 'pages.film' });
 	const { movie } = await getMovie(params.film, params.lang);
-	if (!movie) return { title: 'Film introuvable' };
+	if (!movie) return { title: upperFirst(common('errors.film_not_found')) };
 	return {
-		title: movie.title,
-		description: `This is the page of ${movie.title}`,
+		title: t('metadata.title', { title: movie.title, year: new Date(String(movie.release_date)).getFullYear() }),
+		description: t('metadata.description', {
+			title: movie.title,
+			directors: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(movie.directors.map((director: any) => director.name)),
+			year: new Date(String(movie.release_date)).getFullYear(),
+			overview: movie.overview,
+		}),
 	};
 }
 

@@ -59,6 +59,7 @@ export const userKeys = {
 			search?: string | null
 		}
 	) => filters ? [...userKeys.detail(userId), 'followees', filters] as const : [...userKeys.detail(userId), 'followees'] as const,
+	followProfile: (userId: string, profileId: string) => [...userKeys.detail(userId), 'follow', profileId] as const,
 
 	movies: (userId: string) => [...userKeys.detail(userId), 'movies'] as const,
 	movie: (userId: string, movieId: number) => [...userKeys.movies(userId), movieId] as const,

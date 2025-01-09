@@ -24,11 +24,11 @@ export async function generateMetadata({
 }
 
 export default async function About({
-  params: { lang },
+  params,
 }: {
   params: { lang: Lang };
 }) {
-  const t = await getTranslations('pages.about');
+  const t = await getTranslations({ locale: params.lang, namespace: 'pages.about' });
   const [session, products] = await Promise.all([
     getSession(),
     getActiveProductsWithPrices(),
@@ -101,7 +101,6 @@ export default async function About({
     },
   ];
 
-  console.log('buisness model', t('businessmodel.paragraph'));
   return (
     <main className="flex flex-col gap-4 items-center text-justify transition-all">
       {/* ABOUT */}
@@ -312,7 +311,7 @@ export default async function About({
           })}
         </p>
         <p>
-          {t.rich('contact-support.conact-us', {
+          {t.rich('contact-support.contact-us', {
             link: (chunks) => (
               <Link
                 href="mailto:contact@recomend.app"

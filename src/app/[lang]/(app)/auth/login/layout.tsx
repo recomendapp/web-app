@@ -1,5 +1,6 @@
 import { siteConfig } from '@/config/site';
 import { getTranslations } from 'next-intl/server';
+import { noSSR } from 'next/dynamic';
 
 export async function generateMetadata({
   params,

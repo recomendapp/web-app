@@ -64,9 +64,6 @@ export default async function ProfileHeader({ profile }: { profile: UserProfile 
           <div className="hidden @lg/profile-header:flex items-center gap-2">
             <ProfileFollowersButton userId={profile?.id!} className="hidden sm:block" disabled={!profile.visible ? true : false} />
             <ProfileFolloweesButton userId={profile?.id!} className="hidden sm:block" disabled={!profile.visible ? true : false} />
-            {/* <Button variant={'action'}>
-              suivi(e)s
-            </Button> */}
             {user?.id == profile?.id && (
               <Button variant={'action'} asChild>
                 <Link href={'/settings/profile'}>

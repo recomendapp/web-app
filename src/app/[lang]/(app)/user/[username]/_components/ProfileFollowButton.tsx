@@ -6,8 +6,10 @@ import toast from 'react-hot-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { cn } from '@/lib/utils';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useSupabaseClient } from '@/context/supabase-context';
+import { useUserFollowProfile } from '@/features/user/userQueries';
+import { useUserFollowProfileInsert, useUserUnfollowProfileDelete } from '@/features/user/userMutations';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 interface UserFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   profileId: string;
@@ -17,106 +19,42 @@ export function ProfileFollowButton({
   className,
   profileId,
 }: UserFollowButtonProps) {
-  const supabase = useSupabaseClient();
+  const common = useTranslations('common');
   const { user } = useAuth();
 
-  const queryClient = useQueryClient();
-
-  const { data: isFollow, isLoading: loading } = useQuery({
-    queryKey: ['user', user?.id, 'followers', profileId],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('user_follower')
-        .select('*')
-        .eq('followee_id', profileId)
-        .eq('user_id', user!.id)
-        .maybeSingle();
-      if (error) throw error;
-      return data;
-    },
-    meta: {
-      normalize: false
-    },
-    enabled: !!user,
+  const {
+    data: isFollow,
+    isLoading: loading,
+  } = useUserFollowProfile({
+    userId: user?.id,
+    followeeId: profileId,
   });
 
-  const { mutateAsync: insertFollowerMutation } = useMutation({
-    mutationFn: async ({ followee_id, user_id } : { followee_id: string, user_id: string}) => {
-      const { data, error } = await supabase
-        .from('user_follower')
-        .insert({
-          followee_id: followee_id,
-          user_id: user_id,
-        })
-        .select('*, friend:followee_id(*)')
-        .single();
-      if (error) throw error;
-      return (data);
-    },
-    onSuccess: (data, variables) => {
-      // Update follow status
-      queryClient.setQueryData(
-        ['user', variables.user_id, 'followers', variables.followee_id],
-        data
-      );
-      // Add the followee to the user's following list only if the follow is not pending
-      !data.is_pending && queryClient.setQueryData(
-        ['user', variables.user_id, 'followings'],
-        (existData: any) => {
-          return existData ? [...existData, data] : [data];
+  const insertFollow = useUserFollowProfileInsert();
+  const deleteFollowerMutation = useUserUnfollowProfileDelete();
+
+  const followUser = async () => {
+    user?.id &&
+      (await insertFollow.mutateAsync({
+        userId: user?.id,
+        followeeId: profileId,
+      }, {
+        onError: (error) => {
+          toast.error(upperFirst(common('errors.an_error_occurred')));
         }
-      );
-    },
-  });
-
-  const { mutateAsync: deleteFollowerMutation } = useMutation({
-    mutationFn: async ({ followee_id, user_id } : { followee_id: string, user_id: string}) => {
-      const { error } = await supabase
-        .from('user_follower')
-        .delete()
-        .eq('followee_id', followee_id)
-        .eq('user_id', user_id);
-      if (error) throw error;
-      return false;
-    },
-    onSuccess: (data, variables) => {
-      // Update follow status
-      queryClient.setQueryData(
-        ['user', variables.user_id, 'followers', variables.followee_id],
-        data
-      );
-      // Delete the followee from the user's followeing list
-      queryClient.setQueryData(
-        ['user', variables.user_id, 'followings'],
-        (data: any) => {
-          return data?.filter((item: any) => item.followee_id !== variables.followee_id);
-        }
-      );
-    },
-  });
-
-  async function followUser() {
-    try {
-      user?.id &&
-        (await insertFollowerMutation({
-          followee_id: profileId,
-          user_id: user?.id,
-        }));
-    } catch (error) {
-      toast.error("Une erreur s'est produite");
-    }
+      }));
   }
 
-  async function unfollowUser() {
-    try {
-      user?.id &&
-        (await deleteFollowerMutation({
-          followee_id: profileId,
-          user_id: user?.id,
-        }));
-    } catch (error) {
-      toast.error("Une erreur s'est produite");
-    }
+  const unfollowUser = async () => {
+    user?.id &&
+      (await deleteFollowerMutation.mutateAsync({
+        userId: user?.id,
+        followeeId: profileId,
+      }, {
+        onError: (error) => {
+          toast.error(upperFirst(common('errors.an_error_occurred')));
+        }
+      }));
   }
 
   if (!user || user.id == profileId) return null;
@@ -132,10 +70,8 @@ export function ProfileFollowButton({
           className="rounded-full py-0"
         >
           {isFollow ? (
-            isFollow.is_pending ? 'Demande envoyée' : 'Suivi(e)'
-          ) : (
-            'Suivre'
-          )}
+            isFollow.is_pending ? upperFirst(common('messages.request_sent')) : upperFirst(common('messages.followed'))
+          ) : upperFirst(common('messages.follow'))}
         </Button>
       )}
     </div>

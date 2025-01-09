@@ -1,5 +1,7 @@
 'use client';
 
+import { upperFirst } from 'lodash';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -8,11 +10,12 @@ export default function MovieNavbar({
 }: {
   movieId: number;
 }) {
+  const common = useTranslations('common');
   const pathname = usePathname();
   const focus = pathname.split('/').pop();
   const routes = [
     {
-      label: 'Description',
+      label: upperFirst(common('word.details')),
       active: focus != 'reviews' && focus != 'playlists',
       href: `/film/${movieId}`,
     },

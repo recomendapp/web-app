@@ -20,14 +20,28 @@
       "add_to_playlist": "ajouter à une playlist",
       "send_to_friend": "envoyer à un ami",
       "custom_sort": "trier personnalisé",
-      "quick_add": "ajout rapide"
+      "quick_add": "ajout rapide",
+      "favorite_films": "films favoris",
+      "follow": "suivre",
+      "followed": "suivi(e)",
+      "request_sent": "Demande envoyée",
+      "follower": "{count, plural, one {follower} other {followers}}",
+      "see_followers": "voir les followers",
+      "followee": "{count, plural, one {suivi(e)} other {suivi(e)s}}",
+      "see_followees": "voir les suivi(e)s",
+      "last_activities": "dernières activités",
+      "show_all": "tout afficher",
+      "this_account_is_private": "ce compte est privé",
+      "follow_to_see_activities": "suivez pour voir les activités"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",
       "already_premium": "vous êtes déjà premium",
       "default": "une erreur s'est produite",
       "an_error_occurred": "une erreur s'est produite",
-      "playlist_not_found": "playlist introuvable"
+      "playlist_not_found": "playlist introuvable",
+      "user_not_found": "utilisateur introuvable",
+      "film_not_found": "film introuvable"
     },
     "word": {
       "hello": "Bonjour",
@@ -63,7 +77,9 @@
       "playlist": "{count, plural, one {playlist} other {playlists}}",
       "public": "public",
       "private": "{gender, select, female {privée} other {privé}}{count, plural, one {} other {s}}",
-      "description": "description"
+      "description": "description",
+      "details": "détails",
+      "profile": "profil"
     },
     "error": "Une erreur s'est produite",
     "click_here": "Cliquez ici",
@@ -376,7 +392,7 @@
         "help-center": "Trouve les réponses à tes questions existentielles dans notre <link>Help Center</link>.",
         "technical-support": "Pour des questions techniques : <link>help@recomend.app</link>",
         "suggest-a-feature": "Pour des suggestions : <link>ideas@recomend.app</link>",
-        "conact-us": "Pour simplement rentrer en contact avec nous : <link>contact@recomend.app</link>"
+        "contact-us": "Pour simplement rentrer en contact avec nous : <link>contact@recomend.app</link>"
       },
       "quote": {
         "label": "Citation",
@@ -520,6 +536,18 @@
       "metadata": {
         "title": "{title} - playlist de @{username}",
         "description": "Découvrez la playlist de films de @{username} sur {app}."
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Découvrez le profil de @{username} sur {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} est un film de {directors} sorti en {year}. Synopsis: {overview}"
       }
     }
   },

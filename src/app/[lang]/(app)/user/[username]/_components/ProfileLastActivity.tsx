@@ -10,9 +10,11 @@ import { useInView } from 'react-intersection-observer';
 // QUERY
 import { UserProfile } from '@/types/type.db';
 import { useUserMovieActivitiesInfinite } from '@/features/user/userQueries';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 export default function ProfileLastActivity({ profile }: { profile: UserProfile }) {
-
+  const common = useTranslations('common');
   const { ref, inView } = useInView();
 
   const {
@@ -37,11 +39,11 @@ export default function ProfileLastActivity({ profile }: { profile: UserProfile 
       <div className="flex justify-between gap-4 items-center">
         <Link href={`/@${profile?.username}/films`}>
           <h3 className="font-semibold text-xl">
-            Dernières activités
+          {upperFirst(common('messages.last_activities'))}
           </h3>
         </Link>
         <Button variant={'link'} asChild>
-          <Link href={`/@${profile?.username}/films`}>Tout afficher</Link>
+          <Link href={`/@${profile?.username}/films`}>{upperFirst(common('messages.show_all'))}</Link>
         </Button>
       </div>
       <ScrollArea className="rounded-md">

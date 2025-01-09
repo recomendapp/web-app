@@ -620,6 +620,31 @@ export const useUserDiscoveryInfinite = ({
 	});
 }
 
+export const useUserFollowProfile = ({
+	userId,
+	followeeId,
+} : {
+	userId?: string;
+	followeeId?: string;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.followProfile(userId as string, followeeId as string),
+		queryFn: async () => {
+			if (!userId || !followeeId) throw Error('Missing user id or followee id');
+			const { data, error } = await supabase
+				.from('user_follower')
+				.select('*')
+				.eq('user_id', userId)
+				.eq('followee_id', followeeId)
+				.maybeSingle();
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId && !!followeeId,
+	});
+}
+
 
 export const useUserMovieActivitiesInfinite = ({
 	userId,

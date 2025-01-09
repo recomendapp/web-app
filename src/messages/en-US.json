@@ -20,14 +20,28 @@
       "add_to_playlist": "add to a playlist",
       "send_to_friend": "send to a friend",
       "custom_sort": "custom sort",
-      "quick_add": "quick add"
+      "quick_add": "quick add",
+      "favorite_films": "favorite films",
+      "follow": "follow",
+      "followed": "followed",
+      "request_sent": "request sent",
+      "follower": "{count, plural, one {follower} other {followers}}",
+      "see_followers": "see followers",
+      "followee": "{count, plural, one {followee} other {followees}}",
+      "see_followees": "see followees",
+      "last_activities": "last activities",
+      "show_all": "show all",
+      "this_account_is_private": "this account is private",
+      "follow_to_see_activities": "follow to see activities"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
       "already_premium": "you are already premium",
       "default": "an error occurred",
       "an_error_occurred": "an error occurred",
-      "playlist_not_found": "playlist not found"
+      "playlist_not_found": "playlist not found",
+      "user_not_found": "user not found",
+      "film_not_found": "film not found"
     },
     "word": {
       "hello": "Hello",
@@ -63,7 +77,9 @@
       "playlist": "{count, plural, one {playlist} other {playlists}}",
       "public": "public",
       "private": "private",
-      "description": "description"
+      "description": "description",
+      "details": "details",
+      "profile": "profile"
     },
     "error": "An error occurred",
     "click_here": "Click here",
@@ -520,6 +536,18 @@
       "metadata": {
         "title": "{title} - playlist by @{username}",
         "description": "Discover the playlist of films by @{username} on {app}."
+      }
+    },
+    "user": {
+      "metadata": {
+        "title": "{full_name} (@{username})",
+        "description": "Discover the profile of @{username} on {app}."
+      }
+    },
+    "film": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} is a film by {directors} released in {year}. Synopsis: {overview}"
       }
     }
   },

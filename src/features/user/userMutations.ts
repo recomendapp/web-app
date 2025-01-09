@@ -75,6 +75,79 @@ export const useUserDeclineFollowerRequest = ({
 	});
 };
 
+export const useUserFollowProfileInsert = () => {
+	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({
+			userId,
+			followeeId,
+		} : {
+			userId?: string;
+			followeeId?: string;
+		}) => {
+			if (!userId || !followeeId) throw Error('Missing user id or followee id');
+			const { data, error } = await supabase
+				.from('user_follower')
+				.insert({
+					user_id: userId,
+					followee_id: followeeId,
+				})
+				.select('*, followee:followee_id(*)')
+				.single();
+			if (error) throw error;
+			return data;
+		},
+		onSuccess: (data) => {
+			queryClient.setQueryData(userKeys.followProfile(data.user_id, data.followee_id), data);
+			!data.is_pending && queryClient.setQueryData(userKeys.followees(data.user_id), (oldData: { pages: UserFollower[][] } | undefined) => {
+				if (!oldData) return oldData;
+				return {
+					...oldData,
+					pages: oldData.pages.map((page) => [...page, data]),
+				}
+			});
+		},
+	});
+};
+
+export const useUserUnfollowProfileDelete = () => {
+	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({
+			userId,
+			followeeId,
+		} : {
+			userId?: string;
+			followeeId?: string;
+		}) => {
+			if (!userId || !followeeId) throw Error('Missing user id or followee id');
+			const { data, error } = await supabase
+				.from('user_follower')
+				.delete()
+				.eq('user_id', userId)
+				.eq('followee_id', followeeId)
+				.select()
+				.single();
+			if (error) throw error;
+			return data;
+		},
+		onSuccess: (data) => {
+			queryClient.setQueryData(userKeys.followProfile(data.user_id, data.followee_id), null);
+			!data.is_pending && queryClient.setQueryData(userKeys.followees(data.user_id), (oldData: { pages: UserFollower[][] } | undefined) => {
+				if (!oldData) return oldData;
+				return {
+				...oldData,
+				pages: oldData.pages.map((page) =>
+					page.filter((item) => item.id !== data.id)
+				),
+				};
+			});
+		},
+	});
+}
+
 export const useUserMovieActivityInsert = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();

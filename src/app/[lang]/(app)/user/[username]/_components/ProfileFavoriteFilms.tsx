@@ -1,14 +1,17 @@
 import MovieCard from '@/components/Movie/Card/MovieCard';
-import { Movie, User } from '@/types/type.db';
+import { Movie, UserProfile } from '@/types/type.db';
+import { upperFirst } from 'lodash';
+import { useTranslations } from 'next-intl';
 
-export default function ProfileFavoriteFilms({ profile }: { profile: User }) {
-  if (!profile?.favorite_movies?.length) return null;
+export default function ProfileFavoriteFilms({ profile }: { profile: UserProfile }) {
+  const common = useTranslations('common');
+  // if (!profile?.favorite_movies?.length) return null;
 
   return (
     <div className="flex flex-col gap-2">
-      <h3 className="font-semibold text-xl text-accent-1">Films favoris</h3>
+      <h3 className="font-semibold text-xl text-accent-1">{upperFirst(common('messages.favorite_films'))}</h3>
       <div className="grid grid-cols-4 md:grid-cols-8 2xl:grid-cols-12 gap-2">
-        {profile?.favorite_movies?.map(({ movie } : { movie: Movie }) => (
+        {/* {profile?.favorite_movies?.map(({ movie } : { movie: Movie }) => (
           <MovieCard
             key={movie?.id}
             movie={movie}
@@ -26,7 +29,7 @@ export default function ProfileFavoriteFilms({ profile }: { profile: User }) {
                 200px
               `}
           />
-        ))}
+        ))} */}
       </div>
     </div>
   );

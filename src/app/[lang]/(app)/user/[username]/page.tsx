@@ -4,6 +4,7 @@ import ProfileNavbar from './_components/ProfileNavbar';
 import ProfileLastActivity from './_components/ProfileLastActivity';
 import ProfilePrivateAccountCard from './_components/ProfilePrivateAccountCard';
 import { getProfile } from './_components/getProfile';
+import ProfileFavoriteFilms from './_components/ProfileFavoriteFilms';
 
 export default async function UserPage({
   params,

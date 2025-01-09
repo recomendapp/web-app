@@ -1,18 +1,23 @@
 import { Fragment } from 'react';
 import { getProfile } from './_components/getProfile';
+import { upperFirst } from 'lodash';
+import { getTranslations } from 'next-intl/server';
+import { siteConfig } from '@/config/site';
 
 export async function generateMetadata({
   params,
 }: {
-  params: { username: string };
+  params: { lang: string, username: string };
 }) {
+  const common = await getTranslations({ lang: params.lang, namespace: 'common' });
+  const t = await getTranslations({ lang: params.lang, namespace: 'pages' });
   const user = await getProfile(params.username);
   if (!user) return {
-      title: 'Oups, utilisateur introuvable !',
+      title: upperFirst(common('errors.user_not_found')),
   };
   return {
-    title: `${user.full_name} (@${user.username})`,
-    description: `This is the page of @${user.username}`,
+    title: upperFirst(t('user.metadata.title', { full_name: user.full_name, username: user.username })),
+    description: upperFirst(t('user.metadata.description', { username: user.username, app: siteConfig.name })),
   };
 }
 

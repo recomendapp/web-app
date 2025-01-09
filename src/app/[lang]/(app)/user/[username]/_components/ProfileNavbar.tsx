@@ -1,7 +1,10 @@
 'use client';
+
 import UserCard from '@/components/User/UserCard/UserCard';
 import { cn } from '@/lib/utils';
-import { User, UserProfile } from '@/types/type.db';
+import { UserProfile } from '@/types/type.db';
+import { upperFirst } from 'lodash';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
@@ -15,21 +18,22 @@ export default function ProfileNavbar({
   className?: string;
   withProfile?: boolean;
 }) {
+  const common = useTranslations('common');
   const pathname = usePathname();
   const profileRoutes = useMemo(
     () => [
       {
-        label: 'Profil',
+        label: upperFirst(common('word.profile')),
         active: pathname === `/@${profile?.username}`,
         href: `/@${profile?.username}`,
       },
       {
-        label: 'Films',
+        label: upperFirst(common('word.film', { count: 2 })),
         active: pathname === `/@${profile?.username}/films`,
         href: `/@${profile?.username}/films`,
       },
       {
-        label: 'Playlists',
+        label: upperFirst(common('word.playlist', { count: 2 })),
         active: pathname === `/@${profile?.username}/playlists`,
         href: `/@${profile?.username}/playlists`,
       },
