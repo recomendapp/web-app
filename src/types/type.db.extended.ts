@@ -28,22 +28,30 @@ type ViewExtensions = {
 	};
   };
   **/
- movie: {
-	id: number,
-	directors: PostgresViews['person']['Row'][],
-	// directors: {
-	// 	id: number
-	// 	name: string
-	// 	gender: number
-	// 	popularity: number
-	// 	profile_path: string
-	// 	know_for_department: string
-	// }[],
-	genres: {
-		id: number
-		name: string
-	}[],
- }
+  movie: {
+    id: number,
+    directors: PostgresViews['person']['Row'][],
+    // directors: {
+    // 	id: number
+    // 	name: string
+    // 	gender: number
+    // 	popularity: number
+    // 	profile_path: string
+    // 	know_for_department: string
+    // }[],
+    genres: {
+      id: number
+      name: string
+    }[],
+  },
+  tv_serie: {
+    id: number,
+    created_by: PostgresViews['person']['Row'][],
+    genres: {
+      id: number
+      name: string
+    }[],
+  }
 };
 // <END>
 // ☝️ this is the only thing you edit

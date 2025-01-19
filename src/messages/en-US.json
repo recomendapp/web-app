@@ -43,7 +43,13 @@
       "view_activity": "view activity",
       "comment_count": "{count, plural, one {# comment} other {# comments}}",
       "write_review": "write a review",
-      "my_review": "{count, plural, one {my review} other {my reviews}}"
+      "my_review": "{count, plural, one {my review} other {my reviews}}",
+      "serie": "{count, plural, one {serie} other {series}}",
+      "season": "{count, plural, one {season} other {seasons}}",
+      "season_count": "{count, plural, one {# season} other {# seasons}}",
+      "see_film": "see film",
+      "watch_film_title": "watch {title}",
+      "watch_film_streaming_or_download": "Watch <important>{title}</important> on streaming or download"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
@@ -52,7 +58,8 @@
       "an_error_occurred": "an error occurred",
       "playlist_not_found": "playlist not found",
       "user_not_found": "user not found",
-      "film_not_found": "film not found"
+      "film_not_found": "film not found",
+      "serie_not_found": "serie not found"
     },
     "word": {
       "hello": "Hello",
@@ -560,6 +567,12 @@
       "metadata": {
         "title": "{title} ({year})",
         "description": "{title} is a film by {directors} released in {year}. Synopsis: {overview}"
+      }
+    },
+    "serie": {
+      "metadata": {
+        "title": "{title} ({year})",
+        "description": "{title} is a serie by {creators} first aired in {year}. Synopsis: {overview}"
       }
     }
   },

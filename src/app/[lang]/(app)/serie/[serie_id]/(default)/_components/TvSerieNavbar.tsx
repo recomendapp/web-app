@@ -5,31 +5,32 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const type = 'film';
+const type = 'serie';
 
-export default function MovieNavbar({
-  movieId,
+export default function TvSerieNavbar({
+  serieId,
 }: {
-  movieId: number;
+  serieId: number;
 }) {
   const common = useTranslations('common');
   const pathname = usePathname();
-  const regex = `^/${type}/${movieId}(-[a-z0-9-]*)?`;
+
+  const regex = `^/${type}/${serieId}(-[a-z0-9-]*)?`;
   const routes = [
     {
       label: upperFirst(common('word.details')),
       active: pathname.match(new RegExp(regex + '$')),
-      href: `/${type}/${movieId}`,
+      href: `/${type}/${serieId}`,
     },
     {
       label: upperFirst(common('messages.review', { count: 2 })),
       active: pathname.match(new RegExp(regex + '/reviews')),
-      href: `/${type}/${movieId}/reviews`,
+      href: `/${type}/${serieId}/reviews`,
     },
     {
       label: upperFirst(common('word.playlist', { count: 2 })),
       active: pathname.match(new RegExp(regex + '/playlists')),
-      href: `/${type}/${movieId}/playlists`,
+      href: `/${type}/${serieId}/playlists`,
     },
   ];
 

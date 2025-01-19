@@ -103,6 +103,17 @@ export type MoviePerson = Database['public']['Tables']['tmdb_movie_credits']['Ro
 	person?: Person;
 } | null | undefined;
 
+export type TvSerie = Database['public']['Views']['tv_serie']['Row'] & {
+	videos?: Database['public']['Tables']['tmdb_tv_series_videos']['Row'][];
+	production_countries?: Database['public']['Tables']['tmdb_tv_series_production_countries']['Row'][];
+	spoken_languages?: Database['public']['Tables']['tmdb_tv_series_spoken_languages']['Row'][];
+	cast?: TvSeriePerson[];
+} | null | undefined;
+
+export type TvSeriePerson = Database['public']['Tables']['tmdb_tv_series_credits']['Row'] & {
+	person?: Person;
+} | null | undefined;
+
 // *========== PERSON ==========* //
 // export type Person = Database['public']['Tables']['tmdb_person']['Row'] & {
 // 	data?: PersonTranslation[] | any;

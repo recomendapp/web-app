@@ -1,7 +1,5 @@
 import { getIdFromSlug } from "@/hooks/get-id-from-slug";
 import { createServerClient } from "@/lib/supabase/server";
-import { id } from "date-fns/locale";
-import { unstable_cache } from "next/cache";
 import { cache } from "react";
 
 export const getMovie = cache(async (id: string, lang: string) => {
@@ -29,7 +27,7 @@ export const getMovie = cache(async (id: string, lang: string) => {
 		id: movieId,
 		movie,
 	};
-})
+});
 
 // export const getMovie = async (id: string, lang: string) => {
 // 	const supabase = createServerClient();

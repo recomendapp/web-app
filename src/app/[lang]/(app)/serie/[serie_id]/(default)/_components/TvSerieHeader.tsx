@@ -31,35 +31,35 @@ import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import ActivityIcon from '@/components/Review/ActivityIcon';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { Movie } from '@/types/type.db';
+import { TvSerie } from '@/types/type.db';
 import { useModal } from '@/context/modal-context';
 import { ModalMovieFollowersRating } from '@/components/Modals/Movie/ModalMovieFollowersRating';
-import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { useLocale, useTranslations } from 'next-intl';
 
-export default function MovieHeader({
-  movie,
+export default function TvSerieHeader({
+  serie,
 }: {
-  movie: Movie;
+  serie: TvSerie;
 }) {
   const { openModal } = useModal();
   const common = useTranslations('common');
 
-  if (!movie) return null;
+  if (!serie) return null;
   return (
     <div>
       <HeaderBox
-        className='@container/movie-header'
+        className='@container/serie-header'
         style={{
-          backgroundImage: `url(https://image.tmdb.org/t/p/w1280/${movie.backdrop_path})`,
+          backgroundImage: `url(https://image.tmdb.org/t/p/w1280/${serie.backdrop_path})`,
         }}
       >
-        <div className="flex flex-col w-full gap-4 items-center @xl/movie-header:flex-row">
-          {/* MOVIE POSTER */}
+        <div className="flex flex-col w-full gap-4 items-center @xl/serie-header:flex-row">
+          {/* SERIE POSTER */}
           <MoviePoster
             className="w-[200px]"
-            src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
-            alt={movie.title ?? ''}
+            src={`https://image.tmdb.org/t/p/original/${serie.poster_path}`}
+            alt={serie.name ?? ''}
             fill
             sizes={`
               (max-width: 640px) 96px,
@@ -67,28 +67,28 @@ export default function MovieHeader({
               150px
             `}
           >
-            {movie.vote_count && (
+            {serie.vote_count && (
               <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
                 <ActivityIcon
-                  movieId={movie.id}
-                  rating={movie.vote_average}
+                  movieId={serie.id}
+                  rating={serie.vote_average}
                   variant="general"
                   className="w-full"
                   tooltip='Note moyenne'
                 />
-                {movie.follower_avg_rating && <ActivityIcon
+                {/* {movie.follower_avg_rating && <ActivityIcon
                   movieId={movie.id}
                   rating={movie.follower_avg_rating}
                   variant="follower"
                   className="w-full"
                   tooltip='Note followers'
                   onClick={() => openModal(ModalMovieFollowersRating, { movieId: movie.id })}
-                />}
+                />} */}
               </div>
             )}
-            {movie?.videos && movie.videos.length > 0 && (
-              <MovieTrailerButton
-                videos={movie.videos}
+            {serie?.videos && serie.videos.length > 0 && (
+              <SerieTrailerButton
+                videos={serie.videos}
                 className="absolute bottom-2 right-2"
               />
             )}
@@ -97,30 +97,24 @@ export default function MovieHeader({
           <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
             {/* TYPE & GENRES */}
             <div>
-              <span className='text-accent-1'>{upperFirst(common('word.film', { count: 1 }))}</span>
-              <Genres genres={movie.genres} className="before:content-['_|_']" />
+              <span className='text-accent-1'>{upperFirst(common('messages.serie', { count: 1 }))}</span>
+              <Genres genres={serie.genres} className="before:content-['_|_']" />
             </div>
             {/* TITLE */}
             <div className="text-clamp space-x-1">
-              <span className='font-bold select-text'>{movie.title}</span>
+              <span className='font-bold select-text'>{serie.name}</span>
               {/* DATE */}
               <sup>
-                <DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-base font-medium'/>
+                <DateOnlyYearTooltip date={serie.first_air_date ?? ''} className=' text-base font-medium'/>
               </sup>
-              {movie.original_title !== movie.title && (
-                <div className='text-base font-semibold text-muted-foreground'>{movie.original_title}</div>
+              {serie.original_name !== serie.name && (
+                <div className='text-base font-semibold text-muted-foreground'>{serie.original_name}</div>
               )}
             </div>
-            {/* <div> */}
-              {/* <div className='flex items-center gap-2'>
-                <Star size={20} className="text-accent-pink fill-accent-pink" />
-                <span className='text-accent-pink font-medium'>{movie.vote_average?.toFixed(1)}</span>
-              </div> */}
-              
-            {/* </div> */}
+
             <div className=" space-y-2">
               <div>
-                {movie.directors?.map((director, index: number) => (
+                {serie.created_by?.map((director, index: number) => (
                   <Fragment key={index}>
                     {index > 0 && <span>, </span>}
                     <span key={index}>
@@ -134,25 +128,27 @@ export default function MovieHeader({
                     </span>
                   </Fragment>
                 )) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
-                {/* RUNTIME */}
-                <RuntimeTooltip runtime={movie.runtime ?? 0} className=" before:content-['_•_']" />
+                {/* NUMBER OF SEASONS */}
+                <span className="before:content-['_•_']">
+                  {common('messages.season_count', { count: serie.number_of_seasons })}
+                </span>
               </div>
             </div>
           </div>
         </div>
       </HeaderBox>
       <div className="px-4 pb-4">
-        <MovieAction filmId={movie.id} all />
+        {/* <MovieAction filmId={serie.id} all /> */}
       </div>
     </div>
   );
 }
 
-export function MovieTrailerButton({
+export function SerieTrailerButton({
   videos,
   className,
 } : {
-  videos: Database['public']['Tables']['tmdb_movie_videos']['Row'][];
+  videos: Database['public']['Tables']['tmdb_tv_series_videos']['Row'][];
   className?: string;
 }) {
   const [selectedTrailer, setSelectedTailer] = useState<string>(

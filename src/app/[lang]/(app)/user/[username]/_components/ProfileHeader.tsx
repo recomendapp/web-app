@@ -7,10 +7,10 @@ import { createServerClient } from '@/lib/supabase/server';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 
 // ICONS
-import { HiSparkles } from "react-icons/hi2";
 import { UserProfile } from '@/types/type.db';
 import { ProfileFollowersButton } from './ProfileFollowersButton';
 import { ProfileFolloweesButton } from './ProfileFolloweesButton';
+import { Icons } from '@/config/icons';
 
 export default async function ProfileHeader({ profile }: { profile: UserProfile }) {
   const supabase = createServerClient();
@@ -56,7 +56,7 @@ export default async function ProfileHeader({ profile }: { profile: UserProfile 
             <h2 className="text-xl font-semibold">
               {profile?.full_name}
               {profile?.premium && (
-                  <sup><HiSparkles size={15} className=' fill-accent-1 inline'/></sup>
+                  <Icons.premium className='ml-1 fill-blue-400 inline w-3'/>
               )}
             </h2>
             <span className="text-muted-foreground">@{profile?.username}</span>

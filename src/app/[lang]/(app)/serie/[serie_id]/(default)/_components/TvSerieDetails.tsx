@@ -5,18 +5,18 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import { Movie, MoviePerson } from "@/types/type.db";
+import { Movie, MoviePerson, TvSerie, TvSeriePerson } from "@/types/type.db";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
-export default function MovieDetails({
-  movie,
+export default function TvSerieDetails({
+  serie,
 }: {
-  movie: Movie;
+  serie: TvSerie;
 }) {
   const common = useTranslations('common');
-  if (!movie) return null;
+  if (!serie) return null;
 
   return (
     <div className="@container/movie-details flex flex-col gap-4">
@@ -24,26 +24,26 @@ export default function MovieDetails({
         <div>
           <h2 className="text-lg font-medium">{upperFirst(common('word.overview'))}</h2>
           <div className="text-justify text-muted-foreground">
-            {movie.overview ?? upperFirst(common('messages.no_overview'))}
+            {serie.overview ?? upperFirst(common('messages.no_overview'))}
           </div>
         </div>
         <JustWatchWidget
-          id={movie.id}
-          title={movie.title ?? ''}
-          type="movie"
-          className="min-w-[20%]"
+          id={serie.id}
+          title={serie.name ?? ''}
+          type="show"
+          // className="min-w-[20%]"
         />
       </div>
       {/* CASTING */}
-      <MovieCast cast={movie.cast} />
+      <SerieCast cast={serie.cast} />
     </div>
   );
 }
 
-const MovieCast = ({
+const SerieCast = ({
 	cast,
 } : {
-	cast?: MoviePerson[]
+	cast?: TvSeriePerson[]
 }) => {
   const common = useTranslations('common');
 	return (
@@ -63,7 +63,6 @@ const MovieCast = ({
       ) : (
         <div className="text-justify text-muted-foreground">{upperFirst(common('messages.no_cast'))}</div>
       )}
-			{/* <CrewModal crew={movie.credits.crew} /> */}
 		</div>
 	)
 }
@@ -92,7 +91,7 @@ function CastPoster({
         </div>
         <div className="text-center">
           <p className="line-clamp-2 break-words">{credit.person?.name}</p>
-          <p className="line-clamp-2 text-accent-1 italic text-sm">{credit.role.character}</p>
+          <p className="line-clamp-2 text-accent-1 italic text-sm">{credit.character}</p>
         </div>
       </Card>
     </Link>
