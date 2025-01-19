@@ -566,13 +566,15 @@
     "film": {
       "metadata": {
         "title": "{title} ({year})",
-        "description": "{title} est un film de {directors} sorti en {year}. Synopsis: {overview}"
+        "description": "{title} est un film de {directors} sorti en {year}. Synopsis: {overview}",
+        "description_no_director": "{title} est un film sorti en {year}. Synopsis: {overview}"
       }
     },
     "serie": {
       "metadata": {
         "title": "{title} ({year})",
-        "description": "{title} est une série de {creators} diffusée pour la première fois en {year}. Synopsis: {overview}"
+        "description": "{title} est une série de {creators} diffusée pour la première fois en {year}. Synopsis: {overview}",
+        "description_no_creator": "{title} est une série diffusée pour la première fois en {year}. Synopsis: {overview}"
       }
     }
   },

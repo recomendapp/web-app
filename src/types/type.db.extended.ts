@@ -30,7 +30,7 @@ type ViewExtensions = {
   **/
   movie: {
     id: number,
-    directors: PostgresViews['person']['Row'][],
+    directors?: PostgresViews['person']['Row'][],
     // directors: {
     // 	id: number
     // 	name: string
@@ -39,15 +39,15 @@ type ViewExtensions = {
     // 	profile_path: string
     // 	know_for_department: string
     // }[],
-    genres: {
+    genres?: {
       id: number
       name: string
     }[],
   },
   tv_serie: {
     id: number,
-    created_by: PostgresViews['person']['Row'][],
-    genres: {
+    created_by?: PostgresViews['person']['Row'][],
+    genres?: {
       id: number
       name: string
     }[],

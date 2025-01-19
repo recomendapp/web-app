@@ -19,12 +19,17 @@ export async function generateMetadata({
 	if (!serie) return { title: upperFirst(common('errors.serie_not_found')) };
 	return {
 		title: t('metadata.title', { title: serie.name, year: new Date(String(serie.first_air_date)).getFullYear() }),
-		description: t('metadata.description', {
-			title: serie.name,
-			creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.created_by.map((creator: any) => creator.name)),
-			year: new Date(String(serie.first_air_date)).getFullYear(),
-			overview: serie.overview,
-		}),
+		description: serie.created_by
+			? t('metadata.description', {
+				title: serie.name,
+				creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.created_by.map((creator: any) => creator.name)),
+				year: new Date(String(serie.first_air_date)).getFullYear(),
+				overview: serie.overview,
+			}) : t('metadata.description_no_creator', {
+				title: serie.name,
+				year: new Date(String(serie.first_air_date)).getFullYear(),
+				overview: serie.overview,
+			}),
 	};
 }
 

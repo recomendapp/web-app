@@ -31,7 +31,7 @@ export default function TvSerieDetails({
           id={serie.id}
           title={serie.name ?? ''}
           type="show"
-          // className="min-w-[20%]"
+          className="min-w-[20%]"
         />
       </div>
       {/* CASTING */}

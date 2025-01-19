@@ -19,12 +19,17 @@ export async function generateMetadata({
 	if (!movie) return { title: upperFirst(common('errors.film_not_found')) };
 	return {
 		title: t('metadata.title', { title: movie.title, year: new Date(String(movie.release_date)).getFullYear() }),
-		description: t('metadata.description', {
-			title: movie.title,
-			directors: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(movie.directors.map((director: any) => director.name)),
-			year: new Date(String(movie.release_date)).getFullYear(),
-			overview: movie.overview,
-		}),
+		description: movie.directors
+			? t('metadata.description', {
+				title: movie.title,
+				directors: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(movie.directors.map((director: any) => director.name)),
+				year: new Date(String(movie.release_date)).getFullYear(),
+				overview: movie.overview,
+			}) : t('metadata.description_no_creator', {
+				title: movie.title,
+				year: new Date(String(movie.release_date)).getFullYear(),
+				overview: movie.overview,
+			}),
 	};
 }
 

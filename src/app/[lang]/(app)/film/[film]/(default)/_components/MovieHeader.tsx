@@ -98,7 +98,7 @@ export default function MovieHeader({
             {/* TYPE & GENRES */}
             <div>
               <span className='text-accent-1'>{upperFirst(common('word.film', { count: 1 }))}</span>
-              <Genres genres={movie.genres} className="before:content-['_|_']" />
+              {movie.genres ? <Genres genres={movie.genres} className="before:content-['_|_']" /> : null}
             </div>
             {/* TITLE */}
             <div className="text-clamp space-x-1">

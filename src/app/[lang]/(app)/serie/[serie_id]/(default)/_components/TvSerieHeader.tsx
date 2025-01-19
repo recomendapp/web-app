@@ -98,7 +98,7 @@ export default function TvSerieHeader({
             {/* TYPE & GENRES */}
             <div>
               <span className='text-accent-1'>{upperFirst(common('messages.serie', { count: 1 }))}</span>
-              <Genres genres={serie.genres} className="before:content-['_|_']" />
+              {serie.genres ? <Genres genres={serie.genres} className="before:content-['_|_']" /> : null}
             </div>
             {/* TITLE */}
             <div className="text-clamp space-x-1">
