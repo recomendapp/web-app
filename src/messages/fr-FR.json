@@ -48,8 +48,12 @@
       "season": "{count, plural, one {saison} other {saisons}}",
       "season_count": "{count, plural, one {# saison} other {# saisons}}",
       "see_film": "voir le film",
+      "see_serie": "voir la série",
       "watch_film_title": "voir {title}",
-      "watch_film_streaming_or_download": "Regarder <important>{title}</important> en streaming ou en téléchargement légal"
+      "watch_film_streaming_or_download": "Regarder <important>{title}</important> en streaming ou en téléchargement légal",
+      "person": "{count, plural, one {personne} other {personnes}}",
+      "top_result": "meilleur resultat",
+      "user": "{count, plural, one {utilisateur} other {utilisateurs}}"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",

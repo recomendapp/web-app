@@ -4333,6 +4333,19 @@ export type Database = {
         }
         Returns: Record<string, unknown>
       }
+      find_media: {
+        Args: {
+          media_id: number
+          media_type: Database["public"]["Enums"]["media_type"]
+        }
+        Returns: Json
+      }
+      find_medias: {
+        Args: {
+          media_list: Json
+        }
+        Returns: Json
+      }
       get_config: {
         Args: {
           user_id?: string
@@ -4484,6 +4497,7 @@ export type Database = {
       guidelist_status: "active" | "completed" | "deleted"
       image_type: "backdrop" | "poster" | "logo" | "profile"
       language_app: "en-US" | "fr-FR"
+      media_type: "movie" | "tv" | "person"
       notifications_device_type: "web" | "ios" | "android"
       notifications_provider: "fcm"
       pricing_plan_interval: "day" | "week" | "month" | "year"

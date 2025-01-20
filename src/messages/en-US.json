@@ -48,8 +48,12 @@
       "season": "{count, plural, one {season} other {seasons}}",
       "season_count": "{count, plural, one {# season} other {# seasons}}",
       "see_film": "see film",
+      "see_serie": "see serie",
       "watch_film_title": "watch {title}",
-      "watch_film_streaming_or_download": "Watch <important>{title}</important> on streaming or download"
+      "watch_film_streaming_or_download": "Watch <important>{title}</important> on streaming or download",
+      "person": "{count, plural, one {person} other {persons}}",
+      "top_result": "top result",
+      "user": "{count, plural, one {user} other {users}}"
     },
     "errors": {
       "not_logged_in": "you are not logged in",

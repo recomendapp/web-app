@@ -39,8 +39,5 @@ export const tmdbSearchMovies = async (query: string, language = routing.default
 	
 	const movies: Movie[] = tmdbResults.results.map((movie: any) => request.data?.find((m: any) => m.id === movie.id));
 
-	return {
-		...request,
-		data: movies,
-	}
+	return movies;
 }

@@ -1,5 +1,5 @@
-import SearchFilmsFull from '@/components/Search/SearchFilms/SearchFilmsFull';
 import { redirect } from 'next/navigation';
+import SearchFilmsFull from './_components/SearchFilmsFull';
 
 export async function generateMetadata({
   searchParams,

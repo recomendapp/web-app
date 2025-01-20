@@ -2,8 +2,6 @@
 
 import { Fragment, useState } from 'react';
 import Link from 'next/link';
-import { MovieActionCounter } from '@/components/Movie/MovieActionCounter';
-import { MovieAction } from '@/components/Movie/Actions/MovieAction';
 import YoutubeEmbed from '@/components/utils/Youtube';
 
 import { Button } from '@/components/ui/button';
@@ -27,13 +25,11 @@ import { Play } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MoviePoster from '@/components/Movie/MoviePoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';
-import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import ActivityIcon from '@/components/Review/ActivityIcon';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { TvSerie } from '@/types/type.db';
 import { useModal } from '@/context/modal-context';
-import { ModalMovieFollowersRating } from '@/components/Modals/Movie/ModalMovieFollowersRating';
 import { upperFirst } from 'lodash';
 import { useLocale, useTranslations } from 'next-intl';
 
@@ -67,7 +63,7 @@ export default function TvSerieHeader({
               150px
             `}
           >
-            {serie.vote_count && (
+            {serie.vote_count ? (
               <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
                 <ActivityIcon
                   movieId={serie.id}
@@ -85,13 +81,13 @@ export default function TvSerieHeader({
                   onClick={() => openModal(ModalMovieFollowersRating, { movieId: movie.id })}
                 />} */}
               </div>
-            )}
-            {serie?.videos && serie.videos.length > 0 && (
+            ) : null}
+            {(serie?.videos && serie.videos.length > 0) ? (
               <SerieTrailerButton
                 videos={serie.videos}
                 className="absolute bottom-2 right-2"
               />
-            )}
+            ) : null}
           </MoviePoster>
           {/* MOVIE MAIN DATA */}
           <div className="flex flex-col justify-between gap-2 w-full h-full py-4">

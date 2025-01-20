@@ -1,5 +1,5 @@
-import SearchCrewCastFull from '@/components/Search/SearchCrewCast/SearchCrewCastFull';
 import { redirect } from 'next/navigation';
+import SearchCrewCastFull from './_components/SearchCrewCastFull';
 
 export async function generateMetadata({
   searchParams,

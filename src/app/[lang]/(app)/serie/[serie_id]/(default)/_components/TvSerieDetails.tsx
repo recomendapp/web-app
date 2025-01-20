@@ -61,7 +61,7 @@ const SerieCast = ({
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       ) : (
-        <div className="text-justify text-muted-foreground">{upperFirst(common('messages.no_cast'))}</div>
+        <div className="text-justify text-muted-foreground">{upperFirst(common('messages.no_casting'))}</div>
       )}
 		</div>
 	)

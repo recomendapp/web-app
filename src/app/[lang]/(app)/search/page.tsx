@@ -1,9 +1,10 @@
 import FeaturedPlaylists from '@/components/Playlist/FeaturedPlaylists/FeaturedPlaylists';
-import SearchFilmsSmall from '@/components/Search/SearchFilms/SearchFilmsSmall';
-import SearchPlaylistsSmall from '@/components/Search/SearchPlaylists/SearchPlaylistsSmall';
-import { Fragment } from 'react';
-import SearchUsersSmall from '@/components/Search/SearchUsers/SearchUsersSmall';
-import SearchCrewCastSmall from '@/components/Search/SearchCrewCast/SearchCrewCastSmall';
+import SearchFilmsSmall from './_components/SearchFilmsSmall';
+import SearchBestResult from './_components/SearchBestResult';
+import SearchCrewCastSmall from './_components/SearchCrewCastSmall';
+import SearchPlaylistsSmall from './_components/SearchPlaylistsSmall';
+import SearchUsersSmall from './_components/SearchUsersSmall';
+import SearchSeriesSmall from './_components/SearchSeriesSmall';
 
 export async function generateMetadata({
   searchParams,
@@ -31,12 +32,14 @@ export default function Search({
 }) {
   if (searchParams?.q)
     return (
-      <Fragment>
-        <SearchFilmsSmall query={searchParams.q} />
-        <SearchPlaylistsSmall query={searchParams.q} />
-        <SearchUsersSmall query={searchParams.q} />
-        <SearchCrewCastSmall query={searchParams.q} />
-      </Fragment>
+      <div className='grid grid-cols-2 gap-4'>
+        <SearchBestResult query={searchParams.q} className='col-span-2 md:col-span-1' />
+        <SearchFilmsSmall query={searchParams.q} className='col-span-2 md:col-span-1' />
+        <SearchSeriesSmall query={searchParams.q} className='col-span-2' />
+        <SearchPlaylistsSmall query={searchParams.q} className='col-span-2' />
+        <SearchCrewCastSmall query={searchParams.q} className='col-span-2' />
+        <SearchUsersSmall query={searchParams.q} className='col-span-2' />
+      </div>
     );
 
   return <FeaturedPlaylists />;

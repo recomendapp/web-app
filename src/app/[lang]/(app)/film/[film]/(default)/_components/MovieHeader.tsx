@@ -67,7 +67,7 @@ export default function MovieHeader({
               150px
             `}
           >
-            {movie.vote_count && (
+            {movie.vote_count ? (
               <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
                 <ActivityIcon
                   movieId={movie.id}
@@ -76,22 +76,22 @@ export default function MovieHeader({
                   className="w-full"
                   tooltip='Note moyenne'
                 />
-                {movie.follower_avg_rating && <ActivityIcon
+                {movie.follower_avg_rating ? <ActivityIcon
                   movieId={movie.id}
                   rating={movie.follower_avg_rating}
                   variant="follower"
                   className="w-full"
                   tooltip='Note followers'
                   onClick={() => openModal(ModalMovieFollowersRating, { movieId: movie.id })}
-                />}
+                /> : null}
               </div>
-            )}
-            {movie?.videos && movie.videos.length > 0 && (
+            ) : null}
+            {(movie?.videos && movie.videos.length > 0) ? (
               <MovieTrailerButton
                 videos={movie.videos}
                 className="absolute bottom-2 right-2"
               />
-            )}
+            ) : null}
           </MoviePoster>
           {/* MOVIE MAIN DATA */}
           <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
@@ -107,9 +107,7 @@ export default function MovieHeader({
               <sup>
                 <DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-base font-medium'/>
               </sup>
-              {movie.original_title !== movie.title && (
-                <div className='text-base font-semibold text-muted-foreground'>{movie.original_title}</div>
-              )}
+              {movie.original_title !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.original_title}</div> : null}
             </div>
             {/* <div> */}
               {/* <div className='flex items-center gap-2'>

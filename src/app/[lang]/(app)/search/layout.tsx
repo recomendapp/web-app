@@ -1,8 +1,8 @@
 "use client"
 
-import SearchFilters from '@/components/Search/SearchFilters';
 import SearchBar from '@/components/Search/SearchBar';
 import { useUI } from '@/context/ui-context';
+import SearchFilters from './_components/SearchFilters';
 
 export default function Search({ children }: { children: React.ReactNode }) {
   const { device } = useUI();
