@@ -11,6 +11,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { count } from 'console';
 
 export default function SearchBestResult({
   query,
@@ -59,22 +60,29 @@ export default function SearchBestResult({
             href={
               results.pages[0].best_result?.media_type === 'movie'
                 ? `/film/${results.pages[0].best_result.slug ?? results.pages[0].best_result.id}`
-                : results.pages[0].best_result?.media_type === 'tv'
+                : results.pages[0].best_result?.media_type === 'tv_serie'
                 ? `/serie/${results.pages[0].best_result.slug ?? results.pages[0].best_result.id}`
                 : results.pages[0].best_result?.media_type === 'person'
                 ? `/person/${results.pages[0].best_result.slug ?? results.pages[0].best_result.id}`
                 : ''
             }
           >
-            <Card className='flex flex-col gap-2 relative max-w-md p-2'>
+            <Card className='flex flex-col gap-2 relative p-2 hover:bg-muted-hover'>
               <Badge variant={"accent-1"} className='absolute top-2 right-2'>
-                {results.pages[0].best_result?.media_type}
+                {results.pages[0].best_result?.media_type === 'movie'
+                  ? common('word.film', { count: 1 })
+                  : results.pages[0].best_result?.media_type === 'tv_serie'
+                  ? common('messages.serie', { count: 1 })
+                  : results.pages[0].best_result?.media_type === 'person'
+                  ? common('word.cast_and_crew')
+                  : ''
+                }
               </Badge>
               <div
               className={`relative w-[100px] shrink-0 overflow-hidden
                 ${results.pages[0].best_result.media_type === 'movie'
                   ? 'aspect-[2/3] rounded-md'
-                  : results.pages[0].best_result.media_type === 'tv'
+                  : results.pages[0].best_result.media_type === 'tv_serie'
                   ? 'aspect-[2/3] rounded-md'
                   : results.pages[0].best_result.media_type === 'person'
                   ? 'aspect-[1/1] rounded-full'
@@ -85,7 +93,7 @@ export default function SearchBestResult({
                   src={`https://image.tmdb.org/t/p/original/${
                     results.pages[0].best_result.media_type === 'movie'
                       ? results.pages[0].best_result.poster_path
-                      : results.pages[0].best_result.media_type === 'tv'
+                      : results.pages[0].best_result.media_type === 'tv_serie'
                       ? results.pages[0].best_result.poster_path
                       : results.pages[0].best_result.media_type === 'person'
                       ? results.pages[0].best_result.profile_path
@@ -95,7 +103,7 @@ export default function SearchBestResult({
                   alt={
                       results.pages[0].best_result.media_type === 'movie'
                       ? results.pages[0].best_result.title
-                      : results.pages[0].best_result.media_type === 'tv'
+                      : results.pages[0].best_result.media_type === 'tv_serie'
                       ? results.pages[0].best_result.name
                       : results.pages[0].best_result.media_type === 'person'
                       ? results.pages[0].best_result.name
@@ -110,7 +118,7 @@ export default function SearchBestResult({
                 <p className="text-2xl font-bold line-clamp-2 break-all overflow-hidden">
                   {results.pages[0].best_result.media_type === 'movie'
                     ? results.pages[0].best_result.title
-                    : results.pages[0].best_result.media_type === 'tv'
+                    : results.pages[0].best_result.media_type === 'tv_serie'
                     ? results.pages[0].best_result.name
                     : results.pages[0].best_result.media_type === 'person'
                     ? results.pages[0].best_result.name
@@ -127,7 +135,7 @@ export default function SearchBestResult({
                     <Credits
                       credits={results.pages[0].best_result.media_type === 'movie'
                         ? results.pages[0].best_result.directors
-                        : results.pages[0].best_result.media_type === 'tv'
+                        : results.pages[0].best_result.media_type === 'tv_serie'
                         ? results.pages[0].best_result.created_by
                         : []
                       }
@@ -139,7 +147,7 @@ export default function SearchBestResult({
                     <p className="text-muted-foreground">
                       {new Date(results.pages[0].best_result.release_date).getFullYear()}
                     </p>
-                  ) : results.pages[0].best_result.media_type === 'tv'
+                  ) : results.pages[0].best_result.media_type === 'tv_serie'
                   ? (
                     <p className="text-muted-foreground">
                       {new Date(results.pages[0].best_result.first_air_date).getFullYear()}

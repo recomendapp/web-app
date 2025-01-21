@@ -14,7 +14,7 @@ export default function Search({ children }: { children: React.ReactNode }) {
       `}>
         <SearchBar />
       </div>
-      <div className="@container flex flex-col gap-2">
+      <div className="@container/search flex flex-col gap-2">
         <SearchFilters />
         {children}
       </div>

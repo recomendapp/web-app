@@ -35,7 +35,7 @@ export const tmdbSearchMulti = async (query: string, language = "en", page = 1) 
 			media_list: tmdbResults.results.map((result: any) => {
 				return {
 					id: result.id,
-					type: result.media_type,
+					type: result.media_type === 'tv' ? 'tv_serie' : result.media_type,
 				}
 			})
 		})
@@ -45,7 +45,7 @@ export const tmdbSearchMulti = async (query: string, language = "en", page = 1) 
 	
 	const best_result = data[0];
 	const movies = data.filter((result: any) => result.media_type === 'movie') // .filter((result: any) => result.id !== best_result.id);
-	const tv_series = data.filter((result: any) => result.media_type === 'tv') // .filter((result: any) => result.id !== best_result.id);
+	const tv_series = data.filter((result: any) => result.media_type === 'tv_serie') // .filter((result: any) => result.id !== best_result.id);
 	const persons = data.filter((result: any) => result.media_type === 'person') // .filter((result: any) => result.id !== best_result.id);
 
 	return {

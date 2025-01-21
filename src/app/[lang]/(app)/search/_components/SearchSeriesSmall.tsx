@@ -67,7 +67,7 @@ export default function SearchSeriesSmall({
             <Link
               key={item.id}
               href={`/serie/${item.slug ?? item.id}`}
-              className="text-sm flex justify-between p-2 rounded-md"
+              className="text-sm flex justify-between p-2 rounded-md hover:bg-muted"
             >
               <div className="flex items-center gap-2">
                 {/* MOVIE COVER */}
