@@ -12,6 +12,7 @@ import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Playlist } from '@/types/type.db';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { CardPlaylist } from '@/components/card/CardPlaylist';
 
 export function UserPlaylistsLiked({
   sidebarExpanded,
@@ -72,8 +73,8 @@ export function UserPlaylistsLiked({
     return (
       <Fragment>
         {playlists?.pages.map((page, i) => (
-          page?.map(({ playlist } : { playlist: Playlist}) => (
-            <MoviePlaylistCard playlist={playlist} key={playlist?.id} />
+          page?.map(({ playlist }) => (
+            <CardPlaylist playlist={playlist as Playlist} key={playlist?.id} />
           ))
         ))}
       </Fragment>
@@ -82,7 +83,7 @@ export function UserPlaylistsLiked({
   return (
     <Fragment>
       {playlists?.pages.map((page, i) => (
-        page?.map(({ playlist } : { playlist: Playlist}, index) => (
+        page?.map(({ playlist }, index) => (
           <Button
             key={playlist?.id}
             variant={

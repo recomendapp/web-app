@@ -24,6 +24,45 @@ export type Database = {
         }
         Relationships: []
       }
+      media_stats: {
+        Row: {
+          likes_count: number
+          media_id: number
+          media_type: Database["public"]["Enums"]["media_type"]
+          popularity: number | null
+          recos_count: number
+          review_count: number
+          vote_average: number
+          vote_count: number
+          watch_count: number
+          watchlist_count: number
+        }
+        Insert: {
+          likes_count?: number
+          media_id: number
+          media_type: Database["public"]["Enums"]["media_type"]
+          popularity?: number | null
+          recos_count?: number
+          review_count?: number
+          vote_average?: number
+          vote_count?: number
+          watch_count?: number
+          watchlist_count?: number
+        }
+        Update: {
+          likes_count?: number
+          media_id?: number
+          media_type?: Database["public"]["Enums"]["media_type"]
+          popularity?: number | null
+          recos_count?: number
+          review_count?: number
+          vote_average?: number
+          vote_count?: number
+          watch_count?: number
+          watchlist_count?: number
+        }
+        Relationships: []
+      }
       playlist: {
         Row: {
           created_at: string
@@ -163,6 +202,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "playlist_item_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "playlist_item_movie_id_fkey"
             columns: ["movie_id"]
@@ -857,6 +903,13 @@ export type Database = {
             foreignKeyName: "tmdb_movie_alternative_title_movie_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_alternative_title_movie_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -896,6 +949,13 @@ export type Database = {
             foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -904,6 +964,13 @@ export type Database = {
             columns: ["movie_id"]
             isOneToOne: false
             referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "media_person"
             referencedColumns: ["id"]
           },
           {
@@ -953,6 +1020,13 @@ export type Database = {
             foreignKeyName: "tmdb_movie_external_ids_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_external_ids_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -987,6 +1061,13 @@ export type Database = {
             columns: ["genre_id"]
             isOneToOne: false
             referencedRelation: "tmdb_genre"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_genre_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
             referencedColumns: ["id"]
           },
           {
@@ -1047,6 +1128,13 @@ export type Database = {
             foreignKeyName: "tmdb_movie_images_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_images_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -1081,6 +1169,13 @@ export type Database = {
             columns: ["keyword_id"]
             isOneToOne: false
             referencedRelation: "tmdb_keyword"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_keyword_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
             referencedColumns: ["id"]
           },
           {
@@ -1122,6 +1217,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "tmdb_country"
             referencedColumns: ["iso_3166_1"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_origin_country_movie_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_movie_origin_country_movie_fkey"
@@ -1174,6 +1276,13 @@ export type Database = {
             foreignKeyName: "tmdb_movie_production_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_production_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -1209,6 +1318,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "tmdb_country"
             referencedColumns: ["iso_3166_1"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_country_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_movie_country_movie_id_fkey"
@@ -1274,6 +1390,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "tmdb_language"
             referencedColumns: ["iso_639_1"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_release_dates_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_movie_release_dates_movie_id_fkey"
@@ -1352,6 +1475,13 @@ export type Database = {
             foreignKeyName: "tmdb_movie_language_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_language_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -1399,6 +1529,13 @@ export type Database = {
           title?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "tmdb_movie_translation_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tmdb_movie_translation_movie_id_fkey"
             columns: ["movie_id"]
@@ -1462,6 +1599,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "tmdb_country"
             referencedColumns: ["iso_3166_1"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_videos_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_movie_videos_movie_id_fkey"
@@ -1647,6 +1791,13 @@ export type Database = {
             foreignKeyName: "tmdb_person_also_known_as_person_fkey"
             columns: ["person"]
             isOneToOne: false
+            referencedRelation: "media_person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_person_also_known_as_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
             referencedRelation: "person"
             referencedColumns: ["id"]
           },
@@ -1686,6 +1837,13 @@ export type Database = {
           value?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "tmdb_person_external_id_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "media_person"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tmdb_person_external_id_person_fkey"
             columns: ["person"]
@@ -1745,6 +1903,13 @@ export type Database = {
             foreignKeyName: "tmdb_person_image_person_fkey"
             columns: ["person"]
             isOneToOne: false
+            referencedRelation: "media_person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_person_image_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
             referencedRelation: "person"
             referencedColumns: ["id"]
           },
@@ -1787,6 +1952,13 @@ export type Database = {
           person?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "tmdb_person_translation_person_fkey"
+            columns: ["person"]
+            isOneToOne: false
+            referencedRelation: "media_person"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tmdb_person_translation_person_fkey"
             columns: ["person"]
@@ -1888,6 +2060,13 @@ export type Database = {
             foreignKeyName: "tmdb_tv_series_alternative_titles_serie_id_fkey"
             columns: ["serie_id"]
             isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_alternative_titles_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_tv_series"
             referencedColumns: ["id"]
           },
@@ -1923,6 +2102,13 @@ export type Database = {
           serie_id?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "tmdb_tv_series_content_ratings_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tmdb_tv_series_content_ratings_serie_id_fkey"
             columns: ["serie_id"]
@@ -1972,6 +2158,13 @@ export type Database = {
             foreignKeyName: "tmdb_tv_series_credits_person_id_fkey"
             columns: ["person_id"]
             isOneToOne: false
+            referencedRelation: "media_person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
             referencedRelation: "person"
             referencedColumns: ["id"]
           },
@@ -1987,6 +2180,13 @@ export type Database = {
             columns: ["person_id"]
             isOneToOne: false
             referencedRelation: "tmdb_person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_credits_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_serie"
             referencedColumns: ["id"]
           },
           {
@@ -2122,6 +2322,13 @@ export type Database = {
             foreignKeyName: "tmdb_tv_series_external_ids_serie_id_fkey"
             columns: ["serie_id"]
             isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_external_ids_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_tv_series"
             referencedColumns: ["id"]
           },
@@ -2156,6 +2363,13 @@ export type Database = {
             columns: ["genre_id"]
             isOneToOne: false
             referencedRelation: "tmdb_genre"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_genres_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_serie"
             referencedColumns: ["id"]
           },
           {
@@ -2216,6 +2430,13 @@ export type Database = {
             foreignKeyName: "tmdb_tv_series_images_serie_id_fkey"
             columns: ["serie_id"]
             isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_images_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_tv_series"
             referencedColumns: ["id"]
           },
@@ -2250,6 +2471,13 @@ export type Database = {
             columns: ["keyword_id"]
             isOneToOne: false
             referencedRelation: "tmdb_keyword"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_keywords_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_serie"
             referencedColumns: ["id"]
           },
           {
@@ -2296,6 +2524,13 @@ export type Database = {
             foreignKeyName: "tmdb_tv_series_languages_serie_id_fkey"
             columns: ["serie_id"]
             isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_languages_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_tv_series"
             referencedColumns: ["id"]
           },
@@ -2330,6 +2565,13 @@ export type Database = {
             columns: ["network_id"]
             isOneToOne: false
             referencedRelation: "tmdb_network"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_networks_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_serie"
             referencedColumns: ["id"]
           },
           {
@@ -2371,6 +2613,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "tmdb_country"
             referencedColumns: ["iso_3166_1"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_origin_country_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_tv_series_origin_country_serie_id_fkey"
@@ -2423,6 +2672,13 @@ export type Database = {
             foreignKeyName: "tmdb_tv_series_production_companies_serie_id_fkey"
             columns: ["serie_id"]
             isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_production_companies_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_tv_series"
             referencedColumns: ["id"]
           },
@@ -2458,6 +2714,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "tmdb_country"
             referencedColumns: ["iso_3166_1"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_production_countries_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "tmdb_tv_series_production_countries_serie_id_fkey"
@@ -2501,6 +2764,13 @@ export type Database = {
           vote_count?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "tmdb_tv_series_seasons_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tmdb_tv_series_seasons_serie_id_fkey"
             columns: ["serie_id"]
@@ -2630,6 +2900,13 @@ export type Database = {
             foreignKeyName: "tmdb_tv_series_spoken_languages_serie_id_fkey"
             columns: ["serie_id"]
             isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_spoken_languages_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_tv_series"
             referencedColumns: ["id"]
           },
@@ -2674,6 +2951,13 @@ export type Database = {
           tagline?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "tmdb_tv_serie_translations_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tmdb_tv_serie_translations_serie_id_fkey"
             columns: ["serie_id"]
@@ -2731,6 +3015,13 @@ export type Database = {
           type?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "tmdb_tv_series_videos_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tmdb_tv_series_videos_serie_id_fkey"
             columns: ["serie_id"]
@@ -2800,6 +3091,57 @@ export type Database = {
           website?: string | null
         }
         Relationships: []
+      }
+      user_activity: {
+        Row: {
+          created_at: string
+          id: number
+          is_liked: boolean
+          media_id: number
+          media_type: Database["public"]["Enums"]["media_type"]
+          rating: number | null
+          updated_at: string | null
+          user_id: string
+          watched_date: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          is_liked?: boolean
+          media_id: number
+          media_type: Database["public"]["Enums"]["media_type"]
+          rating?: number | null
+          updated_at?: string | null
+          user_id: string
+          watched_date?: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          is_liked?: boolean
+          media_id?: number
+          media_type?: Database["public"]["Enums"]["media_type"]
+          rating?: number | null
+          updated_at?: string | null
+          user_id?: string
+          watched_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_billing: {
         Row: {
@@ -2973,6 +3315,13 @@ export type Database = {
             foreignKeyName: "user_movie_activity_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -3022,6 +3371,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "user_movie_favorite_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "user_movie_favorite_movie_id_fkey"
             columns: ["movie_id"]
@@ -3081,6 +3437,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "user_movie_guidelist_movie_id_fkey"
             columns: ["movie_id"]
@@ -3173,118 +3536,6 @@ export type Database = {
           },
         ]
       }
-      user_movie_review_comment: {
-        Row: {
-          comment: string
-          comments_count: number
-          created_at: string
-          id: number
-          likes_count: number
-          parent_comment_id: number | null
-          review_id: number
-          user_id: string
-        }
-        Insert: {
-          comment: string
-          comments_count?: number
-          created_at?: string
-          id?: number
-          likes_count?: number
-          parent_comment_id?: number | null
-          review_id: number
-          user_id: string
-        }
-        Update: {
-          comment?: string
-          comments_count?: number
-          created_at?: string
-          id?: number
-          likes_count?: number
-          parent_comment_id?: number | null
-          review_id?: number
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_movie_review_comment_parent_comment_id_fkey"
-            columns: ["parent_comment_id"]
-            isOneToOne: false
-            referencedRelation: "user_movie_review_comment"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_comment_review_id_fkey"
-            columns: ["review_id"]
-            isOneToOne: false
-            referencedRelation: "review"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_comment_review_id_fkey"
-            columns: ["review_id"]
-            isOneToOne: false
-            referencedRelation: "user_movie_review"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_comment_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_comment_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      user_movie_review_comment_like: {
-        Row: {
-          comment_id: number
-          created_at: string
-          id: number
-          user_id: string
-        }
-        Insert: {
-          comment_id: number
-          created_at?: string
-          id?: number
-          user_id: string
-        }
-        Update: {
-          comment_id?: number
-          created_at?: string
-          id?: number
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_movie_review_comment_like_comment_id_fkey"
-            columns: ["comment_id"]
-            isOneToOne: false
-            referencedRelation: "user_movie_review_comment"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_comment_like_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profile"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_movie_review_comment_like_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       user_movie_review_like: {
         Row: {
           created_at: string
@@ -3361,6 +3612,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "user_movie_watchlist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "user_movie_watchlist_movie_id_fkey"
             columns: ["movie_id"]
@@ -3463,6 +3721,13 @@ export type Database = {
             foreignKeyName: "user_person_follower_person_id_fkey"
             columns: ["person_id"]
             isOneToOne: false
+            referencedRelation: "media_person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_person_follower_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
             referencedRelation: "person"
             referencedColumns: ["id"]
           },
@@ -3489,6 +3754,180 @@ export type Database = {
           },
           {
             foreignKeyName: "user_person_follower_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_recos: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: number
+          media_id: number
+          media_type: Database["public"]["Enums"]["media_type"]
+          sender_id: string
+          status: Database["public"]["Enums"]["reco_status"]
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: number
+          media_id: number
+          media_type: Database["public"]["Enums"]["media_type"]
+          sender_id: string
+          status?: Database["public"]["Enums"]["reco_status"]
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: number
+          media_id?: number
+          media_type?: Database["public"]["Enums"]["media_type"]
+          sender_id?: string
+          status?: Database["public"]["Enums"]["reco_status"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_recos_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_recos_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_recos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_recos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_review: {
+        Row: {
+          body: Json
+          comments_count: number
+          created_at: string
+          id: number
+          likes_count: number
+          title: string | null
+          updated_at: string | null
+          views_count: number
+        }
+        Insert: {
+          body: Json
+          comments_count?: number
+          created_at?: string
+          id?: number
+          likes_count?: number
+          title?: string | null
+          updated_at?: string | null
+          views_count?: number
+        }
+        Update: {
+          body?: Json
+          comments_count?: number
+          created_at?: string
+          id?: number
+          likes_count?: number
+          title?: string | null
+          updated_at?: string | null
+          views_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_review_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_activity"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_review_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_activity_media"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_review_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_feed"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_review_like: {
+        Row: {
+          created_at: string
+          id: number
+          review_id: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          review_id: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          review_id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_review_like_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "user_review"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_review_like_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "user_review_activity"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_review_like_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "user_review_media_activity"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_review_like_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_review_like_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "user"
@@ -3572,6 +4011,51 @@ export type Database = {
           },
         ]
       }
+      user_watchlist: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: number
+          media_id: number
+          media_type: Database["public"]["Enums"]["media_type"]
+          status: Database["public"]["Enums"]["watchlist_status"]
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: number
+          media_id: number
+          media_type: Database["public"]["Enums"]["media_type"]
+          status?: Database["public"]["Enums"]["watchlist_status"]
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: number
+          media_id?: number
+          media_type?: Database["public"]["Enums"]["media_type"]
+          status?: Database["public"]["Enums"]["watchlist_status"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       collection: {
@@ -3635,6 +4119,13 @@ export type Database = {
             foreignKeyName: "user_movie_activity_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -3673,6 +4164,13 @@ export type Database = {
             foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -3681,6 +4179,13 @@ export type Database = {
             columns: ["movie_id"]
             isOneToOne: false
             referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "media_person"
             referencedColumns: ["id"]
           },
           {
@@ -3715,6 +4220,13 @@ export type Database = {
           user_id: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "user_movie_guidelist_movie_id_fkey"
             columns: ["movie_id"]
@@ -3758,6 +4270,13 @@ export type Database = {
             foreignKeyName: "user_movie_guidelist_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -3783,6 +4302,143 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      media_movie: {
+        Row: {
+          adult: boolean | null
+          backdrop_path: string | null
+          backdrop_url: string | null
+          belongs_to_collection: number | null
+          budget: number | null
+          directors: Json[] | null
+          follower_avg_rating: number | null
+          genres: Json[] | null
+          homepage: string | null
+          id: number | null
+          likes_count: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          original_language: string | null
+          original_title: string | null
+          overview: string | null
+          popularity: number | null
+          poster_path: string | null
+          poster_url: string | null
+          recos_count: number | null
+          release_date: string | null
+          revenue: number | null
+          review_count: number | null
+          runtime: number | null
+          slug: string | null
+          status: string | null
+          tagline: string | null
+          title: string | null
+          tmdb_popularity: number | null
+          tmdb_vote_average: number | null
+          tmdb_vote_count: number | null
+          url: string | null
+          vote_average: number | null
+          vote_count: number | null
+          watch_count: number | null
+          watchlist_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_movie_collection_fkey"
+            columns: ["belongs_to_collection"]
+            isOneToOne: false
+            referencedRelation: "collection"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_collection_fkey"
+            columns: ["belongs_to_collection"]
+            isOneToOne: false
+            referencedRelation: "tmdb_collection"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      media_person: {
+        Row: {
+          gender: number | null
+          id: number | null
+          known_for_department: string | null
+          likes_count: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          name: string | null
+          popularity: number | null
+          profile_path: string | null
+          profile_url: string | null
+          recos_count: number | null
+          review_count: number | null
+          slug: string | null
+          tmdb_popularity: number | null
+          url: string | null
+          vote_average: number | null
+          vote_count: number | null
+          watch_count: number | null
+          watchlist_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_person_gender_fkey"
+            columns: ["gender"]
+            isOneToOne: false
+            referencedRelation: "tmdb_gender"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      media_person_combined_credits: {
+        Row: {
+          credits: Json | null
+          media: Json | null
+          media_id: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          person_id: number | null
+          popularity: number | null
+          tmdb_popularity: number | null
+        }
+        Relationships: []
+      }
+      media_tv_serie: {
+        Row: {
+          adult: boolean | null
+          backdrop_path: string | null
+          backdrop_url: string | null
+          created_by: Json[] | null
+          first_air_date: string | null
+          follower_avg_rating: number | null
+          genres: Json[] | null
+          id: number | null
+          in_production: boolean | null
+          last_air_date: string | null
+          likes_count: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          name: string | null
+          number_of_episodes: number | null
+          number_of_seasons: number | null
+          original_language: string | null
+          original_name: string | null
+          overview: string | null
+          popularity: number | null
+          poster_path: string | null
+          poster_url: string | null
+          recos_count: number | null
+          review_count: number | null
+          slug: string | null
+          status: string | null
+          tmdb_popularity: number | null
+          tmdb_vote_average: number | null
+          tmdb_vote_count: number | null
+          type: string | null
+          url: string | null
+          vote_average: number | null
+          vote_count: number | null
+          watch_count: number | null
+          watchlist_count: number | null
+        }
+        Relationships: []
       }
       movie: {
         Row: {
@@ -3839,6 +4495,13 @@ export type Database = {
             foreignKeyName: "user_movie_activity_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -3875,6 +4538,13 @@ export type Database = {
             foreignKeyName: "user_movie_guidelist_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_guidelist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -3893,6 +4563,13 @@ export type Database = {
           movie_id: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "user_movie_activity_movie_id_fkey"
             columns: ["movie_id"]
@@ -4076,6 +4753,13 @@ export type Database = {
             foreignKeyName: "user_movie_activity_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_movie_activity_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -4116,6 +4800,16 @@ export type Database = {
           },
         ]
       }
+      tmdb_combined_credits: {
+        Row: {
+          department: string | null
+          job: string | null
+          media_id: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          person_id: number | null
+        }
+        Relationships: []
+      }
       tmdb_movie_credits_random: {
         Row: {
           department: string | null
@@ -4143,6 +4837,13 @@ export type Database = {
             foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
             columns: ["movie_id"]
             isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
             referencedRelation: "movie"
             referencedColumns: ["id"]
           },
@@ -4151,6 +4852,13 @@ export type Database = {
             columns: ["movie_id"]
             isOneToOne: false
             referencedRelation: "tmdb_movie"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "media_person"
             referencedColumns: ["id"]
           },
           {
@@ -4186,6 +4894,13 @@ export type Database = {
             foreignKeyName: "tmdb_movie_credits_person_id_fkey"
             columns: ["person_id"]
             isOneToOne: false
+            referencedRelation: "media_person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
             referencedRelation: "person"
             referencedColumns: ["id"]
           },
@@ -4217,6 +4932,13 @@ export type Database = {
           vote_count: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "tmdb_tv_series_seasons_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_serie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tmdb_tv_series_seasons_serie_id_fkey"
             columns: ["serie_id"]
@@ -4259,6 +4981,373 @@ export type Database = {
         }
         Relationships: []
       }
+      user_activity_media: {
+        Row: {
+          created_at: string | null
+          id: number | null
+          is_liked: boolean | null
+          media: Json | null
+          media_id: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          rating: number | null
+          updated_at: string | null
+          user_id: string | null
+          watched_date: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number | null
+          is_liked?: boolean | null
+          media?: Json | null
+          media_id?: number | null
+          media_type?: Database["public"]["Enums"]["media_type"] | null
+          rating?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          watched_date?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number | null
+          is_liked?: boolean | null
+          media?: Json | null
+          media_id?: number | null
+          media_type?: Database["public"]["Enums"]["media_type"] | null
+          rating?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          watched_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_feed: {
+        Row: {
+          created_at: string | null
+          id: number | null
+          is_liked: boolean | null
+          media: Json | null
+          media_id: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          rating: number | null
+          updated_at: string | null
+          user_id: string | null
+          watched_date: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number | null
+          is_liked?: boolean | null
+          media?: never
+          media_id?: number | null
+          media_type?: Database["public"]["Enums"]["media_type"] | null
+          rating?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          watched_date?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: number | null
+          is_liked?: boolean | null
+          media?: never
+          media_id?: number | null
+          media_type?: Database["public"]["Enums"]["media_type"] | null
+          rating?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          watched_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_recos_aggregated: {
+        Row: {
+          created_at: string | null
+          media: Json | null
+          media_id: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          senders: Json[] | null
+          status: Database["public"]["Enums"]["reco_status"] | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_recos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_recos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_recos_aggregated_random: {
+        Row: {
+          created_at: string | null
+          media: Json | null
+          media_id: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          senders: Json[] | null
+          status: Database["public"]["Enums"]["reco_status"] | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_recos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_recos_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_review_activity: {
+        Row: {
+          body: Json | null
+          comments_count: number | null
+          created_at: string | null
+          id: number | null
+          is_liked: boolean | null
+          likes_count: number | null
+          media_id: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          rating: number | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+          views_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_review_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_activity"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_review_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_activity_media"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_review_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_feed"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_review_media_activity: {
+        Row: {
+          body: Json | null
+          comments_count: number | null
+          created_at: string | null
+          id: number | null
+          is_liked: boolean | null
+          likes_count: number | null
+          media: Json | null
+          media_id: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          rating: number | null
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+          views_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_activity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_review_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_activity"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_review_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_activity_media"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_review_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "user_feed"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_watchlist_media: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          id: number | null
+          media: Json | null
+          media_id: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          status: Database["public"]["Enums"]["watchlist_status"] | null
+          user_id: string | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          id?: number | null
+          media?: never
+          media_id?: number | null
+          media_type?: Database["public"]["Enums"]["media_type"] | null
+          status?: Database["public"]["Enums"]["watchlist_status"] | null
+          user_id?: string | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          id?: number | null
+          media?: never
+          media_id?: number | null
+          media_type?: Database["public"]["Enums"]["media_type"] | null
+          status?: Database["public"]["Enums"]["watchlist_status"] | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_watchlist_media_random: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          id: number | null
+          media: Json | null
+          media_id: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          status: Database["public"]["Enums"]["watchlist_status"] | null
+          user_id: string | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          id?: number | null
+          media?: never
+          media_id?: number | null
+          media_type?: Database["public"]["Enums"]["media_type"] | null
+          status?: Database["public"]["Enums"]["watchlist_status"] | null
+          user_id?: string | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          id?: number | null
+          media?: never
+          media_id?: number | null
+          media_type?: Database["public"]["Enums"]["media_type"] | null
+          status?: Database["public"]["Enums"]["watchlist_status"] | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_watchlist_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       watchlist_random: {
         Row: {
           created_at: string | null
@@ -4282,6 +5371,13 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "user_movie_watchlist_movie_id_fkey"
+            columns: ["movie_id"]
+            isOneToOne: false
+            referencedRelation: "media_movie"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "user_movie_watchlist_movie_id_fkey"
             columns: ["movie_id"]
@@ -4312,6 +5408,15 @@ export type Database = {
           },
         ]
       }
+      widget_most_recommended: {
+        Row: {
+          media: Json | null
+          media_id: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          recommendation_count: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       delete_avatar: {
@@ -4335,8 +5440,8 @@ export type Database = {
       }
       find_media: {
         Args: {
-          media_id: number
-          media_type: Database["public"]["Enums"]["media_type"]
+          p_media_id: number
+          p_media_type: Database["public"]["Enums"]["media_type"]
         }
         Returns: Json
       }
@@ -4445,6 +5550,16 @@ export type Database = {
         }
         Returns: undefined
       }
+      user_recos_insert: {
+        Args: {
+          mediaid: number
+          mediatype: Database["public"]["Enums"]["media_type"]
+          comment: string
+          sender_user_id: string
+          receiver_user_ids: string[]
+        }
+        Returns: undefined
+      }
       utils_check_playlist_guest: {
         Args: {
           p_user_id: string
@@ -4491,17 +5606,39 @@ export type Database = {
         }
         Returns: string
       }
+      utils_popularity_score: {
+        Args: {
+          rating_count: number
+          likes_count: number
+          watch_count: number
+          watchlist_count: number
+          recos_count: number
+        }
+        Returns: number
+      }
+      utils_update_media_stats: {
+        Args: {
+          p_media_id: number
+          p_media_type: Database["public"]["Enums"]["media_type"]
+          update_activity: boolean
+          update_reviews: boolean
+          update_watchlist: boolean
+          update_reco: boolean
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       eventType: "INSERT" | "DELETE" | "UPDATE"
       guidelist_status: "active" | "completed" | "deleted"
       image_type: "backdrop" | "poster" | "logo" | "profile"
       language_app: "en-US" | "fr-FR"
-      media_type: "movie" | "tv" | "person"
+      media_type: "movie" | "tv_serie" | "person" | "tv_season" | "tv_episode"
       notifications_device_type: "web" | "ios" | "android"
       notifications_provider: "fcm"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"
+      reco_status: "active" | "completed" | "deleted"
       subscription_status:
         | "trialing"
         | "active"

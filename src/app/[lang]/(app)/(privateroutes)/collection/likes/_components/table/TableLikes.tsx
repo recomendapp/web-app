@@ -28,9 +28,10 @@ import {
 import { DataTableToolbar } from './component/data-table-toolbar';
 import { columns } from './component/columns';
 import { useMediaQuery } from 'react-responsive';
-import { UserMovieActivity } from '@/types/type.db';
+import { UserActivity } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
 import { capitalize } from 'lodash';
+import { cn } from '@/lib/utils';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -38,11 +39,11 @@ declare module '@tanstack/react-table' {
   }
 }
 
-interface DataTableProps {
-  data: UserMovieActivity[];
+interface DataTableProps extends React.HTMLAttributes<HTMLDivElement> {
+  data: UserActivity[];
 }
 
-export function TableLikes({ data }: DataTableProps) {
+export function TableLikes({ data,className, ...props }: DataTableProps) {
   const common = useTranslations('common');
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -52,7 +53,7 @@ export function TableLikes({ data }: DataTableProps) {
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
-  const table = useReactTable<UserMovieActivity>({
+  const table = useReactTable<UserActivity>({
     data,
     columns: columns(),
     initialState: {
@@ -105,7 +106,7 @@ export function TableLikes({ data }: DataTableProps) {
   }, [isMobile, table]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className={cn("flex flex-col gap-2", className)} {...props}>
       <DataTableToolbar table={table} />
       <div className="rounded-md">
         <Table>

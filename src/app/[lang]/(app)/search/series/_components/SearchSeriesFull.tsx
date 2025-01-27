@@ -8,7 +8,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { useTmdbSearchSeriesInfinite } from '@/features/tmdb/tmdbQueries';
+import { useTmdbSearchSeriesInfinite } from '@/features/client/tmdb/tmdbQueries';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
 
@@ -74,7 +74,7 @@ export default function SearchSeriesFull({ query }: { query: string }) {
         page?.map((serie, index) => (
             <Link
               key={serie?.id}
-              href={`/serie/${serie?.slug ?? serie?.id}`}
+              href={serie?.url}
               className="text-sm flex justify-between p-2 hover:bg-secondary rounded-md"
               {...(i === series.pages.length - 1 && index === page.length - 1
                 ? { ref: ref }

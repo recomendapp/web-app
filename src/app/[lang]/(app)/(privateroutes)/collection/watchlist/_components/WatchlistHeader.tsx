@@ -1,19 +1,19 @@
 import { HeaderBox } from "@/components/Box/HeaderBox";
-import { UserMovieWatchlist } from "@/types/type.db";
+import { UserWatchlist } from "@/types/type.db";
 import { capitalize } from "lodash";
 import { useTranslations } from "next-intl";
 
-export function WatchlistHeader({ data }: { data: UserMovieWatchlist[] }) {
+export function WatchlistHeader({ data }: { data: UserWatchlist[] }) {
   const common = useTranslations('common');
-  const randomBackdrop = (object: UserMovieWatchlist[]) => {
+  const randomBackdrop = (object: UserWatchlist[]) => {
     const itemsWithBackdrop = object.filter(
-      (item) => item?.movie?.backdrop_path
+      (item) => item?.media?.backdrop_path
     );
 
     if (itemsWithBackdrop.length === 0) return null;
 
     const randomIndex = Math.floor(Math.random() * itemsWithBackdrop.length);
-    return itemsWithBackdrop[randomIndex]?.movie?.backdrop_path;
+    return itemsWithBackdrop[randomIndex]?.media?.backdrop_path;
   };
 
   return (

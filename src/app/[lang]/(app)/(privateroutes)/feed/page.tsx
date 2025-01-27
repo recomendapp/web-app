@@ -5,7 +5,7 @@ import FeedItem from "./_components/FeedItem";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import Loader from "@/components/Loader/Loader";
-import { useUserFeedInfinite } from "@/features/user/userQueries";
+import { useUserFeedInfiniteQuery } from "@/features/client/user/userQueries";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 
@@ -21,7 +21,7 @@ export default function Feed() {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useUserFeedInfinite({
+  } = useUserFeedInfiniteQuery({
     userId: user?.id,
   });
 

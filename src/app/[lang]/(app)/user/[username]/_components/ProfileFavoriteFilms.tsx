@@ -1,9 +1,9 @@
 import MovieCard from '@/components/Movie/Card/MovieCard';
-import { Movie, UserProfile } from '@/types/type.db';
+import { User } from '@/types/type.db';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 
-export default function ProfileFavoriteFilms({ profile }: { profile: UserProfile }) {
+export default function ProfileFavoriteFilms({ profile }: { profile: User }) {
   const common = useTranslations('common');
   // if (!profile?.favorite_movies?.length) return null;
 

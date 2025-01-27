@@ -7,12 +7,12 @@ import { createServerClient } from '@/lib/supabase/server';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 
 // ICONS
-import { UserProfile } from '@/types/type.db';
+import { Profile } from '@/types/type.db';
 import { ProfileFollowersButton } from './ProfileFollowersButton';
 import { ProfileFolloweesButton } from './ProfileFolloweesButton';
 import { Icons } from '@/config/icons';
 
-export default async function ProfileHeader({ profile }: { profile: UserProfile }) {
+export default async function ProfileHeader({ profile }: { profile: Profile }) {
   const supabase = createServerClient();
   const {
     data: { user },
@@ -32,8 +32,8 @@ export default async function ProfileHeader({ profile }: { profile: UserProfile 
         />
         <div className="flex flex-col gap-2 items-end">
           <div className="flex items-center @lg/profile-header:hidden">
-            <ProfileFollowersButton userId={profile?.id!} disabled={!profile.visible ? true : false} />
-            <ProfileFolloweesButton userId={profile?.id!} disabled={!profile.visible ? true : false} />
+            <ProfileFollowersButton userId={profile?.id!} disabled={!profile?.visible ? true : false} />
+            <ProfileFolloweesButton userId={profile?.id!} disabled={!profile?.visible ? true : false} />
             {user?.id == profile?.id && (
               <Button variant={'action'} asChild>
                 <Link href={'/settings/profile'}>
@@ -62,8 +62,8 @@ export default async function ProfileHeader({ profile }: { profile: UserProfile 
             <span className="text-muted-foreground">@{profile?.username}</span>
           </Link>
           <div className="hidden @lg/profile-header:flex items-center gap-2">
-            <ProfileFollowersButton userId={profile?.id!} className="hidden sm:block" disabled={!profile.visible ? true : false} />
-            <ProfileFolloweesButton userId={profile?.id!} className="hidden sm:block" disabled={!profile.visible ? true : false} />
+            <ProfileFollowersButton userId={profile?.id!} className="hidden sm:block" disabled={!profile?.visible ? true : false} />
+            <ProfileFolloweesButton userId={profile?.id!} className="hidden sm:block" disabled={!profile?.visible ? true : false} />
             {user?.id == profile?.id && (
               <Button variant={'action'} asChild>
                 <Link href={'/settings/profile'}>
@@ -77,7 +77,7 @@ export default async function ProfileHeader({ profile }: { profile: UserProfile 
         <section className="flex justify-between h-full">
           {/* PROFILE EXTRADATA */}
           <div>
-            {/* {profile.badge && <p className='text-accent-1 italic'>{profile.badge}</p>} */}
+            {/* {profile?.badge && <p className='text-accent-1 italic'>{profile?.badge}</p>} */}
             {profile?.bio && (
               <p className="text-justify max-w-lg">{profile?.bio}</p>
             )}

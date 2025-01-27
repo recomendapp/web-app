@@ -1,4 +1,4 @@
-import { getProfile } from "../../_components/getProfile";
+import { getProfile } from "@/features/server/users";
 
 export default async function Stats({
   params,

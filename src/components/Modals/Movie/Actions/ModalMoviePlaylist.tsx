@@ -12,13 +12,13 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Movie, Playlist, PlaylistType } from '@/types/type.db';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
-import { useAddMovieToPlaylists, useCreatePlaylist } from '@/features/playlist/playlistMutations';
+import { useAddMovieToPlaylists, useCreatePlaylist } from '@/features/client/playlist/playlistMutations';
 import { Icons } from '@/config/icons';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Label } from '@/components/ui/label';
-import { useMeAddMovieToPlaylist } from '@/features/me/meQueries';
+import { useMeAddMovieToPlaylist } from '@/features/client/me/meQueries';
 import { useQueryClient } from '@tanstack/react-query';
-import { meKeys } from '@/features/me/meKeys';
+import { meKeys } from '@/features/client/me/meKeys';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useTranslations } from 'next-intl';
 

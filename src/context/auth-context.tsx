@@ -5,10 +5,8 @@ import { useRouter } from 'next/navigation';
 import { Provider, Session } from '@supabase/supabase-js';
 
 import { User } from '@/types/type.db';
-import { useUserDetails } from '@/features/user/userQueries';
+import { useUserQuery } from '@/features/client/user/userQueries';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { userKeys } from '@/features/user/userKeys';
-import { useQuery } from '@tanstack/react-query';
 
 export interface UserState {
   user: User | null | undefined;
@@ -53,18 +51,8 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
   const {
     data: user,
     isLoading: userLoading,
-  } = useQuery({
-    queryKey: userKeys.detail(session?.user?.id as string),
-    queryFn: async () => {
-      if (session === null || !session?.user.id) return (null);
-      const { data, error } = await supabase
-        .from('user')
-        .select('*')
-        .eq('id', session.user.id)
-        .single();
-      if (error) throw error;
-      return data;
-    },
+  } = useUserQuery({
+    userId: session?.user?.id,
     enabled: session !== undefined,
   })
 

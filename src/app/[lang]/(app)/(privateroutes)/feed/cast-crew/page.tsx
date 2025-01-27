@@ -4,7 +4,7 @@ import { useAuth } from "@/context/auth-context";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import Loader from "@/components/Loader/Loader";
-import { useUserFeedInfinite, useUserFeedCastCrewInifinite } from "@/features/user/userQueries";
+import { useUserFeedCastCrewInfiniteQuery } from "@/features/client/user/userQueries";
 import { FeedCastCrewItem } from "./_components/FeedCastCrewItem";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
@@ -21,7 +21,7 @@ export default function FeedPersons() {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useUserFeedCastCrewInifinite({
+  } = useUserFeedCastCrewInfiniteQuery({
     userId: user?.id,
   });
 

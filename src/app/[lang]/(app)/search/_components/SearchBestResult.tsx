@@ -3,15 +3,15 @@ import Link from 'next/link';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useLocale, useTranslations } from 'next-intl';
-import { useTmdbSearchMultiInfinite } from '@/features/tmdb/tmdbQueries';
+import { useTmdbSearchMultiInfinite } from '@/features/client/tmdb/tmdbQueries';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { count } from 'console';
+import { getMediaDetails } from '@/hooks/get-media-details';
+import { BadgeMedia } from '@/components/badge/BadgeMedia';
 
 export default function SearchBestResult({
   query,
@@ -57,58 +57,18 @@ export default function SearchBestResult({
           </>
         ) : (
           <Link
-            href={
-              results.pages[0].best_result?.media_type === 'movie'
-                ? `/film/${results.pages[0].best_result.slug ?? results.pages[0].best_result.id}`
-                : results.pages[0].best_result?.media_type === 'tv_serie'
-                ? `/serie/${results.pages[0].best_result.slug ?? results.pages[0].best_result.id}`
-                : results.pages[0].best_result?.media_type === 'person'
-                ? `/person/${results.pages[0].best_result.slug ?? results.pages[0].best_result.id}`
-                : ''
-            }
+            href={getMediaDetails(results.pages[0].best_result).url}
           >
             <Card className='flex flex-col gap-2 relative p-2 hover:bg-muted-hover'>
-              <Badge variant={"accent-1"} className='absolute top-2 right-2'>
-                {results.pages[0].best_result?.media_type === 'movie'
-                  ? common('word.film', { count: 1 })
-                  : results.pages[0].best_result?.media_type === 'tv_serie'
-                  ? common('messages.serie', { count: 1 })
-                  : results.pages[0].best_result?.media_type === 'person'
-                  ? common('word.cast_and_crew')
-                  : ''
-                }
-              </Badge>
+              <BadgeMedia type={results.pages[0].best_result?.media_type} variant={"accent-1"} className='absolute top-2 right-2' />
               <div
               className={`relative w-[100px] shrink-0 overflow-hidden
-                ${results.pages[0].best_result.media_type === 'movie'
-                  ? 'aspect-[2/3] rounded-md'
-                  : results.pages[0].best_result.media_type === 'tv_serie'
-                  ? 'aspect-[2/3] rounded-md'
-                  : results.pages[0].best_result.media_type === 'person'
-                  ? 'aspect-[1/1] rounded-full'
-                  : ''}
+                ${getMediaDetails(results.pages[0].best_result).poster_className}
               `}
               >
                 <ImageWithFallback
-                  src={`https://image.tmdb.org/t/p/original/${
-                    results.pages[0].best_result.media_type === 'movie'
-                      ? results.pages[0].best_result.poster_path
-                      : results.pages[0].best_result.media_type === 'tv_serie'
-                      ? results.pages[0].best_result.poster_path
-                      : results.pages[0].best_result.media_type === 'person'
-                      ? results.pages[0].best_result.profile_path
-                      : ''
-                    }
-                  `}
-                  alt={
-                      results.pages[0].best_result.media_type === 'movie'
-                      ? results.pages[0].best_result.title
-                      : results.pages[0].best_result.media_type === 'tv_serie'
-                      ? results.pages[0].best_result.name
-                      : results.pages[0].best_result.media_type === 'person'
-                      ? results.pages[0].best_result.name
-                      : ''
-                  }
+                  src={`https://image.tmdb.org/t/p/original/${getMediaDetails(results.pages[0].best_result).poster_path}`}
+                  alt={getMediaDetails(results.pages[0].best_result).title ?? ''}
                   layout="fill"
                   objectFit="cover"
                   className="object-cover"
@@ -116,14 +76,7 @@ export default function SearchBestResult({
               </div>
               <div>
                 <p className="text-2xl font-bold line-clamp-2 break-all overflow-hidden">
-                  {results.pages[0].best_result.media_type === 'movie'
-                    ? results.pages[0].best_result.title
-                    : results.pages[0].best_result.media_type === 'tv_serie'
-                    ? results.pages[0].best_result.name
-                    : results.pages[0].best_result.media_type === 'person'
-                    ? results.pages[0].best_result.name
-                    : ''
-                  }
+                  {getMediaDetails(results.pages[0].best_result).title}
                 </p>
                 {results.pages[0].best_result.media_type === 'person'
                   ? (
@@ -133,12 +86,7 @@ export default function SearchBestResult({
                   )
                   : (
                     <Credits
-                      credits={results.pages[0].best_result.media_type === 'movie'
-                        ? results.pages[0].best_result.directors
-                        : results.pages[0].best_result.media_type === 'tv_serie'
-                        ? results.pages[0].best_result.created_by
-                        : []
-                      }
+                      credits={getMediaDetails(results.pages[0].best_result).mainCredits ?? []}
                     />
                   )
                 }

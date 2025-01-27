@@ -43,7 +43,7 @@ export const columns = (): ColumnDef<PlaylistItem>[] => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={upperFirst(common('word.film', { count: 1 }))} />
       ),
-      cell: ({ row }) => <MovieCardSmall movie={row.original?.movie} />,
+      cell: ({ row }) => <MovieCardSmall movie={row.original?.movie!} />,
       enableHiding: false,
     },
     {

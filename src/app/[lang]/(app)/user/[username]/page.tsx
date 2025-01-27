@@ -3,7 +3,7 @@ import ProfileHeader from './_components/ProfileHeader';
 import ProfileNavbar from './_components/ProfileNavbar';
 import ProfileLastActivity from './_components/ProfileLastActivity';
 import ProfilePrivateAccountCard from './_components/ProfilePrivateAccountCard';
-import { getProfile } from './_components/getProfile';
+import { getProfile } from '@/features/server/users';
 import ProfileFavoriteFilms from './_components/ProfileFavoriteFilms';
 
 export default async function UserPage({

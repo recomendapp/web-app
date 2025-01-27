@@ -36,6 +36,7 @@ import {
   Moon,
   MoreHorizontalIcon,
   MoreVertical,
+  PenIcon,
   Pizza,
   Plus,
   SearchIcon,
@@ -216,6 +217,7 @@ export const Icons = {
   delete: Trash,
   close: X,
   spinner: Loader2,
+  star: StarIcon,
   loader: ({ className, ...props }: LucideProps) => (
     <Icons.spinner className={cn('animate-spin', className)} {...props} />
   ),
@@ -231,6 +233,7 @@ export const Icons = {
   settings: Settings,
   billing: CreditCard,
   add: Plus,
+  edit: PenIcon,
   lock: LockIcon,
   warning: AlertTriangle,
   user: User,

@@ -49,7 +49,7 @@ import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Playlist, PlaylistItem } from '@/types/type.db';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { useMutation } from '@tanstack/react-query';
-import { usePlaylistIsAllowedToEdit } from '@/features/playlist/playlistQueries';
+import { usePlaylistIsAllowedToEdit } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useLocale, useTranslations } from 'next-intl';
-import { useTmdbSearchMultiInfinite } from '@/features/tmdb/tmdbQueries';
+import { useTmdbSearchMultiInfinite } from '@/features/client/tmdb/tmdbQueries';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -66,7 +66,7 @@ export default function SearchSeriesSmall({
           page.tv_series.slice(0, 4).map((item) => (
             <Link
               key={item.id}
-              href={`/serie/${item.slug ?? item.id}`}
+              href={item.url}
               className="text-sm flex justify-between p-2 rounded-md hover:bg-muted"
             >
               <div className="flex items-center gap-2">

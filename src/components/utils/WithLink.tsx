@@ -1,22 +1,32 @@
+import * as React from "react";
 import Link from "next/link"
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
-export const WithLink = ({
-	href,
-	children,
-	className,
-	...props
-  }: {
-	href?: string;
-	children: React.ReactNode;
-	className?: string;
-  }) => {
-	if (href) {
-	  return (
-		<Link href={href} className={className} {...props}>
-		  {children}
-		</Link>
-	  );
-	}
-	
-	return <>{children}</>;
-  };
+interface WithLinkProps extends React.HTMLAttributes<HTMLDivElement | HTMLAnchorElement> {
+  href?: string;
+  as?: React.ElementType;
+  withOnClick?: boolean;
+}
+
+export const WithLink = React.forwardRef<
+  HTMLDivElement,
+  WithLinkProps
+>(({ href, as: Component = "div", className, withOnClick = false, onClick, children, ...props }, ref) => {
+	const router = useRouter();
+	const ComponentRender = (href && !withOnClick) ? Link : Component;
+	return (
+		<ComponentRender
+		ref={ref}
+		href={href ?? undefined}
+		onClick={(e: React.MouseEvent<HTMLDivElement | HTMLAnchorElement>) => {
+			href && router.push(href);
+			onClick && onClick(e);
+		}}
+		className={cn(href ? "cursor-pointer" : "", className)}
+		{...props}
+		>
+		{children}
+		</ComponentRender>
+	);
+});

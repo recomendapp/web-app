@@ -1,8 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { MovieAction } from '@/components/Movie/Actions/MovieAction';
-
 // UI
 import { Button } from '@/components/ui/button';
 import {
@@ -29,8 +27,8 @@ import { Movie, PlaylistItem } from '@/types/type.db';
 import { ModalMoviePlaylist } from '@/components/Modals/Movie/Actions/ModalMoviePlaylist';
 import { TextIcon } from 'lucide-react';
 import { Icons } from '@/config/icons';
-import { useDeletePlaylistItem } from '@/features/playlist/playlistMutations';
-import { usePlaylistIsAllowedToEdit } from '@/features/playlist/playlistQueries';
+import { useDeletePlaylistItem } from '@/features/client/playlist/playlistMutations';
+import { usePlaylistIsAllowedToEdit } from '@/features/client/playlist/playlistQueries';
 import { ModalMovieSend } from '@/components/Modals/Movie/Actions/ModalMovieSend';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
@@ -51,9 +49,6 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
     <>
       <DropdownMenu>
         <div className="flex gap-2 items-center justify-end">
-          <div className="hidden lg:invisible lg:group-hover:visible lg:flex items-center gap-2">
-            <MovieAction filmId={data?.movie_id!} rating like />
-          </div>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
@@ -86,7 +81,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
             </Link>
           </DropdownMenuItem>
           <ShowDirectorsButton
-            movie={data?.movie}
+            movie={data?.movie!}
             setOpen={setOpenShowDirectors}
           />
           {(isAllowedToEdit || data?.comment) && (
@@ -120,7 +115,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
         </DropdownMenuContent>
       </DropdownMenu>
       <ShowDirectorsModal
-        movie={data?.movie}
+        movie={data?.movie!}
         open={openShowDirectors}
         setOpen={setOpenShowDirectors}
       />
@@ -147,7 +142,7 @@ export function ShowDirectorsButton({
   if (movie?.directors.length == 1) {
     return (
       <DropdownMenuItem asChild>
-        <Link href={`/person/${movie.directors[0].slug ?? movie.directors[0].id}`}>
+        <Link href={`/person/${movie.directors[0]?.slug ?? movie.directors[0].id}`}>
           <Icons.user className='w-4' />
           {upperFirst(common('messages.view_directors', { count: movie.directors.length }))}
         </Link>

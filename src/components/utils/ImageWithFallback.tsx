@@ -4,10 +4,11 @@ import { ComponentProps, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { ImageIcon, ListVideo, UserIcon } from 'lucide-react';
+import { MediaType } from '@/types/type.db';
 
 interface ImageWithFallbackProps extends ComponentProps<typeof Image> {
   src: string;
-  type?: 'default' | 'playlist' | 'person' | 'movie' | 'service' | 'watch-provider';
+  type?: 'default' | 'playlist' | 'service' | 'watch-provider' | MediaType;
   blurDataURL?: string;
 }
 
@@ -71,6 +72,10 @@ export function Fallback({
       ) : type == 'person' ? (
         <UserIcon color="#fff" className="w-2/5 h-2/5" />
       ) : type == 'movie' ? (
+        <span className="text-muted-foreground text-clamp-2 text-center">
+          {alt}
+        </span>
+      ) : type == 'tv_serie' ? (
         <span className="text-muted-foreground text-clamp-2 text-center">
           {alt}
         </span>

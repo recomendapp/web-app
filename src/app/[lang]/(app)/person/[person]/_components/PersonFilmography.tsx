@@ -148,7 +148,7 @@ export default function PersonFilmography({
             movies.map((credits, index) => (
               <MovieCard
                 key={index}
-                movie={credits.movie}
+                movie={credits.movie!}
                 displayMode={displayMode}
                 job={credits.job}
                 fill

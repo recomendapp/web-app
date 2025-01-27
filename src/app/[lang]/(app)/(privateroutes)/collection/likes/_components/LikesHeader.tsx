@@ -1,20 +1,19 @@
 import { HeaderBox } from "@/components/Box/HeaderBox";
-import { UserMovieActivityFragment } from "@/graphql/__generated__/graphql";
-import { UserMovieActivity } from "@/types/type.db";
+import { UserActivity } from "@/types/type.db";
 import { capitalize } from "lodash";
 import { useTranslations } from "next-intl";
 
-export function LikesHeader({ data }: { data: UserMovieActivity[] }) {
+export function LikesHeader({ data }: { data: UserActivity[] }) {
   const common = useTranslations('common');
-  const randomBackdrop = (object: UserMovieActivity[]) => {
+  const randomBackdrop = (object: UserActivity[]) => {
     const itemsWithBackdrop = object.filter(
-      (item) => item?.movie?.backdrop_path
+      (item) => item?.media?.backdrop_path
     );
 
     if (itemsWithBackdrop.length === 0) return null;
 
     const randomIndex = Math.floor(Math.random() * itemsWithBackdrop.length);
-    return itemsWithBackdrop[randomIndex]?.movie?.backdrop_path;
+    return itemsWithBackdrop[randomIndex]?.media?.backdrop_path;
   };
 
   return (

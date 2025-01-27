@@ -29,7 +29,7 @@ import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MoviePoster from '@/components/Movie/MoviePoster';
 import { MovieAction } from '@/components/Movie/Actions/MovieAction';
 import { useLocale } from 'next-intl';
-import ActivityIcon from '@/components/Review/ActivityIcon';
+import ActivityIcon from '@/components/review/ActivityIcon';
 import { Movie, MoviePerson, UserMovieActivity } from '@/types/type.db';
 import { useState } from 'react';
 import { TooltipBox } from '@/components/Box/TooltipBox';

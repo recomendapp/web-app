@@ -28,7 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/Editor/Editor.tsx",
+    "src/components/tiptap/Tiptap.tsx",
     "src/components/elements/ModalFollowers",
     "src/components/RightSidebar",
     "worker/index.js"

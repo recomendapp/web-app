@@ -7,7 +7,7 @@ import { TooltipContentProps, TooltipPortal, TooltipTriggerProps } from '@radix-
 
 interface TooltipBoxProps extends React.ComponentProps<typeof TooltipContent> {
 	children: React.ReactNode;
-	tooltip?: string | TooltipContentProps;
+	tooltip?: string | TooltipContentProps | null;
 	tooltipTrigger?: TooltipTriggerProps;
 }
 

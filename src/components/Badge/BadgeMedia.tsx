@@ -1,0 +1,30 @@
+import { MediaType } from "@/types/type.db";
+import * as React from "react"
+import { Badge } from "../ui/badge";
+import { useTranslations } from "next-intl";
+
+interface BadgeMediaProps
+	extends React.ComponentProps<typeof Badge> {
+		type?: MediaType | null;
+	}
+
+const BadgeMedia = React.forwardRef<
+	HTMLDivElement,
+	BadgeMediaProps
+>(({ type, variant, className, ...props }, ref) => {
+	const common = useTranslations('common');
+	return (
+		<Badge variant={variant ?? 'accent-1'} className={className} {...props}>
+		{type === 'movie'
+			? common('word.film', { count: 1 })
+			: type === 'tv_serie'
+			? common('messages.serie', { count: 1 })
+			: type === 'person'
+			? common('word.cast_and_crew')
+			: type
+		}
+		</Badge>
+	);
+})
+
+export { BadgeMedia }

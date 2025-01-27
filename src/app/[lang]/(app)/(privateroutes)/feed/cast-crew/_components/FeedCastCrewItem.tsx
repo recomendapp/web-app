@@ -1,13 +1,14 @@
 import * as React from "react"
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { ContextMenuMovie } from "@/components/context-menu/ContextMenuMovie";
 import Link from "next/link";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { useFormatter, useTranslations } from "next-intl";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
-import { FeedCastCrew } from "@/types/type.db";
+import { FeedCastCrew, Movie } from "@/types/type.db";
+import { ContextMenuMedia } from "@/components/context-menu/ContextMenuMedia";
+import { getMediaDetails } from "@/hooks/get-media-details";
 
 interface FeedCastCrewItemProps
 	extends React.ComponentProps<typeof Card> {
@@ -20,6 +21,7 @@ const FeedCastCrewItemDefault = React.forwardRef<
 >(({ className, activity, ...props }, ref) => {
 	const format = useFormatter();
 	const common = useTranslations('common');
+	const media = getMediaDetails(activity?.media);
 	return (
 		<Card
 		ref={ref}
@@ -30,12 +32,12 @@ const FeedCastCrewItemDefault = React.forwardRef<
 		{...props}
 		>
 			<Link
-			href={`/film/${activity?.movie?.slug ?? activity?.movie_id}`}
+			href={media.url}
 			className="w-20 @md/feed-item:w-24 relative h-full shrink-0 rounded-md overflow-hidden aspect-[2/3]"
 			>
 				<ImageWithFallback
-					src={activity?.movie?.poster_path ? `https://image.tmdb.org/t/p/original/${activity.movie.poster_path}` : ''}
-					alt={activity?.movie?.title ?? ''}
+					src={media.poster_url ??''}
+					alt={media.title ?? ''}
 					fill
 					className="object-cover"
 					type="movie"
@@ -57,9 +59,9 @@ const FeedCastCrewItemDefault = React.forwardRef<
 							{common.rich('feed.persons.new_activity', {
 								name: activity?.person?.name,
 								roles: activity?.jobs?.length ? activity.jobs.join(', ').toLowerCase() : common('word.unknown'),
-								film: activity?.movie?.title,
+								film: activity?.media?.title,
 								linkPerson: (chunk) => <Link href={`/person/${activity?.person?.slug ?? activity?.person?.id}`} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
-								linkFilm: (chunk) => <Link href={`/film/${activity?.movie?.slug ?? activity?.movie_id}`} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
+								linkFilm: (chunk) => <Link href={`/film/${activity?.media?.slug ?? activity?.movie_id}`} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
 								important: (chunk) => <span className="text-foreground">{chunk}</span>
 							})}
 						</p>
@@ -68,20 +70,20 @@ const FeedCastCrewItemDefault = React.forwardRef<
 						{format.relativeTime(new Date(activity?.release_date ?? ''), new Date())}
 					</div>
 				</div>
-				<Link href={`/film/${activity?.movie?.slug ?? activity?.movie_id}`} className="space-y-2">
+				<Link href={`/film/${activity?.media?.slug ?? activity?.movie_id}`} className="space-y-2">
 					<div className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
-						<span className='font-bold'>{activity?.movie?.title}</span>
+						<span className='font-bold'>{activity?.media?.title}</span>
 						<sup>
-							<DateOnlyYearTooltip date={activity?.movie?.release_date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
+							<DateOnlyYearTooltip date={activity?.media?.release_date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
 						</sup>
 					</div>
 					<p
 						className={`
 							text-xs @md/feed-item:text-sm line-clamp-3 text-justify
-							${!activity?.movie?.overview?.length && 'text-muted-foreground'}
+							${!activity?.media?.overview?.length && 'text-muted-foreground'}
 						`}
 					>
-						{activity?.movie?.overview?.length ? activity.movie.overview : 'Aucune description'}
+						{activity?.media?.overview?.length ? activity.media.overview : 'Aucune description'}
 					</p>
 				</Link>
 			</div>
@@ -96,9 +98,9 @@ const FeedCastCrewItem = React.forwardRef<
 	FeedCastCrewItemProps
 >(({ className, activity, ...props }, ref) => {
 	return (
-		<ContextMenuMovie movie={activity?.movie}>
+		<ContextMenuMedia media={activity?.media!}>
 			<FeedCastCrewItemDefault ref={ref} className={className} activity={activity} {...props} />
-		</ContextMenuMovie>
+		</ContextMenuMedia>
 	)
 });
 FeedCastCrewItem.displayName = "FeedCastCrewItem";

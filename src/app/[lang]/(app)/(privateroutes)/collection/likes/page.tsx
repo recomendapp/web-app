@@ -6,6 +6,7 @@ import { LikesHeader } from './_components/LikesHeader';
 import { useAuth } from '@/context/auth-context';
 import { useLocale } from 'next-intl';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { useUserLikesQuery } from '@/features/client/user/userQueries';
 
 export default function Likes() {
   const supabase = useSupabaseClient();
@@ -14,22 +15,10 @@ export default function Likes() {
 
   const {
     data: likes,
-  } = useQuery({
-    queryKey: ['user', user?.id, 'collection', 'likes'],
-    queryFn: async () => {
-      if (!user?.id || !locale) throw new Error('No user or locale');
-      const { data } = await supabase
-        .from('user_movie_activity')
-        .select(`
-          *,
-          movie(*)
-        `)
-        .eq('user_id', user.id)
-        .eq('is_liked', true)
-        .order('created_at', { ascending: true });
-      return data;
-    },
-    enabled: !!user?.id && !!locale,
+    isLoading,
+    isError,
+  } = useUserLikesQuery({
+    userId: user?.id,
   });
 
   if (!likes) return null;
@@ -37,9 +26,7 @@ export default function Likes() {
   return (
     <main className="h-full">
       <LikesHeader data={likes} />
-      <div className="p-4">
-        <TableLikes data={likes} />
-      </div>
+      <TableLikes data={likes} className='m-4' />
     </main>
   );
 }

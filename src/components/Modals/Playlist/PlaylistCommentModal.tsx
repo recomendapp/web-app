@@ -13,8 +13,8 @@ import { Playlist, PlaylistGuest, PlaylistItem } from "@/types/type.db";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useSupabaseClient } from '@/context/supabase-context';
-import { playlistKeys } from "@/features/playlist/playlistKeys";
-import { usePlaylistIsAllowedToEdit } from "@/features/playlist/playlistQueries";
+import { playlistKeys } from "@/features/client/playlist/playlistKeys";
+import { usePlaylistIsAllowedToEdit } from "@/features/client/playlist/playlistQueries";
 
 interface PlaylistCommentModalProps extends ModalType {
 	playlistItem: PlaylistItem;

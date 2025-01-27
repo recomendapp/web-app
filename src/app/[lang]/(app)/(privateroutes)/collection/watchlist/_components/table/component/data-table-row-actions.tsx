@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { Column, Row, Table } from '@tanstack/react-table';
-import { MovieAction } from '@/components/Movie/Actions/MovieAction';
 
 // UI
 import { Button } from '@/components/ui/button';
@@ -13,39 +12,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
 
 // ICONS
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { Dispatch, SetStateAction, useState } from 'react';
-import ButtonShare from '@/components/utils/ButtonShare';
-import { useAuth } from '@/context/auth-context';
 
 // GRAPHQL
 import toast from 'react-hot-toast';
-import { Movie, UserMovieWatchlist } from '@/types/type.db';
-import { useQueryClient } from '@tanstack/react-query';
-import ModalMovieWatchlistComment from '@/components/Modals/Movie/ModalMovieWatchlistComment';
+import { UserWatchlist } from '@/types/type.db';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
-import { useUserMovieWatchlistDelete } from '@/features/user/userMutations';
-import { userKeys } from '@/features/user/userKeys';
+import { useUserWatchlistDeleteMutation } from '@/features/client/user/userMutations';
 import { useTranslations } from 'next-intl';
-import { capitalize } from 'lodash';
-import { cp } from 'fs';
+import { capitalize, upperFirst } from 'lodash';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
+import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
+import { getMediaDetails } from '@/hooks/get-media-details';
+import { ModalWatchlistComment } from '@/components/Modals/watchlist/ModalWatchlistComment';
 
 interface DataTableRowActionsProps {
-  table: Table<UserMovieWatchlist>;
-  row: Row<UserMovieWatchlist>;
-  column: Column<UserMovieWatchlist, unknown>;
-  data: UserMovieWatchlist;
+  table: Table<UserWatchlist>;
+  row: Row<UserWatchlist>;
+  column: Column<UserWatchlist, unknown>;
+  data: UserWatchlist;
 }
 
 export function DataTableRowActions({
@@ -55,11 +43,10 @@ export function DataTableRowActions({
   data,
 }: DataTableRowActionsProps) {
   const common = useTranslations('common');
-  const { user } = useAuth();
+  const media = getMediaDetails(data?.media);
   const { openModal, createConfirmModal } = useModal();
-  const queryClient = useQueryClient();
-  const [openShowDirectors, setOpenShowDirectors] = useState(false);
-  const deleteWatchlist = useUserMovieWatchlistDelete();
+  // const [openShowDirectors, setOpenShowDirectors] = useState(false);
+  const deleteWatchlist = useUserWatchlistDeleteMutation();
 
   const handleUnwatchlist = async () => {
     if (!data) return;
@@ -67,9 +54,6 @@ export function DataTableRowActions({
       watchlistId: data.id,
     }, {
       onSuccess: () => {
-        queryClient.setQueryData(userKeys.watchlist(user?.id as string), (oldData: UserMovieWatchlist[]) => {
-          return (oldData ?? []).filter((activity) => activity?.id !== data.id)
-        });
         toast.success(capitalize(common('word.deleted')));
       },
       onError: () => {
@@ -79,36 +63,50 @@ export function DataTableRowActions({
   }
 
   return (
-    <>
+    <div className="flex items-center justify-end">
       <DropdownMenu>
-        <div className="flex gap-2 items-center justify-end">
-          <div className="hidden lg:invisible lg:group-hover:visible lg:flex items-center gap-2">
-            <MovieAction filmId={data?.movie_id!} rating like />
-          </div>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-            >
-              <DotsHorizontalIcon className="h-4 w-4 text-accent-1" />
-              <span className="sr-only">{capitalize(common('sr.open_menu'))}</span>
-            </Button>
-          </DropdownMenuTrigger>
-        </div>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+          >
+            <DotsHorizontalIcon className="h-4 w-4 text-accent-1" />
+            <span className="sr-only">{capitalize(common('sr.open_menu'))}</span>
+          </Button>
+        </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end" className="w-[160px]">
+          <DropdownMenuItem
+            onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id!, mediaType: data?.media_type!, mediaTitle: media.title })}
+          >
+            <Icons.send className='w-4' />
+            {upperFirst(common('messages.send_to_friend'))}
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href={`/film/${data?.movie?.slug ?? data?.movie_id}`}>
+            <Link href={media.url}>
               <Icons.eye className='w-4' />
-              {capitalize(common('messages.go_to_film'))}
+              {data?.media_type === 'movie'
+                ? capitalize(common('messages.go_to_film'))
+                : data?.media_type === 'tv_serie'
+                ? capitalize(common('messages.go_to_serie'))
+                : data?.media_type === 'person'
+                ? capitalize(common('messages.go_to_person'))
+                : ''
+              }
             </Link>
           </DropdownMenuItem>
-          <ShowDirectorsButton
+          {media.mainCredits && media.mainCredits.length > 0 ? (
+            <div>
+
+            </div>
+          ) : null}
+          {/* <ShowDirectorsButton
             movie={data?.movie}
             setOpen={setOpenShowDirectors}
-          />
+          /> */}
           <DropdownMenuItem
-            onClick={() => openModal(ModalMovieWatchlistComment, { watchlistItem: data })}
+            onClick={() => openModal(ModalWatchlistComment, { watchlistItem: data })}
           >
             <Icons.comment className='w-4' />
             {data?.comment ? capitalize(common('messages.view_comment', { count: 1 })) : capitalize(common('messages.add_comment'))}
@@ -116,9 +114,9 @@ export function DataTableRowActions({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => openModal(ModalShare, {
-              name: data?.movie?.title,
-              type: 'movie',
-              path: `/film/${data?.movie?.slug ?? data?.movie_id}`,
+              title: media.title,
+              type: data?.media_type,
+              path: media.url,
             })}
           >
             <Icons.share className='w-4' />
@@ -128,10 +126,10 @@ export function DataTableRowActions({
             onClick={async () => createConfirmModal({
               title: capitalize(common('library.collection.watchlist.modal.delete_confirm.title')),
               description: common.rich('library.collection.watchlist.modal.delete_confirm.description', {
-                film: data?.movie?.title,
+                title: media.title,
                 important: (chunk) => <b>{chunk}</b>,
               }),
-              onConfirm: async () => data && await handleUnwatchlist(),
+              onConfirm: handleUnwatchlist,
             })}
           >
             <Icons.delete className='w-4' />
@@ -139,72 +137,72 @@ export function DataTableRowActions({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <ShowDirectorsModal
+      {/* <ShowDirectorsModal
         movie={data?.movie}
         open={openShowDirectors}
         setOpen={setOpenShowDirectors}
-      />
-    </>
+      /> */}
+    </div>
   );
 }
 
-export function ShowDirectorsButton({
-  movie,
-  setOpen,
-}: {
-  movie: Movie;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) {
-  const common = useTranslations('common');
-  if (!movie?.directors?.length) {
-    return (
-      <DropdownMenuItem>
-        <Icons.user className='w-4' />
-        {capitalize(common('messages.no_director'))}
-      </DropdownMenuItem>
-    );
-  }
-  if (movie?.directors?.length == 1) {
-    return (
-      <DropdownMenuItem asChild>
-        <Link href={`/person/${movie.directors[0]?.slug ?? movie.directors[0]?.id}`}>
-          <Icons.user className='w-4' />
-          {capitalize(common('messages.view_directors', { count: movie.directors.length }))}
-        </Link>
-      </DropdownMenuItem>
-    );
-  }
-  return (
-    <DropdownMenuItem onClick={() => setOpen(true)}>
-      <Icons.users className='w-4' />
-      {capitalize(common('messages.view_directors', { count: movie.directors.length }))}
-    </DropdownMenuItem>
-  );
-}
+// export function ShowDirectorsButton({
+//   movie,
+//   setOpen,
+// }: {
+//   movie: Movie;
+//   setOpen: Dispatch<SetStateAction<boolean>>;
+// }) {
+//   const common = useTranslations('common');
+//   if (!movie?.directors?.length) {
+//     return (
+//       <DropdownMenuItem>
+//         <Icons.user className='w-4' />
+//         {capitalize(common('messages.no_director'))}
+//       </DropdownMenuItem>
+//     );
+//   }
+//   if (movie?.directors?.length == 1) {
+//     return (
+//       <DropdownMenuItem asChild>
+//         <Link href={`/person/${movie.directors[0]?.slug ?? movie.directors[0]?.id}`}>
+//           <Icons.user className='w-4' />
+//           {capitalize(common('messages.view_directors', { count: movie.directors.length }))}
+//         </Link>
+//       </DropdownMenuItem>
+//     );
+//   }
+//   return (
+//     <DropdownMenuItem onClick={() => setOpen(true)}>
+//       <Icons.users className='w-4' />
+//       {capitalize(common('messages.view_directors', { count: movie.directors.length }))}
+//     </DropdownMenuItem>
+//   );
+// }
 
-export function ShowDirectorsModal({
-  movie,
-  open,
-  setOpen,
-}: {
-  movie: Movie;
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) {
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-5xl bg-black">
-        <DialogHeader>
-          <DialogTitle className="text-center">Réalisateur</DialogTitle>
-        </DialogHeader>
-        <div className="flex flex-col gap-4">
-          {movie?.directors?.map((person: any) => (
-            <Button key={person?.id} variant={'ghost'} asChild>
-              <Link href={`/person/${person?.slug ?? person?.id}`}>{person?.name}</Link>
-            </Button>
-          ))}
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}
+// export function ShowDirectorsModal({
+//   movie,
+//   open,
+//   setOpen,
+// }: {
+//   movie: Movie;
+//   open: boolean;
+//   setOpen: Dispatch<SetStateAction<boolean>>;
+// }) {
+//   return (
+//     <Dialog open={open} onOpenChange={setOpen}>
+//       <DialogContent className="max-w-5xl bg-black">
+//         <DialogHeader>
+//           <DialogTitle className="text-center">Réalisateur</DialogTitle>
+//         </DialogHeader>
+//         <div className="flex flex-col gap-4">
+//           {movie?.directors?.map((person: any) => (
+//             <Button key={person?.id} variant={'ghost'} asChild>
+//               <Link href={`/person/${person?.slug ?? person?.id}`}>{person?.name}</Link>
+//             </Button>
+//           ))}
+//         </div>
+//       </DialogContent>
+//     </Dialog>
+//   );
+// }

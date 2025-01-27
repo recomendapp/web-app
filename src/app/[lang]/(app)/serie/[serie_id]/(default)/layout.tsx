@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation';
 import TvSerieHeader from './_components/TvSerieHeader';
-import MovieNavbar from './_components/TvSerieNavbar';
+import TvSerieNavbar from './_components/TvSerieNavbar';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
-import { getSerie } from '@/data/supabase/series';
+import { getSerie } from '@/features/server/series';
+import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 
 export async function generateMetadata({
 	params,
@@ -15,7 +16,8 @@ export async function generateMetadata({
 }) {
 	const common = await getTranslations({ locale: params.lang, namespace: 'common' });
 	const t = await getTranslations({ locale: params.lang, namespace: 'pages.serie' });
-	const { serie } = await getSerie(params.serie_id, params.lang);
+	const { id: serieId } = getIdFromSlug(params.serie_id);
+	const serie = await getSerie(serieId, params.lang);
 	if (!serie) return { title: upperFirst(common('errors.serie_not_found')) };
 	return {
 		title: t('metadata.title', { title: serie.name, year: new Date(String(serie.first_air_date)).getFullYear() }),
@@ -43,13 +45,14 @@ export default async function SerieLayout({
 	  serie_id: string;
 	};
 }) {
-	const { id, serie } = await getSerie(params.serie_id, params.lang);
+	const { id: serieId } = getIdFromSlug(params.serie_id);
+	const serie = await getSerie(serieId, params.lang);
 	if (!serie) notFound();
 	return (
 		<>
-			<TvSerieHeader serie={serie as any} />
+			<TvSerieHeader serie={serie} />
 			<div className="px-4 pb-4">
-				<MovieNavbar serieId={id} />
+				<TvSerieNavbar serieId={params.serie_id} />
 				{children}
 			</div>
 		</>

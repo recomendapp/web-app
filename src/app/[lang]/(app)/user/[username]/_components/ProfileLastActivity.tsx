@@ -1,19 +1,14 @@
 'use client';
-
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import MovieCard from '@/components/Movie/Card/MovieCard';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-
-// QUERY
-import { UserProfile } from '@/types/type.db';
-import { useUserMovieActivitiesInfinite } from '@/features/user/userQueries';
+import { Profile } from '@/types/type.db';
+import { useUserActivitiesInfiniteQuery } from '@/features/client/user/userQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { CardMedia } from '@/components/card/CardMedia';
 
-export default function ProfileLastActivity({ profile }: { profile: UserProfile }) {
+export default function ProfileLastActivity({ profile }: { profile: Profile }) {
   const common = useTranslations('common');
   const { ref, inView } = useInView();
 
@@ -23,7 +18,7 @@ export default function ProfileLastActivity({ profile }: { profile: UserProfile 
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useUserMovieActivitiesInfinite({
+  } = useUserActivitiesInfiniteQuery({
     userId: profile?.id ?? undefined,
   })
 
@@ -36,43 +31,21 @@ export default function ProfileLastActivity({ profile }: { profile: UserProfile 
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex justify-between gap-4 items-center">
-        <Link href={`/@${profile?.username}/films`}>
-          <h3 className="font-semibold text-xl">
-          {upperFirst(common('messages.last_activities'))}
-          </h3>
-        </Link>
-        <Button variant={'link'} asChild>
-          <Link href={`/@${profile?.username}/films`}>{upperFirst(common('messages.show_all'))}</Link>
-        </Button>
-      </div>
+      <h3 className="font-semibold text-xl">
+      {upperFirst(common('messages.last_activities'))}
+      </h3>
       <ScrollArea className="rounded-md">
         <div className="flex space-x-4 pb-4">
           {activities?.pages.map((page, i) => (
               page?.map((activity, index) => (
-                <div
-                  key={activity?.id}
-                  className="w-24 lg:w-32 pb-2"
-                  ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
-                >
-                  <MovieCard
-                    movie={activity?.movie}
-                    displayMode={'grid'}
-                    movieActivity={activity}
-                    fill
-                    sizes={`
-                      (max-width: 640px) 100px,
-                      (max-width: 768px) 100px,
-                      (max-width: 1024px) 120px,
-                      (max-width: 1280px) 150px,
-                      (max-width: 1536px) 150px,
-                      (max-width: 1792px) 150px,
-                      (max-width: 2048px) 200px,
-                      (max-width: 2304px) 200px,
-                      200px
-                    `}
-                  />
-                </div>
+                <CardMedia
+                key={activity?.id}
+                variant='poster'
+                ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+                media={activity?.media!}
+                activity={activity}
+                className='w-24 lg:w-32'
+                />
               ))
             ))}
         </div>

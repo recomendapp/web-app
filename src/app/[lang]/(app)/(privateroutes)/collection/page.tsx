@@ -36,8 +36,8 @@ export default function Collection() {
             <Send fill="#fff" className="w-2/5 h-2/5" />
           </CollectionIcon>
         ),
-        label: capitalize(common('library.collection.guidelist.label')),
-        href: '/collection/guidelist',
+        label: capitalize(common('messages.my_recos')),
+        href: '/collection/my-recos',
       },
       {
         icon: (
@@ -74,7 +74,6 @@ export default function Collection() {
           <TabsTrigger value="personal">Ma Bibliothèque</TabsTrigger>
           <TabsTrigger value="external">Enregistré</TabsTrigger>
         </TabsList>
-        {/* <TabsContent value="personal" className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2"> */}
         <TabsContent value="personal" className="grid gap-6 grid-cols-3 @xl/collection:grid-cols-4 @2xl/collection:grid-cols-5 @4xl/collection:grid-cols-6 @6xl/collection:grid-cols-7 @7xl/collection:grid-cols-8">
           {collectionRoutes.map((item) => (
             <Button

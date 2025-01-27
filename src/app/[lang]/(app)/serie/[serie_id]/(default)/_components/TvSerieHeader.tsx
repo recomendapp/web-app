@@ -25,22 +25,28 @@ import { Play } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MoviePoster from '@/components/Movie/MoviePoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';
-import ActivityIcon from '@/components/Review/ActivityIcon';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { TvSerie } from '@/types/type.db';
+import { MediaTvSerie, TvSerie } from '@/types/type.db';
 import { useModal } from '@/context/modal-context';
 import { upperFirst } from 'lodash';
 import { useLocale, useTranslations } from 'next-intl';
+import UserActivityLike from '@/components/media/actions/UserActivityLike';
+import UserActivityWatch from '@/components/media/actions/UserActivityWatch';
+import UserActivityWatchedDate from '@/components/media/actions/UserActivityWatchedDate';
+import UserActivityRating from '@/components/media/actions/UserActivityRating';
+import UserRecos from '@/components/media/actions/UserRecos';
+import UserWatchlist from '@/components/media/actions/UserWatchlist';
+import { IconMediaRating } from '@/components/media/icons/IconMediaRating';
 
 export default function TvSerieHeader({
   serie,
 }: {
-  serie: TvSerie;
+  serie: MediaTvSerie;
 }) {
   const { openModal } = useModal();
   const common = useTranslations('common');
-
+  console.log('test', serie.vote_average ?? serie.tmdb_vote_average);
   if (!serie) return null;
   return (
     <div>
@@ -65,13 +71,12 @@ export default function TvSerieHeader({
           >
             {serie.vote_count ? (
               <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                <ActivityIcon
-                  movieId={serie.id}
-                  rating={serie.vote_average}
+                {(serie.vote_average || serie.tmdb_vote_average) ? <IconMediaRating
+                  rating={serie.vote_average ?? serie.tmdb_vote_average}
                   variant="general"
                   className="w-full"
                   tooltip='Note moyenne'
-                />
+                /> : null}
                 {/* {movie.follower_avg_rating && <ActivityIcon
                   movieId={movie.id}
                   rating={movie.follower_avg_rating}
@@ -133,8 +138,18 @@ export default function TvSerieHeader({
           </div>
         </div>
       </HeaderBox>
-      <div className="px-4 pb-4">
-        {/* <MovieAction filmId={serie.id} all /> */}
+      <div className="flex justify-between gap-2 px-4 pb-4">
+        <div className="flex gap-2 overflow-x-auto items-center">
+          <UserActivityRating mediaId={serie.id} mediaType={'tv_serie'} />
+          <UserActivityLike mediaId={serie.id} mediaType={'tv_serie'} />
+          <UserActivityWatch mediaId={serie.id} mediaType={'tv_serie'} />
+          <UserWatchlist mediaId={serie.id} mediaType={'tv_serie'} />
+          <UserActivityWatchedDate mediaId={serie.id} mediaType={'tv_serie'} />
+        </div>
+        <div className="flex gap-2 items-center">
+          {/* {(all || playlist) && <MoviePlaylistAction movieId={filmId} />} */}
+          <UserRecos mediaId={serie.id} mediaType={'tv_serie'} mediaTitle={serie.name} />
+        </div>
       </div>
     </div>
   );

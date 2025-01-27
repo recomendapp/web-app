@@ -7,30 +7,31 @@ import { useState } from "react";
 import copyToClipboard from "@/hooks/copy-to-clipboard";
 import { siteConfig } from "@/config/site";
 import { FacebookIcon, FacebookShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
+import { MediaType } from "@/types/type.db";
 
 interface ModalShareProps extends ModalType {
-	name?: string | null;
-	type: 'movie' | 'playlist';
+	title?: string | null;
+	type?: 'playlist' | MediaType | null;
 	path: string;
 }
 
-export const ModalShare = ({ name, type, ...props }: ModalShareProps) => {
+export const ModalShare = ({ title, type, ...props }: ModalShareProps) => {
 	const { closeModal } = useModal();
 	const [copyDone, setCopyDone] = useState(false);
 	const url = `${location.origin}${props.path}`;
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
-			<ModalHeader>
+			{/* <ModalHeader>
 				<ModalTitle>
 					Partager
 				</ModalTitle>
 				<ModalDescription>
-					Partagez <strong>{name}</strong> avec vos amis
+					Partagez <strong>{title}</strong> avec vos amis
 				</ModalDescription>
-			</ModalHeader>
+			</ModalHeader> */}
 			<ModalBody>
 				<div>
-					<h3 className="text-lg font-semibold mb-2">Partager via</h3>
+					<h3 className="text-lg font-semibold mb-2">Partager <strong>{title}</strong> via</h3>
 					<div className="flex gap-2">
 						<TwitterShareButton
 						url={url}

@@ -8,7 +8,7 @@ import Loader from '@/components/Loader/Loader';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { useTmdbSearchPersonsInfinite } from '@/features/tmdb/tmdbQueries';
+import { useTmdbSearchPersonsInfinite } from '@/features/client/tmdb/tmdbQueries';
 import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 

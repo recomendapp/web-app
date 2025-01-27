@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import ProfileHeader from '../_components/ProfileHeader';
 import ProfilePrivateAccountCard from '../_components/ProfilePrivateAccountCard';
 import ProfileNavbar from '../_components/ProfileNavbar';
-import { getProfile } from '../_components/getProfile';
+import { getProfile } from '@/features/server/users';
 
 interface UserLayoutProps {
   params: { username: string };

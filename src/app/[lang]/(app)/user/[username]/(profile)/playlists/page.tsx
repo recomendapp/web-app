@@ -1,5 +1,6 @@
-import { getProfile } from '../../_components/getProfile';
+import { notFound } from 'next/navigation';
 import ProfilePlaylists from './_components/ProfilePlaylists';
+import { getProfile } from '@/features/server/users';
 
 export default async function Playlists({
   params,
@@ -7,5 +8,6 @@ export default async function Playlists({
   params: { username: string };
 }) {
   const user = await getProfile(params.username);
-  return <ProfilePlaylists profile={user} />;
+  if (!user?.id) notFound();
+  return <ProfilePlaylists userId={user?.id} />;
 }

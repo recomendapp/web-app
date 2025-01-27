@@ -5,7 +5,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '../../utils/ImageWithFallback';
 import Link from 'next/link';
-import FeaturedPlaylistBadge from '@/components/Badge/FeatuedPlaylistBadge';
+import FeaturedPlaylistBadge from '@/components/badge/FeatuedPlaylistBadge';
 import { Playlist } from '@/types/type.db';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';

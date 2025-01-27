@@ -3,7 +3,7 @@ import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentMo
 import { PlaylistItem } from '@/types/type.db';
 import { MessageSquarePlusIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { usePlaylistIsAllowedToEdit } from '@/features/playlist/playlistQueries';
+import { usePlaylistIsAllowedToEdit } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 

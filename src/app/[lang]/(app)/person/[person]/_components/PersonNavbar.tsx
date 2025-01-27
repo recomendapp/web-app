@@ -1,29 +1,32 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+const type = 'person';
 
 export default function PersonNavbar({
-  focus,
   personId,
 }: {
-  focus: string;
-  personId: number;
+  personId: string;
 }) {
+  const pathname = usePathname();
+  const regex = `^/${type}/${personId}(-[a-z0-9-]*)?`;
   const routes = [
     {
-      label: 'Œuvres',
-      active: focus === 'oeuvre',
-      href: `/person/${personId}`,
+      label: 'Général',
+      active: pathname.match(new RegExp(regex + '$')),
+      href: `/${type}/${personId}`,
     },
-    // {
-    //   label: 'Prix',
-    //   active: focus === 'awards',
-    //   href: `/person/${personId}/awards`,
-    // },
     {
-      label: 'À propos',
-      active: focus === 'about',
-      href: `/person/${personId}/about`,
+      label: 'Films',
+      active: pathname.match(new RegExp(regex + '/films')),
+      href: `/${type}/${personId}/films`,
+    },
+    {
+      label: 'Séries',
+      active: pathname.match(new RegExp(regex + '/series')),
+      href: `/${type}/${personId}/series`,
     },
   ];
 

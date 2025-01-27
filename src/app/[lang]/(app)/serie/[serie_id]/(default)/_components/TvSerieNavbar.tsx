@@ -10,7 +10,7 @@ const type = 'serie';
 export default function TvSerieNavbar({
   serieId,
 }: {
-  serieId: number;
+  serieId: string;
 }) {
   const common = useTranslations('common');
   const pathname = usePathname();

@@ -5,6 +5,9 @@
       "added_by": "ajouté par",
       "sort_by": "trier par",
       "go_to_film": "accéder au film",
+      "go_to_serie": "accéder à la série",
+      "go_to_user": "accéder à l'utilisateur",
+      "go_to_person": "accéder à la personne",
       "view_recommendations": "voir {count, plural, one {la reco} other {les recos}}",
       "view_directors": "voir {count, plural, one {le réalisateur} other {les réalisateurs}}",
       "no_director": "aucun réalisateur",
@@ -53,7 +56,17 @@
       "watch_film_streaming_or_download": "Regarder <important>{title}</important> en streaming ou en téléchargement légal",
       "person": "{count, plural, one {personne} other {personnes}}",
       "top_result": "meilleur resultat",
-      "user": "{count, plural, one {utilisateur} other {utilisateurs}}"
+      "user": "{count, plural, one {utilisateur} other {utilisateurs}}",
+      "reco": "{count, plural, one {reco} other {recos}}",
+      "my_recos": "mes recos",
+      "item": "{count, plural, one {élément} other {éléments}}",
+      "type": "type",
+      "complete": "compléter",
+      "completed": "complété",
+      "collection": "{count, plural, one {collection} other {collections}}",
+      "most_recent": "{gender, select, female {{count, plural, one {plus récente} other {plus récentes}}} other {{count, plural, one {plus récent} other {plus récents}}}}",
+      "most_old": "{{gender, select, female {{count, plural, one {plus ancienne} other {plus anciennes}}} other {{count, plural, one {plus ancien} other {plus anciens}}}}",
+      "known_for": "Connu pour"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",
@@ -63,7 +76,8 @@
       "playlist_not_found": "playlist introuvable",
       "user_not_found": "utilisateur introuvable",
       "film_not_found": "film introuvable",
-      "serie_not_found": "série introuvable"
+      "serie_not_found": "série introuvable",
+      "review_not_found": "critique introuvable"
     },
     "word": {
       "hello": "Bonjour",
@@ -175,6 +189,22 @@
             "delete_confirm": {
               "title": "supprimer de la guidelist",
               "description": "Êtes-vous sûr de vouloir supprimer <important>{film}</important> de votre guidelist ?"
+            }
+          }
+        },
+        "my_recos": {
+          "label": "mes recos",
+          "search": {
+            "placeholder": "rechercher dans mes recos..."
+          },
+          "modal": {
+            "delete_confirm": {
+              "title": "supprimer de mes recos",
+              "description": "Êtes-vous sûr de vouloir supprimer <important>{title}</important> de vos recos ?"
+            },
+            "complete_confirm": {
+              "title": "completer la reco",
+              "description": "Êtes-vous sûr de vouloir compléter la reco <important>{title}</important> ?"
             }
           }
         },
@@ -580,6 +610,17 @@
         "description": "{title} est une série de {creators} diffusée pour la première fois en {year}. Synopsis: {overview}",
         "description_no_creator": "{title} est une série diffusée pour la première fois en {year}. Synopsis: {overview}"
       }
+    },
+    "review": {
+      "metadata": {
+        "title": "Critique de {title} par (@{username})"
+      },
+      "create": {
+        "metadata": {
+          "title": "Écrire une critique sur {title}",
+          "description": "Partagez votre avis sur {title}."
+        }
+      }
     }
   },
   "routes": {
@@ -647,10 +688,10 @@
     }
   },
   "widgets": {
-    "user_movie_watchlist": {
+    "user_watchlist": {
       "label": "À voir"
     },
-    "user_movie_guidelist": {
+    "user_recos": {
       "label": "Reco par vos amis"
     },
     "user_friends_playlists": {

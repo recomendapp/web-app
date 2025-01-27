@@ -5,8 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
-import { useUserAcceptFollowerRequest, useUserDeclineFollowerRequest } from "@/features/user/userMutations";
-import { useUserFolloweesInfinite, useUserFollowersRequests } from "@/features/user/userQueries";
+import { useUserAcceptFollowerRequest, useUserDeclineFollowerRequest } from "@/features/client/user/userMutations";
+import { useUserFolloweesInfiniteQuery, useUserFollowersRequestsQuery } from "@/features/client/user/userQueries";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useInView } from "react-intersection-observer";
@@ -46,7 +46,7 @@ const RightPanelSocialFollows = () => {
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useUserFolloweesInfinite({
+	} = useUserFolloweesInfiniteQuery({
 		userId: user?.id,
 	});
 
@@ -93,7 +93,7 @@ const RightPanelSocialRequests = () => {
 		data: requests,
 		isLoading,
 		isError,
-	} = useUserFollowersRequests({
+	} = useUserFollowersRequestsQuery({
 		userId: user?.id,
 	});
 

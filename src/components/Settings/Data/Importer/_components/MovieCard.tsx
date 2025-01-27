@@ -1,5 +1,5 @@
 import MoviePoster from "@/components/Movie/MoviePoster";
-import ActivityIcon from "@/components/Review/ActivityIcon";
+import ActivityIcon from "@/components/review/ActivityIcon";
 import { Button } from "@/components/ui/button";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { Json, Movie, Person } from "@/types/type.db";

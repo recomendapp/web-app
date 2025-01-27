@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
-import { getProfile } from './_components/getProfile';
 import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
 import { siteConfig } from '@/config/site';
+import { getProfile } from '@/features/server/users';
 
 export async function generateMetadata({
   params,
@@ -30,5 +30,5 @@ export default async function UserLayout({
   children,
 }: UserLayoutProps) {
 
-  return <Fragment>{children}</Fragment>;
+  return children;
 }

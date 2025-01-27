@@ -10,8 +10,8 @@ import { PlaylistItem } from '@/types/type.db';
 import useDebounce from '@/hooks/use-debounce';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { usePlaylistFull, usePlaylistIsAllowedToEdit, usePlaylistItems } from '@/features/playlist/playlistQueries';
-import { useUpdatePlaylistItemChanges } from '@/features/playlist/playlistMutations';
+import { usePlaylistFull, usePlaylistIsAllowedToEdit, usePlaylistItems } from '@/features/client/playlist/playlistQueries';
+import { useUpdatePlaylistItemChanges } from '@/features/client/playlist/playlistMutations';
 
 export default function PlaylistPage({
   params,

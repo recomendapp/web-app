@@ -6,16 +6,16 @@ import { useTranslations } from "next-intl";
 import { useUI } from "@/context/ui-context";
 import HeaderRightSide from "@/components/Header/HeaderRightSide";
 import { Skeleton } from "@/components/ui/skeleton";
-import { WidgetMoviesMostRecommended } from "@/components/widgets/WidgetMoviesMostRecommended";
 import { WidgetRecomendShowcase } from "@/components/widgets/WidgetRecomendShowcase";
-import { WidgetUserMovieGuidelist } from "@/components/widgets/WidgetUserMovieGuidelist";
-import { WidgetUserMovieWatchlist } from "@/components/widgets/WidgetUserMovieWatchlist";
 import { WidgetUserFriendsPlaylists } from "@/components/widgets/WIdgetUserFriendsPlaylists";
 import { WidgetUserFeed } from "@/components/widgets/WidgetUserFeed";
 import { WidgetUserDiscovery } from "@/components/widgets/WidgetUserDiscovery";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { upperFirst } from "lodash";
+import { WidgetMostRecommended } from "@/components/widgets/WidgetMostRecommended";
+import { WidgetUserRecos } from "@/components/widgets/WidgetUserRecos";
+import { WidgetUserWatchlist } from "@/components/widgets/WidgetUserWatchlist";
 
 export default function Home() {
   const { session, user } = useAuth();
@@ -41,7 +41,7 @@ export default function Home() {
 			</div>
 			<div className="flex text-4xl font-bold col-span-full">
 			</div>
-			<WidgetMoviesMostRecommended className='col-span-full' />
+			<WidgetMostRecommended className='col-span-full' />
 			{!session ? (
 				// Only non-logged users
 				<>
@@ -54,8 +54,8 @@ export default function Home() {
 			{session ? (
 				// Only logged users
 				<>
-				<WidgetUserMovieGuidelist />
-				<WidgetUserMovieWatchlist />
+				<WidgetUserRecos />
+				<WidgetUserWatchlist />
 				<WidgetUserFriendsPlaylists />
 				<WidgetUserFeed />
 				<WidgetUserDiscovery className="h-[600px]" />

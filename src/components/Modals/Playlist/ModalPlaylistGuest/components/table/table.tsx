@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/config/icons"
-import { useDeletePlaylistGuests } from "@/features/playlist/playlistMutations"
+import { useDeletePlaylistGuests } from "@/features/client/playlist/playlistMutations"
 import toast from "react-hot-toast"
 import { useModal } from "@/context/modal-context"
 

@@ -10,11 +10,11 @@ import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Movie, Playlist } from '@/types/type.db';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modals/Modal';
-import { useAddMoviesToPlaylist } from '@/features/playlist/playlistMutations';
+import { useAddMoviesToPlaylist } from '@/features/client/playlist/playlistMutations';
 import { Icons } from '@/config/icons';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
-import { useTmdbSearchMoviesInfinite } from '@/features/tmdb/tmdbQueries';
+import { useTmdbSearchMoviesInfinite } from '@/features/client/tmdb/tmdbQueries';
 import { useLocale } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -135,7 +135,7 @@ export function ModalPlaylistQuickAdd({
 											<p className='line-clamp-1 break-words text-muted-foreground'>
 											{movie?.directors?.map((director, index: number) => (
 												<span key={index} className={`${index > 0 ? 'before:content-[",_"]' : ''}`}>
-													{director.name}
+													{director?.name}
 												</span>
 											)) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
 											</p>

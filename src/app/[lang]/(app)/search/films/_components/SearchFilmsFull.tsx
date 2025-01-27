@@ -8,7 +8,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { useTmdbSearchMoviesInfinite } from '@/features/tmdb/tmdbQueries';
+import { useTmdbSearchMoviesInfinite } from '@/features/client/tmdb/tmdbQueries';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
 

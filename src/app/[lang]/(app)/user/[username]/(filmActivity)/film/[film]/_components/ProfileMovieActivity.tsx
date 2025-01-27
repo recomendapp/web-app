@@ -5,9 +5,7 @@ import { useLocale } from "next-intl";
 // COMPONENTS
 import MovieCard from "@/components/Movie/Card/MovieCard";
 
-import MovieReviewForm from "@/components/Review/form/MovieReviewForm";
 import { useQuery } from "@tanstack/react-query";
-import { UserMovieActivity } from "@/types/type.db";
 import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function ProfileMovieActivity({
@@ -53,7 +51,7 @@ export default function ProfileMovieActivity({
 				{activity?.movie && <MovieCard movie={activity?.movie} width={96} height={144} />}
 			</div>
 	    	<div className="w-full bg-muted h-fit p-4 rounded-md">
-				{activity?.review && <MovieReviewForm review={activity?.review} />}
+				{/* {activity?.review && <MovieReviewForm review={activity?.review} />} */}
 			</div>
 		</div>
 	)
