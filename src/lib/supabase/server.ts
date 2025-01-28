@@ -3,12 +3,11 @@ import {
   createServerClient as createServerClientSupabase,
 } from '@supabase/ssr';
 import { routing } from '../i18n/routing';
-import { getLocale } from 'next-intl/server';
 
 
 export const createServerClient = async (localeParam?: string) => {
   const cookieStore = await cookies();
-  const locale = localeParam ?? await getLocale() ?? routing.defaultLocale;
+  const locale = localeParam ?? routing.defaultLocale;
   return createServerClientSupabase<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

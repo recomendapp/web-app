@@ -1,8 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
-import { ThemeProviderProps as ThemeProviderPropsPrimitive} from 'next-themes/dist/types';
+import { ThemeProvider as NextThemesProvider, ThemeProviderProps as NextThemesProviderProps } from 'next-themes';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { UIProvider } from './ui-context';
 import NextTopLoader from 'nextjs-toploader';
@@ -10,7 +9,7 @@ import { Toaster } from 'react-hot-toast';
 import { ModalProvider } from './modal-context';
 import { SidebarProvider } from '@/components/ui/sidebar';
 
-interface ThemeProviderProps extends ThemeProviderPropsPrimitive {
+interface ThemeProviderProps extends NextThemesProviderProps {
   defaultLayout?: number[];
   cookieSidebarOpen?: boolean;
   cookieRightPanelOpen?: boolean;

@@ -82,12 +82,12 @@ export default function PlaylistTable({
   const { mutateAsync: updatePlaylistItem } = useMutation({
     mutationFn: async ({ id, rank } : { id: UniqueIdentifier, rank: number }) => {
       if (!id || !rank) throw Error('Missing id or rank');
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('playlist_items')
         .update({ rank })
         .eq('id', id)
       if (error) throw error;
-      return data;
+      // return data;
     },
   });
   const [activeId, setActiveId] = React.useState<UniqueIdentifier | null>(null);

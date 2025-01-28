@@ -26,6 +26,7 @@ import { getMediaDetails } from '@/hooks/get-media-details';
 import { useUserRecosCompleteMutation, useUserRecosDeleteMutation } from '@/features/client/user/userMutations';
 import toast from 'react-hot-toast';
 import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
+import { ModalPlaylistAdd } from '@/components/Modals/actions/ModalPlaylistAdd';
 
 interface DataTableRowActionsProps {
   table: Table<UserRecosAggregated>;
@@ -116,6 +117,12 @@ export function DataTableRowActions({
           >
             <Icons.send className='w-4' />
             {upperFirst(common('messages.send_to_friend'))}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => openModal(ModalPlaylistAdd, { mediaId: data?.media_id!, mediaType: data?.media_type!, mediaTitle: media.title })}
+          >
+            <Icons.addPlaylist className='w-4' />
+            {upperFirst(common('messages.add_to_playlist'))}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>

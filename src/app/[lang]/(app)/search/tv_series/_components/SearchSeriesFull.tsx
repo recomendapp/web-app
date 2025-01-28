@@ -45,9 +45,9 @@ export default function SearchSeriesFull({ query }: { query: string }) {
   if (isLoading) {
     return (
       <div className="flex flex-col gap-2 max-h-screen overflow-hidden">
-        {Array.from({ length: 20 }).map((item: any) => (
+        {Array.from({ length: 20 }).map((_, i) => (
           <div
-            key={item}
+            key={i}
             className="text-sm flex justify-between p-2 rounded-md"
           >
             <div className="flex items-center gap-2">

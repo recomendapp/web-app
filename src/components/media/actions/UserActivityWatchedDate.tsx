@@ -85,8 +85,7 @@ const UserActivityWatchedDate = React.forwardRef<
           mode="single"
           selected={new Date(activity.watched_date ?? '')}
           onSelect={async (date) => date && await handleUpdateDate(date)}
-          initialFocus
-          captionLayout="dropdown-buttons"
+          className="rounded-md border"
           fromDate={new Date('1900-01-01')}
           toDate={new Date()}
         />

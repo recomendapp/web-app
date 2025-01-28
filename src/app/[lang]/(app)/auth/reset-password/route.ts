@@ -1,4 +1,4 @@
-import { createRouteHandlerClient } from '@/lib/supabase/route';
+import { createServerClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   try {
     const code = requestUrl.searchParams.get('code');
     if (!code) throw new Error('No code provided');
-    const supabase = createRouteHandlerClient();
+    const supabase = await createServerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (error) throw error;
 

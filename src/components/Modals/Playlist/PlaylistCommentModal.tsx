@@ -32,7 +32,7 @@ const PlaylistCommentModal = ({
 	const { mutateAsync: updatePlaylistItem } = useMutation({
 		mutationFn: async ({ comment } : { comment: string}) => {
 			if (!playlistItem?.id) throw Error('Missing id');
-			const { data, error } = await supabase
+			const { error } = await supabase
 			  .from('playlist_items')
 			  .update({
 				comment: comment,
@@ -40,7 +40,7 @@ const PlaylistCommentModal = ({
 			  .eq('id', playlistItem.id)
 			  .select(`*`)
 			if (error) throw error;
-			return data;
+			// return data;
 		},
 	})
 

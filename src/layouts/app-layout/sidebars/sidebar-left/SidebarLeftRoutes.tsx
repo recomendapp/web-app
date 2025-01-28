@@ -42,7 +42,7 @@ const SidebarCollectionContainerIcon = ({
 }
 
 export const SidebarLeftRoutes = () => {
-	const { user } = useAuth();
+	const { user, session } = useAuth();
 	const { open } = useSidebar();
 	const routesDic = useTranslations('routes');
 	const common = useTranslations('common');
@@ -149,7 +149,6 @@ export const SidebarLeftRoutes = () => {
 		}
 	}, [inView, hasNextPage, playlists, fetchNextPage]);
 
-
 	return (
 		<>
 		<SidebarGroup>
@@ -171,7 +170,7 @@ export const SidebarLeftRoutes = () => {
 		</SidebarGroup>
 		<SidebarSeparator />
 		<SidebarGroup className="overflow-hidden">
-			{user ? (
+			{session ? (
 			<SidebarMenu className={`h-full ${!open ? "items-center" : ""}`}>
 				<SidebarMenuItem>
 					<SidebarMenuButton tooltip={"Bibliothèque"} isActive={pathname === '/collection'} asChild>

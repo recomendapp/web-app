@@ -2,8 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import NavigationButton from '../NavigationButton/NavigationButton';
-// import SearchBar from '@/components/Search/SearchBar';
-import SearchBar from '@/components/Search/SearchBarOLD';
+import SearchBar from '@/components/Search/SearchBar';
 import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
 import { cn } from '@/lib/utils';
 import { SidebarTrigger } from '../ui/sidebar';
@@ -19,7 +18,6 @@ export default function HeaderLeftSide({
       <SidebarTrigger className='md:hidden'/>
       <NavigationButton />
       {pathname.startsWith('/search') && <SearchBar />}
-      {/* <SearchBar /> */}
       {pathname == '/collection' && <PlaylistCreateButton />}
     </div>
   );

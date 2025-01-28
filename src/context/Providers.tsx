@@ -32,7 +32,7 @@ export default async function Provider({
   const layout = cookiesStore.get("ui:layout");
   const sidebarOpen = (await cookies()).get("ui-sidebar:open");
   const rightPanelOpen = cookiesStore.get("ui-right-panel:open");
-  const defaultLayout = layout ? JSON.parse(layout.value) : undefined
+  const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <SupabaseProvider locale={locale}>
