@@ -87,7 +87,7 @@ export function DataTableRowActions({
               <Icons.eye className='w-4' />
               {data?.media_type === 'movie'
                 ? capitalize(common('messages.go_to_film'))
-                : data?.media_type === 'tv_serie'
+                : data?.media_type === 'tv_series'
                 ? capitalize(common('messages.go_to_serie'))
                 : data?.media_type === 'person'
                 ? capitalize(common('messages.go_to_person'))

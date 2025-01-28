@@ -13,7 +13,7 @@ import { ProfileFolloweesButton } from './ProfileFolloweesButton';
 import { Icons } from '@/config/icons';
 
 export default async function ProfileHeader({ profile }: { profile: Profile }) {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

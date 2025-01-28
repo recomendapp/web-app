@@ -33,17 +33,22 @@ export type MediaMovie = Database['public']['Views']['media_movie']['Row'] & {
 	cast?: MoviePerson[];
 };
 
-export type MediaTvSerie = Database['public']['Views']['media_tv_serie']['Row'] & {
+export type MediaMovieAggregateCredits = Database['public']['Views']['media_movie_aggregate_credits']['Row'] & {
+};
+
+export type MediaTvSeries = Database['public']['Views']['media_tv_series']['Row'] & {
 	videos?: Database['public']['Tables']['tmdb_tv_series_videos']['Row'][];
 	production_countries?: Database['public']['Tables']['tmdb_tv_series_production_countries']['Row'][];
 	spoken_languages?: Database['public']['Tables']['tmdb_tv_series_spoken_languages']['Row'][];
 	cast?: TvSeriePerson[];
 };
 
+export type MediaTvSeriesAggregateCredits = any;
+
 export type MediaPerson = Database['public']['Views']['media_person']['Row'] & {
 };
 
-export type Media = MediaMovie & MediaTvSerie & MediaPerson & {
+export type Media = MediaMovie & MediaTvSeries & MediaPerson & {
 };
 
 export type MediaPersonCombinedCredits = Database['public']['Views']['media_person_combined_credits']['Row'] & {
@@ -120,6 +125,25 @@ export type Person = Database['public']['Views']['person']['Row'] & Database['pu
 } | null | undefined;
 /* -------------------------------------------------------------------------- */
 
+/* -------------------------------- PLAYLIST -------------------------------- */
+export type Playlist = Database['public']['Tables']['playlists']['Row'] & {
+	user?: User;
+	guests?: PlaylistGuest[];
+	collaborators?: PlaylistGuest[] | any;
+	items?: PlaylistItem[] | any;
+} | null | undefined;
+
+export type PlaylistItem = Database['public']['Tables']['playlist_items']['Row'] & Database['public']['Views']['playlist_items_media']['Row'] & {
+	media?: Movie;
+	playlist?: Playlist;
+	user?: User;
+} | null | undefined;
+
+export type PlaylistGuest = Database['public']['Tables']['playlist_guests']['Row'] & {
+	user?: User;
+	playlist?: Playlist;
+} | null | undefined;
+/* -------------------------------------------------------------------------- */
 
 
 
@@ -186,27 +210,11 @@ export type MovieTranslation = Database['public']['Tables']['tmdb_movie_translat
 export type PersonTranslation = Database['public']['Tables']['tmdb_person_translation']['Row'] | null | undefined;
 
 // *========== PLAYLIST ==========* //
-export type Playlist = Database['public']['Tables']['playlist']['Row'] & {
-	user?: User;
-	guests?: PlaylistGuest[];
-	collaborators?: PlaylistGuest[] | any;
-	items?: PlaylistItem[] | any;
-} | null | undefined;
 
 export type PlaylistType = 'personal' | 'shared';
 
 // *========== PLAYLIST_ITEM ==========* //
-export type PlaylistItem = Database['public']['Tables']['playlist_item']['Row'] & {
-	movie?: Movie;
-	playlist?: Playlist;
-	user?: User;
-} | null | undefined;
 
-// *========== PLAYLIST_GUEST ==========* //
-export type PlaylistGuest = Database['public']['Tables']['playlist_guest']['Row'] & {
-	user?: User;
-	playlist?: Playlist;
-} | null | undefined;
 
 // *========== FEED_CAST_CREW ==========* //
 export type FeedCastCrew = Database['public']['Views']['feed_cast_crew']['Row'] & {

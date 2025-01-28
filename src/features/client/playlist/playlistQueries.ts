@@ -1,7 +1,7 @@
 import { useSupabaseClient } from "@/context/supabase-context";
 import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { playlistKeys } from "./playlistKeys";
-import { Playlist, PlaylistGuest } from "@/types/type.db";
+import { Playlist, PlaylistGuest, PlaylistItem } from "@/types/type.db";
 import { useAuth } from "@/context/auth-context";
 
 export const usePlaylistFull = (playlistId: number) => {
@@ -13,21 +13,18 @@ export const usePlaylistFull = (playlistId: number) => {
 		queryFn: async () => {
 			if (!playlistId) throw Error('Missing playlist id');
 			const { data, error } = await supabase
-				.from('playlist')
+				.from('playlists')
 				.select(`
 					*,
 					user(*),
-					items:playlist_item(
-						*,
-						movie(*)
-					),
-					guests:playlist_guest(
+					items:playlist_items_media(*),
+					guests:playlist_guests(
 						*,
 						user:user(*)
 					)
 				`)
 				.eq('id', playlistId)
-				.order('rank', { ascending: true, referencedTable: 'playlist_item' })
+				.order('rank', { ascending: true, referencedTable: 'playlist_items_media' })
 				.returns<Playlist[]>()
 				.single();
 			if (error || !data) throw error;
@@ -59,13 +56,11 @@ export const usePlaylistItems = (playlistId?: number) => {
 		queryFn: async () => {
 			if (!playlistId) throw Error('Missing playlist id');
 			const { data, error } = await supabase
-				.from('playlist_item')
-				.select(`
-					*,
-					movie(*)
-				`)
+				.from('playlist_items_media')
+				.select(`*`)
 				.eq('playlist_id', playlistId)
 				.order('rank', { ascending: true })
+				.returns<PlaylistItem[]>()
 			if (error) throw error;
 			return data;
 		},

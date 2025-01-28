@@ -1,23 +1,27 @@
 import { notFound, redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
-import { getMovie } from '@/features/server/movies';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import CreateReviewForm from '@/components/review/CreateReviewFrom';
+import { getMovie } from '@/features/server/media/mediaQueries';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: {
-    lang: string;
-    film_id: string;
-  };
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{
+      lang: string;
+      film_id: string;
+    }>;
+  }
+) {
+  const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.create.metadata' });
   const { id: movieId } = getIdFromSlug(params.film_id);
-  const movie = await getMovie(movieId, params.lang);
+  const movie = await getMovie({
+		id: movieId,
+		locale: params.lang,
+	});
 
   if (!movie) return { title: upperFirst(common('errors.film_not_found')) };
 
@@ -27,16 +31,17 @@ export async function generateMetadata({
   };
 }
 
-export default async function CreateReview({
-  params,
-}: {
-  params: {
-    lang: string;
-    film_id: string;
-  };
-}) {
+export default async function CreateReview(
+  props: {
+    params: Promise<{
+      lang: string;
+      film_id: string;
+    }>;
+  }
+) {
+  const params = await props.params;
   const { id: movieId } = getIdFromSlug(params.film_id);
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
 
   const {
     data: { user },
@@ -56,7 +61,10 @@ export default async function CreateReview({
 
   if (review) redirect(`/film/${movieId}/review/${review.id}`);
 
-  const movie = await getMovie(movieId, params.lang);
+  const movie = await getMovie({
+    id: movieId,
+    locale: params.lang,
+  });
 
   if (!movie) notFound();
 

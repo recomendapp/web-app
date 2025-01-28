@@ -33,7 +33,7 @@ const PlaylistCommentModal = ({
 		mutationFn: async ({ comment } : { comment: string}) => {
 			if (!playlistItem?.id) throw Error('Missing id');
 			const { data, error } = await supabase
-			  .from('playlist_item')
+			  .from('playlist_items')
 			  .update({
 				comment: comment,
 			  })

@@ -3,12 +3,12 @@ export const getType = (obj: any) => {
 	if ('username' in obj && 'full_name' in obj) return ('user');
 	// FRIENDS
 	else if ('friend' in obj) return ('user_riend');
-	// PLAYLIST
-	else if ('user_id' in obj && 'title' in obj && 'description' in obj && 'private' in obj && 'poster_url' in obj && 'featured' in obj) return ('playlist');
-	// PLAYLIST_GUEST
-	else if ('playlist_id' in obj && 'user_id' in obj && 'created_at' in obj && 'edit' in obj) return ('playlist_guest');
-	// PLAYLIST_ITEM
-	else if ('comment' in obj && 'created_at' in obj && 'movie_id' in obj && 'playlist_id' in obj && 'rank' in obj && 'user_id' in obj) return ('playlist_item');
+	// PLAYLISTS
+	else if ('user_id' in obj && 'title' in obj && 'description' in obj && 'private' in obj && 'poster_url' in obj) return ('playlists');
+	// PLAYLIST_GUESTS
+	else if ('playlist_id' in obj && 'user_id' in obj && 'created_at' in obj && 'edit' in obj) return ('playlist_guests');
+	// PLAYLIST_ITEMS
+	else if ('comment' in obj && 'created_at' in obj && 'media_id' in obj && 'media_type' in obj && 'playlist_id' in obj && 'rank' in obj && 'user_id' in obj) return ('playlist_items');
 	// USER_WATCHLIST
 	else if ('comment' in obj && 'created_at' in obj && 'media_id' in obj && 'media_type' in obj && 'status' in obj) return ('user_watchlist');
 	// TMDB_PERSON

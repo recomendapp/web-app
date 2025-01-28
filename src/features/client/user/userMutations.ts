@@ -204,6 +204,10 @@ export const useUserActivityInsertMutation = () => {
 				if (!oldData) return oldData;
 				return oldData.filter((reco: any) => !(reco.media_id === data.media_id && reco.media_type === data.media_type));
 			});
+
+			queryClient.invalidateQueries({
+				queryKey: userKeys.feed({ userId: data.user_id })
+			})
 		}
 	});
 };
@@ -233,6 +237,10 @@ export const useUserActivityDeleteMutation = () => {
 				mediaId: data.media_id,
 				mediaType: data.media_type,
 			}), null);
+
+			queryClient.invalidateQueries({
+				queryKey: userKeys.feed({ userId: data.user_id })
+			})
 		}
 	});
 };
@@ -281,6 +289,10 @@ export const useUserActivityUpdateMutation = () => {
 					userId: data.user_id,
 				})
 			});
+
+			queryClient.invalidateQueries({
+				queryKey: userKeys.feed({ userId: data.user_id })
+			})
 		}
 	});
 };

@@ -4,13 +4,13 @@ import ProfileNavbar from './_components/ProfileNavbar';
 import ProfileLastActivity from './_components/ProfileLastActivity';
 import ProfilePrivateAccountCard from './_components/ProfilePrivateAccountCard';
 import { getProfile } from '@/features/server/users';
-import ProfileFavoriteFilms from './_components/ProfileFavoriteFilms';
 
-export default async function UserPage({
-  params,
-}: {
-  params: { username: string };
-}) {
+export default async function UserPage(
+  props: {
+    params: Promise<{ username: string }>;
+  }
+) {
+  const params = await props.params;
   const user = await getProfile(params.username);
   if (!user) notFound();
   return (
@@ -22,7 +22,6 @@ export default async function UserPage({
             <ProfileNavbar profile={user} />
           </div>
           <div className="p-4 flex flex-col gap-4">
-            {/* <ProfileFavoriteFilms profile={user} /> */}
             <ProfileLastActivity profile={user} />
           </div>
         </>

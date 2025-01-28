@@ -2,16 +2,21 @@ import { Button } from "@/components/ui/button";
 import { useMap } from "../../../context/map-context"
 import { TriangleAlert, XIcon } from "lucide-react";
 import MoviePoster from "@/components/Movie/MoviePoster";
-import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import Loader from "@/components/Loader/Loader";
 import { MovieTrailerButton } from "@/app/[lang]/(app)/film/[film_id]/(default)/_components/MovieHeader";
 import Link from "next/link";
 import { RuntimeTooltip } from "@/components/utils/RuntimeTooltip";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
-import { MovieAction } from "@/components/Movie/Actions/MovieAction";
 import { useMediaMovieDetailsQuery } from "@/features/client/media/mediaQueries";
 import { IconMediaRating } from "@/components/media/icons/IconMediaRating";
+import UserActivityRating from "@/components/media/actions/UserActivityRating";
+import UserActivityLike from "@/components/media/actions/UserActivityLike";
+import UserActivityWatch from "@/components/media/actions/UserActivityWatch";
+import UserWatchlist from "@/components/media/actions/UserWatchlist";
+import UserActivityWatchedDate from "@/components/media/actions/UserActivityWatchedDate";
+import MediaActionPlaylistAdd from "@/components/media/actions/MediaActionPlaylistAdd";
+import UserRecos from "@/components/media/actions/UserRecos";
 
 export const MovieWidget = () => {
 	const {
@@ -152,7 +157,19 @@ export const MovieWidget = () => {
 							</div>
 						</div>
 					</div>
-					<MovieAction filmId={movie.id} all />
+					<div className="flex justify-between gap-2 px-4 pb-4">
+						<div className="flex gap-2 overflow-x-auto items-center">
+						<UserActivityRating mediaId={movie.id} mediaType={'movie'} />
+						<UserActivityLike mediaId={movie.id} mediaType={'movie'} />
+						<UserActivityWatch mediaId={movie.id} mediaType={'movie'} />
+						<UserWatchlist mediaId={movie.id} mediaType={'movie'} />
+						<UserActivityWatchedDate mediaId={movie.id} mediaType={'movie'} />
+						</div>
+						<div className="flex gap-2 items-center">
+						<MediaActionPlaylistAdd mediaId={movie.id} mediaType={'movie'} mediaTitle={movie.title} />
+						<UserRecos mediaId={movie.id} mediaType={'movie'} mediaTitle={movie.title} />
+						</div>
+					</div>
 				</div>
 			)}
 		</div>

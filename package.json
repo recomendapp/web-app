@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS=--no-deprecation next dev",
+    "dev": "NODE_OPTIONS=--no-deprecation next dev --turbopack",
     "build": "next build",
     "start": "NODE_OPTIONS=--no-deprecation next start",
     "lint": "next lint",
@@ -72,8 +72,8 @@
     "@tiptap/react": "^2.1.8",
     "@tiptap/starter-kit": "^2.1.8",
     "@types/node": "20.3.1",
-    "@types/react": "^18.2.14",
-    "@types/react-dom": "18.2.6",
+    "@types/react": "19.0.8",
+    "@types/react-dom": "19.0.3",
     "autoprefixer": "10.4.14",
     "class-variance-authority": "^0.7.0",
     "clsx": "^1.2.1",
@@ -85,7 +85,7 @@
     "embla-carousel-autoplay": "^8.3.0",
     "embla-carousel-react": "^8.3.0",
     "eslint": "9.13.0",
-    "eslint-config-next": "^15.0.1",
+    "eslint-config-next": "15.1.6",
     "firebase": "^11.0.1",
     "fuse.js": "^7.0.0",
     "graphql": "^16.8.1",
@@ -96,15 +96,15 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.453.0",
     "maplibre-gl": "^3.6.1",
-    "next": "^14.2.1",
+    "next": "15.1.6",
     "next-intl": "^3.23.5",
     "next-themes": "^0.3.0",
     "nextjs-toploader": "^1.4.2",
     "postcss": "^8.4.31",
     "prettier": "^3.0.3",
-    "react": "^18.2.0",
+    "react": "19.0.0",
     "react-day-picker": "8.10.1",
-    "react-dom": "^18.2.0",
+    "react-dom": "19.0.0",
     "react-fast-marquee": "^1.6.5",
     "react-hook-form": "^7.53.1",
     "react-hot-toast": "^2.4.1",
@@ -143,7 +143,9 @@
     "webpack": "^5.89.0"
   },
   "overrides": {
-    "cookie": "^0.7.2"
+    "cookie": "^0.7.2",
+    "@types/react": "19.0.8",
+    "@types/react-dom": "19.0.3"
   },
   "resolutions": {
     "node-gyp-build": "^4.7.1"

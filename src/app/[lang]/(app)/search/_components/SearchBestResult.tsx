@@ -95,7 +95,7 @@ export default function SearchBestResult({
                     <p className="text-muted-foreground">
                       {new Date(results.pages[0].best_result.release_date).getFullYear()}
                     </p>
-                  ) : results.pages[0].best_result.media_type === 'tv_serie'
+                  ) : results.pages[0].best_result.media_type === 'tv_series'
                   ? (
                     <p className="text-muted-foreground">
                       {new Date(results.pages[0].best_result.first_air_date).getFullYear()}

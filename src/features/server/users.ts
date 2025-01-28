@@ -3,7 +3,7 @@ import { Profile } from "@/types/type.db";
 import { cache } from "react";
 
 export const getProfile = cache(async (username: string) => {
-	const supabase = createServerClient();
+	const supabase = await createServerClient();
 	const { data: user, error } = await supabase
 		.from('profile')
 		.select('*')

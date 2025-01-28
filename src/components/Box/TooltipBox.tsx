@@ -17,7 +17,7 @@ export const TooltipBox: React.FC<TooltipBoxProps> = ({
 	tooltipTrigger,
 	...props
 }) => {
-	if (!tooltip) return children as JSX.Element;
+	if (!tooltip) return children;
 
 	let tooltipContentProps: TooltipContentProps = {};
 

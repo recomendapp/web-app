@@ -1,6 +1,6 @@
 import { LucideProps } from "lucide-react";
 import { ContextMenu as ContextMenuPrimitive, ContextMenuContent, ContextMenuItem, ContextMenuTrigger, ContextMenuShortcut } from "../ui/context-menu"
-import { ForwardRefExoticComponent, RefAttributes } from "react";
+import { ForwardRefExoticComponent, RefAttributes, JSX } from "react";
 import { WithLink } from "../utils/WithLink";
 
 export interface ContextMenuProps extends React.ComponentProps<typeof ContextMenuPrimitive> {

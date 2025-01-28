@@ -107,7 +107,7 @@ export function UserPlaylists({
               </div>
               <div>
                 <p className="line-clamp-1">{playlist?.title}</p>
-                <p>{playlist?.items_count} films</p>
+                {/* <p>{playlist?.items_count} films</p> */}
               </div>
             </Link>
           </Button>

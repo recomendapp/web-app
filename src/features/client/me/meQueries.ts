@@ -4,148 +4,77 @@ import { MediaType, UserRecosAggregated, PlaylistType, UserFriend } from "@/type
 import { meKeys } from "./meKeys";
 
 /**
- * Fetches the user friends to send a recommendation
- * @param userId The user id
- * @param mediaId The media id
- * @param mediaType The media type
- * @returns The user friends
- */
-// export const useMeSendReco = ({
-// 	userId,
-// 	mediaId,
-// 	mediaType,
-// } : {
-// 	userId?: string;
-// 	mediaId?: number;
-// 	mediaType?: MediaType;
-// }) => {
-// 	const supabase = useSupabaseClient();
-// 	return useQuery({
-// 		queryKey: meKeys.sendReco({
-// 			mediaId: mediaId as number,
-// 			mediaType: mediaType as MediaType,
-// 		}),
-// 		queryFn: async () => {
-// 			if (!userId) throw Error('Missing user id');
-// 			if (!mediaId) throw Error('Missing media id');
-// 			if (!mediaType) throw Error('Missing media type');
-// 			const { data, error } = await supabase
-// 				.from('user_friend')
-// 				.select(`
-// 					id,
-// 					friend:friend_id!inner(
-// 						*,
-// 						user_activity(count),
-// 						user_recos!user_recos_user_id_fkey(count)
-// 					)
-// 				`)
-// 				.match({
-// 					'user_id': userId,
-// 					'friend.user_activity.media_id': mediaId,
-// 					'friend.user_activity.media_type': mediaType,
-// 					'friend.user_recos.media_id': mediaId,
-// 					'friend.user_recos.media_type': mediaType,
-// 					'friend.user_recos.sender_id': userId,
-// 					'friend.user_recos.status': 'active',
-// 				})
-// 				.returns<(UserFriend & {
-// 					friend: {
-// 						user_activity: {
-// 							count: number;
-// 						}[];
-// 						user_recos: {
-// 							count: number;
-// 						}[];
-// 					};
-// 				})[]>();
-// 			if (error) throw error;
-// 			const output = data?.map((userFriend) => ({
-// 				friend: userFriend.friend,
-// 				as_watched: userFriend.friend.user_activity[0]?.count > 0,
-// 				already_sent: userFriend.friend.user_recos[0]?.count > 0,
-// 			}));
-// 			return output;
-// 		},
-// 		enabled: !!userId && !!mediaId && !!mediaType,
-// 	});
-// }
-
-
-
-/* -------------------------------------------------------------------------- */
-/*                                     OLD                                    */
-/* -------------------------------------------------------------------------- */
-
-/**
  * Fetches the user playlists to add a movie
  * @param userId The user id
  * @param movieId The movie id
  * @returns The user playlists
  */
-export const useMeAddMovieToPlaylist = ({
-	movieId,
+export const useMeAddMediaToPlaylist = ({
+	mediaId,
+	mediaType,
 	userId,
 	type = 'personal',
 } : {
-	movieId?: number;
+	mediaId: number;
+	mediaType: MediaType;
 	userId?: string;
 	type: PlaylistType;
 }) => {
 	const supabase = useSupabaseClient();
 	return useQuery({
-		queryKey: meKeys.addMovieToPlaylistType({ movieId: movieId as number, type: type }),
+		queryKey: meKeys.addMediaToPlaylistType({ mediaId: mediaId, mediaType: mediaType, type: type }),
 		queryFn: async () => {
 			if (!userId) throw Error('Missing user id');
-			if (!movieId) throw Error('Missing movie id');
 			if (!type) throw Error('Missing type');
 
 			if (type === 'personal') { // personal
 				const { data, error } = await supabase
-					.from('playlist')
-					.select('*, playlist_item(count)')
+					.from('playlists')
+					.select('*, playlist_items(count)')
 					.match({
 						'user_id': userId,
-						'playlist_item.movie_id': movieId,
+						'playlist_items.media_id': mediaId,
+						'playlist_items.media_type': mediaType,
 					})
 					.order('updated_at', { ascending: false })
 				if (error) throw error;
-				const output = data?.map(({ playlist_item, ...playlist }) => ({
+				const output = data?.map(({ playlist_items, ...playlist }) => ({
 					playlist: playlist,
-					already_added: playlist_item[0]?.count > 0,
+					already_added: playlist_items[0]?.count > 0,
 				}));
 				return output;
 			} else { // shared
-				const { data, error } = await supabase
-					.from('playlist_like')
-					.select(`
-						id,
-						playlist!inner(
-							*,
-							playlist_guest!inner(*),
-							user!inner(*),
-							playlist_item(count)
-						)
-					`)
-					.match({
-						'user_id': userId,
-						'playlist.playlist_guest.user_id': userId,
-						'playlist.playlist_guest.edit': true,
-						'playlist.user.premium': true,
-						'playlist.playlist_item.movie_id': movieId,
-					})
-					.order('updated_at', {
-						referencedTable: 'playlist',
-						ascending: false 
-					})
-				if (error) throw error;
-				const output = data?.map(({ playlist: { playlist_item, playlist_guest, user, ...playlist }, ...playlist_like }) => ({
-					playlist: playlist,
-					already_added: playlist_item[0]?.count > 0,
-				}));
-				return output;
+				// const { data, error } = await supabase
+				// 	.from('playlist_like')
+				// 	.select(`
+				// 		id,
+				// 		playlist!inner(
+				// 			*,
+				// 			playlist_guest!inner(*),
+				// 			user!inner(*),
+				// 			playlist_item(count)
+				// 		)
+				// 	`)
+				// 	.match({
+				// 		'user_id': userId,
+				// 		'playlist.playlist_guest.user_id': userId,
+				// 		'playlist.playlist_guest.edit': true,
+				// 		'playlist.user.premium': true,
+				// 		'playlist.playlist_item.movie_id': movieId,
+				// 	})
+				// 	.order('updated_at', {
+				// 		referencedTable: 'playlist',
+				// 		ascending: false 
+				// 	})
+				// if (error) throw error;
+				// const output = data?.map(({ playlist: { playlist_item, playlist_guest, user, ...playlist }, ...playlist_like }) => ({
+				// 	playlist: playlist,
+				// 	already_added: playlist_item[0]?.count > 0,
+				// }));
+				// return output;
 			}
 		},
-		enabled: !!userId && !!movieId,
+		enabled: !!userId && !!mediaId && !!mediaType,
 	});
 }
 

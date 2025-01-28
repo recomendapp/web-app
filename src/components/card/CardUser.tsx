@@ -18,7 +18,7 @@ interface CardUserProps
 const CardUserDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardUserProps, "variant">
->(({ className, user, children, ...props }, ref) => {
+>(({ className, user, linked, children, ...props }, ref) => {
 	return (
 		<WithLink
 			ref={ref}

@@ -1,15 +1,15 @@
 import { Media, Movie } from "@/types/type.db"
 import { Icons } from "@/config/icons";
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuShortcut, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
 import { WithLink } from "../utils/WithLink";
 import { useModal } from "@/context/modal-context";
-import { ModalMoviePlaylist } from "../Modals/Movie/Actions/ModalMoviePlaylist";
 import { Fragment } from "react";
 import { ModalShare } from "../Modals/Share/ModalShare";
 import { getMediaDetails } from "@/hooks/get-media-details";
 import { ModalRecoSend } from "../Modals/actions/ModalRecoSend";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { ModalPlaylistAdd } from "../Modals/actions/ModalPlaylistAdd";
 
 interface Item {
 	icon: React.ElementType;
@@ -45,11 +45,11 @@ export const ContextMenuMedia = ({
 			// 		label: director.name,
 			// 	})) : undefined,
 			// },
-			// {
-			// 	icon: Icons.addPlaylist,
-			// 	onClick: () => openModal(ModalMoviePlaylist, { movieId: movie?.id!, movie: movie }),
-			// 	label: 'Ajouter à une playlist',
-			// },
+			{
+				icon: Icons.addPlaylist,
+				onClick: () => openModal(ModalPlaylistAdd, { mediaId: media.id, mediaType: media.media_type, mediaTitle: mediaDetails.title }),
+				label: 'Ajouter à une playlist',
+			},
 			{
 				icon: Icons.send,
 				onClick: () => openModal(ModalRecoSend, { mediaId: media.id, mediaType: media.media_type, mediaTitle: mediaDetails.title }),

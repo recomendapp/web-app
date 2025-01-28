@@ -612,7 +612,7 @@ export const useUserPlaylistsInfiniteQuery = ({
 			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
 	  		let to = from - 1 + mergedFilters.resultsPerPage;
 			let request = supabase
-				.from('playlist')
+				.from('playlists')
 				.select(`*`)
 				.eq('user_id', userId)
 				.range(from, to)
@@ -794,7 +794,7 @@ export const useUserPlaylists = ({
 		queryFn: async () => {
 			if (!userId) throw Error('Missing user id');
 			let request = supabase
-				.from('playlist')
+				.from('playlists')
 				.select('*')
 				.eq('user_id', userId)
 			

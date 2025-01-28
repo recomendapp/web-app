@@ -66,7 +66,9 @@
       "collection": "{count, plural, one {collection} other {collections}}",
       "most_recent": "most recent",
       "most_old": "most old",
-      "known_for": "known for"
+      "known_for": "known for",
+      "release_date": "release date",
+      "vote_average": "vote average"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
@@ -77,7 +79,9 @@
       "user_not_found": "user not found",
       "film_not_found": "film not found",
       "serie_not_found": "serie not found",
-      "review_not_found": "review not found"
+      "review_not_found": "review not found",
+      "person_not_found": "person not found",
+      "wrong_arguments": "wrong arguments"
     },
     "word": {
       "hello": "Hello",
@@ -216,7 +220,7 @@
           "modal": {
             "delete_confirm": {
               "title": "delete from the watchlist",
-              "description": "Are you sure you want to delete <important>{film}</important> from your watchlist?"
+              "description": "Are you sure you want to delete <important>{title}</important> from your watchlist?"
             }
           }
         },
@@ -228,7 +232,7 @@
           "modal": {
             "delete_confirm": {
               "title": "delete from the likes",
-              "description": "Are you sure you want to delete <important>{film}</important> from your likes?"
+              "description": "Are you sure you want to delete <important>{title}</important> from your likes?"
             }
           }
         }
@@ -247,7 +251,7 @@
       "modal": {
         "delete_confirm": {
           "title": "delete from the playlist",
-          "description": "Are you sure you want to delete <important>{film}</important> from your playlist?"
+          "description": "Are you sure you want to delete <important>{title}</important> from your playlist?"
         }
       }
     },

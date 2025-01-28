@@ -32,6 +32,6 @@
     "src/components/elements/ModalFollowers",
     "src/components/RightSidebar",
     "worker/index.js"
-  ],
+, "src/app/api/revalidate"  ],
   "exclude": ["node_modules"]
 }

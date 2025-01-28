@@ -9,6 +9,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
 import {
@@ -40,6 +41,7 @@ import UserWatchlist from '@/components/media/actions/UserWatchlist';
 import UserActivityWatchedDate from '@/components/media/actions/UserActivityWatchedDate';
 import UserRecos from '@/components/media/actions/UserRecos';
 import { IconMediaRating } from '@/components/media/icons/IconMediaRating';
+import MediaActionPlaylistAdd from '@/components/media/actions/MediaActionPlaylistAdd';
 
 export default function MovieHeader({
   movie,
@@ -143,7 +145,7 @@ export default function MovieHeader({
           <UserActivityWatchedDate mediaId={movie.id} mediaType={'movie'} />
         </div>
         <div className="flex gap-2 items-center">
-          {/* <MoviePlaylistAction movieId={filmId} /> */}
+          <MediaActionPlaylistAdd mediaId={movie.id} mediaType={'movie'} mediaTitle={movie.title} />
           <UserRecos mediaId={movie.id} mediaType={'movie'} mediaTitle={movie.title} />
         </div>
       </div>
@@ -178,11 +180,9 @@ export function MovieTrailerButton({
       </TooltipBox>
       <DialogContent className="@xl/movie-header:max-w-[60vw]">
         <DialogHeader className="relative flex flex-row gap-4 items-center">
-          <div className="absolute w-full flex justify-center -top-12 @xl/movie-header:-top-16 pointer-events-none">
-            <h2 className="text-accent-1-foreground text-2xl @xl/movie-header:text-5xl font-bold rounded-md bg-accent-1 px-4 py-2 pointer-events-auto">
-              TRAILER
-            </h2>
-          </div>
+          <DialogTitle className="absolute left-1/2 transform -translate-x-1/2 -top-12 @xl/movie-header:-top-16 text-accent-1-foreground text-2xl @xl/movie-header:text-5xl font-bold rounded-md bg-accent-1 px-4 py-2 pointer-events-auto">
+            TRAILER
+          </DialogTitle>
           <div className=" pt-4">
             <Select
               onValueChange={setSelectedTailer}

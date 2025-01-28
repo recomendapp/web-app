@@ -255,7 +255,7 @@ export function ReviewTitle({
 	maxLength={MAX_TITLE_LENGTH}
 	className={`
 		w-full h-fit  outline-none focus-visible:ring-0 overflow-hidden resize-none text-5xl font-semibold text-center text-accent-1
-		${editable ? 'bg-background border-accent-1 border-dashed' : 'bg-muted border-transparent'}
+		${editable ? 'bg-background border-dashed' : 'bg-muted border-transparent'}
 	`}
     />
   );

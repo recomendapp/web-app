@@ -20,7 +20,7 @@ interface CardReviewProps
 const CardReviewDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardReviewProps, "variant">
->(({ className, review, children, ...props }, ref) => {
+>(({ className, review, linked, children, ...props }, ref) => {
 	const now = useNow({ updateInterval: 1000 * 10 });
 	const format = useFormatter();
 	return (

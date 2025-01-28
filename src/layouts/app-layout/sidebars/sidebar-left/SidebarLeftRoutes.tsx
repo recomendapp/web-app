@@ -211,9 +211,9 @@ export const SidebarLeftRoutes = () => {
 										children: (
 											<>
 												{playlist.title}
-												<span className="ml-4 text-muted-foreground">
+												{/* <span className="ml-4 text-muted-foreground">
 													{playlist.items_count}
-												</span>
+												</span> */}
 											</>
 										)
 									}}
@@ -233,7 +233,7 @@ export const SidebarLeftRoutes = () => {
 										</SidebarCollectionContainerIcon>
 										<div className={`line-clamp-1 transition-all duration-300 ${!open ? "opacity-0 hidden" : "opacity-100"}`}>
 											<p className="line-clamp-1">{playlist.title}</p>
-											<p className='text-muted-foreground line-clamp-1'>{common('word.film_count', { count: playlist.items_count })}</p>
+											{/* <p className='text-muted-foreground line-clamp-1'>{common('word.film_count', { count: playlist.items_count })}</p> */}
 										</div>
 									</Link>
 								</SidebarMenuButton>

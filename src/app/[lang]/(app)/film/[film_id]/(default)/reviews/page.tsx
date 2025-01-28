@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, use } from 'react';
 import {
   Select,
   SelectContent,
@@ -28,14 +28,15 @@ const getValidatedOrder = (order: string | null): z.infer<typeof orderSchema> =>
   return orderSchema.safeParse(order).success ? order as z.infer<typeof orderSchema> : "updated_at-desc";
 };
 
-export default function Reviews({
-  params,
-}: {
-  params: {
-    lang: string;
-    film_id: string;
+export default function Reviews(
+  props: {
+    params: Promise<{
+      lang: string;
+      film_id: string;
+    }>
   }
-}) {
+) {
+  const params = use(props.params);
   const { id: movieId } = getIdFromSlug(params.film_id);
   const common = useTranslations('common');
   const searchParams = useSearchParams();

@@ -4,11 +4,12 @@ import { getTranslations } from 'next-intl/server';
 import { siteConfig } from '@/config/site';
 import { getProfile } from '@/features/server/users';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { lang: string, username: string };
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ lang: string, username: string }>;
+  }
+) {
+  const params = await props.params;
   const common = await getTranslations({ lang: params.lang, namespace: 'common' });
   const t = await getTranslations({ lang: params.lang, namespace: 'pages' });
   const user = await getProfile(params.username);

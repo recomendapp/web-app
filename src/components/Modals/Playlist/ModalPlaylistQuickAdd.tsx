@@ -8,17 +8,17 @@ import { Input } from '@/components/ui/input';
 import { Check } from 'lucide-react';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Movie, Playlist } from '@/types/type.db';
+import { Media, Playlist } from '@/types/type.db';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modals/Modal';
-import { useAddMoviesToPlaylist } from '@/features/client/playlist/playlistMutations';
 import { Icons } from '@/config/icons';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
-import { useTmdbSearchMoviesInfinite } from '@/features/client/tmdb/tmdbQueries';
+import { useTmdbSearchMoviesInfinite, useTmdbSearchMultiInfinite } from '@/features/client/tmdb/tmdbQueries';
 import { useLocale } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
+import { useAddMediasToPlaylist } from '@/features/client/playlist/playlistMutations';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -33,7 +33,7 @@ export function ModalPlaylistQuickAdd({
 	const { user } = useAuth();
 	const locale = useLocale();
 	const { closeModal } = useModal();
-	const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
+	const [selectedMovies, setSelectedMovies] = useState<Media[]>([]);
 	const [comment, setComment] = useState<string>('');
 	const [search, setSearch] = useState<string>('');
 	const searchQuery = useDebounce(search, 500);
@@ -46,12 +46,12 @@ export function ModalPlaylistQuickAdd({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useTmdbSearchMoviesInfinite({
+	} = useTmdbSearchMultiInfinite({
 		query: searchQuery,
 		locale: locale,
 	})
 
-	const addMoviesToPlaylist = useAddMoviesToPlaylist({
+	const addMoviesToPlaylist = useAddMediasToPlaylist({
 		userId: user?.id,
 		playlist: playlist,
 	});
@@ -64,7 +64,7 @@ export function ModalPlaylistQuickAdd({
 
 	function submit() {
 		addMoviesToPlaylist.mutate({
-			movies: selectedMovies,
+			medias: selectedMovies,
 			comment: comment,
 		}, {
 			onSuccess: () => {
@@ -89,7 +89,7 @@ export function ModalPlaylistQuickAdd({
 					Ajouter un ou plusieurs films à <strong>{playlist?.title}</strong>
 				</ModalDescription>
 			</ModalHeader>
-			<ModalBody className='!p-0 border-t bg-popover text-popover-foreground'>
+			{/* <ModalBody className='!p-0 border-t bg-popover text-popover-foreground'>
 				<InputSearch
 				value={search}
 				onChange={(e) => setSearch(e.target.value)}
@@ -161,7 +161,7 @@ export function ModalPlaylistQuickAdd({
 					 {(isLoading || isFetchingNextPage) ? <Icons.loader /> : null}
 					</div>
 				</ScrollArea>
-			</ModalBody>
+			</ModalBody> */}
 			<div className='px-2 pt-2'>
 				<Label htmlFor="comment" className='sr-only'>Commentaire</Label>
 				<Input

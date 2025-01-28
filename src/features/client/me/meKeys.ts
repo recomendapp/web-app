@@ -46,11 +46,13 @@ export const meKeys = {
 	 * @param movieId The movie id
 	 * @returns List of playlists
 	 */
-	addMovieToPlaylist: ({
-		movieId,
+	addMediaToPlaylist: ({
+		mediaId,
+		mediaType,
 	} : {
-		movieId: number;
-	}) => [...meKeys.playlists(), 'add', movieId] as const,
+		mediaId: number;
+		mediaType: MediaType;
+	}) => [...meKeys.playlists(), 'add', mediaType, mediaId] as const,
 
 	/**
 	 * Fetches playlists to add a movie with a type
@@ -58,11 +60,13 @@ export const meKeys = {
 	 * @param type The playlist type
 	 * @returns List of playlists
 	 */
-	addMovieToPlaylistType: ({
-		movieId,
+	addMediaToPlaylistType: ({
+		mediaId,
+		mediaType,
 		type,
 	} : {
-		movieId: number;
+		mediaId: number;
+		mediaType: MediaType;
 		type: PlaylistType;
-	}) => [...meKeys.addMovieToPlaylist({ movieId }), type] as const,
+	}) => [...meKeys.addMediaToPlaylist({ mediaId, mediaType }), type] as const,
 }

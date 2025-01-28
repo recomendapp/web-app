@@ -26,12 +26,13 @@ interface CardMediaProps
 		posterClassName?: string;
 		disableActions?: boolean;
 		showRating?: boolean;
+		hideMediaType?: boolean;
 	}
 
 const CardMediaDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardMediaProps, "variant">
->(({ className, media, children, posterClassName, ...props }, ref) => {
+>(({ className, media, children, linked, showRating, posterClassName, ...props }, ref) => {
 	const mediaDetails = getMediaDetails(media);
 	return (
 		<Card
@@ -70,7 +71,7 @@ CardMediaDefault.displayName = "CardMediaDefault";
 const CardMediaPoster = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardMediaProps, "variant">
->(({ className, media, linked, disableActions, activity, children, ...props }, ref) => {
+>(({ className, media, linked, disableActions, showRating, activity, children, ...props }, ref) => {
 	const { device } = useUI();
 	const [isHovered, setIsHovered] = React.useState(false);
 	const mediaDetails = getMediaDetails(media);
@@ -141,7 +142,7 @@ CardMediaPoster.displayName = "CardMediaPoster";
 const CardMediaRow = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardMediaProps, "variant">
->(({ className, media, activity, linked, children, ...props }, ref) => {
+>(({ className, media, hideMediaType, activity, linked, showRating, children, ...props }, ref) => {
 	const mediaDetails = getMediaDetails(media);
 	const mediaUrlPrefix = getMediaUrlPrefix(media.media_type);
 	return (
@@ -169,7 +170,7 @@ const CardMediaRow = React.forwardRef<
 				/>
 			</div>
 			<div className='space-y-1'>
-				<BadgeMedia type={media.media_type} />
+				{!hideMediaType ? <BadgeMedia type={media.media_type} /> : null}
 				<div className="flex items-center gap-2">
 					<Link
 					href={mediaDetails.url}
@@ -230,7 +231,7 @@ CardMediaRow.displayName = "CardMediaRow";
 const CardMedia = React.forwardRef<
 	HTMLDivElement,
 	CardMediaProps
->(({ className, media, onClick, showRating = true, linked = true, variant = "default", ...props }, ref) => {
+>(({ className, media, hideMediaType = true, onClick, showRating = true, linked = true, variant = "default", ...props }, ref) => {
 	const mediaDetails = getMediaDetails(media);
 	const router = useRouter();
 	const customOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -242,11 +243,11 @@ const CardMedia = React.forwardRef<
 	return (
 	<ContextMenuMedia media={media}>
 		{variant === "default" ? (
-			<CardMediaDefault ref={ref} className={cn(linked && 'cursor-pointer', className)} media={media} linked={linked} onClick={customOnClick} showRating={showRating} {...props} />
+			<CardMediaDefault ref={ref} className={cn(linked ? 'cursor-pointer' : '', className)} media={media} linked={linked} onClick={customOnClick} showRating={showRating} {...props} />
 		) : variant == "poster" ? (
-			<CardMediaPoster ref={ref} className={cn(linked && 'cursor-pointer', className)} media={media} linked={linked} onClick={customOnClick} showRating={showRating} {...props} />
+			<CardMediaPoster ref={ref} className={cn(linked ? 'cursor-pointer' : '', className)} media={media} linked={linked} onClick={customOnClick} showRating={showRating} {...props} />
 		) : variant == "row" ? (
-			<CardMediaRow ref={ref} className={cn(linked && 'cursor-pointer', className)} media={media} linked={linked} onClick={customOnClick} showRating={showRating} {...props} />
+			<CardMediaRow ref={ref} className={cn(linked ? 'cursor-pointer' : '', className)} media={media} linked={linked} onClick={customOnClick} showRating={showRating} hideMediaType={hideMediaType} {...props} />
 		) : null}
 	</ContextMenuMedia>
 	);

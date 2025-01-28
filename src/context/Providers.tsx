@@ -21,16 +21,16 @@ export default async function Provider({
   children: React.ReactNode;
   locale: string;
 }) {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const { data: { session } } = await supabase.auth.getSession();
   // NEXT-INTL
   const userMessages = await getMessages({ locale });
   const fallbackMessages = await getMessages({ locale: getFallbackLanguage({ locale }) });
   const messages = deepmerge(fallbackMessages, userMessages);
   // UI
-  const cookiesStore = cookies();
+  const cookiesStore = await cookies();
   const layout = cookiesStore.get("ui:layout");
-  const sidebarOpen = cookies().get("ui-sidebar:open");
+  const sidebarOpen = (await cookies()).get("ui-sidebar:open");
   const rightPanelOpen = cookiesStore.get("ui-right-panel:open");
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined
   return (

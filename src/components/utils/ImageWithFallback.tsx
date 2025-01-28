@@ -75,7 +75,7 @@ export function Fallback({
         <span className="text-muted-foreground text-clamp-2 text-center">
           {alt}
         </span>
-      ) : type == 'tv_serie' ? (
+      ) : type == 'tv_series' ? (
         <span className="text-muted-foreground text-clamp-2 text-center">
           {alt}
         </span>

@@ -57,7 +57,7 @@ HTMLAnchorElement,
       <CardContent className='p-0'>
         <p className="line-clamp-1 break-words group-hover:text-primary/80">{playlist.title}</p>
         <p className="line-clamp-1 text-sm italic text-muted-foreground">
-          {playlist.items_count} film{Number(playlist.items_count) > 1 && 's'}
+          {/* {playlist.items_count} film{Number(playlist.items_count) > 1 && 's'} */}
         </p>
       </CardContent>
     </Card>

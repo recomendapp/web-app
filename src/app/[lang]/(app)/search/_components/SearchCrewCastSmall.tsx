@@ -46,9 +46,9 @@ export default function SearchCrewCastSmall({
         
       <div className="grid grid-cols-2 gap-2 @sm/search-widget:grid-cols-3 @md/search-widget:grid-cols-4 @lg/search-widget:grid-cols-5 @2xl/search-widget:grid-cols-6 @4xl/search-widget:grid-cols-7">
         {showSkeleton ? (
-          Array.from({ length: 4 }).map((item: any) => (
+          Array.from({ length: 4 }).map((_, i) => (
             <div
-              key={item}
+              key={i}
               className="text-sm flex justify-between p-2 rounded-md"
             >
               <div className="flex items-center gap-2">
@@ -63,7 +63,7 @@ export default function SearchCrewCastSmall({
               </div>
             </div>
           ))
-        ) : results?.pages.map((page, index) => (
+        ) : results?.pages.map((page) => (
           page.persons.slice(0, 5).map((item) => (
             <Link
               key={item.id}

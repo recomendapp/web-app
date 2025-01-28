@@ -43,7 +43,10 @@ type ViewExtensions = {
     }[],
     media_type: MediaType,
   },
-  media_tv_serie: {
+  media_movie_aggregate_credits: {
+    media: Media,
+  },
+  media_tv_series: {
     id: number,
     created_by?: Person[],
     genres?: {
@@ -60,6 +63,12 @@ type ViewExtensions = {
     media: Media,
 }
  /* -------------------------------------------------------------------------- */
+
+  /* -------------------------------- PLAYLIST -------------------------------- */
+  playlist_items_media: {
+  media: Media,
+  },
+  /* -------------------------------------------------------------------------- */
   movie: {
     id: number,
     directors?: Person[],

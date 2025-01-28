@@ -5,14 +5,15 @@ import { upperFirst } from 'lodash';
 import { getMediaDetails } from '@/hooks/get-media-details';
 import Review from '@/components/review/Review';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: {
-    lang: string;
-    review_id: number;
-  };
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{
+      lang: string;
+      review_id: number;
+    }>;
+  }
+) {
+  const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.metadata' });
   const review = await getReview(params.review_id, params.lang);
@@ -23,14 +24,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function ReviewPage({
-  params,
-}: {
-  params: {
-    lang: string;
-	  review_id: number;
-  };
-}) {
+export default async function ReviewPage(
+  props: {
+    params: Promise<{
+      lang: string;
+        review_id: number;
+    }>;
+  }
+) {
+  const params = await props.params;
   const review = await getReview(params.review_id, params.lang);
   if (!review) notFound();
   return <Review reviewServer={review} />;

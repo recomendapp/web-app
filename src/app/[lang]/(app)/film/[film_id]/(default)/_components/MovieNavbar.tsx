@@ -8,28 +8,28 @@ import { usePathname } from 'next/navigation';
 const type = 'film';
 
 export default function MovieNavbar({
-  movieId,
+  movieSlug,
 }: {
-  movieId: string;
+  movieSlug: string;
 }) {
   const common = useTranslations('common');
   const pathname = usePathname();
-  const regex = `^/${type}/${movieId}(-[a-z0-9-]*)?`;
+  const regex = `^/${type}/${movieSlug}(-[a-z0-9-]*)?`;
   const routes = [
     {
       label: upperFirst(common('word.details')),
       active: pathname.match(new RegExp(regex + '$')),
-      href: `/${type}/${movieId}`,
+      href: `/${type}/${movieSlug}`,
     },
     {
       label: upperFirst(common('messages.review', { count: 2 })),
       active: pathname.match(new RegExp(regex + '/reviews')),
-      href: `/${type}/${movieId}/reviews`,
+      href: `/${type}/${movieSlug}/reviews`,
     },
     {
       label: upperFirst(common('word.playlist', { count: 2 })),
       active: pathname.match(new RegExp(regex + '/playlists')),
-      href: `/${type}/${movieId}/playlists`,
+      href: `/${type}/${movieSlug}/playlists`,
     },
   ];
 

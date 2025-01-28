@@ -16,13 +16,13 @@ export default function Senders({
 
 	return (
 		<div
-			onClick={() => openModal(ModalRecosSenders, { comments: row.original?.senders })}
-			className="flex w-fit items-center -space-x-2  cursor-pointer "
+		onClick={() => openModal(ModalRecosSenders, { comments: row.original?.senders })}
+		className="flex w-fit items-center -space-x-2  cursor-pointer "
 		>
 			<div className="flex justify-end flex-row-reverse -space-x-4 space-x-reverse">
-				{row.original?.senders?.slice(0, senderToShow).reverse().map((item: any) => (
-				<div key={item?.id} className='relative'>
-					<UserAvatar className=" border-2 border-background" avatar_url={item.user.avatar_url} username={item.user.username} />
+				{row.original?.senders?.slice(0, senderToShow).reverse().map((item, i) => (
+				<div key={i} className='relative'>
+					<UserAvatar className=" border-2 border-background" avatar_url={item.user?.avatar_url} username={item.user?.username} />
 					{item?.comment && <Text size={15} className='absolute -top-1 -right-1 rounded-full bg-background text-accent-1 p-1'/>}
 				</div>
 				))}

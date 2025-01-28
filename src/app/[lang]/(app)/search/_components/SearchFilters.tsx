@@ -34,8 +34,8 @@ export default function SearchFilters() {
     },
     {
       label: 'Séries',
-      filter: 'series',
-      active: searchFilter === 'series'
+      filter: 'tv_series',
+      active: searchFilter === 'tv_series'
     },
     {
       label: 'Playlists',
@@ -74,7 +74,7 @@ export default function SearchFilters() {
     const segments = pathname.split('/');
     if (segments.length > 2) {
       const filter = segments[2];
-      if (['films', 'series', 'playlists', 'users', 'crew-cast'].includes(filter)) {
+      if (['films', 'tv_series', 'playlists', 'users', 'crew-cast'].includes(filter)) {
         return filter;
       }
     }

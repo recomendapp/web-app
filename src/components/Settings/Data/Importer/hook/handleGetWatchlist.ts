@@ -12,7 +12,7 @@ export const handleGetWatchlist = async (
 	}[],
 	userId: string
 ) => {
-	const supabase = createServerClient();
+	const supabase = await createServerClient();
 
     const success = [];
 

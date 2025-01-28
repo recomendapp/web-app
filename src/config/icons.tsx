@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { el } from 'date-fns/locale';
 import {
+  AlertCircleIcon,
   AlertTriangle,
   ArchiveIcon,
   ArchiveRestoreIcon,
@@ -241,6 +242,7 @@ export const Icons = {
   arrowRight: ArrowRight,
   help: HelpCircle,
   pizza: Pizza,
+  error: AlertCircleIcon,
   minus: MinusIcon,
   twitter: Twitter,
   archive: ArchiveIcon,

@@ -84,7 +84,7 @@ export function PlaylistForm({
       }
     ) => {
       const {data: response, error } = await supabase
-        .from('playlist')
+        .from('playlists')
         .insert(payload)
         .select(`*`)
         .single()
@@ -124,7 +124,7 @@ export function PlaylistForm({
     }) => {
       if (!playlistId) throw Error('Missing activity id');
       const {data: response, error } = await supabase
-        .from('playlist')
+        .from('playlists')
         .update(payload)
         .eq('id', playlistId)
         .select(`*`)

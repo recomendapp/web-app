@@ -49,9 +49,12 @@ export function ShowPlaylists({ filmId }: { filmId: number }) {
       else ascending = true;
 
       const { data } = await supabase
-        .from('playlist')
-        .select('*, playlist_item!inner(*)')
-        .eq('playlist_item.movie_id', filmId)
+        .from('playlists')
+        .select('*, playlist_items!inner(*)')
+        .match({
+          'playlist_items.media_id': filmId,
+          'playlist_items.media_type': 'movie',
+        })
         .range(from, to)
         .order(column, { ascending });
 
