@@ -1,7 +1,7 @@
 import { createServerClient } from "@/lib/supabase/server";
 import { cache } from "react";
 
-export const getPlaylist = cache(async (id: string) => {
+export const getPlaylist = cache(async (id: number) => {
 	const supabase = await createServerClient();
 	const { data: playlist, error } = await supabase
 		.from('playlists')

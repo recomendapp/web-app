@@ -17,7 +17,6 @@ export const getMovie = async ({
 }) => {
 	return await cache(
 		async () => {
-			console.log('GET MOVIES', new Date());
 			const supabase = await createClient(locale);
 			const { data: film, error } = await supabase
 				.from('media_movie')

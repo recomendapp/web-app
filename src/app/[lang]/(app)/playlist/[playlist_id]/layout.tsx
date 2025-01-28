@@ -7,7 +7,7 @@ import { siteConfig } from '@/config/site';
 
 export async function generateMetadata(
     props: {
-        params: Promise<{lang: string, playlist_id: string }>;
+        params: Promise<{lang: string, playlist_id: number }>;
     }
 ) {
     const params = await props.params;
@@ -26,7 +26,7 @@ export async function generateMetadata(
 export default async function PlaylistLayout(
     props: {
         children: ReactNode;
-        params: Promise<{lang: string, playlist_id: string }>;
+        params: Promise<{lang: string, playlist_id: number }>;
     }
 ) {
     const params = await props.params;

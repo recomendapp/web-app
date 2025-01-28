@@ -85,7 +85,7 @@ export default function PlaylistTable({
       const { error } = await supabase
         .from('playlist_items')
         .update({ rank })
-        .eq('id', id)
+        .eq('id', id as number)
       if (error) throw error;
       // return data;
     },

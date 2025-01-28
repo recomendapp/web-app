@@ -86,8 +86,9 @@ const UserActivityWatchedDate = React.forwardRef<
           selected={new Date(activity.watched_date ?? '')}
           onSelect={async (date) => date && await handleUpdateDate(date)}
           className="rounded-md border"
-          fromDate={new Date('1900-01-01')}
-          toDate={new Date()}
+          startMonth={new Date('1900-01-01')}
+          endMonth={new Date()}
+          hidden={[{ before: new Date('1900-01-01')}]}
         />
       </PopoverContent>
     </Popover>

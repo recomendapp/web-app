@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState, use } from 'react';
+import * as React from 'react';
 import { useAuth } from '@/context/auth-context';
 import { PlaylistItem } from '@/types/type.db';
 import useDebounce from '@/hooks/use-debounce';
@@ -15,25 +15,26 @@ export default function PlaylistPage(
     params: Promise<{lang: string, playlist_id: number }>;
   }
 ) {
-  const params = use(props.params);
+  const params = React.use(props.params);
   const supabase = useSupabaseClient();
   const { user } = useAuth();
-  const [shouldRefresh, setShouldRefresh] = useState(false);
+  const [shouldRefresh, setShouldRefresh] = React.useState(false);
   const debouncedRefresh = useDebounce(shouldRefresh, 200);
   const { data: playlist, refetch } = usePlaylistFull(Number(params.playlist_id));
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(playlist?.id);
   const { data: playlistItems } = usePlaylistItems(playlist?.id);
-  const [playlistItemsRender, setPlaylistItemsRender] = useState<PlaylistItem[]>(playlistItems || []);
+  const [playlistItemsRender, setPlaylistItemsRender] = React.useState<PlaylistItem[]>(playlistItems || []);
   const { mutate: updatePlaylistItemChanges } = useUpdatePlaylistItemChanges({
     playlistId: Number(params.playlist_id),
   });
 
-  const eventBuffer = useRef<RealtimePostgresChangesPayload<{
+  const eventBuffer = React.useRef<RealtimePostgresChangesPayload<{
     [key: string]: any;
   }>[] | null>(null);
-  const eventBufferTimeout = useRef<NodeJS.Timeout | null>(null);
+  const eventBufferTimeout = React.useRef<NodeJS.Timeout | null>(null);
 
-  const handleEventBuffering = (payload: RealtimePostgresChangesPayload<{
+  // const handleEventBuffering = (payload: RealtimePostgresChangesPayload<{
+  const handleEventBuffering = React.useCallback((payload: RealtimePostgresChangesPayload<{
     [key: string]: any;
   }>) => {
     if (!eventBuffer.current) {
@@ -51,9 +52,9 @@ export default function PlaylistPage(
       });
       eventBuffer.current = null;
     }, 10);
-  };
+  }, [updatePlaylistItemChanges]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isAllowedToEdit) {
       const playlistItemsChanges = supabase
         .channel(`movie_playlist:${params.playlist_id}`)
@@ -76,14 +77,14 @@ export default function PlaylistPage(
     }
   }, [params.playlist_id, playlist, user, refetch, isAllowedToEdit, handleEventBuffering, supabase]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (debouncedRefresh) {
       refetch();
       setShouldRefresh(false);
     }
   }, [debouncedRefresh, refetch]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (playlistItems) {
       setPlaylistItemsRender(playlistItems);
     }
