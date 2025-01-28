@@ -27,11 +27,6 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    "src/components/tiptap/Tiptap.tsx",
-    "src/components/elements/ModalFollowers",
-    "src/components/RightSidebar",
-    "worker/index.js"
-, "src/app/api/revalidate"  ],
+  ],
   "exclude": ["node_modules"]
 }
