@@ -9,14 +9,14 @@ import Link from "next/link";
 import { RuntimeTooltip } from "@/components/utils/RuntimeTooltip";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useMediaMovieDetailsQuery } from "@/features/client/media/mediaQueries";
-import { IconMediaRating } from "@/components/media/icons/IconMediaRating";
-import UserActivityRating from "@/components/media/actions/UserActivityRating";
-import UserActivityLike from "@/components/media/actions/UserActivityLike";
-import UserActivityWatch from "@/components/media/actions/UserActivityWatch";
-import UserWatchlist from "@/components/media/actions/UserWatchlist";
-import UserActivityWatchedDate from "@/components/media/actions/UserActivityWatchedDate";
-import MediaActionPlaylistAdd from "@/components/media/actions/MediaActionPlaylistAdd";
-import UserRecos from "@/components/media/actions/UserRecos";
+import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
+import UserActivityRating from "@/components/Media/actions/UserActivityRating";
+import UserActivityLike from "@/components/Media/actions/UserActivityLike";
+import UserActivityWatch from "@/components/Media/actions/UserActivityWatch";
+import UserWatchlist from "@/components/Media/actions/UserWatchlist";
+import UserActivityWatchedDate from "@/components/Media/actions/UserActivityWatchedDate";
+import MediaActionPlaylistAdd from "@/components/Media/actions/MediaActionPlaylistAdd";
+import UserRecos from "@/components/Media/actions/UserRecos";
 
 export const MovieWidget = () => {
 	const {

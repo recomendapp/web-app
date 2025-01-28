@@ -6,7 +6,7 @@ import Link from "next/link";
 import { getMediaDetails } from "@/hooks/get-media-details";
 import { Card } from "@/components/ui/card";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import ReviewForm from "@/components/review/ReviewForm";
+import ReviewForm from "@/components/Review/ReviewForm";
 import { useUserReviewQuery } from "@/features/client/user/userQueries";
 
 export default function Review({

@@ -32,14 +32,14 @@ import { MediaTvSeries, TvSerie } from '@/types/type.db';
 import { useModal } from '@/context/modal-context';
 import { upperFirst } from 'lodash';
 import { useLocale, useTranslations } from 'next-intl';
-import UserActivityLike from '@/components/media/actions/UserActivityLike';
-import UserActivityWatch from '@/components/media/actions/UserActivityWatch';
-import UserActivityWatchedDate from '@/components/media/actions/UserActivityWatchedDate';
-import UserActivityRating from '@/components/media/actions/UserActivityRating';
-import UserRecos from '@/components/media/actions/UserRecos';
-import UserWatchlist from '@/components/media/actions/UserWatchlist';
-import { IconMediaRating } from '@/components/media/icons/IconMediaRating';
-import MediaActionPlaylistAdd from '@/components/media/actions/MediaActionPlaylistAdd';
+import UserActivityLike from '@/components/Media/actions/UserActivityLike';
+import UserActivityWatch from '@/components/Media/actions/UserActivityWatch';
+import UserActivityWatchedDate from '@/components/Media/actions/UserActivityWatchedDate';
+import UserActivityRating from '@/components/Media/actions/UserActivityRating';
+import UserRecos from '@/components/Media/actions/UserRecos';
+import UserWatchlist from '@/components/Media/actions/UserWatchlist';
+import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
+import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlaylistAdd';
 
 export default function TvSerieHeader({
   serie,

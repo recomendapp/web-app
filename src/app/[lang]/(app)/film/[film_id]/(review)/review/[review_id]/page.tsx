@@ -3,7 +3,7 @@ import { getReview } from '@/features/server/reviews';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { getMediaDetails } from '@/hooks/get-media-details';
-import Review from '@/components/review/Review';
+import Review from '@/components/Review/Review';
 
 export async function generateMetadata(
   props: {

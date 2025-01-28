@@ -7,7 +7,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
 import { FeedCastCrew, Movie } from "@/types/type.db";
-import { ContextMenuMedia } from "@/components/context-menu/ContextMenuMedia";
+import { ContextMenuMedia } from "@/components/ContextMenu/ContextMenuMedia";
 import { getMediaDetails } from "@/hooks/get-media-details";
 
 interface FeedCastCrewItemProps

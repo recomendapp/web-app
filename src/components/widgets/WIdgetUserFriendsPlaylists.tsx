@@ -1,7 +1,7 @@
 import { useAuth } from "@/context/auth-context";
 import { useUserPlaylistsFriendsInfinite } from "@/features/client/user/userQueries";
 import { cn } from "@/lib/utils"
-import { CardPlaylist } from "../card/CardPlaylist";
+import { CardPlaylist } from "../Card/CardPlaylist";
 import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 

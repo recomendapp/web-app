@@ -23,8 +23,8 @@ import { useAuth } from "@/context/auth-context";
 import { useTranslations } from "next-intl";
 import { useWidgetMostRecommended } from "@/features/client/widget/widgetQueries";
 import { ModalRecoSend } from "../Modals/actions/ModalRecoSend";
-import { BadgeMedia } from "../badge/BadgeMedia";
-import { ContextMenuMedia } from "../context-menu/ContextMenuMedia";
+import { BadgeMedia } from "../Badge/BadgeMedia";
+import { ContextMenuMedia } from "../ContextMenu/ContextMenuMedia";
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
 

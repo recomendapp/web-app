@@ -3,7 +3,7 @@ import { createServerClient } from '@/lib/supabase/server';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
-import CreateReviewForm from '@/components/review/CreateReviewFrom';
+import CreateReviewForm from '@/components/Review/CreateReviewFrom';
 import { getTvSeries } from '@/features/server/media/mediaQueries';
 
 export async function generateMetadata(

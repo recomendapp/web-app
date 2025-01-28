@@ -14,7 +14,7 @@ import { useTranslations } from 'next-intl';
 import { capitalize, upperFirst } from 'lodash';
 import { getMediaDetails } from '@/hooks/get-media-details';
 import { Item } from './data-table-item';
-import { BadgeMedia } from '@/components/badge/BadgeMedia';
+import { BadgeMedia } from '@/components/Badge/BadgeMedia';
 
 export const Columns = (): ColumnDef<PlaylistItem>[] => {
   const common = useTranslations('common');

@@ -14,7 +14,7 @@ import {
 	ChartTooltipContent,
   } from "@/components/ui/chart"
 import UserCard from "@/components/User/UserCard/UserCard";
-import ActivityIcon from "@/components/review/ActivityIcon";
+import ActivityIcon from "@/components/Review/ActivityIcon";
 import { Card } from "@/components/ui/card";
 
 const chartConfig = {

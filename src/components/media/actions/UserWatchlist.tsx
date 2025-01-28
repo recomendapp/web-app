@@ -13,7 +13,7 @@ import { useUserWatchlistDeleteMutation, useUserWatchlistInsertMutation } from "
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { ContextMenuWatchlistAction } from "../../context-menu/ContextMenuWatchlistAction";
+import { ContextMenuWatchlistAction } from "../../ContextMenu/ContextMenuWatchlistAction";
 
 interface UserWatchlistProps
 	extends React.ComponentProps<typeof Button> {

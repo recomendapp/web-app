@@ -6,7 +6,7 @@ import { UserActivity } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
 import { capitalize } from 'lodash';
 import { Item } from './data-table-item';
-import { BadgeMedia } from '@/components/badge/BadgeMedia';
+import { BadgeMedia } from '@/components/Badge/BadgeMedia';
 
 export const Columns = (): ColumnDef<UserActivity>[] => {
   const common = useTranslations('common');

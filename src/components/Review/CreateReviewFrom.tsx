@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import ReviewForm from '@/components/review/ReviewForm';
+import ReviewForm from '@/components/Review/ReviewForm';
 import { getMediaUrl } from '@/hooks/get-media-details';
 
 export default function CreateReviewForm({

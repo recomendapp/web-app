@@ -11,7 +11,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Card } from '@/components/ui/card';
 import { getMediaDetails } from '@/hooks/get-media-details';
-import { BadgeMedia } from '@/components/badge/BadgeMedia';
+import { BadgeMedia } from '@/components/Badge/BadgeMedia';
 
 export default function SearchBestResult({
   query,

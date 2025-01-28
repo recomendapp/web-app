@@ -5,16 +5,16 @@ import { Card } from "../ui/card";
 import { Media, UserActivity } from "@/types/type.db";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import Link from "next/link";
-import { ContextMenuMedia } from "../context-menu/ContextMenuMedia";
+import { ContextMenuMedia } from "../ContextMenu/ContextMenuMedia";
 import { getMediaDetails, getMediaUrlPrefix } from "@/hooks/get-media-details";
 import { TooltipBox } from "../Box/TooltipBox";
 import { Button } from "../ui/button";
-import { BadgeMedia } from "../badge/BadgeMedia";
+import { BadgeMedia } from "../Badge/BadgeMedia";
 import { Icons } from "@/config/icons";
 import { useRouter } from "next/navigation";
-import UserActivityWatch from "../media/actions/UserActivityWatch";
-import UserWatchlist from "../media/actions/UserWatchlist";
-import { IconMediaRating } from "../media/icons/IconMediaRating";
+import UserActivityWatch from "../Media/actions/UserActivityWatch";
+import UserWatchlist from "../Media/actions/UserWatchlist";
+import { IconMediaRating } from "../Media/icons/IconMediaRating";
 import { useUI } from "@/context/ui-context";
 
 interface CardMediaProps

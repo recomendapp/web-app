@@ -7,8 +7,8 @@ import { WithLink } from "../utils/WithLink";
 import { CardUser } from "./CardUser";
 import { useFormatter, useNow } from "next-intl";
 import { JSONContent } from "@tiptap/react";
-import ActionReviewLike from "../review/actions/ActionReviewLike";
-import { IconMediaRating } from "../media/icons/IconMediaRating";
+import { IconMediaRating } from "../Media/icons/IconMediaRating";
+import ActionReviewLike from "@/components/Review/actions/ActionReviewLike";
 
 interface CardReviewProps
 	extends React.ComponentProps<typeof Card> {
