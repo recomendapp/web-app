@@ -65,6 +65,7 @@ const Tiptap = ({
       onCharacterCountChange(editor.storage.characterCount.characters());
       setInitBodyLength(true);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editor, onCharacterCountChange]);
 
   return (

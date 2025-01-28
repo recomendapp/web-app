@@ -48,6 +48,7 @@ export const Item = React.forwardRef<
 		</div>
 	);
 })
+Item.displayName = 'Item';
 
 
 const Credits = ({

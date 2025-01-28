@@ -79,7 +79,7 @@ const RightPanelSocialFollows = () => {
 			) : (isLoading || followees === undefined) ? (
 				<Icons.loader className='w-8 h-8 mx-auto' />
 			) : isError ? (
-				<div className='text-center text-muted-foreground'>Une erreur s'est produite</div>
+				<div className='text-center text-muted-foreground'>Une erreur s&apos;est produite</div>
 			) : (
 				<div className='text-center text-muted-foreground'>Aucun suivi</div>
 			)}
@@ -134,8 +134,9 @@ const RightPanelSocialRequests = () => {
 		<>
 			{requests?.length ? (
 				<>
-					{requests?.map(({ id, user }, index) => (
+					{requests?.map(({ id, user }, i) => (
 						<Card
+						key={i}
 						className={"flex flex-col rounded-xl bg-muted hover:bg-muted-hover p-1"}
 						>
 							<div className="flex items-center p-1">
@@ -155,7 +156,7 @@ const RightPanelSocialRequests = () => {
 			) : (isLoading || requests === undefined) ? (
 				<Icons.loader className='w-8 h-8 mx-auto' />
 			) : isError ? (
-				<div className='text-center text-muted-foreground'>Une erreur s'est produite</div>
+				<div className='text-center text-muted-foreground'>Une erreur s&apos;est produite</div>
 			) : (
 				<div className='text-center text-muted-foreground'>Aucune demande</div>
 			)}

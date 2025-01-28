@@ -24,9 +24,6 @@ export interface UiContextProps {
   sidebarOpenMobile: boolean;
   setSidebarOpenMobile: (open: boolean) => void;
   toggleSidebar: () => void;
-  // sidebarCollapsedSize: number;
-  // sidebarMinSize: number;
-  // sidebarMaxSize: number;
   rightPanelOpen: boolean;
   rightPanelOpenChange: (open: boolean) => void;
   rightPanelOpenMobile: boolean;
@@ -68,11 +65,16 @@ export const UIProvider = ({
   const sidebarCollapsedSize = 2;
   const sidebarMinSize = 14;
   const sidebarMaxSize = 20;
-  const sidebarOpenChange = (open: boolean) => {
+  // const sidebarOpenChange = (open: boolean) => {
+  //   setSidebarOpen(open);
+  //   // Save to cookie
+  //   document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+  // }
+  const sidebarOpenChange = React.useCallback((open: boolean) => {
     setSidebarOpen(open);
     // Save to cookie
     document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
-  }
+  }, []);
   const toggleSidebar = React.useCallback(() => {
     return isMobile
       ? setSidebarOpenMobile((open) => !open)
@@ -89,11 +91,16 @@ export const UIProvider = ({
   const rightPanelCollapsedSize = 0;
   const rightPanelMinSize = 20;
   const rightPanelMaxSize = 30;
-  const rightPanelOpenChange = (open: boolean) => {
+  // const rightPanelOpenChange = (open: boolean) => {
+  //   setRightPanelOpen(open);
+  //   // Save to cookie
+  //   document.cookie = `${RIGHT_PANEL_COOKIE_NAME}=${open}; path=/; max-age=${RIGHT_PANEL_COOKIE_MAX_AGE}`;
+  // }
+  const rightPanelOpenChange = React.useCallback((open: boolean) => {
     setRightPanelOpen(open);
     // Save to cookie
     document.cookie = `${RIGHT_PANEL_COOKIE_NAME}=${open}; path=/; max-age=${RIGHT_PANEL_COOKIE_MAX_AGE}`;
-  }
+  }, []);
   const toggleRightPanel = React.useCallback((open?: boolean) => {
     const newState = open !== undefined ?
       open :

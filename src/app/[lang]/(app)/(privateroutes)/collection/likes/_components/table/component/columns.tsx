@@ -8,7 +8,7 @@ import { capitalize } from 'lodash';
 import { Item } from './data-table-item';
 import { BadgeMedia } from '@/components/badge/BadgeMedia';
 
-export const columns = (): ColumnDef<UserActivity>[] => {
+export const Columns = (): ColumnDef<UserActivity>[] => {
   const common = useTranslations('common');
   return [
     {

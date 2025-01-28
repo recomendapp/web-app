@@ -10,7 +10,7 @@ import { getMediaDetails } from '@/hooks/get-media-details';
 import { Item } from './data-table-item';
 import { BadgeMedia } from '@/components/badge/BadgeMedia';
 
-export const columns = (): ColumnDef<UserWatchlist>[] => {
+export const Columns = (): ColumnDef<UserWatchlist>[] => {
   const common = useTranslations('common');
   return [
     {

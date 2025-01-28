@@ -1,10 +1,10 @@
 "use client"
+import * as React from 'react'
 import { Icons } from "@/config/icons"
 import { cn } from "@/lib/utils"
 import { upperFirst } from "lodash"
 import { useLocale, useTranslations } from "next-intl"
 import Link from "next/link"
-import { useEffect } from "react"
 import { ImageWithFallback } from "../utils/ImageWithFallback"
 import { useModal } from "@/context/modal-context"
 
@@ -31,19 +31,7 @@ export function JustWatchWidget({
 	const locale = useLocale();
 	const common = useTranslations('common');
 
-	useEffect(() => { 
-		resetAndReloadWidget();
-
-		return () => {
-			// @ts-ignore
-			delete window['JustWatch'];
-			const script = document.getElementById(`justwatch-widget-${id}`);
-			if (script)
-				script.remove();
-		}
-	  },[id]);
-
-	  const loadJustWatchScript = () => {
+	const loadJustWatchScript = React.useCallback(() => {
 		// Check if the script is already present
 		if (!document.getElementById(`justwatch-widget-${id}`)) {
 			const script = document.createElement("script");
@@ -52,9 +40,9 @@ export function JustWatchWidget({
 			script.setAttribute("id", `justwatch-widget-${id}`);
 			document.body.appendChild(script);
 		}
-	};
+	}, [id]);
 
-	const resetAndReloadWidget = () => {
+	const resetAndReloadWidget = React.useCallback(() => {
 		// Reset the JustWatch variable
 		// @ts-ignore
 		if (typeof window !== "undefined" && window["JustWatch"]) {
@@ -69,7 +57,19 @@ export function JustWatchWidget({
 
 		// Reload the script
 		loadJustWatchScript();
-	};
+	}, [id, loadJustWatchScript]);
+
+	React.useEffect(() => { 
+		resetAndReloadWidget();
+
+		return () => {
+			// @ts-ignore
+			delete window['JustWatch'];
+			const script = document.getElementById(`justwatch-widget-${id}`);
+			if (script)
+				script.remove();
+		}
+	},[id, resetAndReloadWidget]);
 
 	return (
 		<div className={cn('', className)}>

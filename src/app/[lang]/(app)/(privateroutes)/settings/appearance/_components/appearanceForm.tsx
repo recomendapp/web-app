@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -19,14 +19,6 @@ import { cn } from '@/lib/utils';
 import { useLocale, useTranslations } from 'next-intl';
 import { Lang } from '@/types/type.i18n';
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
   Command,
   CommandEmpty,
   CommandGroup,
@@ -35,8 +27,6 @@ import {
   CommandList,
 } from "@/components/ui/command"
 import { useTheme } from 'next-themes';
-// import { usePathname, useRouter } from "next-intl/client"
-import { createSharedPathnamesNavigation } from 'next-intl/navigation';
 import { Theme } from '@/types/type.theme';
 import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
@@ -103,7 +93,8 @@ export function AppearanceForm() {
 
   useEffect(() => {
     form.reset(defaultValues);
-  }, [locale, theme, user]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale, theme, user, defaultValues]);
 
 
   async function onSubmit(data: AppearanceFormValues) {

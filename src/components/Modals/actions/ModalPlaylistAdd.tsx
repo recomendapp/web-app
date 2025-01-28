@@ -125,7 +125,7 @@ export function ModalPlaylistAdd({
 					<Tabs onValueChange={setType as Dispatch<SetStateAction<string>>} defaultValue={type} className="w-full">
 						<TabsList className="grid w-full grid-cols-2">
 							<TabsTrigger value="personal">Mes playlists</TabsTrigger>
-							<TabsTrigger value="shared">Enregistrées</TabsTrigger>
+							<TabsTrigger value="shared" disabled>Enregistrées</TabsTrigger>
 						</TabsList>
 					</Tabs>
 					<CommandList>

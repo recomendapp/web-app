@@ -38,7 +38,7 @@ export default function ProfileNavbar({
         href: `/@${profile?.username}/playlists`,
       },
     ],
-    [pathname, profile]
+    [pathname, profile, common]
   );
   return (
     <div

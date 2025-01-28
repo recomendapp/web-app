@@ -26,7 +26,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { DataTableToolbar } from './component/data-table-toolbar';
-import { columns } from './component/columns';
+import { Columns } from './component/columns';
 import { useMediaQuery } from 'react-responsive';
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -97,7 +97,7 @@ export default function PlaylistTable({
  
   const table = useReactTable({
     data: playlistItems,
-    columns: columns(),
+    columns: Columns(),
     initialState: {
       pagination: {
         pageSize: 1001,

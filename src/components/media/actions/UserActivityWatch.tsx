@@ -127,5 +127,6 @@ const UserActivityWatch = React.forwardRef<
 		</TooltipBox>
 	);
 });
+UserActivityWatch.displayName = 'UserActivityWatch';
 
 export default UserActivityWatch;

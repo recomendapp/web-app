@@ -94,5 +94,6 @@ const UserActivityWatchedDate = React.forwardRef<
     </Popover>
 	);
 });
+UserActivityWatchedDate.displayName = 'UserActivityWatchedDate';
 
 export default UserActivityWatchedDate;

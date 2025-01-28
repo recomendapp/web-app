@@ -139,5 +139,6 @@ const UserActivityLike = React.forwardRef<
 		</TooltipBox>
 	);
 });
+UserActivityLike.displayName = 'UserActivityLike';
 
 export default UserActivityLike;

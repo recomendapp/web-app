@@ -127,5 +127,6 @@ const ActionReviewLike = React.forwardRef<
 		</TooltipBox>
 	);
 });
+ActionReviewLike.displayName = 'ActionReviewLike';
 
 export default ActionReviewLike;

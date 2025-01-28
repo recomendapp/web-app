@@ -30,3 +30,4 @@ export const WithLink = React.forwardRef<
 		</ComponentRender>
 	);
 });
+WithLink.displayName = 'WithLink'

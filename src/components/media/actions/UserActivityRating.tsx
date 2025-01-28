@@ -161,6 +161,7 @@ const UserActivityRating = React.forwardRef<
 		</Dialog>
 	  );
 });
+UserActivityRating.displayName = 'UserActivityRating';
 
 const MovieRating = ({
 	rating,

@@ -180,3 +180,4 @@ export const Notification = React.forwardRef<
 		</div>
 	)
 });
+Notification.displayName = 'Notification';

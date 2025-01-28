@@ -16,7 +16,7 @@ import { getMediaDetails } from '@/hooks/get-media-details';
 import { Item } from './data-table-item';
 import { BadgeMedia } from '@/components/badge/BadgeMedia';
 
-export const columns = (): ColumnDef<PlaylistItem>[] => {
+export const Columns = (): ColumnDef<PlaylistItem>[] => {
   const common = useTranslations('common');
   return [
     {

@@ -104,7 +104,7 @@ export const SidebarLeftRoutes = () => {
 			active: pathname.startsWith('/collection/likes'),
 			href: '/collection/likes',
 		},
-	], [pathname]);
+	], [pathname, common]);
 
 	const unloggedRoutes = useMemo(() => [
 		{

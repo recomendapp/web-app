@@ -31,3 +31,4 @@ export const ReactMarkdown = React.forwardRef<
 		</ReactMarkdownPrimitive>
 	);
 });
+ReactMarkdown.displayName = 'ReactMarkdown';

@@ -137,5 +137,6 @@ const UserWatchlist = React.forwardRef<
 		</ContextMenuWatchlistAction>
 	);
 });
+UserWatchlist.displayName = 'UserWatchlist';
 
 export default UserWatchlist;

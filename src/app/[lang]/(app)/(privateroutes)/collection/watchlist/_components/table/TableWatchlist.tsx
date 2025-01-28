@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/table';
 import { DataTableToolbar } from './component/data-table-toolbar';
 
-import { columns } from './component/columns';
+import { Columns } from './component/columns';
 import { useMediaQuery } from 'react-responsive';
 import { UserWatchlist } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
@@ -54,7 +54,7 @@ export function TableWatchlist({ data, className, ...props }: DataTableProps) {
 
   const table = useReactTable<UserWatchlist>({
     data,
-    columns: columns(),
+    columns: Columns(),
     initialState: {
       pagination: {
         pageSize: 5000,

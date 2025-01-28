@@ -74,7 +74,7 @@ export default function PlaylistPage(
         supabase.removeChannel(playlistItemsChanges);
       };
     }
-  }, [params.playlist_id, playlist, user, refetch, isAllowedToEdit]);
+  }, [params.playlist_id, playlist, user, refetch, isAllowedToEdit, handleEventBuffering, supabase]);
 
   useEffect(() => {
     if (debouncedRefresh) {

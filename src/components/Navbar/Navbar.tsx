@@ -62,7 +62,7 @@ export function Navbar({ className }: NavbarProps) {
         href: user ? '/collection' : '/auth/login',
       },
     ],
-    [pathname, user]
+    [pathname, user, routesDic, common]
   );
 
   return (

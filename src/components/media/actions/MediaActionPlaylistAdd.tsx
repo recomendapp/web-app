@@ -62,5 +62,6 @@ const MediaActionPlaylistAdd = React.forwardRef<
 		</TooltipBox>
 	  );
 });
+MediaActionPlaylistAdd.displayName = 'MediaActionPlaylistAdd';
 
 export default MediaActionPlaylistAdd;

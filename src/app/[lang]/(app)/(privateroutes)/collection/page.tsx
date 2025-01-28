@@ -1,16 +1,10 @@
 'use client'
 
 import React, { useMemo } from 'react';
-import { UserNav } from '@/components/User/UserNav/UserNav';
 import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
-
 import Link from 'next/link';
 import { UserPlaylists } from '@/components/User/UserPlaylists/UserPlaylists';
-
-// ICONS
 import { Bookmark, Heart, Send } from 'lucide-react';
-
-// COMPONENTS
 import {
   Tabs,
   TabsContent,
@@ -58,7 +52,7 @@ export default function Collection() {
         href: '/collection/likes',
       },
     ],
-    []
+    [common]
   );
   return (
     <main className="h-full @container/collection overflow-y-auto relative">

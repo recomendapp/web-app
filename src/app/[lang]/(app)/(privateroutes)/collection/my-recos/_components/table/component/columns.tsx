@@ -10,7 +10,7 @@ import { getMediaDetails } from '@/hooks/get-media-details';
 import { Item } from './data-table-item';
 import { BadgeMedia } from '@/components/badge/BadgeMedia';
 
-export const columns = (): ColumnDef<UserRecosAggregated>[] => {
+export const Columns = (): ColumnDef<UserRecosAggregated>[] => {
   const common = useTranslations('common');
   return [
     {

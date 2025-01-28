@@ -49,6 +49,7 @@ export const MapSearchbar = () => {
 		if (inView && data?.movies && displayedCount < data.movies.length) {
 			setDisplayedCount((prev) => prev + numberOfResult);
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [inView, data?.movies]);
 
 	useEffect(() => {

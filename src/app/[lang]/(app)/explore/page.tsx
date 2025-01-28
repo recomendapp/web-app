@@ -5,12 +5,12 @@ export const metadata: Metadata = {
   title: 'Explore',
 };
 
-export default function MapPage({
-  params,
-}: {
-  params: {
-    lang: string;
-  };
-}) {
+export default function MapPage(
+  props: {
+    params: Promise<{
+      lang: string;
+    }>;
+  }
+) {
   return <Map />;
 }

@@ -37,6 +37,7 @@ const IconMediaRating = React.forwardRef<HTMLDivElement, IconMediaRatingProps>(
 	</TooltipBox>
 	);
 });
+IconMediaRating.displayName = "IconMediaRating";
 
 export {
 	IconMediaRating,

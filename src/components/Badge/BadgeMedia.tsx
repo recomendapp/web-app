@@ -26,5 +26,6 @@ const BadgeMedia = React.forwardRef<
 		</Badge>
 	);
 })
+BadgeMedia.displayName = 'BadgeMedia'
 
 export { BadgeMedia }

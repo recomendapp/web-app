@@ -62,5 +62,6 @@ const UserRecos = React.forwardRef<
 		</TooltipBox>
 	  );
 });
+UserRecos.displayName = 'UserRecos';
 
 export default UserRecos;
