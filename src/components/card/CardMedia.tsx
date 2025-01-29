@@ -12,9 +12,9 @@ import { Button } from "../ui/button";
 import { BadgeMedia } from "../Badge/BadgeMedia";
 import { Icons } from "@/config/icons";
 import { useRouter } from "next/navigation";
-import UserActivityWatch from "../Media/actions/UserActivityWatch";
-import UserWatchlist from "../Media/actions/UserWatchlist";
-import { IconMediaRating } from "../Media/icons/IconMediaRating";
+import UserActivityWatch from "@/components/Media/actions/UserActivityWatch";
+import UserWatchlist from "@/components/Media/actions/UserWatchlist";
+import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { useUI } from "@/context/ui-context";
 
 interface CardMediaProps

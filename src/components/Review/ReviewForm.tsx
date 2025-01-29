@@ -29,7 +29,7 @@ import UserActivityRating from '@/components/Media/actions/UserActivityRating';
 import { useRouter } from 'next/navigation';
 import { getMediaUrl } from '@/hooks/get-media-details';
 import ActionReviewLike from './actions/ActionReviewLike';
-import { IconMediaRating } from '../Media/icons/IconMediaRating';
+import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 
 const MAX_TITLE_LENGTH = 50;
 const MAX_BODY_LENGTH = 5000;
