@@ -2,13 +2,13 @@ import { NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe/stripe';
 import { getURL } from '@/lib/stripe/stripe-helpers';
 import { createOrRetrieveCustomer } from '@/lib/supabase/supabase-admin';
-import { createRouteHandlerClient } from '@/lib/supabase/route';
+import { createServerClient } from '@/lib/supabase/server';
 
 export async function POST(request: Request) {
   const { price, quantity = 1, metadata = {} } = await request.json();
 
   try {
-    const supabase = createRouteHandlerClient();
+    const supabase = await createServerClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();

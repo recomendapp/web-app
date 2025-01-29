@@ -7,18 +7,19 @@ import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
 
-export async function generateMetadata({
-	params,
-  }: {
-	params: {
-	  lang: string;
-	};
-  }) {
-	const t = await getTranslations({ locale: params.lang, namespace: 'pages' });
-	return {
-	  title: upperFirst(t('upgrade.metadata.title')),
-    description: upperFirst(t('upgrade.metadata.description', { app: siteConfig.name })),
-	};
+export async function generateMetadata(
+  props: {
+      params: Promise<{
+        lang: string;
+      }>;
+    }
+) {
+  const params = await props.params;
+  const t = await getTranslations({ locale: params.lang, namespace: 'pages' });
+  return {
+    title: upperFirst(t('upgrade.metadata.title')),
+  description: upperFirst(t('upgrade.metadata.description', { app: siteConfig.name })),
+  };
 }
 
 export default async function UpgradePage() {

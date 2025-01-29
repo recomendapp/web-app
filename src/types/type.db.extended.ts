@@ -1,5 +1,7 @@
 
 import { Database as PostgresSchema } from './__generated__/type.db';
+import { Media, MediaType, Person, User } from './type.db';
+import { JSONContent } from '@tiptap/react';
 
 type PostgresTables = PostgresSchema['public']['Tables'];
 type PostgresViews = PostgresSchema['public']['Views'];
@@ -16,6 +18,9 @@ type TableExtensions = {
     };
   };
   **/
+  user_review: {
+    body: JSONContent;
+  }
 };
 
 type ViewExtensions = {
@@ -28,17 +33,45 @@ type ViewExtensions = {
 	};
   };
   **/
+ /* ---------------------------------- MEDIA --------------------------------- */
+ media_movie: {
+  id: number,
+  directors?: Person[],
+  genres?: {
+      id: number
+      name: string
+    }[],
+    media_type: MediaType,
+  },
+  media_movie_aggregate_credits: {
+    media: Media,
+  },
+  media_tv_series: {
+    id: number,
+    created_by?: Person[],
+    genres?: {
+      id: number
+      name: string
+    }[],
+    media_type: MediaType,
+  },
+  media_person: {
+    id: number,
+    media_type: MediaType,
+  },
+  media_person_combined_credits: {
+    media: Media,
+}
+ /* -------------------------------------------------------------------------- */
+
+  /* -------------------------------- PLAYLIST -------------------------------- */
+  playlist_items_media: {
+  media: Media,
+  },
+  /* -------------------------------------------------------------------------- */
   movie: {
     id: number,
-    directors?: PostgresViews['person']['Row'][],
-    // directors: {
-    // 	id: number
-    // 	name: string
-    // 	gender: number
-    // 	popularity: number
-    // 	profile_path: string
-    // 	know_for_department: string
-    // }[],
+    directors?: Person[],
     genres?: {
       id: number
       name: string
@@ -46,12 +79,41 @@ type ViewExtensions = {
   },
   tv_serie: {
     id: number,
-    created_by?: PostgresViews['person']['Row'][],
+    created_by?: Person[],
     genres?: {
       id: number
       name: string
     }[],
+  },
+  person: {
+    id: number,
+  },
+  /* -------------------------------- ACTIVITY -------------------------------- */
+  user_activity_media: {
+    media?: Media,
+  },
+  /* -------------------------------------------------------------------------- */
+  /* --------------------------------- REVIEW --------------------------------- */
+  user_review_media_activity: {
+    media?: Media,
   }
+  /* -------------------------------------------------------------------------- */
+  user_recos_aggregated: {
+    media?: Media,
+    senders: {
+      user: User,
+      comment?: string | null,
+      created_at: string,
+    }[],
+  },
+  user_watchlist_media: {
+    media?: Media,
+  },
+  /* --------------------------------- WIDGETS -------------------------------- */
+  widget_most_recommended: {
+    media?: Media,
+  },
+  /* -------------------------------------------------------------------------- */
 };
 // <END>
 // ☝️ this is the only thing you edit

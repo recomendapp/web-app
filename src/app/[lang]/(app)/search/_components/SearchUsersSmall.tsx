@@ -69,9 +69,9 @@ export default function SearchUsersSmall({
       <ScrollArea className="pb-4">
         <div className="flex gap-4">
           {showSkeleton ? (
-            Array.from({ length: 4 }).map((_, index) => (
+            Array.from({ length: 4 }).map((_, i) => (
               <Skeleton
-                key={index}
+                key={i}
                 className="flex flex-col items-center bg-secondary h-full rounded-xl p-2 gap-2"
               >
                 <Skeleton className=" h-[150px] w-[150px] rounded-full" />

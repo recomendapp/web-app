@@ -8,95 +8,70 @@ import { BiSearch } from 'react-icons/bi';
 import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 
-// Elasticsearch
-import AppSearchAPIConnector from "@elastic/search-ui-app-search-connector";
-import { SearchBox, SearchProvider } from "@elastic/react-search-ui";
-import { useLocale } from 'next-intl';
-
-const renderInput = ({
-  getAutocomplete,
-  getInputProps,
-  getButtonProps
-} : {
-  getAutocomplete: any,
-  getInputProps: any,
-  getButtonProps: any
-}) => {
-  return (
-      <div className="search-box w-full h-full flex items-center rounded-full bg-muted text-foreground border border-solid border-transparent">
-          <div className="py-3 px-4">
-            <BiSearch size={20}/>
-          </div>
-          {/* <EuiIcon className="search-box__icon" type="search" /> */}
-          <input
-              {...getInputProps({
-                  className: "search-box__input w-full bg-transparent pr-4 focus:outline-none focus:outline-offset-2",
-                  placeholder: "Faire une recherche"
-              })}
-          />
-          {getAutocomplete()}
-      </div>
-  )
-}
-
 interface SearchBarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function SearchBar({ className }: SearchBarProps) {
-  const locale = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const q = searchParams.get('q');
 
-  const connector = new AppSearchAPIConnector({
-    searchKey: process.env.NEXT_PUBLIC_SEARCH_API_KEY,
-    engineName: `search-${locale}`,
-    endpointBase: process.env.NEXT_PUBLIC_SEARCH_BASE_URL || "",
-    cacheResponses: false
-  });
+  const [searchQuery, setSearchQuery] = useState<any>(q);
+  const [isSearching, setIsSearching] = useState<any>(false);
+  const searchbarRef = useRef<HTMLDivElement>(null);
 
-  const configurationOptions = {
-    apiConnector: connector,
-    trackUrlState: false,
-    alwaysSearchOnInitialLoad: false,
-    autocompleteQuery: {
-      results: {
-        result_fields: {
-          title: {
-            snippet: {
-              size: 100
-            }
-          }
-        }
-      }, 
-      suggestions: {
-        types: {
-          // Limit query to only suggest based on "title" field
-          documents: { fields: ["title"] }
-        },
-        // Limit the number of suggestions returned from the server
-        size: 3
-      }
-    }
+  const debouncedSearchTerm = useDebounce(searchQuery);
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    setSearchQuery(event.target.elements.searchTerm.value);
   };
 
+  const handleOnFocus = (event: any) => {
+    setIsSearching(true);
+  };
+  const handleOutFocus = (event: any) => {
+    setIsSearching(false);
+  };
+
+  useEffect(() => {
+    let queryString = '';
+    if (searchQuery) {
+      queryString += `q=${searchQuery}`;
+    }
+    const url = queryString ? `/search?${queryString}` : pathname
+    url && router.push(url);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchTerm]);
+
   return (
-    <SearchProvider config={configurationOptions}>
-      <SearchBox
-          searchAsYouType={true}
-          inputView={renderInput}
-          autocompleteSuggestions={{
-              sectionTitle: "Suggested Queries"
-          }}
-          autocompleteMinimumCharacters={2}
-          onSubmit={searchTerm => {
-              router.push("/search?q=" + searchTerm);
-          }}
-          onSelectAutocomplete={(selection: any, defaultOnSelectAutocomplete: any) => {
-              if (selection.suggestion) {
-                  router.push("/search?q=" + selection.suggestion);
-              } else {
-                  defaultOnSelectAutocomplete(selection);
-              }
-          }}
-      />
-    </SearchProvider>
-  )
+    <div
+      ref={searchbarRef}
+      className={cn('pointer-events-auto w-full h-full lg:w-fit', className)}
+    >
+      <form
+        onSubmit={handleSubmit}
+        className={` w-full h-full flex items-center rounded-full bg-muted text-foreground border border-solid border-transparent ${
+          isSearching && 'border-white'
+        }`}
+      >
+        {/* SEARCH BUTTON */}
+        <button className="py-3 px-4">
+          <BiSearch size={20} />
+        </button>
+        {/* SEARCH FORM */}
+        <input
+          name="searchTerm"
+          type="search"
+          placeholder="Faire une recherche"
+          className="w-full bg-transparent pr-4 focus:outline-none focus:outline-offset-2"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={handleOnFocus}
+          onBlur={handleOutFocus}
+          autoFocus
+        />
+      </form>
+    </div>
+  );
 }

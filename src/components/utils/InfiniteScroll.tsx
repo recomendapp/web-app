@@ -51,7 +51,7 @@ export const InfiniteScroll = ({
 				return child;
 			}
 		});
-	}, [children, dataLength, ref]);
+	}, [children, dataLength, ref, isLoading, SkeletonComponent, loader]);
 	return (
 		<>
 			{renderChildren()}

@@ -10,11 +10,11 @@ import { Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Movie, User } from '@/types/type.db';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
-import { useMeSendMovie } from '@/features/me/meQueries';
+import { useMeSendMovie } from '@/features/client/me/meQueries';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Icons } from '@/config/icons';
 import { UserAvatar } from '@/components/User/UserAvatar/UserAvatar';
-import { useSendMovie } from '@/features/me/meMutations';
+import { useSendMovie } from '@/features/client/me/meMutations';
 import { Label } from '@/components/ui/label';
 
 const COMMENT_MAX_LENGTH = 180;

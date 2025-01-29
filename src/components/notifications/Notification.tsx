@@ -9,7 +9,7 @@ import { Button } from '../ui/button';
 import { Icons } from '@/config/icons';
 import { TooltipBox } from '../Box/TooltipBox';
 import { Skeleton } from '../ui/skeleton';
-import { useUserAcceptFollowerRequest, useUserDeclineFollowerRequest } from '@/features/user/userMutations';
+import { useUserAcceptFollowerRequest, useUserDeclineFollowerRequest } from '@/features/client/user/userMutations';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 
@@ -180,3 +180,4 @@ export const Notification = React.forwardRef<
 		</div>
 	)
 });
+Notification.displayName = 'Notification';

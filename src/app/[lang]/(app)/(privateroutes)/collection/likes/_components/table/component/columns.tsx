@@ -1,55 +1,68 @@
 'use client';
-
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
-import { DateOnlyYearTooltip } from '@/components/utils/Date';
-import { Clock } from 'lucide-react';
-import MovieCardSmall from '@/components/Movie/MovieCardSmall';
-import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
-import { UserMovieActivity } from '@/types/type.db';
+import { UserActivity } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
 import { capitalize } from 'lodash';
+import { Item } from './data-table-item';
+import { BadgeMedia } from '@/components/Badge/BadgeMedia';
 
-export const columns = (): ColumnDef<UserMovieActivity>[] => {
+export const Columns = (): ColumnDef<UserActivity>[] => {
   const common = useTranslations('common');
   return [
     {
-      id: 'movie',
-      accessorFn: (row) => row?.movie?.title,
+      id: 'item',
+      accessorFn: (row) => row?.media?.title,
       meta: {
-        displayName: capitalize(common('word.film', { count: 1 })),
+        displayName: capitalize(common('messages.item', { count: 1 })),
       },
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={capitalize(common('word.film', { count: 1 }))} />
+        <DataTableColumnHeader column={column} title={capitalize(common('messages.item', { count: 1 }))} />
       ),
-      cell: ({ row }) => <MovieCardSmall movie={row.original?.movie} />,
+      cell: ({ row }) => <Item key={row.index} media={row.original?.media!} />,
       enableHiding: false,
     },
+    // {
+    //   id: 'release_date',
+    //   accessorFn: (row) => row?.movie?.release_date,
+    //   meta: {
+    //     displayName: capitalize(common('word.date')),
+    //   },
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} title={capitalize(common('word.date'))} />
+    //   ),
+    //   cell: ({ row }) => (
+    //     <DateOnlyYearTooltip date={row.original?.movie?.release_date} className='text-muted-foreground'/>
+    //   ),
+    // },
+    // {
+    //   id: 'runtime',
+    //   accessorFn: (row) => row?.movie?.runtime,
+    //   meta: {
+    //     displayName: capitalize(common('word.duration')),
+    //   },
+    //   header: ({ column }) => (
+    //     <DataTableColumnHeader column={column} Icon={Clock} />
+    //   ),
+    //   cell: ({ row }) => (
+    //     <RuntimeTooltip runtime={row.original?.movie?.runtime ?? 0} className='text-muted-foreground'/>
+    //   ),
+    // },
     {
-      id: 'release_date',
-      accessorFn: (row) => row?.movie?.release_date,
+      id: 'type',
+      accessorFn: (row) => row?.media_type,
       meta: {
-        displayName: capitalize(common('word.date')),
+        displayName: capitalize(common('messages.type')),
       },
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={capitalize(common('word.date'))} />
+        <DataTableColumnHeader
+        column={column}
+        title={capitalize(common('messages.type'))}
+        />
       ),
       cell: ({ row }) => (
-        <DateOnlyYearTooltip date={row.original?.movie?.release_date} className='text-muted-foreground'/>
-      ),
-    },
-    {
-      id: 'runtime',
-      accessorFn: (row) => row?.movie?.runtime,
-      meta: {
-        displayName: capitalize(common('word.duration')),
-      },
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} Icon={Clock} />
-      ),
-      cell: ({ row }) => (
-        <RuntimeTooltip runtime={row.original?.movie?.runtime ?? 0} className='text-muted-foreground'/>
+        <BadgeMedia type={row.original?.media_type} />
       ),
     },
     {

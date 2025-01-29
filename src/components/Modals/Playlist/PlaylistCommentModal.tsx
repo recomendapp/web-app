@@ -13,8 +13,8 @@ import { Playlist, PlaylistGuest, PlaylistItem } from "@/types/type.db";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useSupabaseClient } from '@/context/supabase-context';
-import { playlistKeys } from "@/features/playlist/playlistKeys";
-import { usePlaylistIsAllowedToEdit } from "@/features/playlist/playlistQueries";
+import { playlistKeys } from "@/features/client/playlist/playlistKeys";
+import { usePlaylistIsAllowedToEdit } from "@/features/client/playlist/playlistQueries";
 
 interface PlaylistCommentModalProps extends ModalType {
 	playlistItem: PlaylistItem;
@@ -32,15 +32,15 @@ const PlaylistCommentModal = ({
 	const { mutateAsync: updatePlaylistItem } = useMutation({
 		mutationFn: async ({ comment } : { comment: string}) => {
 			if (!playlistItem?.id) throw Error('Missing id');
-			const { data, error } = await supabase
-			  .from('playlist_item')
+			const { error } = await supabase
+			  .from('playlist_items')
 			  .update({
 				comment: comment,
 			  })
 			  .eq('id', playlistItem.id)
 			  .select(`*`)
 			if (error) throw error;
-			return data;
+			// return data;
 		},
 	})
 

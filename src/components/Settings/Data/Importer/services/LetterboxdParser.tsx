@@ -42,6 +42,7 @@ const LetterboxdParser = ({
 		else if (parsingStep === 2) user_movie();
 		else if (parsingStep === 3) watchlist();
 		else if (parsingStep === 4) setStep(3);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [parsingStep]);
 
 	const parseCSV: (content: string) => Promise<any[]> = (content) => {

@@ -4,14 +4,15 @@ import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, Sideba
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
-import { useUserPlaylists } from "@/features/user/userQueries";
+import { useUserPlaylists, useUserPlaylistsInfiniteQuery } from "@/features/client/user/userQueries";
 import { cn } from "@/lib/utils";
 import { capitalize } from "lodash";
 import { BookmarkIcon, HeartIcon, LibraryIcon, SendIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useInView } from "react-intersection-observer";
 
 const SidebarCollectionContainerIcon = ({
 	className,
@@ -41,11 +42,12 @@ const SidebarCollectionContainerIcon = ({
 }
 
 export const SidebarLeftRoutes = () => {
-	const { user } = useAuth();
+	const { user, session } = useAuth();
 	const { open } = useSidebar();
 	const routesDic = useTranslations('routes');
 	const common = useTranslations('common');
 	const pathname = usePathname();
+	const { ref, inView } = useInView();
 
 	const routes = useMemo(
 		() => [
@@ -82,9 +84,9 @@ export const SidebarLeftRoutes = () => {
 			icon: <SendIcon fill="#fff" className="w-2/5 h-2/5" />,
 			bgFrom: '#FBE773',
 			bgTo: '#F18E43',
-			label: capitalize(common('library.collection.guidelist.label')),
-			active: pathname.startsWith('/collection/guidelist'),
-			href: '/collection/guidelist',
+			label: capitalize(common('messages.my_recos')),
+			active: pathname.startsWith('/collection/my-recos'),
+			href: '/collection/my-recos',
 		},
 		{
 			icon: <BookmarkIcon fill="#fff" className="w-2/5 h-2/5" />,
@@ -102,7 +104,7 @@ export const SidebarLeftRoutes = () => {
 			active: pathname.startsWith('/collection/likes'),
 			href: '/collection/likes',
 		},
-	], [pathname]);
+	], [pathname, common]);
 
 	const unloggedRoutes = useMemo(() => [
 		{
@@ -130,13 +132,22 @@ export const SidebarLeftRoutes = () => {
 
 	const {
 		data: playlists,
-		isLoading 
-	} = useUserPlaylists({
+		isLoading,
+		fetchNextPage,
+		isFetchingNextPage,
+		hasNextPage,
+	} = useUserPlaylistsInfiniteQuery({
 		userId: user?.id,
 		filters: {
 			order: 'updated_at-desc',
 		}
 	});
+
+	useEffect(() => {
+		if (inView && hasNextPage) {
+			fetchNextPage();
+		}
+	}, [inView, hasNextPage, playlists, fetchNextPage]);
 
 	return (
 		<>
@@ -159,7 +170,7 @@ export const SidebarLeftRoutes = () => {
 		</SidebarGroup>
 		<SidebarSeparator />
 		<SidebarGroup className="overflow-hidden">
-			{user ? (
+			{session ? (
 			<SidebarMenu className={`h-full ${!open ? "items-center" : ""}`}>
 				<SidebarMenuItem>
 					<SidebarMenuButton tooltip={"Bibliothèque"} isActive={pathname === '/collection'} asChild>
@@ -187,41 +198,48 @@ export const SidebarLeftRoutes = () => {
 							</SidebarMenuButton>
 						</SidebarMenuItem>
 					))}
-					{playlists?.map((playlist, i) => (
-						<SidebarMenuItem key={i}>
-							<SidebarMenuButton
-								tooltip={{
-									children: (
-										<>
-											{playlist.title}
-											<span className="ml-4 text-muted-foreground">
-												{playlist.items_count}
-											</span>
-										</>
-									)
-								}}
-								className="h-fit"
-								isActive={pathname === `/playlist/${playlist.id}`}
-								asChild
+					{playlists?.pages[0]?.length ? (
+						playlists?.pages.map((page, i) => (
+							page?.map((playlist, index) => (
+							<SidebarMenuItem
+							key={index}
+							ref={(i === playlists.pages.length - 1 && index === page.length - 1) ? ref : undefined }
 							>
-								<Link href={`/playlist/${playlist.id}`}>
-									<SidebarCollectionContainerIcon className={`${open ? "w-12" : "w-8"}`}>
-										<ImageWithFallback
-											src={playlist.poster_url ?? ''}
-											alt={playlist.title ?? ''}
-											fill
-											className='object-cover'
-											type='playlist'
-										/>
-									</SidebarCollectionContainerIcon>
-									<div className={`line-clamp-1 transition-all duration-300 ${!open ? "opacity-0 hidden" : "opacity-100"}`}>
-										<p className="line-clamp-1">{playlist.title}</p>
-										<p className='text-muted-foreground line-clamp-1'>{common('word.film_count', { count: playlist.items_count })}</p>
-									</div>
-								</Link>
-							</SidebarMenuButton>
-						</SidebarMenuItem>
-					))}
+								<SidebarMenuButton
+									tooltip={{
+										children: (
+											<>
+												{playlist.title}
+												{/* <span className="ml-4 text-muted-foreground">
+													{playlist.items_count}
+												</span> */}
+											</>
+										)
+									}}
+									className="h-fit"
+									isActive={pathname === `/playlist/${playlist.id}`}
+									asChild
+								>
+									<Link href={`/playlist/${playlist.id}`}>
+										<SidebarCollectionContainerIcon className={`${open ? "w-12" : "w-8"}`}>
+											<ImageWithFallback
+												src={playlist.poster_url ?? ''}
+												alt={playlist.title ?? ''}
+												fill
+												className='object-cover'
+												type='playlist'
+											/>
+										</SidebarCollectionContainerIcon>
+										<div className={`line-clamp-1 transition-all duration-300 ${!open ? "opacity-0 hidden" : "opacity-100"}`}>
+											<p className="line-clamp-1">{playlist.title}</p>
+											{/* <p className='text-muted-foreground line-clamp-1'>{common('word.film_count', { count: playlist.items_count })}</p> */}
+										</div>
+									</Link>
+								</SidebarMenuButton>
+							</SidebarMenuItem>
+							))
+						))
+					) : null}
 				</ScrollArea>
 			</SidebarMenu>
 			) : (

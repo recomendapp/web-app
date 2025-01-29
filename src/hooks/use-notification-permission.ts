@@ -96,6 +96,7 @@ const useNotificationPermission = () => {
 		if (user && permission === 'granted') {
 			loadToken();
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user, permission]);
 
 	// Store token
@@ -107,7 +108,7 @@ const useNotificationPermission = () => {
 				console.error('Error updating FCM token in the database', error);
 			}
 		}
-	}, [token]);
+	}, [token, user?.id]);
 
 
 	return {

@@ -1,6 +1,6 @@
 'use client';
 
-import MovieCard from '@/components/Movie/Card/MovieCard';
+// import MovieCard from '@/components/Movie/Card/MovieCard';
 import { MouseSensor, TouchSensor } from '@/components/DragNDrop/CustomSensor';
 import { Button } from '@/components/ui/button';
 import {
@@ -251,7 +251,7 @@ const SortableFilm = ({
       >
         <X size={15} />
       </Button>
-      <MovieCard
+      {/* <MovieCard
         movie={movie}
         displayMode="grid"
         fill
@@ -262,7 +262,7 @@ const SortableFilm = ({
         `}
         disabledActions
         clickable={false}
-      />
+      /> */}
     </div>
   );
 };

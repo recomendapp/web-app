@@ -3,17 +3,18 @@ import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 
-export async function generateMetadata({
-	params,
-  }: {
-	params: {
-	  lang: string;
-	};
-  }) {
-	const common = await getTranslations({ locale: params.lang, namespace: 'pages' });
-	return {
-	  title: upperFirst(common('settings.label')),
-	};
+export async function generateMetadata(
+  props: {
+      params: Promise<{
+        lang: string;
+      }>;
+    }
+) {
+  const params = await props.params;
+  const common = await getTranslations({ locale: params.lang, namespace: 'pages' });
+  return {
+    title: upperFirst(common('settings.label')),
+  };
 }
 
 interface SettingsLayoutProps {

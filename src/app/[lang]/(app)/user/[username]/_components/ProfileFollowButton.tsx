@@ -6,8 +6,8 @@ import toast from 'react-hot-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { cn } from '@/lib/utils';
-import { useUserFollowProfile } from '@/features/user/userQueries';
-import { useUserFollowProfileInsert, useUserUnfollowProfileDelete } from '@/features/user/userMutations';
+import { useUserFollowProfile } from '@/features/client/user/userQueries';
+import { useUserFollowProfileInsert, useUserUnfollowProfileDelete } from '@/features/client/user/userMutations';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 

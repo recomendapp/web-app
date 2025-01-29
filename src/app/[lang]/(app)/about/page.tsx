@@ -10,24 +10,26 @@ import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { upperFirst } from 'lodash';
 
-export async function generateMetadata({
-  params,
-  }: {
-  params: {
-    lang: string;
-  };
-  }) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{
+      lang: string;
+    }>;
+    }
+) {
+  const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'routes' });
   return {
     title: upperFirst(common('about')),
   };
 }
 
-export default async function About({
-  params,
-}: {
-  params: { lang: Lang };
-}) {
+export default async function About(
+  props: {
+    params: Promise<{ lang: Lang }>;
+  }
+) {
+  const params = await props.params;
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.about' });
   const [session, products] = await Promise.all([
     getSession(),

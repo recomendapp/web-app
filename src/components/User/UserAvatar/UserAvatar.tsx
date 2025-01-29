@@ -1,7 +1,6 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User, UserProfile } from '@/types/type.db';
 import { cn, getInitiales } from '@/lib/utils';
 
 interface UserAvatarProps extends React.HTMLAttributes<HTMLDivElement> {

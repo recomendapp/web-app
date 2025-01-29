@@ -118,6 +118,7 @@ const SidebarProvider = React.forwardRef<
       return isMobile
         ? setOpenMobile((open) => !open)
         : setOpen((open) => !open)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isMobile, setOpen])
 
     // Adds a keyboard shortcut to toggle the sidebar.
@@ -135,6 +136,7 @@ const SidebarProvider = React.forwardRef<
 
       window.addEventListener("keydown", handleKeyDown)
       return () => window.removeEventListener("keydown", handleKeyDown)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [toggleSidebar])
 
     // We add a state so that we can do data-state="expanded" or "collapsed".
@@ -159,6 +161,7 @@ const SidebarProvider = React.forwardRef<
       if (autoCloseOnRouteChange && isMobile && openMobile) {
         setOpenMobile(false)
       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pathname])
 
     return (

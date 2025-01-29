@@ -27,17 +27,6 @@ export default function ActivityIcon({
 }: RatingProps) {
   if (!rating) return null;
 
-  // if (!rating && !is_liked) return null;
-
-  // if (!rating && is_liked) {
-  //   return (
-  //     <Heart
-  //       size={15}
-  //       className="shadow-sm text-background fill-accent-pink"
-  //     />
-  //   );
-  // }
-
   return (
     <TooltipBox tooltip={tooltip}>
         <div
@@ -55,7 +44,7 @@ export default function ActivityIcon({
         >
           {is_reviewed && (
             <Link
-              href={`/film/${movieId}/review/${is_reviewed}`}
+              href={`/@${movieId}/film/${movieId}`}
               className="absolute -bottom-2 -left-2 p-0.5 bg-background rounded-full"
             >
               <Text size={12} className="" />

@@ -2,19 +2,23 @@ import { Button } from "@/components/ui/button";
 import { useMap } from "../../../context/map-context"
 import { TriangleAlert, XIcon } from "lucide-react";
 import MoviePoster from "@/components/Movie/MoviePoster";
-import { useQuery } from "@tanstack/react-query";
 import { useLocale } from "next-intl";
 import Loader from "@/components/Loader/Loader";
-import ActivityIcon from "@/components/Review/ActivityIcon";
-import { MovieTrailerButton } from "@/app/[lang]/(app)/film/[film]/(default)/_components/MovieHeader";
+import { MovieTrailerButton } from "@/app/[lang]/(app)/film/[film_id]/(default)/_components/MovieHeader";
 import Link from "next/link";
 import { RuntimeTooltip } from "@/components/utils/RuntimeTooltip";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
-import { MovieAction } from "@/components/Movie/Actions/MovieAction";
-import { useSupabaseClient } from '@/context/supabase-context';
+import { useMediaMovieDetailsQuery } from "@/features/client/media/mediaQueries";
+import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
+import UserActivityRating from "@/components/Media/actions/UserActivityRating";
+import UserActivityLike from "@/components/Media/actions/UserActivityLike";
+import UserActivityWatch from "@/components/Media/actions/UserActivityWatch";
+import UserWatchlist from "@/components/Media/actions/UserWatchlist";
+import UserActivityWatchedDate from "@/components/Media/actions/UserActivityWatchedDate";
+import MediaActionPlaylistAdd from "@/components/Media/actions/MediaActionPlaylistAdd";
+import UserRecos from "@/components/Media/actions/UserRecos";
 
 export const MovieWidget = () => {
-	const supabase = useSupabaseClient();
 	const {
 		selectedMovie,
 		setSelectedMovie,
@@ -26,23 +30,9 @@ export const MovieWidget = () => {
 		data: movie,
 		isLoading,
 		isError,
-	} = useQuery({
-		queryKey: ['movie', selectedMovie?.movie.id],
-		queryFn: async () => {
-			if (!selectedMovie?.movie.id) throw new Error('No movieId');
-			const { data: movie, error } = await supabase
-				.from('movie')
-				.select(`
-					*,
-					videos:tmdb_movie_videos(*)
-				`)
-				.eq('id', selectedMovie?.movie.id)
-				.eq('videos.iso_639_1', locale)
-				.single();
-			if (error) throw error;
-			return movie;
-		},
-		enabled: !!selectedMovie?.movie.id && !!locale,
+	} = useMediaMovieDetailsQuery({
+		id: selectedMovie?.movie.id,
+		locale: locale as string,
 	});
 
 	if (!selectedMovie?.movie.id) return null;
@@ -71,27 +61,25 @@ export const MovieWidget = () => {
 					<div className="w-full h-full flex gap-2 items-center">
 						<MoviePoster
 							className="h-full w-fit"
-							src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+							src={movie.poster_url ?? ''}
 							alt={movie.title ?? ''}
 							width={96}
 							height={144}
 						>
 							{movie.vote_count && (
 							<div className='absolute flex flex-col gap-2 top-1 right-1 w-10'>
-								<ActivityIcon
-									movieId={movie.id}
+								{movie.vote_average ? <IconMediaRating
 									rating={movie.vote_average}
 									variant="general"
 									className="w-full"
 									tooltip='Note moyenne'
-								/>
-								{movie.follower_avg_rating && <ActivityIcon
-									movieId={movie.id}
+								/> : null}
+								{movie.follower_avg_rating ? <IconMediaRating
 									rating={movie.follower_avg_rating}
 									variant="follower"
 									className="w-full"
 									tooltip='Note followers'
-								/>}
+								/> : null}
 							</div>
 							)}
 							{movie?.videos?.length > 0 && (
@@ -151,7 +139,7 @@ export const MovieWidget = () => {
 											className="w-fit p-0 h-full hover:text-accent-1 transition"
 											asChild
 										>
-											<Link href={`/person/${person.slug ?? person.id}`}>
+											<Link href={`/person/${person?.slug ?? person?.id}`}>
 											{person?.name}
 											</Link>
 										</Button>
@@ -169,7 +157,19 @@ export const MovieWidget = () => {
 							</div>
 						</div>
 					</div>
-					<MovieAction filmId={movie.id} all />
+					<div className="flex justify-between gap-2 px-4 pb-4">
+						<div className="flex gap-2 overflow-x-auto items-center">
+						<UserActivityRating mediaId={movie.id} mediaType={'movie'} />
+						<UserActivityLike mediaId={movie.id} mediaType={'movie'} />
+						<UserActivityWatch mediaId={movie.id} mediaType={'movie'} />
+						<UserWatchlist mediaId={movie.id} mediaType={'movie'} />
+						<UserActivityWatchedDate mediaId={movie.id} mediaType={'movie'} />
+						</div>
+						<div className="flex gap-2 items-center">
+						<MediaActionPlaylistAdd mediaId={movie.id} mediaType={'movie'} mediaTitle={movie.title} />
+						<UserRecos mediaId={movie.id} mediaType={'movie'} mediaTitle={movie.title} />
+						</div>
+					</div>
 				</div>
 			)}
 		</div>

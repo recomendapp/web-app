@@ -2,7 +2,7 @@
 
 import { routing } from "@/lib/i18n/routing";
 import { createServerClient } from "@/lib/supabase/server";
-import { TvSerie } from "@/types/type.db";
+import { MediaTvSeries } from "@/types/type.db";
 import { z } from "zod";
 
 const searchSeriesSchema = z
@@ -21,7 +21,7 @@ const searchSeriesSchema = z
 	})
 
 export const tmdbSearchSeries = async (query: string, language = routing.defaultLocale, page = 1) => {
-	const supabase = createServerClient(language);
+	const supabase = await createServerClient(language);
 	const verifiedField = searchSeriesSchema.safeParse({ query, language, page });
 	if (!verifiedField.success) {
 		throw new Error(verifiedField.error.errors.join('; '));
@@ -32,12 +32,12 @@ export const tmdbSearchSeries = async (query: string, language = routing.default
 		)
 	).json();
 	const request = await supabase
-		.from('tv_serie')
+		.from('media_tv_series')
 		.select('*')
 		.in('id', tmdbResults.results.map((serie: any) => serie.id))
 		.limit(20);
 	
-	const series: TvSerie[] = tmdbResults.results.map((person: any) => request.data?.find((m: any) => m.id === person.id));
+	const series: MediaTvSeries[] = tmdbResults.results.map((person: any) => request.data?.find((m: any) => m.id === person.id));
 
 	return series;
 }

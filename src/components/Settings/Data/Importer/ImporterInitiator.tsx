@@ -26,7 +26,6 @@ import {
 
 import LetterboxdParser from "./services/LetterboxdParser";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import MovieCard from "./_components/MovieCard";
 import ImporterResults from "./services/ImporterResults";
 import { Movie } from "@/types/type.db";
 
@@ -211,7 +210,7 @@ export const ImporterInitiator = ({
 											<div className="space-y-2">
 												{importResults.user_movies.success.map((movie) => (
 													<div key={movie.movie!.id} className="flex gap-2 items-center justify-between">
-														<MovieCard
+														{/* <MovieCard
 															id={movie.movie!.id}
 															title={movie.movie!.title}
 															poster_url={`https://image.tmdb.org/t/p/original/${movie?.movie!.poster_path}`}
@@ -219,7 +218,7 @@ export const ImporterInitiator = ({
 															directors={movie.movie!.directors}
 															rating={movie.rating}
 															liked={movie.liked}
-														/>
+														/> */}
 														<div className="shrink-0">
 															<Button
 																variant={'ghost'}
@@ -262,13 +261,13 @@ export const ImporterInitiator = ({
 											<div className="space-y-2">
 												{importResults.watchlist.success.map((movie) => (
 													<div key={movie.movie!.id} className="flex gap-2 items-center justify-between">
-														<MovieCard
+														{/* <MovieCard
 															id={movie.movie!.id}
 															title={movie.movie!.title}
 															poster_url={`https://image.tmdb.org/t/p/original/${movie?.movie!.poster_path}`}
 															release_date={movie.movie!.release_date}
 															directors={movie.movie!.directors}
-														/>
+														/> */}
 														<div className="shrink-0">
 															<Button
 																variant={'ghost'}

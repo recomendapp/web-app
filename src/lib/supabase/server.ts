@@ -1,13 +1,13 @@
 import { cookies } from 'next/headers';
 import {
   createServerClient as createServerClientSupabase,
-  type CookieOptions,
 } from '@supabase/ssr';
 import { routing } from '../i18n/routing';
 
-export const createServerClient = (localeParam?: string) => {
-  const cookieStore = cookies();
-  const locale = cookieStore.get('NEXT_LOCALE');
+
+export const createServerClient = async (localeParam?: string) => {
+  const cookieStore = await cookies();
+  const locale = localeParam ?? routing.defaultLocale;
   return createServerClientSupabase<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -30,17 +30,15 @@ export const createServerClient = (localeParam?: string) => {
       },
       global: {
         headers: {
-          'language': locale?.value ?? localeParam ?? routing.defaultLocale,
+          'language': locale,
         }
       }
     },
   );
 };
 
-// export const supabase = createServerClient();
-
 export async function getSession() {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   try {
     const {
       data: { session },
@@ -53,7 +51,7 @@ export async function getSession() {
 }
 
 export const getActiveProductsWithPrices = async () => {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const { data, error } = await supabase
     .from('products')
     .select('*, prices(*)')
@@ -69,7 +67,7 @@ export const getActiveProductsWithPrices = async () => {
 };
 
 export async function getSubscriptionByUserId() {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   try {
     const { data: subscription } = await supabase
       .from('user_subscriptions')

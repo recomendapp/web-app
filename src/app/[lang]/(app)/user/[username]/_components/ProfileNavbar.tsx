@@ -2,7 +2,7 @@
 
 import UserCard from '@/components/User/UserCard/UserCard';
 import { cn } from '@/lib/utils';
-import { UserProfile } from '@/types/type.db';
+import { Profile } from '@/types/type.db';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -14,7 +14,7 @@ export default function ProfileNavbar({
   className,
   withProfile = false,
 }: {
-  profile: UserProfile;
+  profile: Profile;
   className?: string;
   withProfile?: boolean;
 }) {
@@ -28,9 +28,9 @@ export default function ProfileNavbar({
         href: `/@${profile?.username}`,
       },
       {
-        label: upperFirst(common('word.film', { count: 2 })),
-        active: pathname === `/@${profile?.username}/films`,
-        href: `/@${profile?.username}/films`,
+        label: upperFirst(common('messages.collection', { count: 1 })),
+        active: pathname === `/@${profile?.username}/collection`,
+        href: `/@${profile?.username}/collection`,
       },
       {
         label: upperFirst(common('word.playlist', { count: 2 })),
@@ -38,7 +38,7 @@ export default function ProfileNavbar({
         href: `/@${profile?.username}/playlists`,
       },
     ],
-    [pathname, profile]
+    [pathname, profile, common]
   );
   return (
     <div

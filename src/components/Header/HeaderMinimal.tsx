@@ -9,7 +9,7 @@ import { getTranslations } from 'next-intl/server';
 interface HeaderMinimalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export async function HeaderMinimal({ className }: HeaderMinimalProps) {
-  const supabase = createServerClient();
+  const supabase = await createServerClient();
   const word = await getTranslations('word');
 
   const {

@@ -3,18 +3,16 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useModal } from "@/context/modal-context";
-import { useUserMovieFollowersRating } from "@/features/user/userQueries";
+import { useUserMovieFollowersRating } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
-
 import {
 	ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
   } from "@/components/ui/chart"
-import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
 import UserCard from "@/components/User/UserCard/UserCard";
 import ActivityIcon from "@/components/Review/ActivityIcon";
 import { Card } from "@/components/ui/card";
@@ -119,7 +117,7 @@ export const ModalMovieFollowersRating = ({
 				) : (isLoading || followersRating === undefined) ? (
 					<Skeleton className="h-[40vh]" />
 				) : isError ? (
-					<div className="text-muted-foreground">Une erreur s'est produite</div>
+					<div className="text-muted-foreground">Une erreur s&apos;est produite</div>
 				) : (
 					<div className="text-muted-foreground">Aucune note</div>
 				)}

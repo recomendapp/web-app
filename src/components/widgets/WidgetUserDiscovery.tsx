@@ -2,10 +2,10 @@ import { cn } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { ScrollArea } from "../ui/scroll-area"
 import { Fragment, useState } from "react"
-import { useUserDiscoveryInfinite } from "@/features/user/userQueries"
+import { useUserDiscoveryInfinite } from "@/features/client/user/userQueries"
 import UserCard from "../User/UserCard/UserCard"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "../ui/select"
-import { CardUser } from "../card/CardUser"
+import { CardUser } from "../Card/CardUser"
 import { useTranslations } from "next-intl"
 
 export const WidgetUserDiscovery = ({

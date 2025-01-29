@@ -2,13 +2,14 @@ import { siteConfig } from '@/config/site';
 import { getTranslations } from 'next-intl/server';
 import { noSSR } from 'next/dynamic';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: {
-    lang: string;
-  };
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{
+      lang: string;
+    }>;
+  }
+) {
+  const params = await props.params;
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.auth.login' });
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   return {

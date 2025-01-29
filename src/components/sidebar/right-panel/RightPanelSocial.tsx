@@ -1,12 +1,12 @@
-import { CardUser } from "@/components/card/CardUser";
+import { CardUser } from "@/components/Card/CardUser";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
-import { useUserAcceptFollowerRequest, useUserDeclineFollowerRequest } from "@/features/user/userMutations";
-import { useUserFolloweesInfinite, useUserFollowersRequests } from "@/features/user/userQueries";
+import { useUserAcceptFollowerRequest, useUserDeclineFollowerRequest } from "@/features/client/user/userMutations";
+import { useUserFolloweesInfiniteQuery, useUserFollowersRequestsQuery } from "@/features/client/user/userQueries";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useInView } from "react-intersection-observer";
@@ -46,7 +46,7 @@ const RightPanelSocialFollows = () => {
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useUserFolloweesInfinite({
+	} = useUserFolloweesInfiniteQuery({
 		userId: user?.id,
 	});
 
@@ -79,7 +79,7 @@ const RightPanelSocialFollows = () => {
 			) : (isLoading || followees === undefined) ? (
 				<Icons.loader className='w-8 h-8 mx-auto' />
 			) : isError ? (
-				<div className='text-center text-muted-foreground'>Une erreur s'est produite</div>
+				<div className='text-center text-muted-foreground'>Une erreur s&apos;est produite</div>
 			) : (
 				<div className='text-center text-muted-foreground'>Aucun suivi</div>
 			)}
@@ -93,7 +93,7 @@ const RightPanelSocialRequests = () => {
 		data: requests,
 		isLoading,
 		isError,
-	} = useUserFollowersRequests({
+	} = useUserFollowersRequestsQuery({
 		userId: user?.id,
 	});
 
@@ -134,8 +134,9 @@ const RightPanelSocialRequests = () => {
 		<>
 			{requests?.length ? (
 				<>
-					{requests?.map(({ id, user }, index) => (
+					{requests?.map(({ id, user }, i) => (
 						<Card
+						key={i}
 						className={"flex flex-col rounded-xl bg-muted hover:bg-muted-hover p-1"}
 						>
 							<div className="flex items-center p-1">
@@ -155,7 +156,7 @@ const RightPanelSocialRequests = () => {
 			) : (isLoading || requests === undefined) ? (
 				<Icons.loader className='w-8 h-8 mx-auto' />
 			) : isError ? (
-				<div className='text-center text-muted-foreground'>Une erreur s'est produite</div>
+				<div className='text-center text-muted-foreground'>Une erreur s&apos;est produite</div>
 			) : (
 				<div className='text-center text-muted-foreground'>Aucune demande</div>
 			)}

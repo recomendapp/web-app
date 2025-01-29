@@ -65,21 +65,29 @@ export const metadata: Metadata = {
 
 interface RootLayoutProps {
   children: React.ReactNode;
-  params: { lang: string };
+  params: Promise<{ lang: string }>;
 }
 
-export default async function LangLayout({
-  children,
-  params: { lang },
-}: RootLayoutProps) {
+export default async function LangLayout(props: RootLayoutProps) {
+  const params = await props.params;
+
+  const {
+    lang
+  } = params;
+
+  const {
+    children
+  } = props;
+
   const direction = getLangDir(lang);
   return (
     <html lang={lang} dir={direction} suppressHydrationWarning>
-      <Script
+      {process.env.NODE_ENV === 'production' ? (
+        <Script
         defer
         src={process.env.NEXT_PUBLIC_ANAYLTICS_URL}
         data-website-id={process.env.NEXT_PUBLIC_ANALYTICS_ID}
-      />
+      />) : null}
       <body className={cn('font-sans antialiased', fontSans.variable)}>
         <Providers locale={lang}>{children}</Providers>
       </body>

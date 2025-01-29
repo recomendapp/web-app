@@ -1,25 +1,27 @@
 import SearchPlaylistsFull from '@/components/Search/SearchPlaylists/SearchPlaylistsFull';
 import { redirect } from 'next/navigation';
 
-export async function generateMetadata({
-  searchParams,
-}: {
-  searchParams: {
-    q: string | undefined;
-  };
-}) {
+export async function generateMetadata(
+  props: {
+    searchParams: Promise<{
+      q: string | undefined;
+    }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   return {
     title: `${searchParams.q} - Playlists`,
   };
 }
 
-export default function SearchFilms({
-  searchParams,
-}: {
-  searchParams?: {
-    q: string;
-  };
-}) {
+export default async function SearchFilms(
+  props: {
+    searchParams?: Promise<{
+      q: string;
+    }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   if (!searchParams?.q) redirect('/search');
   return <SearchPlaylistsFull query={searchParams?.q} />;
 }

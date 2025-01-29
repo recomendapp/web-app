@@ -43,7 +43,8 @@ import { Playlist } from '@/types/type.db';
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { useDeletePlaylist } from '@/features/playlist/playlistMutations';
+import { useDeletePlaylist } from '@/features/client/playlist/playlistMutations';
+import { userKeys } from '@/features/client/user/userKeys';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -83,7 +84,7 @@ export function PlaylistForm({
       }
     ) => {
       const {data: response, error } = await supabase
-        .from('playlist')
+        .from('playlists')
         .insert(payload)
         .select(`*`)
         .single()
@@ -91,17 +92,20 @@ export function PlaylistForm({
       return response;
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['user', user?.id, 'playlists', { order: 'updated_at-desc'}], (oldData: InfiniteData<Playlist[], unknown>) => {
-        if (!oldData || !oldData.pages) {
-            return oldData;
-        }
-        const newPage = [data, ...oldData.pages[0]];
-        const newData: InfiniteData<Playlist[], unknown> = {
-          ...oldData,
-          pages: [newPage, ...oldData.pages.slice(1)],
-        };
-        return newData;
+      queryClient.invalidateQueries({
+        queryKey: userKeys.playlists({ userId: user?.id as string }),
       });
+      // queryClient.setQueryData(['user', user?.id, 'playlists', { order: 'updated_at-desc'}], (oldData: InfiniteData<Playlist[], unknown>) => {
+      //   if (!oldData || !oldData.pages) {
+      //       return oldData;
+      //   }
+      //   const newPage = [data, ...oldData.pages[0]];
+      //   const newData: InfiniteData<Playlist[], unknown> = {
+      //     ...oldData,
+      //     pages: [newPage, ...oldData.pages.slice(1)],
+      //   };
+      //   return newData;
+      // });
     },
   });
 
@@ -120,7 +124,7 @@ export function PlaylistForm({
     }) => {
       if (!playlistId) throw Error('Missing activity id');
       const {data: response, error } = await supabase
-        .from('playlist')
+        .from('playlists')
         .update(payload)
         .eq('id', playlistId)
         .select(`*`)

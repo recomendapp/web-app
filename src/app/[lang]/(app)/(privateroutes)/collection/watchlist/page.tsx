@@ -3,7 +3,7 @@
 import { TableWatchlist } from './_components/table/TableWatchlist';
 import { WatchlistHeader } from './_components/WatchlistHeader';
 import { useAuth } from '@/context/auth-context';
-import { useUserWatchlist } from '@/features/user/userQueries';
+import { useUserWatchlistQuery } from '@/features/client/user/userQueries';
 
 export default function Watchlist() {
   const { user } = useAuth();
@@ -12,7 +12,7 @@ export default function Watchlist() {
     data: watchlist,
     isLoading,
     isError,
-  } = useUserWatchlist({
+  } = useUserWatchlistQuery({
     userId: user?.id,
   })
 
@@ -20,10 +20,8 @@ export default function Watchlist() {
 
   return (
     <main className="h-full">
-      <WatchlistHeader data={watchlist as any} />
-      <div className="p-4">
-        <TableWatchlist data={watchlist as any} />
-      </div>
+      <WatchlistHeader data={watchlist} />
+      <TableWatchlist data={watchlist} className="m-4" />
     </main>
   );
 }

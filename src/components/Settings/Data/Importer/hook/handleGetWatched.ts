@@ -15,7 +15,7 @@ export const handleGetWatched = async (
 	}[],
 	userId: string
 ) => {
-	const supabase = createServerClient();
+	const supabase = await createServerClient();
 
     const success = [];
 	const failed = [];

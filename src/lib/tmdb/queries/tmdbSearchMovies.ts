@@ -21,7 +21,7 @@ const searchMovieSchema = z
 	})
 
 export const tmdbSearchMovies = async (query: string, language = routing.defaultLocale, page = 1) => {
-	const supabase = createServerClient(language);
+	const supabase = await createServerClient(language);
 	const verifiedField = searchMovieSchema.safeParse({ query, language, page });
 	if (!verifiedField.success) {
 		throw new Error(verifiedField.error.errors.join('; '));

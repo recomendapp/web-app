@@ -2,12 +2,12 @@
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import UserCard from "@/components/User/UserCard/UserCard";
-import { UserMovieGuidelistView } from "@/types/type.db";
+import { UserRecosAggregated } from "@/types/type.db";
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useModal } from "@/context/modal-context";
 
 interface GuidelistSendersModalProps extends ModalType {
-	  comments: UserMovieGuidelistView['senders'];
+	  comments: UserRecosAggregated['senders'];
 }
 
 export const GuidelistSendersModal = ({

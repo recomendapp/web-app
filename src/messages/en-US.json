@@ -5,6 +5,9 @@
       "added_by": "added by",
       "sort_by": "sort by",
       "go_to_film": "go to film",
+      "go_to_serie": "go to serie",
+      "go_to_user": "go to user",
+      "go_to_person": "go to person",
       "view_recommendations": "view {count, plural, one {reco} other {recos}}",
       "view_directors": "view {count, plural, one {director} other {directors}}",
       "no_director": "no director",
@@ -53,7 +56,19 @@
       "watch_film_streaming_or_download": "Watch <important>{title}</important> on streaming or download",
       "person": "{count, plural, one {person} other {persons}}",
       "top_result": "top result",
-      "user": "{count, plural, one {user} other {users}}"
+      "user": "{count, plural, one {user} other {users}}",
+      "reco": "{count, plural, one {reco} other {recos}}",
+      "my_recos": "my recos",
+      "item": "{count, plural, one {item} other {items}}",
+      "type": "type",
+      "complete": "complete",
+      "completed": "completed",
+      "collection": "{count, plural, one {collection} other {collections}}",
+      "most_recent": "most recent",
+      "most_old": "most old",
+      "known_for": "known for",
+      "release_date": "release date",
+      "vote_average": "vote average"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
@@ -63,7 +78,10 @@
       "playlist_not_found": "playlist not found",
       "user_not_found": "user not found",
       "film_not_found": "film not found",
-      "serie_not_found": "serie not found"
+      "serie_not_found": "serie not found",
+      "review_not_found": "review not found",
+      "person_not_found": "person not found",
+      "wrong_arguments": "wrong arguments"
     },
     "word": {
       "hello": "Hello",
@@ -178,6 +196,22 @@
             }
           }
         },
+        "my_recos": {
+          "label": "my recos",
+          "search": {
+            "placeholder": "search in my recos..."
+          },
+          "modal": {
+            "delete_confirm": {
+              "title": "delete from my recos",
+              "description": "Are you sure you want to delete <important>{title}</important> from your recos?"
+            },
+            "complete_confirm": {
+              "title": "complete the reco",
+              "description": "Are you sure you want to complete the reco <important>{title}</important>?"
+            }
+          }
+        },
         "watchlist": {
           "label": "watchlist",
           "search": {
@@ -186,7 +220,7 @@
           "modal": {
             "delete_confirm": {
               "title": "delete from the watchlist",
-              "description": "Are you sure you want to delete <important>{film}</important> from your watchlist?"
+              "description": "Are you sure you want to delete <important>{title}</important> from your watchlist?"
             }
           }
         },
@@ -198,7 +232,7 @@
           "modal": {
             "delete_confirm": {
               "title": "delete from the likes",
-              "description": "Are you sure you want to delete <important>{film}</important> from your likes?"
+              "description": "Are you sure you want to delete <important>{title}</important> from your likes?"
             }
           }
         }
@@ -217,7 +251,7 @@
       "modal": {
         "delete_confirm": {
           "title": "delete from the playlist",
-          "description": "Are you sure you want to delete <important>{film}</important> from your playlist?"
+          "description": "Are you sure you want to delete <important>{title}</important> from your playlist?"
         }
       }
     },
@@ -580,6 +614,17 @@
         "description": "{title} is a serie by {creators} first aired in {year}. Synopsis: {overview}",
         "description_no_creator": "{title} is a serie first aired in {year}. Synopsis: {overview}"
       }
+    },
+    "review": {
+      "metadata": {
+        "title": "Review of {title} by @{username}"
+      },
+      "create": {
+        "metadata": {
+          "title": "Write a review on {title}",
+          "description": "Share your opinion on {title}."
+        }
+      }
     }
   },
   "routes": {
@@ -647,10 +692,10 @@
     }
   },
   "widgets": {
-    "user_movie_watchlist": {
+    "user_watchlist": {
       "label": "To watch"
     },
-    "user_movie_guidelist": {
+    "user_recos": {
       "label": "Reco by your friends"
     },
     "user_friends_playlists": {

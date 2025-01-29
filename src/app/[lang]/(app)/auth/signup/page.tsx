@@ -30,7 +30,6 @@ import { Input } from '@/components/ui/input';
 import useDebounce from '@/hooks/use-debounce';
 import { useCheckUsernameAvailability } from '@/hooks/use-check-username-availability';
 import { InputPassword } from '@/components/ui/input-password';
-import { count } from 'console';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -137,6 +136,7 @@ export default function Signup() {
 		if (!form.formState.errors.username?.message && usernameToCheck) {
 			usernameAvailability.check(usernameToCheck);
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [usernameToCheck]);
 
 	useEffect(() => {
@@ -145,7 +145,8 @@ export default function Signup() {
 				message: common('form.username.schema.unavailable'),
 			});
 		}
-	}, [usernameAvailability.isAvailable]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [usernameAvailability.isAvailable, common]);
 	
 	const handleSubmit = async (data: SignupFormValues) => {
 		try {

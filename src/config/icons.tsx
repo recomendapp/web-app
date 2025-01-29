@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { el } from 'date-fns/locale';
 import {
+  AlertCircleIcon,
   AlertTriangle,
   ArchiveIcon,
   ArchiveRestoreIcon,
@@ -36,6 +37,7 @@ import {
   Moon,
   MoreHorizontalIcon,
   MoreVertical,
+  PenIcon,
   Pizza,
   Plus,
   SearchIcon,
@@ -216,6 +218,7 @@ export const Icons = {
   delete: Trash,
   close: X,
   spinner: Loader2,
+  star: StarIcon,
   loader: ({ className, ...props }: LucideProps) => (
     <Icons.spinner className={cn('animate-spin', className)} {...props} />
   ),
@@ -231,6 +234,7 @@ export const Icons = {
   settings: Settings,
   billing: CreditCard,
   add: Plus,
+  edit: PenIcon,
   lock: LockIcon,
   warning: AlertTriangle,
   user: User,
@@ -238,6 +242,7 @@ export const Icons = {
   arrowRight: ArrowRight,
   help: HelpCircle,
   pizza: Pizza,
+  error: AlertCircleIcon,
   minus: MinusIcon,
   twitter: Twitter,
   archive: ArchiveIcon,

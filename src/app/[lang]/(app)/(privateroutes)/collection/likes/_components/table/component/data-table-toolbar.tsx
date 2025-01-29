@@ -5,10 +5,10 @@ import { Table } from '@tanstack/react-table';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { DataTableViewOptions } from '@/app/[lang]/(app)/(privateroutes)/collection/guidelist/_components/table/component/data-table-view-options';
 import { DataTableSortOptions } from './data-table-sort-options';
 import { useTranslations } from 'next-intl';
 import { capitalize } from 'lodash';
+import { DataTableViewOptions } from './data-table-view-options';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -26,12 +26,12 @@ export function DataTableToolbar<TData>({
         <Input
           placeholder={capitalize(common('library.collection.likes.search.placeholder'))}
           value={
-            (table.getColumn('movie')?.getFilterValue() as string) ??
+            (table.getColumn('item')?.getFilterValue() as string) ??
             ''
           }
           onChange={(event) =>
             table
-              .getColumn('movie')
+              .getColumn('item')
               ?.setFilterValue(event.target.value)
           }
           className="h-8 w-full lg:w-[250px]"

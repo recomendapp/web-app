@@ -8,7 +8,7 @@ import Loader from '@/components/Loader/Loader';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { useTmdbSearchPersonsInfinite } from '@/features/tmdb/tmdbQueries';
+import { useTmdbSearchPersonsInfinite } from '@/features/client/tmdb/tmdbQueries';
 import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 
@@ -44,9 +44,9 @@ export default function SearchCrewCastFull({ query }: { query: string }) {
   if (isLoading) {
     return (
       <div className="flex flex-col gap-2 max-h-screen overflow-hidden">
-        {Array.from({ length: 20 }).map((item: any) => (
+        {Array.from({ length: 20 }).map((_, i) => (
           <div
-            key={item}
+            key={i}
             className="text-sm flex justify-between p-2 rounded-md"
           >
             <div className="flex items-center gap-2">

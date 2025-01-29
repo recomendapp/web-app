@@ -1,17 +1,15 @@
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import MovieHoverCard from "./MovieHoverCard";
-import MovieReviewOverview from "@/components/Review/MovieReviewOverview";
-import ActivityIcon from '@/components/Review/ActivityIcon';
 import { cn } from "@/lib/utils";
-import { Heart } from "lucide-react";
-import { UserMovieActivity } from "@/types/type.db";
+import { UserActivity } from "@/types/type.db";
+import { Icons } from "@/config/icons";
+import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
   
 export function FeedActivity({
 activity,
 className,
 }: {
-activity: UserMovieActivity;
+activity: UserActivity;
 className?: string;
 }) {
 	const t = useTranslations('feed');
@@ -28,7 +26,8 @@ className?: string;
 				  </Link>
 				),
 				movie: () => (
-				  <MovieHoverCard movie={activity.movie} />
+					<></>
+				//   <MovieHoverCard movie={activity.movie} />
 				),
 			  })}
 			</span>
@@ -77,10 +76,13 @@ className?: string;
 			  </span>
 			)}
 		  	{activity?.rating && (
-				<ActivityIcon movieId={activity.movie_id} rating={activity.rating} className="inline-flex"/>
+				<IconMediaRating
+				rating={activity.rating}
+				className="inline-flex"
+				/>
 			)}
 			{activity?.is_liked && (
-				<Heart
+				<Icons.like
 					size={24}
 					className="text-background fill-accent-pink inline-flex"
 				/>

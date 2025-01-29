@@ -8,7 +8,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { useTmdbSearchMoviesInfinite } from '@/features/tmdb/tmdbQueries';
+import { useTmdbSearchMoviesInfinite } from '@/features/client/tmdb/tmdbQueries';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
 
@@ -45,9 +45,9 @@ export default function SearchFilmsFull({ query }: { query: string }) {
   if (isLoading) {
     return (
       <div className="flex flex-col gap-2 max-h-screen overflow-hidden">
-        {Array.from({ length: 20 }).map((item: any) => (
+        {Array.from({ length: 20 }).map((_, i) => (
           <div
-            key={item}
+            key={i}
             className="text-sm flex justify-between p-2 rounded-md"
           >
             <div className="flex items-center gap-2">

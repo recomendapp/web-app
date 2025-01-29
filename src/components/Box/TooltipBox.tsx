@@ -7,7 +7,7 @@ import { TooltipContentProps, TooltipPortal, TooltipTriggerProps } from '@radix-
 
 interface TooltipBoxProps extends React.ComponentProps<typeof TooltipContent> {
 	children: React.ReactNode;
-	tooltip?: string | TooltipContentProps;
+	tooltip?: string | TooltipContentProps | null;
 	tooltipTrigger?: TooltipTriggerProps;
 }
 
@@ -17,7 +17,7 @@ export const TooltipBox: React.FC<TooltipBoxProps> = ({
 	tooltipTrigger,
 	...props
 }) => {
-	if (!tooltip) return children as JSX.Element;
+	if (!tooltip) return children;
 
 	let tooltipContentProps: TooltipContentProps = {};
 

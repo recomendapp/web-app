@@ -13,7 +13,7 @@ import { useInView } from 'react-intersection-observer';
 import { Search } from 'lucide-react';
 import useDebounce from '@/hooks/use-debounce';
 import Link from 'next/link';
-import { useUserFollowersInfinite } from '@/features/user/userQueries';
+import { useUserFollowersInfiniteQuery } from '@/features/client/user/userQueries';
 import { useSupabaseClient } from '@/context/supabase-context';
 
 
@@ -35,7 +35,7 @@ export function ProfileFollowersModal({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useUserFollowersInfinite({
+	} = useUserFollowersInfiniteQuery({
 		userId: userId,
 		filters: {
 			search: debouncedSearch,

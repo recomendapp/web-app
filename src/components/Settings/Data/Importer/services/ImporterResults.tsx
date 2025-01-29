@@ -32,6 +32,7 @@ const ImporterResults = ({
 		if (importStep === 1) importMovies();
 		else if (importStep === 2) importWatchlist();
 		else if (importStep === 3) setStep(5);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [importStep]);
 
 	const importMovies = async () => {
