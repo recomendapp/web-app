@@ -2,7 +2,7 @@ import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getPerson, getPersonFilms } from '@/features/server/media/mediaQueries';
 import { getTranslations } from 'next-intl/server';
 import { replace, upperFirst } from 'lodash';
-import { CardMedia } from '@/components/Card/CardMedia';
+import { CardMedia } from '@/components/Cards/CardMedia';
 import { z } from "zod";
 import { Icons } from '@/config/icons';
 import Link from 'next/link';

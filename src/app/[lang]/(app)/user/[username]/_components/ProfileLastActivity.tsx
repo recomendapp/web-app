@@ -6,7 +6,7 @@ import { Profile } from '@/types/type.db';
 import { useUserActivitiesInfiniteQuery } from '@/features/client/user/userQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { CardMedia } from '@/components/Card/CardMedia';
+import { CardMedia } from '@/components/Cards/CardMedia';
 
 export default function ProfileLastActivity({ profile }: { profile: Profile }) {
   const common = useTranslations('common');

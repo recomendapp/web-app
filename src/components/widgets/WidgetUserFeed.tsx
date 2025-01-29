@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
-import { CardUserActivity } from "../Card/CardUserActivity";
+import { CardUserActivity } from "../Cards/CardUserActivity";
 
 const WIDGET_USER_FEED_LIMIT = 4;
 

@@ -17,7 +17,7 @@ import { MediaType, UserActivity, UserReview } from '@/types/type.db';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import ActivityIcon from '@/components/Review/ActivityIcon';
-import { CardUser } from '@/components/Card/CardUser';
+import { CardUser } from '@/components/Cards/CardUser';
 import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import Tiptap from '@/components/tiptap/Tiptap';
@@ -25,11 +25,11 @@ import { useUserReviewInsertMutation, useUserReviewUpdateMutation } from '@/feat
 import { upperFirst } from 'lodash';
 import { useModal } from '@/context/modal-context';
 import { ReviewSettings } from './ReviewSettings';
-import UserActivityRating from '@/components/Media/actions/UserActivityRating';
+import UserActivityRating from '@/components/Medias/actions/UserActivityRating';
 import { useRouter } from 'next/navigation';
 import { getMediaUrl } from '@/hooks/get-media-details';
 import ActionReviewLike from './actions/ActionReviewLike';
-import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
+import { IconMediaRating } from '@/components/Medias/icons/IconMediaRating';
 
 const MAX_TITLE_LENGTH = 50;
 const MAX_BODY_LENGTH = 5000;
