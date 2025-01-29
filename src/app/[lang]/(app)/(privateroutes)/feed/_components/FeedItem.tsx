@@ -9,7 +9,7 @@ import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useFormatter } from "next-intl";
 import { UserActivity } from "@/types/type.db";
 import { getMediaDetails } from "@/hooks/get-media-details";
-import { CardReview } from "@/components/Cards/CardReview";
+import { CardReview } from "@/components/Card/CardReview";
 
 const FeedItem = ({ activity }: { activity?: UserActivity }) => {
 	const format = useFormatter();

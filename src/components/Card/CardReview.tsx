@@ -7,7 +7,7 @@ import { WithLink } from "../utils/WithLink";
 import { CardUser } from "./CardUser";
 import { useFormatter, useNow } from "next-intl";
 import { JSONContent } from "@tiptap/react";
-import { IconMediaRating } from "@/components/Medias/icons/IconMediaRating";
+import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import ActionReviewLike from "@/components/Review/actions/ActionReviewLike";
 
 interface CardReviewProps

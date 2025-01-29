@@ -1,4 +1,4 @@
-import { CardUser } from "@/components/Cards/CardUser";
+import { CardUser } from "@/components/Card/CardUser";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

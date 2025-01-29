@@ -5,7 +5,7 @@ import { Fragment, useState } from "react"
 import { useUserDiscoveryInfinite } from "@/features/client/user/userQueries"
 import UserCard from "../User/UserCard/UserCard"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "../ui/select"
-import { CardUser } from "../Cards/CardUser"
+import { CardUser } from "../Card/CardUser"
 import { useTranslations } from "next-intl"
 
 export const WidgetUserDiscovery = ({

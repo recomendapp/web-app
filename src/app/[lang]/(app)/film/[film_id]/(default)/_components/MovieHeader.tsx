@@ -34,14 +34,14 @@ import { useModal } from '@/context/modal-context';
 import { ModalMovieFollowersRating } from '@/components/Modals/Movie/ModalMovieFollowersRating';
 import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import UserActivityRating from '@/components/Medias/actions/UserActivityRating';
-import UserActivityLike from '@/components/Medias/actions/UserActivityLike';
-import UserActivityWatch from '@/components/Medias/actions/UserActivityWatch';
-import UserWatchlist from '@/components/Medias/actions/UserWatchlist';
-import UserActivityWatchedDate from '@/components/Medias/actions/UserActivityWatchedDate';
-import UserRecos from '@/components/Medias/actions/UserRecos';
-import { IconMediaRating } from '@/components/Medias/icons/IconMediaRating';
-import MediaActionPlaylistAdd from '@/components/Medias/actions/MediaActionPlaylistAdd';
+import UserActivityRating from '@/components/Media/actions/UserActivityRating';
+import UserActivityLike from '@/components/Media/actions/UserActivityLike';
+import UserActivityWatch from '@/components/Media/actions/UserActivityWatch';
+import UserWatchlist from '@/components/Media/actions/UserWatchlist';
+import UserActivityWatchedDate from '@/components/Media/actions/UserActivityWatchedDate';
+import UserRecos from '@/components/Media/actions/UserRecos';
+import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
+import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlaylistAdd';
 
 export default function MovieHeader({
   movie,

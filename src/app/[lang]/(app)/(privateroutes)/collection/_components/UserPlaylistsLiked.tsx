@@ -10,7 +10,7 @@ import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Playlist } from '@/types/type.db';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { CardPlaylist } from '@/components/Cards/CardPlaylist';
+import { CardPlaylist } from '@/components/Card/CardPlaylist';
 
 export function UserPlaylistsLiked({
   sidebarExpanded,

@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useUserActivitiesInfiniteQuery } from '@/features/client/user/userQueries';
-import { CardMedia } from '@/components/Cards/CardMedia';
+import { CardMedia } from '@/components/Card/CardMedia';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Badge } from '@/components/ui/badge';

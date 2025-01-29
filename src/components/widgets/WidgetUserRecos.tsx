@@ -7,7 +7,7 @@ import { UserAvatar } from '@/components/User/UserAvatar/UserAvatar';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
-import { CardMedia } from '@/components/Cards/CardMedia';
+import { CardMedia } from '@/components/Card/CardMedia';
 
 export const WidgetUserRecos = ({
   className,

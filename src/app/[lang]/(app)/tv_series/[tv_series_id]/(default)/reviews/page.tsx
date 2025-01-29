@@ -17,7 +17,7 @@ import { z } from "zod";
 import { useSearchParams } from 'next/navigation';
 import { useMediaReviewsInfiniteQuery } from '@/features/client/media/mediaQueries';
 import { Icons } from '@/config/icons';
-import { CardReview } from '@/components/Cards/CardReview';
+import { CardReview } from '@/components/Card/CardReview';
 import { MyReviewButton } from '@/components/Review/MyReviewButton';
 
 const NUMBER_OF_RESULT = 20;
