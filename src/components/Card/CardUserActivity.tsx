@@ -7,7 +7,7 @@ import Link from "next/link";
 import { DateOnlyYearTooltip } from "../utils/Date";
 import { UserAvatar } from "../User/UserAvatar/UserAvatar";
 import { FeedActivity } from "@/app/[lang]/(app)/(privateroutes)/feed/_components/FeedActivity";
-import { useFormatter } from "next-intl";
+import { useFormatter, useNow } from "next-intl";
 import { getMediaDetails } from "@/hooks/get-media-details";
 
 interface CardUserActivityProps
@@ -21,6 +21,7 @@ const CardUserActivityDefault = React.forwardRef<
 	Omit<CardUserActivityProps, "variant">
 >(({ className, activity, children, ...props }, ref) => {
 	const format = useFormatter();
+	const now = useNow({ updateInterval: 1000 * 10 });
 	const media = getMediaDetails(activity?.media);
 	return (
 		<Card
@@ -52,7 +53,7 @@ const CardUserActivityDefault = React.forwardRef<
 						<FeedActivity activity={activity} className="text-sm @md/feed-item:text-base text-muted-foreground"/>
 					</div>
 					<div className='text-sm text-muted-foreground opacity-0 group-hover:opacity-100 duration-500'>
-						{format.relativeTime(new Date(media?.date ?? ''), new Date())}
+						{format.relativeTime(new Date(activity?.watched_date ?? ''), now)}
 					</div>
 				</div>
 				<Link href={media.url} className="space-y-2">
