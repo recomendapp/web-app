@@ -1,12 +1,58 @@
 import { mediaKeys } from "@/features/server/media/mediaKeys";
+import { createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@/lib/supabase/server-no-cookie";
-import { MediaMovie, MediaTvSeries } from "@/types/type.db";
+import { Media, MediaMovie, MediaTvSeries } from "@/types/type.db";
 import { unstable_cache as cache } from "next/cache";
 
-const MEDIA_REVALIDATE_TIME = 24 * 60 * 60 * 1000;
+export const MEDIA_REVALIDATE_TIME = 24 * 60 * 60 * 1000;
+
+export const getMediaFollowersAverageRating = async ({
+	media_id,
+} : {
+	media_id: number;
+}) => {
+	const supabase = await createServerClient();
+	const { data, error } = await supabase
+		.from('user_followers_average_rating')
+		.select(`*`)
+		.match({
+			media_id: media_id,
+		})
+		.maybeSingle();
+	if (error) throw error;
+	return data;
+};
 
 /* -------------------------------------------------------------------------- */
-/*                                    FILM                                    */
+/*                                    MEDIA                                   */
+/* -------------------------------------------------------------------------- */
+export const getMedia = async ({
+	locale,
+	id,
+} : {
+	locale: string;
+	id: number;
+}) => {
+	return await cache(
+		async () => {
+			const supabase = await createClient(locale);
+			return await supabase
+				.from('media')
+				.select('*')
+				.match({
+					media_id: id,
+				})
+				.returns<Media[]>()
+				.maybeSingle();
+		},
+		mediaKeys.detail({ locale: locale, id: id }),
+		{ revalidate: MEDIA_REVALIDATE_TIME }
+	)();
+};
+/* -------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------- */
+/*                                    MOVIE                                   */
 /* -------------------------------------------------------------------------- */
 export const getMovie = async ({
 	locale,
@@ -24,7 +70,7 @@ export const getMovie = async ({
 					*,
 					cast:tmdb_movie_credits(
 						id,
-						person:person(*),
+						person:media_person(*),
 						role:tmdb_movie_roles(*)
 					),
 					videos:tmdb_movie_videos(*)
@@ -67,7 +113,7 @@ export const getMovieReviews = async ({
 	let from = (filters.page - 1) * filters.perPage;
 	let to = from + filters.perPage - 1;
 	let request = supabase
-		.from('user_review_activity')
+		.from('user_review')
 		.select(`
 			*,
 			user(*)
@@ -86,7 +132,7 @@ export const getMovieReviews = async ({
 		}
 	}
 	return await request;
-}
+};
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
@@ -108,7 +154,7 @@ export const getTvSeries = async ({
 					*,
 					cast:tmdb_tv_series_credits(
 						*,
-						person:person(*)
+						person:media_person(*)
 					),
 					videos:tmdb_tv_series_videos(*)
 				`)
@@ -148,7 +194,7 @@ export const getPerson = async ({
 	  async () => {
 		const supabase = await createClient(locale);
 		const { data: person, error } = await supabase
-			.from('person_full')
+			.from('media_person')
 			.select(`
 				*,
 				movies:media_movie_aggregate_credits(*, media:media_movie(*)),
@@ -157,7 +203,7 @@ export const getPerson = async ({
 			.match({
 				'id': id,
 			})
-			.order('media(release_date)', { referencedTable: 'movies', ascending: false, nullsFirst: false })
+			.order('media(date)', { referencedTable: 'movies', ascending: false, nullsFirst: false })
 			.limit(10, { foreignTable: 'movies' })
 			.limit(10, { foreignTable: 'tv_series' })
 			.maybeSingle();
@@ -172,35 +218,35 @@ export const getPerson = async ({
 	)();
 };
 
-export const getPersonCombinedCredits = async ({
-	id,
-	locale,
-} : {
-	id: number;
-	locale: string;
-}) => {
-	return await cache(
-		async () => {
-			const supabase = await createClient(locale);
-			const { data: credits, error } = await supabase
-				.from('media_person_combined_credits')
-				.select(`*`)
-				.match({
-					'person_id': id,
-				})
-				.order('popularity', { ascending: false, nullsFirst: false })
-				.order('tmdb_popularity', { ascending: false, nullsFirst: false })
-				.limit(10)
-			if (error) throw error;
-			return credits;
-		},
-		mediaKeys.personCombinedCredits({
-			locale: locale,
-			id: id,
-		}),
-		{ revalidate: 6 * 60 * 60 * 1000 }
-	)();
-}
+// export const getPersonCombinedCredits = async ({
+// 	id,
+// 	locale,
+// } : {
+// 	id: number;
+// 	locale: string;
+// }) => {
+// 	return await cache(
+// 		async () => {
+// 			const supabase = await createClient(locale);
+// 			const { data: credits, error } = await supabase
+// 				.from('media_person_combined_credits')
+// 				.select(`*`)
+// 				.match({
+// 					'person_id': id,
+// 				})
+// 				.order('popularity', { ascending: false, nullsFirst: false })
+// 				.order('tmdb_popularity', { ascending: false, nullsFirst: false })
+// 				.limit(10)
+// 			if (error) throw error;
+// 			return credits;
+// 		},
+// 		mediaKeys.personCombinedCredits({
+// 			locale: locale,
+// 			id: id,
+// 		}),
+// 		{ revalidate: 6 * 60 * 60 * 1000 }
+// 	)();
+// }
 
 export const getPersonFilms = async ({
 	id,
@@ -238,10 +284,10 @@ export const getPersonFilms = async ({
 				if (filters.sortBy && filters.sortOrder) {
 					switch (filters.sortBy) {
 						case 'release_date':
-							request = request.order(`media(${filters.sortBy})`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
+							request = request.order(`media(date)`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
 							break;
 						case 'vote_average':
-							request = request.order(`media(${filters.sortBy})`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
+							request = request.order(`media(vote_average)`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
 							request = request.order(`media(tmdb_vote_average)`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
 							break;
 						default:

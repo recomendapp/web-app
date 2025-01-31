@@ -26,18 +26,17 @@ export const tmdbSearchSeries = async (query: string, language = routing.default
 	if (!verifiedField.success) {
 		throw new Error(verifiedField.error.errors.join('; '));
 	}
-	const tmdbResults = await (
-		await fetch(
-			`${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/tv?query=${query}&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}`
-		)
-	).json();
-	const request = await supabase
+	const tmdbResults = await fetch(
+		`${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/tv?query=${query}&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}`
+	).then(res => res.json() as Promise<{ results: { id: number }[] }>);
+	const { data, error } = await supabase
 		.from('media_tv_series')
 		.select('*')
 		.in('id', tmdbResults.results.map((serie: any) => serie.id))
 		.limit(20);
 	
-	const series: MediaTvSeries[] = tmdbResults.results.map((person: any) => request.data?.find((m: any) => m.id === person.id));
-
-	return series;
+	if (error) throw error;
+	return tmdbResults.results.map(tmdbSerie =>
+		data.find(serie => serie.id === tmdbSerie.id)
+	).filter(serie => serie);
 }

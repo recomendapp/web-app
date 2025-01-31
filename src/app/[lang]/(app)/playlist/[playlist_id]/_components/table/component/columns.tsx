@@ -3,16 +3,10 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
-import { DateOnlyYearTooltip } from '@/components/utils/Date';
-import { ConvertHoursMinutes } from '@/lib/utils';
-import { Clock } from 'lucide-react';
-import MovieCardSmall from '@/components/Movie/MovieCardSmall';
 import { DataComment } from './data-table-comment';
-import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import { PlaylistItem } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
 import { capitalize, upperFirst } from 'lodash';
-import { getMediaDetails } from '@/hooks/get-media-details';
 import { Item } from './data-table-item';
 import { BadgeMedia } from '@/components/Badge/BadgeMedia';
 
@@ -39,7 +33,7 @@ export const Columns = (): ColumnDef<PlaylistItem>[] => {
     },
     {
       id: 'item',
-      accessorFn: (row) => getMediaDetails(row?.media).title,
+      accessorFn: (row) => row?.media?.title,
       meta: {
         displayName: capitalize(common('messages.item', { count: 1 })),
       },
@@ -88,7 +82,7 @@ export const Columns = (): ColumnDef<PlaylistItem>[] => {
     },
     {
       id: 'type',
-      accessorFn: (row) => row?.media_type,
+      accessorFn: (row) => row?.media?.media_type,
       meta: {
         displayName: capitalize(common('messages.type')),
       },
@@ -99,7 +93,7 @@ export const Columns = (): ColumnDef<PlaylistItem>[] => {
         />
       ),
       cell: ({ row }) => (
-        <BadgeMedia type={row.original?.media_type} />
+        <BadgeMedia type={row.original?.media?.media_type} />
       ),
     },
     {

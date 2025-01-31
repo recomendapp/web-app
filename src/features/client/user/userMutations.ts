@@ -160,23 +160,19 @@ export const useUserActivityInsertMutation = () => {
 		mutationFn: async ({
 			userId,
 			mediaId,
-			mediaType,
 			rating,
 			isLiked,
 		} : {
-			userId?: string;
-			mediaId?: number;
-			mediaType?: MediaType;
+			userId: string;
+			mediaId: number;
 			rating?: number;
 			isLiked?: boolean;
 		}) => {
-			if (!userId || !mediaId || !mediaType) throw Error('Missing profile id or media id or media type');
 			const { data, error } = await supabase
 				.from('user_activity')
 				.insert({
 					user_id: userId,
 					media_id: mediaId,
-					media_type: mediaType,
 					rating: rating,
 					is_liked: isLiked,
 				})
@@ -189,21 +185,19 @@ export const useUserActivityInsertMutation = () => {
 			queryClient.setQueryData(userKeys.activity({
 				userId: data.user_id,
 				mediaId: data.media_id,
-				mediaType: data.media_type,
 			}), data);
 
 			// Remove media from watchlist
 			queryClient.setQueryData(userKeys.watchlistItem({
 				userId: data.user_id,
 				mediaId: data.media_id,
-				mediaType: data.media_type,
 			}), null);
 
-			// Remove media from recommendations
-			queryClient.setQueryData(userKeys.recos({userId: data.user_id}), (oldData: UserRecosAggregated[]) => {
-				if (!oldData) return oldData;
-				return oldData.filter((reco: any) => !(reco.media_id === data.media_id && reco.media_type === data.media_type));
-			});
+			// TODO: Remove media from recommendations
+			// queryClient.setQueryData(userKeys.recos({userId: data.user_id}), (oldData: UserRecosAggregated[]) => {
+			// 	if (!oldData) return oldData;
+			// 	return oldData.filter((reco: any) => !(reco.media_id === data.media_id && reco.media_type === data.media_type));
+			// });
 
 			queryClient.invalidateQueries({
 				queryKey: userKeys.feed({ userId: data.user_id })
@@ -219,14 +213,13 @@ export const useUserActivityDeleteMutation = () => {
 		mutationFn: async ({
 			activityId,
 		} : {
-			activityId?: number;
+			activityId: number;
 		}) => {
-			if (!activityId) throw Error('Missing activity id');
 			const { data, error } = await supabase
 				.from('user_activity')
 				.delete()
 				.eq('id', activityId)
-				.select()
+				.select(`*, review:user_review(*)`)
 				.single();
 			if (error) throw error;
 			return data;
@@ -235,7 +228,6 @@ export const useUserActivityDeleteMutation = () => {
 			queryClient.setQueryData(userKeys.activity({
 				userId: data.user_id,
 				mediaId: data.media_id,
-				mediaType: data.media_type,
 			}), null);
 
 			queryClient.invalidateQueries({
@@ -255,12 +247,11 @@ export const useUserActivityUpdateMutation = () => {
 			watchedDate,
 			isLiked,
 		} : {
-			activityId?: number;
+			activityId: number;
 			rating?: number | null;
 			watchedDate?: Date;
 			isLiked?: boolean;
 		}) => {
-			if (!activityId) throw Error('Missing activity id');
 			const { data, error } = await supabase
 				.from('user_activity')
 				.update({
@@ -281,7 +272,6 @@ export const useUserActivityUpdateMutation = () => {
 			queryClient.setQueryData(userKeys.activity({
 				userId: data.user_id,
 				mediaId: data.media_id,
-				mediaType: data.media_type,
 			}), data);
 
 			isLikedChange && queryClient.invalidateQueries({
@@ -296,7 +286,6 @@ export const useUserActivityUpdateMutation = () => {
 		}
 	});
 };
-
 /* -------------------------------------------------------------------------- */
 
 /* --------------------------------- REVIEW --------------------------------- */
@@ -304,11 +293,9 @@ export const useUserActivityUpdateMutation = () => {
 export const useUserReviewInsertMutation = ({
 	userId,
 	mediaId,
-	mediaType,
 } : {
 	userId?: string;
 	mediaId: number;
-	mediaType: MediaType;
 }) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
@@ -337,12 +324,12 @@ export const useUserReviewInsertMutation = ({
 		onSuccess: (data) => {
 			// Invalidate reviews queries
 			queryClient.invalidateQueries({
-				queryKey: mediaKeys.reviews({ mediaId, mediaType }),
+				queryKey: mediaKeys.reviews({ mediaId }),
 			});
 
 			// Invalidate the review activity
 			userId && queryClient.invalidateQueries({
-				queryKey: userKeys.activity({ userId: userId, mediaId, mediaType }),
+				queryKey: userKeys.activity({ userId: userId, mediaId }),
 			});
 		}
 	});
@@ -362,8 +349,7 @@ export const useUserReviewUpdateMutation = () => {
 			body: JSONContent;
 		}) => {
 			const { data, error } = await supabase
-				.from('user_review_media_activity')
-				// @ts-ignore
+				.from('user_review')
 				.update({
 					title: title,
 					body: body,
@@ -382,11 +368,9 @@ export const useUserReviewUpdateMutation = () => {
 export const useUserReviewDeleteMutation = ({
 	userId,
 	mediaId,
-	mediaType,
 } : {
 	userId?: string;
 	mediaId: number;
-	mediaType: MediaType;
 }) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
@@ -404,19 +388,18 @@ export const useUserReviewDeleteMutation = ({
 			return {
 				id,
 				mediaId,
-				mediaType,
 			}
 		},
 		onSuccess: (data) => {
-			// queryClient.setQueryData(userKeys.review({ reviewId: data.id }), null);
+			queryClient.setQueryData(userKeys.review({ reviewId: data.id }), null);
 
 			queryClient.invalidateQueries({
-				queryKey: mediaKeys.reviews({ mediaId: data.mediaId, mediaType: data.mediaType }),
+				queryKey: mediaKeys.reviews({ mediaId: data.mediaId }),
 			});
 
 			// Invalidate the review activity
 			userId && queryClient.invalidateQueries({
-				queryKey: userKeys.activity({ userId: userId, mediaId: data.mediaId, mediaType: data.mediaType }),
+				queryKey: userKeys.activity({ userId: userId, mediaId: data.mediaId }),
 			});
 		},
 	});
@@ -477,44 +460,39 @@ export const useUserReviewLikeDeleteMutation = () => {
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------------- RECOS --------------------------------- */
-export const useUserRecosInsertMutation = ({
-	senderId,
-	mediaId,
-	mediaType,
-} : {
-	senderId?: string;
-	mediaId: number;
-	mediaType: MediaType;
-}) => {
+export const useUserRecosInsertMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async ({
+			senderId,
+			mediaId,
 			receivers,
 			comment,
 		} : {
+			senderId: string;
+			mediaId: number;
 			receivers: User[];
 			comment: string;
 		}) => {
-			if (!senderId) throw Error('Missing sender id');
-			if (!mediaId || !mediaType) throw Error('Missing media id or media type');
-			if (!receivers || receivers.length === 0) throw Error('Missing receivers');
+			if (receivers.length === 0) throw Error('Missing receivers');
 			const { error } = await supabase
 				.rpc('user_recos_insert', {
 					mediaid: mediaId,
-					mediatype: mediaType,
 					receiver_user_ids: receivers.map((user) => String(user?.id)),
 					sender_user_id: senderId,
 					comment: comment,
 				})
 			if (error) throw error;
+			return {
+				senderId,
+				mediaId,
+			}
 		},
-		onSuccess: () => {
-		},
-		meta: {
-			invalidates: [
-				userKeys.recosSend({ mediaId, mediaType }),
-			]
+		onSuccess: ({ mediaId }) => {
+			queryClient.invalidateQueries({
+				queryKey: userKeys.recosSend({ mediaId: mediaId }),
+			});
 		}
 	});	
 };
@@ -526,11 +504,9 @@ export const useUserRecosDeleteMutation = () => {
 		mutationFn: async ({
 			userId,
 			mediaId,
-			mediaType,
 		} : {
 			userId: string;
 			mediaId: number;
-			mediaType: MediaType;
 		}) => {
 			const { error } = await supabase
 				.from('user_recos')
@@ -539,7 +515,6 @@ export const useUserRecosDeleteMutation = () => {
 				})
 				.match({
 					media_id: mediaId,
-					media_type: mediaType,
 					user_id: userId,
 					status: 'active',
 				})
@@ -547,7 +522,6 @@ export const useUserRecosDeleteMutation = () => {
 				return {
 					userId,
 					mediaId,
-					mediaType,
 				};
 		},
 		onSuccess: (data) => {
@@ -564,7 +538,7 @@ export const useUserRecosDeleteMutation = () => {
 				queryClient.setQueryData(key, (currentData: UserRecosAggregated[] | undefined) => {
 					if (!currentData) return currentData;
 					return currentData.filter(
-						(reco) => !(reco.media_id === data.mediaId && reco.media_type === data.mediaType)
+						(reco) => reco.media_id !== data.mediaId
 					);
 				});
 			});
@@ -580,11 +554,9 @@ export const useUserRecosCompleteMutation = () => {
 		mutationFn: async ({
 			userId,
 			mediaId,
-			mediaType,
 		} : {
 			userId: string;
 			mediaId: number;
-			mediaType: MediaType;
 		}) => {
 			const { error } = await supabase
 				.from('user_recos')
@@ -593,7 +565,6 @@ export const useUserRecosCompleteMutation = () => {
 				})
 				.match({
 					media_id: mediaId,
-					media_type: mediaType,
 					user_id: userId,
 					status: 'active',
 				})
@@ -602,7 +573,6 @@ export const useUserRecosCompleteMutation = () => {
 			return {
 				userId,
 				mediaId,
-				mediaType,
 			}
 		},
 		onSuccess: (data) => {
@@ -619,7 +589,7 @@ export const useUserRecosCompleteMutation = () => {
 				queryClient.setQueryData(key, (currentData: UserRecosAggregated[] | undefined) => {
 					if (!currentData) return currentData;
 					return currentData.filter(
-						(reco) => !(reco.media_id === data.mediaId && reco.media_type === data.mediaType)
+						(reco) => reco.media_id !== data.mediaId
 					);
 				});
 			});
@@ -641,18 +611,15 @@ export const useUserWatchlistInsertMutation = ({
 		mutationFn: async ({
 			userId,
 			mediaId,
-			mediaType,
 		} : {
 			userId: string;
 			mediaId: number;
-			mediaType: MediaType;
 		}) => {
 			const { data, error } = await supabase
 				.from('user_watchlist')
 				.insert({
 					user_id: userId,
 					media_id: mediaId,
-					media_type: mediaType,
 				})
 				.select()
 				.single()
@@ -663,7 +630,6 @@ export const useUserWatchlistInsertMutation = ({
 			queryClient.setQueryData(userKeys.watchlistItem({
 				userId: data.user_id,
 				mediaId: data.media_id,
-				mediaType: data.media_type,
 			}), data);
 		},
 		meta: {
@@ -698,7 +664,6 @@ export const useUserWatchlistDeleteMutation = () => {
 			queryClient.setQueryData(userKeys.watchlistItem({
 				userId: data.user_id,
 				mediaId: data.media_id,
-				mediaType: data.media_type,
 			}), null);
 			/* -------------- Delete the item in all the watchlist queries -------------- */
 			const baseKey = userKeys.watchlist({ userId: data.user_id});
@@ -743,6 +708,78 @@ export const useUserWatchlistUpdateMutation = () => {
 				.single()
 			if (error) throw error;
 			return data;
+		}
+	});
+};
+/* -------------------------------------------------------------------------- */
+
+/* -------------------------------- PLAYLIST -------------------------------- */
+export const useUserPlaylistSavedInsertMutation = () => {
+	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({
+			userId,
+			playlistId,
+		} : {
+			userId: string;
+			playlistId: number;
+		}) => {
+			const { data, error } = await supabase
+				.from('playlists_saved')
+				.insert({
+					user_id: userId,
+					playlist_id: playlistId,
+				})
+				.select()
+				.single()
+			if (error) throw error;
+			return data;
+		},
+		onSuccess: (data) => {
+			queryClient.setQueryData(userKeys.playlistSaved({
+				userId: data.user_id,
+				playlistId: data.playlist_id,
+			}), data);
+
+			queryClient.invalidateQueries({
+				queryKey: userKeys.playlistsSaved({
+					userId: data.user_id,
+				})
+			})
+		}
+	});
+};
+
+export const useUserPlaylistSavedDeleteMutation = () => {
+	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({
+			savedId,
+		} : {
+			savedId: number;
+		}) => {
+			const { data, error } = await supabase
+				.from('playlists_saved')
+				.delete()
+				.eq('id', savedId)
+				.select()
+				.single();
+			if (error) throw error;
+			return data;
+		},
+		onSuccess: (data) => {
+			queryClient.setQueryData(userKeys.playlistSaved({
+				userId: data.user_id,
+				playlistId: data.playlist_id,
+			}), null);
+
+			queryClient.invalidateQueries({
+				queryKey: userKeys.playlistsSaved({
+					userId: data.user_id,
+				})
+			})
 		}
 	});
 };

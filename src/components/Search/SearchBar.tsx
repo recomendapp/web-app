@@ -1,9 +1,6 @@
 'use client';
-
 import React, { useEffect, useState, useRef } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-
-// ICON
 import { BiSearch } from 'react-icons/bi';
 import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
@@ -15,9 +12,8 @@ export default function SearchBar({ className }: SearchBarProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const q = searchParams.get('q');
-
-  const [searchQuery, setSearchQuery] = useState<any>(q);
-  const [isSearching, setIsSearching] = useState<any>(false);
+  const [searchQuery, setSearchQuery] = useState(q ?? '');
+  const [isSearching, setIsSearching] = useState(false);
   const searchbarRef = useRef<HTMLDivElement>(null);
 
   const debouncedSearchTerm = useDebounce(searchQuery);
@@ -35,13 +31,14 @@ export default function SearchBar({ className }: SearchBarProps) {
   };
 
   useEffect(() => {
-    let queryString = '';
-    if (searchQuery) {
-      queryString += `q=${searchQuery}`;
+    if (!debouncedSearchTerm) return;
+    const params = new URLSearchParams(searchParams);
+    params.set('q', searchQuery);
+    if (!pathname.startsWith('/search')) {
+      router.push(`/search?${params.toString()}`);
+    } else {
+      router.push(`${pathname}?${params.toString()}`);
     }
-    const url = queryString ? `/search?${queryString}` : pathname
-    url && router.push(url);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm]);
 
   return (
@@ -55,11 +52,9 @@ export default function SearchBar({ className }: SearchBarProps) {
           isSearching && 'border-white'
         }`}
       >
-        {/* SEARCH BUTTON */}
         <button className="py-3 px-4">
           <BiSearch size={20} />
         </button>
-        {/* SEARCH FORM */}
         <input
           name="searchTerm"
           type="search"

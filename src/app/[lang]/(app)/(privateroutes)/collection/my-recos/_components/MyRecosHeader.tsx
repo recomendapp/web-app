@@ -7,13 +7,13 @@ export function MyRecosHeader({ data }: { data: UserRecosAggregated[] }) {
   const common = useTranslations('common');
   const randomBackdrop = (object: UserRecosAggregated[]) => {
     const itemsWithBackdrop = object.filter(
-      (item) => item?.media?.backdrop_path
+      (item) => item?.media?.backdrop_url
     );
 
     if (itemsWithBackdrop.length === 0) return null;
 
     const randomIndex = Math.floor(Math.random() * itemsWithBackdrop.length);
-    return itemsWithBackdrop[randomIndex]?.media?.backdrop_path;
+    return itemsWithBackdrop[randomIndex]?.media?.backdrop_url;
   };
 
   return (
@@ -21,7 +21,7 @@ export function MyRecosHeader({ data }: { data: UserRecosAggregated[] }) {
       style={{
         backgroundImage: `${
           data.length
-            ? `url('https://image.tmdb.org/t/p/original/${randomBackdrop(data)}`
+            ? `url(${randomBackdrop(data)})`
             : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')"
         }`,
       }}

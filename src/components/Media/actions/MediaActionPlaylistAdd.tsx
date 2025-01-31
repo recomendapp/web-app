@@ -13,7 +13,6 @@ import { ModalPlaylistAdd } from "@/components/Modals/actions/ModalPlaylistAdd";
 interface MediaActionPlaylistAddProps
 	extends React.ComponentProps<typeof Button> {
 		mediaId: number;
-		mediaType: MediaType;
 		mediaTitle?: string | null;
 		stopPropagation?: boolean;
 	}
@@ -21,7 +20,7 @@ interface MediaActionPlaylistAddProps
 const MediaActionPlaylistAdd = React.forwardRef<
 	HTMLDivElement,
 	MediaActionPlaylistAddProps
->(({ mediaId, mediaType, stopPropagation = true, mediaTitle, className, ...props }, ref) => {
+>(({ mediaId, stopPropagation = true, mediaTitle, className, ...props }, ref) => {
 	const { user } = useAuth();
 	const pathname = usePathname();
 	const { openModal } = useModal();
@@ -53,7 +52,7 @@ const MediaActionPlaylistAdd = React.forwardRef<
 			className={cn("rounded-full", className)}
 			onClick={(e) => {
 				stopPropagation && e.stopPropagation();
-				openModal(ModalPlaylistAdd, { mediaId, mediaType, mediaTitle })
+				openModal(ModalPlaylistAdd, { mediaId, mediaTitle })
 			}}
 			{...props}
 		  >

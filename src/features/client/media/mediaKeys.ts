@@ -2,37 +2,41 @@ import { MediaType } from "@/types/type.db"
 
 export const mediaKeys = {
 	all: ['media'] as const,
+
+	specify: ({
+		type,
+	} : {
+		type: MediaType;
+	}) => [type] as const,
 	
 	detail: ({
 		id,
 		type,
 	} : {
 		id: number;
-		type: MediaType;
-	}) => [...mediaKeys.all, type, id] as const,
+		type?: MediaType;
+	}) => type
+		? [mediaKeys.specify({ type }), String(id)] as const
+		: [...mediaKeys.all, id] as const,
 
 	/* --------------------------------- REVIEWS -------------------------------- */
 	reviews: ({
 		mediaId,
-		mediaType,
 		filters,
 	} : {
 		mediaId: number;
-		mediaType: MediaType;
 		filters?: any;
-	}) => filters ? [...mediaKeys.detail({ id: mediaId, type: mediaType }), 'reviews', filters] as const : [...mediaKeys.detail({ id: mediaId, type: mediaType }), 'reviews'] as const,
+	}) => filters ? [...mediaKeys.detail({ id: mediaId }), 'reviews', filters] as const : [...mediaKeys.detail({ id: mediaId }), 'reviews'] as const,
 	/* -------------------------------------------------------------------------- */
 
 	/* -------------------------------- PLAYLISTS ------------------------------- */
 	playlists: ({
 		mediaId,
-		mediaType,
 		filters,
 	} : {
 		mediaId: number;
-		mediaType: MediaType;
 		filters?: any;
-	}) => filters ? [...mediaKeys.detail({ id: mediaId, type: mediaType }), 'playlists', filters] as const : [...mediaKeys.detail({ id: mediaId, type: mediaType }), 'playlists'] as const,
+	}) => filters ? [...mediaKeys.detail({ id: mediaId }), 'playlists', filters] as const : [...mediaKeys.detail({ id: mediaId }), 'playlists'] as const,
 	/* -------------------------------------------------------------------------- */
 
 	/* -------------------------------------------------------------------------- */

@@ -39,7 +39,7 @@
       "review": "{count, plural, one {review} other {reviews}}",
       "no_overview": "no synopsis",
       "cast": "cast",
-      "no_casting": "no casting",
+      "no_cast": "no casting",
       "recent": "recent",
       "popular": "popular",
       "no_reviews": "no reviews",
@@ -60,6 +60,7 @@
       "reco": "{count, plural, one {reco} other {recos}}",
       "my_recos": "my recos",
       "item": "{count, plural, one {item} other {items}}",
+      "item_count": "{count, plural, one {# item} other {# items}}",
       "type": "type",
       "complete": "complete",
       "completed": "completed",
@@ -68,7 +69,9 @@
       "most_old": "most old",
       "known_for": "known for",
       "release_date": "release date",
-      "vote_average": "vote average"
+      "vote_average": "vote average",
+      "added": "added",
+      "updated_at": "updated at"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
@@ -699,7 +702,7 @@
       "label": "Reco by your friends"
     },
     "user_friends_playlists": {
-      "label": "Friends' playlists"
+      "label": "Friends playlists"
     },
     "user_feed": {
       "label": "Latest activities"

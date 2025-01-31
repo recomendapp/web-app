@@ -25,13 +25,13 @@ export default function PlaylistHeader({
 
   const randomBackdrop = (object: PlaylistItem[]) => {
     const itemsWithBackdrop = object.filter(
-      (item ) => item?.media?.backdrop_path
+      (item ) => item?.media?.backdrop_url
     );
 
     if (itemsWithBackdrop.length === 0) return null;
 
     const randomIndex = Math.floor(Math.random() * itemsWithBackdrop.length);
-    return itemsWithBackdrop[randomIndex]?.media?.backdrop_path;
+    return itemsWithBackdrop[randomIndex]?.media?.backdrop_url;
   };
 
   const openPlaylistModal = () => {
@@ -44,7 +44,7 @@ export default function PlaylistHeader({
   return (
     <HeaderBox
       style={{
-        backgroundImage:  playlist?.items?.length ? `url(https://image.tmdb.org/t/p/w1280/${randomBackdrop(playlist?.items)})` : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')",
+        backgroundImage:  playlist?.items?.length ? `${randomBackdrop(playlist?.items)}` : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')",
       }}
     >
       <div className="flex flex-col w-full gap-4 items-center md:flex-row">
@@ -95,7 +95,7 @@ export default function PlaylistHeader({
             <div className="flex gap-1 font-light">
               <UserCard user={playlist?.user} />
               <span className=" before:content-['_•_']" >
-                {/* {common('word.film_count', {count: Number(playlist?.items_count) ?? 0})} */}
+                {common('word.film_count', {count: Number(playlist?.items_count) ?? 0})}
               </span>
               <span className=" before:content-['_•_']" >
                 {ConvertHoursMinutes(totalRuntime)}

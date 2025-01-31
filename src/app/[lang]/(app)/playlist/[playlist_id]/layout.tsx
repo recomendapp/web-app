@@ -37,6 +37,6 @@ export default async function PlaylistLayout(
 
     const playlist = await getPlaylist(params.playlist_id);
     if (!playlist) notFound();
-    return <>{children}</>;
+    return children;
 };
 

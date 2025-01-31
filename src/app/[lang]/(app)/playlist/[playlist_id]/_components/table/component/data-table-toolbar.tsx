@@ -1,14 +1,9 @@
 'use client';
-
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTableSortOptions } from './data-table-sort-options';
-
-// GRAPHQL
-import { PlaylistAction } from '../../../../../../../../components/Playlist/FilmPlaylist/Actions/PlaylistAction';
 import { useAuth } from '@/context/auth-context';
 import { Playlist } from '@/types/type.db';
 import { Icons } from '@/config/icons';
@@ -18,6 +13,8 @@ import { usePlaylistIsAllowedToEdit } from '@/features/client/playlist/playlistQ
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { DataTableViewOptions } from './data-table-view-options';
+import { ModalShare } from '@/components/Modals/Share/ModalShare';
+import PlaylistActionSave from '@/components/Playlist/actions/PlaylistActionSave';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -62,7 +59,21 @@ export function DataTableToolbar<TData>({
         )}
       </div>
       <div className="w-full lg:w-fit flex items-center justify-between gap-2">
-        {user?.id !== playlist?.user_id ? <PlaylistAction playlistId={playlist?.id!} /> : null}
+        {user?.id !== playlist?.user_id ? (
+          <PlaylistActionSave playlistId={playlist?.id!} />
+        ) : null}
+        <Button
+        size={'icon'}
+        variant={'action'}
+        onClick={() => openModal(ModalShare, {
+          title: playlist?.title,
+          type: 'playlist',
+          path: `/playlist/${playlist?.id}`,
+        })}
+        >
+          <Icons.share />
+          <span className='sr-only'>{upperFirst(common('word.share'))}</span>
+        </Button>
         <div className="w-fit flex items-center gap-2">
           {/* {isAllowedToEdit ? <Button
           variant="outline"

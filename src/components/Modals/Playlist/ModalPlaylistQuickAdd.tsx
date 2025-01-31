@@ -184,7 +184,7 @@ export function ModalPlaylistQuickAdd({
 						>
 							<AspectRatio ratio={1 / 1}>
 								<ImageWithFallback
-									src={`https://image.tmdb.org/t/p/original/${movie?.poster_path}`}
+									src={movie.avatar_url ?? ''}
 									alt={movie?.title ?? ''}
 									fill
 									className="rounded-md object-cover"

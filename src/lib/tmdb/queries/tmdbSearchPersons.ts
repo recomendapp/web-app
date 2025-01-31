@@ -2,7 +2,6 @@
 
 import { routing } from "@/lib/i18n/routing";
 import { createServerClient } from "@/lib/supabase/server";
-import { Person } from "@/types/type.db";
 import { z } from "zod";
 
 const searchPersonsSchema = z
@@ -26,18 +25,18 @@ export const tmdbSearchPersons = async (query: string, language = routing.defaul
 	if (!verifiedField.success) {
 		throw new Error(verifiedField.error.errors.join('; '));
 	}
-	const tmdbResults = await (
-		await fetch(
+	const tmdbResults = await fetch(
 			`${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/person?query=${query}&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}`
-		)
-	).json();
-	const request = await supabase
-		.from('person')
+		).then(res => res.json() as Promise<{ results: { id: number }[] }>);
+	const { data, error } = await supabase
+		.from('media_person')
 		.select('*')
 		.in('id', tmdbResults.results.map((person: any) => person.id))
 		.limit(20);
 	
-	const persons: Person[] = tmdbResults.results.map((person: any) => request.data?.find((m: any) => m.id === person.id));
+	if (error) throw error;
 
-	return persons;
+	return tmdbResults.results.map(tmdbPerson =>
+		data.find(person => person.id === tmdbPerson.id)
+	).filter(person => person);
 }

@@ -54,8 +54,8 @@ export async function generateMetadata(
   });
   if (!person) return { title: upperFirst(common('errors.person_not_found')) };
   return {
-	title: `Série avec ${person.name}`,
-	description: person.biography,
+	title: `Série avec ${person.title}`,
+	description: person.extra_data.biography,
   };
 }
 

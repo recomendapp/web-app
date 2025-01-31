@@ -7,12 +7,9 @@ export default function Search({ children }: { children: React.ReactNode }) {
   const { device } = useUI();
   return (
     <div className="p-4">
-      <div className={`
-        flex flex-col gap-4 pb-4
-        ${device !== "mobile" ? 'hidden' : ''}
-      `}>
+      {device === 'mobile' ? <div className={`flex flex-col gap-4 pb-4`}>
         <SearchBar />
-      </div>
+      </div> : null}
       <div className="@container/search flex flex-col gap-2">
         <SearchFilters />
         {children}

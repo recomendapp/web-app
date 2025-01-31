@@ -16,4 +16,10 @@ export const playlistKeys = {
 	
 	
 	allowedToEdit: (playlistId: number) => [...playlistKeys.detail(playlistId), 'allowedToEdit'] as const,
+
+	featured: ({
+		filters,
+	} : {
+		filters?: any;
+	}) => filters ? [...playlistKeys.all, 'featured', filters] : [...playlistKeys.all, 'featured'] as const,
 };

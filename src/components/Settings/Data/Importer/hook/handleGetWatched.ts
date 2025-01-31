@@ -1,7 +1,6 @@
 "use server"
 
 import { createServerClient } from "@/lib/supabase/server";
-import { Movie } from "@/types/type.db";
 
 export const handleGetWatched = async (
 	movies: {

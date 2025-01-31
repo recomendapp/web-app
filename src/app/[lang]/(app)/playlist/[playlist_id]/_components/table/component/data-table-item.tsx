@@ -4,7 +4,7 @@ import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { getMediaDetails } from "@/hooks/get-media-details";
 import { cn } from "@/lib/utils";
-import { Media } from "@/types/type.db";
+import { Media, MediaPerson } from "@/types/type.db";
 import Link from "next/link";
 
 interface ItemProps
@@ -27,8 +27,8 @@ export const Item = React.forwardRef<
 				)}
 			>
 				<ImageWithFallback
-				src={mediaDetails.poster_url ?? ''}
-				alt={mediaDetails.title ?? ''}
+				src={media.avatar_url ?? ''}
+				alt={media.title ?? ''}
 				className={cn("object-cover")}
 				width={60}
           		height={90}
@@ -37,12 +37,12 @@ export const Item = React.forwardRef<
 				/>
 			</div>
 			<div className="flex-1">
-				<Link href={mediaDetails.url} className="font-medium line-clamp-2">
-				{mediaDetails.title}
+				<Link href={media.url ?? ''} className="font-medium line-clamp-2">
+				{media.title}
 				</Link>
-				<Credits credits={mediaDetails.mainCredits ?? []} className="line-clamp-1" />
-				{mediaDetails.date ? <p className="lg:hidden">
-					<DateOnlyYearTooltip date={mediaDetails.date} />
+				<Credits credits={media.main_credit ?? []} className="line-clamp-1" />
+				{media.date ? <p className="lg:hidden">
+					<DateOnlyYearTooltip date={media.date} />
 				</p> : null}
 			</div>
 		</div>
@@ -55,21 +55,21 @@ const Credits = ({
 	credits,
 	className,
   }: {
-	credits: any[];
+	credits: MediaPerson[];
 	className?: string;
   }) => {
 	if (!credits || credits.length === 0) return null;
 	return (
 	  <p className={cn('line-clamp-1', className)}>
-		{credits?.map((credit: any, index: number) => (
-		  <span key={credit.id}>
+		{credits?.map((credit, index) => (
+		  <span key={index}>
 			<Button
 			  variant={'link'}
 			  className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition"
 			  asChild
 			>
-			  <Link href={`/person/${credit.id}`}>
-				{credit.name}
+			  <Link href={credit.url ?? ''}>
+				{credit.title}
 			  </Link>
 			</Button>
 			{index !== credits.length - 1 && (

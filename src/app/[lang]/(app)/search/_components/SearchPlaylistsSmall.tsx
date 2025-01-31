@@ -35,7 +35,7 @@ export default function SearchPlaylistsSmall({
 			let to = from - 1 + numberOfResult;
 
 			const { data } = await supabase
-        .from('playlist')
+        .from('playlists')
         .select('*')
         .order('updated_at', { ascending: false})
         .range(from, to)
@@ -61,7 +61,7 @@ export default function SearchPlaylistsSmall({
         : (
           <Button
           variant={'link'}
-          className="text-2xl font-bold justify-start p-0 hover:text-foreground"
+          className="text-2xl font-bold justify-start p-0"
           asChild
           >
             <Link href={`/search/playlists?q=${query}`}>{upperFirst(common('word.playlist', { count: 2}))}</Link>

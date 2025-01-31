@@ -51,7 +51,7 @@ export const Columns = (): ColumnDef<UserActivity>[] => {
     // },
     {
       id: 'type',
-      accessorFn: (row) => row?.media_type,
+      accessorFn: (row) => row?.media?.media_type,
       meta: {
         displayName: capitalize(common('messages.type')),
       },
@@ -62,7 +62,7 @@ export const Columns = (): ColumnDef<UserActivity>[] => {
         />
       ),
       cell: ({ row }) => (
-        <BadgeMedia type={row.original?.media_type} />
+        <BadgeMedia type={row.original?.media?.media_type} />
       ),
     },
     {

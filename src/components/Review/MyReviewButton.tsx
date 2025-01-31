@@ -1,8 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/context/auth-context";
 import { useUserActivityQuery } from "@/features/client/user/userQueries";
-import { getMediaDetails, getMediaUrl } from "@/hooks/get-media-details";
-import { MediaType } from "@/types/type.db";
 import { upperFirst } from "lodash";
 import { FileEdit } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -10,12 +8,8 @@ import Link from "next/link";
 
 export function MyReviewButton({
 	mediaId,
-	mediaType,
-	mediaSlug,
  } : {
 	mediaId: number;
-	mediaType: MediaType;
-	mediaSlug?: string;
 }) {
 	const common = useTranslations('common');
 	const { user } = useAuth();
@@ -25,10 +19,8 @@ export function MyReviewButton({
 	} = useUserActivityQuery({
 		userId: user?.id,
 		mediaId: mediaId,
-		mediaType: mediaType,
 	});
-	const mediaUrl = getMediaUrl({ id: mediaId, type: mediaType, slug: mediaSlug });
-  
+
 	if (!user) return;
 
 	if (isLoading || activity === undefined) {
@@ -40,7 +32,7 @@ export function MyReviewButton({
 	if (!activity?.review) {
 		return (
 			<Link
-			href={`${mediaUrl}/review/create/`}
+			href={`/review/create/${mediaId}`}
 			className="bg-blue-500 rounded-full px-4 py-1 flex gap-2 items-center"
 			>
 				<FileEdit />
@@ -51,7 +43,7 @@ export function MyReviewButton({
   
 	return (
 		<Link
-		href={`${mediaUrl}/review/${activity?.review?.id}`}
+		href={`/review/${activity?.review?.id}`}
 		className="bg-blue-500 rounded-full px-4 py-1 flex gap-2 items-center"
 		>
 			<FileEdit />

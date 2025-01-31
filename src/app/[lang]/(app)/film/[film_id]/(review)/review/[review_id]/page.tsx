@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation';
 import { getReview } from '@/features/server/reviews';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
-import { getMediaDetails } from '@/hooks/get-media-details';
 import Review from '@/components/Review/Review';
 
 export async function generateMetadata(
@@ -18,9 +17,8 @@ export async function generateMetadata(
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.metadata' });
   const review = await getReview(params.review_id, params.lang);
   if (!review) return { title: upperFirst(common('errors.review_not_found')) };
-  const media = getMediaDetails(review.media);
   return {
-    title: t('title', { title: media.title, username: review.user?.username }),
+    title: t('title', { title: review.activity?.media?.title, username: review.activity?.user?.username }),
   };
 }
 

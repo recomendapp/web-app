@@ -9,7 +9,7 @@ import { Check } from 'lucide-react';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { MediaType, Movie, Playlist, PlaylistType } from '@/types/type.db';
+import { Playlist, PlaylistType } from '@/types/type.db';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { useAddMediaToPlaylists, useCreatePlaylist } from '@/features/client/playlist/playlistMutations';
@@ -21,18 +21,17 @@ import { meKeys } from '@/features/client/me/meKeys';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useTranslations } from 'next-intl';
 import { useMeAddMediaToPlaylist } from '@/features/client/me/meQueries';
+import { upperFirst } from 'lodash';
 
 const COMMENT_MAX_LENGTH = 180;
 
 interface ModalPlaylistAddProps extends ModalType {
 	mediaId: number;
-	mediaType: MediaType;
 	mediaTitle?: string | null;
 }
 
 export function ModalPlaylistAdd({
 	mediaId,
-	mediaType,
 	mediaTitle,
 	...props
 } : ModalPlaylistAddProps) {
@@ -50,14 +49,12 @@ export function ModalPlaylistAdd({
 		isLoading,
 	} = useMeAddMediaToPlaylist({
 		mediaId: mediaId,
-		mediaType: mediaType,
 		userId: user?.id,
 		type,
 	});
 
 	const addMovieToPlaylist = useAddMediaToPlaylists({
 		mediaId: mediaId,
-		mediaType: mediaType,
 		userId: user?.id,
 	});
 
@@ -71,11 +68,11 @@ export function ModalPlaylistAdd({
 			comment: comment,
 		}, {
 			onSuccess: () => {
-				toast.success('Ajouté');
+				toast.success(upperFirst(common('messages.added')));
 				closeModal(props.id);
 			},
 			onError: () => {
-				toast.error("Une erreur s\'est produite");
+				toast.error(upperFirst(common('errors.an_error_occurred')));
 			}
 		});
 	}
@@ -88,7 +85,6 @@ export function ModalPlaylistAdd({
 				// Update the cache
 				queryClient.setQueryData(meKeys.addMediaToPlaylistType({
 					mediaId: mediaId,
-					mediaType: mediaType,
 					type: 'personal',
 				}), (prev: { playlist: Playlist; already_added: boolean }[] | undefined) => {
 					if (!prev) return [{ playlist, already_added: false }];
@@ -102,7 +98,7 @@ export function ModalPlaylistAdd({
 				setCreatePlaylistName('');
 			},
 			onError: (error: any) => {
-				toast.error("Une erreur s\'est produite");
+				toast.error(upperFirst(common('errors.an_error_occurred')));
 			}
 		});
 	}

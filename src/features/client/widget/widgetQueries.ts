@@ -24,8 +24,10 @@ export const useWidgetMostRecommended = ({
 		queryFn: async () => {
 			let request = supabase
 				.from('widget_most_recommended')
-				.select('*')
-				.in('media_type', ['movie', 'tv_series'])
+				.select(`
+					*,
+					media(*)
+				`)
 				.limit(10);
 			
 			if (mergedFilters) {

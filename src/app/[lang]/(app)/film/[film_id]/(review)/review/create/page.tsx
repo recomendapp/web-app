@@ -3,8 +3,9 @@ import { createServerClient } from '@/lib/supabase/server';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
-import CreateReviewForm from '@/components/Review/CreateReviewFrom';
 import { getMovie } from '@/features/server/media/mediaQueries';
+import CreateReviewForm from '@/components/Review/CreateReviewForm';
+import { Media } from '@/types/type.db';
 
 export async function generateMetadata(
   props: {
@@ -69,15 +70,6 @@ export default async function CreateReview(
   if (!movie) notFound();
 
   return (
-    <CreateReviewForm
-    media={{
-      id: movie.id,
-      media_type: 'movie',
-      poster_path: movie.poster_path,
-      title: movie.title,
-      credits: movie.directors,
-      slug: movie.slug,
-    }}
-    />
+    <CreateReviewForm media={movie as Media} />
   );
 }

@@ -22,7 +22,7 @@ import { Session } from "@supabase/supabase-js";
 import { upperFirst } from "lodash";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 interface PlanFeature {
 	type: string;
@@ -254,15 +254,15 @@ export const Upgrade = ({
               </TableRow>
             </TableHeader>
 			<TableBody>
-				{planFeatures.map((featureType) => (
-				<>
+				{planFeatures.map((featureType, index) => (
+				<Fragment key={index}>
 					<TableRow className="bg-muted/50" key={featureType.type}>
 					<TableCell colSpan={5} className="font-bold">
 						{featureType.type}
 					</TableCell>
 					</TableRow>
-					{featureType.features.map((feature) => (
-					<TableRow key={feature.name}>
+					{featureType.features.map((feature, i) => (
+					<TableRow key={i}>
 						<TableCell>
 							{feature.name} {feature.soon && <span className="text-xs text-accent-1">{`(${common('word.soon')})`}</span>}
 							{feature.description && (
@@ -283,7 +283,7 @@ export const Upgrade = ({
 						</TableCell>
 					</TableRow>
 					))}
-				</>
+				</Fragment>
 				))}
 				<TableRow>
 					<TableCell colSpan={2}></TableCell>

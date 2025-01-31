@@ -26,8 +26,8 @@ import {
 
 import LetterboxdParser from "./services/LetterboxdParser";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import ImporterResults from "./services/ImporterResults";
-import { Movie } from "@/types/type.db";
+// import ImporterResults from "./services/ImporterResults";
+import { MediaMovie } from "@/types/type.db";
 
 export type ImportResults = {
 	watchlist: {
@@ -38,7 +38,7 @@ export type ImportResults = {
 				year: string;
 				date: string;
 			},
-			movie: Movie;
+			movie: MediaMovie;
 		}[];
 		failed: any[];
 	};
@@ -49,7 +49,7 @@ export type ImportResults = {
 				title: string;
 				year: string;
 			},
-			movie: Movie;
+			movie: MediaMovie;
 			rating: number | null;
 			liked: boolean;
 		}[];
@@ -190,9 +190,9 @@ export const ImporterInitiator = ({
 							<span className="italic text-muted-foreground">Source not supported</span>
 						)
 					)}
-					{ step === 4 && (
+					{/* { step === 4 && (
 						<ImporterResults importResults={importResults} setStep={setStep} />
-					)}
+					)} */}
 				</div>
 			) : step === 3 ? (
 				<div className="flex flex-col gap-2">

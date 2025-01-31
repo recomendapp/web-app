@@ -6,13 +6,13 @@ import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { useFormatter, useTranslations } from "next-intl";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
-import { FeedCastCrew, Movie } from "@/types/type.db";
 import { ContextMenuMedia } from "@/components/ContextMenu/ContextMenuMedia";
 import { getMediaDetails } from "@/hooks/get-media-details";
+import { UserFeedCastCrew } from "@/types/type.db";
 
 interface FeedCastCrewItemProps
 	extends React.ComponentProps<typeof Card> {
-		activity: FeedCastCrew;
+		activity: UserFeedCastCrew;
 	}
 
 const FeedCastCrewItemDefault = React.forwardRef<
@@ -21,7 +21,6 @@ const FeedCastCrewItemDefault = React.forwardRef<
 >(({ className, activity, ...props }, ref) => {
 	const format = useFormatter();
 	const common = useTranslations('common');
-	const media = getMediaDetails(activity?.media);
 	return (
 		<Card
 		ref={ref}
@@ -32,12 +31,12 @@ const FeedCastCrewItemDefault = React.forwardRef<
 		{...props}
 		>
 			<Link
-			href={media.url}
+			href={activity?.media?.url ?? ''}
 			className="w-20 @md/feed-item:w-24 relative h-full shrink-0 rounded-md overflow-hidden aspect-[2/3]"
 			>
 				<ImageWithFallback
-					src={media.poster_url ??''}
-					alt={media.title ?? ''}
+					src={activity?.media?.avatar_url ??''}
+					alt={activity?.media?.title ?? ''}
 					fill
 					className="object-cover"
 					type="movie"
@@ -53,11 +52,11 @@ const FeedCastCrewItemDefault = React.forwardRef<
 					{/* PERSON */}
 					<div className="flex gap-2">
 						<Link href={`/person/${activity?.person?.slug ?? activity?.person?.id}`} className="shrink-0">
-							<UserAvatar className="w-8 h-8 rounded-md" avatar_url={activity?.person?.profile_path ? `https://image.tmdb.org/t/p/original/${activity?.person?.profile_path}` : ''} username={activity?.person?.name} />
+							<UserAvatar className="w-8 h-8 rounded-md" avatar_url={activity?.person?.avatar_url ?? ''} username={activity?.person?.title} />
 						</Link>
 						<p className="text-muted-foreground line-clamp-2">
 							{common.rich('feed.persons.new_activity', {
-								name: activity?.person?.name,
+								name: activity?.person?.title,
 								roles: activity?.jobs?.length ? activity.jobs.join(', ').toLowerCase() : common('word.unknown'),
 								film: activity?.media?.title,
 								linkPerson: (chunk) => <Link href={`/person/${activity?.person?.slug ?? activity?.person?.id}`} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
@@ -66,24 +65,24 @@ const FeedCastCrewItemDefault = React.forwardRef<
 							})}
 						</p>
 					</div>
-					<div className='hidden @md/feed-item:block text-sm text-muted-foreground'>
-						{format.relativeTime(new Date(activity?.release_date ?? ''), new Date())}
-					</div>
+					{activity?.date ? <div className='hidden @md/feed-item:block text-sm text-muted-foreground'>
+						{format.relativeTime(new Date(activity?.date ?? ''), new Date())}
+					</div> : null}
 				</div>
 				<Link href={`/film/${activity?.media?.slug ?? activity?.movie_id}`} className="space-y-2">
 					<div className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
 						<span className='font-bold'>{activity?.media?.title}</span>
 						<sup>
-							<DateOnlyYearTooltip date={activity?.media?.release_date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
+							<DateOnlyYearTooltip date={activity?.media?.date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
 						</sup>
 					</div>
 					<p
 						className={`
 							text-xs @md/feed-item:text-sm line-clamp-3 text-justify
-							${!activity?.media?.overview?.length && 'text-muted-foreground'}
+							${!activity?.media?.extra_data.overview?.length && 'text-muted-foreground'}
 						`}
 					>
-						{activity?.media?.overview?.length ? activity.media.overview : 'Aucune description'}
+						{activity?.media?.extra_data.overview?.length ? activity.media.extra_data.overview : 'Aucune description'}
 					</p>
 				</Link>
 			</div>

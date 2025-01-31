@@ -74,12 +74,18 @@ export const userKeys = {
 	activity: ({
 		userId,
 		mediaId,
-		mediaType,
 	} : {
 		userId: string;
 		mediaId: number;
-		mediaType: MediaType;
-	}) => [...userKeys.detail(userId), 'activity', mediaType, mediaId] as const,
+	}) => [...userKeys.detail(userId), 'activity', mediaId] as const,
+
+	followersRating: ({
+		userId,
+		mediaId,
+	} : {
+		userId: string;
+		mediaId: number;
+	}) => [...userKeys.detail(userId), 'followers-rating', mediaId] as const,
 	/* -------------------------------------------------------------------------- */
 
 	/* --------------------------------- REVIEW --------------------------------- */
@@ -117,11 +123,9 @@ export const userKeys = {
 
 	recosSend: ({
 		mediaId,
-		mediaType,
 	} : {
 		mediaId: number;
-		mediaType: MediaType;
-	}) => [...userKeys.all, 'recos-send', mediaType, mediaId] as const,
+	}) => [...userKeys.all, 'recos-send', mediaId] as const,
 	/* -------------------------------------------------------------------------- */
 
 	/* -------------------------------- WATCHLIST ------------------------------- */
@@ -136,12 +140,10 @@ export const userKeys = {
 	watchlistItem: ({
 		userId,
 		mediaId,
-		mediaType,
 	} : {
 		userId: string;
 		mediaId: number;
-		mediaType: MediaType;
-	}) => [...userKeys.detail(userId), 'watchlist-item', mediaType, mediaId] as const,
+	}) => [...userKeys.detail(userId), 'watchlist-item', mediaId] as const,
 	/* -------------------------------------------------------------------------- */
 
 	/* ---------------------------------- LIKES --------------------------------- */
@@ -184,6 +186,22 @@ export const userKeys = {
 		userId: string;
 		filters?: any;
 	}) => filters ? [...userKeys.detail(userId), 'playlists', filters] as const : [...userKeys.detail(userId), 'playlists'] as const,
+
+	playlistSaved: ({
+		userId,
+		playlistId,
+	} : {
+		userId: string;
+		playlistId: number;
+	}) => [...userKeys.detail(userId), 'playlist-saved', playlistId] as const,
+
+	playlistsSaved: ({
+		userId,
+		filters,
+	} : {
+		userId: string;
+		filters?: any;
+	}) => filters ? [...userKeys.detail(userId), 'playlists-saved', filters] as const : [...userKeys.detail(userId), 'playlists-saved'] as const,
 	/* -------------------------------------------------------------------------- */
 
 
@@ -206,7 +224,6 @@ export const userKeys = {
 		userId: string;
 		filters?: any;
 	}) => filters ? [...userKeys.detail(userId), 'activities', filters] as const : [...userKeys.detail(userId), 'activities'] as const,
-	movieFollowersRating: (userId: string, movieId: number) => [...userKeys.movie(userId, movieId), 'followers-rating'] as const,
 
 	collection: (userId: string) => [...userKeys.detail(userId), 'collection'] as const,
 	collectionLikes: (userId: string) => [...userKeys.collection(userId), 'likes'] as const,

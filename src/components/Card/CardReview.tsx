@@ -1,8 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { UserReview } from "@/types/type.db";
-import { getMediaUrl } from "@/hooks/get-media-details";
+import { User, UserActivity, UserReview } from "@/types/type.db";
 import { WithLink } from "../utils/WithLink";
 import { CardUser } from "./CardUser";
 import { useFormatter, useNow } from "next-intl";
@@ -14,13 +13,15 @@ interface CardReviewProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default";
 		review: UserReview;
+		activity: UserActivity;
+		author: User;
 		linked?: boolean;
 	}
 
 const CardReviewDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardReviewProps, "variant">
->(({ className, review, linked, children, ...props }, ref) => {
+>(({ className, review, activity, author, linked, children, ...props }, ref) => {
 	const now = useNow({ updateInterval: 1000 * 10 });
 	const format = useFormatter();
 	return (
@@ -34,14 +35,14 @@ const CardReviewDefault = React.forwardRef<
 		>
 			<div className="flex flex-col items-center gap-1">
 				<IconMediaRating
-				rating={review?.rating}
+				rating={activity?.rating}
 				className="h-fit"
 				/>
 				<div className="bg-muted-hover h-full w-0.5 rounded-full"></div>
 			</div>
 			<div className="w-full flex flex-col gap-1">
 				<div className="w-full flex justify-between items-center gap-2">
-					<CardUser variant="inline" user={review?.user} />
+					<CardUser variant="inline" user={author} />
 					<div className='text-sm text-muted-foreground'>
 					{format.relativeTime(new Date(review?.created_at ?? ''), now)}
 					</div>
@@ -66,9 +67,10 @@ const CardReview = React.forwardRef<
 	HTMLDivElement,
 	CardReviewProps
 >(({ className, review, linked = true, variant = "default", ...props }, ref) => {
-	const mediaUrl = (review?.media_id && review.media_type)
-		? `${getMediaUrl({ id: review.media_id, type: review.media_type, slug: review.media?.slug })}/review/${review?.id}`
-		: `/review/${review?.id}`;
+	// const mediaUrl = (review?.media_id && review.media_type)
+	// 	? `${getMediaUrl({ id: review.media_id, type: review.media_type, slug: review.media?.slug })}/review/${review?.id}`
+	// 	: `/review/${review?.id}`;
+	const mediaUrl = `/review/${review?.id}`;
 	return (
 	// <ContextMenuReview media={media}>
 		<WithLink href={linked ? mediaUrl : undefined} withOnClick>

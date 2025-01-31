@@ -25,6 +25,8 @@ import { useWidgetMostRecommended } from "@/features/client/widget/widgetQueries
 import { ModalRecoSend } from "../Modals/actions/ModalRecoSend";
 import { BadgeMedia } from "../Badge/BadgeMedia";
 import { ContextMenuMedia } from "../ContextMenu/ContextMenuMedia";
+import { getMediaDetails } from "@/hooks/get-media-details";
+import { Media } from "@/types/type.db";
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -66,10 +68,10 @@ export const WidgetMostRecommended = ({
 				if (!media) return null;
 				return (
 				<CarouselItem key={index}>
-					<ContextMenuMedia media={media!}>
+					<ContextMenuMedia media={media as Media}>
 						<div
 						style={{
-							backgroundImage: media?.backdrop_path ? `url(https://image.tmdb.org/t/p/original/${media.backdrop_path})` : 'none',
+							backgroundImage: media?.backdrop_url ? `url(${media.backdrop_url})` : undefined,
 							backgroundSize: 'cover',
 							backgroundPosition: 'center',
 							backgroundRepeat: 'no-repeat',
@@ -90,7 +92,7 @@ export const WidgetMostRecommended = ({
 									<Link href={media.url ?? ''} className="w-fit text-clamp-title line-clamp-2 font-semibold">
 										{media?.title}
 										<sup className="ml-2">
-											<DateOnlyYearTooltip date={media?.release_date ?? ''} className="text-base font-medium" />
+											<DateOnlyYearTooltip date={media.date ?? ''} className="text-base font-medium" />
 										</sup>
 									</Link>
 									{media.genres ? <div>
@@ -111,8 +113,8 @@ export const WidgetMostRecommended = ({
 										</span>
 										))}
 									</div> : null}
-									{media?.overview ? <div className="max-w-xl line-clamp-2 pt-2">
-										{media.overview}
+									{media?.extra_data?.overview ? <div className="max-w-xl line-clamp-2 pt-2">
+										{media.extra_data.overview}
 									</div> : null}
 								</CardContent>
 								<CardFooter className="flex items-center gap-2">
@@ -121,7 +123,7 @@ export const WidgetMostRecommended = ({
 										size={"icon"}
 										variant={"muted"}
 										className="bg-muted/60"
-										onClick={() => (session && media) && openModal(ModalRecoSend, { mediaId: media.id, mediaType: media.media_type, mediaTitle: media.title })}
+										onClick={() => (session && media) && openModal(ModalRecoSend, { mediaId: media.media_id!, mediaTitle: media.title })}
 										>
 											<SendIcon className="w-4 h-4 fill-primary" />
 										</Button>

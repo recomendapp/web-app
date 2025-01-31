@@ -13,7 +13,7 @@ export function LikesHeader({ data }: { data: UserActivity[] }) {
     if (itemsWithBackdrop.length === 0) return null;
 
     const randomIndex = Math.floor(Math.random() * itemsWithBackdrop.length);
-    return itemsWithBackdrop[randomIndex]?.media?.backdrop_path;
+    return itemsWithBackdrop[randomIndex]?.media?.backdrop_url;
   };
 
   return (
@@ -21,7 +21,7 @@ export function LikesHeader({ data }: { data: UserActivity[] }) {
       style={{
         backgroundImage: `${
           data.length
-            ? `url('https://image.tmdb.org/t/p/original/${randomBackdrop(data)}`
+            ? `url(${randomBackdrop(data)})`
             : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')"
         }`,
       }}

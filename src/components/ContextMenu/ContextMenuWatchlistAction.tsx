@@ -10,14 +10,14 @@ export const ContextMenuWatchlistAction = ({
 	watchlistItem,
 }: {
 	children: React.ReactNode,
-	watchlistItem: UserWatchlist,
+	watchlistItem?: UserWatchlist | null,
 }) => {
 	const { openModal } = useModal();
 	const items = [
 		[
 			{
 				icon: Icons.comment,
-				onClick: () => openModal(ModalWatchlistComment, { watchlistItem }),
+				onClick: () => watchlistItem && openModal(ModalWatchlistComment, { watchlistItem }),
 				label: watchlistItem?.comment ? 'Modifier le commentaire' : 'Ajouter un commentaire',
 			}
 		]

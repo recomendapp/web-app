@@ -18,9 +18,8 @@ export async function generateMetadata(
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.metadata' });
   const review = await getReview(params.review_id, params.lang);
   if (!review) return { title: upperFirst(common('errors.review_not_found')) };
-  const media = getMediaDetails(review.media);
   return {
-    title: t('title', { title: media.title, username: review.user?.username }),
+    title: t('title', { title: review.activity?.media?.title, username: review.activity?.user?.username }),
   };
 }
 

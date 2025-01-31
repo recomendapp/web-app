@@ -10,13 +10,13 @@ import { RuntimeTooltip } from "@/components/utils/RuntimeTooltip";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useMediaMovieDetailsQuery } from "@/features/client/media/mediaQueries";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
-import UserActivityRating from "@/components/Media/actions/UserActivityRating";
-import UserActivityLike from "@/components/Media/actions/UserActivityLike";
-import UserActivityWatch from "@/components/Media/actions/UserActivityWatch";
-import UserWatchlist from "@/components/Media/actions/UserWatchlist";
-import UserActivityWatchedDate from "@/components/Media/actions/UserActivityWatchedDate";
+import MediaActionUserActivityRating from "@/components/Media/actions/MediaActionUserActivityRating";
+import MediaActionUserActivityLike from "@/components/Media/actions/MediaActionUserActivityLike";
+import MediaActionUserActivityWatch from "@/components/Media/actions/MediaActionUserActivityWatch";
+import MediaActionUserWatchlist from "@/components/Media/actions/MediaActionUserWatchlist";
+import MediaActionUserActivityWatchedDate from "@/components/Media/actions/MediaActionUserActivityWatchedDate";
 import MediaActionPlaylistAdd from "@/components/Media/actions/MediaActionPlaylistAdd";
-import UserRecos from "@/components/Media/actions/UserRecos";
+import MediaActionUserRecos from "@/components/Media/actions/MediaActionUserRecos";
 
 export const MovieWidget = () => {
 	const {
@@ -61,7 +61,7 @@ export const MovieWidget = () => {
 					<div className="w-full h-full flex gap-2 items-center">
 						<MoviePoster
 							className="h-full w-fit"
-							src={movie.poster_url ?? ''}
+							src={movie.avatar_url ?? ''}
 							alt={movie.title ?? ''}
 							width={96}
 							height={144}
@@ -122,15 +122,15 @@ export const MovieWidget = () => {
 								</Link>
 								{/* DATE */}
 								<sup>
-									<DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-xs font-medium'/>
+									<DateOnlyYearTooltip date={movie.date ?? ''} className=' text-xs font-medium'/>
 								</sup>
-								{movie.original_title !== movie.title && (
-									<div className='text-xs !ml-0 font-semibold text-muted-foreground line-clamp-1'>{movie.original_title}</div>
+								{movie.extra_data.original_title !== movie.title && (
+									<div className='text-xs !ml-0 font-semibold text-muted-foreground line-clamp-1'>{movie.extra_data.original_title}</div>
 								)}
 							</div>
 							<div className=" space-y-2">
 							<div className="line-clamp-1">
-								{movie.directors?.map((person, index) => (
+								{movie.main_credit?.map((person, index) => (
 								<>
 									{index > 0 && <span>, </span>}
 									<span key={index}>
@@ -139,15 +139,15 @@ export const MovieWidget = () => {
 											className="w-fit p-0 h-full hover:text-accent-1 transition"
 											asChild
 										>
-											<Link href={`/person/${person?.slug ?? person?.id}`}>
-											{person?.name}
+											<Link href={person.url ?? ''}>
+											{person?.title}
 											</Link>
 										</Button>
 									</span>
 								</>
 								)) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
 								{/* RUNTIME */}
-								<RuntimeTooltip runtime={movie.runtime ?? 0} className=" before:content-['_•_']" />
+								<RuntimeTooltip runtime={movie.extra_data.runtime ?? 0} className=" before:content-['_•_']" />
 							</div>
 							{/* <div>
 								{movie?.videos?.length > 0 && (
@@ -159,15 +159,15 @@ export const MovieWidget = () => {
 					</div>
 					<div className="flex justify-between gap-2 px-4 pb-4">
 						<div className="flex gap-2 overflow-x-auto items-center">
-						<UserActivityRating mediaId={movie.id} mediaType={'movie'} />
-						<UserActivityLike mediaId={movie.id} mediaType={'movie'} />
-						<UserActivityWatch mediaId={movie.id} mediaType={'movie'} />
-						<UserWatchlist mediaId={movie.id} mediaType={'movie'} />
-						<UserActivityWatchedDate mediaId={movie.id} mediaType={'movie'} />
+						<MediaActionUserActivityRating mediaId={movie.media_id!} />
+						<MediaActionUserActivityLike mediaId={movie.media_id!} />
+						<MediaActionUserActivityWatch mediaId={movie.media_id!} />
+						<MediaActionUserWatchlist mediaId={movie.media_id!} />
+						<MediaActionUserActivityWatchedDate mediaId={movie.media_id!} />
 						</div>
 						<div className="flex gap-2 items-center">
-						<MediaActionPlaylistAdd mediaId={movie.id} mediaType={'movie'} mediaTitle={movie.title} />
-						<UserRecos mediaId={movie.id} mediaType={'movie'} mediaTitle={movie.title} />
+						<MediaActionPlaylistAdd mediaId={movie.media_id!} mediaTitle={movie.title} />
+						<MediaActionUserRecos mediaId={movie.media_id!} mediaTitle={movie.title} />
 						</div>
 					</div>
 				</div>

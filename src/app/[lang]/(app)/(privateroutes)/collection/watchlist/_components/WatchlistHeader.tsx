@@ -7,13 +7,13 @@ export function WatchlistHeader({ data }: { data: UserWatchlist[] }) {
   const common = useTranslations('common');
   const randomBackdrop = (object: UserWatchlist[]) => {
     const itemsWithBackdrop = object.filter(
-      (item) => item?.media?.backdrop_path
+      (item) => item?.media?.backdrop_url
     );
 
     if (itemsWithBackdrop.length === 0) return null;
 
     const randomIndex = Math.floor(Math.random() * itemsWithBackdrop.length);
-    return itemsWithBackdrop[randomIndex]?.media?.backdrop_path;
+    return itemsWithBackdrop[randomIndex]?.media?.backdrop_url;
   };
 
   return (
@@ -21,7 +21,7 @@ export function WatchlistHeader({ data }: { data: UserWatchlist[] }) {
       style={{
         backgroundImage: `${
           data.length
-            ? `url('https://image.tmdb.org/t/p/original/${randomBackdrop(data)}`
+            ? `url(${randomBackdrop(data)})`
             : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')"
         }`,
       }}
@@ -31,7 +31,7 @@ export function WatchlistHeader({ data }: { data: UserWatchlist[] }) {
         {capitalize(common('library.collection.watchlist.label'))}
         </h2>
         <p className="text-muted-foreground">
-        {data.length} {common('word.film', { count: data?.length })}
+        {common('messages.item_count', { count: data?.length })}
         </p>
       </div>
     </HeaderBox>

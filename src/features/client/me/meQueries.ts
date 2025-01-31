@@ -11,22 +11,19 @@ import { meKeys } from "./meKeys";
  */
 export const useMeAddMediaToPlaylist = ({
 	mediaId,
-	mediaType,
 	userId,
 	type = 'personal',
 } : {
 	mediaId: number;
-	mediaType: MediaType;
 	userId?: string;
 	type: PlaylistType;
 }) => {
 	const supabase = useSupabaseClient();
 	return useQuery({
-		queryKey: meKeys.addMediaToPlaylistType({ mediaId: mediaId, mediaType: mediaType, type: type }),
+		queryKey: meKeys.addMediaToPlaylistType({ mediaId: mediaId, type: type }),
 		queryFn: async () => {
 			if (!userId) throw Error('Missing user id');
 			if (!type) throw Error('Missing type');
-
 			if (type === 'personal') { // personal
 				const { data, error } = await supabase
 					.from('playlists')
@@ -34,7 +31,6 @@ export const useMeAddMediaToPlaylist = ({
 					.match({
 						'user_id': userId,
 						'playlist_items.media_id': mediaId,
-						'playlist_items.media_type': mediaType,
 					})
 					.order('updated_at', { ascending: false })
 				if (error) throw error;
@@ -74,7 +70,7 @@ export const useMeAddMediaToPlaylist = ({
 				// return output;
 			}
 		},
-		enabled: !!userId && !!mediaId && !!mediaType,
+		enabled: !!userId && !!mediaId,
 	});
 }
 

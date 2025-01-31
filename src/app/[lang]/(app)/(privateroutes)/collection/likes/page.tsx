@@ -24,9 +24,9 @@ export default function Likes() {
   if (!likes) return null;
 
   return (
-    <main className="h-full">
+    <div className="h-full">
       <LikesHeader data={likes} />
       <TableLikes data={likes} className='m-4' />
-    </main>
+    </div>
   );
 }

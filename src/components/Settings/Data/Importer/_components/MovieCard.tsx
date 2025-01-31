@@ -1,8 +1,7 @@
 import MoviePoster from "@/components/Movie/MoviePoster";
 import ActivityIcon from "@/components/Review/ActivityIcon";
-import { Button } from "@/components/ui/button";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
-import { Json, Movie, Person } from "@/types/type.db";
+import { MediaPerson } from "@/types/type.db";
 import { HeartIcon } from "lucide-react";
 
 export default function MovieCard({
@@ -43,11 +42,11 @@ export default function MovieCard({
   
 		  {/* DATE / GENRES / RUNTIME */}
 		  <div className="line-clamp-1">
-			{directors?.map(({ person } : { person: Person }, index: number) => (
+			{directors?.map(({ person } : { person: MediaPerson }, index: number) => (
 			  <>
 				{index > 0 && <span className='text-muted-foreground'>, </span>}
 				<span key={person?.id} className="italic text-muted-foreground">
-					{person?.name}
+					{person?.title}
 				</span>
 			  </>
 			)) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}

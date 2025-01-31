@@ -19,9 +19,9 @@ export default function Watchlist() {
   if (!watchlist) return null;
 
   return (
-    <main className="h-full">
+    <div className="h-full">
       <WatchlistHeader data={watchlist} />
       <TableWatchlist data={watchlist} className="m-4" />
-    </main>
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 // import { getPerson } from '@/features/server/persons';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
-import { WidgetPersonMostRated } from './_components/WidgetPersonMostRated';
+// import { WidgetPersonMostRated } from './_components/WidgetPersonMostRated';
 import { WidgetPersonFilms } from './_components/WidgetPersonFilms';
 import { WidgetPersonTvSeries } from './_components/WidgetPersonTvSeries';
 import { getPerson } from '@/features/server/media/mediaQueries';
@@ -25,8 +25,8 @@ export async function generateMetadata(
   });
   if (!person) return { title: upperFirst(common('errors.person_not_found')) };
   return {
-    title: `${person.name} (${person.known_for_department})`,
-    description: person.biography,
+    title: `${person.title} (${person.extra_data.known_for_department})`,
+    description: person.extra_data.biography,
   };
 }
 
@@ -47,7 +47,7 @@ export default async function Person(
   if (!person) notFound();
   return (
     <>
-        <WidgetPersonMostRated personId={id} lang={params.lang} />
+        {/* <WidgetPersonMostRated personId={id} lang={params.lang} /> */}
         <WidgetPersonFilms personSlug={params.person_id} credits={person.movies} lang={params.lang} />
     </>
   );

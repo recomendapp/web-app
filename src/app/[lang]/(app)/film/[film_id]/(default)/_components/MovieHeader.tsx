@@ -31,40 +31,41 @@ import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { MediaMovie } from '@/types/type.db';
 import { useModal } from '@/context/modal-context';
-import { ModalMovieFollowersRating } from '@/components/Modals/Movie/ModalMovieFollowersRating';
 import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import UserActivityRating from '@/components/Media/actions/UserActivityRating';
-import UserActivityLike from '@/components/Media/actions/UserActivityLike';
-import UserActivityWatch from '@/components/Media/actions/UserActivityWatch';
-import UserWatchlist from '@/components/Media/actions/UserWatchlist';
-import UserActivityWatchedDate from '@/components/Media/actions/UserActivityWatchedDate';
-import UserRecos from '@/components/Media/actions/UserRecos';
+import MediaActionUserActivityRating from '@/components/Media/actions/MediaActionUserActivityRating';
+import MediaActionUserActivityLike from '@/components/Media/actions/MediaActionUserActivityLike';
+import MediaActionUserActivityWatch from '@/components/Media/actions/MediaActionUserActivityWatch';
+import MediaActionUserWatchlist from '@/components/Media/actions/MediaActionUserWatchlist';
+import MediaActionUserActivityWatchedDate from '@/components/Media/actions/MediaActionUserActivityWatchedDate';
+import MediaActionUserRecos from '@/components/Media/actions/MediaActionUserRecos';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlaylistAdd';
+import { ModalMediaFollowersRating } from '@/components/Modals/ModalMediaFollowersRating';
 
 export default function MovieHeader({
   movie,
+  followersAvgRating,
 }: {
   movie: MediaMovie;
+  followersAvgRating?: number | null;
 }) {
   const { openModal } = useModal();
   const common = useTranslations('common');
-
   if (!movie) return null;
   return (
     <div>
       <HeaderBox
         className='@container/movie-header'
         style={{
-          backgroundImage: `url(https://image.tmdb.org/t/p/w1280/${movie.backdrop_path})`,
+          backgroundImage: movie.backdrop_url ? `url(${movie.backdrop_url})` : undefined,
         }}
       >
         <div className="flex flex-col w-full gap-4 items-center @xl/movie-header:flex-row">
           {/* MOVIE POSTER */}
           <MoviePoster
             className="w-[200px]"
-            src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+            src={movie.avatar_url ?? ''}
             alt={movie.title ?? ''}
             fill
             sizes={`
@@ -73,23 +74,21 @@ export default function MovieHeader({
               150px
             `}
           >
-            {movie.vote_count ? (
-              <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                {movie.vote_average ? <IconMediaRating
-                  rating={movie.vote_average}
-                  variant="general"
-                  className="w-full"
-                  tooltip='Note moyenne'
-                /> : null}
-                {movie.follower_avg_rating ? <IconMediaRating
-                  rating={movie.follower_avg_rating}
-                  variant="follower"
-                  className="w-full"
-                  tooltip='Note followers'
-                  onClick={() => openModal(ModalMovieFollowersRating, { movieId: movie.id })}
-                /> : null}
-              </div>
-            ) : null}
+            <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
+              {(movie.vote_average || movie.tmdb_vote_average) ? <IconMediaRating
+                rating={movie.vote_average ?? movie.tmdb_vote_average}
+                variant="general"
+                className="w-full"
+                tooltip='Note moyenne'
+              /> : null}
+              {followersAvgRating ? <IconMediaRating
+                rating={followersAvgRating}
+                variant="follower"
+                className="w-full"
+                tooltip='Note followers'
+                onClick={() => openModal(ModalMediaFollowersRating, { mediaId: movie.media_id! })}
+              /> : null}
+            </div>
             {(movie?.videos && movie.videos.length > 0) ? (
               <MovieTrailerButton
                 videos={movie.videos}
@@ -109,13 +108,13 @@ export default function MovieHeader({
               <span className='font-bold select-text'>{movie.title}</span>
               {/* DATE */}
               <sup>
-                <DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-base font-medium'/>
+                <DateOnlyYearTooltip date={movie.extra_data.release_date ?? ''} className=' text-base font-medium'/>
               </sup>
-              {movie.original_title !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.original_title}</div> : null}
+              {movie.extra_data.original_title !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.extra_data.original_title}</div> : null}
             </div>
             <div className=" space-y-2">
               <div>
-                {movie.directors?.map((director, index: number) => (
+                {movie.main_credit?.map((director, index: number) => (
                   <Fragment key={index}>
                     {index > 0 && <span>, </span>}
                     <span key={index}>
@@ -124,13 +123,13 @@ export default function MovieHeader({
                         className="w-fit p-0 h-full hover:text-accent-1 transition"
                         asChild
                       >
-                        <Link href={`/person/${director?.slug ?? director?.id}`}>{director?.name}</Link>
+                        <Link href={`/person/${director?.slug ?? director?.id}`}>{director?.title}</Link>
                       </Button>
                     </span>
                   </Fragment>
                 )) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
                 {/* RUNTIME */}
-                <RuntimeTooltip runtime={movie.runtime ?? 0} className=" before:content-['_•_']" />
+                <RuntimeTooltip runtime={movie.extra_data.runtime ?? 0} className=" before:content-['_•_']" />
               </div>
             </div>
           </div>
@@ -138,15 +137,15 @@ export default function MovieHeader({
       </HeaderBox>
       <div className="flex justify-between gap-2 px-4 pb-4">
         <div className="flex gap-2 overflow-x-auto items-center">
-          <UserActivityRating mediaId={movie.id} mediaType={'movie'} />
-          <UserActivityLike mediaId={movie.id} mediaType={'movie'} />
-          <UserActivityWatch mediaId={movie.id} mediaType={'movie'} />
-          <UserWatchlist mediaId={movie.id} mediaType={'movie'} />
-          <UserActivityWatchedDate mediaId={movie.id} mediaType={'movie'} />
+          <MediaActionUserActivityRating mediaId={movie.media_id!} />
+          <MediaActionUserActivityLike mediaId={movie.media_id!}  />
+          <MediaActionUserActivityWatch mediaId={movie.media_id!} />
+          <MediaActionUserWatchlist mediaId={movie.media_id!} />
+          <MediaActionUserActivityWatchedDate mediaId={movie.media_id!} />
         </div>
         <div className="flex gap-2 items-center">
-          <MediaActionPlaylistAdd mediaId={movie.id} mediaType={'movie'} mediaTitle={movie.title} />
-          <UserRecos mediaId={movie.id} mediaType={'movie'} mediaTitle={movie.title} />
+          <MediaActionPlaylistAdd mediaId={movie.media_id!} mediaTitle={movie.title} />
+          <MediaActionUserRecos mediaId={movie.media_id!} mediaTitle={movie.title} />
         </div>
       </div>
     </div>

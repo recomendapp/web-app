@@ -3,6 +3,7 @@ import PersonHeader from './_components/PersonHeader';
 import PersonNavbar from './_components/PersonNavbar';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getPerson } from '@/features/server/media/mediaQueries';
+import { Media } from '@/types/type.db';
 
 export default async function PersonLayout(
   props: {
@@ -22,7 +23,7 @@ export default async function PersonLayout(
   if (!person) notFound();
   return (
     <>
-      <PersonHeader person={person} background={person.backdrop_path} />
+      <PersonHeader person={person} background={randomBackdrop(person.movies.map((movie) => movie.media))} />
       <div className="px-4 pb-4">
         <PersonNavbar personId={params.person_id} />
         {props.children}
@@ -30,3 +31,14 @@ export default async function PersonLayout(
     </>
   );
 }
+
+const randomBackdrop = (object: Media[]) => {
+  const itemsWithBackdrop = object.filter(
+    (media ) => media?.backdrop_url
+  );
+
+  if (itemsWithBackdrop.length === 0) return null;
+
+  const randomIndex = Math.floor(Math.random() * itemsWithBackdrop.length);
+  return itemsWithBackdrop[randomIndex]?.backdrop_url;
+};

@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { MediaType, User } from '@/types/type.db';
+import { User } from '@/types/type.db';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '@/components/Modals/Modal';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Icons } from '@/config/icons';
@@ -21,13 +21,11 @@ const COMMENT_MAX_LENGTH = 180;
 
 interface ModalRecoSendProps extends ModalType {
 	mediaId: number;
-	mediaType: MediaType;
 	mediaTitle?: string | null;
 }
 
 export function ModalRecoSend({
 	mediaId,
-	mediaType,
 	mediaTitle,
 	...props
 } : ModalRecoSendProps) {
@@ -40,17 +38,15 @@ export function ModalRecoSend({
 		isLoading,
 	} = useUserRecosSendQuery({
 		userId: user?.id,
-		mediaId,
-		mediaType,
+		mediaId: mediaId,
 	});
-	const sendMovie = useUserRecosInsertMutation({
-		mediaId,
-		mediaType,
-		senderId: user?.id,
-	});
+	const sendMovie = useUserRecosInsertMutation();
 
 	function submit() {
+		if (!user || !mediaId) return;
 		sendMovie.mutate({
+			senderId: user.id,
+			mediaId: mediaId,
 			receivers: selectedUsers,
 			comment: comment,
 		}, {

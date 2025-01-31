@@ -7,17 +7,20 @@ import Link from 'next/link';
 import { Playlist } from '@/types/type.db';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import React from 'react';
+import { useTranslations } from 'next-intl';
 
 interface CardPlaylistProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default";
 		playlist: Playlist;
+		hideItemCount?: boolean;
 	}
 
 const CardPlaylistDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardPlaylistProps, "variant">
->(({ className, playlist, children, ...props }, ref) => {
+>(({ className, playlist, hideItemCount, children, ...props }, ref) => {
+	const common = useTranslations('common');
 	return (
 		<Card
 			ref={ref}
@@ -46,9 +49,11 @@ const CardPlaylistDefault = React.forwardRef<
       </CardHeader>
       <CardContent className='p-0'>
         <p className="line-clamp-2 break-words group-hover:text-primary/80">{playlist?.title}</p>
-        {/* <p className="line-clamp-1 text-sm italic text-muted-foreground">
-          {playlist?.items_count} film{Number(playlist?.items_count) > 1 && 's'}
-        </p> */}
+        {!hideItemCount ? (
+			<p className="line-clamp-1 text-sm italic text-muted-foreground">
+			{common('messages.item_count', { count: playlist?.items_count ?? 0 })}
+			</p>
+		) : null}
       </CardContent>
 		</Card>
 	);

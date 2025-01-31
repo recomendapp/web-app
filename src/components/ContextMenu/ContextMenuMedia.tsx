@@ -1,4 +1,4 @@
-import { Media, Movie } from "@/types/type.db"
+import { Media } from "@/types/type.db"
 import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
 import { WithLink } from "../utils/WithLink";
@@ -33,7 +33,7 @@ export const ContextMenuMedia = ({
 		[
 			{
 				icon: Icons.movie,
-				href: mediaDetails.url,
+				href: media.url ?? '',
 				label: 'Accéder au film',
 			},
 			// {
@@ -47,12 +47,12 @@ export const ContextMenuMedia = ({
 			// },
 			{
 				icon: Icons.addPlaylist,
-				onClick: () => openModal(ModalPlaylistAdd, { mediaId: media.id, mediaType: media.media_type, mediaTitle: mediaDetails.title }),
+				onClick: () => openModal(ModalPlaylistAdd, { mediaId: media.media_id!, mediaTitle: mediaDetails.title }),
 				label: 'Ajouter à une playlist',
 			},
 			{
 				icon: Icons.send,
-				onClick: () => openModal(ModalRecoSend, { mediaId: media.id, mediaType: media.media_type, mediaTitle: mediaDetails.title }),
+				onClick: () => openModal(ModalRecoSend, { mediaId: media.media_id!, mediaTitle: mediaDetails.title }),
 				label: upperFirst(common('messages.send_to_friend')),
 			}
 		],
@@ -60,9 +60,9 @@ export const ContextMenuMedia = ({
 			{
 				icon: Icons.share,
 				onClick: () => openModal(ModalShare, {
-					title: mediaDetails.title,
+					title: media.title,
 					type: media.media_type,
-					path: mediaDetails.url,
+					path: media.url ?? '',
 				}),
 				label: upperFirst(common('word.share')),
 			},

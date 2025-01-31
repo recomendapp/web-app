@@ -6,10 +6,10 @@ import { useModal } from "@/context/modal-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { useFormatter } from "next-intl";
 import { TbGrave } from "react-icons/tb";
-import { Person } from "@/types/type.db";
+import { MediaPerson } from "@/types/type.db";
 
 interface PersonAboutModalProps extends ModalType {
-	person?: Person;
+	person?: MediaPerson;
 }
 
 export const PersonAboutModal = ({
@@ -26,14 +26,14 @@ export const PersonAboutModal = ({
 			className=""
 		>
 			<ModalHeader>
-				<ModalTitle>À propos de {person.name}</ModalTitle>
+				<ModalTitle>À propos de {person.title}</ModalTitle>
 			</ModalHeader>
 			<ModalBody className="flex flex-col gap-4">
 				{/* Détails */}
 				<div className="">
 					<h3 className=" text-lg font-semibold">Détails</h3>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-muted-foreground">
-						{person?.gender && (
+						{person?.extra_data.gender && (
 							<div className="flex items-center gap-2">
 							<TooltipBox tooltip="Genre">
 								<div>
@@ -42,14 +42,14 @@ export const PersonAboutModal = ({
 								</div>
 							</TooltipBox>
 							<span className="">
-								{person.gender === 3 ? 'Non-binaire'
-								: person.gender === 2 ? 'Homme'
-								: person.gender === 1 ? 'Femme'
+								{person.extra_data.gender === 3 ? 'Non-binaire'
+								: person.extra_data.gender === 2 ? 'Homme'
+								: person.extra_data.gender === 1 ? 'Femme'
 								: 'Non spécifié'}
 							</span>
 							</div>
 						)}
-						{person?.birthday && (
+						{person?.extra_data.birthday && (
 							<div className="flex items-center gap-2">
 							<TooltipBox tooltip="Date de naissance">
 								<div>
@@ -59,14 +59,14 @@ export const PersonAboutModal = ({
 							</TooltipBox>
 							<span className="">
 								{format.dateTime(
-								new Date(person?.birthday),
+								new Date(person?.extra_data.birthday),
 								{ dateStyle: 'long' }
 								)}
-								{!person.deathday && ` (${new Date().getFullYear() - new Date(person?.birthday).getFullYear()} ans)`}
+								{!person.extra_data.deathday && ` (${new Date().getFullYear() - new Date(person?.extra_data.birthday).getFullYear()} ans)`}
 							</span>
 							</div>
 						)}
-						{person?.deathday && (
+						{person?.extra_data.deathday && (
 							<div className="flex items-center gap-2">
 							<TooltipBox tooltip="Date de décès">
 								<div>
@@ -76,14 +76,14 @@ export const PersonAboutModal = ({
 							</TooltipBox>
 							<span className="">
 								{format.dateTime(
-								new Date(person?.deathday),
+								new Date(person?.extra_data.deathday),
 								{ dateStyle: 'long' }
 								)}
-								{person.birthday && ` (${new Date(person?.deathday).getFullYear() - new Date(person?.birthday).getFullYear()} ans)`}
+								{person.extra_data.birthday && ` (${new Date(person?.extra_data.deathday).getFullYear() - new Date(person?.extra_data.birthday).getFullYear()} ans)`}
 							</span>
 							</div>
 						)}
-						{person?.place_of_birth && (
+						{person?.extra_data.place_of_birth && (
 							<div className="flex items-center gap-2">
 							<TooltipBox tooltip="Lieu de naissance">
 								<div>
@@ -92,18 +92,18 @@ export const PersonAboutModal = ({
 								</div>
 							</TooltipBox>
 							<span className="">
-								{person?.place_of_birth}
+								{person?.extra_data.place_of_birth}
 							</span>
 							</div>
 						)}
-						{!person?.gender && !person?.birthday && !person?.deathday && !person?.place_of_birth && 'Aucune information disponible'}
+						{!person?.extra_data.gender && !person?.extra_data.birthday && !person?.extra_data.deathday && !person?.extra_data.place_of_birth && 'Aucune information disponible'}
 					</div>
 				</div>
 				{/* BIOGRAPHY */}
 				<div className=''>
 				<h3 className=" text-lg font-semibold">Biographie</h3>
 				<p className="text-justify text-muted-foreground">
-					{person?.biography?.length ? person?.biography : 'No biography available'}
+					{person?.extra_data.biography?.length ? person?.extra_data.biography : 'No biography available'}
 				</p>
 				</div>
 			</ModalBody>

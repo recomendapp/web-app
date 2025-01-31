@@ -94,7 +94,7 @@ export default function PlaylistPage(
 
   return (
     <>
-      <PlaylistHeader playlist={playlist} totalRuntime={playlistItems?.reduce((total: number, item: PlaylistItem) => total + (item?.media?.runtime ?? 0), 0)} />
+      <PlaylistHeader playlist={playlist} />
       <div className="p-4">
         {playlistItemsRender ? <PlaylistTable playlist={playlist} playlistItems={playlistItemsRender} setPlaylistItems={setPlaylistItemsRender} /> : null}
       </div>

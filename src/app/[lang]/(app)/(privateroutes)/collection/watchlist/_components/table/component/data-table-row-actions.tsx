@@ -44,7 +44,7 @@ export function DataTableRowActions({
   data,
 }: DataTableRowActionsProps) {
   const common = useTranslations('common');
-  const media = getMediaDetails(data?.media);
+  // const media = getMediaDetails(data?.media);
   const { openModal, createConfirmModal } = useModal();
   // const [openShowDirectors, setOpenShowDirectors] = useState(false);
   const deleteWatchlist = useUserWatchlistDeleteMutation();
@@ -78,32 +78,32 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
-            onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id!, mediaType: data?.media_type!, mediaTitle: media.title })}
+            onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id, mediaTitle: data?.media?.title })}
           >
             <Icons.send className='w-4' />
             {upperFirst(common('messages.send_to_friend'))}
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => openModal(ModalPlaylistAdd, { mediaId: data?.media_id!, mediaType: data?.media_type!, mediaTitle: media.title })}
+          {/* <DropdownMenuItem
+            onClick={() => openModal(ModalPlaylistAdd, { mediaId: data?.media_id!, mediaType: data?.media_type!, mediaTitle: data?.media?.title })}
           >
             <Icons.addPlaylist className='w-4' />
             {upperFirst(common('messages.add_to_playlist'))}
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href={media.url}>
+            <Link href={data?.media?.url ?? ''}>
               <Icons.eye className='w-4' />
-              {data?.media_type === 'movie'
+              {data?.media?.media_type === 'movie'
                 ? capitalize(common('messages.go_to_film'))
-                : data?.media_type === 'tv_series'
+                : data?.media?.media_type === 'tv_series'
                 ? capitalize(common('messages.go_to_serie'))
-                : data?.media_type === 'person'
+                : data?.media?.media_type === 'person'
                 ? capitalize(common('messages.go_to_person'))
                 : ''
               }
             </Link>
           </DropdownMenuItem>
-          {media.mainCredits && media.mainCredits.length > 0 ? (
+          {data?.media?.main_credit && data?.media.main_credit.length > 0 ? (
             <div>
 
             </div>
@@ -121,9 +121,9 @@ export function DataTableRowActions({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => openModal(ModalShare, {
-              title: media.title,
-              type: data?.media_type,
-              path: media.url,
+              title: data?.media?.title,
+              type: data?.media?.media_type,
+              path: data?.media?.url ?? '',
             })}
           >
             <Icons.share className='w-4' />
@@ -133,7 +133,7 @@ export function DataTableRowActions({
             onClick={async () => createConfirmModal({
               title: capitalize(common('library.collection.watchlist.modal.delete_confirm.title')),
               description: common.rich('library.collection.watchlist.modal.delete_confirm.description', {
-                title: media.title,
+                title: data?.media?.title,
                 important: (chunk) => <b>{chunk}</b>,
               }),
               onConfirm: handleUnwatchlist,

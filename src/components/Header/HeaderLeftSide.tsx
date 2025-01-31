@@ -17,7 +17,8 @@ export default function HeaderLeftSide({
     <div className={cn("flex items-center gap-4", className)}>
       <SidebarTrigger className='md:hidden'/>
       <NavigationButton />
-      {pathname.startsWith('/search') && <SearchBar />}
+      <SearchBar />
+      {/* {pathname.startsWith('/search') && <SearchBar />} */}
       {pathname == '/collection' && <PlaylistCreateButton />}
     </div>
   );

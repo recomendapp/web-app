@@ -7,23 +7,6 @@ export const meKeys = {
 
 	playlists: () => [...meKeys.all, 'playlists'] as const,
 
-
-	/**
-	 * Fetches friends of a user to send a recommendation
-	 * @param mediaId The media id
-	 * @param mediaType The media type
-	 * @returns List of friends
-	 */
-	// sendReco: ({
-	// 	mediaId,
-	// 	mediaType,
-	// } : {
-	// 	mediaId: number;
-	// 	mediaType: MediaType;
-	// }) => [...meKeys.all, 'friends', 'send', mediaType, mediaId] as const,
-
-
-
 	/* -------------------------------------------------------------------------- */
 	/*                                     OLD                                    */
 	/* -------------------------------------------------------------------------- */
@@ -48,11 +31,9 @@ export const meKeys = {
 	 */
 	addMediaToPlaylist: ({
 		mediaId,
-		mediaType,
 	} : {
 		mediaId: number;
-		mediaType: MediaType;
-	}) => [...meKeys.playlists(), 'add', mediaType, mediaId] as const,
+	}) => [...meKeys.playlists(), 'add', mediaId] as const,
 
 	/**
 	 * Fetches playlists to add a movie with a type
@@ -62,11 +43,9 @@ export const meKeys = {
 	 */
 	addMediaToPlaylistType: ({
 		mediaId,
-		mediaType,
 		type,
 	} : {
 		mediaId: number;
-		mediaType: MediaType;
 		type: PlaylistType;
-	}) => [...meKeys.addMediaToPlaylist({ mediaId, mediaType }), type] as const,
+	}) => [...meKeys.addMediaToPlaylist({ mediaId }), type] as const,
 }

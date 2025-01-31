@@ -11,14 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-
-// ICONS
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { useModal } from '@/context/modal-context';
@@ -30,10 +22,8 @@ import { useDeletePlaylistItem } from '@/features/client/playlist/playlistMutati
 import { usePlaylistIsAllowedToEdit } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { capitalize, upperFirst } from 'lodash';
-import { getMediaDetails } from '@/hooks/get-media-details';
 import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
-
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItem>;
@@ -48,7 +38,6 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
   const { openModal, createConfirmModal } = useModal();
   const [openShowDirectors, setOpenShowDirectors] = useState(false);
   const { mutateAsync: deletePlaylistItem } = useDeletePlaylistItem();
-  const media = getMediaDetails(data?.media);
 
   return (
     <>
@@ -67,32 +56,32 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
 
         <DropdownMenuContent align="end" className="max-w-sm">
           <DropdownMenuItem
-            onClick={() => openModal(ModalPlaylistAdd, { mediaId: data?.media_id!, mediaType: data?.media_type!, mediaTitle: media.title })}
+            onClick={() => openModal(ModalPlaylistAdd, { mediaId: data?.media_id!, mediaTitle: data?.media?.title })}
           >
             <Icons.addPlaylist className='w-4' />
             {upperFirst(common('messages.add_to_playlist'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id!, mediaType: data?.media_type!, mediaTitle: media.title })}
+            onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id!, mediaTitle: data?.media?.title })}
           >
             <Icons.send className='w-4' />
             {upperFirst(common('messages.send_to_friend'))}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href={media.url}>
+            <Link href={data?.media?.url ?? ''}>
               <Icons.eye className='w-4' />
-              {data?.media_type === 'movie'
+              {data?.media?.media_type === 'movie'
                 ? capitalize(common('messages.go_to_film'))
-                : data?.media_type === 'tv_series'
+                : data?.media?.media_type === 'tv_series'
                 ? capitalize(common('messages.go_to_serie'))
-                : data?.media_type === 'person'
+                : data?.media?.media_type === 'person'
                 ? capitalize(common('messages.go_to_person'))
                 : ''
               }
             </Link>
           </DropdownMenuItem>
-          {media.mainCredits && media.mainCredits.length > 0 ? (
+          {data?.media?.main_credit && data?.media?.main_credit.length > 0 ? (
             <div>
 
             </div>
@@ -112,9 +101,9 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => openModal(ModalShare, {
-              title: media.title,
-              type: data?.media_type,
-              path: media.url,
+              title: data?.media?.title,
+              type: data?.media?.media_type,
+              path: data?.media?.url ?? '',
             })}
           >
             <Icons.share className='w-4' />
@@ -125,10 +114,10 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
               onClick={() => createConfirmModal({
                 title: upperFirst(common('playlist.modal.delete_confirm.title')),
                 description: common.rich('playlist.modal.delete_confirm.description', {
-                  title: media.title,
+                  title: data?.media?.title,
                   important: (chunk) => <b>{chunk}</b>,
                 }),
-                onConfirm: () => data && deletePlaylistItem({ playlistItemId: data.id, mediaId: data.media_id, mediaType: data.media_type }),
+                onConfirm: () => data && deletePlaylistItem({ playlistItemId: data.id, mediaId: data.media_id }),
               })}
             >
               <Icons.delete className='w-4' />

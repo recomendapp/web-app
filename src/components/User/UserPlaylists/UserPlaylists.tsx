@@ -37,7 +37,7 @@ export function UserPlaylists({
       let to = from - 1 + numberOfResult;
 
       const { data, error } = await supabase
-        .from('playlist')
+        .from('playlists')
         .select(`*`)
         .eq('user_id', user.id)
         .range(from, to)
@@ -66,7 +66,7 @@ export function UserPlaylists({
     return (
       <Fragment>
         {playlists?.pages.map((page, i) => (
-          page?.map((playlist: Playlist, index) => (
+          page?.map((playlist, index) => (
             <MoviePlaylistCard
             ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
             playlist={playlist}
@@ -80,7 +80,7 @@ export function UserPlaylists({
   return (
     <Fragment>
       {playlists?.pages.map((page, i) => (
-        page?.map((playlist: Playlist, index) => (
+        page?.map((playlist, index) => (
           <Button
             key={playlist?.id}
             variant={
@@ -107,7 +107,7 @@ export function UserPlaylists({
               </div>
               <div>
                 <p className="line-clamp-1">{playlist?.title}</p>
-                {/* <p>{playlist?.items_count} films</p> */}
+                <p>{playlist?.items_count} films</p>
               </div>
             </Link>
           </Button>

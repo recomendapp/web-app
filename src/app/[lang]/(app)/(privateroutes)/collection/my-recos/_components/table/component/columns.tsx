@@ -6,7 +6,6 @@ import Senders from './data-table-senders';
 import { UserRecosAggregated } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
 import { capitalize } from 'lodash';
-import { getMediaDetails } from '@/hooks/get-media-details';
 import { Item } from './data-table-item';
 import { BadgeMedia } from '@/components/Badge/BadgeMedia';
 
@@ -15,7 +14,7 @@ export const Columns = (): ColumnDef<UserRecosAggregated>[] => {
   return [
     {
       id: 'item',
-      accessorFn: (row) => getMediaDetails(row.media).title,
+      accessorFn: (row) => row?.media?.title,
       meta: {
         displayName: capitalize(common('messages.item', { count: 1 })),
       },
@@ -70,7 +69,7 @@ export const Columns = (): ColumnDef<UserRecosAggregated>[] => {
     },
     {
       id: 'type',
-      accessorFn: (row) => row?.media_type,
+      accessorFn: (row) => row?.media?.media_type,
       meta: {
         displayName: capitalize(common('messages.type')),
       },
@@ -81,7 +80,7 @@ export const Columns = (): ColumnDef<UserRecosAggregated>[] => {
         />
       ),
       cell: ({ row }) => (
-        <BadgeMedia type={row?.original.media_type} />
+        <BadgeMedia type={row?.original.media?.media_type} />
       ),
     },
     {

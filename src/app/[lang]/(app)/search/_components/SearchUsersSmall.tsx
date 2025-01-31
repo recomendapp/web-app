@@ -59,7 +59,7 @@ export default function SearchUsersSmall({
         : (
           <Button
           variant={'link'}
-          className="text-2xl font-bold justify-start p-0 hover:text-foreground"
+          className="text-2xl font-bold justify-start p-0"
           asChild
           >
             <Link href={`/search/users?q=${query}`}>{upperFirst(common('messages.user', { count: 2}))}</Link>

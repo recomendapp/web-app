@@ -1,7 +1,7 @@
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getPerson, getPersonFilms } from '@/features/server/media/mediaQueries';
 import { getTranslations } from 'next-intl/server';
-import { replace, upperFirst } from 'lodash';
+import { upperFirst } from 'lodash';
 import { CardMedia } from '@/components/Card/CardMedia';
 import { z } from "zod";
 import { Pagination } from './_components/Pagination';
@@ -9,7 +9,6 @@ import { Icons } from '@/config/icons';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Filters } from './_components/Filters';
-import { redirect } from 'next/navigation';
 
 const SORT_BY = ["release_date", "vote_average"] as const;
 const DISPLAY = ["grid", "row"] as const;
@@ -56,8 +55,8 @@ export async function generateMetadata(
   });
   if (!person) return { title: upperFirst(common('errors.person_not_found')) };
   return {
-	title: `Films avec ${person.name}`,
-	description: person.biography,
+	title: `Films avec ${person.title}`,
+	description: person.extra_data.biography,
   };
 }
 
@@ -71,7 +70,7 @@ export default async function FilmsPage(
 			sort_by?: string;
 			sort_order?: string;
 			page?: number;
-			perPage?: number;
+			per_page?: number;
 			display?: string;
 		}>;
 	}
@@ -81,7 +80,7 @@ export default async function FilmsPage(
 	const sortBy = getValidatedSortBy(searchParams.sort_by);
 	const sortOrder = getValidatedSortOrder(searchParams.sort_order);
 	const page = getValidatePage(Number(searchParams.page));
-	const perPage = getValidatePerPage(Number(searchParams.perPage));
+	const perPage = getValidatePerPage(Number(searchParams.per_page));
 	const display = getValidatedDisplay(searchParams.display);
 	const common = await getTranslations({ locale: params.lang, namespace: 'common' });
 	const { id } = getIdFromSlug(params.person_id);

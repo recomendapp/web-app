@@ -12,7 +12,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { Button } from '@/components/ui/button';
-import { UserPlaylistsLiked } from './_components/UserPlaylistsLiked';
+import { UserPlaylistsSaved } from './_components/UserPlaylistsSaved';
 import CollectionIcon from '@/components/Collection/CollectionIcon';
 import { useUI } from '@/context/ui-context';
 import HeaderRightSide from '@/components/Header/HeaderRightSide';
@@ -85,7 +85,7 @@ export default function Collection() {
           <UserPlaylists grid />
         </TabsContent>
         <TabsContent value="external" className="grid gap-2 grid-cols-3 @md/collection:grid-cols-4 @2xl/collection:grid-cols-6 @4xl/collection:grid-cols-8 @6xl/collection:grid-cols-10 @7xl/collection:grid-cols-12">
-          <UserPlaylistsLiked sidebarExpanded={false} grid />
+          <UserPlaylistsSaved sidebarExpanded={false} grid />
         </TabsContent>
       </Tabs>
     </main>

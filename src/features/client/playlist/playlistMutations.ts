@@ -1,5 +1,5 @@
 import { useSupabaseClient } from '@/context/supabase-context';
-import { Media, MediaType, Movie, Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
+import { Media, Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
 import { matchQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { playlistKeys } from './playlistKeys';
 import { userKeys } from '../user/userKeys';
@@ -103,11 +103,9 @@ export const useDeletePlaylist = ({
  */
 export const useAddMediaToPlaylists = ({
 	mediaId,
-	mediaType,
 	userId,
 } : {
 	mediaId: number;
-	mediaType: MediaType;
 	userId?: string;
 }) => {
 	const supabase = useSupabaseClient();
@@ -129,7 +127,6 @@ export const useAddMediaToPlaylists = ({
 						.map((playlist) => ({
 							playlist_id: playlist?.id!,
 							media_id: mediaId,
-							media_type: mediaType,
 							user_id: userId,
 							comment: comment,
 							rank: 0,
@@ -138,10 +135,9 @@ export const useAddMediaToPlaylists = ({
 			if (error) throw error;
 			const updatedPlaylists = playlists.map((playlist) => ({
 				...playlist,
-				// items_count: (playlist?.items_count ?? 0) + 1,
+				items_count: (playlist?.items_count ?? 0) + 1,
 			}));
 			return updatedPlaylists;
-			// return playlists;
 		},
 		onSuccess: (playlists) => {
 			queryClient.invalidateQueries({
@@ -150,8 +146,7 @@ export const useAddMediaToPlaylists = ({
 		},
 		meta: {
 			invalidates: [
-				// userKeys.addMovieToPlaylist(userId as string, movieId),
-				meKeys.addMediaToPlaylist({ mediaId, mediaType }),
+				meKeys.addMediaToPlaylist({ mediaId }),
 			]
 		}
 	});
@@ -215,22 +210,20 @@ export const useDeletePlaylistItem = () => {
 		mutationFn: async ({
 			playlistItemId,
 			mediaId,
-			mediaType,
 		} : {
 			playlistItemId: number;
 			mediaId: number;
-			mediaType: MediaType;
 		}) => {
 			const { error } = await supabase
 				.from('playlist_items')
 				.delete()
 				.eq('id', playlistItemId)
 			if (error) throw error;
-			return { playlistItemId, mediaId, mediaType };
+			return { playlistItemId, mediaId };
 		},
-		onSuccess: ({ mediaId, mediaType }) => {
+		onSuccess: ({ mediaId }) => {
 			queryClient.invalidateQueries({
-				queryKey: meKeys.addMediaToPlaylist({ mediaId, mediaType }),
+				queryKey: meKeys.addMediaToPlaylist({ mediaId }),
 			});
 		},
 		onError: (error) => {
@@ -267,8 +260,8 @@ export const useUpdatePlaylistItemChanges = ({
 				  case 'INSERT':
 					if (payload.new.rank !== newPlaylistItems.length + 1) throw Error('Invalid rank');
 					const { error: insertError, data: insertData } = await supabase
-					  .from('playlist_items_media')
-					  .select(`*`)
+					  .from('playlist_items')
+					  .select(`*, media(*)`)
 					  .eq('id', payload.new.id)
 					  .returns<PlaylistItem>()
 					  .single();
@@ -307,7 +300,6 @@ export const useUpdatePlaylistItemChanges = ({
 			newPlaylistItems && queryClient.setQueryData(playlistKeys.items(playlistId), [...newPlaylistItems]);
 		},
 		onError: (error) => {
-			toast.error('Une erreur s\'est produite');
 			queryClient.invalidateQueries({
 				queryKey: playlistKeys.items(playlistId),
 			});

@@ -2,7 +2,6 @@
 
 import { routing } from "@/lib/i18n/routing";
 import { createServerClient } from "@/lib/supabase/server";
-import { Movie } from "@/types/type.db";
 import { z } from "zod";
 
 const searchMovieSchema = z
@@ -26,18 +25,18 @@ export const tmdbSearchMovies = async (query: string, language = routing.default
 	if (!verifiedField.success) {
 		throw new Error(verifiedField.error.errors.join('; '));
 	}
-	const tmdbResults = await (
-		await fetch(
-			`${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/movie?query=${query}&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}`
-		)
-	).json();
-	const request = await supabase
-		.from('movie')
+	const tmdbResults = await fetch(
+		`${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/movie?query=${query}&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}`
+	).then(res => res.json() as Promise<{ results: { id: number }[] }>);
+	const { data, error } = await supabase
+		.from('media_movie')
 		.select('*')
 		.in('id', tmdbResults.results.map((movie: any) => movie.id))
 		.limit(20);
 	
-	const movies: Movie[] = tmdbResults.results.map((movie: any) => request.data?.find((m: any) => m.id === movie.id));
+	if (error) throw error;
 
-	return movies;
+	return tmdbResults.results.map(tmdbMovie => 
+		data.find(movie => movie.id === tmdbMovie.id)
+	).filter(movie => movie);
 }

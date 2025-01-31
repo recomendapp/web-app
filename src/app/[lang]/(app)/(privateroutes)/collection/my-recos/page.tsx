@@ -19,9 +19,9 @@ export default function MyRecos() {
   if (!recos) return null;
 
   return (
-    <main className="h-full">
+    <div className="h-full">
       <MyRecosHeader data={recos} />
       <TableMyRecos data={recos} className='m-4'/>
-    </main>
+    </div>
   );
 }

@@ -1,112 +1,70 @@
-'use client';
 import Link from 'next/link';
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useLocale, useTranslations } from 'next-intl';
-import { useTmdbSearchMultiInfinite } from '@/features/client/tmdb/tmdbQueries';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
-import { upperFirst } from 'lodash';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Card } from '@/components/ui/card';
 import { getMediaDetails } from '@/hooks/get-media-details';
 import { BadgeMedia } from '@/components/Badge/BadgeMedia';
+import { Media, MediaPerson } from '@/types/type.db';
+import { upperFirst } from 'lodash';
+import { getTranslations } from 'next-intl/server';
 
-export default function SearchBestResult({
-  query,
+export default async function SearchBestResult({
+  media,
+  locale,
   className,
 }: {
-  query: string | undefined;
+  media: Media;
+  locale: string;
   className?: string;
 }) {
-  const common = useTranslations('common');
-  const locale = useLocale();
-  const {
-    data: results,
-    isLoading
-  } = useTmdbSearchMultiInfinite({
-    query: query,
-    locale: locale,
-  });
-  const showSkeleton = results === undefined || isLoading;
-
-  if ((!showSkeleton && !results) || !results?.pages[0].best_result) return null;
+  const common = await getTranslations({ locale: locale, namespace: 'common' });
 
   return (
     <div className={cn('flex flex-col gap-2', className)}>
-      <div className="text-2xl font-bold">
-        {showSkeleton ? <Skeleton className="h-8 w-32" /> : upperFirst(common('messages.top_result'))}
-      </div>
-      <div className="flex flex-col gap-2">
-        {showSkeleton ? (
-          <>
-            <div className="flex justify-between items-end">
-              <Skeleton className="h-8 w-32" />
-            </div>
-            <div className="flex bg-secondary h-full rounded-md p-2 gap-2">
-              {/* MOVIE COVER */}
-              <Skeleton className="bg-background w-[200px] h-full rounded-md" />
-
-              {/* NAME */}
-              <div className="flex flex-col justify-end">
-                {/* MOVIE TITLE */}
-                <Skeleton className="bg-background h-10 w-40" />
-              </div>
-            </div>
-          </>
-        ) : (
-          <Link
-            href={getMediaDetails(results.pages[0].best_result).url}
+      <h2 className="text-2xl font-bold">
+      {upperFirst(common('messages.top_result'))}
+      </h2>
+      <Link href={media.url ?? ''}>
+        <Card className='flex flex-col gap-2 relative p-2 hover:bg-muted-hover'>
+          <BadgeMedia type={media.media_type} variant={"accent-1"} className='absolute top-2 right-2' />
+          <div
+          className={`relative w-[100px] shrink-0 overflow-hidden
+            ${getMediaDetails(media).poster_className}
+          `}
           >
-            <Card className='flex flex-col gap-2 relative p-2 hover:bg-muted-hover'>
-              <BadgeMedia type={results.pages[0].best_result?.media_type} variant={"accent-1"} className='absolute top-2 right-2' />
-              <div
-              className={`relative w-[100px] shrink-0 overflow-hidden
-                ${getMediaDetails(results.pages[0].best_result).poster_className}
-              `}
-              >
-                <ImageWithFallback
-                  src={`https://image.tmdb.org/t/p/original/${getMediaDetails(results.pages[0].best_result).poster_path}`}
-                  alt={getMediaDetails(results.pages[0].best_result).title ?? ''}
-                  layout="fill"
-                  objectFit="cover"
-                  className="object-cover"
-                />
-              </div>
-              <div>
-                <p className="text-2xl font-bold line-clamp-2 break-all overflow-hidden">
-                  {getMediaDetails(results.pages[0].best_result).title}
+            <ImageWithFallback
+              src={media.avatar_url ?? ''}
+              alt={media.title ?? ''}
+              layout="fill"
+              objectFit="cover"
+              className="object-cover"
+            />
+          </div>
+          <div>
+            <p className="text-2xl font-bold line-clamp-2 break-all overflow-hidden">
+              {media.title}
+            </p>
+            {media.media_type === 'person' ? (
+              <p className="line-clamp-2 text-muted-foreground">
+                {media.extra_data.known_for_department}
+              </p>
+            ) : null}
+            {media.main_credit ? (
+              <Credits
+                credits={media.main_credit ?? []}
+              />
+            ) : null}
+            {(media.media_type === 'movie' || media.media_type === 'tv_series') ? (
+                <p className="text-muted-foreground">
+                  {new Date(media.date ?? '').getFullYear()}
                 </p>
-                {results.pages[0].best_result.media_type === 'person'
-                  ? (
-                    <p className="line-clamp-2 text-muted-foreground">
-                      {results.pages[0].best_result.known_for_department}
-                    </p>
-                  )
-                  : (
-                    <Credits
-                      credits={getMediaDetails(results.pages[0].best_result).mainCredits ?? []}
-                    />
-                  )
-                }
-                {results.pages[0].best_result.media_type === 'movie'
-                  ? (
-                    <p className="text-muted-foreground">
-                      {new Date(results.pages[0].best_result.release_date).getFullYear()}
-                    </p>
-                  ) : results.pages[0].best_result.media_type === 'tv_series'
-                  ? (
-                    <p className="text-muted-foreground">
-                      {new Date(results.pages[0].best_result.first_air_date).getFullYear()}
-                    </p>
-                  ) : null
-                }
-              </div>
-            </Card>
-          </Link>
-        )}
-      </div>
+            ) : null}
+          </div>
+        </Card>
+      </Link>
     </div>
   )
 }
@@ -115,21 +73,21 @@ const Credits = ({
   credits,
   className,
 }: {
-  credits: any[];
+  credits: MediaPerson[];
   className?: string;
 }) => {
   if (!credits || credits.length === 0) return null;
   return (
     <p className={cn('line-clamp-2', className)}>
-      {credits?.map((credit: any, index: number) => (
-        <span key={credit.id}>
+      {credits?.map((credit, index: number) => (
+        <span key={index}>
           <Button
             variant={'link'}
             className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition"
             asChild
           >
-            <Link href={`/person/${credit.id}`}>
-              {credit.name}
+            <Link href={credit.url ?? ''}>
+              {credit.title}
             </Link>
           </Button>
           {index !== credits.length - 1 && (

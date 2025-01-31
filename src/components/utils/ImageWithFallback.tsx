@@ -8,7 +8,7 @@ import { MediaType } from '@/types/type.db';
 
 interface ImageWithFallbackProps extends ComponentProps<typeof Image> {
   src: string;
-  type?: 'default' | 'playlist' | 'service' | 'watch-provider' | MediaType;
+  type?: 'default' | 'playlist' | 'service' | 'watch-provider' | MediaType | null;
   blurDataURL?: string;
 }
 
@@ -55,7 +55,7 @@ export function Fallback({
   alt,
 }: {
   className?: string;
-  type?: string;
+  type?: string | null;
   from: string;
   to: string;
   alt: string;

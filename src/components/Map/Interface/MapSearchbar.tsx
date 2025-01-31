@@ -132,7 +132,7 @@ export const MapSearchbar = () => {
 								<div className="line-clamp-1">
 									{movie.directors.length ? (
 										movie.directors.map(
-											(director: any, index: number) => (
+											(director, index: number) => (
 											<span key={director.id}>
 												<Button
 												variant={'link'}

@@ -1,5 +1,5 @@
-import SearchPlaylistsFull from '@/components/Search/SearchPlaylists/SearchPlaylistsFull';
 import { redirect } from 'next/navigation';
+import SearchPlaylistsFull from './_components/SearchPlaylistsFull';
 
 export async function generateMetadata(
   props: {

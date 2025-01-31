@@ -36,66 +36,53 @@ export const useMediaMovieDetailsQuery = ({
 /* --------------------------------- REVIEWS -------------------------------- */
 export const useMediaReviewsInfiniteQuery = ({
 	mediaId,
-	mediaType,
 	filters,
 } : {
 	mediaId: number;
-	mediaType: MediaType;
-	filters?: {
-		resultsPerPage?: number;
-		order?:
-			'updated_at-desc' |
-			'updated_at-asc' |
-			'rating-desc' |
-			'rating-asc' |
-			'likes_count-desc' |
-			'likes_count-asc';
+	filters: {
+		perPage: number;
+		sortBy: 'updated_at';
+		sortOrder: 'asc' | 'desc';
 	};
 }) => {
-	const mergedFilters = {
-		resultsPerPage: 20,
-		order: 'updated_at-desc',
-		...filters,
-	};
 	const supabase = useSupabaseClient();
 	return useInfiniteQuery({
 		queryKey: mediaKeys.reviews({
 			mediaId,
-			mediaType,
-			filters: mergedFilters,
+			filters,
 		}),
 		queryFn: async ({ pageParam = 1 }) => {
-			if (!mediaId || !mediaType) throw Error('No media id or type provided');
-			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
-	  		let to = from - 1 + mergedFilters.resultsPerPage;
+			let from = (pageParam - 1) * filters.perPage;
+	  		let to = from - 1 + filters.perPage;
 			let request = supabase
-				.from('user_review_activity')
+				.from('user_review')
 				.select(`
 					*,
-					user(*)
+					activity:user_activity!inner(*, user(*))
 				`)
-				.match({
-					media_id: mediaId,
-					media_type: mediaType,
-				})
+				.eq('activity.media_id', mediaId)
 				.range(from, to)
 			
-			if (mergedFilters) {
-				if (mergedFilters.order) {
-					const [ column, direction ] = mergedFilters.order.split('-');
-					request = request.order(column, { ascending: direction === 'asc', nullsFirst: false });
+			if (filters) {
+				if (filters.sortBy && filters.sortOrder) {
+					switch (filters.sortBy) {
+						case 'updated_at':
+							request = request.order('updated_at', { ascending: filters.sortOrder === 'asc', nullsFirst: false });
+							break;
+						default:
+							break;
+					}
 				}
 			}
-			const { data, error } = await request
-				.returns<UserReview[]>();
+			const { data, error } = await request;
 			if (error) throw error;
 			return data;
 		},
 		initialPageParam: 1,
 		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == mergedFilters.resultsPerPage ? pages.length + 1 : undefined;
+			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
 		},
-		enabled: !!mediaId && !!mediaType,
+		enabled: !!mediaId,
 	});
 
 };
@@ -109,49 +96,49 @@ export const useMediaReviewsInfiniteQuery = ({
 /* -------------------------------------------------------------------------- */
 
 /* ------------------------------- FILMOGRAPHY ------------------------------ */
-export const useMediaPersonMostRatedInfiniteQuery = ({
-	personId,
-	filters,
-} : {
-	personId: number;
-	filters?: {
-		resultsPerPage?: number;
-		limit?: number;
-	};
-}) => {
-	const mergedFilters = {
-		resultsPerPage: 20,
-		limit: 10,
-		...filters,
-	};
-	const supabase = useSupabaseClient();
-	return useInfiniteQuery({
-		queryKey: mediaKeys.mostRated({ personId, filters: mergedFilters }),
-		queryFn: async ({ pageParam = 1}) => {
-			if (!personId) throw Error('No person id provided');
-			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
-			let to = from - 1 + mergedFilters.resultsPerPage;
-			let request = supabase
-				.from('media_person_combined_credits')
-				.select('*')
-				.eq('person_id', personId)
-				.order('popularity', { ascending: false, nullsFirst: false })
-				.order('tmdb_popularity', { ascending: false, nullsFirst: false })
-				.range(from, to);
-			if (mergedFilters) {
-				if (mergedFilters.limit) {
-					request = request.limit(mergedFilters.limit);
-				}
-			}
-			const { data, error } = await request;
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == mergedFilters.resultsPerPage ? pages.length + 1 : undefined;
-		},
-		enabled: !!personId,
-	});
-};
+// export const useMediaPersonMostRatedInfiniteQuery = ({
+// 	personId,
+// 	filters,
+// } : {
+// 	personId: number;
+// 	filters?: {
+// 		resultsPerPage?: number;
+// 		limit?: number;
+// 	};
+// }) => {
+// 	const mergedFilters = {
+// 		resultsPerPage: 20,
+// 		limit: 10,
+// 		...filters,
+// 	};
+// 	const supabase = useSupabaseClient();
+// 	return useInfiniteQuery({
+// 		queryKey: mediaKeys.mostRated({ personId, filters: mergedFilters }),
+// 		queryFn: async ({ pageParam = 1}) => {
+// 			if (!personId) throw Error('No person id provided');
+// 			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
+// 			let to = from - 1 + mergedFilters.resultsPerPage;
+// 			let request = supabase
+// 				.from('media_person_combined_credits')
+// 				.select('*')
+// 				.eq('person_id', personId)
+// 				.order('popularity', { ascending: false, nullsFirst: false })
+// 				.order('tmdb_popularity', { ascending: false, nullsFirst: false })
+// 				.range(from, to);
+// 			if (mergedFilters) {
+// 				if (mergedFilters.limit) {
+// 					request = request.limit(mergedFilters.limit);
+// 				}
+// 			}
+// 			const { data, error } = await request;
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		initialPageParam: 1,
+// 		getNextPageParam: (lastPage, pages) => {
+// 			return lastPage?.length == mergedFilters.resultsPerPage ? pages.length + 1 : undefined;
+// 		},
+// 		enabled: !!personId,
+// 	});
+// };
 /* -------------------------------------------------------------------------- */

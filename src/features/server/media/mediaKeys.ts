@@ -8,25 +8,36 @@ export const mediaKeys = {
 		locale?: string;
 	}) => locale ? [locale, 'media'] : ['media'],
 
+	specify: ({
+		locale,
+		type,
+	} : {
+		locale: string;
+		type: MediaType;
+	}) => [locale, type],
+
 	detail: ({
 		locale,
 		id,
 		type,
 	} : {
-		locale?: string;
+		locale: string;
 		id: number;
-		type: MediaType;
-	}) => [...mediaKeys.all({ locale }), type, String(id)],
+		type?: MediaType;
+	}) => type
+		? [...mediaKeys.specify({ locale, type }), String(id)]
+		: [...mediaKeys.all({ locale }), String(id)],
 
 	/* -------------------------------------------------------------------------- */
 	/*                                    MOVIE                                   */
 	/* -------------------------------------------------------------------------- */
+
 	movieReviews: ({
 		locale,
 		id,
 		filters
 	} : {
-		locale?: string;
+		locale: string;
 		id: number;
 		filters?: any
 	}) => filters ? [...mediaKeys.detail({ locale, id, type: 'movie' }), 'reviews', JSON.stringify(filters)] : [...mediaKeys.detail({ locale, id, type: 'movie' }), 'reviews'],
@@ -39,7 +50,7 @@ export const mediaKeys = {
 		locale,
 		id,
 	} : {
-		locale?: string;
+		locale: string;
 		id: number;
 	}) => [...mediaKeys.detail({ locale, id, type: 'person' }), 'combined-credits'],
 	personFilms: ({
@@ -47,10 +58,10 @@ export const mediaKeys = {
 		id,
 		filters
 	} : {
-		locale?: string;
+		locale: string;
 		id: number;
-		filters?: any
-	}) => filters ? [...mediaKeys.detail({ locale, id, type: 'person' }), 'films', JSON.stringify(filters)] : [...mediaKeys.detail({ locale, id, type: 'person' }), 'films'],
+		filters: any
+	}) => [...mediaKeys.detail({ locale, id, type: 'person' }), 'films', JSON.stringify(filters)],
 
 	/* -------------------------------------------------------------------------- */
 }

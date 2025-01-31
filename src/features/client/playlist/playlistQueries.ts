@@ -17,14 +17,14 @@ export const usePlaylistFull = (playlistId: number) => {
 				.select(`
 					*,
 					user(*),
-					items:playlist_items_media(*),
+					items:playlist_items(*, media(*)),
 					guests:playlist_guests(
 						*,
 						user:user(*)
 					)
 				`)
 				.eq('id', playlistId)
-				.order('rank', { ascending: true, referencedTable: 'playlist_items_media' })
+				.order('rank', { ascending: true, referencedTable: 'playlist_items' })
 				.returns<Playlist[]>()
 				.single();
 			if (error || !data) throw error;
@@ -56,8 +56,8 @@ export const usePlaylistItems = (playlistId?: number) => {
 		queryFn: async () => {
 			if (!playlistId) throw Error('Missing playlist id');
 			const { data, error } = await supabase
-				.from('playlist_items_media')
-				.select(`*`)
+				.from('playlist_items')
+				.select(`*, media(*)`)
 				.eq('playlist_id', playlistId)
 				.order('rank', { ascending: true })
 				.returns<PlaylistItem[]>()
@@ -76,7 +76,7 @@ export const usePlaylistGuests = (playlistId?: number) => {
 		queryFn: async () => {
 			if (!playlistId) throw Error('Missing playlist id');
 			const { data, error } = await supabase
-				.from('playlist_guest')
+				.from('playlist_guests')
 				.select(`
 					*,
 					user:user(*)
@@ -164,4 +164,58 @@ export const usePlaylistGuestsSearchInfinite = ({
 		enabled: !!playlistId,
 	});
 }
+
+/* -------------------------------- FEATURED -------------------------------- */
+export const usePlaylistFeaturedInfiniteQuery = ({
+	filters
+} : {
+	filters?: {
+		sortBy?: 'created_at' | 'updated_at';
+		sortOrder?: 'asc' | 'desc';
+		resultsPerPage?: number;
+	};
+} = {}) => {
+	const mergedFilters = {
+		resultsPerPage: 20,
+		sortBy: 'updated_at',
+		sortOrder: 'desc',
+		...filters,
+	};
+	const supabase = useSupabaseClient();
+	return useInfiniteQuery({
+		queryKey: playlistKeys.featured({ filters: mergedFilters }),
+		queryFn: async ({ pageParam = 1 }) => {
+			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
+			let to = from - 1 + mergedFilters.resultsPerPage;
+			let query = supabase
+				.from('playlists_featured')
+				.select('*, playlist:playlists(*)')
+				.range(from, to)
+			
+			if (mergedFilters) {
+				if (mergedFilters.sortBy) {
+					switch (mergedFilters.sortBy) {
+						case 'created_at':
+							query = query.order('created_at', { referencedTable: 'playlist', ascending: mergedFilters.sortOrder === 'asc', nullsFirst: false });
+							break;
+						case 'updated_at':
+							query = query.order('updated_at', { referencedTable: 'playlist', ascending: mergedFilters.sortOrder === 'asc', nullsFirst: false });
+							break;
+						default:
+							break;
+					}
+				}
+			}
+			const { data, error } = await query;
+			if (error) throw error;
+			return data;
+		},
+		initialPageParam: 1,
+		getNextPageParam: (lastPage, pages) => {
+			return lastPage?.length === mergedFilters.resultsPerPage ? pages.length + 1 : undefined;
+		},
+		throwOnError: true,
+	});
+}
+/* -------------------------------------------------------------------------- */
 

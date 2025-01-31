@@ -1,11 +1,10 @@
 'use client';
 
 import { JustWatchWidget } from "@/components/JustWatch/JustWatchWidgetScript";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import { MediaMovie, MoviePerson } from "@/types/type.db";
+import { MediaMovie, MediaMoviePerson, MediaPerson } from "@/types/type.db";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -24,7 +23,7 @@ export default function MovieDetails({
         <div>
           <h2 className="text-lg font-medium">{upperFirst(common('word.overview'))}</h2>
           <div className="text-justify text-muted-foreground">
-            {movie.overview ?? upperFirst(common('messages.no_overview'))}
+            {movie.extra_data.overview ?? upperFirst(common('messages.no_overview'))}
           </div>
         </div>
         <JustWatchWidget
@@ -43,7 +42,7 @@ export default function MovieDetails({
 const MovieCast = ({
 	cast,
 } : {
-	cast?: MoviePerson[]
+	cast?: MediaMoviePerson[]
 }) => {
   const common = useTranslations('common');
 	return (
@@ -52,10 +51,8 @@ const MovieCast = ({
       {(cast && cast?.length > 0) ? (
         <ScrollArea>
           <div className="flex space-x-4 pb-4">
-            {cast?.map((actor: any) => (
-              <div key={actor.id}>
-                <CastPoster credit={actor} />
-              </div>
+            {cast?.map(({ person, role }, i) => (
+              <CastPoster key={i} person={person} character={role?.character} />
             ))}
           </div>
           <ScrollBar orientation="horizontal" />
@@ -69,17 +66,20 @@ const MovieCast = ({
 }
 
 function CastPoster({
-  credit
+  person,
+  character,
 } : {
-  credit: any
+  person?: MediaPerson,
+  character?: string | null,
 }) {
+  if (!person) return null;
   return (
-    <Link href={`/person/${credit.person?.slug ?? credit.person?.id}`}>
+    <Link href={person.url ?? ''}>
       <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
         <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
           <ImageWithFallback
-            src={credit.person?.profile_path ? `https://image.tmdb.org/t/p/original/${credit.person?.profile_path}` : ''}
-            alt={credit.person?.name ?? ''}
+            src={person.avatar_url ?? ''}
+            alt={person.title ?? ''}
             fill
             className="object-cover"
             type="person"
@@ -91,8 +91,8 @@ function CastPoster({
           />
         </div>
         <div className="text-center">
-          <p className="line-clamp-2 break-words">{credit.person?.name}</p>
-          <p className="line-clamp-2 text-accent-1 italic text-sm">{credit.role.character}</p>
+          <p className="line-clamp-2 break-words">{person.title}</p>
+          {character ? <p className="line-clamp-2 text-accent-1 italic text-sm">{character}</p> : null}
         </div>
       </Card>
     </Link>

@@ -48,14 +48,13 @@ export function DataTableRowActions({
   const completeRecoMutation = useUserRecosCompleteMutation();
 
   const handleDeleteReco = async () => {
-    if (!user || !data?.media_id || !data.media_type) {
+    if (!user || !data?.media_id) {
       toast.error(upperFirst(common('errors.an_error_occurred')));
       return;
     }
     await deleteRecoMutation.mutateAsync({
       userId: user?.id,
       mediaId: data?.media_id,
-      mediaType: data?.media_type,
     }, {
       onSuccess: () => {
         toast.success(upperFirst(common('word.deleted')));
@@ -67,14 +66,13 @@ export function DataTableRowActions({
   };
 
   const handleCompleteReco = async () => {
-    if (!user || !data?.media_id || !data.media_type) {
+    if (!user || !data?.media_id) {
       toast.error(upperFirst(common('errors.an_error_occurred')));
       return;
     }
     await completeRecoMutation.mutateAsync({
       userId: user?.id,
       mediaId: data?.media_id,
-      mediaType: data?.media_type,
     }, {
       onSuccess: () => {
         toast.success(upperFirst(common('messages.completed')));
@@ -113,32 +111,32 @@ export function DataTableRowActions({
             {upperFirst(common('messages.complete'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id!, mediaType: data?.media_type!, mediaTitle: media.title })}
+            onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id!, mediaTitle: media.title })}
           >
             <Icons.send className='w-4' />
             {upperFirst(common('messages.send_to_friend'))}
           </DropdownMenuItem>
-          <DropdownMenuItem
+          {/* <DropdownMenuItem
             onClick={() => openModal(ModalPlaylistAdd, { mediaId: data?.media_id!, mediaType: data?.media_type!, mediaTitle: media.title })}
           >
             <Icons.addPlaylist className='w-4' />
             {upperFirst(common('messages.add_to_playlist'))}
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href={media.url}>
+            <Link href={media.url ?? ''}>
               <Icons.eye className='w-4' />
-              {data.media_type === 'movie'
+              {data.media?.media_type === 'movie'
                 ? capitalize(common('messages.go_to_film'))
-                : data.media_type === 'tv_series'
+                : data.media?.media_type === 'tv_series'
                 ? capitalize(common('messages.go_to_serie'))
-                : data.media_type === 'person'
+                : data.media?.media_type === 'person'
                 ? capitalize(common('messages.go_to_person'))
                 : ''
               }
             </Link>
           </DropdownMenuItem>
-          {media.mainCredits && media.mainCredits.length > 0 ? (
+          {data.media?.main_credit && data.media.main_credit.length > 0 ? (
             <div>
 
             </div>
@@ -158,9 +156,9 @@ export function DataTableRowActions({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => openModal(ModalShare, {
-              title: media.title,
-              type: data?.media_type,
-              path: media.url,
+              title: data.media?.title,
+              type: data.media?.media_type,
+              path: data.media?.url ?? '',
             })}
           >
             <Icons.share className='w-4' />

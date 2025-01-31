@@ -22,7 +22,6 @@ const CardUserActivityDefault = React.forwardRef<
 >(({ className, activity, children, ...props }, ref) => {
 	const format = useFormatter();
 	const now = useNow({ updateInterval: 1000 * 10 });
-	const media = getMediaDetails(activity?.media);
 	return (
 		<Card
 			ref={ref}
@@ -34,8 +33,8 @@ const CardUserActivityDefault = React.forwardRef<
 		>
 			<div className='w-20 relative h-full shrink-0 rounded-md overflow-hidden' style={{ aspectRatio: '2 / 3' }}>
 				<ImageWithFallback
-					src={media.poster_path ? `https://image.tmdb.org/t/p/original/${media.poster_path}` : ''}
-					alt={media.title ?? ''}
+					src={activity?.media?.avatar_url ?? ''}
+					alt={activity?.media?.title ?? ''}
 					fill
 					className="object-cover"
 					type="movie"
@@ -56,23 +55,23 @@ const CardUserActivityDefault = React.forwardRef<
 						{format.relativeTime(new Date(activity?.watched_date ?? ''), now)}
 					</div>
 				</div>
-				<Link href={media.url} className="space-y-2">
+				<Link href={activity?.media?.url ?? ''} className="space-y-2">
 					{/* TITLE */}
 					<div className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
-						<span className='font-bold'>{media.title}</span>
+						<span className='font-bold'>{activity?.media?.title}</span>
 						{/* DATE */}
 						<sup>
-							<DateOnlyYearTooltip date={media.release_date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
+							<DateOnlyYearTooltip date={activity?.media?.date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
 						</sup>
 					</div>
 					{/* DESCRIPTION */}
 					<p
 					className={`
 						text-xs line-clamp-2 text-justify
-						${(!media.overview || !media.overview.length) && 'text-muted-foreground'}
+						${(!activity?.media?.extra_data.overview || !activity?.media?.extra_data.overview.length) && 'text-muted-foreground'}
 					`}
 					>
-						{(media.overview && media.overview.length) ? media.overview : 'Aucune description'}
+						{(activity?.media?.extra_data.overview && activity?.media?.extra_data.overview.length) ? activity?.media?.extra_data.overview : 'Aucune description'}
 					</p>
 				</Link>
 			</div>

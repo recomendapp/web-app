@@ -1,6 +1,7 @@
 "use server"
 
 import { createServerClient } from "@/lib/supabase/server";
+import { Media } from "@/types/type.db";
 import { z } from "zod";
 
 const searchMultiSchema = z
@@ -31,22 +32,35 @@ export const tmdbSearchMulti = async (query: string, language = "en", page = 1) 
 	).json();
 
 	const { data, error } = await supabase
-		.rpc('find_medias', {
-			media_list: tmdbResults.results.map((result: any) => {
-				return {
-					id: result.id,
-					type: result.media_type === 'tv' ? 'tv_series' : result.media_type,
-				}
-			})
-		})
-		.returns<any[]>();
-	
+		.from('medias')
+		.select('*, media_movie(*), media_tv_series(*), media_person(*)')
+		.or(tmdbResults.results.map((result: any) => {
+			return `${result.media_type === 'tv' ? 'tv_series' : result.media_type}_id.eq.${result.id}`
+		}).join(','));
+
 	if (!data || error) throw error;
-	
-	const best_result = data[0];
-	const movies = data.filter((result: any) => result.media_type === 'movie') // .filter((result: any) => result.id !== best_result.id);
-	const tv_series = data.filter((result: any) => result.media_type === 'tv_series') // .filter((result: any) => result.id !== best_result.id);
-	const persons = data.filter((result: any) => result.media_type === 'person') // .filter((result: any) => result.id !== best_result.id);
+
+	const orderedData = tmdbResults.results.map((tmdbResult: any) => {
+		return data.find((result) => {
+			if (tmdbResult.media_type === 'movie') {
+				return result.movie_id === tmdbResult.id;
+			} else if (tmdbResult.media_type === 'tv') {
+				return result.tv_series_id === tmdbResult.id;
+			} else if (tmdbResult.media_type === 'person') {
+				return result.person_id === tmdbResult.id;
+			}
+			return false;
+		});
+	}).filter(Boolean) as typeof data;
+
+	const best_result = {
+		...orderedData[0].media_movie,
+		...orderedData[0].media_tv_series,
+		...orderedData[0].media_person,
+	} as Media;
+	const movies = orderedData.filter((result) => result.media_type === 'movie').map((result) => result.media_movie);
+	const tv_series = orderedData.filter((result) => result.media_type === 'tv_series').map((result) => result.media_tv_series);
+	const persons = orderedData.filter((result) => result.media_type === 'person').map((result) => result.media_person);
 
 	return {
 		best_result: best_result,

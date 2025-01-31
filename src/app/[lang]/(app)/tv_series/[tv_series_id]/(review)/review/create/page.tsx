@@ -3,8 +3,9 @@ import { createServerClient } from '@/lib/supabase/server';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
-import CreateReviewForm from '@/components/Review/CreateReviewFrom';
 import { getTvSeries } from '@/features/server/media/mediaQueries';
+import CreateReviewForm from '@/components/Review/CreateReviewForm';
+import { Media } from '@/types/type.db';
 
 export async function generateMetadata(
   props: {
@@ -26,8 +27,8 @@ export async function generateMetadata(
   if (!serie) return { title: upperFirst(common('errors.serie_not_found')) };
 
   return {
-    title: t('title', { title: serie.name }),
-    description: t('description', { title: serie.name }),
+    title: t('title', { title: serie.title }),
+    description: t('description', { title: serie.title }),
   };
 }
 
@@ -69,15 +70,6 @@ export default async function CreateReview(
   if (!serie) notFound();
 
   return (
-    <CreateReviewForm
-    media={{
-      id: serie.id,
-      media_type: 'tv_series',
-      poster_path: serie.poster_path,
-      title: serie.name,
-      credits: serie.created_by,
-      slug: serie.slug,
-    }}
-    />
+    <CreateReviewForm media={serie as Media} />
   );
 }

@@ -1,9 +1,8 @@
 'use client';
-import { UserReview } from "@/types/type.db";
+import { MediaPerson, UserReview } from "@/types/type.db";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { getMediaDetails } from "@/hooks/get-media-details";
 import { Card } from "@/components/ui/card";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import ReviewForm from "@/components/Review/ReviewForm";
@@ -20,7 +19,6 @@ export default function Review({
 		reviewId: reviewServer.id,
 		initialData: reviewServer,
 	})
-	const media = getMediaDetails(review?.media);
 
 	if (!review) return null;
 	
@@ -28,7 +26,7 @@ export default function Review({
 	<div className="@container/review">
 		<div className="flex flex-col @3xl/review:flex-row gap-4 p-2">
 			{/* MEDIA */}
-			<Link href={media.url ?? ''} className="shrink-0">
+			<Link href={review?.activity?.media?.url ?? ''} className="shrink-0">
 				<Card
 				className={`
 					flex items-center rounded-xl bg-muted hover:bg-muted-hover p-1 h-20
@@ -36,14 +34,14 @@ export default function Review({
 				`}
 				>
 					<div
-					className={cn('relative h-full shrink-0 rounded-md overflow-hidden @3xl/review:w-56', media.poster_className)}
+					className={cn('relative h-full shrink-0 rounded-md overflow-hidden @3xl/review:w-56 aspect-[2/3]')}
 					>
 						<ImageWithFallback
-						src={media?.poster_path ? `https://image.tmdb.org/t/p/original/${media.poster_path}` : ''}
-						alt={media?.title ?? ''}
+						src={review?.activity?.media?.avatar_url ?? ''}
+						alt={review?.activity?.media?.title ?? ''}
 						fill
 						className="object-cover"
-						type="playlist"
+						type={review?.activity?.media?.media_type}
 						sizes={`
 						(max-width: 640px) 96px,
 						(max-width: 1024px) 120px,
@@ -52,12 +50,18 @@ export default function Review({
 						/>
 					</div>
 					<div className='px-2 py-1 space-y-1'>
-						<h3 className='text-xl font-semibold line-clamp-2 break-words'>{media?.title}</h3>
-						{media.mainCredits ? <Credits credits={media.mainCredits ?? []} /> : null}
+						<h3 className='text-xl font-semibold line-clamp-2 break-words'>{review?.activity?.media?.title}</h3>
+						{review?.activity?.media?.main_credit ? <Credits credits={review?.activity?.media.main_credit ?? []} /> : null}
 					</div>
 				</Card>
 			</Link>
-			<ReviewForm review={review} mediaId={review.media_id!} mediaType={review.media_type!} />
+			<ReviewForm
+			mediaId={review?.activity?.media_id!}
+			media={review?.activity?.media!}
+			review={review}
+			activity={review.activity} 
+			author={review.activity?.user}
+			/>
 		</div>
 	</div>
 	)
@@ -67,21 +71,21 @@ const Credits = ({
 	credits,
 	className,
   }: {
-	credits: any[];
+	credits: MediaPerson[];
 	className?: string;
   }) => {
 	if (!credits || credits.length === 0) return null;
 	return (
-	  <p className={cn('line-clamp-1', className)}>
-		{credits?.map((credit: any, index: number) => (
-		  <span key={credit.id}>
+	  <p className={cn('line-clamp-2', className)}>
+		{credits?.map((credit, index: number) => (
+		  <span key={index}>
 			<Button
 			  variant={'link'}
 			  className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition"
 			  asChild
 			>
-			  <Link href={`/person/${credit.id}`}>
-				{credit.name}
+			  <Link href={credit.url ?? ''}>
+				{credit.title}
 			  </Link>
 			</Button>
 			{index !== credits.length - 1 && (
@@ -91,4 +95,5 @@ const Credits = ({
 		))}
 	  </p>
 	)
-}
+  }
+  

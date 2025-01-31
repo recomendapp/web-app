@@ -13,10 +13,9 @@ import { Textarea } from '@/components/ui/textarea';
 import toast from 'react-hot-toast';
 import { Icons } from '@/config/icons';
 import { useAuth } from '@/context/auth-context';
-import { MediaType, UserActivity, UserReview } from '@/types/type.db';
+import { Media, User, UserActivity, UserReview } from '@/types/type.db';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
-import ActivityIcon from '@/components/Review/ActivityIcon';
 import { CardUser } from '@/components/Card/CardUser';
 import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { TooltipBox } from '@/components/Box/TooltipBox';
@@ -25,9 +24,8 @@ import { useUserReviewInsertMutation, useUserReviewUpdateMutation } from '@/feat
 import { upperFirst } from 'lodash';
 import { useModal } from '@/context/modal-context';
 import { ReviewSettings } from './ReviewSettings';
-import UserActivityRating from '@/components/Media/actions/UserActivityRating';
+import MediaActionUserActivityRating from '@/components/Media/actions/MediaActionUserActivityRating';
 import { useRouter } from 'next/navigation';
-import { getMediaUrl } from '@/hooks/get-media-details';
 import ActionReviewLike from './actions/ActionReviewLike';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 
@@ -35,16 +33,18 @@ const MAX_TITLE_LENGTH = 50;
 const MAX_BODY_LENGTH = 5000;
 
 interface ReviewFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  review?: UserReview;
-  mediaId: number;
-  mediaType: MediaType;
-  activity?: UserActivity;
+	mediaId: number;
+	media: Media;
+	review?: UserReview;
+	author?: User;
+	activity?: UserActivity | null;
 }
 
 export default function ReviewForm({
-	review,
 	mediaId,
-	mediaType,
+	media,
+	review,
+	author,
 	activity,
 	className
 } : ReviewFormProps) {
@@ -62,7 +62,6 @@ export default function ReviewForm({
 	const insertReview = useUserReviewInsertMutation({
 		userId: user?.id,
 		mediaId,
-		mediaType,
 	});
 
 	const handleUpdateReview = async () => {
@@ -109,7 +108,8 @@ export default function ReviewForm({
 			onSuccess: (data) => {
 				setEditable(false);
 				toast.success(upperFirst(common('word.saved')));
-				router.replace(`${getMediaUrl({ id: mediaId, type: mediaType })}/review/${data.id}`);
+				router.replace(`/review/${data.id}`);
+				// router.replace(`${getMediaUrl({ id: mediaId, type: mediaType })}/review/${data.id}`);
 			},
 			onError: () => {
 				toast.error(upperFirst(common('errors.an_error_occurred')));
@@ -139,16 +139,16 @@ export default function ReviewForm({
 	>
 		<div className="flex flex-col items-center gap-1">
 			{review
-				? <IconMediaRating rating={review?.rating} className="h-fit"/>
-				: <UserActivityRating mediaId={mediaId} mediaType={mediaType} />}
+				? <IconMediaRating rating={activity?.rating} className="h-fit"/>
+				: <MediaActionUserActivityRating mediaId={mediaId} />}
 			<div className="bg-muted-hover h-full w-0.5 rounded-full"></div>
 		</div>
 		<div className="w-full flex flex-col gap-2">
 			<div className="w-full flex justify-between items-center gap-2">
-				{review ? <CardUser variant="inline" user={review?.user} /> : <CardUser variant="inline" user={user} />}
+				{review ? <CardUser variant="inline" user={author} /> : <CardUser variant="inline" user={author} />}
 				<div className='flex items-center gap-1 text-sm text-muted-foreground'>
 					{review ? format.relativeTime(new Date(review?.created_at ?? ''), now) : null}
-					{review?.user?.id == user?.id ? (
+					{author?.id == user?.id ? (
 						<>
 							{!editable ? (
 								<TooltipBox tooltip="Modifier">							
@@ -189,7 +189,14 @@ export default function ReviewForm({
 								</TooltipBox>
 								</>
 							)}
-							{review ? <ReviewSettings review={review} mediaId={mediaId} mediaType={mediaType} /> : null}
+							{review ? (
+								<ReviewSettings
+								mediaId={mediaId}
+								media={media}
+								review={review}
+								author={author}
+								/>
+							) : null}
 						</>
 					) : !review ? (
 						<TooltipBox tooltip="Enregistrer">

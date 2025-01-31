@@ -8,7 +8,7 @@ export type Profile = Database['public']['Views']['profile']['Row'] & {
 
 export type User = (Database['public']['Tables']['user']['Row']) & {
 	subscriptions?: UserSubscriptions[] | any;
-	favorite_movies?: Movie[] | any;
+	favorite_movies?: Media[] | any;
 } | null | undefined;
 
 // *========== USER_FRIEND ==========* //
@@ -30,7 +30,12 @@ export type MediaMovie = Database['public']['Views']['media_movie']['Row'] & {
 	videos?: Database['public']['Tables']['tmdb_movie_videos']['Row'][];
 	production_countries?: Database['public']['Tables']['tmdb_movie_production_countries']['Row'][];
 	spoken_languages?: Database['public']['Tables']['tmdb_movie_spoken_languages']['Row'][];
-	cast?: MoviePerson[];
+	cast?: MediaMoviePerson[];
+};
+
+export type MediaMoviePerson = Database['public']['Tables']['tmdb_movie_credits']['Row'] & {
+	person?: MediaPerson;
+	role?: Database['public']['Tables']['tmdb_movie_roles']['Row'];
 };
 
 export type MediaMovieAggregateCredits = Database['public']['Views']['media_movie_aggregate_credits']['Row'] & {
@@ -40,7 +45,11 @@ export type MediaTvSeries = Database['public']['Views']['media_tv_series']['Row'
 	videos?: Database['public']['Tables']['tmdb_tv_series_videos']['Row'][];
 	production_countries?: Database['public']['Tables']['tmdb_tv_series_production_countries']['Row'][];
 	spoken_languages?: Database['public']['Tables']['tmdb_tv_series_spoken_languages']['Row'][];
-	cast?: TvSeriePerson[];
+	cast?: MediaTvSeriesPerson[];
+};
+
+export type MediaTvSeriesPerson = Database['public']['Tables']['tmdb_tv_series_credits']['Row'] & {
+	person?: MediaPerson;
 };
 
 export type MediaTvSeriesAggregateCredits = any;
@@ -48,19 +57,22 @@ export type MediaTvSeriesAggregateCredits = any;
 export type MediaPerson = Database['public']['Views']['media_person']['Row'] & {
 };
 
-export type Media = MediaMovie & MediaTvSeries & MediaPerson & {
-};
+export type Media =
+	// Database['public']['Views']['media']['Row'] &
+	MediaMovie & MediaTvSeries & MediaPerson & {
+	};
 
-export type MediaPersonCombinedCredits = Database['public']['Views']['media_person_combined_credits']['Row'] & {
-};
+// export type MediaPersonCombinedCredits = Database['public']['Views']['media_person_combined_credits']['Row'] & {
+// };
 
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- ACTIVITY -------------------------------- */
-export type UserActivity = Database['public']['Tables']['user_activity']['Row'] & Database['public']['Views']['user_activity_media']['Row'] & {
+export type UserActivity = Database['public']['Tables']['user_activity']['Row'] & {
 	user?: User;
-	review?: UserReview;
-} | null | undefined;
+	review?: UserReview | null;
+	media?: Media;
+};
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------------- RECOS --------------------------------- */
@@ -69,17 +81,16 @@ export type UserRecosAggregated = Database['public']['Views']['user_recos_aggreg
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- WATCHLIST ------------------------------- */
-export type UserWatchlist = Database['public']['Tables']['user_watchlist']['Row'] & Database['public']['Views']['user_watchlist_media']['Row'] & {
-} | null | undefined;
+export type UserWatchlist = Database['public']['Tables']['user_watchlist']['Row'] & Database['public']['Views']['user_watchlist_random']['Row'] & {
+	media?: Media;
+};
 /* -------------------------------------------------------------------------- */
 
 /* --------------------------------- REVIEW --------------------------------- */
 export type UserReview =
 	Database['public']['Tables']['user_review']['Row']
-	& Database['public']['Views']['user_review_activity']['Row']
-	& Database['public']['Views']['user_review_media_activity']['Row']
 	& {
-		user?: User;
+		activity?: UserActivity;
 	};
 /* -------------------------------------------------------------------------- */
 
@@ -92,39 +103,6 @@ export type UserReview =
 
 
 
-
-
-/* -------------------------------- TV_SERIE -------------------------------- */
-export type TvSerie = Database['public']['Views']['tv_serie']['Row'] & {
-	videos?: Database['public']['Tables']['tmdb_tv_series_videos']['Row'][];
-	production_countries?: Database['public']['Tables']['tmdb_tv_series_production_countries']['Row'][];
-	spoken_languages?: Database['public']['Tables']['tmdb_tv_series_spoken_languages']['Row'][];
-	cast?: TvSeriePerson[];
-};
-
-export type TvSeriePerson = Database['public']['Tables']['tmdb_tv_series_credits']['Row'] & {
-	person?: Person;
-} | null | undefined;
-/* -------------------------------------------------------------------------- */
-
-/* ---------------------------------- MOVIE --------------------------------- */
-export type Movie = Database['public']['Views']['movie']['Row'] & {
-	videos?: Database['public']['Tables']['tmdb_movie_videos']['Row'][];
-	production_countries?: Database['public']['Tables']['tmdb_movie_production_countries']['Row'][];
-	spoken_languages?: Database['public']['Tables']['tmdb_movie_spoken_languages']['Row'][];
-	cast?: MoviePerson[];
-};
-
-export type MoviePerson = Database['public']['Tables']['tmdb_movie_credits']['Row'] & {
-	person?: Person;
-} | null | undefined;
-/* -------------------------------------------------------------------------- */
-
-/* --------------------------------- PERSON --------------------------------- */
-export type Person = Database['public']['Views']['person']['Row'] & Database['public']['Views']['person_full']['Row'] & {
-} | null | undefined;
-/* -------------------------------------------------------------------------- */
-
 /* -------------------------------- PLAYLIST -------------------------------- */
 export type Playlist = Database['public']['Tables']['playlists']['Row'] & {
 	user?: User;
@@ -133,8 +111,8 @@ export type Playlist = Database['public']['Tables']['playlists']['Row'] & {
 	items?: PlaylistItem[] | any;
 } | null | undefined;
 
-export type PlaylistItem = Database['public']['Tables']['playlist_items']['Row'] & Database['public']['Views']['playlist_items_media']['Row'] & {
-	media?: Movie;
+export type PlaylistItem = Database['public']['Tables']['playlist_items']['Row'] & {
+	media?: Media;
 	playlist?: Playlist;
 	user?: User;
 } | null | undefined;
@@ -143,82 +121,32 @@ export type PlaylistGuest = Database['public']['Tables']['playlist_guests']['Row
 	user?: User;
 	playlist?: Playlist;
 } | null | undefined;
+
+export type PlaylistType = 'personal' | 'shared';
+/* -------------------------------------------------------------------------- */
+
+/* ---------------------------------- FEED ---------------------------------- */
+export type UserFeedCastCrew = Database['public']['Views']['user_feed_cast_crew']['Row'] & {
+	media?: Media;
+	person?: MediaPerson;
+} | null | undefined;
 /* -------------------------------------------------------------------------- */
 
 
-
-// *========== USER_MOVIE_ACTIVITY ==========* //
-export type UserMovieActivity = Database['public']['Tables']['user_movie_activity']['Row'] & {
-	movie?: Movie;
-	user?: User;
-	review?: UserMovieReview;
-} | null | undefined;
-
-// *========== USER_MOVIE_WATCHLIST ==========* //
-export type UserMovieWatchlist = Database['public']['Tables']['user_movie_watchlist']['Row'] & {
-	movie?: Movie;
-	user?: User;
-} | null | undefined;
-
-// *========== USER_MOVIE_GUIDELIST ==========* //
-export type UserMovieGuidelist = Database['public']['Tables']['user_movie_guidelist']['Row'] & {
-	movie?: Movie;
-	user?: User;
-	sender?: User;
-} | null | undefined;
-
-export type UserMovieGuidelistView = Database['public']['Views']['guidelist']['Row'] & {
-	movie?: Movie;
-};
-
-// *========== USER_MOVIE_REVIEW ==========* //
-export type UserMovieReview = Database['public']['Tables']['user_movie_review']['Row'] & {
-	user?: User;
-} | null | undefined;
-
-// *========== review ==========* //
-export type Review = Database['public']['Views']['review']['Row'] & {
-	user?: User;
-	movie?: Movie;
-} | null | undefined;
-
-// *========== SUBSCRIPTION ==========* //
+/* ------------------------------ SUBSCRIPTIONS ----------------------------- */
 export type UserSubscriptions = Database['public']['Tables']['user_subscriptions']['Row'] & {
 	prices?: Prices[];
 } | null | undefined;
+/* -------------------------------------------------------------------------- */
 
-// *========== PRICES ==========* //
+/* --------------------------------- PRICES --------------------------------- */
 export type Prices = Database['public']['Tables']['prices']['Row'] & {
 	product?: Products;
 } | null | undefined;
+/* -------------------------------------------------------------------------- */
 
-// *========== PRODUCTS ==========* //
+/* -------------------------------- PRODUCTS -------------------------------- */
 export type Products = Database['public']['Tables']['products']['Row'] & {
 	prices?: Prices[];
 } | null | undefined;
-
-// *========== MOVIE_TRANSLATION ==========* //
-export type MovieTranslation = Database['public']['Tables']['tmdb_movie_translations']['Row'] | null | undefined;
-
-
-// *========== PERSON ==========* //
-// export type Person = Database['public']['Tables']['tmdb_person']['Row'] & {
-// 	data?: PersonTranslation[] | any;
-// } | null | undefined;
-
-// *========== PERSON_TRANSLATION ==========* //
-export type PersonTranslation = Database['public']['Tables']['tmdb_person_translation']['Row'] | null | undefined;
-
-// *========== PLAYLIST ==========* //
-
-export type PlaylistType = 'personal' | 'shared';
-
-// *========== PLAYLIST_ITEM ==========* //
-
-
-// *========== FEED_CAST_CREW ==========* //
-export type FeedCastCrew = Database['public']['Views']['feed_cast_crew']['Row'] & {
-	media?: Media;
-	// movie?: Movie;
-	person?: Person;
-} | null | undefined;
+/* -------------------------------------------------------------------------- */

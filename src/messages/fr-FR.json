@@ -39,7 +39,7 @@
       "review": "{count, plural, one {critique} other {critiques}}",
       "no_overview": "aucun synopsis",
       "cast": "casting",
-      "no_casting": "aucun casting",
+      "no_cast": "aucun casting",
       "recent": "{gender, select, female {récente} other {récent}}{count, plural, one {} other {s}}",
       "popular": "{count, plural, one {populaire} other {populaires}}",
       "no_reviews": "aucune critique",
@@ -60,6 +60,7 @@
       "reco": "{count, plural, one {reco} other {recos}}",
       "my_recos": "mes recos",
       "item": "{count, plural, one {élément} other {éléments}}",
+      "item_count": "{count, plural, one {# élément} other {# éléments}}",
       "type": "type",
       "complete": "compléter",
       "completed": "complété",
@@ -68,7 +69,9 @@
       "most_old": "{{gender, select, female {{count, plural, one {plus ancienne} other {plus anciennes}}} other {{count, plural, one {plus ancien} other {plus anciens}}}}",
       "known_for": "Connu pour",
       "release_date": "date de sortie",
-      "vote_average": "note moyenne"
+      "vote_average": "note moyenne",
+      "added": "ajouté",
+      "updated_at": "mis à jour"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",
