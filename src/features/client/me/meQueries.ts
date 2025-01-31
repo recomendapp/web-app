@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useSupabaseClient } from '@/context/supabase-context';
-import { MediaType, UserRecosAggregated, PlaylistType, UserFriend } from "@/types/type.db";
+import { UserRecosAggregated, PlaylistType, UserFriend } from "@/types/type.db";
 import { meKeys } from "./meKeys";
 
 /**
@@ -40,34 +40,34 @@ export const useMeAddMediaToPlaylist = ({
 				}));
 				return output;
 			} else { // shared
-				// const { data, error } = await supabase
-				// 	.from('playlist_like')
-				// 	.select(`
-				// 		id,
-				// 		playlist!inner(
-				// 			*,
-				// 			playlist_guest!inner(*),
-				// 			user!inner(*),
-				// 			playlist_item(count)
-				// 		)
-				// 	`)
-				// 	.match({
-				// 		'user_id': userId,
-				// 		'playlist.playlist_guest.user_id': userId,
-				// 		'playlist.playlist_guest.edit': true,
-				// 		'playlist.user.premium': true,
-				// 		'playlist.playlist_item.movie_id': movieId,
-				// 	})
-				// 	.order('updated_at', {
-				// 		referencedTable: 'playlist',
-				// 		ascending: false 
-				// 	})
-				// if (error) throw error;
-				// const output = data?.map(({ playlist: { playlist_item, playlist_guest, user, ...playlist }, ...playlist_like }) => ({
-				// 	playlist: playlist,
-				// 	already_added: playlist_item[0]?.count > 0,
-				// }));
-				// return output;
+				const { data, error } = await supabase
+					.from('playlists_saved')
+					.select(`
+						id,
+						playlist:playlists!inner(
+							*,
+							playlist_guests!inner(*),
+							user!inner(*),
+							playlist_items(count)
+						)
+					`)
+					.match({
+						'user_id': userId,
+						'playlist.playlist_guests.user_id': userId,
+						'playlist.playlist_guests.edit': true,
+						'playlist.user.premium': true,
+						'playlist.playlist_items.media_id': mediaId,
+					})
+					.order('updated_at', {
+						referencedTable: 'playlist',
+						ascending: false 
+					})
+				if (error) throw error;
+				const output = data?.map(({ playlist: { playlist_items, playlist_guests, user, ...playlist }, ...playlists_saved }) => ({
+					playlist: playlist,
+					already_added: playlist_items[0]?.count > 0,
+				}));
+				return output;
 			}
 		},
 		enabled: !!userId && !!mediaId,
