@@ -19,9 +19,10 @@ export const getTmdbSearchMulti = async ({
     )
   ).json();
 
-  if (!tmdbResults || tmdbResults.total_results === 0) return {
+  if (!tmdbResults || tmdbResults.total_results === 0 || tmdbResults.success === false) return {
     results: [],
     total_results: 0,
+    error: tmdbResults.status_message || 'No results found',
   }
 
   const { data, error } = await supabase
@@ -74,9 +75,10 @@ export const getTmdbSearchMovies = async ({
     )
   ).json();
 
-  if (!tmdbResults || tmdbResults.total_results === 0) return {
+  if (!tmdbResults || tmdbResults.total_results === 0 || tmdbResults.success === false) return {
     results: [],
     total_results: 0,
+    error: tmdbResults.status_message || 'No results found',
   }
 
   const { data, error } = await supabase
@@ -150,9 +152,10 @@ export const getTmdbSearchPersons = async ({
     )
   ).json();
 
-  if (!tmdbResults || tmdbResults.total_results === 0) return {
+  if (!tmdbResults || tmdbResults.total_results === 0 || tmdbResults.success === false) return {
     results: [],
     total_results: 0,
+    error: tmdbResults.status_message || 'No results found',
   }
 
   const { data, error } = await supabase
@@ -171,22 +174,6 @@ export const getTmdbSearchPersons = async ({
     total_results: tmdbResults.total_results,
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* -------------------------------------------------------------------------- */
 /*                                     OLD                                    */
