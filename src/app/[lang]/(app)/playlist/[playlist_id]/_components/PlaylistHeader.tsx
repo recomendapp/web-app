@@ -93,7 +93,7 @@ export default function PlaylistHeader({
             </p>
             {/* ITEMS & TOTAL RUNTIME */}
             <div className="flex gap-1 font-light">
-              <UserCard user={playlist?.user} />
+              {playlist.user ? <UserCard user={playlist?.user} /> : null}
               <span className=" before:content-['_•_']" >
                 {common('word.film_count', {count: Number(playlist?.items_count) ?? 0})}
               </span>

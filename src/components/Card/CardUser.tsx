@@ -31,7 +31,7 @@ const CardUserDefault = React.forwardRef<
 		>
 			<UserAvatar username={user?.username} avatar_url={user?.avatar_url} />
 			<div className='px-2 py-1 space-y-1'>
-				<p className='line-clamp-2 break-words'>{user?.username}</p>
+				<p className='line-clamp-2 break-words'>{user?.full_name}</p>
 				<p className="text-muted-foreground">@{user?.username}</p>
 				{children}
 			</div>

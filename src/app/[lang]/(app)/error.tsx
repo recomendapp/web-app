@@ -14,6 +14,7 @@ import { Icons } from "@/config/icons";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ButtonCopy } from "@/components/utils/ButtonCopy";
 export default function Error({
 	error,
 	reset,
@@ -43,8 +44,9 @@ export default function Error({
 			</CardDescription>
 		  </CardHeader>
 		  <CardContent className='grid gap-4'>
-			<Alert>
-			  <AlertTitle className="select-text">{error.message}</AlertTitle>
+			<Alert className='relative group'>
+				<AlertTitle className="select-text">{error.message}</AlertTitle>
+				<ButtonCopy variant={'ghost'} size={'sm'} text={error.message} className='absolute top-1 right-1 opacity-0 group-hover:opacity-100 duration-200 transition' />
 			</Alert>
 		  </CardContent>
 		  <CardFooter>

@@ -1,13 +1,10 @@
 import { useModal } from "@/context/modal-context";
-import { Modal, ModalBody, ModalDescription, ModalHeader, ModalTitle, ModalType } from "../Modal";
+import { Modal, ModalBody, ModalType } from "../Modal";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/config/icons";
-import { useState } from "react";
-import copyToClipboard from "@/hooks/copy-to-clipboard";
 import { siteConfig } from "@/config/site";
 import { FacebookIcon, FacebookShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
 import { MediaType } from "@/types/type.db";
+import { ButtonCopy } from "@/components/utils/ButtonCopy";
 
 interface ModalShareProps extends ModalType {
 	title?: string | null;
@@ -17,7 +14,6 @@ interface ModalShareProps extends ModalType {
 
 export const ModalShare = ({ title, type, ...props }: ModalShareProps) => {
 	const { closeModal } = useModal();
-	const [copyDone, setCopyDone] = useState(false);
 	const url = `${location.origin}${props.path}`;
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
@@ -70,17 +66,7 @@ export const ModalShare = ({ title, type, ...props }: ModalShareProps) => {
 					<h3 className="text-lg font-semibold mb-2">Lien</h3>
 					<div className="flex space-x-2">
 						<Input value={url} readOnly />
-						<Button
-						variant={'accent-1'}
-						className="shrink-0"
-						onClick={() => {
-							copyToClipboard(url);
-							setCopyDone(true);
-						}}
-						>
-							<span className="sr-only">Copy Link</span>
-							{copyDone ? <Icons.copyDone /> : <Icons.copy />}
-						</Button>
+						<ButtonCopy text={url} variant={'accent-1'} />
 					</div>
 				</div>
 

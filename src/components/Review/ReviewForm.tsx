@@ -145,7 +145,7 @@ export default function ReviewForm({
 		</div>
 		<div className="w-full flex flex-col gap-2">
 			<div className="w-full flex justify-between items-center gap-2">
-				{review ? <CardUser variant="inline" user={author} /> : <CardUser variant="inline" user={author} />}
+				{author ? (review ? <CardUser variant="inline" user={author} /> : <CardUser variant="inline" user={author} />) : null}
 				<div className='flex items-center gap-1 text-sm text-muted-foreground'>
 					{review ? format.relativeTime(new Date(review?.created_at ?? ''), now) : null}
 					{author?.id == user?.id ? (
@@ -190,12 +190,12 @@ export default function ReviewForm({
 								</>
 							)}
 							{review ? (
-								<ReviewSettings
+								author ? <ReviewSettings
 								mediaId={mediaId}
 								media={media}
 								review={review}
 								author={author}
-								/>
+								/> : null
 							) : null}
 						</>
 					) : !review ? (

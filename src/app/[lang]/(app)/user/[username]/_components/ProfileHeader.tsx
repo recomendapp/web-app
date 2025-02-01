@@ -20,16 +20,16 @@ export default async function ProfileHeader({ profile }: { profile: Profile }) {
 
   return (
     <HeaderBox
-      style={{ backgroundImage: `url(${profile?.background_url})` }}
+      style={{ backgroundImage: `url(${profile.background_url})` }}
       className="!h-fit @container/profile-header"
       classNameChild="flex-col @lg/profile-header:items-start @lg/profile-header:flex-row gap-4"
     >
       <div className="flex gap-4 shrink-0 items-start justify-between w-full @lg/profile-header:w-fit">
-        <UserAvatar
+        {profile.username ? <UserAvatar
           className=" h-20 w-20 @md:h-28 @md:w-28 xl:h-36 xl:w-36"
-          avatar_url={profile?.avatar_url}
-          username={profile?.username}
-        />
+          avatar_url={profile.avatar_url}
+          username={profile.username}
+        /> : null}
         <div className="flex flex-col gap-2 items-end">
           <div className="flex items-center @lg/profile-header:hidden">
             <ProfileFollowersButton userId={profile?.id!} disabled={!profile?.visible ? true : false} />

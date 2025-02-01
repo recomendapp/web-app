@@ -48,7 +48,7 @@ const CardUserActivityDefault = React.forwardRef<
 			<div className='flex flex-col gap-2 p-2 w-full'>
 				<div className="flex justify-between">
 					<div className="flex items-center gap-2">
-						<UserAvatar avatar_url={activity?.user?.avatar_url} username={activity?.user?.username} className="w-6 h-6" />
+						{activity.user?.username ? <UserAvatar avatar_url={activity?.user?.avatar_url} username={activity?.user?.username} className="w-6 h-6" /> : null}
 						<FeedActivity activity={activity} className="text-sm @md/feed-item:text-base text-muted-foreground"/>
 					</div>
 					<div className='text-sm text-muted-foreground opacity-0 group-hover:opacity-100 duration-500'>

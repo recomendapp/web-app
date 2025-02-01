@@ -104,7 +104,7 @@ const CardMediaPoster = React.forwardRef<
 				/>
 				{(media.vote_average || media.tmdb_vote_average) ? (
 					<div className='absolute top-1 right-1'>
-						<IconMediaRating rating={media.vote_average ?? media.tmdb_vote_average} />
+						<IconMediaRating className='absolute top-1 right-1' rating={media.vote_average ?? media.tmdb_vote_average} />
 					</div>
 				) : null}
 				{/* {(activity?.is_liked ||

@@ -56,8 +56,9 @@ export const userKeys = {
 	followees: (
 		userId: string,
 		filters?: {
+			infinite?: boolean;
 			search?: string | null
-		}
+		},
 	) => filters ? [...userKeys.detail(userId), 'followees', filters] as const : [...userKeys.detail(userId), 'followees'] as const,
 	followProfile: (userId: string, profileId: string) => [...userKeys.detail(userId), 'follow', profileId] as const,
 

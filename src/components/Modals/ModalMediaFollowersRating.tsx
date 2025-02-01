@@ -87,7 +87,7 @@ export const ModalMediaFollowersRating = ({
 											return (
 												<>
 													{ratings.length ? ratings.map((item) => (
-														<UserCard key={item.user_id} user={item.user} />
+														item.user ? <UserCard key={item.user_id} user={item.user} /> : null
 													)) : <span className="text-muted-foreground">Aucune note</span>}
 												</>
 											)
@@ -104,7 +104,7 @@ export const ModalMediaFollowersRating = ({
 							<div className="grid grid-cols-2 gap-2">
 								{followersRating.map((item) => (
 									<Card key={item.user_id} className="flex items-center justify-between gap-2 p-2">
-										<UserCard user={item.user} />
+										{item.user ? <UserCard user={item.user} /> : null}
 										<IconMediaRating
 											rating={item.rating}
 											variant="follower"

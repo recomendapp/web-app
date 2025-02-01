@@ -42,7 +42,7 @@ const FeedItem = ({ activity }: { activity?: UserActivity }) => {
 			<div className="flex justify-between">
 				{/* USER */}
 				<div className="flex items-center gap-2">
-					<UserCard user={activity.user} icon />
+					{activity.user ? <UserCard user={activity.user} icon /> : null}
 					<FeedActivity activity={activity} className="text-sm @md/feed-item:text-base text-muted-foreground"/>
 				</div>
 				<div className='hidden @md/feed-item:block text-sm text-muted-foreground opacity-0 group-hover:opacity-100 duration-500'>
@@ -57,12 +57,12 @@ const FeedItem = ({ activity }: { activity?: UserActivity }) => {
 				</sup>
 			</Link>
 			{activity.review ? (
-				<CardReview
+				activity.user ? <CardReview
 					className="bg-background"
 					review={activity.review}
 					activity={activity}
 					author={activity.user}
-				/>
+				/> : null
 			) : (
 				<>
 				{(activity.media?.media_type === 'movie' || activity.media?.media_type === 'tv_series') ? (

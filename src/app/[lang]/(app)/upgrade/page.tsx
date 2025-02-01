@@ -27,5 +27,7 @@ export default async function UpgradePage() {
     getSession(),
     getActiveProductsWithPrices(),
   ]);
-  return <Upgrade session={session} product={products.find((product) => product.name?.toLowerCase() === 'premium')} />;
+  const product = products.find((product) => product.name?.toLowerCase() === 'premium');
+  if (!product) throw new Error('Product not found');
+  return <Upgrade session={session} product={product} />;
 }

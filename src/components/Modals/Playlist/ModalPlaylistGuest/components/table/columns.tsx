@@ -51,7 +51,7 @@ export const columns: ColumnDef<PlaylistGuest>[] = [
 	  },
 	  cell: ({ row }) => (
 		<div className="flex items-center">
-			<UserAvatar avatar_url={row.original?.user?.avatar_url} username={row.original?.user?.username} />
+			{row.original?.user?.username ? <UserAvatar avatar_url={row.original?.user?.avatar_url} username={row.original?.user?.username} /> : null}
 			<div className="ml-2">
 			<p className="text-sm font-medium leading-none line-clamp-1">
 				{row.original?.user?.full_name}

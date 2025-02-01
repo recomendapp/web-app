@@ -4,12 +4,12 @@ export type Json = JsonGenerated;
 
 // *========== USER ==========* //
 export type Profile = Database['public']['Views']['profile']['Row'] & {
-} | null | undefined;
+};
 
 export type User = (Database['public']['Tables']['user']['Row']) & {
 	subscriptions?: UserSubscriptions[] | any;
 	favorite_movies?: Media[] | any;
-} | null | undefined;
+};
 
 // *========== USER_FRIEND ==========* //
 export type UserFriend = Database['public']['Tables']['user_friend']['Row'] & {
@@ -109,18 +109,18 @@ export type Playlist = Database['public']['Tables']['playlists']['Row'] & {
 	guests?: PlaylistGuest[];
 	collaborators?: PlaylistGuest[] | any;
 	items?: PlaylistItem[] | any;
-} | null | undefined;
+};
 
 export type PlaylistItem = Database['public']['Tables']['playlist_items']['Row'] & {
 	media?: Media;
 	playlist?: Playlist;
 	user?: User;
-} | null | undefined;
+};
 
 export type PlaylistGuest = Database['public']['Tables']['playlist_guests']['Row'] & {
 	user?: User;
 	playlist?: Playlist;
-} | null | undefined;
+};
 
 export type PlaylistType = 'personal' | 'shared';
 /* -------------------------------------------------------------------------- */
@@ -129,24 +129,24 @@ export type PlaylistType = 'personal' | 'shared';
 export type UserFeedCastCrew = Database['public']['Views']['user_feed_cast_crew']['Row'] & {
 	media?: Media;
 	person?: MediaPerson;
-} | null | undefined;
+};
 /* -------------------------------------------------------------------------- */
 
 
 /* ------------------------------ SUBSCRIPTIONS ----------------------------- */
 export type UserSubscriptions = Database['public']['Tables']['user_subscriptions']['Row'] & {
 	prices?: Prices[];
-} | null | undefined;
+};
 /* -------------------------------------------------------------------------- */
 
 /* --------------------------------- PRICES --------------------------------- */
 export type Prices = Database['public']['Tables']['prices']['Row'] & {
 	product?: Products;
-} | null | undefined;
+};
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- PRODUCTS -------------------------------- */
 export type Products = Database['public']['Tables']['products']['Row'] & {
 	prices?: Prices[];
-} | null | undefined;
+};
 /* -------------------------------------------------------------------------- */

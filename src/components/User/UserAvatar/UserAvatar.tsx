@@ -5,7 +5,7 @@ import { cn, getInitiales } from '@/lib/utils';
 
 interface UserAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   avatar_url?: string | null;
-  username?: string | null;
+  username: string;
 }
 
 export const UserAvatar = ({
@@ -14,13 +14,11 @@ export const UserAvatar = ({
   className,
   ...props
 } : UserAvatarProps) => {
-  const avatarUrlRender = avatar_url ?? '';
-  const usernameRender = username ?? '';
   return (
     <Avatar className={cn('@container/avatar h-8 w-8', className)} {...props}>
-      <AvatarImage src={avatarUrlRender} alt={usernameRender} />
+      <AvatarImage src={avatar_url ?? undefined} alt={username} />
       <AvatarFallback className="text-xl @[50px]/avatar:text-3xl @[100px]/avatar:text-5xl">
-        {getInitiales(usernameRender)}
+        {getInitiales(username)}
       </AvatarFallback>
     </Avatar>
   );

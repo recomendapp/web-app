@@ -137,7 +137,7 @@ export const Upgrade = ({
 						},
 						locale
 					),
-					premium: formatPrice(product?.prices?.find((price) => price?.interval === billingInterval), locale),
+					premium: formatPrice(product?.prices?.find((price) => price?.interval === billingInterval)!, locale),
 					className: 'text-3xl font-bold',
 				}
 			]
@@ -198,7 +198,7 @@ export const Upgrade = ({
 				{upperFirst(t('upgrade.header.title', { app: siteConfig.name }))}
 				</h1>
 				<h2>
-				{upperFirst(t('upgrade.header.subtitle', { price: `${formatPrice(product?.prices?.find((price) => price?.interval === 'month'), locale)}` }))}
+				{upperFirst(t('upgrade.header.subtitle', { price: `${formatPrice(product?.prices?.find((price) => price?.interval === 'month')!, locale)}` }))}
 				</h2>
 				<div className='flex gap-4 max-w-xs'>
 					<GetStarted />
@@ -240,7 +240,7 @@ export const Upgrade = ({
 								className="text-muted-foreground"
 							/>
 							</svg>
-							<Badge className="mt-3 uppercase shrink-0">{(common('messages.save_up_to_percent', { percent: calculateSave(product?.prices?.find((price) => price?.interval === 'year'), product?.prices?.find((price) => price?.interval === 'month')) }))}</Badge>
+							<Badge className="mt-3 uppercase shrink-0">{(common('messages.save_up_to_percent', { percent: calculateSave(product?.prices?.find((price) => price?.interval === 'year')!, product?.prices?.find((price) => price?.interval === 'month')!) }))}</Badge>
 						</span>
 						</span>
 					</Label>

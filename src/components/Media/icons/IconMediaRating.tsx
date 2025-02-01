@@ -7,7 +7,8 @@ const iconMediaRatingVariants = cva(
 	{
 		variants: {
 			variant: {
-				general: "text-accent-pink border-accent-pink",
+				general: "text-accent-1 border-accent-1",
+				// general: "text-accent-pink border-accent-pink",
 				follower: "text-blue-500 border-blue-500",
 				user: "text-accent-1 border-accent-1",
 			}
@@ -23,7 +24,7 @@ interface IconMediaRatingProps
 }
 
 const IconMediaRating = React.forwardRef<HTMLDivElement, IconMediaRatingProps>(
-	({ rating, tooltip, variant = "user", className, ...props }, ref) => {
+	({ rating, tooltip, variant = "general", className, ...props }, ref) => {
 	if (!rating) return null;
 	return (
 	<TooltipBox tooltip={tooltip}>

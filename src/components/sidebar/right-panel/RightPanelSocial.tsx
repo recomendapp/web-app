@@ -6,11 +6,14 @@ import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
 import { useUserAcceptFollowerRequest, useUserDeclineFollowerRequest } from "@/features/client/user/userMutations";
-import { useUserFolloweesInfiniteQuery, useUserFollowersRequestsQuery } from "@/features/client/user/userQueries";
-import { useEffect } from "react";
+import { useUserFolloweesInfiniteQuery, useUserFolloweesQuery, useUserFollowersRequestsQuery } from "@/features/client/user/userQueries";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { useInView } from "react-intersection-observer";
 import { createRightPanel } from "./RightPanelUtils";
+import Fuse from "fuse.js";
+import { UserFollower } from "@/types/type.db";
+import { Input } from "@/components/ui/input";
 
 export const RightPanelSocial = () => createRightPanel({
 	title: 'Social',
@@ -39,52 +42,80 @@ const RightPanelSocialContent = () => {
 const RightPanelSocialFollows = () => {
 	const { user } = useAuth();
 	const { ref, inView } = useInView();
+	const [search, setSearch] = useState('');
+	const [results, setResults] = useState<UserFollower[] | undefined>(undefined);
 	const {
 		data: followees,
 		isLoading,
 		isError,
-		fetchNextPage,
-		isFetchingNextPage,
-		hasNextPage,
-	} = useUserFolloweesInfiniteQuery({
+	} = useUserFolloweesQuery({
 		userId: user?.id,
 	});
+	const fuse = useMemo(() => {
+		if (!followees?.length) return null;
+		return new Fuse(followees, {
+			keys: ['followee.username', 'followee.full_name'],
+			threshold: 0.3,
+		});
+	}, [followees]);
 
 	useEffect(() => {
-		if (inView && hasNextPage) {
-			fetchNextPage();
+		if (!followees?.length) return;
+		if (search === '') {
+			setResults(followees);
+			return;
 		}
-	}, [inView, hasNextPage, followees, fetchNextPage]);
+		setResults(fuse?.search(search).map(({ item }) => item));
+	}, [search, followees, fuse]);
+
+	if (isLoading) {
+		return <Icons.loader className='w-8 h-8 mx-auto' />
+	}
 
 	return (
 		<>
-			{followees?.pages[0]?.length ? (
-				<>
-					{followees?.pages.map((page, i) => (
-						page?.map(({ followee }, index) => (
-							<CardUser
-							key={index}
-							user={followee}
-							{...(i === followees.pages.length - 1 &&
-								index === page.length - 1
-									? { ref: ref }
-									: {})}
-							/>
-						))
-					))}
-					{(isFetchingNextPage) ? (
-						<Icons.loader className='w-8 h-8 mx-auto' />
-					) : null}
-				</>
-			) : (isLoading || followees === undefined) ? (
-				<Icons.loader className='w-8 h-8 mx-auto' />
-			) : isError ? (
-				<div className='text-center text-muted-foreground'>Une erreur s&apos;est produite</div>
+			<Input placeholder="Rechercher" value={search} onChange={(e) => setSearch(e.target.value)} />
+			{results?.length ?
+				results.map(({ followee }, i) => (
+					<CardUser key={i} user={followee} />
+				))
+			: search ? (
+				<div></div>
 			) : (
 				<div className='text-center text-muted-foreground'>Aucun suivi</div>
 			)}
 		</>
-	);
+	)
+
+	// return (
+	// 	<>
+	// 		{followees?.pages[0]?.length ? (
+	// 			<>
+	// 				{followees?.pages.map((page, i) => (
+	// 					page?.map(({ followee }, index) => (
+	// 						<CardUser
+	// 						key={index}
+	// 						user={followee}
+	// 						{...(i === followees.pages.length - 1 &&
+	// 							index === page.length - 1
+	// 								? { ref: ref }
+	// 								: {})}
+	// 						/>
+	// 					))
+	// 				))}
+	// 				{(isFetchingNextPage) ? (
+	// 					<Icons.loader className='w-8 h-8 mx-auto' />
+	// 				) : null}
+	// 			</>
+	// 		) : (isLoading || followees === undefined) ? (
+	// 			<Icons.loader className='w-8 h-8 mx-auto' />
+	// 		) : isError ? (
+	// 			<div className='text-center text-muted-foreground'>Une erreur s&apos;est produite</div>
+	// 		) : (
+	// 			<div className='text-center text-muted-foreground'>Aucun suivi</div>
+	// 		)}
+	// 	</>
+	// );
 }
 
 const RightPanelSocialRequests = () => {

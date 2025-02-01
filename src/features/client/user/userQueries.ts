@@ -946,7 +946,7 @@ export const useUserFolloweesInfiniteQuery = ({
 }) => {
 	const supabase = useSupabaseClient();
 	return useInfiniteQuery({
-		queryKey: userKeys.followees(userId as string, filters),
+		queryKey: userKeys.followees(userId as string, { ...filters, infinite: true }),
 		queryFn: async ({ pageParam = 1 }) => {
 			if (!userId) throw Error('Missing user id');
 			let from = (pageParam - 1) * numPerPage;
@@ -977,6 +977,42 @@ export const useUserFolloweesInfiniteQuery = ({
 		enabled: !!userId,
 	});
 };
+
+export const useUserFolloweesQuery = ({
+	userId,
+	filters,
+} : {
+	userId?: string;
+	filters?: {
+		search?: string | null;
+	};
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.followees(userId as string, filters),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			let query = supabase
+				.from('user_follower')
+				.select('id, followee:followee_id!inner(*)')
+				.eq('user_id', userId)
+				.eq('is_pending', false);
+			
+			if (filters) {
+				if (filters.search) {
+					query = query
+						.ilike(`followee.username`, `${filters.search}%`)
+				}
+			}
+			const { data, error } = await query
+				.returns<UserFollower[]>();
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId,
+	});
+};
+
 /* -------------------------------------------------------------------------- */
 
 export const useUserDiscoveryInfinite = ({
