@@ -8,7 +8,7 @@ interface ButtonCopyProps extends React.ComponentPropsWithRef<typeof Button> {
 	text: string;
 }
 
-export const ButtonCopy = React.forwardRef<
+const ButtonCopy = React.forwardRef<
 	HTMLButtonElement,
 	ButtonCopyProps
 >(({ text, className, ...props }, ref) => {
@@ -43,3 +43,8 @@ export const ButtonCopy = React.forwardRef<
 		</Button>
 	)
 });
+ButtonCopy.displayName = 'ButtonCopy';
+
+export {
+	ButtonCopy
+}

@@ -22,14 +22,15 @@ export async function generateMetadata(
   };
 }
 
-interface UserLayoutProps {
-  params: { username: string };
-  children: React.ReactNode;
-}
+export default async function UserLayout(
+  props: {
+    params: Promise<{
+      lang: string,
+      username: string
+    }>;
+    children: React.ReactNode;
+  }
+) {
 
-export default async function UserLayout({
-  children,
-}: UserLayoutProps) {
-
-  return children;
+  return props.children;
 }
