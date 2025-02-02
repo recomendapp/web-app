@@ -28,9 +28,14 @@ export const getTmdbSearchMulti = async ({
   const { data, error } = await supabase
     .from('medias')
     .select('*, media_movie(*), media_tv_series(*), media_person(*)')
-    .or(tmdbResults.results.map((result: any) => {
-      return `${result.media_type === 'tv' ? 'tv_series' : result.media_type}_id.eq.${result.id}`
-    }).join(','));
+    .or(
+      tmdbResults.results
+        .filter((result: any) => ['movie', 'tv', 'person'].includes(result.media_type))
+        .map((result: any) => {
+          return `${result.media_type === 'tv' ? 'tv_series' : result.media_type}_id.eq.${result.id}`;
+        })
+        .join(',')
+    );
 
   if (!data || error) throw error;
 
