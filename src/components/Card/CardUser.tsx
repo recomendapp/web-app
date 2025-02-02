@@ -22,6 +22,7 @@ const CardUserDefault = React.forwardRef<
 	return (
 		<WithLink
 			ref={ref}
+			href={linked ? `/@${user?.username}` : undefined}
 			as={Card}
 			className={cn(
 				"flex items-center rounded-xl h-20 bg-muted hover:bg-muted-hover p-1",
