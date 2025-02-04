@@ -585,20 +585,21 @@ export const useUserFeedCastCrewInfiniteQuery = ({
 					media:media_movie(*),
 					person:media_person(*)
 				`)
-				.range(from, to)
-				.returns<UserFeedCastCrew[]>();
+				.range(from, to);
 			
 			if (mergedFilters) {
 				if (mergedFilters.order) {
 					const [ column, direction ] = mergedFilters.order.split('-');
 					switch (column) {
 						case 'release_date':
-							request = request.order('date', { ascending: direction === 'asc' });
+							request = request
+								.order('date', { ascending: direction === 'asc', nullsFirst: false });
 							break;
 					}
 				}
 			}
-			const { data, error } = await request;
+			const { data, error } = await request
+				.returns<UserFeedCastCrew[]>();
 			if (error) throw error;
 			return data;
 		},
