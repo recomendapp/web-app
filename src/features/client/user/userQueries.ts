@@ -505,12 +505,18 @@ export const useUserFeedInfiniteQuery = ({
 	userId?: string;
 	filters?: {
 		resultsPerPage?: number;
-		order?: 'created_at-desc' | 'created_at-asc' | 'watched_date-desc' | 'watched_date-asc';
+		order?:
+			'created_at-desc'
+			| 'created_at-asc'
+			| 'watched_date-desc'
+			| 'watched_date-asc'
+			| 'updated_at-desc'
+			| 'updated_at-asc';
 	};
 }) => {
 	const mergedFilters = {
 		resultsPerPage: 20,
-		order: 'watched_date-desc',
+		order: 'updated_at-desc',
 		...filters,
 	};
 	const supabase = useSupabaseClient();
