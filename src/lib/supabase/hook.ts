@@ -4,7 +4,6 @@ import { routing } from "../i18n/routing";
 import { useMemo } from "react";
 
 export const useSupabaseClient = () => {
-	console.log('useSupabaseClient');
 	const locale = useLocale();
 	
 	const supabase = useMemo(() => {

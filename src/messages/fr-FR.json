@@ -72,7 +72,9 @@
       "vote_average": "note moyenne",
       "added": "ajouté",
       "updated_at": "mis à jour",
-      "search_media": "rechercher un média"
+      "search_media": "rechercher un média",
+      "watched_date": "date de visionnage",
+      "rating": "note"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",

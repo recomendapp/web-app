@@ -79,13 +79,11 @@ export default function MovieHeader({
                 rating={movie.vote_average ?? movie.tmdb_vote_average}
                 variant="general"
                 className="w-full"
-                tooltip='Note moyenne'
               /> : null}
               {followersAvgRating ? <IconMediaRating
                 rating={followersAvgRating}
                 variant="follower"
-                className="w-full"
-                tooltip='Note followers'
+                className="w-full cursor-pointer"
                 onClick={() => openModal(ModalMediaFollowersRating, { mediaId: movie.media_id! })}
               /> : null}
             </div>

@@ -52,7 +52,6 @@ export default function TvSerieHeader({
   const { openModal } = useModal();
   const common = useTranslations('common');
   if (!serie) return null;
-  console.log('serie.extra_data', serie.extra_data)
   return (
     <div>
       <HeaderBox
@@ -79,13 +78,11 @@ export default function TvSerieHeader({
                   rating={serie.vote_average ?? serie.tmdb_vote_average}
                   variant="general"
                   className="w-full"
-                  tooltip='Note moyenne'
                 /> : null}
                 {followersAvgRating ? <IconMediaRating
                   rating={followersAvgRating}
                   variant="follower"
-                  className="w-full"
-                  tooltip='Note followers'
+                  className="w-full cursor-pointer"
                   onClick={() => openModal(ModalMediaFollowersRating, { mediaId: serie.media_id! })}
                 /> : null}
               </div>

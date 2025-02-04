@@ -103,7 +103,6 @@ export function ModalPlaylistQuickAdd({
 					{(medias?.pages && medias?.pages[0].results.length > 0) ? (
 						medias?.pages.map((page, i) => (
 							page.results.map((media, index) => (
-								console.log(i === medias.pages.length - 1 && index === page.results.length - 1),
 								<CardMedia
 								key={index}
 								variant='row'

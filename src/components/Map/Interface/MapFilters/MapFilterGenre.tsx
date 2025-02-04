@@ -15,18 +15,6 @@ export const MapFilterGenre = () => {
 		filters
 	} = useMap();
 
-	// useEffect(() => {
-	// 	if (!map.current) return;
-	// 	console.log('filters.genres.value', filters.genres.value);
-	// 	if (filters.genres.value.length) {
-	// 		// filter movies by genres, genres array need to contain at least one genre id from the selected genres
-	// 		map.current.setFilter('movies', ['in', ['get', 'genres'], ['literal', filters.genres.value]]);
-	// 	} else {
-	// 		map.current.setFilter('movies', null);
-	// 	}
-	// 	console.log('movies filters', map.current.getFilter('movies'));
-	// }, [filters.genres.value, map]);
-
 	return (
 		<FormItem>
 			<Label className=" inline-flex items-center">

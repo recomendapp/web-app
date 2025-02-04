@@ -18,12 +18,15 @@ import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { useUI } from "@/context/ui-context";
 import { DateOnlyYearTooltip } from "../utils/Date";
 import { WithLink } from "../utils/WithLink";
+import { ModalMediaFollowersRating } from "../Modals/ModalMediaFollowersRating";
+import { useModal } from "@/context/modal-context";
 
 interface CardMediaProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default" | "poster" | "row";
 		media: Media;
 		activity?: UserActivity;
+		profileActivity?: UserActivity;
 		linked?: boolean;
 		posterClassName?: string;
 		disableActions?: boolean;
@@ -34,7 +37,7 @@ interface CardMediaProps
 const CardMediaDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardMediaProps, "variant">
->(({ className, media, children, linked, showRating, posterClassName, ...props }, ref) => {
+>(({ className, media, activity, profileActivity, children, linked, showRating, posterClassName, ...props }, ref) => {
 	const mediaDetails = getMediaDetails(media);
 	return (
 		<Card
@@ -73,8 +76,9 @@ CardMediaDefault.displayName = "CardMediaDefault";
 const CardMediaPoster = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardMediaProps, "variant">
->(({ className, media, linked, disableActions, showRating, activity, children, ...props }, ref) => {
+>(({ className, media, activity, profileActivity, linked, disableActions, showRating, children, ...props }, ref) => {
 	const { device } = useUI();
+	const { openModal } = useModal();
 	const [isHovered, setIsHovered] = React.useState(false);
 	const mediaDetails = getMediaDetails(media);
 	return (
@@ -103,30 +107,47 @@ const CardMediaPoster = React.forwardRef<
 					150px
 					`}
 				/>
-				{(media.vote_average || media.tmdb_vote_average) ? (
-					<div className='absolute top-1 right-1'>
-						<IconMediaRating className='absolute top-1 right-1' rating={media.vote_average ?? media.tmdb_vote_average} />
+				{(media.vote_average || media.tmdb_vote_average || media.follower_avg_rating) ? (
+					<div className='absolute top-1 right-1 flex flex-col gap-1'>
+						{(media.vote_average || media.tmdb_vote_average) ?
+						<IconMediaRating
+						disableTooltip
+						rating={media.vote_average ?? media.tmdb_vote_average}
+						/> : null}
+						{media.follower_avg_rating ?
+						<IconMediaRating
+						disableTooltip
+						rating={media.follower_avg_rating}
+						variant="follower"
+						className="w-full cursor-pointer"
+						onClick={() => openModal(ModalMediaFollowersRating, { mediaId: media.media_id! })}
+						/> : null}
 					</div>
 				) : null}
-				{/* {(activity?.is_liked ||
-					activity?.rating ||
-					activity?.review) && (
-					<div className="absolute top-1 right-1 pointer-events-none">
-						<Link
-						href={`/@${activity?.user?.username}${mediaUrlPrefix}/${media.slug ?? media.id}`}
-						className="pointer-events-auto"
-						onClick={linked ? (e) => e.stopPropagation() : undefined}
-						>
-						<IconMediaRating
-							rating={activity?.rating}
-							// is_liked={activity?.is_liked}
-							// is_reviewed={activity?.review?.id ?? null}
-						/>
-						</Link>
+				{(profileActivity?.is_liked
+				|| profileActivity?.rating
+				|| profileActivity?.review) ? (
+					<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+						<div className="relative flex flex-col items-center justify-center bg-muted/90 rounded-full w-10 h-10">
+							{profileActivity.rating ? <span className="font-bold">{profileActivity.rating}</span> : null}
+							{profileActivity.is_liked ?
+							<Icons.like
+							size={profileActivity.rating ? 14 : 15}
+							className={`
+								absolute text-accent-pink fill-accent-pink anchr
+								${profileActivity.rating ? 'bottom-0 right-0' : ''}
+							`}
+							/> : null}
+							{profileActivity.review ?
+							<Icons.comment
+							size={15}
+							className="absolute text-foreground bottom-0 left-0 bg-muted rounded-full p-0.5"
+							/> : null}
+						</div>
 					</div>
-				)} */}
+				) : null}
 				{(device === 'desktop' && !disableActions) ? (
-					<div className="hidden absolute bottom-8 group-hover:flex w-full justify-center pointer-events-none">
+					<div className="hidden absolute bottom-2 group-hover:flex w-full justify-center pointer-events-none">
 					{isHovered ? (
 						<div className="bg-background rounded-md w-fit pointer-events-auto">
 							<MediaActionUserActivityWatch mediaId={media.media_id!} />
@@ -144,7 +165,7 @@ CardMediaPoster.displayName = "CardMediaPoster";
 const CardMediaRow = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardMediaProps, "variant">
->(({ className, posterClassName, media, hideMediaType, activity, linked, showRating, children, ...props }, ref) => {
+>(({ className, posterClassName, media, activity, profileActivity, hideMediaType, linked, showRating, children, ...props }, ref) => {
 	const mediaUrlPrefix = getMediaUrlPrefix(media.media_type!);
 	return (
 		<Card
@@ -180,30 +201,42 @@ const CardMediaRow = React.forwardRef<
 						>
 							{media.title}
 						</WithLink>
-						{activity?.rating ? (
+						{profileActivity?.rating ? (
 							<WithLink
-							href={linked ? `/@${activity?.user?.username}${mediaUrlPrefix}/${media.slug ?? media.id}` : undefined}
+							href={linked ? `/@${profileActivity?.user?.username}${mediaUrlPrefix}/${media.slug ?? media.id}` : undefined}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>
 								<IconMediaRating
-								rating={activity.rating}
+								rating={profileActivity.rating}
 								className="inline-flex"
 								/>
 							</WithLink>
 						) : null}
-						{activity?.is_liked && (
+						{profileActivity?.is_liked && (
 							<Link
-							href={`/@${activity?.user?.username}${mediaUrlPrefix}/${media.slug ?? media.id}`}
+							href={`/@${profileActivity?.user?.username}${mediaUrlPrefix}/${media.slug ?? media.id}`}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>
 								<Icons.like
 								size={24}
-								className="text-background fill-accent-pink inline-flex"
+								className="text-accent-pink fill-accent-pink inline-flex"
 								/>
 							</Link>
 						)}
+						{profileActivity?.review ? (
+							<Link
+							href={`/review/${profileActivity.review.id}`}
+							className="pointer-events-auto"
+							onClick={linked ? (e) => e.stopPropagation() : undefined}
+							>
+								<Icons.comment
+								size={24}
+								className="text-foreground inline-flex"
+								/>
+							</Link>
+						) : null}
 					</div>
 					{media.main_credit ? <Credits credits={media.main_credit} linked={linked} className="line-clamp-2"/> : null}
 					{media.extra_data.known_for_department ? <div className="text-xs text-muted-foreground">{media.extra_data.known_for_department}</div> : null}

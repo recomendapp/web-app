@@ -72,7 +72,9 @@
       "vote_average": "vote average",
       "added": "added",
       "updated_at": "updated at",
-      "search_media": "search a media"
+      "search_media": "search a media",
+      "watched_date": "watched date",
+      "rating": "rating"
     },
     "errors": {
       "not_logged_in": "you are not logged in",

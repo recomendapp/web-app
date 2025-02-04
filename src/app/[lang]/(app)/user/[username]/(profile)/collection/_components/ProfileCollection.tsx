@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
-import { LayoutGrid, List } from 'lucide-react';
+import { ArrowDownNarrowWideIcon, ArrowUpNarrowWideIcon, LayoutGrid, List } from 'lucide-react';
 import Loader from '@/components/Loader/Loader';
 import { useInView } from 'react-intersection-observer';
 import {
@@ -23,17 +23,29 @@ import { Badge } from '@/components/ui/badge';
 import { useSearchParams } from 'next/navigation';
 import { z } from "zod";
 
+const DISPLAY = ["grid", "row"] as const;
+const SORT_BY = ["watched_date", "rating"] as const;
+const DEFAULT_DISPLAY = "grid";
+const DEFAULT_SORT_BY = "watched_date";
+const DEFAULT_SORT_ORDER = "desc";
+
 // Display
-const displaySchema = z.enum(["grid", "row"]);
+const displaySchema = z.enum(DISPLAY);
 const getValidatedDisplay = (display: string | null): z.infer<typeof displaySchema> => {
-  return displaySchema.safeParse(display).success ? display as z.infer<typeof displaySchema> : "grid";
+  return displaySchema.safeParse(display).success ? display as z.infer<typeof displaySchema> : DEFAULT_DISPLAY;
 };
 
-// Order
-const orderSchema = z.enum(["watched_date-desc", "watched_date-asc"]);
-const getValidatedOrder = (order: string | null): z.infer<typeof orderSchema> => {
-  return orderSchema.safeParse(order).success ? order as z.infer<typeof orderSchema> : "watched_date-desc";
+// SORT BY
+const sortBySchema = z.enum(SORT_BY);
+const getValidatedSortBy = (order?: string | null): z.infer<typeof sortBySchema> => {
+  return sortBySchema.safeParse(order).success ? order! as z.infer<typeof sortBySchema> : DEFAULT_SORT_BY;
 };
+
+// SORT ORDER
+const sortOrderSchema = z.enum(["asc", "desc"]);
+const getValidatedSortOrder = (order?: string | null): z.infer<typeof sortOrderSchema> => {
+  return sortOrderSchema.safeParse(order).success ? order! as z.infer<typeof sortOrderSchema> : DEFAULT_SORT_ORDER;
+}
 
 export default function ProfileCollection({
   userId
@@ -43,7 +55,8 @@ export default function ProfileCollection({
   const common = useTranslations('common');
   const searchParams = useSearchParams();
   const display = getValidatedDisplay(searchParams.get('display'));
-  const order = getValidatedOrder(searchParams.get('order'));
+  const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
+  const sortOrder = getValidatedSortOrder(searchParams.get('sort_order'));
   const { ref, inView } = useInView();
   const {
     data: activities,
@@ -54,19 +67,14 @@ export default function ProfileCollection({
   } = useUserActivitiesInfiniteQuery({
     userId: userId,
     filters: {
-      order: order,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
     }
   })
 
-  const handleDisplayChange = () => {
+  const handleChange = ({ name, value }: { name: string, value: string }) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('display', display === 'grid' ? 'row' : 'grid');
-    window.history.pushState(null, '', `?${params.toString()}`)
-  };
-
-  const handleOrderChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('order', value);
+    params.set(name, value);
     window.history.pushState(null, '', `?${params.toString()}`)
   };
 
@@ -76,35 +84,29 @@ export default function ProfileCollection({
    }, [inView, hasNextPage, activities, fetchNextPage]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="@container/profile-collection flex flex-col gap-2">
       <div className="flex justify-between gap-4 items-center">
         <div className='flex items-center gap-2'>
           <p className='text-muted-foreground'>Filters</p>
           <Badge variant={'accent-1'}>{upperFirst(common('word.soon'))}</Badge>
         </div>
         <div className="flex items-center gap-2">
-          <Select onValueChange={handleOrderChange} defaultValue={order}>
+          <Button variant={'ghost'} size={'sm'} onClick={(e) => {
+            e.preventDefault();
+            handleChange({ name: 'sort_order', value: sortOrder === 'desc' ? 'asc' : 'desc' });
+          }}>
+            {sortOrder === 'desc' ? <ArrowDownNarrowWideIcon size={20} /> : <ArrowUpNarrowWideIcon size={20} />}
+          </Button>
+          <Select onValueChange={(e) => handleChange({ name: 'sort_by', value: e })} defaultValue={sortBy}>
             <SelectTrigger className="w-fit">
               <SelectValue />
             </SelectTrigger>
             <SelectContent align="end">
-              <SelectGroup>
-                <SelectLabel>Vus</SelectLabel>
-                <SelectItem value={'watched_date-desc'}>Plus récents</SelectItem>
-                <SelectItem value={'watched_date-asc'}>Plus anciens</SelectItem>
-              </SelectGroup>
-              <SelectSeparator />
-              <SelectGroup>
-                <SelectLabel>Notes</SelectLabel>
-                <SelectItem value={'rating-desc'}>
-                  Notes décroissantes
-                </SelectItem>
-                <SelectItem value={'rating-asc'}>Notes croissantes</SelectItem>
-              </SelectGroup>
-              <SelectSeparator />
+              <SelectItem value={'watched_date'}>{upperFirst(common('messages.watched_date'))}</SelectItem>
+              <SelectItem value={'rating'}>{upperFirst(common('messages.rating'))}</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant={'ghost'} onClick={handleDisplayChange}>
+          <Button variant={'ghost'} onClick={(e) => handleChange({ name: 'display', value: display === 'grid' ? 'row' : 'grid' })}>
             {display == 'grid' ? <LayoutGrid /> : <List />}
           </Button>
         </div>
@@ -119,7 +121,7 @@ export default function ProfileCollection({
               ${
                 display == 'row'
                   ? 'flex flex-col'
-                  : 'grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 2xl:grid-cols-10'
+                  : 'grid grid-cols-2 @xs/profile-collection:grid-cols-3 @md/profile-collection:grid-cols-4 @xl/profile-collection:grid-cols-5 @3xl/profile-collection:grid-cols-6 @5xl/profile-collection:grid-cols-7 @7xl/profile-collection:grid-cols-9'
               }
           `}
         >
@@ -130,7 +132,7 @@ export default function ProfileCollection({
               ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
               variant={display === 'grid' ? 'poster' : 'row'}
               media={activity?.media!}
-              activity={activity}
+              profileActivity={activity}
               className='w-full'
               />
             ))

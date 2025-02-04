@@ -80,19 +80,15 @@ export const useUserActivitiesInfiniteQuery = ({
 } : {
 	userId?: string
 	filters?: {
-		resultsPerPage?: number;
-		order?:
-			'created_at-desc' |
-			'created_at-asc' |
-			'watched_date-desc' |
-			'watched_date-asc' |
-			'rating-desc' |
-			'rating-asc';
+		sortBy?: 'watched_date' | 'rating';
+		sortOrder?: 'asc' | 'desc';
+		perPage?: number;
 	};
 }) => {
 	const mergedFilters = {
-		resultsPerPage: 20,
-		order: 'watched_date-desc',
+		sortBy: 'watched_date',
+		sortOrder: 'desc',
+		perPage: 20,
 		...filters,
 	};
 	const supabase = useSupabaseClient();
@@ -103,8 +99,8 @@ export const useUserActivitiesInfiniteQuery = ({
 		}),
 		queryFn: async ({ pageParam = 1 }) => {
 			if (!userId) throw Error('Missing user id');
-			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
-	  		let to = from - 1 + mergedFilters.resultsPerPage;
+			let from = (pageParam - 1) * mergedFilters.perPage;
+	  		let to = from - 1 + mergedFilters.perPage;
 			let request = supabase
 				.from('user_activity')
 				.select(`
@@ -117,9 +113,19 @@ export const useUserActivitiesInfiniteQuery = ({
 				.range(from, to)
 			
 			if (mergedFilters) {
-				if (mergedFilters.order) {
-					const [ column, direction ] = mergedFilters.order.split('-');
-					request = request.order(column, { ascending: direction === 'asc', nullsFirst: false });
+				if (mergedFilters.sortBy && filters?.sortOrder) {
+					switch (mergedFilters.sortBy) {
+						case 'watched_date':
+							request = request.order('watched_date', { ascending: mergedFilters.sortOrder === 'asc' });
+							break;
+						case 'rating':
+							request = request
+								.not('rating', 'is', null)
+								.order('rating', { ascending: mergedFilters.sortOrder === 'asc' });
+							break;
+						default:
+							break;
+					}
 				}
 			}
 			const { data, error } = await request
@@ -129,7 +135,7 @@ export const useUserActivitiesInfiniteQuery = ({
 		},
 		initialPageParam: 1,
 		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == mergedFilters.resultsPerPage ? pages.length + 1 : undefined;
+			return lastPage?.length == mergedFilters.perPage ? pages.length + 1 : undefined;
 		},
 		enabled: !!userId,
 	});

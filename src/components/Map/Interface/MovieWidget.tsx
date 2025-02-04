@@ -72,13 +72,11 @@ export const MovieWidget = () => {
 									rating={movie.vote_average}
 									variant="general"
 									className="w-full"
-									tooltip='Note moyenne'
 								/> : null}
 								{movie.follower_avg_rating ? <IconMediaRating
 									rating={movie.follower_avg_rating}
 									variant="follower"
 									className="w-full"
-									tooltip='Note followers'
 								/> : null}
 							</div>
 							)}

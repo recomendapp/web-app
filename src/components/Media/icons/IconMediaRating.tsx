@@ -8,9 +8,9 @@ const iconMediaRatingVariants = cva(
 		variants: {
 			variant: {
 				general: "text-accent-1 border-accent-1",
-				// general: "text-accent-pink border-accent-pink",
 				follower: "text-blue-500 border-blue-500",
 				user: "text-accent-1 border-accent-1",
+				profile: "text-gray-200 border-gray-200",
 			}
 		}
 	}
@@ -21,16 +21,38 @@ interface IconMediaRatingProps
 		VariantProps<typeof iconMediaRatingVariants> {
 	rating?: number | null;
 	tooltip?: string | null;
+	disableTooltip?: boolean;
+	stopPropagation?: boolean;
 }
 
 const IconMediaRating = React.forwardRef<HTMLDivElement, IconMediaRatingProps>(
-	({ rating, tooltip, variant = "general", className, ...props }, ref) => {
+	({ rating, tooltip, disableTooltip, onClick, stopPropagation = true, variant = "general", className, ...props }, ref) => {
 	if (!rating) return null;
 	return (
-	<TooltipBox tooltip={tooltip}>
+	<TooltipBox
+	tooltip={!disableTooltip ? (
+		tooltip ?? (
+			variant === "general"
+			? "Note globale"
+			: variant === "follower"
+			? "Vos recomendeurs"
+			: variant === "user"
+			? "Votre note"
+			: variant === "profile"
+			? "Note du profil"
+			: "Note"
+		)
+	) : null}
+	>
 		<div
 		ref={ref}
 		className={iconMediaRatingVariants({ variant, className })}
+		onClick={(e) => {
+			if (onClick) {
+				stopPropagation && e.stopPropagation();
+				onClick(e);
+			}
+		}}
 		{...props}
 		>
 		{rating % 1 === 0 ? rating : rating.toFixed(1)}

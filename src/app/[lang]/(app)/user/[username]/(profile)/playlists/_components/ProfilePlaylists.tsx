@@ -59,8 +59,6 @@ export default function ProfilePlaylists({ userId }: UserPlaylistsProps) {
     },
   });
 
-  console.log("playlists", playlists);
-
   const handleDisplayChange = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('display', display === 'grid' ? 'row' : 'grid');

@@ -7,6 +7,8 @@ import { useUserActivitiesInfiniteQuery } from '@/features/client/user/userQueri
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { CardMedia } from '@/components/Card/CardMedia';
+import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
+import { Icons } from '@/config/icons';
 
 export default function ProfileLastActivity({ profile }: { profile: Profile }) {
   const common = useTranslations('common');
@@ -38,14 +40,14 @@ export default function ProfileLastActivity({ profile }: { profile: Profile }) {
         <div className="flex space-x-4 pb-4">
           {activities?.pages.map((page, i) => (
               page?.map((activity, index) => (
-                <CardMedia
-                key={activity?.id}
-                variant='poster'
-                ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
-                media={activity?.media!}
-                activity={activity}
-                className='w-24 lg:w-32'
-                />
+                  <CardMedia
+                  key={index}
+                  variant='poster'
+                  ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+                  media={activity?.media!}
+                  profileActivity={activity}
+                  className='w-24 lg:w-32'
+                  />
               ))
             ))}
         </div>

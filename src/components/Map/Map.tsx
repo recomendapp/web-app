@@ -74,7 +74,6 @@ export function Map() {
           const isMoviesLayer = e.features?.find((feature) => feature.layer.id === 'movies');
           if (isMoviesLayer) {
             const parsedLocaleData = JSON.parse(isMoviesLayer.properties[locale === 'fr-FR' ? 'fr-FR' : 'en-US']); // TODO: Use local when supported all languages
-            console.log('e', isMoviesLayer.geometry);
             setSelectedMovie({
               movie: {
                 id: isMoviesLayer.properties.id,

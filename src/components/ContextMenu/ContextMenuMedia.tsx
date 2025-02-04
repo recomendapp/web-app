@@ -73,7 +73,7 @@ export const ContextMenuMedia = ({
 			<ContextMenuTrigger>
 				{children}
 			</ContextMenuTrigger>
-			<ContextMenuContent>
+			<ContextMenuContent className="w-56">
 				{items.map((group, fragindex) => (
 					<Fragment key={fragindex}>
 						{group.map((item, index) => (
@@ -88,7 +88,7 @@ export const ContextMenuMedia = ({
 											<ContextMenuItem
 												key={subIndex}
 												className="gap-2"
-												asChild={!!subItem.href}
+												asChild
 											>
 												<WithLink href={subItem.href}>
 													{subItem.label}
@@ -101,8 +101,8 @@ export const ContextMenuMedia = ({
 								<ContextMenuItem
 									key={index}
 									className="gap-2"
-									asChild={!!item.href}
 									onClick={item.onClick}
+									asChild
 								>
 									<WithLink href={item.href}>
 										<item.icon className="h-4 w-4"/>
