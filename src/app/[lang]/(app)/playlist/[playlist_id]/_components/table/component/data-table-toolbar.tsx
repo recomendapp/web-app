@@ -75,15 +75,17 @@ export function DataTableToolbar<TData>({
           <span className='sr-only'>{upperFirst(common('word.share'))}</span>
         </Button>
         <div className="w-fit flex items-center gap-2">
-          {/* {isAllowedToEdit ? <Button
+          {isAllowedToEdit ? <Button
           variant="outline"
           size="sm"
-          className='ml-auto h-8'
+          className='ml-auto h-8 group overflow-hidden gap-0'
           onClick={() => openModal(ModalPlaylistQuickAdd, { playlist: playlist })}
           >
-            <Icons.add className='mr-2 h-4 w-4' />
+            <Icons.add className='h-4 w-4 mr-0 group-hover:mr-2 transition-all duration-300' />
+            <span className='group-hover:w-20 w-0 group-hover:opacity-100 opacity-0 transition-all duration-500'>
             {upperFirst(common('messages.quick_add'))}
-          </Button> : null} */}
+            </span>
+          </Button> : null}
           <DataTableSortOptions table={table} />
           <DataTableViewOptions table={table} />
         </div>

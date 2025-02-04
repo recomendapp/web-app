@@ -71,7 +71,8 @@
       "release_date": "release date",
       "vote_average": "vote average",
       "added": "added",
-      "updated_at": "updated at"
+      "updated_at": "updated at",
+      "search_media": "search a media"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
@@ -84,7 +85,8 @@
       "serie_not_found": "serie not found",
       "review_not_found": "review not found",
       "person_not_found": "person not found",
-      "wrong_arguments": "wrong arguments"
+      "wrong_arguments": "wrong arguments",
+      "no_media_found": "no media found"
     },
     "word": {
       "hello": "Hello",

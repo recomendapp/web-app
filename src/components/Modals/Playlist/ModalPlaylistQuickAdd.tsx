@@ -14,11 +14,13 @@ import { Icons } from '@/config/icons';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
 import { useTmdbSearchMoviesInfinite, useTmdbSearchMultiInfinite } from '@/features/client/tmdb/tmdbQueries';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
 import { useAddMediasToPlaylist } from '@/features/client/playlist/playlistMutations';
+import { upperFirst } from 'lodash';
+import { CardMedia } from '@/components/Card/CardMedia';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -31,16 +33,17 @@ export function ModalPlaylistQuickAdd({
 	...props
 } : ModalPlaylistQuickAddProps) {
 	const { user } = useAuth();
+	const common = useTranslations('common');
 	const locale = useLocale();
 	const { closeModal } = useModal();
-	const [selectedMovies, setSelectedMovies] = useState<Media[]>([]);
+	const [selectedMedias, setSelectedMedias] = useState<Media[]>([]);
 	const [comment, setComment] = useState<string>('');
 	const [search, setSearch] = useState<string>('');
 	const searchQuery = useDebounce(search, 500);
 	const { ref, inView } = useInView();
 
 	const {
-		data: movies,
+		data: medias,
 		isLoading,
 		isError,
 		fetchNextPage,
@@ -51,7 +54,7 @@ export function ModalPlaylistQuickAdd({
 		locale: locale,
 	})
 
-	const addMoviesToPlaylist = useAddMediasToPlaylist({
+	const addMediasToPlaylist = useAddMediasToPlaylist({
 		userId: user?.id,
 		playlist: playlist,
 	});
@@ -63,16 +66,16 @@ export function ModalPlaylistQuickAdd({
 	}, [inView, hasNextPage, fetchNextPage]);
 
 	function submit() {
-		addMoviesToPlaylist.mutate({
-			medias: selectedMovies,
+		addMediasToPlaylist.mutate({
+			medias: selectedMedias,
 			comment: comment,
 		}, {
 			onSuccess: () => {
-				toast.success(`Ajouté${selectedMovies.length > 1 ? 's' : ''}`);
+				toast.success(`Ajouté${selectedMedias.length > 1 ? 's' : ''}`);
 				closeModal(props.id);
 			},
 			onError: () => {
-				toast.error("Une erreur s\'est produite");
+				toast.error(upperFirst(common('errors.an_error_occurred')));
 			}
 		});
 	}
@@ -89,81 +92,62 @@ export function ModalPlaylistQuickAdd({
 					Ajouter un ou plusieurs films à <strong>{playlist?.title}</strong>
 				</ModalDescription>
 			</ModalHeader>
-			{/* <ModalBody className='!p-0 border-t bg-popover text-popover-foreground'>
+			<ModalBody className='!p-0 border-t bg-popover text-popover-foreground'>
 				<InputSearch
 				value={search}
 				onChange={(e) => setSearch(e.target.value)}
-				placeholder="Rechercher un film..."
+				placeholder={upperFirst(common('messages.search_media'))}
 				/>
 				<ScrollArea className={`h-[40vh]`}>
-					<div className='p-2 grid justify-items-center'>
-					{(movies?.pages && movies?.pages[0].length > 0) ? (
-						movies?.pages.map((page, i) => (
-							page.map((movie, index) => (
-								<div
+					<div className='p-2 flex flex-col gap-1'>
+					{(medias?.pages && medias?.pages[0].results.length > 0) ? (
+						medias?.pages.map((page, i) => (
+							page.results.map((media, index) => (
+								console.log(i === medias.pages.length - 1 && index === page.results.length - 1),
+								<CardMedia
 								key={index}
-								className='w-full flex cursor-pointer items-center justify-between py-1.5 px-2 hover:bg-accent rounded-sm'
+								variant='row'
+								media={media}
+								className={`
+									border-none bg-transparent hover:cursor-pointer
+									${selectedMedias.some((selectedMedia) => selectedMedia?.id === media?.id) ? 'bg-muted-hover' : ''}
+								`}
+								posterClassName='h-full'
+								hideMediaType={false}
+								linked={false}
 								onClick={() => {
-									if (selectedMovies.some((selectedMovie) => selectedMovie?.id === movie?.id)) {
-										return setSelectedMovies((prev) => prev.filter(
-											(selectMovie) => selectMovie?.id !== movie?.id
+									if (selectedMedias.some((selectedMedia) => selectedMedia?.id === media?.id)) {
+										return setSelectedMedias((prev) => prev.filter(
+											(selectedMedia) => selectedMedia?.id !== media?.id
 										))
 									}
-									return setSelectedMovies((prev) => [...prev, movie]);
+									return setSelectedMedias((prev) => [...prev, media]);
 								}}
-								{...(i === movies.pages.length - 1 && index === page.length - 1
-									? { ref: ref }
-									: {})}
-								>
-									<div className='flex items-center rounded-xl h-20'>
-										<div className='relative h-full shrink-0 rounded-md overflow-hidden' style={{ aspectRatio: '2 / 3' }}>
-											<ImageWithFallback
-												src={movie?.poster_path ? `https://image.tmdb.org/t/p/original/${movie.poster_path}` : ''}
-												alt={movie?.title ?? ''}
-												fill
-												className="object-cover"
-												type="playlist"
-												sizes={`
-												(max-width: 640px) 96px,
-												(max-width: 1024px) 120px,
-												150px
-												`}
-											/>
-										</div>
-										<div className='px-2 py-1 space-y-1'>
-											<p className='line-clamp-2 break-words'>{movie?.title}</p>
-											<p className='line-clamp-1 break-words text-muted-foreground'>
-											{movie?.directors?.map((director, index: number) => (
-												<span key={index} className={`${index > 0 ? 'before:content-[",_"]' : ''}`}>
-													{director?.name}
-												</span>
-											)) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
-											</p>
-										</div>
-									</div>
-									<Check size={20} className={`text-primary ${!selectedMovies.some((selectedMovie) => selectedMovie?.id === movie?.id) ? 'opacity-0' : ''}`} />
-								</div>
+								{...(i === medias.pages.length - 1 && index === page.results.length - 1
+										? { ref: ref }
+										: {})}
+								/>
 							))
 						))
 					) : isError ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						Une erreur s&apos;est produite.
+						{upperFirst(common('errors.an_error_occurred'))}
 						</div>
 					) : (searchQuery && !isLoading) ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						Aucun film trouvé.
+						{upperFirst(common('errors.no_media_found'))}
 						</div>
 					) : !isLoading ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						Rechercher un film.
+						{upperFirst(common('messages.search_media'))}
 						</div>
 					) : null}
-					 {(isLoading || isFetchingNextPage) ? <Icons.loader /> : null}
+					 {(isLoading || isFetchingNextPage) ? <Icons.loader className='w-full'/> : null}
 					</div>
 				</ScrollArea>
-			</ModalBody> */}
+			</ModalBody>
 			<div className='px-2 pt-2'>
-				<Label htmlFor="comment" className='sr-only'>Commentaire</Label>
+				<Label htmlFor="comment" className='sr-only'>{upperFirst(common('word.comment', {count: 1}))}</Label>
 				<Input
 				value={comment}
 				onChange={(e) => setComment(e.target.value)}
@@ -172,20 +156,20 @@ export function ModalPlaylistQuickAdd({
 				/>
 			</div>
 			<ModalFooter className="flex items-center p-4 sm:justify-between">
-				{selectedMovies.length > 0 ? (
+				{selectedMedias.length > 0 ? (
 				<div className="flex -space-x-2 overflow-hidden">
-					{selectedMovies.map((movie) => (
+					{selectedMedias.map((media) => (
 						<div
-						key={movie?.id}
+						key={media?.id}
 						className={`w-[40px] shadow-2xl cursor-not-allowed`}
-						onClick={() => setSelectedMovies((prev) => prev.filter(
-							(selectedMovie) => selectedMovie?.id !== movie?.id
+						onClick={() => setSelectedMedias((prev) => prev.filter(
+							(selectedMedia) => selectedMedia?.id !== media?.id
 						))}
 						>
 							<AspectRatio ratio={1 / 1}>
 								<ImageWithFallback
-									src={movie.avatar_url ?? ''}
-									alt={movie?.title ?? ''}
+									src={media.avatar_url ?? ''}
+									alt={media?.title ?? ''}
 									fill
 									className="rounded-md object-cover"
 									type="playlist"
@@ -205,10 +189,10 @@ export function ModalPlaylistQuickAdd({
 					</p>
 				)}
 				<Button
-				disabled={!selectedMovies.length || addMoviesToPlaylist.isPending}
+				disabled={!selectedMedias.length || addMediasToPlaylist.isPending}
 				onClick={submit}
 				>
-				{addMoviesToPlaylist.isPending && <Icons.loader className="mr-2" />}
+				{addMediasToPlaylist.isPending && <Icons.loader className="mr-2" />}
 				Ajouter
 				</Button>
 			</ModalFooter>

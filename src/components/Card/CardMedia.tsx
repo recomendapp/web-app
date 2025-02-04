@@ -17,6 +17,7 @@ import MediaActionUserWatchlist from "@/components/Media/actions/MediaActionUser
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { useUI } from "@/context/ui-context";
 import { DateOnlyYearTooltip } from "../utils/Date";
+import { WithLink } from "../utils/WithLink";
 
 interface CardMediaProps
 	extends React.ComponentProps<typeof Card> {
@@ -171,18 +172,17 @@ const CardMediaRow = React.forwardRef<
 			</div>
 			<div className="flex items-center gap-4 justify-between w-full">
 				<div className='space-y-1'>
-					{!hideMediaType ? <BadgeMedia type={media.media_type} /> : null}
 					<div className="flex items-center gap-2">
-						<Link
-						href={media.url ?? ''}
+						<WithLink
+						href={linked ? (media.url ?? '') : undefined}
 						className='line-clamp-2 break-words'
 						onClick={linked ? (e) => e.stopPropagation() : undefined}
 						>
 							{media.title}
-						</Link>
+						</WithLink>
 						{activity?.rating ? (
-							<Link
-							href={`/@${activity?.user?.username}${mediaUrlPrefix}/${media.slug ?? media.id}`}
+							<WithLink
+							href={linked ? `/@${activity?.user?.username}${mediaUrlPrefix}/${media.slug ?? media.id}` : undefined}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>
@@ -190,7 +190,7 @@ const CardMediaRow = React.forwardRef<
 								rating={activity.rating}
 								className="inline-flex"
 								/>
-							</Link>
+							</WithLink>
 						) : null}
 						{activity?.is_liked && (
 							<Link
@@ -207,6 +207,7 @@ const CardMediaRow = React.forwardRef<
 					</div>
 					{media.main_credit ? <Credits credits={media.main_credit} linked={linked} className="line-clamp-2"/> : null}
 					{media.extra_data.known_for_department ? <div className="text-xs text-muted-foreground">{media.extra_data.known_for_department}</div> : null}
+					{!hideMediaType ? <BadgeMedia type={media.media_type} /> : null}
 				</div>
 				{media.date ? (
 					<DateOnlyYearTooltip date={media.date} className="text-xs text-muted-foreground"/>
@@ -221,7 +222,6 @@ const CardMedia = React.forwardRef<
 	HTMLDivElement,
 	CardMediaProps
 >(({ className, media, hideMediaType = true, onClick, showRating = true, linked = true, variant = "default", ...props }, ref) => {
-	const mediaDetails = getMediaDetails(media);
 	const router = useRouter();
 	const customOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		if (linked && media.url) {
@@ -268,15 +268,18 @@ const Credits = ({
 		  <span key={index}>
 			<Button
 			  variant={'link'}
-			  className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition"
+			  className={`
+				w-fit p-0 h-full italic text-muted-foreground transition
+				${linked ? 'hover:text-accent-1' : 'hover:text-muted-foreground hover:no-underline'}
+			`}
 			  asChild
 			>
-			  <Link
-			  href={credit.url ?? ''}
+			  <WithLink
+			  href={linked ? (credit.url ?? '') : undefined}
 			  onClick={linked ? (e) => e.stopPropagation() : undefined}
 			  >
 				{credit.title}
-			  </Link>
+			  </WithLink>
 			</Button>
 			{index !== credits.length - 1 && (
 			  <span className='text-muted-foreground'>, </span>

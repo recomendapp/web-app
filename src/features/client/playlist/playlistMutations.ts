@@ -183,8 +183,7 @@ export const useAddMediasToPlaylist = ({
 					medias
 						.map((media) => ({
 							playlist_id: playlist.id,
-							media_id: media?.id,
-							media_type: media?.media_type,
+							media_id: media?.media_id!,
 							user_id: userId,
 							comment: comment,
 							rank: 0,

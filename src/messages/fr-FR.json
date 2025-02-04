@@ -71,7 +71,8 @@
       "release_date": "date de sortie",
       "vote_average": "note moyenne",
       "added": "ajouté",
-      "updated_at": "mis à jour"
+      "updated_at": "mis à jour",
+      "search_media": "rechercher un média"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",
@@ -84,7 +85,8 @@
       "serie_not_found": "série introuvable",
       "review_not_found": "critique introuvable",
       "person_not_found": "personne introuvable",
-      "wrong_arguments": "arguments incorrects"
+      "wrong_arguments": "arguments incorrects",
+      "no_media_found": "aucun média trouvé"
     },
     "word": {
       "hello": "Bonjour",
