@@ -1,7 +1,7 @@
 import { useSupabaseClient } from "@/context/supabase-context";
 import { useState } from "react";
 
-export const useCheckUsernameAvailability = () => {
+export const useUsernameAvailability = () => {
 	const supabase = useSupabaseClient();
 	const [isAvailable, setIsAvailable] = useState<boolean | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -15,7 +15,11 @@ export const useCheckUsernameAvailability = () => {
 		try {
 			setIsAvailable(undefined);
 			setIsLoading(true);
-			const { data, error } = await supabase.from('user').select('username').eq('username', username).maybeSingle();
+			const { data, error } = await supabase
+				.from('user')
+				.select('username')
+				.ilike('username', username)
+				.maybeSingle();
 			if (error) throw error;
 			setIsAvailable(data === null);
 		} catch (error) {

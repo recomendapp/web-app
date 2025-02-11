@@ -28,7 +28,7 @@ import { AuthError } from '@supabase/supabase-js';
 import { useAuth } from '@/context/auth-context';
 import { Input } from '@/components/ui/input';
 import useDebounce from '@/hooks/use-debounce';
-import { useCheckUsernameAvailability } from '@/hooks/use-check-username-availability';
+import { useUsernameAvailability } from '@/hooks/use-username-availability';
 import { InputPassword } from '@/components/ui/input-password';
 
 const USERNAME_MIN_LENGTH = 3;
@@ -129,7 +129,7 @@ export default function Signup() {
 	// OTP
 	const numberOfDigits = 6;
 	const [showOtp, setShowOtp] = useState<boolean>(false);
-	const usernameAvailability = useCheckUsernameAvailability();
+	const usernameAvailability = useUsernameAvailability();
 	const usernameToCheck = useDebounce(form.watch('username'), 500);
 
 	useEffect(() => {

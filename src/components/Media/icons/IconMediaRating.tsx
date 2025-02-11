@@ -10,7 +10,7 @@ const iconMediaRatingVariants = cva(
 				general: "text-accent-1 border-accent-1",
 				follower: "text-blue-500 border-blue-500",
 				user: "text-accent-1 border-accent-1",
-				profile: "text-gray-200 border-gray-200",
+				profile: "text-white border-muted",
 			}
 		}
 	}

@@ -5,7 +5,7 @@ export default async function checkUsernameExist(supabase: SupabaseClient, usern
   const { data, error } = await supabase
     .from('user')
     .select('*')
-    .eq('username', username);
+    .ilike('username', username);
   if (error) throw error;
   if (data?.length) {
     return true;
