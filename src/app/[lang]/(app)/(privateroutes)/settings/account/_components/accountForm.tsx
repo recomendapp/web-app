@@ -21,22 +21,19 @@ import Loader from '@/components/Loader/Loader';
 import { useMutation } from '@tanstack/react-query';
 import { Switch } from '@/components/ui/switch';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { supabase } from '@/lib/supabase/client';
-import { SupabaseClient } from '@supabase/supabase-js';
-import checkUsernameExist from '@/components/Auth/hooks/checkUsernameExist';
 import { useTranslations } from 'next-intl';
+import { useUsernameAvailability } from '@/hooks/use-username-availability';
+import useDebounce from '@/hooks/use-debounce';
 
-// This can come from your database or API.
+const USERNAME_MIN_LENGTH = 3;
+const USERNAME_MAX_LENGTH = 15;
 
 export function AccountForm() {
   const supabase = useSupabaseClient();
   const t = useTranslations('pages.settings');
   const common = useTranslations('common');
-
   const { user, session } = useAuth();
-
   const [loading, setLoading] = useState(false);
-
   const { mutateAsync: updateProfile } = useMutation({
     mutationFn: async (payload: any) => {
       if (!user?.id) throw new Error('No user id');
@@ -63,27 +60,24 @@ export function AccountForm() {
   const accountFormSchema = z.object({
     username: z
       .string()
-      .min(3, {
-        message: t('account.username.form.min_length'),
+      .min(USERNAME_MIN_LENGTH, {
+        message: common('form.length.char_min', { count: USERNAME_MIN_LENGTH }),
       })
-      .max(15, {
-        message: t('account.username.form.max_length'),
+      .max(USERNAME_MAX_LENGTH, {
+        message: common('form.length.char_max', { count: USERNAME_MAX_LENGTH }),
       })
-      .refine((value) => /^(?!.*\.\.)(?!.*\.$)[^\W][\w.]{2,14}$/.test(value), {
-        message: t('account.username.form.invalid'),
+      .regex(/^[^\W]/, {
+        message: common('form.username.schema.first_char'),
       })
-      .refine(
-        async (value) => {
-          if (value === user?.username) {
-            return true;
-          }
-          const isUsernameExist = await checkUsernameExist(supabase, value);
-          return !isUsernameExist;
-        },
-        {
-          message: t('account.username.form.unavailable'),
-        }
-      ),
+      .regex(/^(?!.*\.\.)/, {
+        message: common('form.username.schema.double_dot'),
+      })
+      .regex(/^(?!.*\.$)/, {
+        message: common('form.username.schema.ends_with_dot'),
+      })
+      .regex(/^[\w.]+$/, {
+        message: common('form.username.schema.format'),
+      }),
     private: z.boolean(),
     email: z.string()
       .email({
@@ -104,6 +98,8 @@ export function AccountForm() {
     defaultValues,
     mode: 'onChange',
   });
+  const usernameAvailability = useUsernameAvailability();
+  const usernameToCheck = useDebounce(form.watch('username'), 500);
 
   useEffect(() => {
     user &&
@@ -113,6 +109,22 @@ export function AccountForm() {
         email: session?.user.email,
       });
   }, [form, session?.user.email, user]);
+
+  useEffect(() => {
+		if (!form.formState.errors.username?.message && usernameToCheck && usernameToCheck !== user?.username) {
+			usernameAvailability.check(usernameToCheck);
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [usernameToCheck]);
+
+	useEffect(() => {
+		if (usernameAvailability.isAvailable === false) {
+			form.setError('username', {
+				message: common('form.username.schema.unavailable'),
+			});
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [usernameAvailability.isAvailable, common]);
 
   async function onSubmit(data: AccountFormValues) {
     try {
