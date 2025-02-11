@@ -31,7 +31,7 @@ import { Theme } from '@/types/type.theme';
 import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Icons } from '@/config/icons';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/Loader/Loader';
@@ -82,10 +82,11 @@ export function AppearanceForm() {
     }
   });
 
-  const defaultValues: Partial<AppearanceFormValues> = {
+  const defaultValues = useMemo(() => ({
     language: locale as Lang | undefined,
     theme: theme as Theme | undefined,
-  };
+  }), [locale, theme]);
+
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
     defaultValues,
@@ -94,7 +95,7 @@ export function AppearanceForm() {
   useEffect(() => {
     form.reset(defaultValues);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale, theme, user, defaultValues]);
+  }, [defaultValues]);
 
 
   async function onSubmit(data: AppearanceFormValues) {
