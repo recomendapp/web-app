@@ -2,7 +2,7 @@ import { ProfileFollowButton } from '@/app/[lang]/(app)/user/[username]/_compone
 import { UserAvatar } from '@/components/User/UserAvatar/UserAvatar';
 import { Button } from '@/components/ui/button';
 import { LinkIcon, Settings } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { createServerClient } from '@/lib/supabase/server';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 

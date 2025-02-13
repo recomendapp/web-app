@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { UserActivity } from "@/types/type.db";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import { DateOnlyYearTooltip } from "../utils/Date";
 import { UserAvatar } from "../User/UserAvatar/UserAvatar";
 import { FeedActivity } from "@/app/[lang]/(app)/(privateroutes)/feed/_components/FeedActivity";

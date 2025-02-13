@@ -5,8 +5,8 @@ import { cn } from '@/lib/utils';
 import { Profile } from '@/types/type.db';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Link } from "@/lib/i18n/routing";
+import { usePathname } from '@/lib/i18n/routing';
 import { useMemo } from 'react';
 
 export default function ProfileNavbar({

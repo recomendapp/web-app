@@ -1,9 +1,7 @@
 import { Bookmark, Heart, Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 export function MovieActionCounter({ movieId }: { movieId: string }) {
-  const router = useRouter();
 
   const [movieLikedCounter, setMovieLikedCounter] = useState<number | null>();
   const [movieWatchedCounter, setMovieWatchedCounter] = useState<

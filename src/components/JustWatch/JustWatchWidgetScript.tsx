@@ -4,7 +4,7 @@ import { Icons } from "@/config/icons"
 import { cn } from "@/lib/utils"
 import { upperFirst } from "lodash"
 import { useLocale, useTranslations } from "next-intl"
-import Link from "next/link"
+import { Link } from "@/lib/i18n/routing"
 import { ImageWithFallback } from "../utils/ImageWithFallback"
 import { useModal } from "@/context/modal-context"
 

@@ -1,13 +1,8 @@
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getPerson, getPersonFilms } from '@/features/server/media/mediaQueries';
 import { getTranslations } from 'next-intl/server';
-import { replace, upperFirst } from 'lodash';
-import { CardMedia } from '@/components/Card/CardMedia';
+import { upperFirst } from 'lodash';
 import { z } from "zod";
-import { Icons } from '@/config/icons';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { redirect } from 'next/navigation';
 
 const SORT_BY = ["release_date"] as const;
 const DISPLAY = ["poster", "row"] as const;

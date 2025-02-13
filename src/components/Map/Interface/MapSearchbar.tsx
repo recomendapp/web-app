@@ -6,7 +6,7 @@ import { SearchIcon } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 import Fuse from "fuse.js";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import {LngLatLike, useMap as useMapContext} from 'react-map-gl/maplibre';
 
 export const MapSearchbar = () => {

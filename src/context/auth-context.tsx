@@ -1,12 +1,12 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { Provider, Session } from '@supabase/supabase-js';
 
 import { User } from '@/types/type.db';
 import { useUserQuery } from '@/features/client/user/userQueries';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { useRouter } from '@/lib/i18n/routing';
 
 export interface UserState {
   user: User | null | undefined;

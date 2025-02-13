@@ -5,8 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/auth-context';
 import { Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link, useRouter } from "@/lib/i18n/routing";
 
 import { useQuery } from '@tanstack/react-query';
 import { createOrRetrieveCustomer } from '@/lib/supabase/supabase-admin';

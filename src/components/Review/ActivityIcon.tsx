@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { Text } from 'lucide-react';
 import { Heart } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { TooltipBox } from '../Box/TooltipBox';
 
 interface RatingProps extends React.HTMLAttributes<HTMLDivElement> {

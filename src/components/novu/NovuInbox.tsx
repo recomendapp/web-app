@@ -1,8 +1,8 @@
 import { useAuth } from "@/context/auth-context";
+import { useRouter } from "@/lib/i18n/routing";
 import { Inbox } from "@novu/react";
 import { createHmac } from "crypto";
 import { useLocale } from "next-intl";
-import { useRouter } from "next/navigation";
 
 const tabs = [
 	{

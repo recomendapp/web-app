@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import UserCard from '@/components/User/UserCard/UserCard';
 import { useInfiniteQuery } from '@tanstack/react-query';

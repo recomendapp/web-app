@@ -7,7 +7,7 @@ import {
   getSession,
 } from '@/lib/supabase/server';
 import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { upperFirst } from 'lodash';
 
 export async function generateMetadata(

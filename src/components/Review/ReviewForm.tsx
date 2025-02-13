@@ -25,9 +25,9 @@ import { upperFirst } from 'lodash';
 import { useModal } from '@/context/modal-context';
 import { ReviewSettings } from './ReviewSettings';
 import MediaActionUserActivityRating from '@/components/Media/actions/MediaActionUserActivityRating';
-import { useRouter } from 'next/navigation';
 import ActionReviewLike from './actions/ActionReviewLike';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
+import { useRouter } from '@/lib/i18n/routing';
 
 const MAX_TITLE_LENGTH = 50;
 const MAX_BODY_LENGTH = 5000;

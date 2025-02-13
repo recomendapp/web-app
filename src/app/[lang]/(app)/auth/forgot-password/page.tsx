@@ -19,8 +19,8 @@ import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { useRandomImage } from '@/hooks/use-random-image';
-import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Link, useRouter } from "@/lib/i18n/routing";
+import { useSearchParams } from 'next/navigation';
 import {
   InputOTP,
   InputOTPGroup,

@@ -10,11 +10,11 @@ import { AuthError } from '@supabase/supabase-js';
 import { useAuth } from '@/context/auth-context';
 import { useState } from 'react';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { useRouter } from 'next/navigation';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { ArrowLeftIcon } from 'lucide-react';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslations } from 'next-intl';
+import { useRouter } from '@/lib/i18n/routing';
 
 export function LoginOtpForm({
   className,

@@ -10,7 +10,7 @@ import {
   } from "@/components/ui/carousel"
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import { DateOnlyYearTooltip } from "../utils/Date";
 import { SendIcon } from "lucide-react";
 import { useModal } from "@/context/modal-context";

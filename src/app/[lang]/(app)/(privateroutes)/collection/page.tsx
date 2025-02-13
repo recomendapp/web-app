@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { UserPlaylists } from '@/components/User/UserPlaylists/UserPlaylists';
 import { Bookmark, Heart, Send } from 'lucide-react';
 import {

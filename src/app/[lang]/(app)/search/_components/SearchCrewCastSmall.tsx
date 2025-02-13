@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';

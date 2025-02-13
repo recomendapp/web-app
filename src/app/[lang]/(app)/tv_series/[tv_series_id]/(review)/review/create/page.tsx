@@ -1,4 +1,4 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { upperFirst } from 'lodash';
@@ -6,6 +6,7 @@ import { getTranslations } from 'next-intl/server';
 import { getTvSeries } from '@/features/server/media/mediaQueries';
 import CreateReviewForm from '@/components/Review/CreateReviewForm';
 import { Media } from '@/types/type.db';
+import { redirect } from '@/lib/i18n/routing';
 
 export async function generateMetadata(
   props: {
@@ -48,19 +49,25 @@ export default async function CreateReview(
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect(`/auth/login?redirect=${encodeURIComponent(`/tv_series/${serieId}/review/create`)}`);
+  if (!user) redirect({
+    href: `/auth/login?redirect=${encodeURIComponent(`/tv_series/${serieId}/review/create`)}`,
+    locale: params.lang,
+  });
 
   const { data: review } = await supabase
     .from('user_review')
     .select(`id`)
     .match({
-      user_id: user.id,
+      user_id: user?.id,
       media_id: serieId,
       media_type: 'tv_series',
     })
     .single();
 
-  if (review) redirect(`/tv_series/${serieId}/review/${review.id}`);
+  if (review) redirect({
+    href: `/tv_series/${serieId}/review/${review.id}`,
+    locale: params.lang,
+  });
 
   const serie = await getTvSeries({
     id: serieId,

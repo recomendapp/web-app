@@ -1,6 +1,5 @@
 import * as React from "react";
-import Link from "next/link"
-import { useRouter } from "next/navigation";
+import { Link, useRouter } from "@/lib/i18n/routing"
 import { cn } from "@/lib/utils";
 
 interface WithLinkProps extends React.HTMLAttributes<HTMLDivElement | HTMLAnchorElement> {

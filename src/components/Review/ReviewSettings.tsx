@@ -7,7 +7,6 @@ DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/context/auth-context';
 import { MoreHorizontal } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { Media, User, UserReview } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
@@ -16,6 +15,7 @@ import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { useUserReviewDeleteMutation } from '@/features/client/user/userMutations';
 import { getMediaUrl } from '@/hooks/get-media-details';
+import { usePathname, useRouter } from '@/lib/i18n/routing';
 
 export function ReviewSettings({
 	mediaId,

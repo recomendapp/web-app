@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname } from '@/lib/i18n/routing';
 import NavigationButton from '../NavigationButton/NavigationButton';
 import SearchBar from '@/components/Search/SearchBar';
 import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';

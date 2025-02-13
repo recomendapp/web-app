@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation';
 import SearchUsersFull from '@/components/Search/SearchUsers/SearchUsersFull';
+import { redirect } from '@/lib/i18n/routing';
 
 export async function generateMetadata(
   props: {
@@ -16,12 +16,16 @@ export async function generateMetadata(
 
 export default async function SearchFilms(
   props: {
+    params: Promise<{
+      lang: string;
+    }>;
     searchParams?: Promise<{
       q: string;
     }>;
   }
 ) {
+  const params = await props.params;
   const searchParams = await props.searchParams;
-  if (!searchParams?.q) redirect('/search');
+  if (!searchParams?.q) redirect({ href: '/search', locale: params.lang });
   return <SearchUsersFull query={searchParams?.q} />;
 }

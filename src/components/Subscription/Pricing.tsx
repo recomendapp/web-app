@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { postData } from '@/lib/stripe/stripe-helpers';
 import { getStripe } from '@/lib/stripe/stripeClient';
 import { Session } from '@supabase/supabase-js';
-import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
@@ -15,6 +14,7 @@ import { Icons } from '../../config/icons';
 import { Prices, Products } from '@/types/type.db';
 import { useQuery } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { usePathname, useRouter } from '@/lib/i18n/routing';
 
 interface Props {
   session: Session | null;

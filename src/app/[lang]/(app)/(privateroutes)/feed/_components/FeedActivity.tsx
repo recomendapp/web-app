@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import { cn } from "@/lib/utils";
 import { UserActivity } from "@/types/type.db";
 import { Icons } from "@/config/icons";

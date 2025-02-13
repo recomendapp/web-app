@@ -13,7 +13,7 @@ import {
 import { Icons } from "@/config/icons";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import { ButtonCopy } from "@/components/utils/ButtonCopy";
 export default function Error({
 	error,

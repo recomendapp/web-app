@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
+import { usePathname } from '@/lib/i18n/routing';
 
 export default function HeaderCenterSide({
   className,

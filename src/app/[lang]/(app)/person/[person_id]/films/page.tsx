@@ -6,7 +6,7 @@ import { CardMedia } from '@/components/Card/CardMedia';
 import { z } from "zod";
 import { Pagination } from './_components/Pagination';
 import { Icons } from '@/config/icons';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { Button } from '@/components/ui/button';
 import { Filters } from './_components/Filters';
 

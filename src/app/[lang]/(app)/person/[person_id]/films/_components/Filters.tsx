@@ -2,10 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useRouter } from "@/lib/i18n/routing";
 import { upperFirst } from "lodash";
 import { ArrowDownNarrowWideIcon, ArrowUpNarrowWideIcon, LayoutGridIcon, ListIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 const SORT_BY = ["release_date", "vote_average"];
 const DISPLAY = ["grid", "row"];

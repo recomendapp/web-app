@@ -3,7 +3,7 @@
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { Playlist } from '@/types/type.db';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import React from 'react';

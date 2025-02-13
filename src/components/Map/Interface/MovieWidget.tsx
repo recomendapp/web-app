@@ -5,7 +5,7 @@ import MoviePoster from "@/components/Movie/MoviePoster";
 import { useLocale } from "next-intl";
 import Loader from "@/components/Loader/Loader";
 import { MovieTrailerButton } from "@/app/[lang]/(app)/film/[film_id]/(default)/_components/MovieHeader";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import { RuntimeTooltip } from "@/components/utils/RuntimeTooltip";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useMediaMovieDetailsQuery } from "@/features/client/media/mediaQueries";

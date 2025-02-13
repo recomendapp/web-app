@@ -21,7 +21,7 @@ import { Products } from "@/types/type.db";
 import { Session } from "@supabase/supabase-js";
 import { upperFirst } from "lodash";
 import { useLocale, useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import { Fragment, useState } from "react";
 
 interface PlanFeature {

@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { UserNav } from '../User/UserNav/UserNav';
 import { Button } from '../ui/button';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { SocialButton } from './components/SocialButton';
 import { NotificationsButton } from '../notifications/NotificationsButton';
 import { useAuth } from '@/context/auth-context';

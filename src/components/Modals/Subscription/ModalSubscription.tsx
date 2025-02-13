@@ -11,12 +11,12 @@ import { formatPrice } from '@/components/ui/format-price';
 import { useLocale, useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
-import { usePathname, useRouter } from 'next/navigation';
 import { postData } from '@/lib/stripe/stripe-helpers';
 import { getStripe } from '@/lib/stripe/stripeClient';
 import { upperFirst } from 'lodash';
 import { Badge } from '@/components/ui/badge';
 import { calculateSave } from '@/hooks/calculate-save';
+import { usePathname, useRouter } from '@/lib/i18n/routing';
 
 
 interface ModalSubscriptionProps extends ModalType {

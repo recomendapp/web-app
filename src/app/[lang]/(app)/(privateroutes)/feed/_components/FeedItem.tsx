@@ -3,7 +3,7 @@
 import UserCard from "@/components/User/UserCard/UserCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FeedActivity } from "./FeedActivity";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import MoviePoster from "@/components/Movie/MoviePoster";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useFormatter } from "next-intl";

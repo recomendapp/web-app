@@ -1,7 +1,7 @@
 import { useAuth } from "@/context/auth-context"
 import { useUserFeedInfiniteQuery } from "@/features/client/user/userQueries";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 import { CardUserActivity } from "../Card/CardUserActivity";

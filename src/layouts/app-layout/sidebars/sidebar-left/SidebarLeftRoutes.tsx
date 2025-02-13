@@ -4,13 +4,13 @@ import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, Sideba
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
-import { useUserPlaylists, useUserPlaylistsInfiniteQuery } from "@/features/client/user/userQueries";
+import { useUserPlaylistsInfiniteQuery } from "@/features/client/user/userQueries";
+import { Link } from "@/lib/i18n/routing";
 import { cn } from "@/lib/utils";
 import { capitalize } from "lodash";
 import { BookmarkIcon, HeartIcon, LibraryIcon, SendIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname } from '@/lib/i18n/routing';
 import { useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 

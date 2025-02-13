@@ -5,7 +5,7 @@ import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { getMediaDetails } from "@/hooks/get-media-details";
 import { cn } from "@/lib/utils";
 import { Media, MediaPerson } from "@/types/type.db";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 
 interface ItemProps
 	extends React.ComponentProps<'div'> {

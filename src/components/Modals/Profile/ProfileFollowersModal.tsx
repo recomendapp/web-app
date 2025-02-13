@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { useInView } from 'react-intersection-observer';
 import { Search } from 'lucide-react';
 import useDebounce from '@/hooks/use-debounce';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { useUserFollowersInfiniteQuery } from '@/features/client/user/userQueries';
 import { useSupabaseClient } from '@/context/supabase-context';
 

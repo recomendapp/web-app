@@ -7,7 +7,7 @@ import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { MediaMovie, MediaMoviePerson, MediaPerson } from "@/types/type.db";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 
 export default function MovieDetails({
   movie,

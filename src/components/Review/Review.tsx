@@ -2,7 +2,7 @@
 import { MediaPerson, UserReview } from "@/types/type.db";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import { Card } from "@/components/ui/card";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import ReviewForm from "@/components/Review/ReviewForm";

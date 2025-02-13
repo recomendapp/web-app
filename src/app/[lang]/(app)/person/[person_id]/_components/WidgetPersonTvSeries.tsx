@@ -2,7 +2,7 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { upperFirst } from 'lodash';
 import { CardMedia } from '@/components/Card/CardMedia';
 import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { Button } from '@/components/ui/button';
 import { MediaTvSeriesAggregateCredits } from '@/types/type.db';
 

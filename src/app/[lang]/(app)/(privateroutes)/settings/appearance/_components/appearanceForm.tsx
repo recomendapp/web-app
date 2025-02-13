@@ -101,7 +101,9 @@ export function AppearanceForm() {
   async function onSubmit(data: AppearanceFormValues) {
     try {
       setLoading(true);
-      if (data.theme != theme) setTheme(data.theme);
+      if (data.theme != theme) {
+        setTheme(data.theme);
+      }
       if (locale != data.language)
       {
         await updateProfile({ language: data.language });

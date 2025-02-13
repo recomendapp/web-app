@@ -22,7 +22,6 @@ import toast from 'react-hot-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
 import PlaylistPictureUpload from '../components/PlaylistPictureUpload';
-import { usePathname, useRouter } from 'next/navigation';
 
 import compressPicture from '@/lib/utils/compressPicture';
 import { Icons } from '@/config/icons';
@@ -45,6 +44,7 @@ import { useAuth } from '@/context/auth-context';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { useDeletePlaylist } from '@/features/client/playlist/playlistMutations';
 import { userKeys } from '@/features/client/user/userKeys';
+import { usePathname, useRouter } from '@/lib/i18n/routing';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;

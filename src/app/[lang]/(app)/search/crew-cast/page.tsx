@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { getSearchPersons } from '@/features/server/search/searchQueries';
 import { CardMedia } from '@/components/Card/CardMedia';
@@ -15,6 +14,7 @@ import {
 import { cn } from '@/lib/utils';
 import { generatePaginationNumbers } from '@/hooks/generate-pagination-numbers';
 import { title } from '@/hooks/custom-lodash';
+import { redirect } from '@/lib/i18n/routing';
 
 export async function generateMetadata(
   props: {
@@ -46,14 +46,14 @@ export default async function SearchCrewCast(
       lang: string;
     }>;
     searchParams: Promise<{
-      q?: string;
+      q: string;
       page?: string;
     }>;
   }
 ) {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  if (!searchParams?.q) redirect('/search');
+  if (!searchParams?.q) redirect({ href: '/search', locale: params.lang });
   const page = getValidatePage(Number(searchParams.page));
 
   const { results, total_results } = await getSearchPersons({

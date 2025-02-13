@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Media, MediaPerson } from '@/types/type.db';
 import { useAuth } from '@/context/auth-context';
 import { useUserActivityQuery } from '@/features/client/user/userQueries';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';

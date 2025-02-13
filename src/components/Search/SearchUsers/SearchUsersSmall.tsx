@@ -1,6 +1,6 @@
 'use client';
 import { Skeleton } from '../../ui/skeleton';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { Button } from '../../ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import UserCard from '@/components/User/UserCard/UserCard';

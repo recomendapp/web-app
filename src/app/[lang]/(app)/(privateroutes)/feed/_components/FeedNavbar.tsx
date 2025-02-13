@@ -4,8 +4,8 @@ import { useAuth } from "@/context/auth-context";
 import { title } from "@/hooks/custom-lodash";
 import { startCase, upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "@/lib/i18n/routing";
+import { usePathname } from '@/lib/i18n/routing';
 
 export const FeedNavbar = () => {
 	const { user } = useAuth();

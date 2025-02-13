@@ -4,7 +4,7 @@ import React from 'react';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '../../utils/ImageWithFallback';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import FeaturedPlaylistBadge from '@/components/Badge/FeatuedPlaylistBadge';
 import { Playlist } from '@/types/type.db';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';

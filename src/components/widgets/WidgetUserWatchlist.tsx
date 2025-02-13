@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { useAuth } from '@/context/auth-context';
 import { useUserWatchlistQuery } from '@/features/client/user/userQueries';
 import { cn } from '@/lib/utils';

@@ -2,7 +2,7 @@ import { Notification as NotificationType } from '@novu/react';
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { ReactMarkdown } from '../utils/ReactMarkdown';
 import { CircleIcon } from 'lucide-react';
 import { Button } from '../ui/button';

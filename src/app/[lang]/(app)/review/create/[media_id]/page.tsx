@@ -1,9 +1,10 @@
 import { getMedia } from "@/features/server/media/mediaQueries";
 import { upperFirst } from "lodash";
 import { getTranslations } from "next-intl/server";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import CreateReviewForm from "../../../../../../components/Review/CreateReviewForm";
 import { createServerClient } from "@/lib/supabase/server";
+import { redirect } from "@/lib/i18n/routing";
 
 export async function generateMetadata(
 	props: {
@@ -41,14 +42,20 @@ export default async function CreateReviewPage(
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
-	if (!user) redirect(`/auth/login?redirect=${encodeURIComponent(`/review/create/${params.media_id}`)}`);
+	if (!user) return redirect({
+		href: `/auth/login?redirect=${encodeURIComponent(`/review/create/${params.media_id}`)}`,
+		locale: params.lang,
+	});
 	const { data: review } = await supabase
 		.from('user_review')
 		.select(`id, activity:user_activity!inner(media_id)`)
 		.eq('user_id', user.id)
 		.eq('activity.media_id', params.media_id)
 		.single();
-	if (review) redirect(`/review/${review.id}`);
+	if (review) redirect({
+		href: `/review/${review.id}`,
+		locale: params.lang,
+	});
 
 	const { data: media, error } = await getMedia({
 		locale: params.lang,

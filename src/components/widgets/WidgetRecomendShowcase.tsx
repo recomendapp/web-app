@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { siteConfig } from "@/config/site";
 import { Button } from "../ui/button";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import { useTranslations } from "next-intl";
 
 export const WidgetRecomendShowcase = ({

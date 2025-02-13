@@ -8,7 +8,7 @@ import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { MediaTvSeries, MediaPerson, MediaTvSeriesPerson } from "@/types/type.db";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 
 export default function TvSerieDetails({
   serie,

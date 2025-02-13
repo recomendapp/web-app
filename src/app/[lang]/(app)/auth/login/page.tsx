@@ -4,7 +4,7 @@ import { LoginPasswordForm } from './_components/LoginPasswordForm';
 import { Icons } from '@/config/icons';
 import { Images } from '@/config/images';
 import { siteConfig } from '@/config/site';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import { useSearchParams } from 'next/navigation';
 import {
   Card,

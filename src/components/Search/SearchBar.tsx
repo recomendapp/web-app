@@ -1,9 +1,10 @@
 'use client';
 import React, { useEffect, useState, useRef } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { BiSearch } from 'react-icons/bi';
 import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
+import { usePathname, useRouter } from '@/lib/i18n/routing';
 
 interface SearchBarProps extends React.HTMLAttributes<HTMLDivElement> {}
 

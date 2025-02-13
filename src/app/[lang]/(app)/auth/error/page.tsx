@@ -3,7 +3,7 @@
 import { Icons } from '@/config/icons';
 import { Images } from '@/config/images';
 import { useRandomImage } from '@/hooks/use-random-image';
-import Link from 'next/link';
+import { Link } from "@/lib/i18n/routing";
 import {
   Card,
   CardContent,

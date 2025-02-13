@@ -1,7 +1,7 @@
 'use client';
 import { Button } from '@/components/ui/button';
+import { useRouter } from '@/lib/i18n/routing';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 export default function NavigationButton() {
   const router = useRouter();

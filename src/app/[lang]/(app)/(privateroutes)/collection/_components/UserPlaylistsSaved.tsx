@@ -1,9 +1,4 @@
-import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { Fragment, useEffect } from 'react';
 import Loader from '@/components/Loader/Loader';
 import { useInView } from 'react-intersection-observer';
@@ -11,6 +6,7 @@ import { Playlist } from '@/types/type.db';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { useUserPlaylistsSavedInfiniteQuery } from '@/features/client/user/userQueries';
+import { usePathname } from '@/lib/i18n/routing';
 
 export function UserPlaylistsSaved({
   sidebarExpanded,

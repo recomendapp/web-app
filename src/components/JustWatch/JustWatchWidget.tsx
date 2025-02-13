@@ -1,7 +1,7 @@
 "use client"
 import { useQuery } from "@tanstack/react-query"
 import { useLocale } from "next-intl"
-import Link from "next/link"
+import { Link } from "@/lib/i18n/routing"
 import { handleGetWatchProviders } from "./hook/handleGetWatchProviders"
 import { Skeleton } from "@/components/ui/skeleton"
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback"

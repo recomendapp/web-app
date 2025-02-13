@@ -1,5 +1,5 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail, SidebarSeparator, useSidebar } from "@/components/ui/sidebar";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { Icons } from "@/config/icons";
 import { SidebarLeftRoutes } from "./SidebarLeftRoutes";

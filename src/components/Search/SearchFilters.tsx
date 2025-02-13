@@ -1,10 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 // UI
 import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
+import { usePathname, useRouter } from '@/lib/i18n/routing';
 
 export default function SearchFilters() {
   const router = useRouter();

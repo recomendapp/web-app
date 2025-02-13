@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { getSearchTvSeries } from '@/features/server/search/searchQueries';
@@ -15,6 +14,7 @@ import {
 } from "@/components/ui/pagination"
 import { cn } from '@/lib/utils';
 import { generatePaginationNumbers } from '@/hooks/generate-pagination-numbers';
+import { redirect } from '@/lib/i18n/routing';
 
 export async function generateMetadata(
   props: {
@@ -53,13 +53,13 @@ export default async function SearchTvSeries(
 ) {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  if (!searchParams?.q) redirect('/search');
+  if (!searchParams?.q) redirect({ href: '/search', locale: params.lang });
   const page = getValidatePage(Number(searchParams.page));
 
   const { results, total_results } = await getSearchTvSeries({
     locale: params.lang,
     filters: {
-      query: searchParams.q,
+      query: searchParams.q ?? '',
       page: page,
     }
   })

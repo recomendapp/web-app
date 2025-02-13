@@ -11,7 +11,7 @@ import { WidgetUserFriendsPlaylists } from "@/components/widgets/WIdgetUserFrien
 import { WidgetUserFeed } from "@/components/widgets/WidgetUserFeed";
 import { WidgetUserDiscovery } from "@/components/widgets/WidgetUserDiscovery";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/lib/i18n/routing";
 import { upperFirst } from "lodash";
 import { WidgetMostRecommended } from "@/components/widgets/WidgetMostRecommended";
 import { WidgetUserRecos } from "@/components/widgets/WidgetUserRecos";
