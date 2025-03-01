@@ -119,7 +119,7 @@ const SidebarProvider = React.forwardRef<
         ? setOpenMobile((open) => !open)
         : setOpen((open) => !open)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isMobile, setOpen])
+    }, [setOpenMobile, setOpen])
 
     // Adds a keyboard shortcut to toggle the sidebar.
     React.useEffect(() => {

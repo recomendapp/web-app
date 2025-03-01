@@ -7,7 +7,6 @@ import { UIProvider } from './ui-context';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 import { ModalProvider } from './modal-context';
-import { SidebarProvider } from '@/components/ui/sidebar';
 
 interface ThemeProviderProps extends NextThemesProviderProps {
   defaultLayout?: number[];
@@ -29,29 +28,27 @@ export const ThemeProvider = ({
         cookieSidebarOpen={cookieSidebarOpen}
         cookieRightPanelOpen={cookieRightPanelOpen}
       >
-        {/* <SidebarProvider> */}
-          <TooltipProvider delayDuration={100}>
-            <ModalProvider>
-              <NextTopLoader
-                showSpinner={false}
-                easing="ease"
-                color="#FFE974"
-                height={2}
-                />
-              <Toaster
-                position="top-center"
-                toastOptions={{
-                  style: {
-                    borderRadius: '10px',
-                    background: '#333',
-                    color: '#fff',
-                  },
-                }}
-              />
-              {children}
-            </ModalProvider>
-          </TooltipProvider>
-        {/* </SidebarProvider> */}
+        <TooltipProvider delayDuration={100}>
+          <ModalProvider>
+            <NextTopLoader
+              showSpinner={false}
+              easing="ease"
+              color="#FFE974"
+              height={2}
+            />
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                style: {
+                  borderRadius: '10px',
+                  background: '#333',
+                  color: '#fff',
+                },
+              }}
+            />
+            {children}
+          </ModalProvider>
+        </TooltipProvider>
       </UIProvider>
     </NextThemesProvider>
   );
