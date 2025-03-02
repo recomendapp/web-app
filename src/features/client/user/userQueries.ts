@@ -113,7 +113,7 @@ export const useUserActivitiesInfiniteQuery = ({
 				.range(from, to)
 			
 			if (mergedFilters) {
-				if (mergedFilters.sortBy && filters?.sortOrder) {
+				if (mergedFilters.sortBy && mergedFilters?.sortOrder) {
 					switch (mergedFilters.sortBy) {
 						case 'watched_date':
 							request = request.order('watched_date', { ascending: mergedFilters.sortOrder === 'asc' });

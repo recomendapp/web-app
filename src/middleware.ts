@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
   const localeMatch = url.pathname.split('/')[1];
   const hasLocale = routing.locales.includes(localeMatch as any);
   if (hasLocale) url.pathname = url.pathname.replace(`/${localeMatch}`, '');
-  
+
   // IMPORTANT: Avoid writing any logic between createServerClient and
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
@@ -60,7 +60,7 @@ export async function middleware(request: NextRequest) {
   const anonUserOnly = [
     '/auth'
   ];
-  if (user && anonUserOnly.some((path) => request.nextUrl.pathname.startsWith(path))) {
+  if (user && anonUserOnly.some((path) => url.pathname.startsWith(path))) {
     // if /auth/login and there is redirect query param, go to redirect
     if (url.pathname === '/auth/login' && url.searchParams.has('redirect'))
       return (NextResponse.redirect(new URL(url.searchParams.get('redirect')!, request.url)));
@@ -77,7 +77,7 @@ export async function middleware(request: NextRequest) {
     '/feed',
     '/settings',
   ];
-  if (!user && authentifiedUserOnly.some((path) => request.nextUrl.pathname.startsWith(path))) {
+  if (!user && authentifiedUserOnly.some((path) => url.pathname.startsWith(path))) {
     url.pathname = '/auth/login';
     url.searchParams.set('redirect', request.nextUrl.pathname);
     return (NextResponse.redirect(url));
@@ -89,7 +89,7 @@ export async function middleware(request: NextRequest) {
   const premiumUserOnly = [
     '/feed/cast-crew',
   ];
-  if (user && !config?.user_premium && premiumUserOnly.some((path) => request.nextUrl.pathname.startsWith(path))) {
+  if (user && !config?.user_premium && premiumUserOnly.some((path) => url.pathname.startsWith(path))) {
     url.pathname = '/upgrade';
     return (NextResponse.redirect(url));
   }

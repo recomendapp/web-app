@@ -18,7 +18,7 @@ export const ReactMarkdown = React.forwardRef<
 				href={href}
 				className={cn(
 					buttonVariants({ variant: 'link' }),
-					'p-0 inline'
+					'p-0 inline whitespace-normal'
 				)}
 				>
 					{children}
