@@ -12,7 +12,6 @@ export async function middleware(request: NextRequest) {
   const localeMatch = url.pathname.split('/')[1];
   const hasLocale = routing.locales.includes(localeMatch as any);
   if (hasLocale) url.pathname = url.pathname.replace(`/${localeMatch}`, '');
-
   // IMPORTANT: Avoid writing any logic between createServerClient and
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
