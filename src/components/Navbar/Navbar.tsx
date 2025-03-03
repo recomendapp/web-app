@@ -18,7 +18,7 @@ import { useTranslations } from 'next-intl';
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function Navbar({ className }: NavbarProps) {
-  const { user } = useAuth();
+  const { session } = useAuth();
   const routesDic = useTranslations('routes');
   const common = useTranslations('common');
   const pathname = usePathname();
@@ -43,26 +43,26 @@ export function Navbar({ className }: NavbarProps) {
         href: '/explore',
       },
       {
-        icon: user ? Zap : Icons.shop,
-        label: user ? routesDic('feed') : routesDic('shop'),
-        active: user ? pathname.startsWith('/feed') : false,
-        href: user ? '/feed' : 'https://shop.recomend.app',
-        target: user ? undefined : '_blank',
+        icon: session ? Zap : Icons.shop,
+        label: session ? routesDic('feed') : routesDic('shop'),
+        active: session ? pathname.startsWith('/feed') : false,
+        href: session ? '/feed' : 'https://shop.recomend.app',
+        target: session ? undefined : '_blank',
       },
       {
-        icon: user ? Library : Icons.user,
-        label: user ? routesDic('library') : common('word.login'),
+        icon: session ? Library : Icons.user,
+        label: session ? routesDic('library') : common('word.login'),
         active:
-          user ?
+        session ?
             pathname.startsWith('/collection') ||
             pathname.startsWith('/auth') ||
             pathname.startsWith('/resetPassword') ||
             pathname.startsWith('/verifyEmail')
             : pathname.startsWith('/auth'),
-        href: user ? '/collection' : '/auth/login',
+        href: session ? '/collection' : '/auth/login',
       },
     ],
-    [pathname, user, routesDic, common]
+    [pathname, session, routesDic, common]
   );
 
   return (
