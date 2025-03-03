@@ -1,10 +1,10 @@
 'use client'
+import * as React from "react";
 import { Header } from '@/components/Header/Header';
 import { useUI } from '@/context/ui-context';
 import { Navbar } from "../../components/Navbar/Navbar";
 import { SidebarInset, SidebarProvider } from "../../components/ui/sidebar";
 import { SidebarLeft } from "./sidebars/sidebar-left/SidebarLeft";
-import React from "react";
 import { SidebarRight } from './sidebars/sidebar-right/SidebarRight';
 
 export function AppLayout({
