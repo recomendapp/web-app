@@ -43,6 +43,7 @@
       "recent": "recent",
       "popular": "popular",
       "no_reviews": "no reviews",
+      "no_playlists": "no playlists",
       "view_activity": "view activity",
       "comment_count": "{count, plural, one {# comment} other {# comments}}",
       "write_review": "write a review",
@@ -72,9 +73,13 @@
       "vote_average": "vote average",
       "added": "added",
       "updated_at": "updated at",
+      "created_at": "created at",
+      "likes": "likes",
+      "likes_count": "likes count",
       "search_media": "search a media",
       "watched_date": "watched date",
-      "rating": "rating"
+      "rating": "rating",
+      "create_a_playlist": "create a playlist"
     },
     "errors": {
       "not_logged_in": "you are not logged in",

@@ -1,116 +1,129 @@
 'use client';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-import Loader from '@/components/Loader/Loader';
-import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
-import { useSupabaseClient } from '@/context/supabase-context';
+import { z } from "zod";
+import { useTranslations } from 'next-intl';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useMediaPlaylistsInfiniteQuery } from '@/features/client/media/mediaQueries';
+import { upperFirst } from 'lodash';
+import { Button } from '@/components/ui/button';
+import { ArrowDownNarrowWideIcon, ArrowUpNarrowWideIcon } from 'lucide-react';
+import { Icons } from '@/config/icons';
+import { CardPlaylist } from '@/components/Card/CardPlaylist';
 
-export function ShowPlaylists({ filmId }: { filmId: number }) {
-  const supabase = useSupabaseClient();
-  const [order, setOrder] = useState('recent');
+const SORT_BY = ["created_at", "likes_count"] as const;
+const DEFAULT_PER_PAGE = 20;
+const DEFAULT_SORT_BY = SORT_BY[0];
+const DEFAULT_SORT_ORDER = "desc";
 
+const sortBySchema = z.enum(SORT_BY);
+const getValidatedSortBy = (order?: string | null): z.infer<typeof sortBySchema> => {
+  return sortBySchema.safeParse(order).success ? order! as z.infer<typeof sortBySchema> : DEFAULT_SORT_BY;
+};
+const orderSchema = z.enum(["asc", "desc"]);
+const getValidatedSortOrder = (order?: string | null): z.infer<typeof orderSchema> => {
+  return orderSchema.safeParse(order).success ? order! as z.infer<typeof orderSchema> : DEFAULT_SORT_ORDER;
+};
+const perPageSchema = z.number().int().positive();
+const getValidatePerPage = (perPage?: number | null): number => {
+  return perPageSchema.safeParse(perPage).success ? perPage! : DEFAULT_PER_PAGE;
+}
+
+interface ShowPlaylistsProps {
+  mediaId: number;
+}
+
+export function ShowPlaylists({
+  mediaId,
+} : ShowPlaylistsProps) {
+  const common = useTranslations('common');
+  const searchParams = useSearchParams();
+  const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
+  const sortOrder = getValidatedSortOrder(searchParams.get('sort_order'));
+  const perPage = getValidatePerPage(Number(searchParams.get('per_page')));
   const { ref, inView } = useInView();
-
-  const numberOfResult = 20;
+  const router = useRouter();
 
   const {
     data: playlists,
-    isLoading: loading,
+    isLoading,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['film', filmId, 'playlists', order],
-    queryFn: async ({ pageParam = 1 }) => {
-      let from = (pageParam - 1) * numberOfResult;
-      let to = from - 1 + numberOfResult;
-      let column;
-      let ascending;
+  } = useMediaPlaylistsInfiniteQuery({
+    mediaId: mediaId,
+    filters: {
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+      perPage: perPage,
+    }
+  })
 
-      const [tablePart, orderPart] = order.split('-');
-
-      if (tablePart == 'popularity') {
-        column = 'likes_count';
-      } else {
-        column = 'created_at';
-      }
-
-      if (orderPart === 'desc') ascending = false;
-      else ascending = true;
-
-      const { data } = await supabase
-        .from('playlists')
-        .select('*, playlist_items!inner(*)')
-        .match({
-          'playlist_items.media_id': filmId,
-          'playlist_items.media_type': 'movie',
-        })
-        .range(from, to)
-        .order(column, { ascending });
-
-      return data;
-    },
-    initialPageParam: 1,
-    getNextPageParam: (data, pages) => {
-      return data?.length == numberOfResult ? pages.length + 1 : undefined;
-    },
-  });
+  const handleChange = ({ name, value }: { name: string, value: string }) => {
+		const params = new URLSearchParams(searchParams.toString());
+		params.set(name, value);
+		router.push(`?${params.toString()}`);
+	};
 
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage();
   }, [inView, hasNextPage, fetchNextPage]);
 
-  if (loading) return <div>Loading</div>;
-
   return (
-    <div className="w-full h-full flex flex-col gap-2">
-      <div className="flex flex-1 justify-end gap-2 items-center">
-        Trier par
-        <Select onValueChange={setOrder} defaultValue={order}>
-          <SelectTrigger className="w-fit">
-            <SelectValue placeholder="Langue" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value={'recent'}>Récentes</SelectItem>
-              <SelectItem value={'popularity-desc'}>Popularité</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+    <div className="@container/movie-playlists w-full h-full flex flex-col items-center gap-4">
+      <div className="w-full flex flex-col gap-4 justify-between @md/movie-playlists:flex-row">
+        <Button disabled variant={'ghost'} size={'sm'}>
+          {upperFirst(common(`messages.create_a_playlist`))}
+        </Button>
+        <div className="flex justify-end gap-2 items-center">
+          <Button variant={'ghost'} size={'sm'} onClick={(e) => {
+            e.preventDefault();
+            handleChange({ name: 'sort_order', value: sortOrder === 'desc' ? 'asc' : 'desc' });
+          }}>
+            {sortOrder === 'desc' ? <ArrowDownNarrowWideIcon size={20} /> : <ArrowUpNarrowWideIcon size={20} />}
+          </Button>
+          <Select defaultValue={sortBy} onValueChange={(e) => handleChange({ name: 'sort_by', value: e })}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {SORT_BY.map((sort) => (
+                <SelectItem key={sort} value={sort}>{upperFirst(common(`messages.${sort}`))}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       {/* PLAYLISTS */}
-      {playlists?.pages[0]?.length ? (
-        <div className="grid gap-2 grid-cols-3 sm:grid-cols-4 md:grid-cols-6 2xl:grid-cols-8">
+      {(isLoading || playlists === undefined) ? (
+        <Icons.loader />
+      ) : playlists?.pages[0]?.length ? (
+        <div className="w-full grid gap-2 grid-cols-2 @xs/movie-playlists:grid-cols-3 @md/movie-playlists:grid-cols-4 @lg/movie-playlists:grid-cols-5 @2xl/movie-playlists:grid-cols-6 @4xl/movie-playlists:grid-cols-7 @5xl/movie-playlists:grid-cols-8 @7xl/movie-playlists:grid-cols-10">
           {playlists?.pages.map((page, i) => (
-            <Fragment key={i}>
-              {page?.map((playlist: any, index) => (
-                <div
-                  key={playlist.id}
-                  {...(i === playlists.pages.length - 1 &&
-                  index === page.length - 1
-                    ? { ref: ref }
-                    : {})}
-                >
-                  <MoviePlaylistCard key={playlist.id} playlist={playlist} />
-                </div>
-              ))}
-            </Fragment>
+            page?.map((playlist, index) => (
+              <CardPlaylist
+              key={index}
+              playlist={playlist}
+              {...(i === playlists.pages.length - 1 &&
+                index === page.length - 1
+                  ? { ref: ref }
+                  : {})}
+              />
+            ))
           ))}
-          {(loading || isFetchingNextPage) && <Loader />}
         </div>
       ) : (
-        <p className="text-center font-semibold">Aucune playlist.</p>
+        <p className="text-muted-foreground text-center font-semibold">{upperFirst(common('messages.no_playlists'))}</p>
       )}
+      {isFetchingNextPage ? <Icons.loader /> : null}
     </div>
   );
 }

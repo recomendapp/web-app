@@ -87,8 +87,53 @@ export const useMediaReviewsInfiniteQuery = ({
 
 };
 /* -------------------------------------------------------------------------- */
-
+export const useMediaPlaylistsInfiniteQuery = ({
+	mediaId,
+	filters,
+} : {
+	mediaId: number;
+	filters: {
+		perPage: number;
+		sortBy: 'created_at' | 'updated_at' | 'likes_count';
+		sortOrder: 'asc' | 'desc';
+	};
+}) => {
+	console.log('mediaId', mediaId);
+	const supabase = useSupabaseClient();
+	return useInfiniteQuery({
+		queryKey: mediaKeys.playlists({
+			mediaId,
+			filters,
+		}),
+		queryFn: async ({ pageParam = 1 }) => {
+			let from = (pageParam - 1) * filters.perPage;
+	  		let to = from - 1 + filters.perPage;
+			let request = supabase
+				.from('playlists')
+				.select('*, playlist_items!inner(*)')
+				.match({
+					'playlist_items.media_id': mediaId,
+				})
+				.range(from, to);
+			
+			if (filters) {
+				if (filters.sortBy && filters.sortOrder) {
+					request = request.order(filters.sortBy, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
+				}
+			}
+			const { data, error } = await request;
+			if (error) throw error;
+			return data;
+		},
+		initialPageParam: 1,
+		getNextPageParam: (lastPage, pages) => {
+			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
+		},
+		enabled: !!mediaId,
+	});
+};
 /* -------------------------------- PLAYLISTS ------------------------------- */
+
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */

@@ -13,7 +13,7 @@ import { useInView } from 'react-intersection-observer';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { z } from "zod";
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useMediaReviewsInfiniteQuery } from '@/features/client/media/mediaQueries';
 import { Icons } from '@/config/icons';
 import { CardReview } from '@/components/Card/CardReview';
@@ -39,12 +39,6 @@ const getValidatePerPage = (perPage?: number | null): number => {
   return perPageSchema.safeParse(perPage).success ? perPage! : DEFAULT_PER_PAGE;
 }
 
-// Order
-// const orderSchema = z.enum(["updated_at-desc", "updated_at-asc", "likes_count-desc", "likes_count-asc", "rating-desc", "rating-asc"]);
-// const getValidatedOrder = (order: string | null): z.infer<typeof orderSchema> => {
-//   return orderSchema.safeParse(order).success ? order as z.infer<typeof orderSchema> : "updated_at-desc";
-// };
-
 interface ReviewProps {
   mediaId: number;
 }
@@ -57,7 +51,7 @@ export default function Reviews({
   const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
   const sortOrder = getValidatedSortOrder(searchParams.get('sort_order'));
   const perPage = getValidatePerPage(Number(searchParams.get('per_page')));
-
+  const router = useRouter();
   const { ref, inView } = useInView();
   const {
     data: reviews,
@@ -75,10 +69,10 @@ export default function Reviews({
   });
 
   const handleChange = ({ name, value }: { name: string, value: string }) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set(name, value);
-    window.history.pushState(null, '', `?${params.toString()}`)
-  };
+		const params = new URLSearchParams(searchParams.toString());
+		params.set(name, value);
+		router.push(`?${params.toString()}`);
+	};
 
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage();

@@ -43,6 +43,7 @@
       "recent": "{gender, select, female {récente} other {récent}}{count, plural, one {} other {s}}",
       "popular": "{count, plural, one {populaire} other {populaires}}",
       "no_reviews": "aucune critique",
+      "no_playlists": "aucune playlist",
       "view_activity": "voir l'activité",
       "comment_count": "{count, plural, one {# commentaire} other {# commentaires}}",
       "write_review": "écrire une critique",
@@ -72,9 +73,13 @@
       "vote_average": "note moyenne",
       "added": "ajouté",
       "updated_at": "mis à jour",
+      "created_at": "créé",
+      "likes": "likes",
+      "likes_count": "nombre de likes",
       "search_media": "rechercher un média",
       "watched_date": "date de visionnage",
-      "rating": "note"
+      "rating": "note",
+      "create_a_playlist": "créer une playlist"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",
