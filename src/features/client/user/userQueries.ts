@@ -583,7 +583,7 @@ export const useUserFeedCastCrewInfiniteQuery = ({
 				.select(`
 					*,
 					media:media_movie(title,avatar_url,extra_data,url,date),
-					person:media_person(*)
+					person:media_person(title,avatar_url,url)
 				`)
 				.range(from, to);
 			
