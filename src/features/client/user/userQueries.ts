@@ -532,7 +532,7 @@ export const useUserFeedInfiniteQuery = ({
 				.from('user_feed')
 				.select(`
 					*,
-					media(*),
+					media(title,avatar_url,extra_data,url,date),
 					user(*),
 					review:user_review(*)
 				`)
@@ -582,7 +582,7 @@ export const useUserFeedCastCrewInfiniteQuery = ({
 				.from('user_feed_cast_crew')
 				.select(`
 					*,
-					media:media_movie(*),
+					media:media_movie(title,avatar_url,extra_data,url,date),
 					person:media_person(*)
 				`)
 				.range(from, to);

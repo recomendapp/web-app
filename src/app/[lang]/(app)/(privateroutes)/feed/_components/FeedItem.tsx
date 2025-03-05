@@ -65,7 +65,7 @@ const FeedItem = ({ activity }: { activity?: UserActivity }) => {
 				/> : null
 			) : (
 				<>
-				{(activity.media?.media_type === 'movie' || activity.media?.media_type === 'tv_series') ? (
+				{(activity.media?.extra_data?.overview) ? (
 					<>
 					<p className={cn("text-xs @md/feed-item:text-sm line-clamp-3 text-justify", !activity.media?.extra_data.overview?.length && 'text-muted-foreground')}>
 						{activity.media?.extra_data.overview?.length ? activity.media.extra_data.overview : 'Aucune description'}
