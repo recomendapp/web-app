@@ -65,8 +65,8 @@ const FeedCastCrewItemDefault = React.forwardRef<
 							})}
 						</p>
 					</div>
-					{activity?.date ? <div className='hidden @md/feed-item:block text-sm text-muted-foreground'>
-						{format.relativeTime(new Date(activity?.date ?? ''), new Date())}
+					{activity?.media?.date ? <div className='hidden @md/feed-item:block text-sm text-muted-foreground'>
+						{format.relativeTime(new Date(activity?.media.date ?? ''), new Date())}
 					</div> : null}
 				</div>
 				<Link href={`/film/${activity?.media?.slug ?? activity?.movie_id}`} className="space-y-2">

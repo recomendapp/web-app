@@ -77,6 +77,13 @@ export type Database = {
             foreignKeyName: "media_stats_id_fkey"
             columns: ["id"]
             isOneToOne: true
+            referencedRelation: "media_new"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "media_stats_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
             referencedRelation: "media_person"
             referencedColumns: ["media_id"]
           },
@@ -271,6 +278,13 @@ export type Database = {
             columns: ["media_id"]
             isOneToOne: false
             referencedRelation: "media_movie"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "playlist_items_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "media_new"
             referencedColumns: ["media_id"]
           },
           {
@@ -3097,6 +3111,13 @@ export type Database = {
             foreignKeyName: "user_activity_media_id_fkey"
             columns: ["media_id"]
             isOneToOne: false
+            referencedRelation: "media_new"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "user_activity_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
             referencedRelation: "media_person"
             referencedColumns: ["media_id"]
           },
@@ -3425,6 +3446,13 @@ export type Database = {
             foreignKeyName: "user_recos_media_id_fkey"
             columns: ["media_id"]
             isOneToOne: false
+            referencedRelation: "media_new"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "user_recos_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
             referencedRelation: "media_person"
             referencedColumns: ["media_id"]
           },
@@ -3690,6 +3718,13 @@ export type Database = {
             foreignKeyName: "user_watchlist_media_id_fkey"
             columns: ["media_id"]
             isOneToOne: false
+            referencedRelation: "media_new"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "user_watchlist_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
             referencedRelation: "media_person"
             referencedColumns: ["media_id"]
           },
@@ -3863,6 +3898,37 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      media_new: {
+        Row: {
+          avatar_path: string | null
+          avatar_url: string | null
+          backdrop_path: string | null
+          backdrop_url: string | null
+          date: string | null
+          extra_data: Json | null
+          follower_avg_rating: number | null
+          genres: Json[] | null
+          id: number | null
+          likes_count: number | null
+          main_credit: Json[] | null
+          media_id: number | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+          popularity: number | null
+          recos_count: number | null
+          review_count: number | null
+          slug: string | null
+          title: string | null
+          tmdb_popularity: number | null
+          tmdb_vote_average: number | null
+          tmdb_vote_count: number | null
+          url: string | null
+          vote_average: number | null
+          vote_count: number | null
+          watch_count: number | null
+          watchlist_count: number | null
+        }
+        Relationships: []
       }
       media_person: {
         Row: {
@@ -4225,26 +4291,6 @@ export type Database = {
           user_id: string | null
           watched_date: string | null
         }
-        Insert: {
-          created_at?: string | null
-          id?: number | null
-          is_liked?: boolean | null
-          media_id?: number | null
-          rating?: number | null
-          updated_at?: string | null
-          user_id?: string | null
-          watched_date?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number | null
-          is_liked?: boolean | null
-          media_id?: number | null
-          rating?: number | null
-          updated_at?: string | null
-          user_id?: string | null
-          watched_date?: string | null
-        }
         Relationships: [
           {
             foreignKeyName: "user_activity_media_id_fkey"
@@ -4258,6 +4304,13 @@ export type Database = {
             columns: ["media_id"]
             isOneToOne: false
             referencedRelation: "media_movie"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "user_activity_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "media_new"
             referencedColumns: ["media_id"]
           },
           {
@@ -4299,7 +4352,6 @@ export type Database = {
       }
       user_feed_cast_crew: {
         Row: {
-          date: string | null
           jobs: string[] | null
           movie_id: number | null
           person_id: number | null
@@ -4373,6 +4425,13 @@ export type Database = {
             foreignKeyName: "user_activity_media_id_fkey"
             columns: ["media_id"]
             isOneToOne: false
+            referencedRelation: "media_new"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "user_activity_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
             referencedRelation: "media_person"
             referencedColumns: ["media_id"]
           },
@@ -4416,6 +4475,13 @@ export type Database = {
             columns: ["media_id"]
             isOneToOne: false
             referencedRelation: "media_movie"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "user_activity_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "media_new"
             referencedColumns: ["media_id"]
           },
           {
@@ -4482,6 +4548,13 @@ export type Database = {
             foreignKeyName: "user_recos_media_id_fkey"
             columns: ["media_id"]
             isOneToOne: false
+            referencedRelation: "media_new"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "user_recos_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
             referencedRelation: "media_person"
             referencedColumns: ["media_id"]
           },
@@ -4536,6 +4609,13 @@ export type Database = {
             columns: ["media_id"]
             isOneToOne: false
             referencedRelation: "media_movie"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "user_recos_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "media_new"
             referencedColumns: ["media_id"]
           },
           {
@@ -4619,6 +4699,13 @@ export type Database = {
             foreignKeyName: "user_watchlist_media_id_fkey"
             columns: ["media_id"]
             isOneToOne: false
+            referencedRelation: "media_new"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "user_watchlist_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
             referencedRelation: "media_person"
             referencedColumns: ["media_id"]
           },
@@ -4670,6 +4757,13 @@ export type Database = {
             columns: ["media_id"]
             isOneToOne: false
             referencedRelation: "media_movie"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "user_recos_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "media_new"
             referencedColumns: ["media_id"]
           },
           {

@@ -593,7 +593,7 @@ export const useUserFeedCastCrewInfiniteQuery = ({
 					switch (column) {
 						case 'release_date':
 							request = request
-								.order('date', { ascending: direction === 'asc', nullsFirst: false });
+								.order('media(date)', { ascending: direction === 'asc', nullsFirst: false });
 							break;
 					}
 				}
