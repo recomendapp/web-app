@@ -541,7 +541,7 @@ export const useUserFeedInfiniteQuery = ({
 			if (mergedFilters) {
 				if (mergedFilters.order) {
 					const [ column, direction ] = mergedFilters.order.split('-');
-					request = request.order(column, { ascending: direction === 'asc', nullsFirst: false });
+					request = request.order(column, { ascending: direction === 'asc' });
 				}
 			}
 			const { data, error } = await request
@@ -593,7 +593,7 @@ export const useUserFeedCastCrewInfiniteQuery = ({
 					switch (column) {
 						case 'release_date':
 							request = request
-								.order('media(date)', { ascending: direction === 'asc', nullsFirst: false });
+								.order('media(date)', { ascending: direction === 'asc' });
 							break;
 					}
 				}

@@ -13,6 +13,7 @@ import { cookies } from 'next/headers';
 import { getMessages } from 'next-intl/server';
 import { getFallbackLanguage } from '@/lib/i18n/fallback';
 import { createServerClient } from '@/lib/supabase/server';
+// import { ApolloClientProvider } from './apollo-client-context';
 
 export default async function Provider({
   children,
@@ -37,28 +38,28 @@ export default async function Provider({
     <NextIntlClientProvider locale={locale} messages={messages}>
       <SupabaseProvider locale={locale}>
         <ReactQueryProvider>
-          <AuthProvider session={session}>
-            <NotificationsProvider>
           {/* <ApolloClientProvider locale={locale}> */}
-              {/* <OneSignalContext> */}
-                <MapContext>
-                  <ThemeProvider
-                    // NextThemesProvider
-                    attribute="class"
-                    defaultTheme="dark"
-                    enableSystem
-                    // UIProvider
-                    defaultLayout={defaultLayout}
-                    cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
-                    cookieRightPanelOpen={rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined}
-                  >
-                    {children}
-                  </ThemeProvider>
-                </MapContext> 
-              {/* </OneSignalContext> */}
-            </NotificationsProvider>
+            <AuthProvider session={session}>
+              <NotificationsProvider>
+                {/* <OneSignalContext> */}
+                  <MapContext>
+                    <ThemeProvider
+                      // NextThemesProvider
+                      attribute="class"
+                      defaultTheme="dark"
+                      enableSystem
+                      // UIProvider
+                      defaultLayout={defaultLayout}
+                      cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
+                      cookieRightPanelOpen={rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined}
+                    >
+                      {children}
+                    </ThemeProvider>
+                  </MapContext> 
+                {/* </OneSignalContext> */}
+              </NotificationsProvider>
+            </AuthProvider>
           {/* </ApolloClientProvider> */}
-          </AuthProvider>
         </ReactQueryProvider>
       </SupabaseProvider>
     </NextIntlClientProvider>

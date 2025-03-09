@@ -1,4 +1,3 @@
-import { supabase } from '@/lib/supabase/client';
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import { BatchHttpLink } from "@apollo/client/link/batch-http";
 import { setContext } from '@apollo/client/link/context';
