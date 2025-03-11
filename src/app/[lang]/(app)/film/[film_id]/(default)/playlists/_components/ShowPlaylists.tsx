@@ -59,7 +59,7 @@ export function ShowPlaylists({
     isFetchingNextPage,
     hasNextPage,
   } = useMediaPlaylistsInfiniteQuery({
-    mediaId: mediaId,
+    id: mediaId,
     filters: {
       sortBy: sortBy,
       sortOrder: sortOrder,

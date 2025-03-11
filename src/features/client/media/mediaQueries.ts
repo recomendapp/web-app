@@ -35,10 +35,10 @@ export const useMediaMovieDetailsQuery = ({
 
 /* --------------------------------- REVIEWS -------------------------------- */
 export const useMediaReviewsInfiniteQuery = ({
-	mediaId,
+	id,
 	filters,
 } : {
-	mediaId: number;
+	id: number;
 	filters: {
 		perPage: number;
 		sortBy: 'updated_at';
@@ -48,7 +48,7 @@ export const useMediaReviewsInfiniteQuery = ({
 	const supabase = useSupabaseClient();
 	return useInfiniteQuery({
 		queryKey: mediaKeys.reviews({
-			mediaId,
+			id,
 			filters,
 		}),
 		queryFn: async ({ pageParam = 1 }) => {
@@ -60,7 +60,7 @@ export const useMediaReviewsInfiniteQuery = ({
 					*,
 					activity:user_activity!inner(*, user(*))
 				`)
-				.eq('activity.media_id', mediaId)
+				.eq('activity.media_id', id)
 				.range(from, to)
 			
 			if (filters) {
@@ -82,27 +82,26 @@ export const useMediaReviewsInfiniteQuery = ({
 		getNextPageParam: (lastPage, pages) => {
 			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
 		},
-		enabled: !!mediaId,
+		enabled: !!id,
 	});
 
 };
 /* -------------------------------------------------------------------------- */
 export const useMediaPlaylistsInfiniteQuery = ({
-	mediaId,
+	id,
 	filters,
 } : {
-	mediaId: number;
+	id: number;
 	filters: {
 		perPage: number;
 		sortBy: 'created_at' | 'updated_at' | 'likes_count';
 		sortOrder: 'asc' | 'desc';
 	};
 }) => {
-	console.log('mediaId', mediaId);
 	const supabase = useSupabaseClient();
 	return useInfiniteQuery({
 		queryKey: mediaKeys.playlists({
-			mediaId,
+			id,
 			filters,
 		}),
 		queryFn: async ({ pageParam = 1 }) => {
@@ -112,7 +111,7 @@ export const useMediaPlaylistsInfiniteQuery = ({
 				.from('playlists')
 				.select('*, playlist_items!inner(*)')
 				.match({
-					'playlist_items.media_id': mediaId,
+					'playlist_items.media_id': id,
 				})
 				.range(from, to);
 			
@@ -129,7 +128,7 @@ export const useMediaPlaylistsInfiniteQuery = ({
 		getNextPageParam: (lastPage, pages) => {
 			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
 		},
-		enabled: !!mediaId,
+		enabled: !!id,
 	});
 };
 /* -------------------------------- PLAYLISTS ------------------------------- */

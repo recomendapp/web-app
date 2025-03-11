@@ -324,7 +324,7 @@ export const useUserReviewInsertMutation = ({
 		onSuccess: (data) => {
 			// Invalidate reviews queries
 			queryClient.invalidateQueries({
-				queryKey: mediaKeys.reviews({ mediaId }),
+				queryKey: mediaKeys.reviews({ id: mediaId }),
 			});
 
 			// Invalidate the review activity
@@ -394,7 +394,7 @@ export const useUserReviewDeleteMutation = ({
 			queryClient.setQueryData(userKeys.review({ reviewId: data.id }), null);
 
 			queryClient.invalidateQueries({
-				queryKey: mediaKeys.reviews({ mediaId: data.mediaId }),
+				queryKey: mediaKeys.reviews({ id: data.mediaId }),
 			});
 
 			// Invalidate the review activity

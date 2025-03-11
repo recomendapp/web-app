@@ -60,7 +60,7 @@ export default function Reviews({
     isFetchingNextPage,
     hasNextPage,
   } = useMediaReviewsInfiniteQuery({
-    mediaId: mediaId,
+    id: mediaId,
     filters: {
       sortBy: sortBy,
       sortOrder: sortOrder,
