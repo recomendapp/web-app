@@ -105,7 +105,7 @@ const ActionReviewLike = React.forwardRef<
 			variant={'action'}
 			className={cn(
 				"rounded-full",
-				like ? 'text-accent-pink hover:text-accent-link/50' : 'text-muted-foreground hover:text-accent-pink',
+				like ? 'text-accent-pink hover:text-accent-pink/50' : 'text-muted-foreground hover:text-accent-pink',
 				className
 			)}
 			{...props}

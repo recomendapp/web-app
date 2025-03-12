@@ -78,6 +78,7 @@ export function ModalPlaylistAdd({
 	}
 
 	function handleCreatePlaylist() {
+		if (!createPlaylistName || !createPlaylistName.length) return
 		createPlaylistMutation.mutate({
 			title: createPlaylistName,
 		}, {
