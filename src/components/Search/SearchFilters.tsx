@@ -54,35 +54,35 @@ export default function SearchFilters() {
     <ScrollArea>
       <div className="flex gap-4 pb-2">
         <Button
-          variant={!searchFilter ? 'accent-1' : 'secondary'}
+          variant={!searchFilter ? 'accent-yellow' : 'secondary'}
           className={`rounded-md shrink-0`}
           onClick={() => selectSearchFilter('')}
         >
           Tout
         </Button>
         <Button
-          variant={searchFilter == 'films' ? 'accent-1' : 'secondary'}
+          variant={searchFilter == 'films' ? 'accent-yellow' : 'secondary'}
           className={`rounded-md shrink-0`}
           onClick={() => selectSearchFilter('films')}
         >
           Films
         </Button>
         <Button
-          variant={searchFilter == 'playlists' ? 'accent-1' : 'secondary'}
+          variant={searchFilter == 'playlists' ? 'accent-yellow' : 'secondary'}
           className={`rounded-md shrink-0`}
           onClick={() => selectSearchFilter('playlists')}
         >
           Playlists
         </Button>
         <Button
-          variant={searchFilter == 'users' ? 'accent-1' : 'secondary'}
+          variant={searchFilter == 'users' ? 'accent-yellow' : 'secondary'}
           className={`rounded-md shrink-0`}
           onClick={() => selectSearchFilter('users')}
         >
           Utilisateurs
         </Button>
         <Button
-          variant={searchFilter == 'crew-cast' ? 'accent-1' : 'secondary'}
+          variant={searchFilter == 'crew-cast' ? 'accent-yellow' : 'secondary'}
           className={`rounded-md shrink-0`}
           onClick={() => selectSearchFilter('crew-cast')}
         >

@@ -77,7 +77,7 @@ export default async function ProfileHeader({ profile }: { profile: Profile }) {
         <section className="flex justify-between h-full">
           {/* PROFILE EXTRADATA */}
           <div>
-            {/* {profile?.badge && <p className='text-accent-1 italic'>{profile?.badge}</p>} */}
+            {/* {profile?.badge && <p className='text-accent-yellow italic'>{profile?.badge}</p>} */}
             {profile?.bio && (
               <p className="text-justify max-w-lg">{profile?.bio}</p>
             )}

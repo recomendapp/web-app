@@ -83,7 +83,7 @@ const CardMediaPoster = React.forwardRef<
 				ref={ref}
 				className={cn(
 					"group relative transition flex gap-4 items-center w-32 shrink-0 rounded-md",
-					"border-transparent hover:border-accent-1",
+					"border-transparent hover:border-accent-yellow",
 					"aspect-[2/3] overflow-hidden",
 					className
 				)}
@@ -282,7 +282,7 @@ const Credits = ({
 			  variant={'link'}
 			  className={`
 				w-fit p-0 h-full italic text-muted-foreground transition
-				${linked ? 'hover:text-accent-1' : 'hover:text-muted-foreground hover:no-underline'}
+				${linked ? 'hover:text-accent-yellow' : 'hover:text-muted-foreground hover:no-underline'}
 			`}
 			  asChild
 			>

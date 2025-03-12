@@ -92,7 +92,7 @@ function CastPoster({
         </div>
         <div className="text-center">
           <p className="line-clamp-2 break-words">{person.title}</p>
-          {character ? <p className="line-clamp-2 text-accent-1 italic text-sm">{character}</p> : null}
+          {character ? <p className="line-clamp-2 text-accent-yellow italic text-sm">{character}</p> : null}
         </div>
       </Card>
     </Link>

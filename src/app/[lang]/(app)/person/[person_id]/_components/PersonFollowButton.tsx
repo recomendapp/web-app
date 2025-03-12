@@ -96,7 +96,7 @@ export function PersonFollowButton({
         <Skeleton className="h-10 w-16 rounded-full" />
       ) : (
         <Button
-          variant={'accent-1'}
+          variant={'accent-yellow'}
           onClick={() => {
             isFollow ?
               deleteFollowerMutation({

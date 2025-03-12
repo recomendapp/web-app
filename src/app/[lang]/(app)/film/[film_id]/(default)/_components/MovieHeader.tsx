@@ -98,7 +98,7 @@ export default function MovieHeader({
           <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
             {/* TYPE & GENRES */}
             <div>
-              <span className='text-accent-1'>{upperFirst(common('word.film', { count: 1 }))}</span>
+              <span className='text-accent-yellow'>{upperFirst(common('word.film', { count: 1 }))}</span>
               {movie.genres ? <Genres genres={movie.genres} className="before:content-['_|_']" /> : null}
             </div>
             {/* TITLE */}
@@ -118,7 +118,7 @@ export default function MovieHeader({
                     <span key={index}>
                       <Button
                         variant="link"
-                        className="w-fit p-0 h-full hover:text-accent-1 transition"
+                        className="w-fit p-0 h-full hover:text-accent-yellow transition"
                         asChild
                       >
                         <Link href={`/person/${director?.slug ?? director?.id}`}>{director?.title}</Link>
@@ -177,7 +177,7 @@ export function MovieTrailerButton({
       </TooltipBox>
       <DialogContent className="@xl/movie-header:max-w-[60vw]">
         <DialogHeader className="relative flex flex-row gap-4 items-center">
-          <DialogTitle className="absolute left-1/2 transform -translate-x-1/2 -top-12 @xl/movie-header:-top-16 text-accent-1-foreground text-2xl @xl/movie-header:text-5xl font-bold rounded-md bg-accent-1 px-4 py-2 pointer-events-auto">
+          <DialogTitle className="absolute left-1/2 transform -translate-x-1/2 -top-12 @xl/movie-header:-top-16 text-accent-yellow-foreground text-2xl @xl/movie-header:text-5xl font-bold rounded-md bg-accent-yellow px-4 py-2 pointer-events-auto">
             TRAILER
           </DialogTitle>
           <div className=" pt-4">

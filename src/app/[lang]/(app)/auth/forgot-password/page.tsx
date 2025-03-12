@@ -126,7 +126,7 @@ export default function ForgotPassword() {
       <Card className="w-full max-w-[400px]">
         <CardHeader className='gap-2'>
           <CardTitle className='inline-flex gap-2 items-center justify-center'>
-            <Icons.site.icon className='fill-accent-1 w-8' />
+            <Icons.site.icon className='fill-accent-yellow w-8' />
             {t('label')}
           </CardTitle>
           <CardDescription>{t('description')}</CardDescription>
@@ -152,7 +152,7 @@ export default function ForgotPassword() {
           <p className="px-8 text-center text-sm text-muted-foreground">
             {t('return_to_login')}{' '}
             <Button
-              variant={'link-accent-1'}
+              variant={'link-accent-yellow'}
               className='inline p-0' 
               asChild
             >
@@ -193,7 +193,7 @@ export default function ForgotPassword() {
         </InputOTP>
         <p className="px-8 text-center text-sm text-muted-foreground">
           {common('form.error.not_received_code')}{' '}
-          <Button variant={"link-accent-1"} className='p-0' onClick={() => handleSubmit()} disabled={isLoading}>
+          <Button variant={"link-accent-yellow"} className='p-0' onClick={() => handleSubmit()} disabled={isLoading}>
             {common('form.resend_code')}
           </Button>
         </p>

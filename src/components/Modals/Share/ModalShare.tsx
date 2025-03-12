@@ -66,7 +66,7 @@ export const ModalShare = ({ title, type, ...props }: ModalShareProps) => {
 					<h3 className="text-lg font-semibold mb-2">Lien</h3>
 					<div className="flex space-x-2">
 						<Input value={url} readOnly />
-						<ButtonCopy text={url} variant={'accent-1'} />
+						<ButtonCopy text={url} variant={'accent-yellow'} />
 					</div>
 				</div>
 

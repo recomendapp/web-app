@@ -247,7 +247,7 @@ export default function Signup() {
 				<Card className="w-full max-w-[400px]">
 					<CardHeader className='gap-2'>
 					<CardTitle className='inline-flex gap-2 items-center justify-center'>
-						<Icons.site.icon className='fill-accent-1 w-8' />
+						<Icons.site.icon className='fill-accent-yellow w-8' />
 						{common('word.signup')}
 					</CardTitle>
 					<CardDescription className='text-center'>{t('description')}</CardDescription>
@@ -373,7 +373,7 @@ export default function Signup() {
 						<p className="px-8 text-center text-sm text-muted-foreground">
 							{t('return_to_login')}{' '}
 							<Button
-								variant={'link-accent-1'}
+								variant={'link-accent-yellow'}
 								className='inline p-0' 
 								asChild
 							>
@@ -395,7 +395,7 @@ export default function Signup() {
 		<Card className='w-full max-w-[400px]'>
 			<CardHeader className='gap-2'>
 				<CardTitle className='inline-flex gap-2 items-center justify-center'>
-					<Icons.site.icon className='fill-accent-1 w-8' />
+					<Icons.site.icon className='fill-accent-yellow w-8' />
 					{t('confirm_form.label')}
 				</CardTitle>
 				<CardDescription>{t('confirm_form.description', { email: form.getValues('email') })}</CardDescription>
@@ -413,7 +413,7 @@ export default function Signup() {
 				<p className="px-8 text-center text-sm text-muted-foreground">
 					{common('form.error.not_received_code')}{' '}
 					<Button
-					variant={"link-accent-1"}
+					variant={"link-accent-yellow"}
 					className='p-0'
 					disabled={isLoading}
 					onClick={resendOtp}

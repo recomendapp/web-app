@@ -131,10 +131,10 @@ const MediaActionUserActivityRating = React.forwardRef<
 		  <DialogContent>
 			<DialogHeader className="relative">
 			  <div className="absolute w-full flex justify-center -top-16">
-				<p className="absolute top-6 text-2xl text-accent-1-foreground font-bold">
+				<p className="absolute top-6 text-2xl text-accent-yellow-foreground font-bold">
 				  {ratingValue}
 				</p>
-				<Icons.star size={80} className="text-accent-1 fill-accent-1" />
+				<Icons.star size={80} className="text-accent-yellow fill-accent-yellow" />
 			  </div>
 			  <DialogTitle className="text-center pt-4">NOTER</DialogTitle>
 			</DialogHeader>
@@ -210,8 +210,8 @@ const MovieRating = ({
 				onMouseEnter={() => handleMouseEnter(i)}
 				onMouseLeave={handleMouseLeave}
 				className={`
-				  text-accent-1
-				  ${i <= (hover || rating) && 'fill-accent-1'}
+				  text-accent-yellow
+				  ${i <= (hover || rating) && 'fill-accent-yellow'}
 				`}
 			  />
 			</label>

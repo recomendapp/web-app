@@ -85,7 +85,7 @@ export default function SettingsAccountPage() {
                 plan
               </p>
               <Button
-                variant={'accent-1-enabled'}
+                variant={'accent-yellow-enabled'}
                 disabled={!session}
                 onClick={redirectToCustomerPortal}
               >
@@ -97,7 +97,7 @@ export default function SettingsAccountPage() {
               <p className="pb-4 sm:pb-0">
                 You are currently on the <b>Free</b> plan
               </p>
-              <Button variant={'accent-1-enabled'} asChild>
+              <Button variant={'accent-yellow-enabled'} asChild>
                 <Link href={'/upgrade'}>
                   <Sparkles className="mr-2 h-4 w-4" />
                   <span>Upgrade to Premium</span>

@@ -183,7 +183,7 @@ const OfferCard = ({
       className={cn(
         'rounded-md shadow-sm bg-muted border border-transparent',
         {
-        ' border-accent-1': product?.name === subscription?.price?.product?.name
+        ' border-accent-yellow': product?.name === subscription?.price?.product?.name
             || (price?.unit_amount === 0 && session && !subscription && !loading),
         }
       )}
@@ -194,7 +194,7 @@ const OfferCard = ({
         <section className="flex-1 flex flex-col gap-2">
           {Array.isArray(product?.features) && product?.features.map((feature: any) => (
             <p key={feature.name} className="flex gap-2 items-center">
-              <Check className="text-accent-1 p-1 shrink-0" />
+              <Check className="text-accent-yellow p-1 shrink-0" />
               <span>{feature.name}</span>
             </p>
           ))}
@@ -211,10 +211,10 @@ const OfferCard = ({
             variant={
               subscription &&
               product?.name === subscription.price?.product?.name
-                ? 'accent-1-enabled'
+                ? 'accent-yellow-enabled'
                 : price?.unit_amount === 0 && !!session
-                  ? 'accent-1-enabled'
-                  : 'accent-1'
+                  ? 'accent-yellow-enabled'
+                  : 'accent-yellow'
             }
             type="button"
             onClick={() => handleCheckout(price)}

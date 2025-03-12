@@ -25,8 +25,8 @@ export async function HeaderMinimal({ className }: HeaderMinimalProps) {
     >
       <div className="flex gap-4 w-full items-center">
         <Link href={'/'} className={'py-1 px-1 lg:p-4'}>
-          <Icons.site.logo className="hidden lg:block fill-accent-1 w-48" />
-          <Icons.site.icon className="lg:hidden fill-accent-1 w-10" />
+          <Icons.site.logo className="hidden lg:block fill-accent-yellow w-48" />
+          <Icons.site.icon className="lg:hidden fill-accent-yellow w-10" />
         </Link>
       </div>
       <div>

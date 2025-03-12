@@ -314,7 +314,7 @@ const DraggableTableRow = ({
   return (
     <TableRow ref={setNodeRef} style={style} className='group'>
       {isDragging ? (
-        <TableCell className='bg-accent-1 h-28' colSpan={row.getVisibleCells().length}>&nbsp;</TableCell>
+        <TableCell className='bg-accent-yellow h-28' colSpan={row.getVisibleCells().length}>&nbsp;</TableCell>
       ) : (
         row.getVisibleCells().map((cell) => (
           <TableCell

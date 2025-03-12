@@ -67,7 +67,7 @@ export const useMediaReviewsInfiniteQuery = ({
 				if (filters.sortBy && filters.sortOrder) {
 					switch (filters.sortBy) {
 						case 'updated_at':
-							request = request.order('updated_at', { ascending: filters.sortOrder === 'asc', nullsFirst: false });
+							request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
 							break;
 						default:
 							break;

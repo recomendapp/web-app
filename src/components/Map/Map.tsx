@@ -170,7 +170,7 @@ export function Map() {
               anchor='center'
               // closeOnClick={false}
               // change backgorund of the popup
-              className="bg-background px-4 py-2 rounded-full text-accent-1 text-lg font-semibold max-w-xs line-clamp-2 text-center"
+              className="bg-background px-4 py-2 rounded-full text-accent-yellow text-lg font-semibold max-w-xs line-clamp-2 text-center"
               // onClose={() => setSelectedMovie(null)}
             >
               {selectedMovie.movie.title}

@@ -36,7 +36,7 @@ export default function Error({
 		<Card className="w-full max-w-[400px]">
 		  <CardHeader className='gap-2'>
 			<CardTitle className='inline-flex gap-2 items-center justify-center'>
-			  <Icons.site.icon className='fill-accent-1 w-8' />
+			  <Icons.site.icon className='fill-accent-yellow w-8' />
 			  Erreur
 			</CardTitle>
 			<CardDescription>

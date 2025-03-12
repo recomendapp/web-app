@@ -29,7 +29,7 @@ export const NotificationsButton = ({
 		>
 			<Icons.bell className='w-4 h-4'/>
 			{counts && counts[0].count > 0 && (
-				<CircleIcon size={8} className='absolute top-0 left-2/3 text-accent-1 fill-accent-1'/>
+				<CircleIcon size={8} className='absolute top-0 left-2/3 text-accent-yellow fill-accent-yellow'/>
 			)}
 		</Button>
 	)

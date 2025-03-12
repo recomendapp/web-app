@@ -36,8 +36,8 @@ export function DataTableColumnHeader<TData, TValue>({
         {title && <span>{title}</span>}
         {Icon && <Icon />}
         {{
-          asc: <ChevronUp className=" ml-2 h-4 w-4 text-accent-1" />,
-          desc: <ChevronDown className=" ml-2 h-4 w-4 text-accent-1" />,
+          asc: <ChevronUp className=" ml-2 h-4 w-4 text-accent-yellow" />,
+          desc: <ChevronDown className=" ml-2 h-4 w-4 text-accent-yellow" />,
         }[column.getIsSorted() as string] ?? (
           <CaretSortIcon className="ml-2 h-4 w-4" />
         )}

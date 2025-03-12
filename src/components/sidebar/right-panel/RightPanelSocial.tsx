@@ -178,7 +178,7 @@ const RightPanelSocialRequests = () => {
 								</div>
 							</div>
 							<div className="grid grid-cols-2 gap-2">
-								<Button variant="accent-1" onClick={() => handleAcceptRequest(id)}>Accepter</Button>
+								<Button variant="accent-yellow" onClick={() => handleAcceptRequest(id)}>Accepter</Button>
 								<Button variant="outline" onClick={() => handleDeclineRequest(id)}>Refuser</Button>
 							</div>
 						</Card>

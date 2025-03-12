@@ -5,9 +5,9 @@
 @layer base {
   :root {
     /* COLORS */
-    --accent-1: 51 100% 73%;
-    --accent-1-foreground: 0 0% 0%;
-    --accent-1-hover: 44 97% 40%;
+    --accent-yellow: 51 100% 73%;
+    --accent-yellow-foreground: 0 0% 0%;
+    --accent-yellow-hover: 44 97% 40%;
 
     --accent-pink: 320 87% 75%;
     --accent-pink-foreground: 0 0% 0%;
@@ -78,9 +78,9 @@
 
   .light {
     /* COLORS */
-    --accent-1: 51 100% 73%;
-    --accent-1-foreground: 0 0% 0%;
-    --accent-1-hover: 44 97% 40%;
+    --accent-yellow: 51 100% 73%;
+    --accent-yellow-foreground: 0 0% 0%;
+    --accent-yellow-hover: 44 97% 40%;
 
     --accent-pink: 320 87% 75%;
     --accent-pink-foreground: 0 0% 0%;

@@ -96,7 +96,7 @@ export function ModalSubscription({
 							<span className="pl-2 text-base font-medium">/ {common(`word.${price?.interval}`)}</span>
 						</div>
 						{index > 0 ? (
-							<Badge variant='accent-1'>
+							<Badge variant='accent-yellow'>
 							{upperFirst(common('messages.save_up_to_percent', {
 								percent: calculateSave(price, product?.prices?.at(index - 1) ?? price),
 							}))}
@@ -104,7 +104,7 @@ export function ModalSubscription({
 						) : null}
 						<Icons.check
 						className={`
-							text-accent-1 transition-opacity
+							text-accent-yellow transition-opacity
 							${selectedProductPrice?.id === price?.id ? 'opacity-100' : 'opacity-0'}
 						`}
 						/>
@@ -113,7 +113,7 @@ export function ModalSubscription({
 			</ModalBody>
 			<ModalFooter>
 				<Button
-					variant='accent-1'
+					variant='accent-yellow'
 					disabled={isLoading}
 					onClick={() => selectedProductPrice && handleCheckout(selectedProductPrice)}
 				>

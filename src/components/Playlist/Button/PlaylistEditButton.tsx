@@ -57,7 +57,7 @@ export function PlaylistEditButton({
             <DialogHeader className="flex-row space-y-0">
               <DialogTitle
                 className={`py-2 px-4 border-b-2 cursor-pointer
-                  ${view == 'general' ? 'border-accent-1' : 'border-muted'}
+                  ${view == 'general' ? 'border-accent-yellow' : 'border-muted'}
                 `}
                 onClick={() => setView('general')}
               >
@@ -65,7 +65,7 @@ export function PlaylistEditButton({
               </DialogTitle>
               <DialogTitle
                 className={`py-2 px-4 border-b-2 cursor-pointer
-                  ${view == 'guest' ? 'border-accent-1' : 'border-muted'}
+                  ${view == 'guest' ? 'border-accent-yellow' : 'border-muted'}
                 `}
                 onClick={() => setView('guest')}
               >

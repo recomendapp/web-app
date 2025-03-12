@@ -32,9 +32,9 @@ export default function ActivityIcon({
         <div
           className={cn(`
             relative flex shadow-sm w-8 aspect-[3/2] rounded-sm bg-background border-2 justify-center items-center shrink-0
-            border-accent-1
+            border-accent-yellow
             ${onClick && 'cursor-pointer'}
-            ${variant === 'user' && 'border-accent-1'}
+            ${variant === 'user' && 'border-accent-yellow'}
             ${variant === 'general' && 'border-accent-pink'}
             ${variant === 'follower' && ' border-blue-500'}
           `,
@@ -52,7 +52,7 @@ export default function ActivityIcon({
           )}
           <p className={`
               font-bold text-sm
-              ${variant === 'user' && 'text-accent-1'}
+              ${variant === 'user' && 'text-accent-yellow'}
               ${variant === 'general' && 'text-accent-pink'}
               ${variant === 'follower' && 'text-blue-500'}
             `}

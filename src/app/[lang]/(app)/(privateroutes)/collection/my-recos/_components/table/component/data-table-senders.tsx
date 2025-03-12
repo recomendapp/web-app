@@ -23,7 +23,7 @@ export default function Senders({
 				{row.original?.senders?.slice(0, senderToShow).reverse().map((item, i) => (
 				<div key={i} className='relative'>
 					{item.user?.username ? <UserAvatar className=" border-2 border-background" avatar_url={item.user?.avatar_url} username={item.user?.username} /> : null}
-					{item?.comment ? <Text size={15} className='absolute -top-1 -right-1 rounded-full bg-background text-accent-1 p-1'/> : null}
+					{item?.comment ? <Text size={15} className='absolute -top-1 -right-1 rounded-full bg-background text-accent-yellow p-1'/> : null}
 				</div>
 				))}
 			</div>

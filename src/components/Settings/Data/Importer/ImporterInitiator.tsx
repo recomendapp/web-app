@@ -162,7 +162,7 @@ export const ImporterInitiator = ({
 						<label>
 							<span className="font-medium text-muted-foreground">
 								Drop files to Attach, or{' '}
-								<span className="text-accent-1 underline">browse</span>
+								<span className="text-accent-yellow underline">browse</span>
 							</span>
 							<Input
 								type="file"

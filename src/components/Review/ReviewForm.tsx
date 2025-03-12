@@ -167,7 +167,7 @@ export default function ReviewForm({
 								<>
 								<TooltipBox tooltip="Enregistrer">
 									<Button
-									variant={'accent-1'}
+									variant={'accent-yellow'}
 									size={'sm'}
 									onClick={handleUpdateReview}
 									disabled={updateReview.isPending || insertReview.isPending}
@@ -178,7 +178,7 @@ export default function ReviewForm({
 								</TooltipBox>
 								<TooltipBox tooltip="Annuler">
 									<Button
-									variant={'accent-1-enabled'}
+									variant={'accent-yellow-enabled'}
 									size={'sm'}
 									onClick={handleCancel}
 									disabled={updateReview.isPending || insertReview.isPending}
@@ -201,7 +201,7 @@ export default function ReviewForm({
 					) : !review ? (
 						<TooltipBox tooltip="Enregistrer">
 							<Button
-							variant={'accent-1'}
+							variant={'accent-yellow'}
 							size={'sm'}
 							onClick={handleCreateReview}
 							disabled={updateReview.isPending || insertReview.isPending}
@@ -261,7 +261,7 @@ export function ReviewTitle({
 	placeholder="Titre"
 	maxLength={MAX_TITLE_LENGTH}
 	className={`
-		w-full h-fit  outline-none focus-visible:ring-0 overflow-hidden resize-none text-5xl font-semibold text-center text-accent-1
+		w-full h-fit  outline-none focus-visible:ring-0 overflow-hidden resize-none text-5xl font-semibold text-center text-accent-yellow
 		${editable ? 'bg-background border-dashed' : 'bg-muted border-transparent'}
 	`}
     />

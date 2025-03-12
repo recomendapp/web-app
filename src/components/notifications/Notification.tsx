@@ -67,7 +67,7 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 					<div className='flex gap-2'>
 						{(notification.primaryAction && !notification.primaryAction.isCompleted) ? (
 							<Button
-							variant='accent-1'
+							variant='accent-yellow'
 							onClick={async () => {
 								const primaryAction = notification.data?.primaryAction as {
 									key: string;
@@ -104,7 +104,7 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 					<div className='flex gap-2'>
 						{(notification.primaryAction && !notification.primaryAction.isCompleted) ? (
 							<Button
-							variant='accent-1'
+							variant='accent-yellow'
 							onClick={async () => {
 								const primaryAction = notification.data?.primaryAction as {
 									key: string;
@@ -212,7 +212,7 @@ export const Notification = React.forwardRef<
 			)}
 			</div>
 			{!notification.isRead ? (
-				<CircleIcon size={8} className='absolute top-1 left-1 text-accent-1 fill-accent-1'/>
+				<CircleIcon size={8} className='absolute top-1 left-1 text-accent-yellow fill-accent-yellow'/>
 			) : null}
 		</div>
 	)

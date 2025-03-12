@@ -27,10 +27,10 @@ module.exports = {
   				border: 'hsl(var(--background-border))'
   			},
   			foreground: 'hsl(var(--foreground))',
-  			'accent-1': {
-  				DEFAULT: 'hsl(var(--accent-1))',
-  				foreground: 'hsl(var(--accent-1-foreground))',
-  				hover: 'hsl(var(--accent-1-hover))'
+  			'accent-yellow': {
+  				DEFAULT: 'hsl(var(--accent-yellow))',
+  				foreground: 'hsl(var(--accent-yellow-foreground))',
+  				hover: 'hsl(var(--accent-yellow-hover))'
   			},
   			'accent-pink': {
   				DEFAULT: 'hsl(var(--accent-pink))',
@@ -129,7 +129,7 @@ module.exports = {
   			DEFAULT: {
   				css: {
   					'--tw-prose-body': '#fff',
-  					'--tw-prose-headings': 'var(--accent-1)',
+  					'--tw-prose-headings': 'var(--accent-yellow)',
   					'--tw-prose-lead': '#fff',
   					'--tw-prose-links': '#fff',
   					'--tw-prose-bold': '#fff',

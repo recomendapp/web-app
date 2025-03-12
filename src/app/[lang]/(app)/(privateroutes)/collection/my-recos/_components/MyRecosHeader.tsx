@@ -27,7 +27,7 @@ export function MyRecosHeader({ data }: { data: UserRecosAggregated[] }) {
       }}
     >
       <div className="w-full h-full flex flex-col justify-center items-center text-center px-4 py-8 ">
-        <h2 className="text-6xl font-bold text-accent-1">
+        <h2 className="text-6xl font-bold text-accent-yellow">
         {capitalize(common('messages.my_recos'))}
         </h2>
         <p className="text-muted-foreground">

@@ -29,7 +29,7 @@ export default async function SearchBestResult({
       </h2>
       <Link href={media.url ?? ''}>
         <Card className='flex flex-col gap-2 relative p-2 hover:bg-muted-hover'>
-          <BadgeMedia type={media.media_type} variant={"accent-1"} className='absolute top-2 right-2' />
+          <BadgeMedia type={media.media_type} variant={"accent-yellow"} className='absolute top-2 right-2' />
           <div
           className={`relative w-[100px] shrink-0 overflow-hidden
             ${getMediaDetails(media).poster_className}
@@ -83,7 +83,7 @@ const Credits = ({
         <span key={index}>
           <Button
             variant={'link'}
-            className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition"
+            className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-yellow transition"
             asChild
           >
             <Link href={credit.url ?? ''}>

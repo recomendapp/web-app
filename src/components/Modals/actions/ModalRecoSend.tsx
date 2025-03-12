@@ -124,7 +124,7 @@ export function ModalRecoSend({
 									</div>
 									<div className="flex items-center gap-2 shrink-0">
 										{already_sent && (
-											<Badge variant="accent-1">
+											<Badge variant="accent-yellow">
 												Déjà envoyé
 											</Badge>
 										)}

@@ -30,7 +30,7 @@ export default function PersonHeader({
         <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
           {/* TYPE */}
           <div>
-            <span className='text-accent-1'>Personnalité</span>
+            <span className='text-accent-yellow'>Personnalité</span>
             <span className=" before:content-['_|_']">
               {person.extra_data.known_for_department}
             </span>

@@ -102,7 +102,7 @@ export default async function FilmsPage(
 					<Icons.error className='mr-1'/>
 					{upperFirst(common('errors.wrong_arguments'))}
 				</div>
-				<Button variant='accent-1'>
+				<Button variant='accent-yellow'>
 					<Link href={`/person/${params.person_id}/films`}>
 						Reset
 					</Link>

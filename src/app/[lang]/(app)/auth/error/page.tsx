@@ -35,7 +35,7 @@ export default function AuthError() {
       <Card className="w-full max-w-[400px]">
         <CardHeader className='gap-2'>
           <CardTitle className='inline-flex gap-2 items-center justify-center'>
-            <Icons.site.icon className='fill-accent-1 w-8' />
+            <Icons.site.icon className='fill-accent-yellow w-8' />
             {t('label')}
           </CardTitle>
           <CardDescription>{t('description')}</CardDescription>

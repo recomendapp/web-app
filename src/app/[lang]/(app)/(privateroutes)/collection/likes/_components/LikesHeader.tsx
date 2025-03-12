@@ -27,7 +27,7 @@ export function LikesHeader({ data }: { data: UserActivity[] }) {
       }}
     >
       <div className="w-full h-full flex flex-col justify-center items-center text-center px-4 py-8 ">
-        <h2 className="text-6xl font-bold text-accent-1">
+        <h2 className="text-6xl font-bold text-accent-yellow">
         {capitalize(common('library.collection.likes.label'))}
         </h2>
         <p className="text-muted-foreground">

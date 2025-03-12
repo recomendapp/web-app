@@ -148,7 +148,7 @@ export const Upgrade = ({
 		if (!session) {
 			return (
 				<Button
-				variant={"accent-1"}
+				variant={"accent-yellow"}
 				className='w-full'
 				asChild
 				>
@@ -161,7 +161,7 @@ export const Upgrade = ({
 			if (user?.premium) {
 				return (
 					<Button
-					variant={"accent-1"}
+					variant={"accent-yellow"}
 					className='w-full'
 					asChild
 					>
@@ -173,7 +173,7 @@ export const Upgrade = ({
 			} else {
 				return (
 					<Button
-					variant={"accent-1"}
+					variant={"accent-yellow"}
 					className='w-full'
 					onClick={() => openModal(ModalSubscription, { product: product, preselectedPrice: product?.prices?.find((price) => price?.interval === billingInterval) })}
 					>
@@ -264,7 +264,7 @@ export const Upgrade = ({
 					{featureType.features.map((feature, i) => (
 					<TableRow key={i}>
 						<TableCell>
-							{feature.name} {feature.soon && <span className="text-xs text-accent-1">{`(${common('word.soon')})`}</span>}
+							{feature.name} {feature.soon && <span className="text-xs text-accent-yellow">{`(${common('word.soon')})`}</span>}
 							{feature.description && (
 								<p className="text-muted-foreground text-sm">
 									{feature.description}

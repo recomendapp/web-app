@@ -53,8 +53,8 @@ export function DataTableSortOptions<TData>({
               >
                 {column.columnDef.meta?.displayName}
                 {{
-                  asc: <ChevronUp className=" ml-2 h-4 w-4 text-accent-1" />,
-                  desc: <ChevronDown className=" ml-2 h-4 w-4 text-accent-1" />,
+                  asc: <ChevronUp className=" ml-2 h-4 w-4 text-accent-yellow" />,
+                  desc: <ChevronDown className=" ml-2 h-4 w-4 text-accent-yellow" />,
                 }[column.getIsSorted() as string] ?? null}
               </DropdownMenuItem>
             );

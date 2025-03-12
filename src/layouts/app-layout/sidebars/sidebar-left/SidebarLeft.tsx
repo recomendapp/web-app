@@ -18,9 +18,9 @@ export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) 
 						onClick={toggleSidebar}
 						>
 							{open ? (
-								<Icons.site.logo className={`fill-accent-1 ${open ? "w-3/4" : "w-0"}`} />
+								<Icons.site.logo className={`fill-accent-yellow ${open ? "w-3/4" : "w-0"}`} />
 							) : (
-								<Icons.site.icon className={`fill-accent-1 ${open ? "w-8" : "w-4"}`} />
+								<Icons.site.icon className={`fill-accent-yellow ${open ? "w-8" : "w-4"}`} />
 							)}
 						</SidebarMenuButton>
 					</SidebarMenuItem>

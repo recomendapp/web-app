@@ -57,7 +57,7 @@ export default function ProfileNavbar({
               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
               disabled:pointer-events-none disabled:opacity-50 
               ${
-                item.active && 'bg-background text-accent-1 shadow-sm'
+                item.active && 'bg-background text-accent-yellow shadow-sm'
               }`}
           >
             {item.label}

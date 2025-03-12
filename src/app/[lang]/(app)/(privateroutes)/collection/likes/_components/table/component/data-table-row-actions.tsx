@@ -70,7 +70,7 @@ export function DataTableRowActions({
             variant="ghost"
             className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
           >
-            <DotsHorizontalIcon className="h-4 w-4 text-accent-1" />
+            <DotsHorizontalIcon className="h-4 w-4 text-accent-yellow" />
             <span className="sr-only">{capitalize(common('sr.open_menu'))}</span>
           </Button>
         </DropdownMenuTrigger>

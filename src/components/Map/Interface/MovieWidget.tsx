@@ -90,7 +90,7 @@ export const MovieWidget = () => {
 						<div className="flex flex-col justify-between w-full h-full">
 							{/* TYPE & GENRES */}
 							<div className=" line-clamp-1">
-							<span className='text-accent-1'>Film</span>
+							<span className='text-accent-yellow'>Film</span>
 							<span className=" before:content-['_|_']">
 								{movie.genres?.map((genre: any, index: number) => (
 								<span key={index}>
@@ -134,7 +134,7 @@ export const MovieWidget = () => {
 									<span key={index}>
 										<Button
 											variant="link"
-											className="w-fit p-0 h-full hover:text-accent-1 transition"
+											className="w-fit p-0 h-full hover:text-accent-yellow transition"
 											asChild
 										>
 											<Link href={person.url ?? ''}>

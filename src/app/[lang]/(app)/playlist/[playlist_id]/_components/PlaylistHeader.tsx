@@ -65,7 +65,7 @@ export default function PlaylistHeader({
         <div className="flex flex-col justify-between gap-2 w-full">
           {/* TYPE & GENRES */}
           <div>
-            <span className='text-accent-1'>{upperFirst(common('word.playlist', {count: 1}))}</span>
+            <span className='text-accent-yellow'>{upperFirst(common('word.playlist', {count: 1}))}</span>
             <span className=" before:content-['_|_']">
               {playlist?.private ? upperFirst(common('word.private', {gender: 'female', count: 1})) : upperFirst(common('word.public'))}
             </span>

@@ -65,7 +65,7 @@ const Credits = ({
 		  <span key={index}>
 			<Button
 			  variant={'link'}
-			  className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-1 transition"
+			  className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-yellow transition"
 			  asChild
 			>
 			  <Link href={credit?.url ?? ''}>

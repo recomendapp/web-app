@@ -19,19 +19,19 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         // link: "text-primary underline-offset-4 hover:underline",
         link: "text-primary underline-offset-4 hover:underline hover:text-accent-pink",
-        'link-accent-1': "text-accent-1/80 underline-offset-4 hover:underline hover:text-accent-1",
+        'link-accent-yellow': "text-accent-yellow/80 underline-offset-4 hover:underline hover:text-accent-yellow",
         action: 'text-foreground hover:text-foreground/60',
         muted: 'bg-muted hover:bg-muted-hover',
         'muted-background': 'bg-background hover:bg-muted',
         // ACCENT
-        'accent-1':
-          'bg-accent-1 text-accent-1-foreground hover:bg-muted hover:text-accent-1 border',
-        'accent-1-enabled': 'bg-accent-1-foreground text-accent-1',
-        'accent-1-hover':
-          'bg-accent-1 text-accent-1-foreground hover:bg-accent-1-hover',
-        rating: 'text-foreground hover:text-accent-1',
+        'accent-yellow':
+          'bg-accent-yellow text-accent-yellow-foreground hover:bg-muted hover:text-accent-yellow border',
+        'accent-yellow-enabled': 'bg-accent-yellow-foreground text-accent-yellow',
+        'accent-yellow-hover':
+          'bg-accent-yellow text-accent-yellow-foreground hover:bg-accent-yellow-hover',
+        rating: 'text-foreground hover:text-accent-yellow',
         'rating-enabled':
-          '!p-0 !aspect-[3/2] border-2 border-accent-1 rounded-sm text-accent-1 hover:text-accent-1-foreground hover:bg-accent-1 bg-background',
+          '!p-0 !aspect-[3/2] border-2 border-accent-yellow rounded-sm text-accent-yellow hover:text-accent-yellow-foreground hover:bg-accent-yellow bg-background',
         share:
           'text-destructive-foreground hover:bg-blue-500/10 hover:text-blue-300 rounded-full',
       },

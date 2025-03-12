@@ -115,7 +115,7 @@ export default async function About(
             ))}
           </Marquee>
         <div className="px-4 flex flex-col gap-4 max-w-xl">
-          <h2 className="text-center font-semibold text-3xl text-accent-1">
+          <h2 className="text-center font-semibold text-3xl text-accent-yellow">
             {t('about.label')}
           </h2>
           <p>
@@ -134,7 +134,7 @@ export default async function About(
       </section>
       {/* TEAM */}
       <section id="team" className="w-full flex flex-col gap-4 px-4 max-w-xl">
-        <h2 className="text-center font-semibold text-3xl text-accent-1">
+        <h2 className="text-center font-semibold text-3xl text-accent-yellow">
           {t('team.label')}
         </h2>
         <p>{t('team.intro')}</p>
@@ -174,7 +174,7 @@ export default async function About(
         id="pricing"
         className="w-full flex flex-col gap-4 px-4 max-w-xl"
       >
-        <h2 className="text-center font-semibold text-3xl text-accent-1">
+        <h2 className="text-center font-semibold text-3xl text-accent-yellow">
           {t('pricing.label')}
         </h2>
         <p>{t('pricing.intro')}</p>
@@ -193,7 +193,7 @@ export default async function About(
         id="businessmodel"
         className="w-full flex flex-col gap-4 px-4 max-w-xl"
       >
-        <h2 className="text-center font-semibold text-3xl text-accent-1">
+        <h2 className="text-center font-semibold text-3xl text-accent-yellow">
           {t('businessmodel.label')}
         </h2>
         <p>{t('businessmodel.paragraph.1')}</p>
@@ -205,7 +205,7 @@ export default async function About(
         id="roadmap"
         className="w-full flex flex-col gap-4 px-4 max-w-xl"
       >
-        <h2 className="text-center font-semibold text-3xl text-accent-1">
+        <h2 className="text-center font-semibold text-3xl text-accent-yellow">
           {t('roadmap.label')}
         </h2>
         <div className="bg-muted p-4 rounded-md text-muted-foreground text-center">
@@ -214,7 +214,7 @@ export default async function About(
       </section>
       {/* DATA */}
       <section id="data" className="w-full flex flex-col gap-4 px-4 max-w-xl">
-        <h2 className="text-center font-semibold text-3xl text-accent-1">
+        <h2 className="text-center font-semibold text-3xl text-accent-yellow">
           {t('data.label')}
         </h2>
         <p>
@@ -249,7 +249,7 @@ export default async function About(
         id="resources"
         className="w-full flex flex-col gap-4 px-4 max-w-xl"
       >
-        <h2 className="text-center font-semibold text-3xl text-accent-1">
+        <h2 className="text-center font-semibold text-3xl text-accent-yellow">
           {t('resources.label')}
         </h2>
         <p>{t('resources.intro')}</p>
@@ -272,7 +272,7 @@ export default async function About(
         id="contact-support"
         className="w-full flex flex-col gap-4 px-4 max-w-xl"
       >
-        <h2 className="text-center font-semibold text-3xl text-accent-1">
+        <h2 className="text-center font-semibold text-3xl text-accent-yellow">
           {t('contact-support.label')}
         </h2>
         <p>
@@ -350,7 +350,7 @@ export default async function About(
             <p className="text-center">
               <em>{t('quote.quote')}</em>
             </p>
-            <p className="sm:text-sm text-right text-accent-1">
+            <p className="sm:text-sm text-right text-accent-yellow">
               {t('quote.author')}, {t('quote.date')}
             </p>
           </div>

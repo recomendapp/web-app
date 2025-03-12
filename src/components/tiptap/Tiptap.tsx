@@ -111,35 +111,35 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       </Button>
       <LinkAction editor={editor} />
       <Button
-        variant={editor?.isActive('bold') ? 'accent-1-enabled' : 'ghost'}
+        variant={editor?.isActive('bold') ? 'accent-yellow-enabled' : 'ghost'}
         size={'icon'}
         onClick={() => editor?.chain().focus().toggleBold().run()}
       >
         <Icons.Bold size={15} />
       </Button>
       <Button
-        variant={editor?.isActive('underline') ? 'accent-1-enabled' : 'ghost'}
+        variant={editor?.isActive('underline') ? 'accent-yellow-enabled' : 'ghost'}
         size={'icon'}
         onClick={() => editor?.chain().focus().toggleUnderline().run()}
       >
         <Icons.Underline size={15} />
       </Button>
       <Button
-        variant={editor?.isActive('italic') ? 'accent-1-enabled' : 'ghost'}
+        variant={editor?.isActive('italic') ? 'accent-yellow-enabled' : 'ghost'}
         size={'icon'}
         onClick={() => editor?.chain().focus().toggleItalic().run()}
       >
         <Icons.Italic size={15} />
       </Button>
       <Button
-        variant={editor?.isActive('strike') ? 'accent-1-enabled' : 'ghost'}
+        variant={editor?.isActive('strike') ? 'accent-yellow-enabled' : 'ghost'}
         size={'icon'}
         onClick={() => editor?.chain().focus().toggleStrike().run()}
       >
         <Icons.Strikethrough size={15} />
       </Button>
       {/* <Button
-          variant={editor?.isActive("code") ? 'accent-1-enabled' : 'ghost'}
+          variant={editor?.isActive("code") ? 'accent-yellow-enabled' : 'ghost'}
           size={'icon'}
           onClick={() => editor?.chain().focus().toggleCode().run()}
         >
@@ -170,7 +170,7 @@ function LinkAction({ editor }: { editor: Editor | null }) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant={editor?.isActive('link') ? 'accent-1-enabled' : 'ghost'}>
+        <Button variant={editor?.isActive('link') ? 'accent-yellow-enabled' : 'ghost'}>
           <Icons.Link size={15} />
         </Button>
       </PopoverTrigger>
