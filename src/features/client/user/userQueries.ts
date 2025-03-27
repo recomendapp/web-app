@@ -582,9 +582,10 @@ export const useUserFeedCastCrewInfiniteQuery = ({
 				.from('user_feed_cast_crew')
 				.select(`
 					*,
-					media:media_movie(title,avatar_url,extra_data,url,date),
+					media:media_movie!inner(title,avatar_url,extra_data,url,date),
 					person:media_person(title,avatar_url,url)
 				`)
+				.not('media.date', 'is', null)
 				.range(from, to);
 			
 			if (mergedFilters) {

@@ -7,7 +7,7 @@ import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useModal } from "@/context/modal-context";
 
 interface ModalRecosSendersProps extends ModalType {
-	  comments: UserRecosAggregated['senders'];
+	comments: UserRecosAggregated['senders'];
 }
 
 export const ModalRecosSenders = ({
