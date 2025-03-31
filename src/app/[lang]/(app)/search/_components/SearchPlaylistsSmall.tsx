@@ -1,6 +1,6 @@
 'use client';
+
 import { Link } from "@/lib/i18n/routing";
-import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
+import { CardPlaylist } from "@/components/Card/CardPlaylist";
 
 export default function SearchPlaylistsSmall({
   query,
@@ -34,9 +35,12 @@ export default function SearchPlaylistsSmall({
 			let from = (pageParam - 1) * numberOfResult;
 			let to = from - 1 + numberOfResult;
 
+      // simulate a delay
+      await new Promise((resolve) => setTimeout(resolve, 10000));
+
 			const { data } = await supabase
         .from('playlists')
-        .select('*')
+        .select('*, user(*)')
         .order('updated_at', { ascending: false})
         .range(from, to)
         .ilike(`title`, `${query}%`);
@@ -70,20 +74,26 @@ export default function SearchPlaylistsSmall({
       <ScrollArea className="pb-4">
         <div className="flex gap-4">
         {showSkeleton ? (
-          Array.from({ length: 4 }).map((playlist: any, index) => (
-            <MoviePlaylistCard
-              key={index}
-              playlist={playlist}
-              className={'w-48'}
-              skeleton
-            />
+          Array.from({ length: 4 }).map((_, index) => (
+            <div
+                key={index}
+                className="flex flex-col items-center w-48 gap-2"
+              >
+                {/* AVATAR */}
+                <Skeleton className="bg-background w-full aspect-square rounded-xl" />
+                {/* NAME */}
+                <div className="flex flex-col w-full gap-1">
+                  <Skeleton className="bg-background h-5 w-36" />
+                  <Skeleton className="bg-background h-5 w-14 " />
+                </div>
+              </div>
           ))
         ) : playlists?.pages.map((page, i) => (
             page?.map((playlist, index) => (
-              <MoviePlaylistCard
-                key={playlist?.id}
-                playlist={playlist}
-                className={'w-48'}
+              <CardPlaylist
+              key={playlist?.id}
+              playlist={playlist}
+              className={'w-48'}
               />
             ))
           ))}

@@ -34,7 +34,7 @@ export default function SearchPlaylistsFull({
 
 			const { data } = await supabase
         .from('playlists')
-        .select('*')
+        .select('*, user(*)')
         .order('updated_at', { ascending: false})
         .range(from, to)
         .ilike(`title`, `${query}%`);
@@ -82,12 +82,6 @@ export default function SearchPlaylistsFull({
                 className={'w-full'}
                 ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
                 />
-                // <div
-                //   key={playlist.id}
-                //   ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
-                // >
-                //   <MoviePlaylistCard playlist={playlist} className={'w-full'} />
-                // </div>
               ))
             ))
           }

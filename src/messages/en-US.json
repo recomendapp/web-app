@@ -79,7 +79,8 @@
       "search_media": "search a media",
       "watched_date": "watched date",
       "rating": "rating",
-      "create_a_playlist": "create a playlist"
+      "create_a_playlist": "create a playlist",
+      "by_name": "by {name}"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
