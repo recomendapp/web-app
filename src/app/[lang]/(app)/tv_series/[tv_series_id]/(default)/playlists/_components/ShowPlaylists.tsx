@@ -79,7 +79,10 @@ export function ShowPlaylists({
 
   return (
     <div className="@container/movie-playlists w-full h-full flex flex-col items-center gap-4">
-      <div className="w-full flex flex-col gap-4 justify-end @md/movie-playlists:flex-row">
+      <div className="w-full flex flex-col gap-4 justify-between @md/movie-playlists:flex-row">
+        <Button disabled variant={'ghost'} size={'sm'}>
+          {upperFirst(common(`messages.create_a_playlist`))}
+        </Button>
         <div className="flex justify-end gap-2 items-center">
           <Button variant={'ghost'} size={'sm'} onClick={(e) => {
             e.preventDefault();
