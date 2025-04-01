@@ -6,6 +6,7 @@ import { userKeys } from '../user/userKeys';
 import { meKeys } from '../me/meKeys';
 import toast from 'react-hot-toast';
 import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
+import { mediaKeys } from '../media/mediaKeys';
 
 
 /**
@@ -143,6 +144,12 @@ export const useAddMediaToPlaylists = ({
 			queryClient.invalidateQueries({
 				predicate: (query) => playlists.some((playlist) => matchQuery({ queryKey: playlistKeys.items(playlist?.id as number) }, query)) ?? false,
 			});
+			// invalidate playlists list for media
+			queryClient.invalidateQueries({
+				queryKey: mediaKeys.playlists({
+					id: mediaId,
+				}),
+			});
 		},
 		meta: {
 			invalidates: [
@@ -223,6 +230,11 @@ export const useDeletePlaylistItem = () => {
 		onSuccess: ({ mediaId }) => {
 			queryClient.invalidateQueries({
 				queryKey: meKeys.addMediaToPlaylist({ mediaId }),
+			});
+			queryClient.invalidateQueries({
+				queryKey: mediaKeys.playlists({
+					id: mediaId,
+				}),
 			});
 		},
 		onError: (error) => {
