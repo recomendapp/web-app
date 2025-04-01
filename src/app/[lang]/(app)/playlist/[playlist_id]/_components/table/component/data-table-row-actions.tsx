@@ -117,7 +117,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
                   title: data?.media?.title,
                   important: (chunk) => <b>{chunk}</b>,
                 }),
-                onConfirm: () => data && deletePlaylistItem({ playlistItemId: data.id, mediaId: data.media_id }),
+                onConfirm: () => data && deletePlaylistItem({ playlistId: data.playlist_id, playlistItemId: data.id, mediaId: data.media_id }),
               })}
             >
               <Icons.delete className='w-4' />

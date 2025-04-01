@@ -214,9 +214,11 @@ export const useDeletePlaylistItem = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async ({
+			playlistId,
 			playlistItemId,
 			mediaId,
 		} : {
+			playlistId: number;
 			playlistItemId: number;
 			mediaId: number;
 		}) => {
@@ -225,9 +227,13 @@ export const useDeletePlaylistItem = () => {
 				.delete()
 				.eq('id', playlistItemId)
 			if (error) throw error;
-			return { playlistItemId, mediaId };
+			return { playlistId, playlistItemId, mediaId };
 		},
-		onSuccess: ({ mediaId }) => {
+		onSuccess: ({ playlistId, playlistItemId, mediaId }) => {
+			queryClient.setQueryData(playlistKeys.items(playlistId), (data: PlaylistItem[]) => {
+				if (!data) return null;
+				return data.filter((item) => item?.id !== playlistItemId);
+			});
 			queryClient.invalidateQueries({
 				queryKey: meKeys.addMediaToPlaylist({ mediaId }),
 			});
@@ -235,6 +241,13 @@ export const useDeletePlaylistItem = () => {
 				queryKey: mediaKeys.playlists({
 					id: mediaId,
 				}),
+			});
+			queryClient.setQueryData(playlistKeys.detail(playlistId), (data: Playlist) => {
+				if (!data) return null;
+				return {
+					...data,
+					items_count: data.items_count - 1,
+				};
 			});
 		},
 		onError: (error) => {
