@@ -21,7 +21,7 @@ export const getPlaylistsFeatured = async (
 			let to = from + props.filters.perPage - 1;
 			let request = supabase
 				.from('playlists_featured')
-				.select('*, playlist:playlists(*)', { count: 'exact' })
+				.select('*, playlist:playlists(*, user(*))', { count: 'exact' })
 				.range(from, to)
 			
 			if (props.filters) {
