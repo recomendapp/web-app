@@ -1,9 +1,10 @@
 'use client';
+
 import * as React from 'react';
 import { useAuth } from '@/context/auth-context';
 import { PlaylistItem } from '@/types/type.db';
 import useDebounce from '@/hooks/use-debounce';
-import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
+import { RealtimeChannel } from '@supabase/supabase-js';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { usePlaylistFull, usePlaylistIsAllowedToEdit, usePlaylistItems } from '@/features/client/playlist/playlistQueries';
 import { useUpdatePlaylistItemChanges } from '@/features/client/playlist/playlistMutations';
@@ -28,54 +29,36 @@ export default function PlaylistPage(
     playlistId: Number(params.playlist_id),
   });
 
-  const eventBuffer = React.useRef<RealtimePostgresChangesPayload<{
-    [key: string]: any;
-  }>[] | null>(null);
-  const eventBufferTimeout = React.useRef<NodeJS.Timeout | null>(null);
-
-  // const handleEventBuffering = (payload: RealtimePostgresChangesPayload<{
-  const handleEventBuffering = React.useCallback((payload: RealtimePostgresChangesPayload<{
-    [key: string]: any;
-  }>) => {
-    if (!eventBuffer.current) {
-      eventBuffer.current = [];
-    }
-    eventBuffer.current.push(payload);
-
-    if (eventBufferTimeout.current) {
-      clearTimeout(eventBufferTimeout.current);
-    }
-
-    eventBufferTimeout.current = setTimeout(() => {
-      updatePlaylistItemChanges({
-        events: eventBuffer.current,
-      });
-      eventBuffer.current = null;
-    }, 10);
-  }, [updatePlaylistItemChanges]);
-
   React.useEffect(() => {
     if (isAllowedToEdit) {
-      const playlistItemsChanges = supabase
-        .channel(`movie_playlist:${params.playlist_id}`)
-        .on(
-          'postgres_changes',
-          {
-            event: '*',
-            schema: 'public',
-            table: 'playlist_items',
-            filter: `playlist_id=eq.${params.playlist_id }`,
-          },
-          async (payload) => {
-            handleEventBuffering(payload);
-          }
-        )
-        .subscribe();
+      let playlistItemsChanges: RealtimeChannel;
+      const setupRealtime = async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session)  return;
+        await supabase.realtime.setAuth(session.access_token);
+        playlistItemsChanges = supabase
+          .channel(`playlist:${params.playlist_id}`, {
+            config: { private: true },
+          })
+          .on('broadcast', { event: '*' }, ({ event, payload } : { event: string, payload: { old: PlaylistItem, new: PlaylistItem } }) => {
+            updatePlaylistItemChanges({
+              event,
+              payload,
+            });
+          })
+          .subscribe();
+        return playlistItemsChanges;
+      }
+      setupRealtime().catch(console.error);
+
       return () => {
-        supabase.removeChannel(playlistItemsChanges);
+        if (playlistItemsChanges) {
+          supabase.removeChannel(playlistItemsChanges);
+        }
       };
     }
-  }, [params.playlist_id, playlist, user, refetch, isAllowedToEdit, handleEventBuffering, supabase]);
+  }, [params.playlist_id, playlist, user, refetch, isAllowedToEdit, supabase]);
+
 
   React.useEffect(() => {
     if (debouncedRefresh) {

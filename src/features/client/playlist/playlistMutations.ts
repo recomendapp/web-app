@@ -230,10 +230,10 @@ export const useDeletePlaylistItem = () => {
 			return { playlistId, playlistItemId, mediaId };
 		},
 		onSuccess: ({ playlistId, playlistItemId, mediaId }) => {
-			queryClient.setQueryData(playlistKeys.items(playlistId), (data: PlaylistItem[]) => {
-				if (!data) return null;
-				return data.filter((item) => item?.id !== playlistItemId);
-			});
+			// queryClient.setQueryData(playlistKeys.items(playlistId), (data: PlaylistItem[]) => {
+			// 	if (!data) return null;
+			// 	return data.filter((item) => item?.id !== playlistItemId);
+			// });
 			queryClient.invalidateQueries({
 				queryKey: meKeys.addMediaToPlaylist({ mediaId }),
 			});
@@ -261,64 +261,70 @@ export const useUpdatePlaylistItemChanges = ({
 } : {
 	playlistId: number;
 }) => {
-	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async ({
-			events,
+			event,
+			payload,
 		} : {
-			events: RealtimePostgresChangesPayload<{
-				[key: string]: any;
-			}>[] | null;
+			event: string;
+			payload: {
+				old: PlaylistItem;
+				new: PlaylistItem;
+			}
 		}) => {
-			if (!events) return null;
-			const newPlaylistItems = queryClient.getQueryData<PlaylistItem[]>(playlistKeys.items(playlistId));
-			if (!newPlaylistItems) throw Error('Missing playlist items');
-			for (const payload of events) {
-				switch (payload.eventType) {
-				  /*
-				  * INSERT:
-				  *  - Check if the new item rank is n + 1 from the last item rank => if not, return false
-				  *  - If everything is ok, ask supabase for the new item and add it to the playlist.items
-				  */
-				  case 'INSERT':
-					if (payload.new.rank !== newPlaylistItems.length + 1) throw Error('Invalid rank');
-					const { error: insertError, data: insertData } = await supabase
-					  .from('playlist_items')
-					  .select(`*, media(*)`)
-					  .eq('id', payload.new.id)
-					  .returns<PlaylistItem>()
-					  .single();
-					if (insertError || !insertData) throw insertError;
-					newPlaylistItems.push(insertData);
-					break;
-				  /*
-				  * UPDATE:
-				  *  - Check if the item exists in the playlist.items => if not, return false
-				  *  - If everything is ok, update the item from payload.new and re-order the playlist.items
-				  */
-				  case 'UPDATE':
-					const itemIndex = newPlaylistItems.findIndex(item => item?.id === payload.new.id);
-					if (itemIndex === -1) throw Error('Missing item');
-					newPlaylistItems[itemIndex] = { ...newPlaylistItems[itemIndex], ...payload.new } as PlaylistItem;
-					break;
-				  /*
-				  * DELETE:
-				  *  - Check if the item exists in the playlist.items => if not, return false
-				  */
-				  case 'DELETE':
-					const deleteIndex = newPlaylistItems.findIndex(item => item?.id === payload.old.id);
-					if (deleteIndex === -1) throw Error('Missing item');
-					newPlaylistItems.splice(deleteIndex, 1);
-					break;
-				  default:
-					break;
-				}
-			  }
-		  
-			  newPlaylistItems.sort((a, b) => a!.rank - b!.rank);
+			const newPlaylistItems = [...queryClient.getQueryData<PlaylistItem[]>(playlistKeys.items(playlistId)) || []];
+			if (!newPlaylistItems.length) throw new Error('playlist items is undefined');
+			switch (event) {
+			case 'INSERT':
+				if (payload.new.playlist_id !== playlistId) throw new Error('Invalid playlist id');
+				newPlaylistItems.forEach(item => {
+					if (item.rank >= payload.new.rank) {
+						item.rank++;
+					}
+				});
+				newPlaylistItems.push(payload.new);
+				break;
+			case 'UPDATE':
+				if (!payload.new.playlist_id) throw new Error('Invalid playlist id');
+				const itemIndex = newPlaylistItems.findIndex((item) => item.id === payload.new.id);
+				if (itemIndex === -1) throw new Error('Missing item');
 
-			  return newPlaylistItems;
+				if (payload.old.rank !== payload.new.rank) {
+				if (payload.old.rank < payload.new.rank) {
+					newPlaylistItems.forEach(item => {
+					if (item.rank > payload.old.rank && item.rank <= payload.new.rank) {
+						item.rank--;
+					}
+					});
+				}
+				if (payload.old.rank > payload.new.rank) {
+					newPlaylistItems.forEach(item => {
+					if (item.rank < payload.old.rank && item.rank >= payload.new.rank) {
+						item.rank++;
+					}
+					});
+				}
+				}
+				newPlaylistItems[itemIndex] = payload.new;
+				break;
+			case 'DELETE':
+				if (!payload.old.playlist_id) throw new Error('Invalid playlist id');
+				const deleteIndex = newPlaylistItems.findIndex((item) => item.id === payload.old.id);
+				if (deleteIndex === -1) throw new Error('Missing item');
+				newPlaylistItems.splice(deleteIndex, 1);
+
+				newPlaylistItems.forEach(item => {
+					if (item.rank > payload.old.rank) {
+						item.rank--;
+					}
+				});
+				break;
+			default:
+				break;
+			};
+			newPlaylistItems.sort((a, b) => a.rank - b.rank);
+			return newPlaylistItems;
 		},
 		onSuccess: (newPlaylistItems) => {
 			newPlaylistItems && queryClient.setQueryData(playlistKeys.items(playlistId), [...newPlaylistItems]);
