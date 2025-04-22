@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';

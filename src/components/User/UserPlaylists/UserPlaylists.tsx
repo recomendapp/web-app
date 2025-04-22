@@ -9,7 +9,6 @@ import Loader from '@/components/Loader/Loader';
 import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-import { Playlist } from '@/types/type.db';
 import { useSupabaseClient } from '@/context/supabase-context';
 
 export function UserPlaylists({
