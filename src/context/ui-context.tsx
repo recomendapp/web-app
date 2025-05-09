@@ -40,6 +40,7 @@ export interface UiContextProps {
     props: P;
   }) => void;
   device: Device;
+  isMobile: boolean;
 }
 
 const UIContext = createContext<UiContextProps | undefined>(undefined);
@@ -152,6 +153,7 @@ export const UIProvider = ({
         toggleRightPanel,
         toggleRightPanelContent,
         device,
+        isMobile,
       }}
     >
         {children}

@@ -13,6 +13,7 @@ import { useTranslations } from "next-intl";
 import { usePathname } from '@/lib/i18n/routing';
 import { useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
+import { useUI } from "@/context/ui-context";
 
 const SidebarCollectionContainerIcon = ({
 	className,
@@ -44,6 +45,7 @@ const SidebarCollectionContainerIcon = ({
 export const SidebarLeftRoutes = () => {
 	const { user, session } = useAuth();
 	const { open } = useSidebar();
+	const { isMobile } = useUI();
 	const routesDic = useTranslations('routes');
 	const common = useTranslations('common');
 	const pathname = usePathname();
@@ -143,6 +145,15 @@ export const SidebarLeftRoutes = () => {
 		}
 	});
 
+	// Fix for sidebar issue with mobile and desktop using different open state
+	const sidebarOpen = useMemo(() => {
+		if (!isMobile) {
+			return open;
+		} else {
+			return true;
+		}
+	}, [isMobile, open]);
+
 	useEffect(() => {
 		if (inView && hasNextPage) {
 			fetchNextPage();
@@ -153,13 +164,13 @@ export const SidebarLeftRoutes = () => {
 		<>
 		<SidebarGroup>
 			<SidebarGroupLabel>{common('word.navigation')}</SidebarGroupLabel>
-			<SidebarMenu className={`${!open ? "items-center" : ""}`}>
+			<SidebarMenu className={`${!sidebarOpen ? "items-center" : ""}`}>
 				{routes.map((route, i) => (
 					<SidebarMenuItem key={i}>
 						<SidebarMenuButton tooltip={route.label} isActive={route.active} asChild>
 							<Link href={route.href}>
 								<route.icon className="w-4" />
-								<span className={`line-clamp-1 transition-all duration-300 ${!open ? "opacity-0 hidden" : "opacity-100"}`}>
+								<span className={`line-clamp-1 transition-all duration-300 ${!sidebarOpen ? "opacity-0 hidden" : "opacity-100"}`}>
 									{route.label}
 								</span>
 							</Link>
@@ -171,15 +182,15 @@ export const SidebarLeftRoutes = () => {
 		<SidebarSeparator />
 		<SidebarGroup className="overflow-hidden">
 			{session ? (
-			<SidebarMenu className={`h-full ${!open ? "items-center" : ""}`}>
+			<SidebarMenu className={`h-full ${!sidebarOpen ? "items-center" : ""}`}>
 				<SidebarMenuItem>
 					<SidebarMenuButton tooltip={"Bibliothèque"} isActive={pathname === '/collection'} asChild>
 						<div>
 							<Link href="/collection" className="flex gap-2 items-center">
 								<LibraryIcon className="w-4" />
-								<span className={`line-clamp-1 transition-all duration-300 ${!open ? "opacity-0 hidden" : "opacity-100"}`}>{routesDic('library')}</span>
+								<span className={`line-clamp-1 transition-all duration-300 ${!sidebarOpen ? "opacity-0 hidden" : "opacity-100"}`}>{routesDic('library')}</span>
 							</Link>
-							{open ? <PlaylistCreateButton className="ml-auto" /> : null}
+							{sidebarOpen ? <PlaylistCreateButton className="ml-auto" /> : null}
 						</div>
 					</SidebarMenuButton>
 				</SidebarMenuItem>
@@ -188,10 +199,10 @@ export const SidebarLeftRoutes = () => {
 						<SidebarMenuItem key={i}>
 							<SidebarMenuButton tooltip={route.label} className="h-fit"  isActive={route.active} asChild>
 								<Link href={route.href}>
-									<SidebarCollectionContainerIcon from={route.bgFrom} to={route.bgTo} className={`${open ? "w-12" : "w-8"}`}>
+									<SidebarCollectionContainerIcon from={route.bgFrom} to={route.bgTo} className={`${sidebarOpen ? "w-12" : "w-8"}`}>
 										{route.icon}
 									</SidebarCollectionContainerIcon>
-									<span className={`line-clamp-1 transition-all duration-300 ${!open ? "opacity-0 hidden" : "opacity-100"}`}>
+									<span className={`line-clamp-1 transition-all duration-300 ${!sidebarOpen ? "opacity-0 hidden" : "opacity-100"}`}>
 										{route.label}
 									</span>
 								</Link>
@@ -221,7 +232,7 @@ export const SidebarLeftRoutes = () => {
 									asChild
 								>
 									<Link href={`/playlist/${playlist.id}`}>
-										<SidebarCollectionContainerIcon className={`${open ? "w-12" : "w-8"}`}>
+										<SidebarCollectionContainerIcon className={`${sidebarOpen ? "w-12" : "w-8"}`}>
 											<ImageWithFallback
 												src={playlist.poster_url ?? ''}
 												alt={playlist.title ?? ''}
@@ -230,7 +241,7 @@ export const SidebarLeftRoutes = () => {
 												type='playlist'
 											/>
 										</SidebarCollectionContainerIcon>
-										<div className={`line-clamp-1 transition-all duration-300 ${!open ? "opacity-0 hidden" : "opacity-100"}`}>
+										<div className={`line-clamp-1 transition-all duration-300 ${!sidebarOpen ? "opacity-0 hidden" : "opacity-100"}`}>
 											<p className="line-clamp-1">{playlist.title}</p>
 											<p className='text-muted-foreground line-clamp-1'>{common('messages.item_count', { count: playlist.items_count ?? 0 })}</p>
 										</div>
@@ -245,13 +256,13 @@ export const SidebarLeftRoutes = () => {
 			) : (
 			<>
 				<SidebarGroupLabel>{common('see_more')}</SidebarGroupLabel>
-				<SidebarMenu className={`h-full ${!open ? "items-center" : ""}`}>
+				<SidebarMenu className={`h-full ${!sidebarOpen ? "items-center" : ""}`}>
 					{unloggedRoutes.map((route, i) => (
 						<SidebarMenuItem key={i}>
 							<SidebarMenuButton tooltip={route.label} asChild>
 								<Link href={route.href} target={route.target}>
 									<route.icon className="w-4" />
-									<span className={`line-clamp-1 transition-all duration-300 ${!open ? "opacity-0 hidden" : "opacity-100"}`}>
+									<span className={`line-clamp-1 transition-all duration-300 ${!sidebarOpen ? "opacity-0 hidden" : "opacity-100"}`}>
 										{route.label}
 									</span>
 								</Link>
