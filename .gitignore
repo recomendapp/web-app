@@ -43,4 +43,7 @@ public/workbox-*.js.map
 public/fallback-*.js
 public/worker-*.js
 
+# vscode
+.vscode
+
 certificates

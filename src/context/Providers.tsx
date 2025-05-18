@@ -8,7 +8,6 @@ import { ThemeProvider } from '@/context/theme-context';
 import { NextIntlClientProvider } from 'next-intl';
 import { SupabaseProvider } from '@/context/supabase-context';
 import { NotificationsProvider } from '@/context/notifications-context';
-import { OneSignalContext } from '@/context/one-signal-context';
 import { cookies } from 'next/headers';
 import { getMessages } from 'next-intl/server';
 import { getFallbackLanguage } from '@/lib/i18n/fallback';
@@ -41,22 +40,20 @@ export default async function Provider({
           {/* <ApolloClientProvider locale={locale}> */}
             <AuthProvider session={session}>
               <NotificationsProvider>
-                {/* <OneSignalContext> */}
-                  <MapContext>
-                    <ThemeProvider
-                      // NextThemesProvider
-                      attribute="class"
-                      defaultTheme="dark"
-                      enableSystem
-                      // UIProvider
-                      defaultLayout={defaultLayout}
-                      cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
-                      cookieRightPanelOpen={rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined}
-                    >
-                      {children}
-                    </ThemeProvider>
-                  </MapContext> 
-                {/* </OneSignalContext> */}
+                <MapContext>
+                  <ThemeProvider
+                    // NextThemesProvider
+                    attribute="class"
+                    defaultTheme="dark"
+                    enableSystem
+                    // UIProvider
+                    defaultLayout={defaultLayout}
+                    cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
+                    cookieRightPanelOpen={rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined}
+                  >
+                    {children}
+                  </ThemeProvider>
+                </MapContext> 
               </NotificationsProvider>
             </AuthProvider>
           {/* </ApolloClientProvider> */}
