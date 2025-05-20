@@ -86,14 +86,14 @@ export function UserNav({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <UserAvatar avatar_url={user.avatar_url} username={user.username} />
+          <UserAvatar avatarUrl={user.avatar_url} username={user.username} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <DropdownMenuItem asChild>
             <Link href={'/@' + user?.username} className="flex gap-2">
-              <UserAvatar avatar_url={user.avatar_url} username={user.username} />
+              <UserAvatar avatarUrl={user.avatar_url} username={user.username} />
               <div className="flex flex-col space-y-1 !items-start">
                 <p className="text-sm font-medium leading-none line-clamp-1">
                   {user?.full_name}

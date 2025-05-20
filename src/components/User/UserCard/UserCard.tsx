@@ -27,7 +27,7 @@ const UserCard = React.forwardRef<
       >
         { user.username ? <UserAvatar
         className={`w-[${width || 150}px] h-[${height || 150}px]`}
-        avatar_url={user.avatar_url}
+        avatarUrl={user.avatar_url}
         username={user.username}
         /> : null }
         <div className="text-center">
@@ -44,7 +44,7 @@ const UserCard = React.forwardRef<
     >
       {user.username ? <UserAvatar
       className={`w-[${width || 25}px] h-[${height || 25}px]`}
-      avatar_url={user.avatar_url}
+      avatarUrl={user.avatar_url}
       username={user.username}
       /> : null}
       {!icon && (

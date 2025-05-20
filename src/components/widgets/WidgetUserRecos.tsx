@@ -43,7 +43,7 @@ export const WidgetUserRecos = ({
           {item.senders?.slice(0, sendersShow).map(({user}:any, index) => (
           <UserAvatar
             key={index}
-            avatar_url={user?.avatar_url ?? ''}
+            avatarUrl={user?.avatar_url ?? ''}
             username={user?.username ?? ''}
             className='w-4 h-4'
           />

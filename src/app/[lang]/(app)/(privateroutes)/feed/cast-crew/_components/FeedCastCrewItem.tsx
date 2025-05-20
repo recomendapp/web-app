@@ -52,7 +52,7 @@ const FeedCastCrewItemDefault = React.forwardRef<
 					{/* PERSON */}
 					<div className="flex gap-2">
 						<Link href={activity?.person?.url ?? ''} className="shrink-0">
-							{activity?.person?.title ? <UserAvatar className="w-8 h-8 rounded-md" avatar_url={activity?.person?.avatar_url ?? ''} username={activity?.person?.title} /> : null}
+							{activity?.person?.title ? <UserAvatar className="w-8 h-8 rounded-md" avatarUrl={activity?.person?.avatar_url ?? ''} username={activity?.person?.title} /> : null}
 						</Link>
 						<p className="text-muted-foreground line-clamp-2">
 							{common.rich('feed.persons.new_activity', {

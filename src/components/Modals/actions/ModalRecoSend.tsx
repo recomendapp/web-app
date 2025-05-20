@@ -112,7 +112,7 @@ export function ModalRecoSend({
 									}}
 								>
 									<div className="flex items-center">
-										<UserAvatar avatar_url={friend.avatar_url} username={friend.username} />
+										<UserAvatar avatarUrl={friend.avatar_url} username={friend.username} />
 										<div className="ml-2">
 										<p className="text-sm font-medium leading-none line-clamp-1">
 											{friend.full_name}
@@ -156,7 +156,8 @@ export function ModalRecoSend({
 					{selectedUsers.map((friend) => (
 					<UserAvatar
 						key={friend?.id}
-						{...friend}
+						avatarUrl={friend?.avatar_url}
+						username={friend?.username}
 						className='cursor-not-allowed'
 						onClick={() => setSelectedUsers((prev) => prev.filter(
 							(selectedUser) => selectedUser?.id !== friend?.id

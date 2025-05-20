@@ -171,7 +171,7 @@ const RightPanelSocialRequests = () => {
 						className={"flex flex-col rounded-xl bg-muted hover:bg-muted-hover p-1"}
 						>
 							<div className="flex items-center p-1">
-								<UserAvatar username={user?.username} avatar_url={user?.avatar_url} />
+								<UserAvatar username={user?.username} avatarUrl={user?.avatar_url} />
 								<div className='px-2 py-1 space-y-1'>
 									<p className='line-clamp-2 break-words'>{user?.username}</p>
 									<p className="text-muted-foreground">@{user?.username}</p>

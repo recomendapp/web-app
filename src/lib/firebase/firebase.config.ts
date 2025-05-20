@@ -29,7 +29,7 @@ const fetchToken = async () => {
 			return token;
 		}
 		return null;
-		} catch (err) {
+	} catch (err) {
 		console.error("An error occurred while fetching the token:", err);
 		return null;
 	}
