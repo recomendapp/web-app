@@ -3,7 +3,7 @@
 import { routing } from "@/lib/i18n/routing";
 import { createBrowserClient } from "@supabase/ssr";
 import { SupabaseClient } from "@supabase/supabase-js";
-import { createContext, useContext, useMemo } from "react";
+import { createContext, use, useMemo } from "react";
 
 const SupabaseContext = createContext<SupabaseClient<Database> | undefined>(undefined);
 
@@ -36,7 +36,7 @@ export const SupabaseProvider = ({
 }
 
 export const useSupabaseClient = () => {
-	const context = useContext(SupabaseContext);
+	const context = use(SupabaseContext);
 	if (!context) {
 		throw new Error('useSupabaseClient must be used within a SupabaseProvider');
 	}

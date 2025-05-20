@@ -1,11 +1,9 @@
 'use client';
 
 import { CheckedState } from "@radix-ui/react-checkbox";
-import { MutableRefObject, createContext, useContext, useMemo, useRef, useState } from "react";
-// import moviesDataset from "@/components/Map/Data/movies.json"
+import { createContext, use, useMemo, useState } from "react";
 import moviesDataset from "@/components/Map/Data/movies.json"
 import genresDataset from "@/components/Map/Data/genres.json"
-// import biomesDataset from "@/components/Map/Data/biomes.json"
 import { useLocale } from "next-intl";
 import { PaddingOptions } from "react-map-gl/dist/esm/types";
 
@@ -222,7 +220,7 @@ export const MapContext = ({
 };
 
 export const useMap = () => {
-	const context = useContext(MapProvider);
+	const context = use(MapProvider);
 	if (context === undefined) {
 		throw new Error('useMap must be used within a MapProvider');
 	}

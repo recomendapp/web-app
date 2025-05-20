@@ -4,8 +4,8 @@ import { RightPanelSocial } from '@/components/sidebar/right-panel/RightPanelSoc
 import { RightPanel } from '@/components/sidebar/right-panel/RightPanelUtils';
 import { Device, useDevice } from '@/hooks/use-device';
 import { useIsMobile } from '@/hooks/use-mobile';
-import React, { createContext, useContext, useState } from 'react';
 import { useAuth } from './auth-context';
+import { createContext, use, useCallback, useState } from 'react';
 
 export const SIDEBAR_COOKIE_NAME = "ui-sidebar:open";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
@@ -71,12 +71,12 @@ export const UIProvider = ({
   //   // Save to cookie
   //   document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
   // }
-  const sidebarOpenChange = React.useCallback((open: boolean) => {
+  const sidebarOpenChange = useCallback((open: boolean) => {
     setSidebarOpen(open);
     // Save to cookie
     document.cookie = `${SIDEBAR_COOKIE_NAME}=${open}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
   }, []);
-  const toggleSidebar = React.useCallback(() => {
+  const toggleSidebar = useCallback(() => {
     return isMobile
       ? setSidebarOpenMobile((open) => !open)
       : sidebarOpenChange(!sidebarOpen);
@@ -97,12 +97,12 @@ export const UIProvider = ({
   //   // Save to cookie
   //   document.cookie = `${RIGHT_PANEL_COOKIE_NAME}=${open}; path=/; max-age=${RIGHT_PANEL_COOKIE_MAX_AGE}`;
   // }
-  const rightPanelOpenChange = React.useCallback((open: boolean) => {
+  const rightPanelOpenChange = useCallback((open: boolean) => {
     setRightPanelOpen(open);
     // Save to cookie
     document.cookie = `${RIGHT_PANEL_COOKIE_NAME}=${open}; path=/; max-age=${RIGHT_PANEL_COOKIE_MAX_AGE}`;
   }, []);
-  const toggleRightPanel = React.useCallback((open?: boolean) => {
+  const toggleRightPanel = useCallback((open?: boolean) => {
     const newState = open !== undefined ?
       open :
       isMobile ? !rightPanelOpenMobile : !rightPanelOpen;
@@ -156,13 +156,13 @@ export const UIProvider = ({
         isMobile,
       }}
     >
-        {children}
+      {children}
     </UIContext.Provider>
   );
 }
 
 export const useUI = () => {
-  const context = useContext(UIContext);
+  const context = use(UIContext);
   if (context === undefined) {
     throw new Error('useUI must be used within a UIContext');
   }

@@ -163,24 +163,3 @@
 * {
   min-width: 0;
 }
-
-/* Scroll bar stylings */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  }
-
-/* Track */
-::-webkit-scrollbar-track {
-    background: var(--lightestgrey); 
-  }
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: var(--scrollbar);
-  }
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-hover); 
-  }

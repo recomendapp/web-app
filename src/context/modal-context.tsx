@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, ReactNode, useState, useEffect, use } from 'react';
+import { createContext, ReactNode, useState, useEffect, use } from 'react';
 import { usePathname } from '@/lib/i18n/routing';
 import { ModalTemplate, ModalTemplateProps } from '@/components/Modals/templates/ModalTemplate';
 import { ConfirmModalTemplate, ConfirmModalTemplateProps } from '@/components/Modals/templates/ConfirmModalTemplate';
@@ -127,7 +127,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useModal = () => {
-  const context = useContext(ModalContext);
+  const context = use(ModalContext);
   if (!context) {
     throw new Error('useModal must be used within a ModalProvider');
   }

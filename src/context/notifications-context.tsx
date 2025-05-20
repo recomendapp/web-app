@@ -4,7 +4,7 @@ import { useAuth } from '@/context/auth-context';
 import useNotificationPermission, { NotificationPermissionProps } from '@/hooks/use-notification-permission';
 import { NovuProvider } from '@novu/react';
 import { createHmac } from 'crypto';
-import { createContext, useContext } from 'react';
+import { createContext, use } from 'react';
 
 interface NotificationsContextProps {
 	permission: NotificationPermissionProps;
@@ -45,7 +45,7 @@ export const NotificationsProvider = ({
 }
 
 export const useNotifications = () => {
-	const context = useContext(NotificationsContext);
+	const context = use(NotificationsContext);
 	if (context === undefined) {
 		throw new Error('useNotifications must be used within a NotificationsProvider');
 	}
