@@ -6,7 +6,6 @@ import { truncate, upperFirst } from 'lodash';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getMediaFollowersAverageRating, getTvSeries } from '@/features/server/media/mediaQueries';
 import { siteConfig } from '@/config/site';
-import Script from 'next/script';
 import { Movie, WithContext } from 'schema-dts'
 
 export async function generateMetadata(
@@ -104,7 +103,7 @@ export default async function TvSeriesLayout(
   };
   return (
   <>
-    <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     <TvSeriesHeader serie={serie} followersAvgRating={followersAvgRating?.follower_avg_rating} />
     <div className="px-4 pb-4">
       <TvSeriesNavbar serieId={params.tv_series_id} />

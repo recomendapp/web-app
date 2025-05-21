@@ -5,7 +5,6 @@ import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getMediaFollowersAverageRating, getMovie } from '@/features/server/media/mediaQueries';
-import Script from 'next/script';
 import { siteConfig } from '@/config/site';
 import { toISO8601Duration } from '@/lib/utils';
 import { Movie, WithContext } from 'schema-dts'
@@ -108,7 +107,7 @@ export default async function MovieLayout(
 
     return (
 		<>
-      <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 			<MovieHeader movie={movie} followersAvgRating={followersAvgRating?.follower_avg_rating} />
 			<div className="px-4 pb-4">
 				<MovieNavbar movieSlug={params.film_id} />
