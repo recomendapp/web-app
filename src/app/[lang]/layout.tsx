@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import Providers from '@/context/Providers';
 import Script from 'next/script';
 import { getLangDir } from 'rtl-detect';
+import Head from 'next/head';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -95,6 +96,9 @@ export default async function LangLayout(props: RootLayoutProps) {
   const direction = getLangDir(lang);
   return (
     <html lang={lang} dir={direction} suppressHydrationWarning>
+      <Head>
+        <link rel="search" type="application/opensearchdescription+xml" title="Recomend" href="/opensearch.xml" />
+      </Head>
       {process.env.NODE_ENV === 'production' ? (
         <Script
         defer
