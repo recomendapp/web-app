@@ -6,6 +6,7 @@ import { Upgrade } from './_components/Upgrade';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
+import { Metadata } from 'next';
 
 export async function generateMetadata(
   props: {
@@ -13,7 +14,7 @@ export async function generateMetadata(
         lang: string;
       }>;
     }
-) {
+): Promise<Metadata> {
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang, namespace: 'pages' });
   return {

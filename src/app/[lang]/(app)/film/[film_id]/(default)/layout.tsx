@@ -8,25 +8,46 @@ import { getMediaFollowersAverageRating, getMovie } from '@/features/server/medi
 import { siteConfig } from '@/config/site';
 import { toISO8601Duration } from '@/lib/utils';
 import { Movie, WithContext } from 'schema-dts'
+import { Metadata } from 'next';
 
 export async function generateMetadata(
-    props: {
-        params: Promise<{
-          lang: string;
-          film_id: string;
-        }>;
-    }
-) {
-    const params = await props.params;
-    const common = await getTranslations({ locale: params.lang, namespace: 'common' });
-    const t = await getTranslations({ locale: params.lang, namespace: 'pages.film' });
-    const { id: movieId} = getIdFromSlug(params.film_id);
-    const movie = await getMovie({
-      id: movieId,
-      locale: params.lang,
-    });
-    if (!movie) return { title: upperFirst(common('errors.film_not_found')) };
-    return {
+  props: {
+      params: Promise<{
+        lang: string;
+        film_id: string;
+      }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
+  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+  const t = await getTranslations({ locale: params.lang, namespace: 'pages.film' });
+  const { id: movieId} = getIdFromSlug(params.film_id);
+  const movie = await getMovie({
+    id: movieId,
+    locale: params.lang,
+  });
+  if (!movie) return { title: upperFirst(common('errors.film_not_found')) };
+  return {
+    title: t('metadata.title', { title: movie.title, year: new Date(String(movie.extra_data.release_date)).getFullYear() }),
+    description: truncate(
+      movie.main_credit
+        ? t('metadata.description', {
+          title: movie.title,
+          directors: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(movie.main_credit.map((director) => director.title ?? '')),
+          year: new Date(String(movie.extra_data.release_date)).getFullYear(),
+          overview: movie.extra_data.overview,
+        }) : t('metadata.description_no_director', {
+          title: movie.title,
+          year: new Date(String(movie.extra_data.release_date)).getFullYear(),
+          overview: movie.extra_data.overview
+        }),
+      { length: siteConfig.seo.description.limit }
+    ),
+    alternates: {
+      canonical: `${siteConfig.url}/film/${movie.slug}`,
+    },
+    openGraph: {
+      siteName: siteConfig.name,
       title: t('metadata.title', { title: movie.title, year: new Date(String(movie.extra_data.release_date)).getFullYear() }),
       description: truncate(
         movie.main_credit
@@ -42,9 +63,16 @@ export async function generateMetadata(
           }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: {
-        canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/film/${movie.slug}`,
-      },
+      url: `${siteConfig.url}/film/${movie.slug}`,
+      images: movie.avatar_url ? [
+        {
+          url: movie.avatar_url,
+          width: 1200,
+          height: 630,
+        },
+      ] : undefined,
+      type: 'video.movie',
+    }
 	};
 }
 

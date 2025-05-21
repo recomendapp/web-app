@@ -188,7 +188,8 @@
       "error": {
         "too_many_attempts": "Trop de tentatives, veuillez réessayer plus tard",
         "not_received_code": "Vous n'avez pas reçu de code ?",
-        "invalid_code": "Code invalide"
+        "invalid_code": "Code invalide",
+        "turnstile": "Erreur de vérification, veuillez réessayer"
       },
       "resend_code": "Renvoyer le code",
       "code_verified": "Code vérifié",

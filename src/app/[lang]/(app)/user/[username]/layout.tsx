@@ -3,12 +3,13 @@ import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
 import { siteConfig } from '@/config/site';
 import { getProfile } from '@/features/server/users';
+import { Metadata } from 'next';
 
 export async function generateMetadata(
   props: {
     params: Promise<{ lang: string, username: string }>;
   }
-) {
+): Promise<Metadata> {
   const params = await props.params;
   const common = await getTranslations({ lang: params.lang, namespace: 'common' });
   const t = await getTranslations({ lang: params.lang, namespace: 'pages' });

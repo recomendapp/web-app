@@ -7,6 +7,7 @@ import { WidgetPersonTvSeries } from './_components/WidgetPersonTvSeries';
 import { getPerson } from '@/features/server/media/mediaQueries';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
+import { Metadata } from 'next';
 
 export async function generateMetadata(
   props: {
@@ -15,7 +16,7 @@ export async function generateMetadata(
       person_id: string;
     }>;
   }
-) {
+): Promise<Metadata> {
   const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const { id } = getIdFromSlug(params.person_id);

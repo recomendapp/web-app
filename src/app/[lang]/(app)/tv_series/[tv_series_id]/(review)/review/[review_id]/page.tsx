@@ -4,6 +4,7 @@ import { getReview } from '@/features/server/reviews';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import Review from '@/components/Review/Review';
+import { Metadata } from 'next';
 
 export async function generateMetadata(
   props: {
@@ -12,7 +13,7 @@ export async function generateMetadata(
       review_id: number;
     }>;
   }
-) {
+): Promise<Metadata> {
   const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.metadata' });

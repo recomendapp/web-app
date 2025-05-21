@@ -9,6 +9,7 @@ import { Icons } from '@/config/icons';
 import { Link } from "@/lib/i18n/routing";
 import { Button } from '@/components/ui/button';
 import { Filters } from './_components/Filters';
+import { Metadata } from 'next';
 
 const SORT_BY = ["release_date", "vote_average"] as const;
 const DISPLAY = ["grid", "row"] as const;
@@ -45,7 +46,7 @@ export async function generateMetadata(
 	  person_id: string;
 	}>;
   }
-) {
+): Promise<Metadata> {
   const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const { id } = getIdFromSlug(params.person_id);

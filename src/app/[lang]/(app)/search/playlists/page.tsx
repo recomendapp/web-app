@@ -1,5 +1,6 @@
 import { redirect } from '@/lib/i18n/routing';
 import SearchPlaylistsFull from './_components/SearchPlaylistsFull';
+import { Metadata } from 'next';
 
 export async function generateMetadata(
   props: {
@@ -7,7 +8,7 @@ export async function generateMetadata(
       q: string | undefined;
     }>;
   }
-) {
+): Promise<Metadata> {
   const searchParams = await props.searchParams;
   return {
     title: `${searchParams.q} - Playlists`,

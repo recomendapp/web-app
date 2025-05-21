@@ -20,12 +20,12 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: siteConfig.name,
+    default: `${siteConfig.name} • ${siteConfig.tagline}`,
     template: `%s • ${siteConfig.name}`,
   },
   description: siteConfig.description,
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_SITE_URL,
+    canonical: siteConfig.url,
   },
   manifest: '/manifest.webmanifest',
   icons: {
@@ -61,6 +61,19 @@ export const metadata: Metadata = {
       },
     ],
   },
+  openGraph: {
+    siteName: siteConfig.name,
+    title: `${siteConfig.name} • ${siteConfig.tagline}`,
+    description: siteConfig.description,
+    images: [
+    ],
+    type: 'website',
+    url: siteConfig.url,
+  },
+  twitter: {
+    site: `@${siteConfig.socials.twitter.username}`,
+    creator: `@${siteConfig.by.twitter}`,
+  }
 };
 
 interface RootLayoutProps {

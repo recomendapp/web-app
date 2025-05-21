@@ -1,34 +1,27 @@
 export type SiteConfig = typeof siteConfig;
-import icon from '@/assets/recomend_icon.svg';
-import logo from '@/assets/recomend_logo.svg';
 import { Icons } from './icons';
+import { getURL } from '@/lib/utils';
 
 export const siteConfig = {
   name: 'Recomend',
-  description: 'An other way to discover movies',
-  domain: 'recomend.app',
-  mainNav: [
-    {
-      title: 'Accueil',
-      href: '/',
-    },
-  ],
+  tagline: 'An other way to discover cinema',
+  description: 'Recomend is a social network for cinema lovers. Discover, share and explore movies and series with your friends.',
+  url: getURL(),
   seo: {
     description: {
       limit: 160,
     }
   },
-  links: {
-    twitter: 'https://twitter.com/xmesky',
-    github: 'https://github.com/xmesky',
-  },
   socials: {
     twitter: {
       username: 'recomendHD',
       url: 'https://x.com/recomendHD',
+    },
+    instagram: {
+      username: 'recomendhd',
+      url: 'https://instagram.com/recomendhd',
     }
   },
-  colors: ['#eb4034', '#34cfeb', '#ebc034', '#ad00ab'],
   oauth2: [
     {
       name: 'Github',
@@ -52,5 +45,11 @@ export const siteConfig = {
     { icon: Icons.movieReview, key: 'reviews', iconClass: '' },
     { icon: Icons.feed, key: 'feed', iconClass: '' },
     { icon: Icons.lock, key: 'adsFree', iconClass: '' },
-  ]
+  ],
+  by: {
+    name: 'Loup',
+    job: 'Founder/Developer',
+    twitter: 'xmesky',
+    github: 'lxup',
+  }
 };

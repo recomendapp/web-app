@@ -6,6 +6,7 @@ import { upperFirst } from 'lodash';
 import { getMovie } from '@/features/server/media/mediaQueries';
 import CreateReviewForm from '@/components/Review/CreateReviewForm';
 import { Media } from '@/types/type.db';
+import { Metadata } from 'next';
 
 export async function generateMetadata(
   props: {
@@ -14,7 +15,7 @@ export async function generateMetadata(
       film_id: string;
     }>;
   }
-) {
+): Promise<Metadata> {
   const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.create.metadata' });

@@ -7,15 +7,16 @@ import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getMediaFollowersAverageRating, getTvSeries } from '@/features/server/media/mediaQueries';
 import { siteConfig } from '@/config/site';
 import { Movie, WithContext } from 'schema-dts'
+import { Metadata } from 'next';
 
 export async function generateMetadata(
   props: {
-      params: Promise<{
-        lang: string;
-        tv_series_id: string;
-      }>;
+    params: Promise<{
+      lang: string;
+      tv_series_id: string;
+    }>;
   }
-) {
+): Promise<Metadata> {
   const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.serie' });
@@ -42,7 +43,34 @@ export async function generateMetadata(
       { length: siteConfig.seo.description.limit }
     ),
     alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/tv_series/${serie.slug}`,
+      canonical: `${siteConfig.url}/tv_series/${serie.slug}`,
+    },
+    openGraph: {
+      siteName: siteConfig.name,
+      title: t('metadata.title', { title: serie.title, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() }),
+      description: truncate(
+        serie.main_credit
+          ? t('metadata.description', {
+            title: serie.title,
+            creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.main_credit.map((creator) => creator.title ?? '')),
+            year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
+            overview: serie.extra_data.overview,
+          }) : t('metadata.description_no_creator', {
+            title: serie.title,
+            year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
+            overview: serie.extra_data.overview,
+          }),
+        { length: siteConfig.seo.description.limit }
+      ),
+      url: `${siteConfig.url}/tv_series/${serie.slug}`,
+      images: serie.avatar_url ? [
+        {
+          url: serie.avatar_url,
+          width: 1200,
+          height: 630,
+        }
+      ] : undefined,
+      type: 'video.tv_show',
     },
   };
 }

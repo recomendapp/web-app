@@ -30,6 +30,7 @@ import { Input } from '@/components/ui/input';
 import useDebounce from '@/hooks/use-debounce';
 import { useUsernameAvailability } from '@/hooks/use-username-availability';
 import { InputPassword } from '@/components/ui/input-password';
+import { Turnstile } from "next-turnstile";
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -49,7 +50,8 @@ export default function Signup() {
 	const redirectTo = searchParams.get('redirect');
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const bgImage = useRandomImage(Images.auth.signup.background);
-
+	const [turnstileStatus, setTurnstileStatus] = useState<"success" | "error" | "expired" | "required">("required");
+	const [turnstileError, setTurnstileError] = useState<string | null>(null);
 	/* ------------------------------- FORM SCHEMA ------------------------------ */
 	const signupSchema = z.object({
 		email: z.string().email({
@@ -151,6 +153,10 @@ export default function Signup() {
 	const handleSubmit = async (data: SignupFormValues) => {
 		try {
 			setIsLoading(true);
+			if (turnstileStatus !== 'success') {
+				toast.error(common('form.error.turnstile'));
+				return;
+			}
 			await signup({
 				email: data.email,
 				name: data.full_name,
@@ -363,10 +369,42 @@ export default function Signup() {
 							</FormItem>
 						)}
 						/>
-
+						<div className="flex flex-col items-center justify-center gap-2">
+							<Turnstile
+							siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+							retry="auto"
+							refreshExpired="auto"
+							language={locale}
+							sandbox={process.env.NODE_ENV === "development"}
+							onError={() => {
+								setTurnstileStatus("error");
+								setTurnstileError("Security check failed. Please try again.");
+							}}
+							onExpire={() => {
+								setTurnstileStatus("expired");
+								setTurnstileError("Security check expired. Please verify again.");
+							}}
+							onLoad={() => {
+								setTurnstileStatus("required");
+								setTurnstileError(null);
+							}}
+							onVerify={(token) => {
+								setTurnstileStatus("success");
+								setTurnstileError(null);
+							}}
+							/>
+							{turnstileError && (
+								<p className="text-sm text-destructive text-center">
+									{turnstileError}
+								</p>
+							)}
+						</div>
 					</CardContent>
 					<CardFooter className='grid gap-2'>
-						<Button className="w-full" disabled={isLoading}>
+						<Button
+						className="w-full"
+						disabled={isLoading || turnstileStatus !== 'success' || !form.formState.isValid}
+						>
 							{isLoading ? (<Icons.loader />) : null}
 							{common('word.signup')}
 						</Button>

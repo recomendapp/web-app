@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { generatePaginationNumbers } from '@/hooks/generate-pagination-numbers';
 import { title } from '@/hooks/custom-lodash';
 import { redirect } from '@/lib/i18n/routing';
+import { Metadata } from 'next';
 
 export async function generateMetadata(
   props: {
@@ -25,7 +26,7 @@ export async function generateMetadata(
       q?: string;
     }>;
   }
-) {
+): Promise<Metadata> {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });

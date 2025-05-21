@@ -188,7 +188,8 @@
       "error": {
         "too_many_attempts": "Too many attempts, please try again later",
         "not_received_code":"Didn't receive a code?",
-        "invalid_code": "Invalid code"
+        "invalid_code": "Invalid code",
+        "turnstile": "Turnstile verification failed"
       },
       "resend_code": "Resend code",
       "code_verified": "Code verified",

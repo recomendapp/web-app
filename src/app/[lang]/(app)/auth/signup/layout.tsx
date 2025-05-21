@@ -1,4 +1,5 @@
 import { siteConfig } from '@/config/site';
+import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata(
@@ -7,7 +8,7 @@ export async function generateMetadata(
       lang: string;
     }>;
   }
-) {
+): Promise<Metadata> {
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.auth.signup' });
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });

@@ -2,6 +2,7 @@ import { SettingsNav } from '@/app/[lang]/(app)/(privateroutes)/settings/_compon
 import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
+import { Metadata } from 'next';
 
 export async function generateMetadata(
   props: {
@@ -9,7 +10,7 @@ export async function generateMetadata(
         lang: string;
       }>;
     }
-) {
+): Promise<Metadata> {
   const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'pages' });
   return {
