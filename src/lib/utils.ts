@@ -36,3 +36,9 @@ export function convertDate(date: string) {
 
   return `${day}/${month}/${year}`;
 }
+
+export function toISO8601Duration(minutes: number): string {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return `PT${h > 0 ? `${h}H` : ''}${m > 0 ? `${m}M` : ''}`;
+}

@@ -2,9 +2,12 @@ import { notFound } from 'next/navigation';
 import TvSeriesHeader from './_components/TvSeriesHeader';
 import TvSeriesNavbar from './_components/TvSeriesNavbar';
 import { getTranslations } from 'next-intl/server';
-import { upperFirst } from 'lodash';
+import { truncate, upperFirst } from 'lodash';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getMediaFollowersAverageRating, getTvSeries } from '@/features/server/media/mediaQueries';
+import { siteConfig } from '@/config/site';
+import Script from 'next/script';
+import { Movie, WithContext } from 'schema-dts'
 
 export async function generateMetadata(
   props: {
@@ -25,17 +28,23 @@ export async function generateMetadata(
   if (!serie) return { title: upperFirst(common('errors.serie_not_found')) };
   return {
     title: t('metadata.title', { title: serie.title, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() }),
-    description: serie.main_credit
-      ? t('metadata.description', {
-        title: serie.title,
-        creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.main_credit.map((creator) => creator.title ?? '')),
-        year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
-        overview: serie.extra_data.overview,
-      }) : t('metadata.description_no_creator', {
-        title: serie.title,
-        year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
-        overview: serie.extra_data.overview,
-      }),
+    description: truncate(
+      serie.main_credit
+        ? t('metadata.description', {
+          title: serie.title,
+          creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.main_credit.map((creator) => creator.title ?? '')),
+          year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
+          overview: serie.extra_data.overview,
+        }) : t('metadata.description_no_creator', {
+          title: serie.title,
+          year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
+          overview: serie.extra_data.overview,
+        }),
+      { length: siteConfig.seo.description.limit }
+    ),
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/tv_series/${serie.slug}`,
+    },
   };
 }
 
@@ -63,8 +72,39 @@ export default async function TvSeriesLayout(
   const followersAvgRating = await getMediaFollowersAverageRating({
     media_id: serie.media_id!,
   })
+  const jsonLd: WithContext<Movie> = {
+    '@context': 'https://schema.org',
+    '@type': 'Movie',
+    name: serie.title ?? undefined,
+    image: serie.avatar_url ?? undefined,
+    description: serie.extra_data.overview,
+    datePublished: serie.date ?? undefined,
+    dateModified: new Date().toISOString(),
+    director: serie.main_credit
+      ?.map(d => d.title)
+      .filter((name): name is string => !!name)
+      .map(name => ({
+        '@type': 'Person',
+        name,
+      })),
+    actor: serie.cast
+      ?.map((actor) => ({
+        '@type': 'Person',
+        name: actor.person?.title ?? undefined,
+        image: actor.person?.avatar_url ?? undefined,
+      })),
+    genre: serie.genres?.map((genre) => genre.name),
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: serie.vote_average ?? undefined,
+      ratingCount: serie.vote_count ?? undefined,
+      bestRating: 10,
+      worstRating: 1,
+    },
+  };
   return (
   <>
+    <Script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     <TvSeriesHeader serie={serie} followersAvgRating={followersAvgRating?.follower_avg_rating} />
     <div className="px-4 pb-4">
       <TvSeriesNavbar serieId={params.tv_series_id} />

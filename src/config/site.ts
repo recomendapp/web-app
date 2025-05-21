@@ -13,16 +13,11 @@ export const siteConfig = {
       href: '/',
     },
   ],
-  // logo: {
-  //   href: '/recomend_logo.svg',
-  //   alt: 'Recomend Logo',
-  //   file: logo,
-  // },
-  // icon: {
-  //   href: '/recomend_icon.svg',
-  //   alt: 'Recomend Logo',
-  //   file: icon,
-  // },
+  seo: {
+    description: {
+      limit: 160,
+    }
+  },
   links: {
     twitter: 'https://twitter.com/xmesky',
     github: 'https://github.com/xmesky',

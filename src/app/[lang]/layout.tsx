@@ -11,14 +11,11 @@ import { getLangDir } from 'rtl-detect';
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   colorScheme: 'light dark',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: 'white' },
     { media: '(prefers-color-scheme: dark)', color: 'black' },
   ],
-  // viewportFit: 'cover'
 };
 
 export const metadata: Metadata = {
@@ -27,6 +24,9 @@ export const metadata: Metadata = {
     template: `%s • ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL,
+  },
   manifest: '/manifest.webmanifest',
   icons: {
     apple: '/icons/icon-512x512.png',
