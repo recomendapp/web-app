@@ -2,14 +2,15 @@ import { notFound } from 'next/navigation';
 import React, { ReactNode } from 'react';
 import { getPlaylist } from './getPlaylist';
 import { getTranslations } from 'next-intl/server';
-import { upperFirst } from 'lodash';
+import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
+import { Metadata } from 'next';
 
 export async function generateMetadata(
     props: {
         params: Promise<{lang: string, playlist_id: number }>;
     }
-) {
+): Promise<Metadata> {
     const params = await props.params;
     const common = await getTranslations({ locale: params.lang, namespace: 'common' });
     const t = await getTranslations({ locale: params.lang, namespace: 'pages' });
@@ -19,7 +20,21 @@ export async function generateMetadata(
 	};
     return {
 		title: t('playlist.metadata.title', { title: playlist.title, username: playlist.user?.username }),
-		description: t('playlist.metadata.description', { username: playlist.user?.username, app: siteConfig.name }),
+		description: truncate(t('playlist.metadata.description', { username: playlist.user?.username, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
+        alternates: {
+            canonical: `${siteConfig.url}/playlist/${playlist.id}`,
+        },
+        openGraph: {
+            siteName: siteConfig.name,
+            title: `${t('playlist.metadata.title', { title: playlist.title, username: playlist.user?.username })} • ${siteConfig.name}`,
+            description: truncate(t('playlist.metadata.description', { username: playlist.user?.username, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
+            url: `${siteConfig.url}/playlist/${playlist.id}`,
+            images: playlist.poster_url ? [
+                { url: playlist.poster_url },
+            ] : undefined,
+            type: 'video.other',
+            locale: params.lang,
+        },
 	};
 }
 

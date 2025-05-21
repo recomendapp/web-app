@@ -639,6 +639,12 @@
           "description": "Partagez votre avis sur {title}."
         }
       }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Explorer Paradise Pictures",
+        "description": "Partez à la découverte de l'île et de ses divers décors. Les nombreux films qui la peuplent sont localisés dans leur environnement diégétique. Arriverez-vous à explorer chacun de ses recoins ?"
+      }
     }
   },
   "routes": {

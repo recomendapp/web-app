@@ -67,6 +67,7 @@ export async function generateMetadata(
         { url: serie.avatar_url }
       ] : undefined,
       type: 'video.tv_show',
+      locale: params.lang,
     },
   };
 }

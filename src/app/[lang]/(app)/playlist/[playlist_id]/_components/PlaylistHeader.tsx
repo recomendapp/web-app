@@ -71,12 +71,12 @@ export default function PlaylistHeader({
             </span>
           </div>
           <div>
-            <h2
+            <h1
               onClick={() => openPlaylistModal()}
               className="w-fit text-clamp font-bold line-clamp-2 cursor-pointer"
             >
               {playlist?.title}
-            </h2>
+            </h1>
           </div>
           <div className='space-y-2'>
             {/* DESCRIPTION */}

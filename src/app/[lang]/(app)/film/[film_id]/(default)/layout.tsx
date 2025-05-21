@@ -68,6 +68,7 @@ export async function generateMetadata(
         { url: movie.avatar_url },
       ] : undefined,
       type: 'video.movie',
+      locale: params.lang,
     }
 	};
 }

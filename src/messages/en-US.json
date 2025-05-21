@@ -639,6 +639,12 @@
           "description": "Share your opinion on {title}."
         }
       }
+    },
+    "explore": {
+      "metadata": {
+        "title": "Explore Paradise Pictures",
+        "description": "Embark on a journey to discover the island and its diverse landscapes. The many films that inhabit it are set in their diegetic environments. Will you manage to explore every one of its corners?"
+      }
     }
   },
   "routes": {

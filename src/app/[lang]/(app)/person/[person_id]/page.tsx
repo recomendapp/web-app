@@ -1,13 +1,11 @@
 import { notFound } from 'next/navigation';
-// import { getPerson } from '@/features/server/persons';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
-// import { WidgetPersonMostRated } from './_components/WidgetPersonMostRated';
 import { WidgetPersonFilms } from './_components/WidgetPersonFilms';
-import { WidgetPersonTvSeries } from './_components/WidgetPersonTvSeries';
 import { getPerson } from '@/features/server/media/mediaQueries';
 import { getTranslations } from 'next-intl/server';
-import { upperFirst } from 'lodash';
+import { truncate, upperFirst } from 'lodash';
 import { Metadata } from 'next';
+import { siteConfig } from '@/config/site';
 
 export async function generateMetadata(
   props: {
@@ -26,8 +24,22 @@ export async function generateMetadata(
   });
   if (!person) return { title: upperFirst(common('errors.person_not_found')) };
   return {
-    title: `${person.title} (${person.extra_data.known_for_department})`,
-    description: person.extra_data.biography,
+    title: `${person.title} • ${person.extra_data.known_for_department}`,
+    description: truncate(person.extra_data.biography, { length: siteConfig.seo.description.limit }),
+    alternates: {
+      canonical: `${siteConfig.url}/person/${person.slug}`,
+    },
+    openGraph: {
+      siteName: siteConfig.name,
+      title: `${person.title} • ${person.extra_data.known_for_department} • ${siteConfig.name}`,
+      description: truncate(person.extra_data.biography, { length: siteConfig.seo.description.limit }),
+      url: `${siteConfig.url}/person/${person.slug}`,
+      images: person.avatar_url ? [
+        { url: person.avatar_url },
+      ] : undefined,
+      type: 'profile',
+      locale: params.lang,
+    }
   };
 }
 
