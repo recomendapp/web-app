@@ -96,9 +96,9 @@ export default async function LangLayout(props: RootLayoutProps) {
   const direction = getLangDir(lang);
   return (
     <html lang={lang} dir={direction} suppressHydrationWarning>
-      <Head>
+      <head>
         <link rel="search" type="application/opensearchdescription+xml" title="Recomend" href="/opensearch.xml" />
-      </Head>
+      </head>
       {process.env.NODE_ENV === 'production' ? (
         <Script
         defer
