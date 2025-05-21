@@ -101,7 +101,7 @@ export default function TvSerieHeader({
               {serie.genres ? <Genres genres={serie.genres} className="before:content-['_|_']" /> : null}
             </div>
             {/* TITLE */}
-            <div className="text-clamp space-x-1">
+            <h1 className="text-clamp space-x-1">
               <span className='font-bold select-text'>{serie.title}</span>
               {/* DATE */}
               <sup>
@@ -110,7 +110,7 @@ export default function TvSerieHeader({
               {serie.extra_data.original_name !== serie.title && (
                 <div className='text-base font-semibold text-muted-foreground'>{serie.extra_data.original_name}</div>
               )}
-            </div>
+            </h1>
 
             <div className=" space-y-2">
               <div>

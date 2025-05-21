@@ -102,14 +102,14 @@ export default function MovieHeader({
               {movie.genres ? <Genres genres={movie.genres} className="before:content-['_|_']" /> : null}
             </div>
             {/* TITLE */}
-            <div className="text-clamp space-x-1">
+            <h1 className="text-clamp space-x-1">
               <span className='font-bold select-text'>{movie.title}</span>
               {/* DATE */}
               <sup>
                 <DateOnlyYearTooltip date={movie.extra_data.release_date ?? ''} className=' text-base font-medium'/>
               </sup>
               {movie.extra_data.original_title !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.extra_data.original_title}</div> : null}
-            </div>
+            </h1>
             <div className=" space-y-2">
               <div>
                 {movie.main_credit?.map((director, index: number) => (

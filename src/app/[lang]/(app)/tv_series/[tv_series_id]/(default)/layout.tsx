@@ -27,7 +27,7 @@ export async function generateMetadata(
   });
   if (!serie) return { title: upperFirst(common('errors.serie_not_found')) };
   return {
-    title: t('metadata.title', { title: serie.title, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() }),
+    title: `${t('metadata.title', { title: serie.title, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() })} • ${upperFirst(common('messages.serie', { count: 1 }))}`,
     description: truncate(
       serie.main_credit
         ? t('metadata.description', {
@@ -47,7 +47,7 @@ export async function generateMetadata(
     },
     openGraph: {
       siteName: siteConfig.name,
-      title: t('metadata.title', { title: serie.title, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() }),
+      title: `${t('metadata.title', { title: serie.title, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() })} • ${upperFirst(common('messages.serie', { count: 1 }))} • ${siteConfig.name}`,
       description: truncate(
         serie.main_credit
           ? t('metadata.description', {
@@ -64,11 +64,7 @@ export async function generateMetadata(
       ),
       url: `${siteConfig.url}/tv_series/${serie.slug}`,
       images: serie.avatar_url ? [
-        {
-          url: serie.avatar_url,
-          width: 1200,
-          height: 630,
-        }
+        { url: serie.avatar_url }
       ] : undefined,
       type: 'video.tv_show',
     },
