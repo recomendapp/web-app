@@ -78,13 +78,13 @@ export default async function ReviewPage(
           image: actor.person?.avatar_url ?? undefined,
         })),
       genre: review.activity?.media?.genres?.map((genre) => genre.name),
-      aggregateRating: {
+      aggregateRating: (review.activity?.media?.vote_average || review.activity?.media?.tmdb_vote_average) ? {
         '@type': 'AggregateRating',
         ratingValue: review.activity?.media?.vote_average ?? review.activity?.media?.tmdb_vote_average ?? undefined,
         ratingCount: review.activity?.media?.vote_count ?? review.activity?.media?.tmdb_vote_count ?? 0,
         bestRating: 10,
         worstRating: 1,
-      },
+      } : undefined,
     },
     reviewRating: {
       '@type': 'Rating',

@@ -117,13 +117,13 @@ export default async function TvSeriesLayout(
         image: actor.person?.avatar_url ?? undefined,
       })),
     genre: serie.genres?.map((genre) => genre.name),
-    aggregateRating: {
+    aggregateRating: (serie.vote_average || serie.tmdb_vote_average) ? {
       '@type': 'AggregateRating',
       ratingValue: serie.vote_average ?? serie.tmdb_vote_average ?? undefined,
       ratingCount: serie.vote_count ?? serie.tmdb_vote_count ?? 0,
       bestRating: 10,
       worstRating: 1,
-    },
+    } : undefined,
   };
   return (
   <>

@@ -120,13 +120,13 @@ export default async function MovieLayout(
           image: actor.person?.avatar_url ?? undefined,
         })),
       genre: movie.genres?.map((genre) => genre.name),
-      aggregateRating: {
+      aggregateRating: (movie.vote_average || movie.tmdb_vote_average) ? {
         '@type': 'AggregateRating',
         ratingValue: movie.vote_average ?? movie.tmdb_vote_average ?? undefined,
         ratingCount: movie.vote_count ?? movie.tmdb_vote_count ?? 0,
         bestRating: 10,
         worstRating: 1,
-      },
+      } : undefined,
     };
     return (
 		<>
