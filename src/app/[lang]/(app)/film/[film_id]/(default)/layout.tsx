@@ -108,11 +108,10 @@ export default async function MovieLayout(
       dateModified: new Date().toISOString(),
       duration: movie.extra_data.runtime ? toISO8601Duration(movie.extra_data.runtime) : undefined,
       director: movie.main_credit
-        ?.map(d => d.title)
-        .filter((name): name is string => !!name)
-        .map(name => ({
+        ?.map(director => ({
           '@type': 'Person',
-          name,
+          name: director.title ?? undefined,
+          image: director.avatar_url ?? undefined,
         })),
       actor: movie.cast
         ?.map((actor) => ({
@@ -123,13 +122,12 @@ export default async function MovieLayout(
       genre: movie.genres?.map((genre) => genre.name),
       aggregateRating: {
         '@type': 'AggregateRating',
-        ratingValue: movie.vote_average ?? undefined,
-        ratingCount: movie.vote_count ?? undefined,
+        ratingValue: movie.vote_average ?? movie.tmdb_vote_average ?? undefined,
+        ratingCount: movie.vote_count ?? (movie.vote_average ? 1 : (movie.tmdb_vote_count ?? 0)),
         bestRating: 10,
         worstRating: 1,
       },
     };
-
     return (
 		<>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

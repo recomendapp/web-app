@@ -105,11 +105,10 @@ export default async function TvSeriesLayout(
     datePublished: serie.date ?? undefined,
     dateModified: new Date().toISOString(),
     director: serie.main_credit
-      ?.map(d => d.title)
-      .filter((name): name is string => !!name)
-      .map(name => ({
+      ?.map(director => ({
         '@type': 'Person',
-        name,
+        name: director.title ?? undefined,
+        image: director.avatar_url ?? undefined,
       })),
     actor: serie.cast
       ?.map((actor) => ({
@@ -120,8 +119,8 @@ export default async function TvSeriesLayout(
     genre: serie.genres?.map((genre) => genre.name),
     aggregateRating: {
       '@type': 'AggregateRating',
-      ratingValue: serie.vote_average ?? undefined,
-      ratingCount: serie.vote_count ?? undefined,
+      ratingValue: serie.vote_average ?? serie.tmdb_vote_average ?? undefined,
+      ratingCount: serie.vote_count ?? (serie.vote_average ? 1 : (serie.tmdb_vote_count ?? 0)),
       bestRating: 10,
       worstRating: 1,
     },
