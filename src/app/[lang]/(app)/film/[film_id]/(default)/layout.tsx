@@ -123,7 +123,7 @@ export default async function MovieLayout(
       aggregateRating: {
         '@type': 'AggregateRating',
         ratingValue: movie.vote_average ?? movie.tmdb_vote_average ?? undefined,
-        ratingCount: movie.vote_count ?? (movie.vote_average ? 1 : (movie.tmdb_vote_count ?? 0)),
+        ratingCount: movie.vote_count ?? movie.tmdb_vote_count ?? 0,
         bestRating: 10,
         worstRating: 1,
       },

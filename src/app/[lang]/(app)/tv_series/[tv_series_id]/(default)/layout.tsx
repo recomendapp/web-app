@@ -120,7 +120,7 @@ export default async function TvSeriesLayout(
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: serie.vote_average ?? serie.tmdb_vote_average ?? undefined,
-      ratingCount: serie.vote_count ?? (serie.vote_average ? 1 : (serie.tmdb_vote_count ?? 0)),
+      ratingCount: serie.vote_count ?? serie.tmdb_vote_count ?? 0,
       bestRating: 10,
       worstRating: 1,
     },
