@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
+import { locales } from '@/lib/i18n/locales';
 
 export async function generateMetadata(
     props: {
@@ -22,13 +23,16 @@ export async function generateMetadata(
 		title: t('playlist.metadata.title', { title: playlist.title, username: playlist.user?.username }),
 		description: truncate(t('playlist.metadata.description', { username: playlist.user?.username, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
         alternates: {
-            canonical: `${siteConfig.url}/playlist/${playlist.id}`,
+            canonical: `${siteConfig.url}/${params.lang}/playlist/${playlist.id}`,
+            languages: Object.fromEntries(
+                locales.map((locale) => [locale, `${siteConfig.url}/${locale}/playlist/${playlist.id}`])
+            ),
         },
         openGraph: {
             siteName: siteConfig.name,
             title: `${t('playlist.metadata.title', { title: playlist.title, username: playlist.user?.username })} • ${siteConfig.name}`,
             description: truncate(t('playlist.metadata.description', { username: playlist.user?.username, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
-            url: `${siteConfig.url}/playlist/${playlist.id}`,
+            url: `${siteConfig.url}/${params.lang}/playlist/${playlist.id}`,
             images: playlist.poster_url ? [
                 { url: playlist.poster_url },
             ] : undefined,

@@ -1,7 +1,7 @@
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getPerson, getPersonFilms } from '@/features/server/media/mediaQueries';
 import { getTranslations } from 'next-intl/server';
-import { upperFirst } from 'lodash';
+import { truncate, upperFirst } from 'lodash';
 import { CardMedia } from '@/components/Card/CardMedia';
 import { z } from "zod";
 import { Pagination } from './_components/Pagination';
@@ -10,6 +10,8 @@ import { Link } from "@/lib/i18n/routing";
 import { Button } from '@/components/ui/button';
 import { Filters } from './_components/Filters';
 import { Metadata } from 'next';
+import { siteConfig } from '@/config/site';
+import { locales } from '@/lib/i18n/locales';
 
 const SORT_BY = ["release_date", "vote_average"] as const;
 const DISPLAY = ["grid", "row"] as const;
@@ -49,6 +51,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+  const t = await getTranslations({ locale: params.lang, namespace: 'pages.person.films' });
   const { id } = getIdFromSlug(params.person_id);
   const person = await getPerson({
 	id: id,
@@ -56,8 +59,25 @@ export async function generateMetadata(
   });
   if (!person) return { title: upperFirst(common('errors.person_not_found')) };
   return {
-	title: `Films avec ${person.title}`,
-	description: person.extra_data.biography,
+	title: t('metadata.title', { name: person.title }),
+	description: truncate(t('metadata.description', { name: person.title }), { length: siteConfig.seo.description.limit }),
+	alternates: {
+	  canonical: `${siteConfig.url}/${params.lang}/person/${person.slug}/films`,
+	  languages: Object.fromEntries(
+		locales.map((locale) => [locale, `${siteConfig.url}/${locale}/person/${person.slug}/films`])
+	  ),
+	},
+	openGraph: {
+      siteName: siteConfig.name,
+      title: `${t('metadata.title', { name: person.title })} • ${siteConfig.name}`,
+      description: truncate(t('metadata.description', { name: person.title }), { length: siteConfig.seo.description.limit }),
+      url: `${siteConfig.url}/${params.lang}/person/${person.slug}/films`,
+      images: person.avatar_url ? [
+        { url: person.avatar_url },
+      ] : undefined,
+      type: 'profile',
+      locale: params.lang,
+    }
   };
 }
 

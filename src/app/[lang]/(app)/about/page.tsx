@@ -141,19 +141,19 @@ export default async function About(
         <p>{t('team.intro')}</p>
         {/* MEMBERS */}
         <div className="w-full space-y-4">
-          {/* YOANN */}
-          <div className="bg-muted rounded-md p-4 w-full">
-            <h3 className=" text-lg font-semibold">
-              {t('team.members.yoann.name')}
-            </h3>
-            <p>{t('team.members.yoann.description')}</p>
-          </div>
           {/* LOUP */}
           <div className="bg-muted rounded-md p-4 w-full">
             <h3 className=" text-lg font-semibold">
               {t('team.members.loup.name')}
             </h3>
             <p>{t('team.members.loup.description')}</p>
+          </div>
+          {/* YOANN */}
+          <div className="bg-muted rounded-md p-4 w-full">
+            <h3 className=" text-lg font-semibold">
+              {t('team.members.yoann.name')}
+            </h3>
+            <p>{t('team.members.yoann.description')}</p>
           </div>
         </div>
         <p>

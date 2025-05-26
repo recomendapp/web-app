@@ -1,8 +1,11 @@
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getPerson, getPersonFilms } from '@/features/server/media/mediaQueries';
 import { getTranslations } from 'next-intl/server';
-import { upperFirst } from 'lodash';
+import { truncate, upperFirst } from 'lodash';
 import { z } from "zod";
+import { siteConfig } from '@/config/site';
+import { locales } from '@/lib/i18n/locales';
+import { Metadata } from 'next';
 
 const SORT_BY = ["release_date"] as const;
 const DISPLAY = ["poster", "row"] as const;
@@ -39,9 +42,10 @@ export async function generateMetadata(
 	  person_id: string;
 	}>;
   }
-) {
+): Promise<Metadata> {
   const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+  const t = await getTranslations({ locale: params.lang, namespace: 'pages.person.tv_series' });
   const { id } = getIdFromSlug(params.person_id);
   const person = await getPerson({
 	id: id,
@@ -49,8 +53,25 @@ export async function generateMetadata(
   });
   if (!person) return { title: upperFirst(common('errors.person_not_found')) };
   return {
-	title: `Série avec ${person.title}`,
-	description: person.extra_data.biography,
+	title: t('metadata.title', { name: person.title }),
+	description: truncate(t('metadata.description', { name: person.title }), { length: siteConfig.seo.description.limit }),
+	alternates: {
+		canonical: `${siteConfig.url}/${params.lang}/person/${person.slug}/tv_series`,
+		languages: Object.fromEntries(
+			locales.map((locale) => [locale, `${siteConfig.url}/${locale}/person/${person.slug}/tv_series`])
+		),
+	},
+	openGraph: {
+      siteName: siteConfig.name,
+      title: `${t('metadata.title', { name: person.title })} • ${siteConfig.name}`,
+      description: truncate(t('metadata.description', { name: person.title }), { length: siteConfig.seo.description.limit }),
+      url: `${siteConfig.url}/${params.lang}/person/${person.slug}/tv_series`,
+      images: person.avatar_url ? [
+        { url: person.avatar_url },
+      ] : undefined,
+      type: 'profile',
+      locale: params.lang,
+    }
   };
 }
 

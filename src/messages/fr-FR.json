@@ -617,9 +617,21 @@
     },
     "film": {
       "metadata": {
-        "title": "{title} ({year})",
+        "title": "{title} ({year}) • Film",
         "description": "{title} est un film de {directors} sorti en {year}. Synopsis: {overview}",
         "description_no_director": "{title} est un film sorti en {year}. Synopsis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlists",
+          "description": "Découvrez toutes les playlists contenant le film {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Critiques",
+          "description": "Découvrez toutes les critiques du film {title}."
+        }
       }
     },
     "serie": {
@@ -627,6 +639,35 @@
         "title": "{title} ({year})",
         "description": "{title} est une série de {creators} diffusée pour la première fois en {year}. Synopsis: {overview}",
         "description_no_creator": "{title} est une série diffusée pour la première fois en {year}. Synopsis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlists",
+          "description": "Découvrez toutes les playlists contenant la série {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Critiques",
+          "description": "Découvrez toutes les critiques de la série {title}."
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Films",
+          "description": "Découvrez tous les films dans lesquels {name} a joué ou a été impliqué."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • Séries TV",
+          "description": "Découvrez toutes les séries TV dans lesquelles {name} a joué ou a été impliqué."
+        }
       }
     },
     "review": {

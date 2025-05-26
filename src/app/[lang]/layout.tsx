@@ -8,6 +8,7 @@ import Providers from '@/context/Providers';
 import Script from 'next/script';
 import { getLangDir } from 'rtl-detect';
 import Head from 'next/head';
+import { locales } from '@/lib/i18n/locales';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -27,6 +28,9 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   alternates: {
     canonical: siteConfig.url,
+    languages: Object.fromEntries(
+      locales.map((locale) => [locale, `${siteConfig.url}/${locale}`])
+    ),
   },
   manifest: '/manifest.webmanifest',
   icons: {

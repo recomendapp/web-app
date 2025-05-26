@@ -6,6 +6,7 @@ import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
+import { locales } from '@/lib/i18n/locales';
 
 export async function generateMetadata(
   props: {
@@ -17,6 +18,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+  const t = await getTranslations({ locale: params.lang, namespace: 'pages.person' });
   const { id } = getIdFromSlug(params.person_id);
   const person = await getPerson({
     id: id,
@@ -24,16 +26,19 @@ export async function generateMetadata(
   });
   if (!person) return { title: upperFirst(common('errors.person_not_found')) };
   return {
-    title: `${person.title} • ${person.extra_data.known_for_department}`,
+    title: t('metadata.title', { name: person.title, department: person.extra_data.known_for_department }),
     description: truncate(person.extra_data.biography, { length: siteConfig.seo.description.limit }),
     alternates: {
-      canonical: `${siteConfig.url}/person/${person.slug}`,
+      canonical: `${siteConfig.url}/${params.lang}/person/${person.slug}`,
+      languages: Object.fromEntries(
+        locales.map((locale) => [locale, `${siteConfig.url}/${locale}/person/${person.slug}`])
+      ),
     },
     openGraph: {
       siteName: siteConfig.name,
       title: `${person.title} • ${person.extra_data.known_for_department} • ${siteConfig.name}`,
       description: truncate(person.extra_data.biography, { length: siteConfig.seo.description.limit }),
-      url: `${siteConfig.url}/person/${person.slug}`,
+      url: `${siteConfig.url}/${params.lang}/person/${person.slug}`,
       images: person.avatar_url ? [
         { url: person.avatar_url },
       ] : undefined,

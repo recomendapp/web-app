@@ -7,6 +7,7 @@ import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 import { type Review, WithContext } from 'schema-dts';
 import { getRawReviewText } from '@/lib/utils';
+import { locales } from '@/lib/i18n/locales';
 
 export async function generateMetadata(
   props: {
@@ -25,13 +26,16 @@ export async function generateMetadata(
     title: t('title', { title: review.activity?.media?.title, username: review.activity?.user?.username }),
     description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
     alternates: {
-      canonical: `${siteConfig.url}/review/${params.review_id}`,
+      canonical: `${siteConfig.url}/${params.lang}/review/${params.review_id}`,
+      languages: Object.fromEntries(
+        locales.map((locale) => [locale, `${siteConfig.url}/${locale}/review/${params.review_id}`])
+      ),
     },
     openGraph: {
       siteName: siteConfig.name,
       title: t('title', { title: review.activity?.media?.title, username: review.activity?.user?.username }),
       description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
-      url: `${siteConfig.url}/review/${params.review_id}`,
+      url: `${siteConfig.url}/${params.lang}/review/${params.review_id}`,
       images: review.activity?.media?.avatar_url ? [
         { url: review.activity?.media?.avatar_url },
       ] : undefined,

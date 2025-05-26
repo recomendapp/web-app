@@ -620,6 +620,18 @@
         "title": "{title} ({year})",
         "description": "{title} is a film by {directors} released in {year}. Synopsis: {overview}",
         "description_no_director": "{title} is a film released in {year}. Synopsis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlists",
+          "description": "Discover all the playlists containing the film {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Reviews",
+          "description": "Discover all the reviews of the film {title}."
+        }
       }
     },
     "serie": {
@@ -627,6 +639,35 @@
         "title": "{title} ({year})",
         "description": "{title} is a serie by {creators} first aired in {year}. Synopsis: {overview}",
         "description_no_creator": "{title} is a serie first aired in {year}. Synopsis: {overview}"
+      },
+      "playlists": {
+        "metadata": {
+          "title": "{title} ({year}) • Playlists",
+          "description": "Discover all the playlists containing the serie {title}."
+        }
+      },
+      "reviews": {
+        "metadata": {
+          "title": "{title} ({year}) • Reviews",
+          "description": "Discover all the reviews of the serie {title}."
+        }
+      }
+    },
+    "person": {
+      "metadata": {
+        "title": "{name} • {department}"
+      },
+      "films": {
+        "metadata": {
+          "title": "{name} • Films",
+          "description": "Discover all the films in which {name} has acted or been involved."
+        }
+      },
+      "tv_series": {
+        "metadata": {
+          "title": "{name} • TV Series",
+          "description": "Discover all the TV series in which {name} has acted or been involved."
+        }
       }
     },
     "review": {

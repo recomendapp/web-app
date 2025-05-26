@@ -3,6 +3,7 @@ import { Map } from '@/components/Map/Map';
 import { getTranslations } from 'next-intl/server';
 import { truncate } from 'lodash';
 import { siteConfig } from '@/config/site';
+import { locales } from '@/lib/i18n/locales';
 
 export async function generateMetadata(
   props: {
@@ -17,7 +18,10 @@ export async function generateMetadata(
     title: t('metadata.title'),
     description: truncate(t('metadata.description'), { length: siteConfig.seo.description.limit }),
     alternates: {
-      canonical: `${siteConfig.url}/explore`,
+      canonical: `${siteConfig.url}/${params.lang}/explore`,
+      languages: Object.fromEntries(
+        locales.map((locale) => [locale, `${siteConfig.url}/${locale}/explore`])
+      ),
     },
     openGraph: {
       siteName: siteConfig.name,
@@ -27,7 +31,7 @@ export async function generateMetadata(
       // images: [
 
       // ]
-      url: `${siteConfig.url}/explore`,
+      url: `${siteConfig.url}/${params.lang}/explore`,
       type: 'website',
       locale: params.lang,
     },

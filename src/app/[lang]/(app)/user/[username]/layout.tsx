@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { siteConfig } from '@/config/site';
 import { getProfile } from '@/features/server/users';
 import { Metadata } from 'next';
+import { locales } from '@/lib/i18n/locales';
 
 export async function generateMetadata(
   props: {
@@ -21,13 +22,16 @@ export async function generateMetadata(
     title: upperFirst(t('user.metadata.title', { full_name: user.full_name, username: user.username })),
     description: truncate(upperFirst(t('user.metadata.description', { username: user.username, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
     alternates: {
-      canonical: `${siteConfig.url}/@${user.username}`,
+      canonical: `${siteConfig.url}/${params.lang}/@${user.username}`,
+      languages: Object.fromEntries(
+        locales.map((locale) => [locale, `${siteConfig.url}/${locale}/@${user.username}`])
+      ),
     },
     openGraph: {
       siteName: siteConfig.name,
       title: `${upperFirst(t('user.metadata.title', { full_name: user.full_name, username: user.username }))} • ${siteConfig.name}`,
       description: truncate(upperFirst(t('user.metadata.description', { username: user.username, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
-      url: `${siteConfig.url}/@${user.username}`,
+      url: `${siteConfig.url}/${params.lang}/@${user.username}`,
       images: user.avatar_url ? [
         { url: user.avatar_url },
       ] : undefined,
