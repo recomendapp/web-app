@@ -20,8 +20,8 @@ const DISPLAY = ["grid", "row"] as const;
 const DEFAULT_PAGE = 1;
 const DEFAULT_PER_PAGE = 20;
 const DEFAULT_DISPLAY = "grid";
-export const DEFAULT_SORT_BY = "release_date";
-export const DEFAULT_SORT_ORDER = "desc";
+const DEFAULT_SORT_BY = "release_date";
+const DEFAULT_SORT_ORDER = "desc";
 
 const sortBySchema = z.enum(SORT_BY);
 const getValidatedSortBy = (order?: string | null): z.infer<typeof sortBySchema> => {

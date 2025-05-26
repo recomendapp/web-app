@@ -65,8 +65,8 @@ export const Filters = ({
 						</div> */}
 						<div className="grid gap-2">
 							<div className="grid grid-cols-3 items-center gap-4">
-								<Label htmlFor="width">{upperFirst(common('word.sort'))}</Label>
-								<Select defaultValue={sortBy} onValueChange={(e) => handleChange({ sort_order: sortOrder === 'desc' ? 'asc' : 'desc' })}>
+								<Label htmlFor="width">{upperFirst(common('messages.sort_by'))}</Label>
+								<Select defaultValue={sortBy} onValueChange={(e) => handleChange({ sort_by: e })}>
 									<SelectTrigger className="col-span-2">
 										<SelectValue />
 									</SelectTrigger>
@@ -92,12 +92,12 @@ export const Filters = ({
 								}}
 								>
 									<SelectTrigger className="col-span-2">
-										<SelectValue placeholder="Select a job"/>
+										<SelectValue placeholder="Select a job" />
 									</SelectTrigger>
 									<SelectContent>
 										{jobs.map((department, i) => (
 											<SelectGroup key={i}>
-												{department.department && <SelectItem value={department.department} className="text-muted-foreground">
+												{department.department && <SelectItem value={department.department} className="text-accent-yellow">
 													{department.department}
 												</SelectItem>}
 												{department.jobs?.map((job, j) => (
