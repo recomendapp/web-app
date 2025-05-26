@@ -80,7 +80,9 @@
       "watched_date": "date de visionnage",
       "rating": "note",
       "create_a_playlist": "créer une playlist",
-      "by_name": "par {name}"
+      "by_name": "par {name}",
+      "reset": "réinitialiser",
+      "job": "{count, plural, one {métier} other {métiers}}"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",

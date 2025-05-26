@@ -198,7 +198,8 @@ export const getPerson = async ({
 			.select(`
 				*,
 				movies:media_movie_aggregate_credits(*, media:media_movie(*)),
-				tv_series:tmdb_tv_series_credits(*, media:media_tv_series(*))
+				tv_series:tmdb_tv_series_credits(*, media:media_tv_series(*)),
+				jobs:person_jobs(*)
 			`)
 			.match({
 				'id': id,
@@ -260,6 +261,8 @@ export const getPersonFilms = async ({
 		perPage: number;
 		sortBy: 'release_date' | 'vote_average';
 		sortOrder: 'asc' | 'desc';
+		department?: string;
+		job?: string;
 	};
 }) => {
 	return await cache(
@@ -267,19 +270,30 @@ export const getPersonFilms = async ({
 			const supabase = await createClient(locale);
 			let from = (filters.page - 1) * filters.perPage;
 			let to = from + filters.perPage - 1;
-			let request = supabase
-				.from('media_movie_aggregate_credits')
-				.select(`
-					*,
-					media:media_movie(*)
-				`, {
-					count: 'exact',
-				})
-				.match({
-					'person_id': id,
-				})
-				.range(from, to)
-			
+			let request;
+			if (filters.department || filters.job) {
+				request = supabase
+					.from('tmdb_movie_credits')
+					.select(`
+						*,
+						media:media_movie(*)
+					`, {
+						count: 'exact',
+					})
+					.match({ 'person_id': id })
+					.range(from, to);
+			} else {
+				request = supabase
+					.from('media_movie_aggregate_credits')
+					.select(`
+						*,
+						media:media_movie(*)
+					`, {
+						count: 'exact',
+					})
+					.match({ 'person_id': id })
+					.range(from, to);
+			}
 			if (filters) {
 				if (filters.sortBy && filters.sortOrder) {
 					switch (filters.sortBy) {
@@ -294,8 +308,16 @@ export const getPersonFilms = async ({
 							break;
 					}
 				}
+				if (filters.department) {
+					request = request.eq('department', filters.department);
+				}
+				if (filters.job) {
+					request = request.eq('job', filters.job);
+				}
 			}
-			return await request;
+			return await request.overrideTypes<Array<{
+				media: Media;
+			}>, { merge: true }>()
 		},
 		mediaKeys.personFilms({
 			locale: locale,

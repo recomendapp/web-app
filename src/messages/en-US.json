@@ -80,7 +80,9 @@
       "watched_date": "watched date",
       "rating": "rating",
       "create_a_playlist": "create a playlist",
-      "by_name": "by {name}"
+      "by_name": "by {name}",
+      "reset": "reset",
+      "job": "{count, plural, one {job} other {jobs}}"
     },
     "errors": {
       "not_logged_in": "you are not logged in",

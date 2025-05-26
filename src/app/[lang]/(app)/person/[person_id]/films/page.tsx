@@ -12,14 +12,16 @@ import { Filters } from './_components/Filters';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { locales } from '@/lib/i18n/locales';
+import { notFound } from 'next/navigation';
+import { Media } from '@/types/type.db';
 
 const SORT_BY = ["release_date", "vote_average"] as const;
 const DISPLAY = ["grid", "row"] as const;
 const DEFAULT_PAGE = 1;
 const DEFAULT_PER_PAGE = 20;
 const DEFAULT_DISPLAY = "grid";
-const DEFAULT_SORT_BY = "release_date";
-const DEFAULT_SORT_ORDER = "desc";
+export const DEFAULT_SORT_BY = "release_date";
+export const DEFAULT_SORT_ORDER = "desc";
 
 const sortBySchema = z.enum(SORT_BY);
 const getValidatedSortBy = (order?: string | null): z.infer<typeof sortBySchema> => {
@@ -40,6 +42,17 @@ const getValidatePerPage = (perPage?: number | null): number => {
 const displaySchema = z.enum(DISPLAY);
 const getValidatedDisplay = (display?: string | null): z.infer<typeof displaySchema> => {
   return displaySchema.safeParse(display).success ? display! as z.infer<typeof displaySchema> : DEFAULT_DISPLAY;
+};
+
+const departmentSchema = z.string().optional();
+const getValidateDepartment = (department?: string | null): string | undefined => {
+  if (department === null) return undefined;
+  return departmentSchema.safeParse(department).success ? department : undefined;
+};
+const jobSchema = z.string().optional();
+const getValidateJob = (job?: string | null): string | undefined => {
+  if (job === null) return undefined;
+  return jobSchema.safeParse(job).success ? job : undefined;
 };
 export async function generateMetadata(
   props: {
@@ -93,6 +106,8 @@ export default async function FilmsPage(
 			page?: number;
 			per_page?: number;
 			display?: string;
+			department?: string;
+			job?: string;
 		}>;
 	}
 ) {
@@ -103,8 +118,15 @@ export default async function FilmsPage(
 	const page = getValidatePage(Number(searchParams.page));
 	const perPage = getValidatePerPage(Number(searchParams.per_page));
 	const display = getValidatedDisplay(searchParams.display);
+	const department = getValidateDepartment(searchParams.department);
+	const job = getValidateJob(searchParams.job);
 	const common = await getTranslations({ locale: params.lang, namespace: 'common' });
 	const { id } = getIdFromSlug(params.person_id);
+	const person = await getPerson({
+		id: id,
+		locale: params.lang,
+  	});
+	if (!person) return notFound();
 	const { data: movies, error, count } = await getPersonFilms({
 		id: id,
 		locale: params.lang,
@@ -113,6 +135,8 @@ export default async function FilmsPage(
 			sortOrder: sortOrder,
 			page: page,
 			perPage: perPage,
+			department: department,
+			job: job,
 		}
 	});
 
@@ -136,9 +160,12 @@ export default async function FilmsPage(
 		<div className='@container/person-films flex flex-col gap-4'>
 			<div className='flex flex-col @md/person-films:flex-row @md/person-films:justify-between items-center gap-2'>
 				<Filters
+				jobs={person.jobs}
 				sortBy={sortBy}
 				sortOrder={sortOrder}
 				display={display}
+				department={department}
+				job={job}
 				/>
 				<Pagination
 				page={page}

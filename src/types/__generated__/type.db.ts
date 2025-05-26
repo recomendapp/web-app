@@ -3994,6 +3994,43 @@ export type Database = {
           },
         ]
       }
+      person_jobs: {
+        Row: {
+          department: string | null
+          jobs: string[] | null
+          person_id: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "media_person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "person"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "person_full"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_movie_credits_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_person"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       playlists_friends: {
         Row: {
           created_at: string | null

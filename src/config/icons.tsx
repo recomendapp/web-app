@@ -21,6 +21,7 @@ import {
   EyeIcon,
   File,
   FileText,
+  FilterIcon,
   HeartIcon,
   HelpCircle,
   HomeIcon,
@@ -254,6 +255,7 @@ export const Icons = {
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
+  filter: FilterIcon,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path

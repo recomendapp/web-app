@@ -10,17 +10,6 @@ export const meKeys = {
 	/* -------------------------------------------------------------------------- */
 	/*                                     OLD                                    */
 	/* -------------------------------------------------------------------------- */
-
-	/**
-	 * Fetches friends of a user to send a movie
-	 * @param movieId The movie id
-	 * @returns List of friends
-	 */
-	sendMovie: ({
-		movieId,
-	} : {
-		movieId: number;
-	}) => [...meKeys.all, 'friends', 'send', movieId] as const,
 		
 
 	/**
