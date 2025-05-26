@@ -46,11 +46,15 @@ export type MediaTvSeries = Database['public']['Views']['media_tv_series']['Row'
 	production_countries?: Database['public']['Tables']['tmdb_tv_series_production_countries']['Row'][];
 	spoken_languages?: Database['public']['Tables']['tmdb_tv_series_spoken_languages']['Row'][];
 	cast?: MediaTvSeriesPerson[];
+	seasons?: MediaTvSeriesSeason[];
 };
 
 export type MediaTvSeriesPerson = Database['public']['Tables']['tmdb_tv_series_credits']['Row'] & {
 	person?: MediaPerson;
 };
+
+export type MediaTvSeriesSeason = Database['public']['Views']['media_tv_series_seasons']['Row'] & {
+}
 
 export type MediaTvSeriesAggregateCredits = any;
 

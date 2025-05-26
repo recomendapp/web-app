@@ -1,7 +1,7 @@
 import { mediaKeys } from "@/features/server/media/mediaKeys";
 import { createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@/lib/supabase/server-no-cookie";
-import { Media, MediaMovie, MediaTvSeries } from "@/types/type.db";
+import { Media, MediaMovie, MediaTvSeries, MediaTvSeriesSeason } from "@/types/type.db";
 import { unstable_cache as cache } from "next/cache";
 
 export const MEDIA_REVALIDATE_TIME = 24 * 60 * 60 * 1000;
@@ -156,7 +156,8 @@ export const getTvSeries = async ({
 						*,
 						person:media_person(*)
 					),
-					videos:tmdb_tv_series_videos(*)
+					videos:tmdb_tv_series_videos(*),
+					seasons:media_tv_series_seasons(*)
 				`)
 				.match({
 					'id': id,
@@ -165,8 +166,8 @@ export const getTvSeries = async ({
 					'videos.type': 'Trailer',
 				})
 				.order('published_at', { referencedTable: 'videos', ascending: true, nullsFirst: false })
-				.returns<MediaTvSeries[]>()
-				.maybeSingle();
+				.maybeSingle()
+				.overrideTypes<MediaTvSeries, { merge: true }>();
 			if (error) throw error;
 			return tvSeries;
 		},
@@ -177,6 +178,44 @@ export const getTvSeries = async ({
 		}
 	)();
 };
+
+export const getTvSeason = async ({
+	locale,
+	serieId,
+	seasonNumber,
+} : {
+	locale: string;
+	serieId: number;
+	seasonNumber: number;
+}) => {
+	return await cache(
+		async () => {
+			const supabase = await createClient(locale);
+			const { data, error } = await supabase
+				.from('media_tv_series_seasons')
+				.select(`
+					*,
+					episodes:tmdb_tv_series_episodes(
+						*
+					)
+				`)
+				.match({
+					serie_id: serieId,
+					season_number: seasonNumber,
+				})
+				.maybeSingle()
+				.overrideTypes<MediaTvSeriesSeason, { merge: true }>();
+			if (error) throw error;
+			return data;
+		},
+		mediaKeys.tvSeason({ locale: locale, serieId: serieId, seasonNumber: seasonNumber }),
+		{
+			revalidate: MEDIA_REVALIDATE_TIME,
+			tags: ['tmdb']
+		}
+	)();
+};
+
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */

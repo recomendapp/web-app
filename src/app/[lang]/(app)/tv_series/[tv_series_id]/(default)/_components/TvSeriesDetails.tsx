@@ -1,7 +1,6 @@
 'use client';
 
 import { JustWatchWidget } from "@/components/JustWatch/JustWatchWidgetScript";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
@@ -9,10 +8,13 @@ import { MediaTvSeries, MediaPerson, MediaTvSeriesPerson } from "@/types/type.db
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/routing";
+import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 
 export default function TvSerieDetails({
+  slug,
   serie,
 }: {
+  slug: string;
   serie: MediaTvSeries;
 }) {
   const common = useTranslations('common');
@@ -32,6 +34,48 @@ export default function TvSerieDetails({
           type="show"
           className="min-w-[20%]"
         />
+      </div>
+      <div>
+        <h2 className="text-lg font-medium">
+          {upperFirst(common('messages.season', { count: serie.seasons?.length }))}
+          <span className="text-muted-foreground">{` ${serie.seasons?.length}`}</span>
+        </h2>
+        <ScrollArea className="w-full">
+          <div className="flex space-x-4 pb-4">
+            {serie.seasons?.map((season, i) => (
+              <Link key={i} href={`/tv_series/${slug}/${season.season_number}`}>
+                <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
+                  <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
+                    <ImageWithFallback
+                      src={season.avatar_url ?? ''}
+                      alt={upperFirst(common('messages.season_value', { number: season.season_number }))}
+                      fill
+                      className="object-cover"
+                      type="tv_season"
+                      sizes={`
+                        (max-width: 640px) 96px,
+                        (max-width: 1024px) 120px,
+                        150px
+                      `}
+                    />
+                    <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
+                      {(season.tmdb_vote_average) ? <IconMediaRating
+                        rating={season.tmdb_vote_average}
+                        variant="general"
+                        className="w-full"
+                      /> : null}
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <p className="line-clamp-2 break-words">{upperFirst(common('messages.season_value', { number: season.season_number }))}</p>
+                    <p className="text-sm text-muted-foreground">{upperFirst(common('messages.episode_count', { count: season.episode_count }))}</p>
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </div>
       {/* CASTING */}
       <SerieCast cast={serie.cast} />

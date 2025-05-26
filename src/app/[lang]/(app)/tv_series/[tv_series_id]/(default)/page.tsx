@@ -122,7 +122,7 @@ export default async function TvSeriesPage(
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <TvSeriesDetails serie={serie} />
+      <TvSeriesDetails slug={params.tv_series_id} serie={serie} />
     </>
   );
 }

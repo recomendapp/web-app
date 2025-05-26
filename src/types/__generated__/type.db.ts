@@ -2299,6 +2299,13 @@ export type Database = {
             foreignKeyName: "tmdb_tv_series_episodes_season_id_fkey"
             columns: ["season_id"]
             isOneToOne: false
+            referencedRelation: "media_tv_series_seasons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_episodes_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_tv_series_seasons"
             referencedColumns: ["id"]
           },
@@ -2794,6 +2801,13 @@ export type Database = {
             foreignKeyName: "tmdb_tv_series_seasons_credits_season_id_fkey"
             columns: ["season_id"]
             isOneToOne: false
+            referencedRelation: "media_tv_series_seasons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_seasons_credits_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
             referencedRelation: "tmdb_tv_series_seasons"
             referencedColumns: ["id"]
           },
@@ -2832,6 +2846,13 @@ export type Database = {
           season_id?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "tmdb_tv_series_seasons_translations_season_id_fkey"
+            columns: ["season_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_series_seasons"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tmdb_tv_series_seasons_translations_season_id_fkey"
             columns: ["season_id"]
@@ -3815,7 +3836,6 @@ export type Database = {
       media_movie_aggregate_credits: {
         Row: {
           credits: Json | null
-          media: Json | null
           movie_id: number | null
           person_id: number | null
         }
@@ -3925,6 +3945,37 @@ export type Database = {
           watchlist_count: number | null
         }
         Relationships: []
+      }
+      media_tv_series_seasons: {
+        Row: {
+          avatar_path: string | null
+          avatar_url: string | null
+          episode_count: number | null
+          extra_data: Json | null
+          id: number | null
+          season_number: number | null
+          serie_id: number | null
+          title: string | null
+          tmdb_vote_average: number | null
+          tmdb_vote_count: number | null
+          url: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tmdb_tv_series_seasons_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "media_tv_series"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tmdb_tv_series_seasons_serie_id_fkey"
+            columns: ["serie_id"]
+            isOneToOne: false
+            referencedRelation: "tmdb_tv_series"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       person: {
         Row: {
