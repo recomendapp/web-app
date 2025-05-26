@@ -4,6 +4,7 @@
       "no_results": "no results",
       "added_by": "added by",
       "sort_by": "sort by",
+      "sort_order": "sort order",
       "go_to_film": "go to film",
       "go_to_serie": "go to serie",
       "go_to_user": "go to user",
@@ -82,7 +83,8 @@
       "create_a_playlist": "create a playlist",
       "by_name": "by {name}",
       "reset": "reset",
-      "job": "{count, plural, one {job} other {jobs}}"
+      "job": "{count, plural, one {job} other {jobs}}",
+      "department": "{count, plural, one {department} other {departments}}"
     },
     "errors": {
       "not_logged_in": "you are not logged in",

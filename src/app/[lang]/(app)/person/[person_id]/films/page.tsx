@@ -12,8 +12,8 @@ import { Filters } from './_components/Filters';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { locales } from '@/lib/i18n/locales';
-import { notFound } from 'next/navigation';
-import { Media } from '@/types/type.db';
+import { notFound, redirect } from 'next/navigation';
+import { ActiveFilters } from './_components/ActiveFilters';
 
 const SORT_BY = ["release_date", "vote_average"] as const;
 const DISPLAY = ["grid", "row"] as const;
@@ -156,23 +156,36 @@ export default async function FilmsPage(
 		)
 	}
 
+	if (!movies.length) {
+		if (department || job) {
+			return redirect(`/person/${params.person_id}/films`);
+		}
+	}
+
 	return (
 		<div className='@container/person-films flex flex-col gap-4'>
-			<div className='flex flex-col @md/person-films:flex-row @md/person-films:justify-between items-center gap-2'>
-				<Filters
-				jobs={person.jobs}
-				sortBy={sortBy}
-				sortOrder={sortOrder}
-				display={display}
+			<div>
+				<div className='flex flex-col @md/person-films:flex-row @md/person-films:justify-between items-center gap-2'>
+					<Filters
+					knownForDepartment={person.extra_data.known_for_department}
+					jobs={person.jobs}
+					sortBy={sortBy}
+					sortOrder={sortOrder}
+					display={display}
+					department={department}
+					job={job}
+					/>
+					<Pagination
+					page={page}
+					perPage={perPage}
+					total={count ?? 0}
+					searchParams={new URLSearchParams(searchParams as Record<string, string>)}
+					className='@md/person-films:mx-0 @md/person-films:w-fit'
+					/>
+				</div>
+				<ActiveFilters
 				department={department}
 				job={job}
-				/>
-				<Pagination
-				page={page}
-				perPage={perPage}
-				total={count ?? 0}
-				searchParams={new URLSearchParams(searchParams as Record<string, string>)}
-				className='@md/person-films:mx-0 @md/person-films:w-fit'
 				/>
 			</div>
 			<div

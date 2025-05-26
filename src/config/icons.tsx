@@ -1,21 +1,23 @@
 import { cn } from '@/lib/utils';
-import { el } from 'date-fns/locale';
+import { Cross2Icon } from '@radix-ui/react-icons';
 import {
   AlertCircleIcon,
   AlertTriangle,
   ArchiveIcon,
   ArchiveRestoreIcon,
-  ArrowRight,
+  ArrowDownIcon,
+  ArrowDownNarrowWideIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ArrowUpIcon,
+  ArrowUpNarrowWideIcon,
   BellIcon,
   BookmarkIcon,
-  Check,
   CheckIcon,
   ChevronLeft,
   ChevronRight,
   ClapperboardIcon,
-  ClipboardCheck,
   CompassIcon,
-  Copy,
   CopyIcon,
   CreditCard,
   EyeIcon,
@@ -240,7 +242,10 @@ export const Icons = {
   warning: AlertTriangle,
   user: User,
   users: UsersIcon,
-  arrowRight: ArrowRight,
+  arrowUp: ArrowUpIcon,
+  arrowDown: ArrowDownIcon,
+  arrowRight: ArrowRightIcon,
+  arrowLeft: ArrowLeftIcon,
   help: HelpCircle,
   pizza: Pizza,
   error: AlertCircleIcon,
@@ -256,6 +261,9 @@ export const Icons = {
   moon: Moon,
   laptop: Laptop,
   filter: FilterIcon,
+  X: Cross2Icon,
+  orderAsc: ArrowUpNarrowWideIcon,
+  orderDesc: ArrowDownNarrowWideIcon,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path
