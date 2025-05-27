@@ -91,7 +91,11 @@
       "by_name": "par {name}",
       "reset": "réinitialiser",
       "job": "{count, plural, one {métier} other {métiers}}",
-      "department": "{count, plural, one {département} other {départements}}"
+      "department": "{count, plural, one {département} other {départements}}",
+      "share_title_via": "Partager <strong>{title}</strong> via",
+      "link": "lien",
+      "copy_link": "copier le lien",
+      "copied": "{gender, select, female {{count, plural, one {copiée} other {copiées}}} other {{count, plural, one {copié} other {copiés}}}}"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",

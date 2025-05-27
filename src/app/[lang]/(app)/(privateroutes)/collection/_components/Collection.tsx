@@ -68,8 +68,8 @@ const Collection = () => {
 		  <TabsTrigger value="external">Enregistré</TabsTrigger>
 		</TabsList>
 		<TabsContent value="personal" className="grid gap-2 grid-cols-3 @md/collection:grid-cols-4 @2xl/collection:grid-cols-6 @4xl/collection:grid-cols-8 @6xl/collection:grid-cols-10 @7xl/collection:grid-cols-12">
-		  {collectionRoutes.map((item) => (
-			<Link href={item.href} className="group h-full w-full flex flex-col gap-2 text-center line-clamp-2">
+		  {collectionRoutes.map((item, i) => (
+			<Link key={i} href={item.href} className="group h-full w-full flex flex-col gap-2 text-center line-clamp-2">
 			{item.icon}
 			{item.label}
 			</Link>

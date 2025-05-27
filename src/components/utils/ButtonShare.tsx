@@ -1,6 +1,6 @@
 // UI
 import { Button } from '@/components/ui/button';
-import copyToClipboard from '@/hooks/copy-to-clipboard';
+import { useCopyToClipboard } from '@/hooks/copy-to-clipboard';
 import { cn } from '@/lib/utils';
 import { capitalize } from 'lodash';
 
@@ -18,6 +18,7 @@ export default function ButtonShare({
   className?: string;
 }) {
   const common = useTranslations('common');
+  const copyToClipboard = useCopyToClipboard();
   if (icon) {
     return (
       <Button className={cn('', className)} variant={'action'} onClick={() => copyToClipboard(url)}>

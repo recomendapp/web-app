@@ -91,7 +91,11 @@
       "by_name": "by {name}",
       "reset": "reset",
       "job": "{count, plural, one {job} other {jobs}}",
-      "department": "{count, plural, one {department} other {departments}}"
+      "department": "{count, plural, one {department} other {departments}}",
+      "share_title_via": "Share <strong>{title}</strong> via",
+      "link": "link",
+      "copy_link": "copy link",
+      "copied": "copied"
     },
     "errors": {
       "not_logged_in": "you are not logged in",

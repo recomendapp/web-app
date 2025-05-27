@@ -1,9 +1,15 @@
-import { toast } from 'react-hot-toast';
+import { upperFirst } from 'lodash';
+import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
 
-const copyToClipboard = (url: string) => {
-  navigator.clipboard.writeText(url);
-  toast.success(`Copié`);
-  return url;
-};
+export const useCopyToClipboard = () => {
+  const t = useTranslations('common');
 
-export default copyToClipboard;
+  const copy = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success(upperFirst(t('messages.copied', {gender: 'male', count: 1})));
+    return text;
+  };
+
+  return copy;
+}
