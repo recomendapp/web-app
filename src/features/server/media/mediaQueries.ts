@@ -148,7 +148,7 @@ export const getTvSeries = async ({
 	return await cache(
 		async () => {
 			const supabase = await createClient(locale);
-			const { data: tvSeries, error } = await supabase
+			const { data: rawTvSeries, error } = await supabase
 				.from('media_tv_series')
 				.select(`
 					*,
@@ -165,10 +165,18 @@ export const getTvSeries = async ({
 					'videos.iso_639_1': locale.split('-')[0],
 					'videos.type': 'Trailer',
 				})
+				.filter('seasons.season_number', 'neq', 0)
 				.order('published_at', { referencedTable: 'videos', ascending: true, nullsFirst: false })
 				.maybeSingle()
-				.overrideTypes<MediaTvSeries, { merge: true }>();
+				.overrideTypes<MediaTvSeries, { merge: false }>();
 			if (error) throw error;
+			const specials = rawTvSeries?.seasons?.filter(season => season.season_number === 0) || [];
+			const regularSeasons = rawTvSeries?.seasons?.filter(season => season.season_number !== 0) || [];
+			const tvSeries: MediaTvSeries = {
+				...rawTvSeries!,
+				seasons: regularSeasons,
+				specials: specials,
+			};
 			return tvSeries;
 		},
 		mediaKeys.detail({ locale: locale, id: id, type: 'tv_series' }),
@@ -195,7 +203,7 @@ export const getTvSeason = async ({
 				.from('media_tv_series_seasons')
 				.select(`
 					*,
-					episodes:tmdb_tv_series_episodes(
+					episodes:media_tv_series_episodes(
 						*
 					)
 				`)
@@ -203,6 +211,7 @@ export const getTvSeason = async ({
 					serie_id: serieId,
 					season_number: seasonNumber,
 				})
+				.order('episode_number', { referencedTable: 'episodes', ascending: true, nullsFirst: false })
 				.maybeSingle()
 				.overrideTypes<MediaTvSeriesSeason, { merge: true }>();
 			if (error) throw error;

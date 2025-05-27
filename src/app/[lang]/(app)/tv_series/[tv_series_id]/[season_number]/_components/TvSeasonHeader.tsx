@@ -5,6 +5,7 @@ import { MediaTvSeriesSeason } from '@/types/type.db';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
+import { useRandomImage } from '@/hooks/use-random-image';
 
 export default function TvSeasonHeader({
   season,
@@ -13,10 +14,17 @@ export default function TvSeasonHeader({
 }) {
   const common = useTranslations('common');
   const title = upperFirst(common('messages.season_value', { number: season.season_number }));
+  const randomBg = useRandomImage(season.episodes?.map(episode => ({
+	src: episode.avatar_url ?? '',
+	alt: upperFirst(common('messages.episode_value', { number: episode.episode_number })),
+  })) ?? []);
   if (!season) return null;
   return (
 	<HeaderBox
 	className='@container/tv_series_season-header @xl/header-box:h-fit'
+	style={{
+		backgroundImage: randomBg ? `url(${randomBg.src})` : undefined,
+	}}
 	>
 	<div className="flex flex-row w-full gap-4 items-center">
 		{/* SERIE POSTER */}

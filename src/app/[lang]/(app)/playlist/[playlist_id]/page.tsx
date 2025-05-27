@@ -77,7 +77,7 @@ export default function PlaylistPage(
 
   return (
     <>
-      <PlaylistHeader playlist={playlist} />
+      <PlaylistHeader playlist={playlist} playlistItems={playlistItemsRender} />
       <div className="p-4">
         {playlistItemsRender ? <PlaylistTable playlist={playlist} playlistItems={playlistItemsRender} setPlaylistItems={setPlaylistItemsRender} /> : null}
       </div>

@@ -47,6 +47,7 @@ export type MediaTvSeries = Database['public']['Views']['media_tv_series']['Row'
 	spoken_languages?: Database['public']['Tables']['tmdb_tv_series_spoken_languages']['Row'][];
 	cast?: MediaTvSeriesPerson[];
 	seasons?: MediaTvSeriesSeason[];
+	specials?: MediaTvSeriesSeason[];
 };
 
 export type MediaTvSeriesPerson = Database['public']['Tables']['tmdb_tv_series_credits']['Row'] & {
@@ -54,6 +55,10 @@ export type MediaTvSeriesPerson = Database['public']['Tables']['tmdb_tv_series_c
 };
 
 export type MediaTvSeriesSeason = Database['public']['Views']['media_tv_series_seasons']['Row'] & {
+	episodes?: MediaTvSeriesEpisode[];
+}
+
+export type MediaTvSeriesEpisode = Database['public']['Views']['media_tv_series_episodes']['Row'] & {
 }
 
 export type MediaTvSeriesAggregateCredits = any;
@@ -112,7 +117,8 @@ export type Playlist = Database['public']['Tables']['playlists']['Row'] & {
 	user?: User;
 	guests?: PlaylistGuest[];
 	collaborators?: PlaylistGuest[] | any;
-	items?: PlaylistItem[] | any;
+	// items?: PlaylistItem[] | any;
+	items?: PlaylistItem[];
 };
 
 export type PlaylistItem = Database['public']['Tables']['playlist_items']['Row'] & {

@@ -11,28 +11,29 @@ import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
 import { Playlist, PlaylistItem } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { useRandomImage } from '@/hooks/use-random-image';
 
 export default function PlaylistHeader({
   playlist,
+  playlistItems,
   totalRuntime,
 } : {
   playlist: Playlist,
+  playlistItems: PlaylistItem[],
   totalRuntime?: number,
 }) {
   const { user } = useAuth();
   const { openModal, createModal } = useModal();
   const common = useTranslations('common');
 
-  const randomBackdrop = (object: PlaylistItem[]) => {
-    const itemsWithBackdrop = object.filter(
-      (item ) => item?.media?.backdrop_url
-    );
-
-    if (itemsWithBackdrop.length === 0) return null;
-
-    const randomIndex = Math.floor(Math.random() * itemsWithBackdrop.length);
-    return itemsWithBackdrop[randomIndex]?.media?.backdrop_url;
-  };
+  const randomBg = useRandomImage(
+    playlistItems.filter(item => item?.media?.backdrop_url)
+      .map(item => ({
+        src: item?.media?.backdrop_url ?? '',
+        alt: item?.media?.title ?? '',
+      })) ?? [],
+    [playlistItems]
+  )
 
   const openPlaylistModal = () => {
     if (playlist?.user_id !== user?.id) return;
@@ -44,7 +45,7 @@ export default function PlaylistHeader({
   return (
     <HeaderBox
       style={{
-        backgroundImage:  playlist?.items?.length ? `${randomBackdrop(playlist?.items)}` : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')",
+        backgroundImage:  randomBg ? `url(${randomBg?.src})` : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')",
       }}
     >
       <div className="flex flex-col w-full gap-4 items-center md:flex-row">
