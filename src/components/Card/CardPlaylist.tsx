@@ -12,13 +12,14 @@ interface CardPlaylistProps
 	extends React.HTMLAttributes<HTMLDivElement> {
 		variant?: "default";
 		playlist: Playlist;
+		showByUser?: boolean;
 		showItemCount?: boolean;
 	}
 
 const CardPlaylistDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardPlaylistProps, "variant">
->(({ className, playlist, showItemCount, children, ...props }, ref) => {
+>(({ className, playlist, showItemCount, showByUser = true, children, ...props }, ref) => {
 	const common = useTranslations('common');
 	return (
 		<div
@@ -48,12 +49,12 @@ const CardPlaylistDefault = React.forwardRef<
 			</div>
 			<div className='p-0'>
 				<p className="line-clamp-2 break-words group-hover:text-primary/80">{playlist?.title}</p>
-				<p className="line-clamp-1 text-sm italic text-muted-foreground">{common('messages.by_name', { name: playlist.user?.username })}</p>
-				{showItemCount ? (
+				{showByUser && <p className="line-clamp-1 text-sm italic text-muted-foreground">{common('messages.by_name', { name: playlist.user?.username })}</p>}
+				{showItemCount && (
 					<p className="line-clamp-1 text-sm italic text-muted-foreground">
 					{common('messages.item_count', { count: playlist?.items_count ?? 0 })}
 					</p>
-				) : null}
+				)}
 			</div>
 		</div>
 	);

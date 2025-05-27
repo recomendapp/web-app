@@ -165,7 +165,7 @@ export const getTvSeries = async ({
 					'videos.iso_639_1': locale.split('-')[0],
 					'videos.type': 'Trailer',
 				})
-				.filter('seasons.season_number', 'neq', 0)
+				// .filter('seasons.season_number', 'neq', 0)
 				.order('published_at', { referencedTable: 'videos', ascending: true, nullsFirst: false })
 				.maybeSingle()
 				.overrideTypes<MediaTvSeries, { merge: false }>();
@@ -205,6 +205,10 @@ export const getTvSeason = async ({
 					*,
 					episodes:media_tv_series_episodes(
 						*
+					),
+					serie:media_tv_series(
+						id,
+						title
 					)
 				`)
 				.match({
@@ -213,7 +217,7 @@ export const getTvSeason = async ({
 				})
 				.order('episode_number', { referencedTable: 'episodes', ascending: true, nullsFirst: false })
 				.maybeSingle()
-				.overrideTypes<MediaTvSeriesSeason, { merge: true }>();
+				.overrideTypes<MediaTvSeriesSeason, { merge: false }>();
 			if (error) throw error;
 			return data;
 		},

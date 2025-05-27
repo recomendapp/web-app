@@ -9,6 +9,7 @@ import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/routing";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
+import { Separator } from "@/components/ui/separator";
 
 export default function TvSerieDetails({
   slug,
@@ -21,8 +22,8 @@ export default function TvSerieDetails({
   if (!serie) return null;
   return (
     <div className="@container/movie-details flex flex-col gap-4">
-      <div className="flex flex-col @4xl/movie-details:flex-row gap-4 justify-between">
-        <div>
+      <div className="flex flex-col @4xl/movie-details:grid @4xl/movie-details:grid-cols-3 gap-4">
+        <div className="@4xl/movie-details:col-span-2">
           <h2 className="text-lg font-medium">{upperFirst(common('word.overview'))}</h2>
           <div className="text-justify text-muted-foreground">
             {serie.extra_data.overview ?? upperFirst(common('messages.no_overview'))}
@@ -32,50 +33,96 @@ export default function TvSerieDetails({
           id={serie.id}
           title={serie.title ?? ''}
           type="show"
-          className="min-w-[20%]"
+          className="@4xl/movie-details:col-span-1"
         />
       </div>
-      <div>
-        <h2 className="text-lg font-medium">
-          {upperFirst(common('messages.season', { count: serie.seasons?.length }))}
-          <span className="text-muted-foreground">{` ${serie.seasons?.length}`}</span>
-        </h2>
-        <ScrollArea className="w-full">
-          <div className="flex space-x-4 pb-4">
-            {serie.seasons?.map((season, i) => (
-              <Link key={i} href={`/tv_series/${slug}/${season.season_number}`}>
-                <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
-                  <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
-                    <ImageWithFallback
-                      src={season.avatar_url ?? ''}
-                      alt={upperFirst(common('messages.season_value', { number: season.season_number }))}
-                      fill
-                      className="object-cover"
-                      type="tv_season"
-                      sizes={`
-                        (max-width: 640px) 96px,
-                        (max-width: 1024px) 120px,
-                        150px
-                      `}
-                    />
-                    <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                      {(season.tmdb_vote_average) ? <IconMediaRating
-                        rating={season.tmdb_vote_average}
-                        variant="general"
-                        className="w-full"
-                      /> : null}
+      <div className="flex flex-col @4xl/movie-details:grid @4xl/movie-details:grid-cols-3 gap-4">
+         <div className={`@4xl/movie-details:col-span-${serie.specials && serie.specials.length > 0 ? '2' : '3'}`}>
+          <h2 className="text-lg font-medium">
+            {upperFirst(common('messages.season', { count: serie.seasons?.length }))}
+            <span className="text-muted-foreground">{` ${serie.seasons?.length}`}</span>
+          </h2>
+          <ScrollArea className="w-full">
+            <div className="flex space-x-4 pb-4">
+              {serie.seasons?.map((season, i) => (
+                <Link key={i} href={`/tv_series/${slug}/${season.season_number}`}>
+                  <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
+                    <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
+                      <ImageWithFallback
+                        src={season.avatar_url ?? ''}
+                        alt={upperFirst(common('messages.season_value', { number: season.season_number }))}
+                        fill
+                        className="object-cover"
+                        type="tv_season"
+                        sizes={`
+                          (max-width: 640px) 96px,
+                          (max-width: 1024px) 120px,
+                          150px
+                        `}
+                      />
+                      <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
+                        {(season.tmdb_vote_average) ? <IconMediaRating
+                          rating={season.tmdb_vote_average}
+                          variant="general"
+                          className="w-full"
+                        /> : null}
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-center">
-                    <p className="line-clamp-2 break-words">{upperFirst(common('messages.season_value', { number: season.season_number }))}</p>
-                    <p className="text-sm text-muted-foreground">{upperFirst(common('messages.episode_count', { count: season.episode_count }))}</p>
-                  </div>
-                </Card>
-              </Link>
-            ))}
+                    <div className="text-center">
+                      <p className="line-clamp-2 break-words">{upperFirst(common('messages.season_value', { number: season.season_number }))}</p>
+                      <p className="text-sm text-muted-foreground">{upperFirst(common('messages.episode_count', { count: season.episode_count }))}</p>
+                    </div>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </div>
+        {(serie.specials && serie.specials.length > 0) && (
+          <div className="@4xl/movie-details:col-span-1">
+            <h2 className="text-lg font-medium">
+              {upperFirst(common('messages.special_episode', { count: serie.specials?.reduce((acc, s) => acc + (s.episode_count ?? 0), 0) }))}
+              <span className="text-muted-foreground">{` ${serie.specials?.length}`}</span>
+            </h2>
+            <ScrollArea className="w-full">
+              <div className="flex space-x-4 pb-4">
+                {serie.specials?.map((special, i) => (
+                  <Link key={i} href={`/tv_series/${slug}/${special.season_number}`}>
+                    <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
+                      <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
+                        <ImageWithFallback
+                          src={special.avatar_url ?? ''}
+                          alt={upperFirst(common('messages.season_value', { number: special.season_number }))}
+                          fill
+                          className="object-cover"
+                          type="tv_season"
+                          sizes={`
+                            (max-width: 640px) 96px,
+                            (max-width: 1024px) 120px,
+                            150px
+                          `}
+                        />
+                        <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
+                          {(special.tmdb_vote_average) ? <IconMediaRating
+                            rating={special.tmdb_vote_average}
+                            variant="general"
+                            className="w-full"
+                          /> : null}
+                        </div>
+                      </div>
+                      <div className="text-center">
+                        <p className="line-clamp-2 break-words">{upperFirst(common('messages.season_value', { number: special.season_number }))}</p>
+                        <p className="text-sm text-muted-foreground">{upperFirst(common('messages.episode_count', { count: special.episode_count }))}</p>
+                      </div>
+                    </Card>
+                  </Link>
+                ))}
+              </div>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
           </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+        )}
       </div>
       {/* CASTING */}
       <SerieCast cast={serie.cast} />

@@ -1,93 +1,23 @@
-'use client'
-
-import React, { useMemo } from 'react';
-import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
-import { Link } from "@/lib/i18n/routing";
-import { UserPlaylists } from '@/components/User/UserPlaylists/UserPlaylists';
-import { Bookmark, Heart, Send } from 'lucide-react';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { Button } from '@/components/ui/button';
-import { UserPlaylistsSaved } from './_components/UserPlaylistsSaved';
-import CollectionIcon from '@/components/Collection/CollectionIcon';
-import { useUI } from '@/context/ui-context';
-import HeaderRightSide from '@/components/Header/HeaderRightSide';
-import { useTranslations } from 'next-intl';
 import { capitalize } from 'lodash';
+import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { ReactNode } from 'react';
+import Collection from './_components/Collection';
 
-export default function Collection() {
-  const { device } = useUI();
-  const common = useTranslations('common');
-  const collectionRoutes = useMemo(
-    () => [
-      {
-        icon: (
-          <CollectionIcon from="#FBE773" to="#F18E43">
-            <Send fill="#fff" className="w-2/5 h-2/5" />
-          </CollectionIcon>
-        ),
-        label: capitalize(common('messages.my_recos')),
-        href: '/collection/my-recos',
-      },
-      {
-        icon: (
-          <CollectionIcon from="#39BAED" to="#32509e">
-            <Bookmark fill="#fff" className="w-2/5 h-2/5" />
-          </CollectionIcon>
-        ),
-        label: capitalize(common('library.collection.watchlist.label')),
-        href: '/collection/watchlist',
-      },
-      {
-        icon: (
-          <CollectionIcon from="#e6619b" to="#e84749">
-            <Heart fill="#fff" className="w-2/5 h-2/5" />
-          </CollectionIcon>
-        ),
-        label: capitalize(common('library.collection.likes.label')),
-        href: '/collection/likes',
-      },
-    ],
-    [common]
-  );
-  return (
-    <main className="h-full @container/collection overflow-y-auto relative">
-      {device === "mobile" ? <div className="flex justify-between items-center w-full p-4 sticky top-0">
-        <div className="flex gap-2 items-center">
-          <div className="text-2xl font-bold">Bibliothèque</div>
-          <PlaylistCreateButton />
-        </div>
-        <HeaderRightSide />
-      </div> : null}
-      <Tabs defaultValue="personal" className='p-4'>
-        <TabsList className="grid grid-cols-2 max-w-[400px]">
-          <TabsTrigger value="personal">Ma Bibliothèque</TabsTrigger>
-          <TabsTrigger value="external">Enregistré</TabsTrigger>
-        </TabsList>
-        <TabsContent value="personal" className="grid gap-6 grid-cols-3 @xl/collection:grid-cols-4 @2xl/collection:grid-cols-5 @4xl/collection:grid-cols-6 @6xl/collection:grid-cols-7 @7xl/collection:grid-cols-8">
-          {collectionRoutes.map((item) => (
-            <Button
-              key={item.label}
-              variant={'muted'}
-              className={`justify-start p-2`}
-              asChild
-            >
-              <Link href={item.href} className="h-full w-full flex flex-col gap-2 text-center line-clamp-2">
-                {item.icon}
-                {item.label}
-              </Link>
-            </Button>
-          ))}
-          <UserPlaylists grid />
-        </TabsContent>
-        <TabsContent value="external" className="grid gap-2 grid-cols-3 @md/collection:grid-cols-4 @2xl/collection:grid-cols-6 @4xl/collection:grid-cols-8 @6xl/collection:grid-cols-10 @7xl/collection:grid-cols-12">
-          <UserPlaylistsSaved sidebarExpanded={false} grid />
-        </TabsContent>
-      </Tabs>
-    </main>
-  );
+export async function generateMetadata(
+  props: {
+      params: Promise<{
+        lang: string;
+      }>;
+    }
+): Promise<Metadata> {
+  const params = await props.params;
+  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+  return {
+    title: capitalize(common('library.label')),
+  };
 }
+
+export default function CollectionPage () {
+	return <Collection />
+};

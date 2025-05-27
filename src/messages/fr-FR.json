@@ -57,6 +57,7 @@
       "episode_count": "{count, plural, one {# épisode} other {# épisodes}}",
       "episode_value": "épisode {number}",
       "episode_short": "S{seasonNumber}E{episodeNumber}",
+      "special_episode": "{count, plural, one {épisode spécial} other {épisodes spéciaux}}",
       "first_air_date": "première diffusion",
       "see_film": "voir le film",
       "see_serie": "voir la série",
@@ -101,6 +102,7 @@
       "user_not_found": "utilisateur introuvable",
       "film_not_found": "film introuvable",
       "serie_not_found": "série introuvable",
+      "season_not_found": "saison introuvable",
       "review_not_found": "critique introuvable",
       "person_not_found": "personne introuvable",
       "wrong_arguments": "arguments incorrects",
@@ -660,6 +662,18 @@
         "metadata": {
           "title": "{title} ({year}) • Critiques",
           "description": "Découvrez toutes les critiques de la série {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Saisons",
+          "description": "Découvrez toutes les saisons de la série {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Saison {number}",
+            "description": "Découvrez tous les épisodes de la saison {number} de la série {title}."
+          }
         }
       }
     },

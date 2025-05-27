@@ -59,21 +59,23 @@ export function DataTableToolbar<TData>({
         )}
       </div>
       <div className="w-full lg:w-fit flex items-center justify-between gap-2">
-        {user?.id !== playlist?.user_id ? (
-          <PlaylistActionSave playlistId={playlist?.id!} />
-        ) : null}
-        <Button
-        size={'icon'}
-        variant={'action'}
-        onClick={() => openModal(ModalShare, {
-          title: playlist?.title,
-          type: 'playlist',
-          path: `/playlist/${playlist?.id}`,
-        })}
-        >
-          <Icons.share />
-          <span className='sr-only'>{upperFirst(common('word.share'))}</span>
-        </Button>
+        <div className='flex items-center gap-2'>
+          {user?.id !== playlist?.user_id ? (
+            <PlaylistActionSave playlistId={playlist?.id!} />
+          ) : null}
+          <Button
+          size={'icon'}
+          variant={'action'}
+          onClick={() => openModal(ModalShare, {
+            title: playlist?.title,
+            type: 'playlist',
+            path: `/playlist/${playlist?.id}`,
+          })}
+          >
+            <Icons.share />
+            <span className='sr-only'>{upperFirst(common('word.share'))}</span>
+          </Button>
+        </div>
         <div className="w-fit flex items-center gap-2">
           {isAllowedToEdit ? <Button
           variant="outline"

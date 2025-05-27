@@ -21,8 +21,8 @@ export default function TvSeasonDetails({
       </h2>
       <div className='mx-auto max-w-xl space-y-2'>
         {season.episodes?.map((episode, i) => (
-          <Card key={i} className="flex flex-row items-center gap-2 p-2 hover:bg-muted-hover hover:cursor-pointer">
-            <div className="shrink-0 relative w-48 aspect-video rounded-md overflow-hidden">
+          <Card key={i} className="@container/episode-card flex flex-row items-center gap-2 p-2 hover:bg-muted-hover hover:cursor-pointer">
+            <div className="shrink-0 relative w-32 @sm/episode-card:w-40 @md/episode-card:w-48 aspect-video rounded-md overflow-hidden">
               <ImageWithFallback
                 src={episode.avatar_url ?? ''}
                 alt={upperFirst(common('messages.episode_value', { number: episode.episode_number }))}

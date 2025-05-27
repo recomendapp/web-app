@@ -6,10 +6,10 @@ import { Link } from "@/lib/i18n/routing";
 import { usePathname } from '@/lib/i18n/routing';
 import { Fragment, useEffect } from 'react';
 import Loader from '@/components/Loader/Loader';
-import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { CardPlaylist } from '@/components/Card/CardPlaylist';
 
 export function UserPlaylists({
   grid = false,
@@ -66,10 +66,12 @@ export function UserPlaylists({
       <Fragment>
         {playlists?.pages.map((page, i) => (
           page?.map((playlist, index) => (
-            <MoviePlaylistCard
+            <CardPlaylist
             ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
-            playlist={playlist}
             key={playlist?.id}
+            playlist={playlist}
+            showByUser={false}
+            showItemCount={true}
             />
           ))
         ))}

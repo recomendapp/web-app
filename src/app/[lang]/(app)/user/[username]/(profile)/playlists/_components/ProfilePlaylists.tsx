@@ -1,8 +1,5 @@
 'use client';
-
-import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
-import { LayoutGrid, List } from 'lucide-react';
 import Loader from '@/components/Loader/Loader';
 import { useInView } from 'react-intersection-observer';
 import {
@@ -11,18 +8,14 @@ import {
   SelectGroup,
   SelectItem,
   SelectLabel,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
 import { useUserPlaylistsInfiniteQuery } from '@/features/client/user/userQueries';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { useTranslations } from 'next-intl';
-import { upperFirst } from 'lodash';
-import { Badge } from '@/components/ui/badge';
 import { useSearchParams } from 'next/navigation';
 import { z } from "zod";
-import MoviePlaylistCard from '@/components/Playlist/FilmPlaylist/MoviePlaylistCard';
+import { CardPlaylist } from '@/components/Card/CardPlaylist';
 
 // Display
 const displaySchema = z.enum(["grid", "row"]);
@@ -108,11 +101,13 @@ export default function ProfilePlaylists({ userId }: UserPlaylistsProps) {
         >
           {playlists.pages.map((page, i) => (
             page?.map((playlist, index) => (
-              <MoviePlaylistCard
+              <CardPlaylist
               key={playlist.id}
               ref={(i === playlists.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
               playlist={playlist}
               className={'w-full'}
+              showByUser={false}
+              showItemCount={true}
               />
             ))
           ))}

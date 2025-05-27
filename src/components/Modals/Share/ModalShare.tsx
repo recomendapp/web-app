@@ -17,14 +17,6 @@ export const ModalShare = ({ title, type, ...props }: ModalShareProps) => {
 	const url = `${location.origin}${props.path}`;
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
-			{/* <ModalHeader>
-				<ModalTitle>
-					Partager
-				</ModalTitle>
-				<ModalDescription>
-					Partagez <strong>{title}</strong> avec vos amis
-				</ModalDescription>
-			</ModalHeader> */}
 			<ModalBody>
 				<div>
 					<h3 className="text-lg font-semibold mb-2">Partager <strong>{title}</strong> via</h3>
@@ -35,11 +27,6 @@ export const ModalShare = ({ title, type, ...props }: ModalShareProps) => {
 						>
 							<XIcon size={32} round />
 						</TwitterShareButton>
-						{/* <FacebookMessengerShareButton
-						url={url}
-						>
-							<FacebookMessengerIcon size={32} round />
-						</FacebookMessengerShareButton> */}
 						<FacebookShareButton
 						url={url}
 						>

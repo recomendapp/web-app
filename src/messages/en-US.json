@@ -57,6 +57,7 @@
       "episode_count": "{count, plural, one {# episode} other {# episodes}}",
       "episode_value": "episode {number}",
       "episode_short": "S{seasonNumber}E{episodeNumber}",
+      "special_episode": "{count, plural, one {special} other {specials}}",
       "first_air_date": "first aired",
       "see_film": "see film",
       "see_serie": "see serie",
@@ -101,6 +102,7 @@
       "user_not_found": "user not found",
       "film_not_found": "film not found",
       "serie_not_found": "serie not found",
+      "season_not_found": "season not found",
       "review_not_found": "review not found",
       "person_not_found": "person not found",
       "wrong_arguments": "wrong arguments",
@@ -660,6 +662,18 @@
         "metadata": {
           "title": "{title} ({year}) • Reviews",
           "description": "Discover all the reviews of the serie {title}."
+        }
+      },
+      "seasons": {
+        "metadata": {
+          "title": "{title} • Seasons",
+          "description": "Discover all the seasons of the serie {title}."
+        },
+        "season": {
+          "metadata": {
+            "title": "{title} • Season {number}",
+            "description": "Discover all the episodes of season {number} of the serie {title}."
+          }
         }
       }
     },

@@ -56,6 +56,7 @@ export type MediaTvSeriesPerson = Database['public']['Tables']['tmdb_tv_series_c
 
 export type MediaTvSeriesSeason = Database['public']['Views']['media_tv_series_seasons']['Row'] & {
 	episodes?: MediaTvSeriesEpisode[];
+	serie?: MediaTvSeries;
 }
 
 export type MediaTvSeriesEpisode = Database['public']['Views']['media_tv_series_episodes']['Row'] & {
