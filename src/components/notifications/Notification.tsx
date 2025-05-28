@@ -2,7 +2,6 @@ import { Notification as NotificationType } from '@novu/react';
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
-import { Link } from "@/lib/i18n/routing";
 import { ReactMarkdown } from '../utils/ReactMarkdown';
 import { CircleIcon } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -60,9 +59,11 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 				/>
 			</div>
 			<div className='space-y-2'>
-				<ReactMarkdown className={'line-clamp-2 break-all'}>
-				{notification.body}
-				</ReactMarkdown>
+				<div className='line-clamp-6 break-words'>
+					<ReactMarkdown>
+					{notification.body}
+					</ReactMarkdown>
+				</div>
 				{(notification.primaryAction || notification.secondaryAction) && (!notification.primaryAction?.isCompleted && !notification.secondaryAction?.isCompleted) ? (
 					<div className='flex gap-2'>
 						{(notification.primaryAction && !notification.primaryAction.isCompleted) ? (

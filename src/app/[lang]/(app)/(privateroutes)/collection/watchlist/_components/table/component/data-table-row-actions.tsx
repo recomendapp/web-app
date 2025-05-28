@@ -16,7 +16,6 @@ import {
 // ICONS
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 
-// GRAPHQL
 import toast from 'react-hot-toast';
 import { UserWatchlist } from '@/types/type.db';
 import { Icons } from '@/config/icons';
@@ -133,7 +132,7 @@ export function DataTableRowActions({
             onClick={async () => createConfirmModal({
               title: capitalize(common('library.collection.watchlist.modal.delete_confirm.title')),
               description: common.rich('library.collection.watchlist.modal.delete_confirm.description', {
-                title: data?.media?.title,
+                title: data?.media?.title!,
                 important: (chunk) => <b>{chunk}</b>,
               }),
               onConfirm: handleUnwatchlist,

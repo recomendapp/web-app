@@ -29,8 +29,8 @@ export async function generateMetadata(
   if (!serie) return { title: upperFirst(common('errors.serie_not_found')) };
 
   return {
-    title: t('title', { title: serie.title }),
-    description: t('description', { title: serie.title }),
+    title: t('title', { title: serie.title! }),
+    description: t('description', { title: serie.title! }),
   };
 }
 

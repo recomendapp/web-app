@@ -28,8 +28,8 @@ export async function generateMetadata(
   if (!movie) return { title: upperFirst(common('errors.film_not_found')) };
 
   return {
-    title: t('title', { title: movie.title }),
-    description: t('description', { title: movie.title }),
+    title: t('title', { title: movie.title! }),
+    description: t('description', { title: movie.title! }),
   };
 }
 

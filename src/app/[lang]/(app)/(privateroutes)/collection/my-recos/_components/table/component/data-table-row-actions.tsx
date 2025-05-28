@@ -101,7 +101,7 @@ export function DataTableRowActions({
             onClick={() => createConfirmModal({
               title: capitalize(common('library.collection.my_recos.modal.complete_confirm.title')),
               description: common.rich('library.collection.my_recos.modal.complete_confirm.description', {
-                title: media.title,
+                title: media.title!,
                 important: (chunk) => <b>{chunk}</b>,
               }),
               onConfirm: handleCompleteReco,
@@ -168,7 +168,7 @@ export function DataTableRowActions({
             onClick={async () => createConfirmModal({
               title: capitalize(common('library.collection.my_recos.modal.delete_confirm.title')),
               description: common.rich('library.collection.my_recos.modal.delete_confirm.description', {
-                title: media.title,
+                title: media.title!,
                 important: (chunk) => <b>{chunk}</b>,
               }),
               onConfirm: handleDeleteReco,

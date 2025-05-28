@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { addMinutes } from 'date-fns';
-import { useFormatter } from 'next-intl';
+import { useFormatter, useNow } from 'next-intl';
 import { ConvertHoursMinutes, cn } from '@/lib/utils';
 import { TooltipBox } from '../Box/TooltipBox';
 
@@ -14,23 +14,21 @@ export function RuntimeTooltip({
   className?: string;
 }) {
   const format = useFormatter();
-  const [endTime, setEndTime] = useState<Date | null>(null);
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const now = useNow({ updateInterval: 1000 * 60 });
+  const endTime = useMemo(() => {
+    if (!runtime) return null;
+    return addMinutes(now, runtime);
+  }, [runtime, now]);
   const formattedEndTime = useMemo(() => {
     if (!endTime) return null;
     return format.dateTime(endTime, {
       hour: 'numeric',
       minute: '2-digit',
+      timeZone: userTimeZone,
     });
   }, [endTime]);
-
-  useEffect(() => {
-    const now = new Date();
-    setEndTime(addMinutes(now, runtime));
-  }, [runtime]);
-
-  if (!runtime || !endTime) return null;
-
-
+  if (!runtime) return null;
   return (
     <TooltipBox tooltip={`Se termine à ${formattedEndTime}`}>
       <span className={cn('w-fit cursor-pointer', className)}>

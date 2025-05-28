@@ -26,10 +26,10 @@ export async function generateMetadata(
   });
   if (!serie) return { title: upperFirst(common('errors.serie_not_found')) };
   return {
-    title: t('metadata.title', { title: serie.title, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() }),
+    title: t('metadata.title', { title: serie.title!, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() }),
     description: truncate(
       t('metadata.description', {
-        title: serie.title,
+        title: serie.title!,
       }),
       { length: siteConfig.seo.description.limit }
     ),
@@ -41,10 +41,10 @@ export async function generateMetadata(
     },
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: serie.title, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
+      title: `${t('metadata.title', { title: serie.title!, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
         t('metadata.description', {
-          title: serie.title,
+          title: serie.title!,
         }),
         { length: siteConfig.seo.description.limit }
       ),

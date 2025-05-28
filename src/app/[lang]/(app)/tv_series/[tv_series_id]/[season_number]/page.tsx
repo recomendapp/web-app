@@ -6,9 +6,9 @@ import { getIdFromSlug } from "@/hooks/get-id-from-slug";
 import { siteConfig } from "@/config/site";
 import { truncate, upperFirst } from "lodash";
 import { locales } from "@/lib/i18n/locales";
-import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 import { TVSeason, WithContext } from "schema-dts";
+import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata(
   props: {
@@ -30,11 +30,11 @@ export async function generateMetadata(
   });
   if (!season) return { title: upperFirst(common('errors.season_not_found')) };
   return {
-    title: t('metadata.title', { title: season.serie?.title, number: season.season_number }),
+    title: t('metadata.title', { title: season.serie?.title!, number: season.season_number! }),
     description: truncate(
       t('metadata.description', {
-        title: season.serie?.title,
-        number: season.season_number,
+        title: season.serie?.title!,
+        number: season.season_number!,
       }),
       { length: siteConfig.seo.description.limit }
     ),
@@ -46,11 +46,11 @@ export async function generateMetadata(
     },
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: season.serie?.title, number: season.season_number })} • ${siteConfig.name}`,
+      title: `${t('metadata.title', { title: season.serie?.title!, number: season.season_number! })} • ${siteConfig.name}`,
       description: truncate(
         t('metadata.description', {
-          title: season.serie?.title,
-          number: season.season_number,
+          title: season.serie?.title!,
+          number: season.season_number!,
         }),
         { length: siteConfig.seo.description.limit }
       ),

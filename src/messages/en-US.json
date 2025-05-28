@@ -93,9 +93,12 @@
       "job": "{count, plural, one {job} other {jobs}}",
       "department": "{count, plural, one {department} other {departments}}",
       "share_title_via": "Share <strong>{title}</strong> via",
+      "share_title": "Share <strong>{title}</strong>",
       "link": "link",
       "copy_link": "copy link",
-      "copied": "copied"
+      "copied": "copied",
+      "other": "{count, plural, one {other} other {others}}",
+      "via": "via"
     },
     "errors": {
       "not_logged_in": "you are not logged in",

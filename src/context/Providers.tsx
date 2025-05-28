@@ -12,7 +12,6 @@ import { cookies } from 'next/headers';
 import { getMessages } from 'next-intl/server';
 import { getFallbackLanguage } from '@/lib/i18n/fallback';
 import { createServerClient } from '@/lib/supabase/server';
-// import { ApolloClientProvider } from './apollo-client-context';
 
 export default async function Provider({
   children,

@@ -49,7 +49,7 @@ const CardPlaylistDefault = React.forwardRef<
 			</div>
 			<div className='p-0'>
 				<p className="line-clamp-2 break-words group-hover:text-primary/80">{playlist?.title}</p>
-				{showByUser && <p className="line-clamp-1 text-sm italic text-muted-foreground">{common('messages.by_name', { name: playlist.user?.username })}</p>}
+				{showByUser && <p className="line-clamp-1 text-sm italic text-muted-foreground">{common('messages.by_name', { name: playlist.user?.username! })}</p>}
 				{showItemCount && (
 					<p className="line-clamp-1 text-sm italic text-muted-foreground">
 					{common('messages.item_count', { count: playlist?.items_count ?? 0 })}

@@ -178,7 +178,7 @@ export const Upgrade = ({
 					onClick={() => openModal(ModalSubscription, { product: product, preselectedPrice: product?.prices?.find((price) => price?.interval === billingInterval) })}
 					>
 					{upperFirst(common('messages.upgrade_to_plan', {
-						plan: product?.name,
+						plan: product?.name!,
 					}))}
 					</Button>
 				)

@@ -26,7 +26,7 @@ export async function generateMetadata(
   });
   if (!person) return { title: upperFirst(common('errors.person_not_found')) };
   return {
-    title: t('metadata.title', { name: person.title, department: person.extra_data.known_for_department }),
+    title: t('metadata.title', { name: person.title!, department: person.extra_data.known_for_department }),
     description: truncate(person.extra_data.biography, { length: siteConfig.seo.description.limit }),
     alternates: {
       canonical: `${siteConfig.url}/${params.lang}/person/${person.slug}`,

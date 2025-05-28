@@ -1,5 +1,5 @@
 import { useModal } from "@/context/modal-context";
-import { Modal, ModalBody, ModalType } from "../Modal";
+import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { Input } from "@/components/ui/input";
 import { siteConfig } from "@/config/site";
 import { FacebookIcon, FacebookShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
@@ -7,26 +7,108 @@ import { MediaType } from "@/types/type.db";
 import { ButtonCopy } from "@/components/utils/ButtonCopy";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useUI } from "@/context/ui-context";
+import { useEffect, useMemo, useState } from "react";
+import { Icons } from "@/config/icons";
+import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
+import { ShareController, ShareControllerProps } from "@/components/ShareController/ShareController";
+import { Separator } from "@/components/ui/separator";
 
-interface ModalShareProps extends ModalType {
+interface ModalShareProps<T> extends ModalType {
 	title?: string | null;
 	type?: 'playlist' | MediaType | null;
 	path: string;
+	shareController?: ShareController<any>;
 }
 
-export const ModalShare = ({ title, type, ...props }: ModalShareProps) => {
+export const ModalShare = <T,>({ title, type, path, shareController, ...props }: ModalShareProps<T>) => {
 	const { closeModal } = useModal();
+	const { device } = useUI();
 	const common = useTranslations('common');
-	const url = `${location.origin}${props.path}`;
+	const url = useMemo(() => (
+		`${location.origin}${path}`
+	), [path]);
+	const sharedData: ShareData = useMemo(() => ({
+		title: title ?? '',
+		url,
+	}), [title, url]);
+
+	const [canShare, setCanShare] = useState<boolean | undefined>(undefined);
+	const [fileToShare, setFileToShare] = useState<File | null>(null);
+	const [canShareController, setCanShareController] = useState<boolean | undefined>(undefined);
+	const sharedControllerData: ShareData = useMemo(() => ({
+		title: title ?? '',
+		files: fileToShare ? [fileToShare] : [],
+		url,
+	}), [fileToShare]);
+	const onShare = async (data: ShareData) => {
+		try {
+			await navigator.share(data);
+		} catch (err) {
+			if (err instanceof Object) {
+				if ('code' in err && typeof err.code === 'number') {
+					if (
+						[
+							11, // An earlier share has not yet completed
+							20, // User cancelled the share action
+						].includes(err.code)
+					) return null;
+				}
+				console.error(err);
+			}
+			toast.error(upperFirst(common('errors.an_error_occurred')));
+		}
+	};
+
+	useEffect(() => {
+		if (navigator.canShare?.(sharedData)) {
+			setCanShare(true);
+		} else {
+			setCanShare(false);
+		}
+	}, [device, sharedData]);
+
+	useEffect(() => {
+		if (shareController) {
+			if (navigator.canShare?.(sharedControllerData)) {
+				setCanShareController(true);
+			} else {
+				setCanShareController(false);
+			}
+		}
+	}, [shareController, sharedControllerData]);
+
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
-			<ModalBody>
+			<ModalHeader>
+				<ModalTitle className="line-clamp-2">
+					{common.rich('messages.share_title', {
+						title: title ?? upperFirst(common('messages.share_default_title')),
+						strong: (chunks) => <strong>{chunks}</strong>,
+					})}
+				</ModalTitle>
+			</ModalHeader>
+			<ModalBody className="space-y-2">
+				{shareController && (
+					<>
+						<div className="flex flex-col items-center gap-2">
+							{shareController?.Component && (
+								<shareController.Component {...shareController.props} onFileReady={setFileToShare} />
+							)}
+							<Button
+							disabled={!canShareController}
+							onClick={() => onShare(sharedControllerData)}
+							>
+								{upperFirst(common('word.share'))}
+							</Button>
+						</div>
+						<Separator />
+					</>
+				)}
 				<div>
 					<h3 className="text-lg font-semibold mb-2">
-						{common.rich('messages.share_title_via', {
-							title: title ?? upperFirst(common('messages.share_default_title')),
-							strong: (chunks) => <strong>{chunks}</strong>,
-						})}
+						{upperFirst(common('messages.via'))}
 					</h3>
 					<div className="flex gap-2">
 						<TwitterShareButton
@@ -55,6 +137,11 @@ export const ModalShare = ({ title, type, ...props }: ModalShareProps) => {
 						>
 							<RedditIcon size={32} round />
 						</RedditShareButton>
+						{canShare === true && (
+							<Button onClick={() => onShare(sharedData)} variant={'accent-yellow'} size={'icon'} className="rounded-full">
+								<Icons.add className="h-4 w-4" />
+							</Button>
+						)}
 					</div>
 				</div>
 				<div>
@@ -64,7 +151,6 @@ export const ModalShare = ({ title, type, ...props }: ModalShareProps) => {
 						<ButtonCopy text={url} variant={'accent-yellow'} />
 					</div>
 				</div>
-
 			</ModalBody>
 		</Modal>
 	);

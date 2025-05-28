@@ -114,7 +114,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
               onClick={() => createConfirmModal({
                 title: upperFirst(common('playlist.modal.delete_confirm.title')),
                 description: common.rich('playlist.modal.delete_confirm.description', {
-                  title: data?.media?.title,
+                  title: data?.media?.title!,
                   important: (chunk) => <b>{chunk}</b>,
                 }),
                 onConfirm: () => data && deletePlaylistItem({ playlistId: data.playlist_id, playlistItemId: data.id, mediaId: data.media_id }),

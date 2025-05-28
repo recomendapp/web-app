@@ -5,7 +5,8 @@ import { createContext, use, useMemo, useState } from "react";
 import moviesDataset from "@/components/Map/Data/movies.json"
 import genresDataset from "@/components/Map/Data/genres.json"
 import { useLocale } from "next-intl";
-import { PaddingOptions } from "react-map-gl/dist/esm/types";
+import { PaddingOptions } from "maplibre-gl";
+import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
 
 interface MapContextProps {
 	mapInitialized: boolean;
@@ -55,7 +56,7 @@ interface MapContextProps {
 		}
 	};
 	data?: {
-		moviesDataset: typeof moviesDataset;
+		moviesDataset: FeatureCollection<Geometry, GeoJsonProperties>;
 		movies: {
 			id: number;
 			title: string;
@@ -137,7 +138,7 @@ export const MapContext = ({
 			}
 		}).sort((a, b) => a.name.localeCompare(b.name));
 		return {
-			moviesDataset,
+			moviesDataset: moviesDataset as FeatureCollection<Geometry, GeoJsonProperties>, // TODO: Fix type
 			movies,
 			genres,
 		}
@@ -167,7 +168,7 @@ export const MapContext = ({
 		longitude: 2.5,
 		zoom: 8,
 	});
-	const [userPadding, setUserPadding] = useState({
+	const [userPadding, setUserPadding] = useState<PaddingOptions>({
 		top: 0,
 		right: 0,
 		bottom: 0,
