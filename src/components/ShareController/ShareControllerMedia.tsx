@@ -16,7 +16,7 @@ const CANVAS_HEIGHT = 2144;
 export const ShareControllerMedia: React.FC<ShareControllerMediaProps> = ({ media, onFileReady }) => {
 	const expectedLayers = [
 		media.avatar_url,
-		media.backdrop_url,
+		// media.backdrop_url,
 		SHARE_CONSTANTS.appLogo.src
 	].filter(Boolean).length;
 	const [loadedLayers, setLoadedLayers] = useState(0);
@@ -119,7 +119,7 @@ export const ShareControllerMedia: React.FC<ShareControllerMediaProps> = ({ medi
 		>
 			<Layer>
 				<Rect x={0} y={0} width={sceneWidth} height={sceneHeight} fill="#1e1e1e" />
-				{media.backdrop_url && (
+				{/* {media.backdrop_url && (
 					<URLImage
 					src={media.backdrop_url}
 					width={sceneWidth}
@@ -130,7 +130,7 @@ export const ShareControllerMedia: React.FC<ShareControllerMediaProps> = ({ medi
 					objectFit="object-cover"
 					onLoad={() => setLoadedLayers(prev => prev + 1)}
 					/>
-				)}
+				)} */}
 			</Layer>
 			<Layer>
 				{media.avatar_url && (

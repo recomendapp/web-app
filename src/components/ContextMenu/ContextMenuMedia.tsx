@@ -3,15 +3,15 @@ import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
 import { WithLink } from "../utils/WithLink";
 import { useModal } from "@/context/modal-context";
-import { Fragment } from "react";
+import { Fragment, useMemo } from "react";
 import { ModalShare } from "../Modals/Share/ModalShare";
-import { getMediaDetails } from "@/hooks/get-media-details";
 import { ModalRecoSend } from "../Modals/actions/ModalRecoSend";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ModalPlaylistAdd } from "../Modals/actions/ModalPlaylistAdd";
 import { ShareControllerMedia } from "../ShareController/ShareControllerMedia";
 import { createShareController } from "../ShareController/ShareController";
+import { useAuth } from "@/context/auth-context";
 
 interface Item {
 	icon: React.ElementType;
@@ -28,10 +28,11 @@ export const ContextMenuMedia = ({
 	children: React.ReactNode,
 	media: Media,
 }) => {
+	const { session } = useAuth();
 	const { openModal } = useModal();
 	const common = useTranslations('common');
-	const mediaDetails = getMediaDetails(media);
-	const items: Item[][] = [
+	const items: Item[][] = useMemo(() => {
+		return [
 		[
 			{
 				icon: Icons.movie,
@@ -47,16 +48,18 @@ export const ContextMenuMedia = ({
 			// 		label: director.name,
 			// 	})) : undefined,
 			// },
-			{
-				icon: Icons.addPlaylist,
-				onClick: () => openModal(ModalPlaylistAdd, { mediaId: media.media_id!, mediaTitle: mediaDetails.title }),
-				label: 'Ajouter à une playlist',
-			},
-			{
-				icon: Icons.send,
-				onClick: () => openModal(ModalRecoSend, { mediaId: media.media_id!, mediaTitle: mediaDetails.title }),
-				label: upperFirst(common('messages.send_to_friend')),
-			}
+			...(session ? [
+				{
+					icon: Icons.addPlaylist,
+					onClick: () => openModal(ModalPlaylistAdd, { mediaId: media.media_id!, mediaTitle: media.title }),
+					label: 'Ajouter à une playlist',
+				},
+				{
+					icon: Icons.send,
+					onClick: () => openModal(ModalRecoSend, { mediaId: media.media_id!, mediaTitle: media.title }),
+					label: upperFirst(common('messages.send_to_friend')),
+				}
+			] : []),
 		],
 		[
 			{
@@ -72,7 +75,7 @@ export const ContextMenuMedia = ({
 				label: upperFirst(common('word.share')),
 			},
 		]
-	];
+	]}, [media, session, common]);
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger>

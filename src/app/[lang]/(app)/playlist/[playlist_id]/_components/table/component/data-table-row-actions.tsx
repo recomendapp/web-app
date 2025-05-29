@@ -95,7 +95,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
               onClick={() => openModal(PlaylistCommentModal, { playlistItem: data! })}
             >
               <Icons.comment className='w-4' />
-              {data?.comment ? upperFirst(common('messages.view_comment', { count: 1 })) : upperFirst(common('messages.add_comment'))}
+              {data?.comment ? upperFirst(common('messages.view_comment', { count: 1 })) : upperFirst(common('messages.add_comment', { count: 1 }))}
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />

@@ -2,8 +2,10 @@ import { UserWatchlist } from "@/types/type.db"
 import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuShortcut, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
 import { useModal } from "@/context/modal-context";
-import { Fragment } from "react";
+import { Fragment, useMemo } from "react";
 import { ModalWatchlistComment } from "../Modals/watchlist/ModalWatchlistComment";
+import { useTranslations } from "next-intl";
+import { upperFirst } from "lodash";
 
 export const ContextMenuWatchlistAction = ({
 	children,
@@ -13,15 +15,16 @@ export const ContextMenuWatchlistAction = ({
 	watchlistItem?: UserWatchlist | null,
 }) => {
 	const { openModal } = useModal();
-	const items = [
+	const common = useTranslations('common');
+	const items = useMemo(() => [
 		[
 			{
 				icon: Icons.comment,
 				onClick: () => watchlistItem && openModal(ModalWatchlistComment, { watchlistItem }),
-				label: watchlistItem?.comment ? 'Modifier le commentaire' : 'Ajouter un commentaire',
+				label: watchlistItem?.comment ? upperFirst(common('messages.edit_comment', { count: 1 })) : upperFirst(common('messages.add_comment', { count: 1 })),
 			}
 		]
-	];
+	], [watchlistItem, common]);
 	if (!watchlistItem) return children;
 	return (
 		<ContextMenu>

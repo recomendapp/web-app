@@ -21,7 +21,7 @@ export function DataComment({ playlistItem }: { playlistItem: PlaylistItem }) {
       >
         {playlistItem?.comment && <span className='line-clamp-2 break-all'>{playlistItem.comment}</span>}
         {!playlistItem?.comment && isAllowedToEdit &&
-          <TooltipBox tooltip={upperFirst(common('messages.add_comment'))}>
+          <TooltipBox tooltip={upperFirst(common('messages.add_comment', { count: 1 }))}>
             <MessageSquarePlusIcon className='w-5 h-5' />
           </TooltipBox>
         }

@@ -115,7 +115,7 @@ export function DataTableRowActions({
             onClick={() => openModal(ModalWatchlistComment, { watchlistItem: data })}
           >
             <Icons.comment className='w-4' />
-            {data?.comment ? capitalize(common('messages.view_comment', { count: 1 })) : capitalize(common('messages.add_comment'))}
+            {data?.comment ? capitalize(common('messages.view_comment', { count: 1 })) : capitalize(common('messages.add_comment', { count: 1 }))}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
