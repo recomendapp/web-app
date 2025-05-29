@@ -24,8 +24,8 @@ export async function generateMetadata(
 	if (error) throw error;
 	if (!media) return { title: upperFirst(common('errors.film_not_found')) };
 	return {
-	  title: t('title', { title: media.title }),
-	  description: t('description', { title: media.title }),
+	  title: t('title', { title: media.title! }),
+	  description: t('description', { title: media.title! }),
 	};
 }
 

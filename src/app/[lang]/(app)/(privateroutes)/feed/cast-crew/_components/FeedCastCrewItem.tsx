@@ -56,9 +56,9 @@ const FeedCastCrewItemDefault = React.forwardRef<
 						</Link>
 						<p className="text-muted-foreground line-clamp-2">
 							{common.rich('feed.persons.new_activity', {
-								name: activity?.person?.title,
+								name: activity?.person?.title!,
 								roles: activity?.jobs?.length ? activity.jobs.join(', ').toLowerCase() : common('word.unknown'),
-								film: activity?.media?.title,
+								film: activity?.media?.title!,
 								linkPerson: (chunk) => <Link href={activity?.person?.url ?? ''} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
 								linkFilm: (chunk) => <Link href={activity?.media?.url ?? ''} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
 								important: (chunk) => <span className="text-foreground">{chunk}</span>

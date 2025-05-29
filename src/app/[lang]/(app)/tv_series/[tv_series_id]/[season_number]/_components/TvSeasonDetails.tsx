@@ -17,7 +17,7 @@ export default function TvSeasonDetails({
 	<div className="@container/tv_season-details flex flex-col gap-4">
 		<div>
 			<h2 className="text-lg font-medium">
-        {upperFirst(common('messages.episode', { count: season.episode_count }))}
+        {upperFirst(common('messages.episode', { count: season.episode_count! }))}
       </h2>
       <div className='mx-auto max-w-xl space-y-2'>
         {season.episodes?.map((episode, i) => (
@@ -25,7 +25,7 @@ export default function TvSeasonDetails({
             <div className="shrink-0 relative w-32 @sm/episode-card:w-40 @md/episode-card:w-48 aspect-video rounded-md overflow-hidden">
               <ImageWithFallback
                 src={episode.avatar_url ?? ''}
-                alt={upperFirst(common('messages.episode_value', { number: episode.episode_number }))}
+                alt={upperFirst(common('messages.episode_value', { number: episode.episode_number! }))}
                 fill
                 className="object-cover"
                 type="tv_episode"
@@ -45,9 +45,9 @@ export default function TvSeasonDetails({
             </div>
             <div className='space-y-2'>
               <h3 className="line-clamp-2 break-words font-bold">
-                <span className='text-accent-yellow font-normal'>{upperFirst(common('messages.episode_short', { seasonNumber: season.season_number, episodeNumber: episode.episode_number }))}</span>
+                <span className='text-accent-yellow font-normal'>{upperFirst(common('messages.episode_short', { seasonNumber: season.season_number!, episodeNumber: episode.episode_number! }))}</span>
                 {" • "}
-                {episode.title ?? upperFirst(common('messages.episode_value', { number: episode.episode_number }))}
+                {episode.title ?? upperFirst(common('messages.episode_value', { number: episode.episode_number! }))}
               </h3>
               <p className="line-clamp-2 break-words">{episode.overview ?? upperFirst(common('messages.no_overview'))}</p>
               <h4 className='text-sm text-muted-foreground'>{`${upperFirst(common('messages.first_air_date'))} : ${episode.air_date ? format.dateTime(new Date(episode.air_date), { year: 'numeric', month: 'long', day: 'numeric' }) : upperFirst(common('word.unknown'))}`}</h4>

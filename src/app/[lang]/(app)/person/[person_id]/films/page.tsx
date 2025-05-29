@@ -72,8 +72,8 @@ export async function generateMetadata(
   });
   if (!person) return { title: upperFirst(common('errors.person_not_found')) };
   return {
-	title: t('metadata.title', { name: person.title }),
-	description: truncate(t('metadata.description', { name: person.title }), { length: siteConfig.seo.description.limit }),
+	title: t('metadata.title', { name: person.title! }),
+	description: truncate(t('metadata.description', { name: person.title! }), { length: siteConfig.seo.description.limit }),
 	alternates: {
 	  canonical: `${siteConfig.url}/${params.lang}/person/${person.slug}/films`,
 	  languages: Object.fromEntries(
@@ -82,8 +82,8 @@ export async function generateMetadata(
 	},
 	openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { name: person.title })} • ${siteConfig.name}`,
-      description: truncate(t('metadata.description', { name: person.title }), { length: siteConfig.seo.description.limit }),
+      title: `${t('metadata.title', { name: person.title! })} • ${siteConfig.name}`,
+      description: truncate(t('metadata.description', { name: person.title! }), { length: siteConfig.seo.description.limit }),
       url: `${siteConfig.url}/${params.lang}/person/${person.slug}/films`,
       images: person.avatar_url ? [
         { url: person.avatar_url },

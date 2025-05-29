@@ -1,10 +1,9 @@
-import { Fragment } from 'react';
 import { truncate, upperFirst } from 'lodash';
-import { getTranslations } from 'next-intl/server';
 import { siteConfig } from '@/config/site';
 import { getProfile } from '@/features/server/users';
 import { Metadata } from 'next';
 import { locales } from '@/lib/i18n/locales';
+import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata(
   props: {
@@ -12,15 +11,15 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const common = await getTranslations({ lang: params.lang, namespace: 'common' });
-  const t = await getTranslations({ lang: params.lang, namespace: 'pages' });
+  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+  const t = await getTranslations({ locale: params.lang, namespace: 'pages.user.metadata' });
   const user = await getProfile(params.username);
   if (!user) return {
       title: upperFirst(common('errors.user_not_found')),
   };
   return {
-    title: upperFirst(t('user.metadata.title', { full_name: user.full_name, username: user.username })),
-    description: truncate(upperFirst(t('user.metadata.description', { username: user.username, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
+    title: upperFirst(t('title', { full_name: user.full_name!, username: user.username! })),
+    description: truncate(upperFirst(t('description', { username: user.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
     alternates: {
       canonical: `${siteConfig.url}/${params.lang}/@${user.username}`,
       languages: Object.fromEntries(
@@ -29,8 +28,8 @@ export async function generateMetadata(
     },
     openGraph: {
       siteName: siteConfig.name,
-      title: `${upperFirst(t('user.metadata.title', { full_name: user.full_name, username: user.username }))} • ${siteConfig.name}`,
-      description: truncate(upperFirst(t('user.metadata.description', { username: user.username, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
+      title: `${upperFirst(t('title', { full_name: user.full_name!, username: user.username! }))} • ${siteConfig.name}`,
+      description: truncate(upperFirst(t('description', { username: user.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
       url: `${siteConfig.url}/${params.lang}/@${user.username}`,
       images: user.avatar_url ? [
         { url: user.avatar_url },

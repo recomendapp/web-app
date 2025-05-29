@@ -23,7 +23,7 @@ export async function generateMetadata(
   const review = await getReview(params.review_id, params.lang);
   if (!review) return { title: upperFirst(common('errors.review_not_found')) };
   return {
-    title: t('title', { title: review.activity?.media?.title, username: review.activity?.user?.username }),
+    title: t('title', { title: review.activity?.media?.title!, username: review.activity?.user?.username! }),
     description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
     alternates: {
       canonical: `${siteConfig.url}/${params.lang}/review/${params.review_id}`,
@@ -33,7 +33,7 @@ export async function generateMetadata(
     },
     openGraph: {
       siteName: siteConfig.name,
-      title: t('title', { title: review.activity?.media?.title, username: review.activity?.user?.username }),
+      title: t('title', { title: review.activity?.media?.title!, username: review.activity?.user?.username! }),
       description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
       url: `${siteConfig.url}/${params.lang}/review/${params.review_id}`,
       images: review.activity?.media?.avatar_url ? [
@@ -60,7 +60,7 @@ export default async function ReviewPage(
   const jsonLd: WithContext<Review> = {
     '@context': 'https://schema.org',
     '@type': 'Review',
-    name: t('title', { title: review.activity?.media?.title, username: review.activity?.user?.username }),
+    name: t('title', { title: review.activity?.media?.title!, username: review.activity?.user?.username! }),
     description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
     datePublished: review.created_at,
     dateModified: review.updated_at,

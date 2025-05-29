@@ -28,16 +28,16 @@ export async function generateMetadata(
   });
   if (!movie) return { title: upperFirst(common('errors.film_not_found')) };
   return {
-    title: t('metadata.title', { title: movie.title, year: new Date(String(movie.extra_data.release_date)).getFullYear() }),
+    title: t('metadata.title', { title: movie.title!, year: new Date(String(movie.extra_data.release_date)).getFullYear() }),
     description: truncate(
       movie.main_credit
         ? t('metadata.description', {
-          title: movie.title,
+          title: movie.title!,
           directors: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(movie.main_credit.map((director) => director.title ?? '')),
           year: new Date(String(movie.extra_data.release_date)).getFullYear(),
           overview: movie.extra_data.overview,
         }) : t('metadata.description_no_director', {
-          title: movie.title,
+          title: movie.title!,
           year: new Date(String(movie.extra_data.release_date)).getFullYear(),
           overview: movie.extra_data.overview
         }),
@@ -51,16 +51,16 @@ export async function generateMetadata(
     },
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: movie.title, year: new Date(String(movie.extra_data.release_date)).getFullYear() })} • ${siteConfig.name}`,
+      title: `${t('metadata.title', { title: movie.title!, year: new Date(String(movie.extra_data.release_date)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
         movie.main_credit
           ? t('metadata.description', {
-            title: movie.title,
+            title: movie.title!,
             directors: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(movie.main_credit.map((director) => director.title ?? '')),
             year: new Date(String(movie.extra_data.release_date)).getFullYear(),
             overview: movie.extra_data.overview,
           }) : t('metadata.description_no_director', {
-            title: movie.title,
+            title: movie.title!,
             year: new Date(String(movie.extra_data.release_date)).getFullYear(),
             overview: movie.extra_data.overview
           }),

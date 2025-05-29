@@ -27,16 +27,16 @@ export async function generateMetadata(
   });
   if (!serie) return { title: upperFirst(common('errors.serie_not_found')) };
   return {
-    title: t('metadata.title', { title: serie.title, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() }),
+    title: t('metadata.title', { title: serie.title!, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() }),
     description: truncate(
       serie.main_credit
         ? t('metadata.description', {
-          title: serie.title,
+          title: serie.title!,
           creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.main_credit.map((creator) => creator.title ?? '')),
           year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
           overview: serie.extra_data.overview,
         }) : t('metadata.description_no_creator', {
-          title: serie.title,
+          title: serie.title!,
           year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
           overview: serie.extra_data.overview,
         }),
@@ -50,16 +50,16 @@ export async function generateMetadata(
     },
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: serie.title, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
+      title: `${t('metadata.title', { title: serie.title!, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
         serie.main_credit
           ? t('metadata.description', {
-            title: serie.title,
+            title: serie.title!,
             creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.main_credit.map((creator) => creator.title ?? '')),
             year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
             overview: serie.extra_data.overview,
           }) : t('metadata.description_no_creator', {
-            title: serie.title,
+            title: serie.title!,
             year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
             overview: serie.extra_data.overview,
           }),
