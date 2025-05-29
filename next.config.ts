@@ -24,12 +24,6 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'huecemdnsnivsvwhkiqz.supabase.co',
-        port: '',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
         hostname: 'image.tmdb.org',
         port: '',
         pathname: '**',
@@ -37,30 +31,6 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'images.justwatch.com',
-        port: '',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'cloud.appwrite.io',
-        port: '',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'mosaic.scdn.co',
-        port: '',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'misc.scdn.co',
         port: '',
         pathname: '**',
       },

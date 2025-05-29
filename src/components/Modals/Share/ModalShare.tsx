@@ -38,10 +38,8 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 	const [fileToShare, setFileToShare] = useState<File | null>(null);
 	const [canShareController, setCanShareController] = useState<boolean | undefined>(undefined);
 	const sharedControllerData: ShareData = useMemo(() => ({
-		title: title ?? '',
 		files: fileToShare ? [fileToShare] : [],
-		url,
-	}), [fileToShare, title, url]);
+	}), [fileToShare]);
 	const onShare = async (data: ShareData) => {
 		try {
 			await navigator.share(data);

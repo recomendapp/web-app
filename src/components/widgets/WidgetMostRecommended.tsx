@@ -25,7 +25,6 @@ import { useWidgetMostRecommended } from "@/features/client/widget/widgetQueries
 import { ModalRecoSend } from "../Modals/actions/ModalRecoSend";
 import { BadgeMedia } from "../Badge/BadgeMedia";
 import { ContextMenuMedia } from "../ContextMenu/ContextMenuMedia";
-import { getMediaDetails } from "@/hooks/get-media-details";
 import { Media } from "@/types/type.db";
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -78,7 +77,7 @@ export const WidgetMostRecommended = ({
 						}}
 						className="rounded-xl h-full"
 						>
-							<Card className="bg-black bg-opacity-40 flex flex-col h-full justify-between gap-2">
+							<Card className="bg-black/40 flex flex-col h-full justify-between gap-2">
 								<CardHeader className="flex-row justify-between items-center gap-2 text-xl font-semibold leading-none tracking-tight ">
 									<h3 className="text-xl">
 										{t('movies_most_recommended.label')}

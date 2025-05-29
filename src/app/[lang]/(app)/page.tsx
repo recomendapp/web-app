@@ -39,8 +39,6 @@ export default function Home() {
 				</div>
 				{device === "mobile" ? <HeaderRightSide /> : null}
 			</div>
-			<div className="flex text-4xl font-bold col-span-full">
-			</div>
 			<WidgetMostRecommended className='col-span-full' />
 			{!session ? (
 				// Only non-logged users

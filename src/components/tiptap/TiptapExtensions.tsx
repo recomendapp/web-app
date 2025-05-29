@@ -7,6 +7,7 @@ import Underline from '@tiptap/extension-underline';
 import Italic from '@tiptap/extension-italic';
 import Strike from '@tiptap/extension-strike';
 import History from '@tiptap/extension-history';
+import BubbleMenu from '@tiptap/extension-bubble-menu';
 
 export const EDITOR_EXTENSIONS = [
   Document,
@@ -20,4 +21,5 @@ export const EDITOR_EXTENSIONS = [
   Underline,
   Italic,
   Strike,
+  BubbleMenu,
 ];
