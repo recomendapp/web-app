@@ -16,12 +16,12 @@ const URLImage = forwardRef<Konva.Image, URLImageProps>(({ src, height, objectFi
   const ratio = useMemo(() => {
     if (!image || height !== undefined) return -1;
     return image.height / image.width;
-  }, [image]);
+  }, [image, height]);
   
   const heightComputed = useMemo(() => {
     if (ratio === -1) return height;
     return rest.width * ratio;
-  }, [image, rest.width]);
+  }, [image, rest.width, height]);
 
   const posterCrop = useMemo(() => {
     if (!image || objectFit !== 'object-cover') return null;
@@ -33,7 +33,7 @@ const URLImage = forwardRef<Konva.Image, URLImageProps>(({ src, height, objectFi
       },
       clipPosition: 'center-middle',
     });
-  }, [image, rest.width, height]);
+  }, [image, rest.width, height, objectFit]);
 
   // Combine refs : localRef + forwarded ref
   useEffect(() => {
@@ -54,7 +54,6 @@ const URLImage = forwardRef<Konva.Image, URLImageProps>(({ src, height, objectFi
 
   return <Image ref={localRef} image={image} height={heightComputed} {...rest} {...posterCrop} />;
 });
-
-
+URLImage.displayName = 'URLImage';
 
 export default URLImage;

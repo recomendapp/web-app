@@ -41,7 +41,7 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 		title: title ?? '',
 		files: fileToShare ? [fileToShare] : [],
 		url,
-	}), [fileToShare]);
+	}), [fileToShare, title, url]);
 	const onShare = async (data: ShareData) => {
 		try {
 			await navigator.share(data);

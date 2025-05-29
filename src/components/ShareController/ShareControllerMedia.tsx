@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { SHARE_CONSTANTS, ShareControllerProps } from "./ShareController";
 import { Media } from "@/types/type.db";
 import { Stage, Layer, Rect, Text, Group } from 'react-konva';
@@ -58,7 +58,7 @@ export const ShareControllerMedia: React.FC<ShareControllerMediaProps> = ({ medi
 	const gapPoster = 50;
 	const gapTitle = 25;
 
-	const updateSize = () => {
+	const updateSize = useCallback(() => {
 		if (!containerRef.current) return;
 		
 		const containerWidth = containerRef.current.offsetWidth;
@@ -73,7 +73,7 @@ export const ShareControllerMedia: React.FC<ShareControllerMediaProps> = ({ medi
 			height: sceneHeight * scale,
 			scale,
 		});
-	};
+	}, []);
 
 	useEffect(() => {
 		updateSize();
@@ -81,7 +81,7 @@ export const ShareControllerMedia: React.FC<ShareControllerMediaProps> = ({ medi
 		return () => {
 			window.removeEventListener('resize', updateSize);
 		};
-	}, []);
+	}, [updateSize]);
 
 	useEffect(() => {
 		if (loadedLayers === expectedLayers && stageRef.current) {
@@ -103,7 +103,7 @@ export const ShareControllerMedia: React.FC<ShareControllerMediaProps> = ({ medi
 		} else {
 			console.log(`Waiting for layers to load: ${loadedLayers}/${expectedLayers}`);
 		}
-	}, [loadedLayers, expectedLayers, stageRef.current, onFileReady]);
+	}, [loadedLayers, expectedLayers, stageRef.current, onFileReady, media.id, stageSize.scale]);
 	return (
 	<div 
       ref={containerRef} 

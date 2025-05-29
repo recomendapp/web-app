@@ -13,7 +13,7 @@ export function useRandomImage(images: ImageObject[], deps: DependencyList = [])
   const image = useMemo(() => {
     if (!images.length) return null;
     return images[randomer(0, images.length - 1)];
-  }, deps);
+  }, [images,...deps]);
 
   return image;
 }

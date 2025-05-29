@@ -27,7 +27,7 @@ export function RuntimeTooltip({
       minute: '2-digit',
       timeZone: userTimeZone,
     });
-  }, [endTime]);
+  }, [endTime, format, userTimeZone]);
   if (!runtime) return null;
   return (
     <TooltipBox tooltip={`Se termine à ${formattedEndTime}`}>
