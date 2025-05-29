@@ -78,9 +78,9 @@ export function JustWatchWidget({
 				onClick={() => {
 					createModal({
 						header:  {
-							title: upperFirst(common('messages.watch_film_title', { title: title! })),
+							title: upperFirst(common('messages.watch_film_title', {title})),
 							description: common.rich('messages.watch_film_streaming_or_download', {
-								title: title!,
+								title: title,
 								important: (chunk) => <b>{chunk}</b>,
 							}),
 						},

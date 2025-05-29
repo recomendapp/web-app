@@ -36,26 +36,24 @@ export default async function Provider({
     <NextIntlClientProvider locale={locale} messages={messages}>
       <SupabaseProvider locale={locale}>
         <ReactQueryProvider>
-          {/* <ApolloClientProvider locale={locale}> */}
-            <AuthProvider session={session}>
-              <NotificationsProvider>
-                <MapContext>
-                  <ThemeProvider
-                    // NextThemesProvider
-                    attribute="class"
-                    defaultTheme="dark"
-                    enableSystem
-                    // UIProvider
-                    defaultLayout={defaultLayout}
-                    cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
-                    cookieRightPanelOpen={rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined}
-                  >
-                    {children}
-                  </ThemeProvider>
-                </MapContext> 
-              </NotificationsProvider>
-            </AuthProvider>
-          {/* </ApolloClientProvider> */}
+          <AuthProvider session={session}>
+            <NotificationsProvider>
+              <MapContext>
+                <ThemeProvider
+                  // NextThemesProvider
+                  attribute="class"
+                  defaultTheme="dark"
+                  enableSystem
+                  // UIProvider
+                  defaultLayout={defaultLayout}
+                  cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
+                  cookieRightPanelOpen={rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined}
+                >
+                  {children}
+                </ThemeProvider>
+              </MapContext> 
+            </NotificationsProvider>
+          </AuthProvider>
         </ReactQueryProvider>
       </SupabaseProvider>
     </NextIntlClientProvider>

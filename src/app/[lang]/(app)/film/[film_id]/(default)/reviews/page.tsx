@@ -26,10 +26,10 @@ export async function generateMetadata(
   });
   if (!movie) return { title: upperFirst(common('errors.film_not_found')) };
   return {
-    title: t('metadata.title', { title: movie.title!, year: new Date(String(movie.extra_data.release_date)).getFullYear() }),
+    title: t('metadata.title', { title: movie.title, year: new Date(String(movie.extra_data.release_date)).getFullYear() }),
     description: truncate(
       t('metadata.description', {
-        title: movie.title!,
+        title: movie.title,
       }),
       { length: siteConfig.seo.description.limit }
     ),
@@ -41,10 +41,10 @@ export async function generateMetadata(
     },
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: movie.title!, year: new Date(String(movie.extra_data.release_date)).getFullYear() })} • ${siteConfig.name}`,
+      title: `${t('metadata.title', { title: movie.title, year: new Date(String(movie.extra_data.release_date)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
         t('metadata.description', {
-          title: movie.title!,
+          title: movie.title,
         }),
         { length: siteConfig.seo.description.limit }
       ),

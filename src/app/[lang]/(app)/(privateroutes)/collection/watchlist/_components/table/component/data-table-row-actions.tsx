@@ -2,8 +2,6 @@
 
 import { Link } from "@/lib/i18n/routing";
 import { Column, Row, Table } from '@tanstack/react-table';
-
-// UI
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -12,10 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
-// ICONS
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-
 import toast from 'react-hot-toast';
 import { UserWatchlist } from '@/types/type.db';
 import { Icons } from '@/config/icons';
@@ -25,9 +20,7 @@ import { useTranslations } from 'next-intl';
 import { capitalize, upperFirst } from 'lodash';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
-import { getMediaDetails } from '@/hooks/get-media-details';
 import { ModalWatchlistComment } from '@/components/Modals/watchlist/ModalWatchlistComment';
-import { ModalPlaylistAdd } from '@/components/Modals/actions/ModalPlaylistAdd';
 
 interface DataTableRowActionsProps {
   table: Table<UserWatchlist>;
@@ -43,9 +36,7 @@ export function DataTableRowActions({
   data,
 }: DataTableRowActionsProps) {
   const common = useTranslations('common');
-  // const media = getMediaDetails(data?.media);
   const { openModal, createConfirmModal } = useModal();
-  // const [openShowDirectors, setOpenShowDirectors] = useState(false);
   const deleteWatchlist = useUserWatchlistDeleteMutation();
 
   const handleUnwatchlist = async () => {
@@ -107,10 +98,6 @@ export function DataTableRowActions({
 
             </div>
           ) : null}
-          {/* <ShowDirectorsButton
-            movie={data?.movie}
-            setOpen={setOpenShowDirectors}
-          /> */}
           <DropdownMenuItem
             onClick={() => openModal(ModalWatchlistComment, { watchlistItem: data })}
           >
@@ -143,72 +130,6 @@ export function DataTableRowActions({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {/* <ShowDirectorsModal
-        movie={data?.movie}
-        open={openShowDirectors}
-        setOpen={setOpenShowDirectors}
-      /> */}
     </div>
   );
 }
-
-// export function ShowDirectorsButton({
-//   movie,
-//   setOpen,
-// }: {
-//   movie: Movie;
-//   setOpen: Dispatch<SetStateAction<boolean>>;
-// }) {
-//   const common = useTranslations('common');
-//   if (!movie?.directors?.length) {
-//     return (
-//       <DropdownMenuItem>
-//         <Icons.user className='w-4' />
-//         {capitalize(common('messages.no_director'))}
-//       </DropdownMenuItem>
-//     );
-//   }
-//   if (movie?.directors?.length == 1) {
-//     return (
-//       <DropdownMenuItem asChild>
-//         <Link href={`/person/${movie.directors[0]?.slug ?? movie.directors[0]?.id}`}>
-//           <Icons.user className='w-4' />
-//           {capitalize(common('messages.view_directors', { count: movie.directors.length }))}
-//         </Link>
-//       </DropdownMenuItem>
-//     );
-//   }
-//   return (
-//     <DropdownMenuItem onClick={() => setOpen(true)}>
-//       <Icons.users className='w-4' />
-//       {capitalize(common('messages.view_directors', { count: movie.directors.length }))}
-//     </DropdownMenuItem>
-//   );
-// }
-
-// export function ShowDirectorsModal({
-//   movie,
-//   open,
-//   setOpen,
-// }: {
-//   movie: Movie;
-//   open: boolean;
-//   setOpen: Dispatch<SetStateAction<boolean>>;
-// }) {
-//   return (
-//     <Dialog open={open} onOpenChange={setOpen}>
-//       <DialogContent className="max-w-5xl bg-black">
-//         <DialogHeader>
-//           <DialogTitle className="text-center">Réalisateur</DialogTitle>
-//         </DialogHeader>
-//         <div className="flex flex-col gap-4">
-//           {movie?.directors?.map((person: any) => (
-//             <Button key={person?.id} variant={'ghost'} asChild>
-//               <Link href={`/person/${person?.slug ?? person?.id}`}>{person?.name}</Link>
-//             </Button>
-//           ))}
-//         </div>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// }

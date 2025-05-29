@@ -126,7 +126,7 @@ export function DataTableRowActions({
             onClick={async () => createConfirmModal({
               title: capitalize(common('library.collection.likes.modal.delete_confirm.title')),
               description: common.rich('library.collection.likes.modal.delete_confirm.description', {
-                title: media.title!,
+                title: media.title,
                 important: (chunk) => <b>{chunk}</b>,
               }),
               onConfirm: handleUnlike,

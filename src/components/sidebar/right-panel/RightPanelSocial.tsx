@@ -6,9 +6,10 @@ import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
 import { useUserAcceptFollowerRequest, useUserDeclineFollowerRequest } from "@/features/client/user/userMutations";
-import { useUserFolloweesQuery, useUserFollowersRequestsQuery } from "@/features/client/user/userQueries";
+import { useUserFolloweesInfiniteQuery, useUserFolloweesQuery, useUserFollowersRequestsQuery } from "@/features/client/user/userQueries";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
+import { useInView } from "react-intersection-observer";
 import { createRightPanel } from "./RightPanelUtils";
 import Fuse from "fuse.js";
 import { UserFollower } from "@/types/type.db";
@@ -40,6 +41,7 @@ const RightPanelSocialContent = () => {
 
 const RightPanelSocialFollows = () => {
 	const { user } = useAuth();
+	const { ref, inView } = useInView();
 	const [search, setSearch] = useState('');
 	const [results, setResults] = useState<UserFollower[] | undefined>(undefined);
 	const {
@@ -84,6 +86,36 @@ const RightPanelSocialFollows = () => {
 			)}
 		</>
 	)
+
+	// return (
+	// 	<>
+	// 		{followees?.pages[0]?.length ? (
+	// 			<>
+	// 				{followees?.pages.map((page, i) => (
+	// 					page?.map(({ followee }, index) => (
+	// 						<CardUser
+	// 						key={index}
+	// 						user={followee}
+	// 						{...(i === followees.pages.length - 1 &&
+	// 							index === page.length - 1
+	// 								? { ref: ref }
+	// 								: {})}
+	// 						/>
+	// 					))
+	// 				))}
+	// 				{(isFetchingNextPage) ? (
+	// 					<Icons.loader className='w-8 h-8 mx-auto' />
+	// 				) : null}
+	// 			</>
+	// 		) : (isLoading || followees === undefined) ? (
+	// 			<Icons.loader className='w-8 h-8 mx-auto' />
+	// 		) : isError ? (
+	// 			<div className='text-center text-muted-foreground'>Une erreur s&apos;est produite</div>
+	// 		) : (
+	// 			<div className='text-center text-muted-foreground'>Aucun suivi</div>
+	// 		)}
+	// 	</>
+	// );
 }
 
 const RightPanelSocialRequests = () => {

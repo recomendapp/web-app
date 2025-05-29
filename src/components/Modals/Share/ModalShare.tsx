@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Icons } from "@/config/icons";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
-import { ShareController, ShareControllerProps } from "@/components/ShareController/ShareController";
+import { ShareController } from "@/components/ShareController/ShareController";
 import { Separator } from "@/components/ui/separator";
 
 interface ModalShareProps<T> extends ModalType {

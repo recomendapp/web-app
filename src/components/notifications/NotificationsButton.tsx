@@ -4,7 +4,6 @@ import { Icons } from "@/config/icons"
 import { useUI } from "@/context/ui-context";
 import { RightPanelNotifications } from "../sidebar/right-panel/RightPanelNotifications";
 import { useCounts } from "@novu/react";
-import { useAuth } from "@/context/auth-context";
 import { CircleIcon } from "lucide-react";
 
 export const NotificationsButton = ({

@@ -178,7 +178,7 @@ export function PlaylistForm({
         message: 'La description ne doit pas dépasser 300 caractères.',
       })
       .optional(),
-    private: z.boolean(),
+    private: z.boolean().default(false),
   });
 
   type CreatePlaylistFormValues = z.infer<typeof CreatePlaylistFormSchema>;

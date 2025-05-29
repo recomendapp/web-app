@@ -17,10 +17,10 @@ export default function TvSeasonHeader({
 	season: MediaTvSeriesSeason;
 }) {
 	const common = useTranslations('common');
-	const title = upperFirst(common('messages.season_value', { number: season.season_number! }));
+	const title = upperFirst(common('messages.season_value', { number: season.season_number }));
 	const randomBg = useRandomImage(season.episodes?.map(episode => ({
 		src: episode.avatar_url ?? '',
-		alt: upperFirst(common('messages.episode_value', { number: episode.episode_number! })),
+		alt: upperFirst(common('messages.episode_value', { number: episode.episode_number })),
 	})) ?? []);
 	if (!season) return null;
 	return (
@@ -69,7 +69,7 @@ export default function TvSeasonHeader({
 					)}
 				</h1>
 				<div>
-					{common('messages.episode_count', { count: season.episode_count! })}
+					{common('messages.episode_count', { count: season.episode_count })}
 				</div>
 			</div>
 		</div>

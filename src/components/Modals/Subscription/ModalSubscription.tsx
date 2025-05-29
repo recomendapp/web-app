@@ -71,7 +71,7 @@ export function ModalSubscription({
 		>
 			<ModalHeader>
 				<ModalTitle>{upperFirst(common('messages.upgrade_to_plan', {
-					plan: product?.name!,
+					plan: product?.name,
 				}))}</ModalTitle>
 				<ModalDescription>
 				{upperFirst(common('messages.choose_subscription_recurrence'))}
@@ -119,7 +119,7 @@ export function ModalSubscription({
 				>
 				{isLoading ? <Icons.loader className='w-6 h-6' /> : null}
 				{upperFirst(common('messages.upgrade_to_plan', {
-					plan: product?.name!,
+					plan: product?.name,
 				}))}
 				</Button>
 			</ModalFooter>

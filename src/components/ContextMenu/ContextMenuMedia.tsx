@@ -9,9 +9,9 @@ import { ModalRecoSend } from "../Modals/actions/ModalRecoSend";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ModalPlaylistAdd } from "../Modals/actions/ModalPlaylistAdd";
-// import { ShareControllerMedia } from "../ShareController/ShareControllerMedia";
-import { createShareController } from "../ShareController/ShareController";
 import { useAuth } from "@/context/auth-context";
+import { createShareController } from "../ShareController/ShareController";
+import { ShareControllerMedia } from "../ShareController/ShareControllerMedia";
 
 interface Item {
 	icon: React.ElementType;
@@ -68,9 +68,9 @@ export const ContextMenuMedia = ({
 					title: media.title,
 					type: media.media_type,
 					path: media.url ?? '',
-					// shareController: createShareController(ShareControllerMedia, {
-					// 	media: media,
-					// }),
+					shareController: createShareController(ShareControllerMedia, {
+						media: media,
+					}),
 				}),
 				label: upperFirst(common('word.share')),
 			},

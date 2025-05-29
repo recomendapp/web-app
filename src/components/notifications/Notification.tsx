@@ -97,43 +97,6 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 					</div>
 				) : null}
 			</div>
-			{/* <div className='flex flex-col gap-2'>
-				<ReactMarkdown>
-				{notification.body}
-				</ReactMarkdown>
-				{(notification.primaryAction || notification.secondaryAction) && (!notification.primaryAction?.isCompleted && !notification.secondaryAction?.isCompleted) ? (
-					<div className='flex gap-2'>
-						{(notification.primaryAction && !notification.primaryAction.isCompleted) ? (
-							<Button
-							variant='accent-yellow'
-							onClick={async () => {
-								const primaryAction = notification.data?.primaryAction as {
-									key: string;
-									id: number;
-								};
-								await handleAction('primary', primaryAction.key, primaryAction.id);
-							}}
-							>
-								{notification.primaryAction.label}
-							</Button>
-						) : null}
-						{(notification.secondaryAction && !notification.secondaryAction.isCompleted) ? (
-							<Button
-							variant='outline'
-							onClick={async () => {
-								const secondaryAction = notification.data?.secondaryAction as {
-									key: string;
-									id: number;
-								};
-								await handleAction('secondary', secondaryAction.key, secondaryAction.id);
-							}}
-							>
-								{notification.secondaryAction.label}
-							</Button>
-						) : null}
-					</div>
-				) : null}
-			</div> */}
 		</div>
 	)
 }

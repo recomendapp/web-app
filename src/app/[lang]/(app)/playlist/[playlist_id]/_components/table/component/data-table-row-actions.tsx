@@ -12,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { useState } from 'react';
 import { useModal } from '@/context/modal-context';
 import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentModal';
 import { PlaylistItem } from '@/types/type.db';
@@ -36,7 +35,6 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
   const common = useTranslations('common');
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(data?.playlist_id as number);
   const { openModal, createConfirmModal } = useModal();
-  const [openShowDirectors, setOpenShowDirectors] = useState(false);
   const { mutateAsync: deletePlaylistItem } = useDeletePlaylistItem();
 
   return (
@@ -86,10 +84,6 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
 
             </div>
           ) : null}
-          {/* <ShowDirectorsButton
-            movie={data?.movie!}
-            setOpen={setOpenShowDirectors}
-          /> */}
           {(isAllowedToEdit || data?.comment) && (
             <DropdownMenuItem
               onClick={() => openModal(PlaylistCommentModal, { playlistItem: data! })}
@@ -126,72 +120,6 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
           )}
         </DropdownMenuContent>
       </DropdownMenu>
-      {/* <ShowDirectorsModal
-        movie={data?.movie!}
-        open={openShowDirectors}
-        setOpen={setOpenShowDirectors}
-      /> */}
     </>
   );
 }
-
-// export function ShowDirectorsButton({
-//   movie,
-//   setOpen,
-// }: {
-//   movie: Movie;
-//   setOpen: Dispatch<SetStateAction<boolean>>;
-// }) {
-//   const common = useTranslations('common');
-//   if (!movie?.directors?.length) {
-//     return (
-//       <DropdownMenuItem asChild>
-//         <Icons.user className='w-4' />
-//         {upperFirst(common('messages.no_director'))}
-//       </DropdownMenuItem>
-//     );
-//   }
-//   if (movie?.directors.length == 1) {
-//     return (
-//       <DropdownMenuItem asChild>
-//         <Link href={`/person/${movie.directors[0]?.slug ?? movie.directors[0].id}`}>
-//           <Icons.user className='w-4' />
-//           {upperFirst(common('messages.view_directors', { count: movie.directors.length }))}
-//         </Link>
-//       </DropdownMenuItem>
-//     );
-//   }
-//   return (
-//     <DropdownMenuItem onClick={() => setOpen(true)}>
-//       <Icons.user className='w-4' />
-//       {upperFirst(common('messages.view_directors', { count: movie.directors.length }))}
-//     </DropdownMenuItem>
-//   );
-// }
-
-// export function ShowDirectorsModal({
-//   movie,
-//   open,
-//   setOpen,
-// }: {
-//   movie: Movie;
-//   open: boolean;
-//   setOpen: Dispatch<SetStateAction<boolean>>;
-// }) {
-//   return (
-//     <Dialog open={open} onOpenChange={setOpen}>
-//       <DialogContent className="max-w-5xl bg-black">
-//         <DialogHeader>
-//           <DialogTitle className="text-center">Réalisateur</DialogTitle>
-//         </DialogHeader>
-//         <div className="flex flex-col gap-4">
-//           {movie?.directors?.map((person) => (
-//             <Button key={person?.id} variant={'ghost'} asChild>
-//               <Link href={`/person/${person?.slug ?? person?.id}`}>{person?.name}</Link>
-//             </Button>
-//           ))}
-//         </div>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// }
