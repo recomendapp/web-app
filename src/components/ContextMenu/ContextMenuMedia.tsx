@@ -37,7 +37,13 @@ export const ContextMenuMedia = ({
 			{
 				icon: Icons.movie,
 				href: media.url ?? '',
-				label: 'Accéder au film',
+				label: media.media_type === 'movie'
+					? upperFirst(common('messages.go_to_film'))
+					: media.media_type === 'tv_series'
+					? upperFirst(common('messages.go_to_serie'))
+					: media.media_type === 'person'
+					? upperFirst(common('messages.go_to_person'))
+					: ''
 			},
 			// {
 			// 	icon: Icons.user,
