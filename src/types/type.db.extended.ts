@@ -48,7 +48,7 @@ type ViewExtensions = {
         name: string
     }[],
     extra_data: {
-      overview: string,
+      overview?: string | null,
       release_date: string | null,
       runtime: number | null,
       original_title: string,
@@ -68,7 +68,7 @@ type ViewExtensions = {
       name: string
     }[],
     extra_data: {
-      overview: string,
+      overview?: string | null,
       first_air_date: string | null,
       in_production: boolean,
       last_air_date: string | null,

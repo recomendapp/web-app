@@ -34,10 +34,11 @@ export async function generateMetadata(
       { length: siteConfig.seo.description.limit }
     ),
     alternates: {
-      canonical: `${siteConfig.url}/${params.lang}/tv_series/${serie.slug}/playlists`,
-      languages: Object.fromEntries(
-        locales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${serie.slug}/playlists`])
-      ),
+      canonical: `${siteConfig.url}/tv_series/${serie.slug}/playlists`,
+      languages: Object.fromEntries([
+        ['x-default', `${siteConfig.url}/tv_series/${serie.slug}/playlists`],
+        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${serie.slug}/playlists`])
+      ])
     },
     openGraph: {
       siteName: siteConfig.name,

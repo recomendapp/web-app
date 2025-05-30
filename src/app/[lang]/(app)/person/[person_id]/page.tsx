@@ -29,10 +29,11 @@ export async function generateMetadata(
     title: t('metadata.title', { name: person.title!, department: person.extra_data.known_for_department }),
     description: truncate(person.extra_data.biography, { length: siteConfig.seo.description.limit }),
     alternates: {
-      canonical: `${siteConfig.url}/${params.lang}/person/${person.slug}`,
-      languages: Object.fromEntries(
-        locales.map((locale) => [locale, `${siteConfig.url}/${locale}/person/${person.slug}`])
-      ),
+      canonical: `${siteConfig.url}/person/${person.slug}`,
+      languages: Object.fromEntries([
+        ['x-default', `${siteConfig.url}/person/${person.slug}`],
+        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/person/${person.slug}`])
+      ])
     },
     openGraph: {
       siteName: siteConfig.name,

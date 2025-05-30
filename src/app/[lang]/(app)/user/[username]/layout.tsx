@@ -21,10 +21,11 @@ export async function generateMetadata(
     title: upperFirst(t('title', { full_name: user.full_name!, username: user.username! })),
     description: truncate(upperFirst(t('description', { username: user.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
     alternates: {
-      canonical: `${siteConfig.url}/${params.lang}/@${user.username}`,
-      languages: Object.fromEntries(
-        locales.map((locale) => [locale, `${siteConfig.url}/${locale}/@${user.username}`])
-      ),
+      canonical: `${siteConfig.url}/@${user.username}`,
+      languages: Object.fromEntries([
+        ['x-default', `${siteConfig.url}/@${user.username}`],
+        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/@${user.username}`])
+      ])
     },
     openGraph: {
       siteName: siteConfig.name,

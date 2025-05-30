@@ -44,10 +44,11 @@ export async function generateMetadata(
       { length: siteConfig.seo.description.limit }
     ),
     alternates: {
-      canonical: `${siteConfig.url}/${params.lang}/film/${movie.slug}`,
-      languages: Object.fromEntries(
-        locales.map((locale) => [locale, `${siteConfig.url}/${locale}/film/${movie.slug}`])
-      ),
+      canonical: `${siteConfig.url}/film/${movie.slug}`,
+      languages: Object.fromEntries([
+        ['x-default', `${siteConfig.url}/film/${movie.slug}`],
+        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/film/${movie.slug}`])
+      ])
     },
     openGraph: {
       siteName: siteConfig.name,
@@ -96,7 +97,7 @@ export default async function MoviePage(
     '@type': 'Movie',
     name: movie.title ?? undefined,
     image: movie.avatar_url ?? undefined,
-    description: movie.extra_data.overview,
+    description: movie.extra_data.overview ?? undefined,
     datePublished: movie.date ?? undefined,
     dateModified: new Date().toISOString(),
     duration: movie.extra_data.runtime ? toISO8601Duration(movie.extra_data.runtime) : undefined,

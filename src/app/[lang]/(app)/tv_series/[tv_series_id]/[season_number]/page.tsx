@@ -39,10 +39,11 @@ export async function generateMetadata(
       { length: siteConfig.seo.description.limit }
     ),
     alternates: {
-      canonical: `${siteConfig.url}/${params.lang}/tv_series/${params.tv_series_id}/${params.season_number}`,
-      languages: Object.fromEntries(
-        locales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${params.tv_series_id}/${params.season_number}`])
-      ),
+      canonical: `${siteConfig.url}/tv_series/${params.tv_series_id}/${params.season_number}`,
+      languages: Object.fromEntries([
+        ['x-default', `${siteConfig.url}/tv_series/${params.tv_series_id}/${params.season_number}`],
+        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${params.tv_series_id}/${params.season_number}`])
+      ])
     },
     openGraph: {
       siteName: siteConfig.name,

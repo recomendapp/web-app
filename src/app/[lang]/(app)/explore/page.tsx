@@ -18,10 +18,11 @@ export async function generateMetadata(
     title: t('metadata.title'),
     description: truncate(t('metadata.description'), { length: siteConfig.seo.description.limit }),
     alternates: {
-      canonical: `${siteConfig.url}/${params.lang}/explore`,
-      languages: Object.fromEntries(
-        locales.map((locale) => [locale, `${siteConfig.url}/${locale}/explore`])
-      ),
+      canonical: `${siteConfig.url}/explore`,
+      languages: Object.fromEntries([
+        ['x-default', `${siteConfig.url}/explore`],
+        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/explore`])
+      ])
     },
     openGraph: {
       siteName: siteConfig.name,

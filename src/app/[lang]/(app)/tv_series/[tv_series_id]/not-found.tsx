@@ -4,7 +4,7 @@ import React from 'react';
 
 export default async function NotFound() {
   const locale = await getLocale();
-  const t = await getTranslations({ locale: locale, namespace: 'pages' });
+  const t = await getTranslations({ locale: locale, namespace: 'common' });
   return (
     <div
       className="bg-white w-full h-full flex justify-center items-center"
@@ -15,7 +15,7 @@ export default async function NotFound() {
       }}
     >
       <div className="text-4xl font-bold">
-      {upperFirst(t('errors.404.description'))}
+      {upperFirst(t('errors.serie_not_found'))}
       </div>
     </div>
   );

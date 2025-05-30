@@ -170,6 +170,7 @@ export const getTvSeries = async ({
 				.maybeSingle()
 				.overrideTypes<MediaTvSeries, { merge: false }>();
 			if (error) throw error;
+			if (!rawTvSeries) return rawTvSeries;
 			const specials = rawTvSeries?.seasons?.filter(season => season.season_number === 0) || [];
 			const regularSeasons = rawTvSeries?.seasons?.filter(season => season.season_number !== 0) || [];
 			const tvSeries: MediaTvSeries = {

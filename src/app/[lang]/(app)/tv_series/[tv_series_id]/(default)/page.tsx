@@ -43,10 +43,11 @@ export async function generateMetadata(
       { length: siteConfig.seo.description.limit }
     ),
     alternates: {
-      canonical: `${siteConfig.url}/${params.lang}/tv_series/${serie.slug}`,
-      languages: Object.fromEntries(
-        locales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${serie.slug}`])
-      ),
+      canonical: `${siteConfig.url}/tv_series/${serie.slug}`,
+      languages: Object.fromEntries([
+        ['x-default', `${siteConfig.url}/tv_series/${serie.slug}`],
+        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${serie.slug}`])
+      ])
     },
     openGraph: {
       siteName: siteConfig.name,
@@ -95,7 +96,7 @@ export default async function TvSeriesPage(
     '@type': 'TVSeries',
     name: serie.title ?? undefined,
     image: serie.avatar_url ?? undefined,
-    description: serie.extra_data.overview,
+    description: serie.extra_data.overview ?? undefined,
     datePublished: serie.date ?? undefined,
     dateModified: new Date().toISOString(),
     director: serie.main_credit
