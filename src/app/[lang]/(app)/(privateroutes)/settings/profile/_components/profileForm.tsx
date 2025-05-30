@@ -149,13 +149,13 @@ export function ProfileForm() {
   async function uploadAvatar(file: File, userId: string) {
     try {
       const fileExt = file.name.split('.').pop();
-      const filePath = `${userId}-${Math.random()}.${fileExt}`;
-
+      const filePath = `${userId}.${fileExt}`;
       const avatarCompressed = await compressPicture(file, filePath, 400, 400);
-
       let { error } = await supabase.storage
         .from('avatars')
-        .upload(filePath, avatarCompressed);
+        .upload(filePath, avatarCompressed, {
+          upsert: true
+        });
 
       if (error) throw error;
 
