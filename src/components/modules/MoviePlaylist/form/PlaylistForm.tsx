@@ -295,17 +295,19 @@ export function PlaylistForm({
   async function uploadPoster(file: File, playlistId: number) {
     try {
       const fileExt = file.name.split('.').pop();
-      const filePath = `${playlistId}-${Math.random()}.${fileExt}`;
-
+      const filePath = `${playlistId}.${fileExt}`;
       const posterCompressed = await compressPicture(file, filePath, 400, 400);
-
       let { data, error } = await supabase.storage
         .from('playlist_posters')
-        .upload(filePath, posterCompressed);
-
+        .upload(filePath, posterCompressed, {
+          upsert: true,
+        });
       if (error) throw error;
-
-      return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/playlist_posters/${filePath}`;
+      if (!data) throw new Error('No data returned from upload');
+      const { data: { publicUrl } } = supabase.storage
+        .from('playlist_posters')
+        .getPublicUrl(data.path);
+      return publicUrl;
     } catch (error) {
       throw error;
     }

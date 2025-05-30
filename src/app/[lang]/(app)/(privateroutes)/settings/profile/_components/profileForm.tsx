@@ -3,7 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -26,6 +25,7 @@ import Loader from '@/components/Loader/Loader';
 import { useTranslations } from 'next-intl';
 import { useMutation } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { upperFirst } from 'lodash';
 
 export function ProfileForm() {
   const supabase = useSupabaseClient();
@@ -110,7 +110,7 @@ export function ProfileForm() {
       if (!user) return;
 
       setLoading(true);
-
+      
       // check if profile has been updated
       if (newAvatar || user.full_name !== data.full_name || user.bio !== data.bio || user.website !== data.website) {
         const userPayload: Record<string, any> = {
@@ -125,9 +125,10 @@ export function ProfileForm() {
         await updateProfile(userPayload);
       }
 
-      toast.success(common('word.saved'));
+      toast.success(upperFirst(common('word.saved')));
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error(upperFirst(common('errors.an_error_occurred')));
+      // toast.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -138,9 +139,9 @@ export function ProfileForm() {
       await updateProfile({
         avatar_url: null,
       });
-      toast.success(t('saved'));
+      toast.success(upperFirst(common('word.saved')));
     } catch (error) {
-      toast.error(common('error'));
+      toast.error(upperFirst(common('errors.an_error_occurred')));
     } finally {
       setLoading(false);
     }
@@ -151,15 +152,17 @@ export function ProfileForm() {
       const fileExt = file.name.split('.').pop();
       const filePath = `${userId}.${fileExt}`;
       const avatarCompressed = await compressPicture(file, filePath, 400, 400);
-      let { error } = await supabase.storage
+      const { data, error } = await supabase.storage
         .from('avatars')
         .upload(filePath, avatarCompressed, {
           upsert: true
         });
-
       if (error) throw error;
-
-      return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/avatars/${filePath}`;
+      if (!data) throw new Error('No data returned from upload');
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(data.path);
+      return publicUrl
     } catch (error) {
       throw error;
     }
@@ -178,7 +181,7 @@ export function ProfileForm() {
             setNewAvatar={setNewAvatar}
           />
           {user.avatar_url && (
-            <Button variant={'destructive'} onClick={deleteAvatar}>
+            <Button type='button' variant={'destructive'} onClick={deleteAvatar}>
               {t('profile.avatar.delete')}
             </Button>
           )}

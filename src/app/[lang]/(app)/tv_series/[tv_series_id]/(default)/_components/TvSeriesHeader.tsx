@@ -1,9 +1,7 @@
 'use client';
-
 import { Fragment, useState } from 'react';
 import { Link } from "@/lib/i18n/routing";
 import YoutubeEmbed from '@/components/utils/Youtube';
-
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -20,8 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-// ICONS
 import { Play } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MoviePoster from '@/components/Movie/MoviePoster';
@@ -41,6 +37,7 @@ import MediaActionUserWatchlist from '@/components/Media/actions/MediaActionUser
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlaylistAdd';
 import { ModalMediaFollowersRating } from '@/components/Modals/ModalMediaFollowersRating';
+import { ContextMenuMedia } from '@/components/ContextMenu/ContextMenuMedia';
 
 export default function TvSerieHeader({
   serie,
@@ -54,89 +51,91 @@ export default function TvSerieHeader({
   if (!serie) return null;
   return (
     <div>
-      <HeaderBox
-        className='@container/serie-header'
-        style={{
-          backgroundImage: serie.backdrop_path ? `url(${serie.backdrop_url})` : undefined,
-        }}
-      >
-        <div className="flex flex-col w-full gap-4 items-center @xl/serie-header:flex-row">
-          {/* SERIE POSTER */}
-          <MoviePoster
-            className="w-[200px]"
-            src={serie.avatar_url ?? ''}
-            alt={serie.title ?? ''}
-            fill
-            sizes={`
-              (max-width: 640px) 96px,
-              (max-width: 1024px) 120px,
-              150px
-            `}
-          >
-              <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                {(serie.vote_average || serie.tmdb_vote_average) ? <IconMediaRating
-                  rating={serie.vote_average ?? serie.tmdb_vote_average}
-                  variant="general"
-                  className="w-full"
-                /> : null}
-                {followersAvgRating ? <IconMediaRating
-                  rating={followersAvgRating}
-                  variant="follower"
-                  className="w-full cursor-pointer"
-                  onClick={() => openModal(ModalMediaFollowersRating, { mediaId: serie.media_id! })}
-                /> : null}
-              </div>
-            {(serie?.videos && serie.videos.length > 0) ? (
-              <SerieTrailerButton
-                videos={serie.videos}
-                className="absolute bottom-2 right-2"
-              />
-            ) : null}
-          </MoviePoster>
-          {/* MOVIE MAIN DATA */}
-          <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
-            {/* TYPE & GENRES */}
-            <div>
-              <span className='text-accent-yellow'>{upperFirst(common('messages.serie', { count: 1 }))}</span>
-              {serie.genres ? <Genres genres={serie.genres} className="before:content-['_|_']" /> : null}
-            </div>
-            {/* TITLE */}
-            <h1 className="text-clamp space-x-1">
-              <span className='font-bold select-text'>{serie.title}</span>
-              {/* DATE */}
-              <sup>
-                <DateOnlyYearTooltip date={serie.extra_data.first_air_date ?? ''} className=' text-base font-medium'/>
-              </sup>
-              {serie.extra_data.original_name !== serie.title && (
-                <div className='text-base font-semibold text-muted-foreground'>{serie.extra_data.original_name}</div>
-              )}
-            </h1>
-
-            <div className=" space-y-2">
+      <ContextMenuMedia media={serie}>
+        <HeaderBox
+          className='@container/serie-header'
+          style={{
+            backgroundImage: serie.backdrop_path ? `url(${serie.backdrop_url})` : undefined,
+          }}
+        >
+          <div className="flex flex-col w-full gap-4 items-center @xl/serie-header:flex-row">
+            {/* SERIE POSTER */}
+            <MoviePoster
+              className="w-[200px]"
+              src={serie.avatar_url ?? ''}
+              alt={serie.title ?? ''}
+              fill
+              sizes={`
+                (max-width: 640px) 96px,
+                (max-width: 1024px) 120px,
+                150px
+              `}
+            >
+                <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
+                  {(serie.vote_average || serie.tmdb_vote_average) ? <IconMediaRating
+                    rating={serie.vote_average ?? serie.tmdb_vote_average}
+                    variant="general"
+                    className="w-full"
+                  /> : null}
+                  {followersAvgRating ? <IconMediaRating
+                    rating={followersAvgRating}
+                    variant="follower"
+                    className="w-full cursor-pointer"
+                    onClick={() => openModal(ModalMediaFollowersRating, { mediaId: serie.media_id! })}
+                  /> : null}
+                </div>
+              {(serie?.videos && serie.videos.length > 0) ? (
+                <SerieTrailerButton
+                  videos={serie.videos}
+                  className="absolute bottom-2 right-2"
+                />
+              ) : null}
+            </MoviePoster>
+            {/* MOVIE MAIN DATA */}
+            <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
+              {/* TYPE & GENRES */}
               <div>
-                {serie.main_credit?.map((director, index: number) => (
-                  <Fragment key={index}>
-                    {index > 0 && <span>, </span>}
-                    <span key={index}>
-                      <Button
-                        variant="link"
-                        className="w-fit p-0 h-full hover:text-accent-yellow transition"
-                        asChild
-                      >
-                        <Link href={director.url ?? ''}>{director?.title}</Link>
-                      </Button>
-                    </span>
-                  </Fragment>
-                )) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
-                {/* NUMBER OF SEASONS */}
-                <span className="before:content-['_•_']">
-                  {common('messages.season_count', { count: serie.extra_data.number_of_seasons })}
-                </span>
+                <span className='text-accent-yellow'>{upperFirst(common('messages.serie', { count: 1 }))}</span>
+                {serie.genres ? <Genres genres={serie.genres} className="before:content-['_|_']" /> : null}
+              </div>
+              {/* TITLE */}
+              <h1 className="text-clamp space-x-1">
+                <span className='font-bold select-text'>{serie.title}</span>
+                {/* DATE */}
+                <sup>
+                  <DateOnlyYearTooltip date={serie.extra_data.first_air_date ?? ''} className=' text-base font-medium'/>
+                </sup>
+                {serie.extra_data.original_name !== serie.title && (
+                  <div className='text-base font-semibold text-muted-foreground'>{serie.extra_data.original_name}</div>
+                )}
+              </h1>
+
+              <div className=" space-y-2">
+                <div>
+                  {serie.main_credit?.map((director, index: number) => (
+                    <Fragment key={index}>
+                      {index > 0 && <span>, </span>}
+                      <span key={index}>
+                        <Button
+                          variant="link"
+                          className="w-fit p-0 h-full hover:text-accent-yellow transition"
+                          asChild
+                        >
+                          <Link href={director.url ?? ''}>{director?.title}</Link>
+                        </Button>
+                      </span>
+                    </Fragment>
+                  )) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
+                  {/* NUMBER OF SEASONS */}
+                  <span className="before:content-['_•_']">
+                    {common('messages.season_count', { count: serie.extra_data.number_of_seasons })}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </HeaderBox>
+        </HeaderBox>
+      </ContextMenuMedia>
       <div className="flex justify-between gap-2 px-4 pb-4">
         <div className="flex gap-2 overflow-x-auto items-center">
           <MediaActionUserActivityRating mediaId={serie.media_id!} />
