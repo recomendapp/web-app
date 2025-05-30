@@ -49,7 +49,7 @@ export default async function SearchBestResult({
             </p>
             {media.media_type === 'person' ? (
               <p className="line-clamp-2 text-muted-foreground">
-                {media.extra_data.known_for_department}
+                {"known_for_department" in media.extra_data && media.extra_data.known_for_department}
               </p>
             ) : null}
             {media.main_credit ? (

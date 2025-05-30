@@ -58,6 +58,7 @@ export default async function ReviewPage(
   const review = await getReview(params.review_id, params.lang);
   if (!review) notFound();
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.metadata' });
+  const { media } = review.activity || {};
   const jsonLd: WithContext<Review> = {
     '@context': 'https://schema.org',
     '@type': 'Review',
@@ -65,32 +66,32 @@ export default async function ReviewPage(
     description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
     datePublished: review.created_at,
     dateModified: review.updated_at,
-    itemReviewed: {
+    itemReviewed: media ? {
       '@type': 'Movie',
-      name: review.activity?.media?.title ?? undefined,
-      image: review.activity?.media?.avatar_url ?? undefined,
-      description: review.activity?.media?.extra_data?.overview ?? undefined,
-      director: review.activity?.media?.main_credit
+      name: media.title ?? undefined,
+      image: media.avatar_url ?? undefined,
+      description: ("overview" in media.extra_data && media.extra_data.overview?.length) ? media.extra_data.overview : undefined,
+      director: media.main_credit
         ?.map(director => ({
           '@type': 'Person',
           name: director.title ?? undefined,
           image: director.avatar_url ?? undefined,
         })),
-      actor: review.activity?.media?.cast
+      actor: "cast" in media ? media.cast
         ?.map((actor) => ({
           '@type': 'Person',
           name: actor.person?.title ?? undefined,
           image: actor.person?.avatar_url ?? undefined,
-        })),
-      genre: review.activity?.media?.genres?.map((genre) => genre.name),
-      aggregateRating: (review.activity?.media?.vote_average || review.activity?.media?.tmdb_vote_average) ? {
+        })) : undefined,
+      genre: media.genres?.map((genre) => genre.name),
+      aggregateRating: (media.vote_average || media.tmdb_vote_average) ? {
         '@type': 'AggregateRating',
-        ratingValue: review.activity?.media?.vote_average ?? review.activity?.media?.tmdb_vote_average ?? undefined,
-        ratingCount: review.activity?.media?.vote_count ?? review.activity?.media?.tmdb_vote_count ?? 0,
+        ratingValue: media.vote_average ?? media.tmdb_vote_average ?? undefined,
+        ratingCount: media.vote_count ?? media.tmdb_vote_count ?? 0,
         bestRating: 10,
         worstRating: 1,
       } : undefined,
-    },
+    } : undefined,
     reviewRating: {
       '@type': 'Rating',
       ratingValue: review.activity?.rating ?? undefined,

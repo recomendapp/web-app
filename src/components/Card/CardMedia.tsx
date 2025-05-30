@@ -76,9 +76,8 @@ const CardMediaPoster = React.forwardRef<
 >(({ className, media, activity, profileActivity, linked, disableActions, showRating, children, ...props }, ref) => {
 	const { device } = useUI();
 	const [isHovered, setIsHovered] = React.useState(false);
-	const mediaDetails = getMediaDetails(media);
 	return (
-		<TooltipBox tooltip={`${media.title} (${mediaDetails.date && (new Date(mediaDetails.date)).getFullYear()})`} side='top'>
+		<TooltipBox tooltip={`${media.title} (${media.date && (new Date(media.date)).getFullYear()})`} side='top'>
 			<Card
 				ref={ref}
 				className={cn(
@@ -180,7 +179,7 @@ const CardMediaRow = React.forwardRef<
 						>
 							{media.title}
 						</WithLink>
-						{profileActivity?.rating ? (
+						{profileActivity?.rating && (
 							<WithLink
 							href={linked ? `/@${profileActivity?.user?.username}${mediaUrlPrefix}/${media.slug ?? media.id}` : undefined}
 							className="pointer-events-auto"
@@ -191,7 +190,7 @@ const CardMediaRow = React.forwardRef<
 								className="inline-flex"
 								/>
 							</WithLink>
-						) : null}
+						)}
 						{profileActivity?.is_liked && (
 							<Link
 							href={`/@${profileActivity?.user?.username}${mediaUrlPrefix}/${media.slug ?? media.id}`}
@@ -204,7 +203,7 @@ const CardMediaRow = React.forwardRef<
 								/>
 							</Link>
 						)}
-						{profileActivity?.review ? (
+						{profileActivity?.review && (
 							<Link
 							href={`/review/${profileActivity.review.id}`}
 							className="pointer-events-auto"
@@ -215,11 +214,15 @@ const CardMediaRow = React.forwardRef<
 								className="text-foreground inline-flex"
 								/>
 							</Link>
-						) : null}
+						)}
 					</div>
-					{media.main_credit ? <Credits credits={media.main_credit} linked={linked} className="line-clamp-2"/> : null}
-					{media.extra_data.known_for_department ? <div className="text-xs text-muted-foreground">{media.extra_data.known_for_department}</div> : null}
-					{!hideMediaType ? <BadgeMedia type={media.media_type} /> : null}
+					{media.main_credit && <Credits credits={media.main_credit} linked={linked} className="line-clamp-2"/>}
+					{("known_for_department" in media.extra_data && media.extra_data.known_for_department) && (
+						<div className="text-xs text-muted-foreground">
+							{media.extra_data.known_for_department}
+						</div>
+					)}
+					{!hideMediaType && <BadgeMedia type={media.media_type} />}
 				</div>
 				{media.date ? (
 					<DateOnlyYearTooltip date={media.date} className="text-xs text-muted-foreground"/>

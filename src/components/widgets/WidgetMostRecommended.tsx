@@ -112,9 +112,11 @@ export const WidgetMostRecommended = ({
 										</span>
 										))}
 									</div> : null}
-									{media?.extra_data?.overview ? <div className="max-w-xl line-clamp-2 pt-2">
-										{media.extra_data.overview}
-									</div> : null}
+									{("overview" in media?.extra_data && media.extra_data.overview) && (
+										<div className="max-w-xl line-clamp-2 pt-2">
+											{media.extra_data.overview}
+										</div>
+									)}
 								</CardContent>
 								<CardFooter className="flex items-center gap-2">
 									<TooltipBox tooltip={session ? 'Envoyer à un(e) ami(e)' : undefined}>

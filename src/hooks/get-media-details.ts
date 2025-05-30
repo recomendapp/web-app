@@ -1,30 +1,8 @@
 import { Media, MediaType } from "@/types/type.db";
-import { string } from "zod";
 
 const getMediaDetails = (media?: Media) => {
 	return {
 		...media,
-		// title: media?.media_type === 'movie'
-		// 	? media?.title
-		// 	: media?.media_type === 'tv_series'
-		// 	? media?.name
-		// 	: media?.media_type == 'person'
-		// 	? media?.name
-		// 	: '',
-		// poster_path: media?.media_type === 'movie'
-		// 	? media?.poster_path
-		// 	: media?.media_type === 'tv_series'
-		// 	? media?.poster_path
-		// 	: media?.media_type == 'person'
-		// 	? media?.profile_path
-		// 	: '',
-		// poster_url: media?.media_type === 'movie'
-		// 	? media?.poster_url
-		// 	: media?.media_type === 'tv_series'
-		// 	? media?.poster_url
-		// 	: media?.media_type == 'person'
-		// 	? media?.profile_url
-		// 	: '',
 		poster_className: media?.media_type === 'movie'
 			? 'aspect-[2/3] rounded-md'
 			: media?.media_type === 'tv_series'
@@ -32,24 +10,6 @@ const getMediaDetails = (media?: Media) => {
 			: media?.media_type === 'person'
 			? 'aspect-[1/1] rounded-full'
 			: 'aspect-[2/3] rounded-md',
-		// backdrop_path: media?.media_type === 'movie'
-		// 	? media?.backdrop_path
-		// 	: media?.media_type === 'tv_series'
-		// 	? media?.backdrop_path
-		// 	: media?.media_type == 'person'
-		// 	? media?.backdrop_path
-		// 	: '',
-		// url: media?.url ?? '',
-		// mainCredits: media?.media_type === 'movie'
-		// 	? media?.directors
-		// 	: media?.media_type === 'tv_series'
-		// 	? media?.created_by
-		// 	: undefined,
-		date: media?.media_type === 'movie'
-			? media?.extra_data?.release_date
-			: media?.media_type === 'tv_series'
-			? media?.extra_data?.first_air_date
-			: undefined,
 	}
 
 };

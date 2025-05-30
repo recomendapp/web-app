@@ -9,6 +9,7 @@ import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
 import { ContextMenuMedia } from "@/components/ContextMenu/ContextMenuMedia";
 import { getMediaDetails } from "@/hooks/get-media-details";
 import { UserFeedCastCrew } from "@/types/type.db";
+import { upperFirst } from "lodash";
 
 interface FeedCastCrewItemProps
 	extends React.ComponentProps<typeof Card> {
@@ -69,7 +70,7 @@ const FeedCastCrewItemDefault = React.forwardRef<
 						{format.relativeTime(new Date(activity?.media.date ?? ''), new Date())}
 					</div> : null}
 				</div>
-				<Link href={activity?.media?.url ?? ''} className="space-y-2">
+				{activity.media && <Link href={activity?.media?.url ?? ''} className="space-y-2">
 					<div className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
 						<span className='font-bold'>{activity?.media?.title}</span>
 						<sup>
@@ -79,12 +80,12 @@ const FeedCastCrewItemDefault = React.forwardRef<
 					<p
 						className={`
 							text-xs @md/feed-item:text-sm line-clamp-3 text-justify
-							${!activity?.media?.extra_data.overview?.length && 'text-muted-foreground'}
+							${"overview" in activity.media.extra_data && activity.media?.extra_data.overview?.length ? '' : 'text-muted-foreground'}
 						`}
 					>
-						{activity?.media?.extra_data.overview?.length ? activity.media.extra_data.overview : 'Aucune description'}
+						{"overview" in activity.media.extra_data && activity.media?.extra_data.overview?.length ? activity.media.extra_data.overview : upperFirst(common('messages.no_overview'))}
 					</p>
-				</Link>
+				</Link>}
 			</div>
 
 		</Card>

@@ -2,8 +2,6 @@
 
 import { Link } from "@/lib/i18n/routing";
 import { Column, Row, Table } from '@tanstack/react-table';
-
-// UI
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -13,10 +11,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
-// ICONS
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-
 import toast from 'react-hot-toast';
 import { UserActivity } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
@@ -24,10 +19,8 @@ import { capitalize, upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { useModal } from '@/context/modal-context';
-import { getMediaDetails } from '@/hooks/get-media-details';
 import { useUserActivityUpdateMutation } from '@/features/client/user/userMutations';
 import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
-import { ModalPlaylistAdd } from '@/components/Modals/actions/ModalPlaylistAdd';
 
 interface DataTableRowActionsProps {
   table: Table<UserActivity>;
@@ -43,7 +36,6 @@ export function DataTableRowActions({
   data,
 }: DataTableRowActionsProps) {
   const common = useTranslations('common');
-  const media = getMediaDetails(data?.media);
   const { openModal, createConfirmModal } = useModal();
   const updateActivity = useUserActivityUpdateMutation();
 
@@ -77,7 +69,7 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
-            onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id!, mediaTitle: media.title })}
+            onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id!, mediaTitle: data.media?.title })}
           >
             <Icons.send className='w-4' />
             {upperFirst(common('messages.send_to_friend'))}
@@ -126,7 +118,7 @@ export function DataTableRowActions({
             onClick={async () => createConfirmModal({
               title: capitalize(common('library.collection.likes.modal.delete_confirm.title')),
               description: common.rich('library.collection.likes.modal.delete_confirm.description', {
-                title: media.title!,
+                title: data.media?.title!,
                 important: (chunk) => <b>{chunk}</b>,
               }),
               onConfirm: handleUnlike,

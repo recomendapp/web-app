@@ -69,8 +69,9 @@ export type MediaPerson = Database['public']['Views']['media_person']['Row'] & {
 
 export type Media =
 	// Database['public']['Views']['media']['Row'] &
-	MediaMovie & MediaTvSeries & MediaPerson & {
-	};
+	(MediaMovie | MediaTvSeries | MediaPerson) & {
+		
+	}
 
 // export type MediaPersonCombinedCredits = Database['public']['Views']['media_person_combined_credits']['Row'] & {
 // };

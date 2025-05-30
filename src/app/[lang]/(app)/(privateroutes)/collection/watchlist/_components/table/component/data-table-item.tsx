@@ -41,8 +41,8 @@ export const Item = React.forwardRef<
 				{media.title}
 				</Link>
 				<Credits credits={media.main_credit ?? []} className="line-clamp-1" />
-				{mediaDetails.date ? <p className="lg:hidden">
-					<DateOnlyYearTooltip date={mediaDetails.date} />
+				{media.date ? <p className="lg:hidden">
+					<DateOnlyYearTooltip date={media.date} />
 				</p> : null}
 			</div>
 		</div>

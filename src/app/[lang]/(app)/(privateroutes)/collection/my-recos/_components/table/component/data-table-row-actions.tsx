@@ -2,7 +2,6 @@
 
 import { Link } from "@/lib/i18n/routing";
 import { Column, Row, Table } from '@tanstack/react-table';
-// UI
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -11,8 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
-// ICONS
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
@@ -22,11 +19,9 @@ import { capitalize, upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { ModalRecosSenders } from '@/components/Modals/recos/ModalRecosSenders';
-import { getMediaDetails } from '@/hooks/get-media-details';
 import { useUserRecosCompleteMutation, useUserRecosDeleteMutation } from '@/features/client/user/userMutations';
 import toast from 'react-hot-toast';
 import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
-import { ModalPlaylistAdd } from '@/components/Modals/actions/ModalPlaylistAdd';
 
 interface DataTableRowActionsProps {
   table: Table<UserRecosAggregated>;
@@ -41,9 +36,7 @@ export function DataTableRowActions({
 }: DataTableRowActionsProps) {
   const { user } = useAuth();
   const common = useTranslations('common');
-  const media = getMediaDetails(data?.media);
   const { openModal, createConfirmModal } = useModal();
-  // const [openShowDirectors, setOpenShowDirectors] = useState(false);
   const deleteRecoMutation = useUserRecosDeleteMutation();
   const completeRecoMutation = useUserRecosCompleteMutation();
 
@@ -101,7 +94,7 @@ export function DataTableRowActions({
             onClick={() => createConfirmModal({
               title: capitalize(common('library.collection.my_recos.modal.complete_confirm.title')),
               description: common.rich('library.collection.my_recos.modal.complete_confirm.description', {
-                title: media.title!,
+                title: data.media?.title!,
                 important: (chunk) => <b>{chunk}</b>,
               }),
               onConfirm: handleCompleteReco,
@@ -111,7 +104,7 @@ export function DataTableRowActions({
             {upperFirst(common('messages.complete'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id!, mediaTitle: media.title })}
+            onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id!, mediaTitle: data.media?.title })}
           >
             <Icons.send className='w-4' />
             {upperFirst(common('messages.send_to_friend'))}
@@ -124,7 +117,7 @@ export function DataTableRowActions({
           </DropdownMenuItem> */}
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href={media.url ?? ''}>
+            <Link href={data.media?.url ?? ''}>
               <Icons.eye className='w-4' />
               {data.media?.media_type === 'movie'
                 ? capitalize(common('messages.go_to_film'))
@@ -168,7 +161,7 @@ export function DataTableRowActions({
             onClick={async () => createConfirmModal({
               title: capitalize(common('library.collection.my_recos.modal.delete_confirm.title')),
               description: common.rich('library.collection.my_recos.modal.delete_confirm.description', {
-                title: media.title!,
+                title: data.media?.title!,
                 important: (chunk) => <b>{chunk}</b>,
               }),
               onConfirm: handleDeleteReco,

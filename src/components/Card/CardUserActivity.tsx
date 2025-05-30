@@ -7,8 +7,9 @@ import { Link } from "@/lib/i18n/routing";
 import { DateOnlyYearTooltip } from "../utils/Date";
 import { UserAvatar } from "../User/UserAvatar/UserAvatar";
 import { FeedActivity } from "@/app/[lang]/(app)/(privateroutes)/feed/_components/FeedActivity";
-import { useFormatter, useNow } from "next-intl";
+import { useFormatter, useNow, useTranslations } from "next-intl";
 import { getMediaDetails } from "@/hooks/get-media-details";
+import { upperFirst } from "lodash";
 
 interface CardUserActivityProps
 	extends React.ComponentProps<typeof Card> {
@@ -22,6 +23,7 @@ const CardUserActivityDefault = React.forwardRef<
 >(({ className, activity, children, ...props }, ref) => {
 	const format = useFormatter();
 	const now = useNow({ updateInterval: 1000 * 10 });
+	const common = useTranslations('common');
 	return (
 		<Card
 			ref={ref}
@@ -55,25 +57,25 @@ const CardUserActivityDefault = React.forwardRef<
 						{format.relativeTime(new Date(activity?.watched_date ?? ''), now)}
 					</div>
 				</div>
-				<Link href={activity?.media?.url ?? ''} className="space-y-2">
+				{activity.media && <Link href={activity.media?.url ?? ''} className="space-y-2">
 					{/* TITLE */}
 					<div className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
-						<span className='font-bold'>{activity?.media?.title}</span>
+						<span className='font-bold'>{activity.media?.title}</span>
 						{/* DATE */}
 						<sup>
-							<DateOnlyYearTooltip date={activity?.media?.date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
+							<DateOnlyYearTooltip date={activity.media?.date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
 						</sup>
 					</div>
 					{/* DESCRIPTION */}
 					<p
 					className={`
 						text-xs line-clamp-2 text-justify
-						${(!activity?.media?.extra_data.overview || !activity?.media?.extra_data.overview.length) && 'text-muted-foreground'}
+						${"overview" in activity.media.extra_data && activity.media?.extra_data.overview?.length ? '' : 'text-muted-foreground'}
 					`}
 					>
-						{(activity?.media?.extra_data.overview && activity?.media?.extra_data.overview.length) ? activity?.media?.extra_data.overview : 'Aucune description'}
+						{"overview" in activity.media.extra_data && activity.media?.extra_data.overview?.length ? activity.media.extra_data.overview : upperFirst(common('messages.no_overview'))}
 					</p>
-				</Link>
+				</Link>}
 			</div>
 		</Card>
 	);

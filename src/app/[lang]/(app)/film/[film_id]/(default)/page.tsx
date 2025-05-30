@@ -125,7 +125,7 @@ export default async function MoviePage(
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <MovieDetails movie={movie} />;
+      <MovieDetails movie={movie} />
     </>
   );
 }

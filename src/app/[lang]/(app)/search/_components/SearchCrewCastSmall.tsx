@@ -53,7 +53,11 @@ export default async function SearchCrewCastSmall({
             <p className='line-clamp-2'>
               {media?.title}
             </p>
-            {media?.extra_data.known_for_department ? <p className="text-muted-foreground line-clamp-1">{media.extra_data.known_for_department}</p> : null}
+            {"known_for_department" in media.extra_data && media.extra_data.known_for_department && (
+              <p className="text-muted-foreground line-clamp-1">
+                {title(media.extra_data.known_for_department)}
+              </p>
+            )}
           </div>
         </Link>
       ))}

@@ -6,7 +6,6 @@ import { UserWatchlist } from '@/types/type.db';
 import { DataComment } from './data-table-comment';
 import { useTranslations } from 'next-intl';
 import { capitalize } from 'lodash';
-import { getMediaDetails } from '@/hooks/get-media-details';
 import { Item } from './data-table-item';
 import { BadgeMedia } from '@/components/Badge/BadgeMedia';
 
@@ -15,7 +14,7 @@ export const Columns = (): ColumnDef<UserWatchlist>[] => {
   return [
     {
       id: 'item',
-      accessorFn: (row) => getMediaDetails(row?.media).title,
+      accessorFn: (row) => row?.media?.title,
       meta: {
         displayName: capitalize(common('messages.item', { count: 1 })),
       },

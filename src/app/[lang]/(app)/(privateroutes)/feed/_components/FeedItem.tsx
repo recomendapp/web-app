@@ -6,16 +6,16 @@ import { FeedActivity } from "./FeedActivity";
 import { Link } from "@/lib/i18n/routing";
 import MoviePoster from "@/components/Movie/MoviePoster";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
-import { useFormatter } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { UserActivity } from "@/types/type.db";
 import { getMediaDetails } from "@/hooks/get-media-details";
 import { CardReview } from "@/components/Card/CardReview";
 import { cn } from "@/lib/utils";
+import { upperFirst } from "lodash";
 
 const FeedItem = ({ activity }: { activity?: UserActivity }) => {
 	const format = useFormatter();
-	// const mediaDetails = getMediaDetails(activity?.media);
-
+	const common = useTranslations('common');
 	if (!activity) {
 	  return (
 		<Skeleton className="flex bg-secondary h-full rounded-xl p-2 gap-2">
@@ -65,10 +65,10 @@ const FeedItem = ({ activity }: { activity?: UserActivity }) => {
 				/> : null
 			) : (
 				<>
-				{(activity.media?.extra_data?.overview) ? (
+				{(activity.media?.extra_data && "overview" in activity.media.extra_data) ? (
 					<>
 					<p className={cn("text-xs @md/feed-item:text-sm line-clamp-3 text-justify", !activity.media?.extra_data.overview?.length && 'text-muted-foreground')}>
-						{activity.media?.extra_data.overview?.length ? activity.media.extra_data.overview : 'Aucune description'}
+						{activity.media?.extra_data.overview?.length ? activity.media.extra_data.overview : upperFirst(common('messages.no_overview'))}
 					</p>
 					</>
 				) : null}

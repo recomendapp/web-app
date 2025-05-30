@@ -42,6 +42,7 @@ import MediaActionUserRecos from '@/components/Media/actions/MediaActionUserReco
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlaylistAdd';
 import { ModalMediaFollowersRating } from '@/components/Modals/ModalMediaFollowersRating';
+import { ContextMenuMedia } from '@/components/ContextMenu/ContextMenuMedia';
 
 export default function MovieHeader({
   movie,
@@ -55,84 +56,86 @@ export default function MovieHeader({
   if (!movie) return null;
   return (
     <div>
-      <HeaderBox
-        className='@container/movie-header'
-        style={{
-          backgroundImage: movie.backdrop_url ? `url(${movie.backdrop_url})` : undefined,
-        }}
-      >
-        <div className="flex flex-col w-full gap-4 items-center @xl/movie-header:flex-row">
-          {/* MOVIE POSTER */}
-          <MoviePoster
-            className="w-[200px]"
-            src={movie.avatar_url ?? ''}
-            alt={movie.title ?? ''}
-            fill
-            sizes={`
-              (max-width: 640px) 96px,
-              (max-width: 1024px) 120px,
-              150px
-            `}
-          >
-            <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-              {(movie.vote_average || movie.tmdb_vote_average) ? <IconMediaRating
-                rating={movie.vote_average ?? movie.tmdb_vote_average}
-                variant="general"
-                className="w-full"
-              /> : null}
-              {followersAvgRating ? <IconMediaRating
-                rating={followersAvgRating}
-                variant="follower"
-                className="w-full cursor-pointer"
-                onClick={() => openModal(ModalMediaFollowersRating, { mediaId: movie.media_id! })}
-              /> : null}
-            </div>
-            {(movie?.videos && movie.videos.length > 0) ? (
-              <MovieTrailerButton
-                videos={movie.videos}
-                className="absolute bottom-2 right-2"
-              />
-            ) : null}
-          </MoviePoster>
-          {/* MOVIE MAIN DATA */}
-          <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
-            {/* TYPE & GENRES */}
-            <div>
-              <span className='text-accent-yellow'>{upperFirst(common('word.film', { count: 1 }))}</span>
-              {movie.genres ? <Genres genres={movie.genres} className="before:content-['_|_']" /> : null}
-            </div>
-            {/* TITLE */}
-            <h1 className="text-clamp space-x-1">
-              <span className='font-bold select-text'>{movie.title}</span>
-              {/* DATE */}
-              <sup>
-                <DateOnlyYearTooltip date={movie.extra_data.release_date ?? ''} className=' text-base font-medium'/>
-              </sup>
-              {movie.extra_data.original_title !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.extra_data.original_title}</div> : null}
-            </h1>
-            <div className=" space-y-2">
+      <ContextMenuMedia media={movie}>
+        <HeaderBox
+          className='@container/movie-header'
+          style={{
+            backgroundImage: movie.backdrop_url ? `url(${movie.backdrop_url})` : undefined,
+          }}
+        >
+          <div className="flex flex-col w-full gap-4 items-center @xl/movie-header:flex-row">
+            {/* MOVIE POSTER */}
+            <MoviePoster
+              className="w-[200px]"
+              src={movie.avatar_url ?? ''}
+              alt={movie.title ?? ''}
+              fill
+              sizes={`
+                (max-width: 640px) 96px,
+                (max-width: 1024px) 120px,
+                150px
+              `}
+            >
+              <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
+                {(movie.vote_average || movie.tmdb_vote_average) ? <IconMediaRating
+                  rating={movie.vote_average ?? movie.tmdb_vote_average}
+                  variant="general"
+                  className="w-full"
+                /> : null}
+                {followersAvgRating ? <IconMediaRating
+                  rating={followersAvgRating}
+                  variant="follower"
+                  className="w-full cursor-pointer"
+                  onClick={() => openModal(ModalMediaFollowersRating, { mediaId: movie.media_id! })}
+                /> : null}
+              </div>
+              {(movie?.videos && movie.videos.length > 0) ? (
+                <MovieTrailerButton
+                  videos={movie.videos}
+                  className="absolute bottom-2 right-2"
+                />
+              ) : null}
+            </MoviePoster>
+            {/* MOVIE MAIN DATA */}
+            <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
+              {/* TYPE & GENRES */}
               <div>
-                {movie.main_credit?.map((director, index: number) => (
-                  <Fragment key={index}>
-                    {index > 0 && <span>, </span>}
-                    <span key={index}>
-                      <Button
-                        variant="link"
-                        className="w-fit p-0 h-full hover:text-accent-yellow transition"
-                        asChild
-                      >
-                        <Link href={`/person/${director?.slug ?? director?.id}`}>{director?.title}</Link>
-                      </Button>
-                    </span>
-                  </Fragment>
-                )) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
-                {/* RUNTIME */}
-                <RuntimeTooltip runtime={movie.extra_data.runtime ?? 0} className=" before:content-['_•_']" />
+                <span className='text-accent-yellow'>{upperFirst(common('word.film', { count: 1 }))}</span>
+                {movie.genres ? <Genres genres={movie.genres} className="before:content-['_|_']" /> : null}
+              </div>
+              {/* TITLE */}
+              <h1 className="text-clamp space-x-1">
+                <span className='font-bold select-text'>{movie.title}</span>
+                {/* DATE */}
+                <sup>
+                  <DateOnlyYearTooltip date={movie.extra_data.release_date ?? ''} className=' text-base font-medium'/>
+                </sup>
+                {movie.extra_data.original_title !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.extra_data.original_title}</div> : null}
+              </h1>
+              <div className=" space-y-2">
+                <div>
+                  {movie.main_credit?.map((director, index: number) => (
+                    <Fragment key={index}>
+                      {index > 0 && <span>, </span>}
+                      <span key={index}>
+                        <Button
+                          variant="link"
+                          className="w-fit p-0 h-full hover:text-accent-yellow transition"
+                          asChild
+                        >
+                          <Link href={`/person/${director?.slug ?? director?.id}`}>{director?.title}</Link>
+                        </Button>
+                      </span>
+                    </Fragment>
+                  )) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
+                  {/* RUNTIME */}
+                  <RuntimeTooltip runtime={movie.extra_data.runtime ?? 0} className=" before:content-['_•_']" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </HeaderBox>
+        </HeaderBox>
+      </ContextMenuMedia>
       <div className="flex justify-between gap-2 px-4 pb-4">
         <div className="flex gap-2 overflow-x-auto items-center">
           <MediaActionUserActivityRating mediaId={movie.media_id!} />
