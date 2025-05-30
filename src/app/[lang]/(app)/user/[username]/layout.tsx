@@ -2,7 +2,7 @@ import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
 import { getProfile } from '@/features/server/users';
 import { Metadata } from 'next';
-import { locales } from '@/lib/i18n/locales';
+import { seoLocales } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata(
@@ -24,7 +24,7 @@ export async function generateMetadata(
       canonical: `${siteConfig.url}/@${user.username}`,
       languages: Object.fromEntries([
         ['x-default', `${siteConfig.url}/@${user.username}`],
-        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/@${user.username}`])
+        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/@${user.username}`])
       ])
     },
     openGraph: {

@@ -5,7 +5,7 @@ import Reviews from '@/components/Review/Reviews';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { truncate, upperFirst } from 'lodash';
-import { locales } from '@/lib/i18n/locales';
+import { seoLocales } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata(
@@ -37,7 +37,7 @@ export async function generateMetadata(
       canonical: `${siteConfig.url}/film/${movie.slug}/reviews`,
       languages: Object.fromEntries([
         ['x-default', `${siteConfig.url}/film/${movie.slug}/reviews`],
-        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/film/${movie.slug}/reviews`])
+        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/film/${movie.slug}/reviews`])
       ])
     },
     openGraph: {

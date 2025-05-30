@@ -3,7 +3,7 @@ import { Map } from '@/components/Map/Map';
 import { getTranslations } from 'next-intl/server';
 import { truncate } from 'lodash';
 import { siteConfig } from '@/config/site';
-import { locales } from '@/lib/i18n/locales';
+import { seoLocales } from '@/lib/i18n/routing';
 
 export async function generateMetadata(
   props: {
@@ -21,7 +21,7 @@ export async function generateMetadata(
       canonical: `${siteConfig.url}/explore`,
       languages: Object.fromEntries([
         ['x-default', `${siteConfig.url}/explore`],
-        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/explore`])
+        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/explore`])
       ])
     },
     openGraph: {

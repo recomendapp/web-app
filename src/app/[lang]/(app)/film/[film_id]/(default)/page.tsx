@@ -5,7 +5,7 @@ import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getMovie } from '@/features/server/media/mediaQueries';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
-import { locales } from '@/lib/i18n/locales';
+import { seoLocales } from '@/lib/i18n/routing';
 import MovieDetails from './_components/MovieDetails';
 import { Movie, WithContext } from 'schema-dts';
 import { toISO8601Duration } from '@/lib/utils';
@@ -47,7 +47,7 @@ export async function generateMetadata(
       canonical: `${siteConfig.url}/film/${movie.slug}`,
       languages: Object.fromEntries([
         ['x-default', `${siteConfig.url}/film/${movie.slug}`],
-        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/film/${movie.slug}`])
+        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/film/${movie.slug}`])
       ])
     },
     openGraph: {

@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ShowPlaylists } from './_components/ShowPlaylists';
 import { truncate, upperFirst } from 'lodash';
-import { locales } from '@/lib/i18n/locales';
+import { seoLocales } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata(
@@ -37,7 +37,7 @@ export async function generateMetadata(
       canonical: `${siteConfig.url}/tv_series/${serie.slug}/playlists`,
       languages: Object.fromEntries([
         ['x-default', `${siteConfig.url}/tv_series/${serie.slug}/playlists`],
-        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${serie.slug}/playlists`])
+        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${serie.slug}/playlists`])
       ])
     },
     openGraph: {

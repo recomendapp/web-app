@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Filters } from './_components/Filters';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
-import { locales } from '@/lib/i18n/locales';
+import { seoLocales } from '@/lib/i18n/routing';
 import { notFound, redirect } from 'next/navigation';
 import { ActiveFilters } from './_components/ActiveFilters';
 
@@ -78,7 +78,7 @@ export async function generateMetadata(
 		canonical: `${siteConfig.url}/person/${person.slug}/films`,
 		languages: Object.fromEntries([
 			['x-default', `${siteConfig.url}/person/${person.slug}/films`],
-			...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/person/${person.slug}/films`])
+			...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/person/${person.slug}/films`])
 		])
 	},
 	openGraph: {

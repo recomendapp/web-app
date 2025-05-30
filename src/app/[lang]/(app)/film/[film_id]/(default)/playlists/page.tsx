@@ -2,7 +2,7 @@ import { ShowPlaylists } from '@/app/[lang]/(app)/film/[film_id]/(default)/playl
 import { siteConfig } from '@/config/site';
 import { getMovie } from '@/features/server/media/mediaQueries';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
-import { locales } from '@/lib/i18n/locales';
+import { seoLocales } from '@/lib/i18n/routing';
 import { truncate, upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
@@ -37,7 +37,7 @@ export async function generateMetadata(
       canonical: `${siteConfig.url}/film/${movie.slug}/playlists`,
       languages: Object.fromEntries([
         ['x-default', `${siteConfig.url}/film/${movie.slug}/playlists`],
-        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/film/${movie.slug}/playlists`])
+        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/film/${movie.slug}/playlists`])
       ])
     },
     openGraph: {

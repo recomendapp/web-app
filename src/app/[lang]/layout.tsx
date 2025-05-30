@@ -2,13 +2,11 @@ import '@/styles/globals.css';
 import { Metadata, Viewport } from 'next';
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/lib/fonts';
-
 import { cn } from '@/lib/utils';
 import Providers from '@/context/Providers';
 import Script from 'next/script';
 import { getLangDir } from 'rtl-detect';
-import Head from 'next/head';
-import { locales } from '@/lib/i18n/locales';
+import { seoLocales } from '@/lib/i18n/routing';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -28,9 +26,10 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   alternates: {
     canonical: siteConfig.url,
-    languages: Object.fromEntries(
-      locales.map((locale) => [locale, `${siteConfig.url}/${locale}`])
-    ),
+    languages: Object.fromEntries([
+      ['x-default', siteConfig.url],
+      ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}`]),
+    ])
   },
   manifest: '/manifest.webmanifest',
   icons: {

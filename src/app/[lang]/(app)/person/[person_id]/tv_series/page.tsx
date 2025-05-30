@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { z } from "zod";
 import { siteConfig } from '@/config/site';
-import { locales } from '@/lib/i18n/locales';
+import { seoLocales } from '@/lib/i18n/routing';
 import { Metadata } from 'next';
 
 const SORT_BY = ["release_date"] as const;
@@ -59,7 +59,7 @@ export async function generateMetadata(
 		canonical: `${siteConfig.url}/person/${person.slug}/tv_series`,
 		languages: Object.fromEntries([
 			['x-default', `${siteConfig.url}/person/${person.slug}/tv_series`],
-			...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/person/${person.slug}/tv_series`])
+			...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/person/${person.slug}/tv_series`])
 		])
 	},
 	openGraph: {

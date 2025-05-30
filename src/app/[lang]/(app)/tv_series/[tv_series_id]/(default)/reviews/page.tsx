@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
-import { locales } from '@/lib/i18n/locales';
+import { seoLocales } from '@/lib/i18n/routing';
 
 export async function generateMetadata(
   props: {
@@ -37,7 +37,7 @@ export async function generateMetadata(
       canonical: `${siteConfig.url}/tv_series/${serie.slug}/reviews`,
       languages: Object.fromEntries([
         ['x-default', `${siteConfig.url}/tv_series/${serie.slug}/reviews`],
-        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${serie.slug}/reviews`])
+        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${serie.slug}/reviews`])
       ])
     },
     openGraph: {

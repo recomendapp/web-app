@@ -5,10 +5,10 @@ import TvSeasonDetails from "./_components/TvSeasonDetails";
 import { getIdFromSlug } from "@/hooks/get-id-from-slug";
 import { siteConfig } from "@/config/site";
 import { truncate, upperFirst } from "lodash";
-import { locales } from "@/lib/i18n/locales";
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 import { TVSeason, WithContext } from "schema-dts";
+import { seoLocales } from "@/lib/i18n/routing";
 
 export async function generateMetadata(
   props: {
@@ -42,7 +42,7 @@ export async function generateMetadata(
       canonical: `${siteConfig.url}/tv_series/${params.tv_series_id}/${params.season_number}`,
       languages: Object.fromEntries([
         ['x-default', `${siteConfig.url}/tv_series/${params.tv_series_id}/${params.season_number}`],
-        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${params.tv_series_id}/${params.season_number}`])
+        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${params.tv_series_id}/${params.season_number}`])
       ])
     },
     openGraph: {

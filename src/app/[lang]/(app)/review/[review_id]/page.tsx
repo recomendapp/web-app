@@ -7,7 +7,7 @@ import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 import { type Review, WithContext } from 'schema-dts';
 import { getRawReviewText } from '@/lib/utils';
-import { locales } from '@/lib/i18n/locales';
+import { seoLocales } from '@/lib/i18n/routing';
 
 export async function generateMetadata(
   props: {
@@ -29,7 +29,7 @@ export async function generateMetadata(
       canonical: `${siteConfig.url}/review/${params.review_id}`,
       languages: Object.fromEntries([
         ['x-default', `${siteConfig.url}/review/${params.review_id}`],
-        ...locales.map((locale) => [locale, `${siteConfig.url}/${locale}/review/${params.review_id}`])
+        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/review/${params.review_id}`])
       ])
     },
     openGraph: {
