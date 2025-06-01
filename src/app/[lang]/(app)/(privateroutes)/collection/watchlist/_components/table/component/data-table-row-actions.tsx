@@ -21,6 +21,8 @@ import { capitalize, upperFirst } from 'lodash';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
 import { ModalWatchlistComment } from '@/components/Modals/watchlist/ModalWatchlistComment';
+import { createShareController } from "@/components/ShareController/ShareController";
+import { ShareControllerMedia } from "@/components/ShareController/ShareControllerMedia";
 
 interface DataTableRowActionsProps {
   table: Table<UserWatchlist>;
@@ -110,6 +112,9 @@ export function DataTableRowActions({
               title: data?.media?.title,
               type: data?.media?.media_type,
               path: data?.media?.url ?? '',
+              shareController: createShareController(ShareControllerMedia, {
+                media: data?.media!,
+              }),
             })}
           >
             <Icons.share className='w-4' />

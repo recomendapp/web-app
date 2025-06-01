@@ -21,6 +21,8 @@ import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { useModal } from '@/context/modal-context';
 import { useUserActivityUpdateMutation } from '@/features/client/user/userMutations';
 import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
+import { createShareController } from "@/components/ShareController/ShareController";
+import { ShareControllerMedia } from "@/components/ShareController/ShareControllerMedia";
 
 interface DataTableRowActionsProps {
   table: Table<UserActivity>;
@@ -109,6 +111,9 @@ export function DataTableRowActions({
               title: data?.media?.title,
               type: data?.media?.media_type,
               path: data?.media?.url ?? '',
+              shareController: createShareController(ShareControllerMedia, {
+                media: data?.media!,
+              }),
             })}
           >
             <Icons.share className='w-4' />

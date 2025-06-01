@@ -23,6 +23,8 @@ import { useTranslations } from 'next-intl';
 import { capitalize, upperFirst } from 'lodash';
 import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
+import { createShareController } from "@/components/ShareController/ShareController";
+import { ShareControllerMedia } from "@/components/ShareController/ShareControllerMedia";
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItem>;
@@ -98,6 +100,9 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
               title: data?.media?.title,
               type: data?.media?.media_type,
               path: data?.media?.url ?? '',
+              shareController: createShareController(ShareControllerMedia, {
+                media: data?.media!,
+              }),
             })}
           >
             <Icons.share className='w-4' />

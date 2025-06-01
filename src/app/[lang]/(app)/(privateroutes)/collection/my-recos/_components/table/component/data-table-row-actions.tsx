@@ -22,6 +22,8 @@ import { ModalRecosSenders } from '@/components/Modals/recos/ModalRecosSenders';
 import { useUserRecosCompleteMutation, useUserRecosDeleteMutation } from '@/features/client/user/userMutations';
 import toast from 'react-hot-toast';
 import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
+import { createShareController } from "@/components/ShareController/ShareController";
+import { ShareControllerMedia } from "@/components/ShareController/ShareControllerMedia";
 
 interface DataTableRowActionsProps {
   table: Table<UserRecosAggregated>;
@@ -152,6 +154,9 @@ export function DataTableRowActions({
               title: data.media?.title,
               type: data.media?.media_type,
               path: data.media?.url ?? '',
+              shareController: createShareController(ShareControllerMedia, {
+                media: data.media!,
+              }),
             })}
           >
             <Icons.share className='w-4' />
