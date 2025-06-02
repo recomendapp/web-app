@@ -7,6 +7,7 @@ import { Link } from "@/lib/i18n/routing";
 import { Playlist } from '@/types/type.db';
 import React from 'react';
 import { useTranslations } from 'next-intl';
+import { ContextMenuPlaylist } from '../ContextMenu/ContextMenuPlaylist';
 
 interface CardPlaylistProps
 	extends React.HTMLAttributes<HTMLDivElement> {
@@ -66,13 +67,13 @@ const CardPlaylist = React.forwardRef<
 	CardPlaylistProps
 >(({ className, playlist, variant = "default", ...props }, ref) => {
 	return (
-	// <ContextMenuMovie movie={movie}>
+	<ContextMenuPlaylist playlist={playlist}>
 		<Link href={`/playlist/${playlist?.id}`}>
 			{variant === "default" ? (
 				<CardPlaylistDefault ref={ref} className={className} playlist={playlist} {...props} />
 			) : null}
 		</Link>
-	// </ContextMenuMovie>
+	</ContextMenuPlaylist>
 	);
 });
 CardPlaylist.displayName = "CardPlaylist";

@@ -1,17 +1,18 @@
-import { Media } from "@/types/type.db"
+import { Playlist } from "@/types/type.db"
 import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
 import { WithLink } from "../utils/WithLink";
 import { useModal } from "@/context/modal-context";
 import { Fragment, useMemo } from "react";
 import { ModalShare } from "../Modals/Share/ModalShare";
-import { ModalRecoSend } from "../Modals/actions/ModalRecoSend";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { ModalPlaylistAdd } from "../Modals/actions/ModalPlaylistAdd";
 import { useAuth } from "@/context/auth-context";
-import { createShareController } from "../ShareController/ShareController";
-import { ShareControllerMedia } from "../ShareController/ShareControllerMedia";
+import { PlaylistModal } from "../Modals/Playlist/PlaylistModal";
+import { ModalPlaylistGuest } from "../Modals/Playlist/ModalPlaylistGuest/ModalPlaylistGuest";
+import { useDeletePlaylist } from "@/features/client/playlist/playlistMutations";
+import toast from "react-hot-toast";
+import { usePathname, useRouter } from "@/lib/i18n/routing";
 
 interface Item {
 	icon: React.ElementType;
@@ -21,73 +22,96 @@ interface Item {
 	onClick?: () => void;
 }
 
-export const ContextMenuMedia = ({
+export const ContextMenuPlaylist = ({
 	children,
-	media,
-	additionalItemsTop = [],
-	additionalItemsBottom = [],
+	playlist,
 }: {
 	children: React.ReactNode,
-	media: Media,
-	additionalItemsTop?: Item[],
-	additionalItemsBottom?: Item[],
+	playlist: Playlist,
 }) => {
 	const { session } = useAuth();
-	const { openModal } = useModal();
+	const router = useRouter();
+	const pathname = usePathname();
+	const { openModal, createConfirmModal } = useModal();
+	const playlistDeleteMutation = useDeletePlaylist({
+		userId: session?.user.id,
+	})
 	const common = useTranslations('common');
 	const items: Item[][] = useMemo(() => {
 		return [
-		additionalItemsTop,
 		[
 			{
-				icon: Icons.movie,
-				href: media.url ?? '',
-				label: media.media_type === 'movie'
-					? upperFirst(common('messages.go_to_film'))
-					: media.media_type === 'tv_series'
-					? upperFirst(common('messages.go_to_serie'))
-					: media.media_type === 'person'
-					? upperFirst(common('messages.go_to_person'))
-					: ''
+				icon: Icons.playlist,
+				href: `/playlist/${playlist.id}`,
+				label: upperFirst(common('messages.go_to_playlist')),
 			},
-			// {
-			// 	icon: Icons.user,
-			// 	href: movie?.directors && movie.directors.length === 1 ? `/person/${movie.directors[0].slug ?? movie.directors[0].id}` : undefined,
-			// 	label: `Accéder ${movie?.directors && movie?.directors.length === 1 ? 'au réalisateur' : 'aux réalisateurs'}`,
-			// 	submenu: (movie?.directors && movie.directors.length > 1) ? movie?.directors?.map((director) => ({
-			// 		href: `/person/${director.slug ?? director.id}`,
-			// 		label: director.name,
-			// 	})) : undefined,
-			// },
-			...(session ? [
+			{
+				icon: Icons.user,
+				href: `/@${playlist.user?.username}`,
+				label: upperFirst(common('messages.go_to_user')),
+			},
+			...(session?.user.id === playlist.user_id ? [
 				{
-					icon: Icons.addPlaylist,
-					onClick: () => openModal(ModalPlaylistAdd, { mediaId: media.media_id!, mediaTitle: media.title }),
-					label: 'Ajouter à une playlist',
+					icon: Icons.edit,
+					onClick: () => {
+						openModal(PlaylistModal, {
+							playlist: playlist,
+						})
+					},
+					label: upperFirst(common('messages.edit')),
 				},
 				{
-					icon: Icons.send,
-					onClick: () => openModal(ModalRecoSend, { mediaId: media.media_id!, mediaTitle: media.title }),
-					label: upperFirst(common('messages.send_to_friend')),
-				}
+					icon: Icons.users,
+					onClick: () => openModal(ModalPlaylistGuest, {
+						playlistId: playlist.id,
+					}),
+					label: upperFirst(common('messages.guest', { gender: 'male', count: 2 })),
+				},
 			] : []),
 		],
 		[
 			{
 				icon: Icons.share,
 				onClick: () => openModal(ModalShare, {
-					title: media.title,
-					type: media.media_type,
-					path: media.url ?? '',
-					shareController: createShareController(ShareControllerMedia, {
-						media: media,
-					}),
+					title: playlist.title,
+					type: 'playlist',
+					path: `/playlist/${playlist.id}`,
 				}),
 				label: upperFirst(common('word.share')),
 			},
-			...additionalItemsBottom
+			...(session?.user.id === playlist.user_id ? [
+				{
+					icon: Icons.delete,
+					onClick: () => {
+						createConfirmModal({
+							title: upperFirst(common('messages.are_u_sure')),
+							description: common.rich('playlist.actions.delete.description', {
+								title: playlist.title,
+								important: (chunk) => <b>{chunk}</b>,
+							}),
+							onConfirm: async () => {
+								await playlistDeleteMutation.mutateAsync(
+									{ playlistId: playlist.id },
+									{
+										onSuccess: async () => {
+											toast.success(upperFirst(common('word.deleted')));
+											if (pathname.startsWith(`/playlist/${playlist.id}`)) {
+												router.replace('/collection');
+											}
+										},
+										onError: () => {
+											toast.error(upperFirst(common('errors.an_error_occurred')));
+										},
+									}
+								);
+							},
+						});
+					},
+					label: upperFirst(common('word.delete')),
+				}
+			] : []),
 		],
-	]}, [media, session, common]);
+	]}, [playlist, session, common]);
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger>

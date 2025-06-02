@@ -8,8 +8,8 @@ import { DateOnlyYearTooltip } from "../utils/Date";
 import { UserAvatar } from "../User/UserAvatar/UserAvatar";
 import { FeedActivity } from "@/app/[lang]/(app)/(privateroutes)/feed/_components/FeedActivity";
 import { useFormatter, useNow, useTranslations } from "next-intl";
-import { getMediaDetails } from "@/hooks/get-media-details";
 import { upperFirst } from "lodash";
+import { ContextMenuUserActivity } from "../ContextMenu/ContextMenuUserActivity";
 
 interface CardUserActivityProps
 	extends React.ComponentProps<typeof Card> {
@@ -86,14 +86,13 @@ const CardUserActivity = React.forwardRef<
 	HTMLDivElement,
 	CardUserActivityProps
 >(({ className, activity, variant = "default", ...props }, ref) => {
+	const t = useTranslations('common');
 	return (
-		<>
+		<ContextMenuUserActivity activity={activity}>
 			{variant === "default" ? (
 				<CardUserActivityDefault ref={ref} className={className} activity={activity} {...props} />
 			) : null}
-		</>
-		// <Link href={`/film/${activity?.movie?.slug ?? activity?.movie_id}`}>
-		// </Link>
+		</ContextMenuUserActivity>
 	)
 });
 CardUserActivity.displayName = "CardUserActivity";

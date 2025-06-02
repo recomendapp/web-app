@@ -9,6 +9,8 @@
       "go_to_serie": "accéder à la série",
       "go_to_user": "accéder à l'utilisateur",
       "go_to_person": "accéder à la personne",
+      "go_to_activity": "accéder à l'activité",
+      "go_to_playlist": "accéder à la playlist",
       "view_recommendations": "voir {count, plural, one {la reco} other {les recos}}",
       "view_directors": "voir {count, plural, one {le réalisateur} other {les réalisateurs}}",
       "no_director": "aucun réalisateur",
@@ -99,7 +101,10 @@
       "copy_link": "copier le lien",
       "copied": "{gender, select, female {{count, plural, one {copiée} other {copiées}}} other {{count, plural, one {copié} other {copiés}}}}",
       "other": "{count, plural, one {autre} other {autres}}",
-      "via": "via"
+      "via": "via",
+      "edit": "modifier",
+      "guest": "{gender, select, female {invitée} other {invité}}{count, plural, one {} other {s}}",
+      "are_u_sure": "êtes-vous sûr ?"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",
@@ -277,7 +282,9 @@
       "actions": {
         "create": "Créer une playlist",
         "edit": "Modifier la playlist",
-        "delete": "Supprimer la playlist"
+        "delete": {
+          "description": "Cela supprimera <important>{title}</important> définitivement de votre bibliothèque."
+        }
       },
       "search": {
         "placeholder": "rechercher dans la playlist..."

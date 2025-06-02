@@ -9,6 +9,8 @@
       "go_to_serie": "go to serie",
       "go_to_user": "go to user",
       "go_to_person": "go to person",
+      "go_to_activity": "go to activity",
+      "go_to_playlist": "go to playlist",
       "view_recommendations": "view {count, plural, one {reco} other {recos}}",
       "view_directors": "view {count, plural, one {director} other {directors}}",
       "no_director": "no director",
@@ -99,7 +101,10 @@
       "copy_link": "copy link",
       "copied": "copied",
       "other": "{count, plural, one {other} other {others}}",
-      "via": "via"
+      "via": "via",
+      "edit": "edit",
+      "guest": "{count, plural, one {guest} other {guests}}",
+      "are_u_sure": "Are you sure?"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
@@ -277,7 +282,9 @@
       "actions": {
         "create": "Create a playlist",
         "edit": "Edit the playlist",
-        "delete": "Delete the playlist"
+        "delete": {
+          "description": "This will permanently delete <important>{title}</important> from your playlists."
+        }
       },
       "search": {
         "placeholder": "search in the playlist..."

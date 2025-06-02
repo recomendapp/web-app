@@ -14,6 +14,7 @@ import { usePathname } from '@/lib/i18n/routing';
 import { useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 import { useUI } from "@/context/ui-context";
+import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylist";
 
 const SidebarCollectionContainerIcon = ({
 	className,
@@ -216,37 +217,39 @@ export const SidebarLeftRoutes = () => {
 							key={index}
 							ref={(i === playlists.pages.length - 1 && index === page.length - 1) ? ref : undefined }
 							>
-								<SidebarMenuButton
-									tooltip={{
-										children: (
-											<>
-												{playlist.title}
-												<span className="ml-4 text-muted-foreground">
-													{playlist.items_count}
-												</span>
-											</>
-										)
-									}}
-									className="h-fit"
-									isActive={pathname === `/playlist/${playlist.id}`}
-									asChild
-								>
-									<Link href={`/playlist/${playlist.id}`}>
-										<SidebarCollectionContainerIcon className={`${sidebarOpen ? "w-12" : "w-8"}`}>
-											<ImageWithFallback
-												src={playlist.poster_url ?? ''}
-												alt={playlist.title ?? ''}
-												fill
-												className='object-cover'
-												type='playlist'
-											/>
-										</SidebarCollectionContainerIcon>
-										<div className={`line-clamp-1 transition-all duration-300 ${!sidebarOpen ? "opacity-0 hidden" : "opacity-100"}`}>
-											<p className="line-clamp-1">{playlist.title}</p>
-											<p className='text-muted-foreground line-clamp-1'>{common('messages.item_count', { count: playlist.items_count ?? 0 })}</p>
-										</div>
-									</Link>
-								</SidebarMenuButton>
+								<ContextMenuPlaylist playlist={playlist}>
+									<SidebarMenuButton
+										tooltip={{
+											children: (
+												<>
+													{playlist.title}
+													<span className="ml-4 text-muted-foreground">
+														{playlist.items_count}
+													</span>
+												</>
+											)
+										}}
+										className="h-fit"
+										isActive={pathname === `/playlist/${playlist.id}`}
+										asChild
+									>
+										<Link href={`/playlist/${playlist.id}`}>
+											<SidebarCollectionContainerIcon className={`${sidebarOpen ? "w-12" : "w-8"}`}>
+												<ImageWithFallback
+													src={playlist.poster_url ?? ''}
+													alt={playlist.title ?? ''}
+													fill
+													className='object-cover'
+													type='playlist'
+												/>
+											</SidebarCollectionContainerIcon>
+											<div className={`line-clamp-1 transition-all duration-300 ${!sidebarOpen ? "opacity-0 hidden" : "opacity-100"}`}>
+												<p className="line-clamp-1">{playlist.title}</p>
+												<p className='text-muted-foreground line-clamp-1'>{common('messages.item_count', { count: playlist.items_count ?? 0 })}</p>
+											</div>
+										</Link>
+									</SidebarMenuButton>
+								</ContextMenuPlaylist>
 							</SidebarMenuItem>
 							))
 						))

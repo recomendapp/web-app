@@ -532,7 +532,7 @@ export const useUserFeedInfiniteQuery = ({
 				.from('user_feed')
 				.select(`
 					*,
-					media(title,avatar_url,extra_data,url,date),
+					media(*),
 					user(*),
 					review:user_review(*)
 				`)

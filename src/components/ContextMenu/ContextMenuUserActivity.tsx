@@ -1,4 +1,4 @@
-import { Media } from "@/types/type.db"
+import { UserActivity } from "@/types/type.db"
 import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
 import { WithLink } from "../utils/WithLink";
@@ -10,8 +10,6 @@ import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ModalPlaylistAdd } from "../Modals/actions/ModalPlaylistAdd";
 import { useAuth } from "@/context/auth-context";
-import { createShareController } from "../ShareController/ShareController";
-import { ShareControllerMedia } from "../ShareController/ShareControllerMedia";
 
 interface Item {
 	icon: React.ElementType;
@@ -21,14 +19,14 @@ interface Item {
 	onClick?: () => void;
 }
 
-export const ContextMenuMedia = ({
+export const ContextMenuUserActivity = ({
 	children,
-	media,
+	activity,
 	additionalItemsTop = [],
 	additionalItemsBottom = [],
 }: {
 	children: React.ReactNode,
-	media: Media,
+	activity: UserActivity,
 	additionalItemsTop?: Item[],
 	additionalItemsBottom?: Item[],
 }) => {
@@ -37,37 +35,34 @@ export const ContextMenuMedia = ({
 	const common = useTranslations('common');
 	const items: Item[][] = useMemo(() => {
 		return [
-		additionalItemsTop,
+		[
+			{
+			icon: Icons.feed,
+			href: `/@${activity.user?.username}`,
+			label: upperFirst(common('messages.go_to_activity')),
+			},
+		],
 		[
 			{
 				icon: Icons.movie,
-				href: media.url ?? '',
-				label: media.media_type === 'movie'
+				href: activity.media?.url ?? '',
+				label: activity.media?.media_type === 'movie'
 					? upperFirst(common('messages.go_to_film'))
-					: media.media_type === 'tv_series'
+					: activity.media?.media_type === 'tv_series'
 					? upperFirst(common('messages.go_to_serie'))
-					: media.media_type === 'person'
+					: activity.media?.media_type === 'person'
 					? upperFirst(common('messages.go_to_person'))
 					: ''
 			},
-			// {
-			// 	icon: Icons.user,
-			// 	href: movie?.directors && movie.directors.length === 1 ? `/person/${movie.directors[0].slug ?? movie.directors[0].id}` : undefined,
-			// 	label: `Accéder ${movie?.directors && movie?.directors.length === 1 ? 'au réalisateur' : 'aux réalisateurs'}`,
-			// 	submenu: (movie?.directors && movie.directors.length > 1) ? movie?.directors?.map((director) => ({
-			// 		href: `/person/${director.slug ?? director.id}`,
-			// 		label: director.name,
-			// 	})) : undefined,
-			// },
 			...(session ? [
 				{
 					icon: Icons.addPlaylist,
-					onClick: () => openModal(ModalPlaylistAdd, { mediaId: media.media_id!, mediaTitle: media.title }),
+					onClick: () => openModal(ModalPlaylistAdd, { mediaId: activity.media?.media_id!, mediaTitle: activity.media?.title }),
 					label: 'Ajouter à une playlist',
 				},
 				{
 					icon: Icons.send,
-					onClick: () => openModal(ModalRecoSend, { mediaId: media.media_id!, mediaTitle: media.title }),
+					onClick: () => openModal(ModalRecoSend, { mediaId: activity.media?.media_id!, mediaTitle: activity.media?.title }),
 					label: upperFirst(common('messages.send_to_friend')),
 				}
 			] : []),
@@ -76,18 +71,15 @@ export const ContextMenuMedia = ({
 			{
 				icon: Icons.share,
 				onClick: () => openModal(ModalShare, {
-					title: media.title,
-					type: media.media_type,
-					path: media.url ?? '',
-					shareController: createShareController(ShareControllerMedia, {
-						media: media,
-					}),
+					title: activity.media?.title,
+					type: activity.media?.media_type,
+					path: activity.media?.url ?? '',
 				}),
 				label: upperFirst(common('word.share')),
 			},
 			...additionalItemsBottom
 		],
-	]}, [media, session, common]);
+	]}, [activity, session, common]);
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger>

@@ -12,6 +12,8 @@ import { Playlist, PlaylistItem } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useRandomImage } from '@/hooks/use-random-image';
+import { ContextMenuPlaylist } from '@/components/ContextMenu/ContextMenuPlaylist';
+import { useEffect, useMemo } from 'react';
 
 export default function PlaylistHeader({
   playlist,
@@ -26,14 +28,16 @@ export default function PlaylistHeader({
   const { openModal, createModal } = useModal();
   const common = useTranslations('common');
 
-  const randomBg = useRandomImage(
-    playlistItems.filter(item => item?.media?.backdrop_url)
+  const randomImageList = useMemo(() => (
+    playlistItems
+      .filter(item => item?.media?.backdrop_url)
       .map(item => ({
         src: item?.media?.backdrop_url ?? '',
         alt: item?.media?.title ?? '',
-      })) ?? [],
-    [playlistItems]
-  )
+      }))
+  ), [playlistItems]);
+
+  const randomBg = useRandomImage(randomImageList);
 
   const openPlaylistModal = () => {
     if (playlist?.user_id !== user?.id) return;
@@ -42,7 +46,12 @@ export default function PlaylistHeader({
     })
   }
 
+  useEffect(() => {
+    console.log('Playlist items updated:', playlistItems);
+  }, [playlistItems]);
+
   return (
+  <ContextMenuPlaylist playlist={playlist}>
     <HeaderBox
       style={{
         backgroundImage:  randomBg ? `url(${randomBg?.src})` : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')",
@@ -96,15 +105,16 @@ export default function PlaylistHeader({
             <div className="flex gap-1 font-light">
               {playlist.user ? <UserCard user={playlist?.user} /> : null}
               <span className=" before:content-['_•_']" >
-                {common('word.film_count', {count: Number(playlist?.items_count) ?? 0})}
+                {common('messages.item_count', {count: Number(playlist?.items_count) ?? 0})}
               </span>
-              <span className=" before:content-['_•_']" >
+              {totalRuntime && <span className=" before:content-['_•_']" >
                 {ConvertHoursMinutes(totalRuntime)}
-              </span>
+              </span>}
             </div>
           </div>
         </div>
       </div>
     </HeaderBox>
+  </ContextMenuPlaylist>
   );
 }

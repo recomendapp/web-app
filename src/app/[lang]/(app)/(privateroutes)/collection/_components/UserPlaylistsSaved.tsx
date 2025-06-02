@@ -3,10 +3,8 @@ import { Fragment, useEffect } from 'react';
 import Loader from '@/components/Loader/Loader';
 import { useInView } from 'react-intersection-observer';
 import { Playlist } from '@/types/type.db';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { useUserPlaylistsSavedInfiniteQuery } from '@/features/client/user/userQueries';
-import { usePathname } from '@/lib/i18n/routing';
 
 export function UserPlaylistsSaved({
   sidebarExpanded,
@@ -15,9 +13,7 @@ export function UserPlaylistsSaved({
   sidebarExpanded: boolean;
   grid?: boolean;
 }) {
-  const supabase = useSupabaseClient();
   const { user } = useAuth();
-	const pathname = usePathname();
 	const { ref, inView } = useInView();
 
   const {
