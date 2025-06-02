@@ -34,7 +34,10 @@ export const ShareControllerMedia: React.FC<ShareControllerMediaProps> = ({ medi
 
 			if (response.ok) {
 				const blob = await response.blob();
-				const file = new File([blob], `${media.title}.png`, { type: 'image/png' });
+				const contentType = response.headers.get('Content-Type') || 'image/png';
+				const extension = contentType.split('/')[1];
+
+				const file = new File([blob], `${media.title}.${extension}`, { type: contentType });
 				setImage(file);
 				if (onFileReady) onFileReady(file);
 			}
