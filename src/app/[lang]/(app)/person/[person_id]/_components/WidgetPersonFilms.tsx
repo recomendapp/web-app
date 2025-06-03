@@ -22,7 +22,7 @@ export async function WidgetPersonFilms({
     <div className="flex flex-col gap-2">
       <Button variant={'link'} size={'fit'} className='font-semibold text-xl p-0' asChild>
         <Link href={`/person/${personSlug}/films`}>
-        {upperFirst(common('word.film', { count: 2 }))}
+        {upperFirst(common('messages.film', { count: 2 }))}
         </Link>
       </Button>
       <ScrollArea className="rounded-md">

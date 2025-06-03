@@ -27,7 +27,7 @@ export default async function SearchTvSeriesSmall({
       className="text-2xl font-bold justify-start p-0"
       asChild
       >
-    <Link href={`/search/tv_series?q=${query}`}>{upperFirst(common('messages.serie', { count: 2}))}</Link>
+    <Link href={`/search/tv_series?q=${query}`}>{upperFirst(common('messages.tv_series', { count: 2}))}</Link>
       </Button>
       <div className="flex flex-col gap-2">
       {medias.slice(0, 4).map((media, i) => (

@@ -31,7 +31,7 @@ export function LikesHeader({ data }: { data: UserActivity[] }) {
         {capitalize(common('library.collection.likes.label'))}
         </h2>
         <p className="text-muted-foreground">
-          {data.length} {common('word.film', { count: data?.length })}
+          {data.length} {common('messages.film', { count: data?.length })}
         </p>
       </div>
     </HeaderBox>

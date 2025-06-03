@@ -51,5 +51,18 @@ export const siteConfig = {
     job: 'Founder/Developer',
     twitter: 'xmesky',
     github: 'lxup',
+  },
+  routes: {
+    authRoutes: [
+      '/collection',
+      '/feed',
+      '/settings',
+    ],
+    anonRoutes: [
+      '/auth',
+    ],
+    premiumRoutes: [
+      '/feed/cast-crew',
+    ]
   }
 };

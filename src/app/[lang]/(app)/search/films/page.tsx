@@ -31,7 +31,7 @@ export async function generateMetadata(
   const searchParams = await props.searchParams;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   return {
-    title: `${searchParams.q} - ${upperFirst(common('word.film', { count: 2 }))}`,
+    title: `${searchParams.q} - ${upperFirst(common('messages.film', { count: 2 }))}`,
   };
 }
 

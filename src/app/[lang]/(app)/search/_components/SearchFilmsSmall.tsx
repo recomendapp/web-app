@@ -27,7 +27,7 @@ export default async function SearchFilmsSmall({
       className="text-2xl font-bold justify-start p-0"
       asChild
       >
-        <Link href={`/search/films?q=${query}`}>{upperFirst(common('word.film', { count: 2}))}</Link>
+        <Link href={`/search/films?q=${query}`}>{upperFirst(common('messages.film', { count: 2}))}</Link>
       </Button>
       <div className="flex flex-col gap-2">
       {medias.slice(0, 4).map((media, i) => (

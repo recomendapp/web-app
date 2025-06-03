@@ -100,7 +100,7 @@ export default function MovieHeader({
             <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
               {/* TYPE & GENRES */}
               <div>
-                <span className='text-accent-yellow'>{upperFirst(common('word.film', { count: 1 }))}</span>
+                <span className='text-accent-yellow'>{upperFirst(common('messages.film', { count: 1 }))}</span>
                 {movie.genres ? <Genres genres={movie.genres} className="before:content-['_|_']" /> : null}
               </div>
               {/* TITLE */}

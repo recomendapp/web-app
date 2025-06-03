@@ -95,7 +95,7 @@ export default function TvSerieHeader({
             <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
               {/* TYPE & GENRES */}
               <div>
-                <span className='text-accent-yellow'>{upperFirst(common('messages.serie', { count: 1 }))}</span>
+                <span className='text-accent-yellow'>{upperFirst(common('messages.tv_series', { count: 1 }))}</span>
                 {serie.genres ? <Genres genres={serie.genres} className="before:content-['_|_']" /> : null}
               </div>
               {/* TITLE */}

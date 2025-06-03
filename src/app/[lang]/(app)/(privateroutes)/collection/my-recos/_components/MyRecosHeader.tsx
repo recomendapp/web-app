@@ -31,7 +31,7 @@ export function MyRecosHeader({ data }: { data: UserRecosAggregated[] }) {
         {capitalize(common('messages.my_recos'))}
         </h2>
         <p className="text-muted-foreground">
-        {data.length} {common('word.film', { count: data?.length })}
+        {data.length} {common('messages.film', { count: data?.length })}
         </p>
       </div>
     </HeaderBox>

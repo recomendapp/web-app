@@ -16,9 +16,9 @@ const BadgeMedia = React.forwardRef<
 	return (
 		<Badge variant={variant ?? 'accent-yellow'} className={className} {...props}>
 		{type === 'movie'
-			? common('word.film', { count: 1 })
+			? common('messages.film', { count: 1 })
 			: type === 'tv_series'
-			? common('messages.serie', { count: 1 })
+			? common('messages.tv_series', { count: 1 })
 			: type === 'person'
 			? common('word.cast_and_crew')
 			: type

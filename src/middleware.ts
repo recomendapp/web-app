@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import createIntlMiddleware from 'next-intl/middleware';
 import { createMiddlewareClient } from './lib/supabase/middleware';
 import { routing } from './lib/i18n/routing';
+import { siteConfig } from './config/site';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -56,10 +57,7 @@ export async function middleware(request: NextRequest) {
   /**
    * Redirect user if not logged in
    */
-  const anonUserOnly = [
-    '/auth'
-  ];
-  if (user && anonUserOnly.some((path) => url.pathname.startsWith(path))) {
+  if (user && siteConfig.routes.anonRoutes.some((path) => url.pathname.startsWith(path))) {
     // if /auth/login and there is redirect query param, go to redirect
     if (url.pathname === '/auth/login' && url.searchParams.has('redirect'))
       return (NextResponse.redirect(new URL(url.searchParams.get('redirect')!, request.url)));
@@ -71,12 +69,7 @@ export async function middleware(request: NextRequest) {
   /**
    * Redirect user if logged in
    */
-  const authentifiedUserOnly = [
-    '/collection',
-    '/feed',
-    '/settings',
-  ];
-  if (!user && authentifiedUserOnly.some((path) => url.pathname.startsWith(path))) {
+  if (!user && siteConfig.routes.authRoutes.some((path) => url.pathname.startsWith(path))) {
     url.pathname = '/auth/login';
     url.searchParams.set('redirect', request.nextUrl.pathname);
     return (NextResponse.redirect(url));
@@ -85,10 +78,7 @@ export async function middleware(request: NextRequest) {
   /**
    * Redirect user if not premium
    */
-  const premiumUserOnly = [
-    '/feed/cast-crew',
-  ];
-  if (user && !config?.user_premium && premiumUserOnly.some((path) => url.pathname.startsWith(path))) {
+  if (user && !config?.user_premium && siteConfig.routes.premiumRoutes.some((path) => url.pathname.startsWith(path))) {
     url.pathname = '/upgrade';
     return (NextResponse.redirect(url));
   }
@@ -98,8 +88,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next|_vercel|.*\\..*).*)',
-    // User pages
-    '/@:username/:path*',
+    '/((?!api|_next|_vercel|favicon.ico|manifest.webmanifest|robots.txt|sitemaps/).*)',
   ],
 };
