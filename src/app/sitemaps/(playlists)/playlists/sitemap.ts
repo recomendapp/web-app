@@ -16,6 +16,7 @@ export default async function sitemap({
 	return playlists.map((playlist) => ({
 		url: `${siteConfig.url}/playlists/${playlist.id}`,
 		lastModified: playlist.updated_at ? new Date(playlist.updated_at) : new Date(),
+		changeFrequency: 'daily',
 		priority: 0.8,
 	}))
 }

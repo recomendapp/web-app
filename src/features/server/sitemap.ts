@@ -142,3 +142,28 @@ export const getSitemapPlaylists = cache(async (id: number, perPage: number = 10
 	return data || [];
 });
 /* -------------------------------------------------------------------------- */
+
+/* --------------------------------- REVIEWS -------------------------------- */
+export const getSitemapReviewCount = cache(async (perPage: number = 10000): Promise<number> => {
+	const supabase = await createServerClient();
+	const { count, error } = await supabase
+		.from('user_review')
+		.select('*', { count: 'exact', head: true })
+	if (error) throw error;
+	if (count === null) {
+		return 0;
+	}
+	return count ? Math.ceil(count / perPage) : 0;
+});
+export const getSitemapReviews = cache(async (id: number, perPage: number = 10000) => {
+	const start = id * perPage;
+	const end = start + perPage - 1;
+	const supabase = await createServerClient();
+	const { data, error } = await supabase
+		.from('user_review')
+		.select('id, updated_at')
+		.range(start, end);
+	if (error) throw error;
+	return data || [];
+});
+/* -------------------------------------------------------------------------- */

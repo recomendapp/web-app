@@ -1,16 +1,14 @@
 import { siteConfig } from "@/config/site";
+import { getSitemapReviewCount } from "@/features/server/sitemap";
 import { buildSitemapIndex } from "@/lib/sitemap";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const sitemapIndexes = [
-      `${siteConfig.url}/sitemaps/medias.xml`,
-      `${siteConfig.url}/sitemaps/reviews.xml`,
-      `${siteConfig.url}/sitemaps/playlists.xml`,
-      `${siteConfig.url}/sitemaps/users.xml`,
-      `${siteConfig.url}/sitemaps/statics.xml`,
-    ]
+    const count = await getSitemapReviewCount();
+    const sitemapIndexes = Array.from({ length: count }, (_, index) => {
+      return `${siteConfig.url}/sitemaps/reviews/sitemap/${index}.xml`;
+    });
     const sitemapIndexXML = buildSitemapIndex(sitemapIndexes);
     return new NextResponse(sitemapIndexXML, {
       headers: {
@@ -19,7 +17,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error('Error generating sitemap index:', error);
+    console.error("Error generating sitemap index:", error);
     return NextResponse.error();
   }
 }
