@@ -88,22 +88,22 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 				</ModalTitle>
 			</ModalHeader>
 			<ModalBody className="space-y-2">
-				{shareController && (
-					<>
-						<div className="flex flex-col items-center gap-2">
-							{shareController?.Component && (
-								<shareController.Component {...shareController.props} onFileReady={setFileToShare} />
-							)}
+				<div className="flex flex-col items-center gap-2">
+					{(shareController && shareController?.Component) && (
+						<shareController.Component {...shareController.props} onFileReady={setFileToShare} />
+					)}
+					{canShareController && (
+						<>
 							<Button
 							disabled={!canShareController}
 							onClick={() => onShare(sharedControllerData)}
 							>
 								{upperFirst(common('word.share'))}
 							</Button>
-						</div>
-						<Separator />
-					</>
-				)}
+							<Separator />
+						</>
+					)}
+				</div>
 				<div>
 					<h3 className="text-lg font-semibold mb-2">
 						{upperFirst(common('messages.via'))}
