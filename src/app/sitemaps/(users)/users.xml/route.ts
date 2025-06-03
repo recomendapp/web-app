@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const count = await getSitemapUserCount();
     const sitemapIndexes = Array.from({ length: count }, (_, index) => {
-      return `${siteConfig.url}/sitemaps/users/sitemap/${index}.xml`;
+      return `${siteConfig.url}/sitemaps/users/${index}`;
     });
     const sitemapIndexXML = buildSitemapIndex(sitemapIndexes);
     return new NextResponse(sitemapIndexXML, {

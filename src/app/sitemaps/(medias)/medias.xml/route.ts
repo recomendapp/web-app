@@ -8,10 +8,10 @@ export async function GET() {
     const count = await getSitemapMediaCount();
     const sitemapIndexes = [
       ...Array.from({ length: count.films }, (_, index) => {
-        return `${siteConfig.url}/sitemaps/medias/films/sitemap/${index}.xml`;
+        return `${siteConfig.url}/sitemaps/medias/films/${index}`;
       }),
       ...Array.from({ length: count.series }, (_, index) => {
-        return `${siteConfig.url}/sitemaps/medias/tv_series/sitemap/${index}.xml`;
+        return `${siteConfig.url}/sitemaps/medias/tv_series/${index}`;
       }),
     ];
     const sitemapIndexXML = buildSitemapIndex(sitemapIndexes);

@@ -1,10 +1,10 @@
 import { routing } from "@/lib/i18n/routing";
-import { createServerClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server-no-cookie";
 import { cache } from "react";
 
 /* ---------------------------------- USERS --------------------------------- */
 export const getSitemapUserCount = cache(async (perPage: number = 10000): Promise<number> => {
-	const supabase = await createServerClient();
+	const supabase = await createClient(routing.defaultLocale);
 	const { count, error } = await supabase
 		.from('user')
 		.select('*', { count: 'exact', head: true })
@@ -19,7 +19,7 @@ export const getSitemapUserCount = cache(async (perPage: number = 10000): Promis
 export const getSitemapUsers = cache(async (id: number, perPage: number = 10000) => {
 	const start = id * perPage;
 	const end = start + perPage - 1;
-	const supabase = await createServerClient();
+	const supabase = await createClient(routing.defaultLocale);
 	const { data, error } = await supabase
 		.from('user')
 		.select('id, username, created_at')
@@ -33,7 +33,7 @@ export const getSitemapUsers = cache(async (id: number, perPage: number = 10000)
 /* --------------------------------- MEDIAS --------------------------------- */
 // Movies
 export const getSitemapMediaMovieCount = cache(async (perPage: number = 500) => {
-	const supabase = await createServerClient();
+	const supabase = await createClient(routing.defaultLocale);
 	const { count, error } = await supabase
 		.from('tmdb_movie')
 		.select('*', { count: 'exact', head: true });
@@ -46,7 +46,7 @@ export const getSitemapMediaMovieCount = cache(async (perPage: number = 500) => 
 export const getSitemapMediaMovies = cache(async (id: number, perPage: number = 500) => {
 	const start = id * perPage;
 	const end = start + perPage - 1;
-	const supabase = await createServerClient();
+	const supabase = await createClient(routing.defaultLocale);
 	const { data, error } = await supabase
 		.from('tmdb_movie')
 		.select(`
@@ -65,7 +65,7 @@ export const getSitemapMediaMovies = cache(async (id: number, perPage: number = 
 
 // TV Series
 export const getSitemapMediaTvSeriesCount = cache(async (perPage: number = 500) => {
-	const supabase = await createServerClient();
+	const supabase = await createClient(routing.defaultLocale);
 	const { count, error } = await supabase
 		.from('tmdb_tv_series')
 		.select('*', { count: 'exact', head: true });
@@ -79,7 +79,7 @@ export const getSitemapMediaTvSeriesCount = cache(async (perPage: number = 500) 
 export const getSitemapMediaTvSeries = cache(async (id: number, perPage: number = 500) => {
 	const start = id * perPage;
 	const end = start + perPage - 1;
-	const supabase = await createServerClient();
+	const supabase = await createClient(routing.defaultLocale);
 	const { data, error } = await supabase
 		.from('tmdb_tv_series')
 		.select(`
@@ -98,7 +98,7 @@ export const getSitemapMediaTvSeries = cache(async (id: number, perPage: number 
 
 
 export const getSitemapMediaCount = cache(async (perPage: number = 500) => {
-	const supabase = await createServerClient();
+	const supabase = await createClient(routing.defaultLocale);
 	const { count: filmCount, error: filmError } = await supabase
 		.from('tmdb_movie')
 		.select('*', { count: 'exact', head: true });
@@ -118,11 +118,11 @@ export const getSitemapMediaCount = cache(async (perPage: number = 500) => {
 
 /* -------------------------------- PLAYLISTS ------------------------------- */
 export const getSitemapPlaylistCount = cache(async (perPage: number = 10000): Promise<number> => {
-	const supabase = await createServerClient();
+	const supabase = await createClient(routing.defaultLocale);
 	const { count, error } = await supabase
 		.from('playlists')
 		.select('*', { count: 'exact', head: true })
-		.eq('private', false);
+		// .eq('private', false); // RLS already handles this
 	if (error) throw error;
 	if (count === null) {
 		return 0;
@@ -132,11 +132,11 @@ export const getSitemapPlaylistCount = cache(async (perPage: number = 10000): Pr
 export const getSitemapPlaylists = cache(async (id: number, perPage: number = 10000) => {
 	const start = id * perPage;
 	const end = start + perPage - 1;
-	const supabase = await createServerClient();
+	const supabase = await createClient(routing.defaultLocale);
 	const { data, error } = await supabase
 		.from('playlists')
 		.select('id, title, updated_at')
-		.eq('private', false)
+		// .eq('private', false) // RLS already handles this
 		.range(start, end);
 	if (error) throw error;
 	return data || [];
@@ -145,7 +145,7 @@ export const getSitemapPlaylists = cache(async (id: number, perPage: number = 10
 
 /* --------------------------------- REVIEWS -------------------------------- */
 export const getSitemapReviewCount = cache(async (perPage: number = 10000): Promise<number> => {
-	const supabase = await createServerClient();
+	const supabase = await createClient(routing.defaultLocale);
 	const { count, error } = await supabase
 		.from('user_review')
 		.select('*', { count: 'exact', head: true })
@@ -158,7 +158,7 @@ export const getSitemapReviewCount = cache(async (perPage: number = 10000): Prom
 export const getSitemapReviews = cache(async (id: number, perPage: number = 10000) => {
 	const start = id * perPage;
 	const end = start + perPage - 1;
-	const supabase = await createServerClient();
+	const supabase = await createClient(routing.defaultLocale);
 	const { data, error } = await supabase
 		.from('user_review')
 		.select('id, updated_at')
