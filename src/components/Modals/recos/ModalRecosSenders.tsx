@@ -1,10 +1,10 @@
 'use client'
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import UserCard from "@/components/User/UserCard/UserCard";
 import { UserRecosAggregated } from "@/types/type.db";
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useModal } from "@/context/modal-context";
+import { CardUser } from "@/components/Card/CardUser";
 
 interface ModalRecosSendersProps extends ModalType {
 	comments: UserRecosAggregated['senders'];
@@ -31,7 +31,7 @@ export const ModalRecosSenders = ({
 								key={item.user.id}
 								className="bg-muted rounded-xl p-2 space-y-2"
 								>
-								<UserCard user={item.user} />
+								<CardUser user={item.user} variant="inline" />
 								{item.comment && (
 									<div className="pl-8">
 										<div className="bg-background rounded-md p-2">

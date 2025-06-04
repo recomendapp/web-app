@@ -1,11 +1,9 @@
 'use client';
-
 import { useAuth } from '@/context/auth-context';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { ConvertHoursMinutes } from '@/lib/utils';
-import UserCard from '@/components/User/UserCard/UserCard';
 import { useModal } from '@/context/modal-context';
 import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
 import { Playlist, PlaylistItem } from '@/types/type.db';
@@ -14,6 +12,7 @@ import { upperFirst } from 'lodash';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { ContextMenuPlaylist } from '@/components/ContextMenu/ContextMenuPlaylist';
 import { useEffect, useMemo } from 'react';
+import { CardUser } from '@/components/Card/CardUser';
 
 export default function PlaylistHeader({
   playlist,
@@ -103,7 +102,7 @@ export default function PlaylistHeader({
             </p>
             {/* ITEMS & TOTAL RUNTIME */}
             <div className="flex gap-1 font-light">
-              {playlist.user ? <UserCard user={playlist?.user} /> : null}
+              {playlist.user ? <CardUser user={playlist?.user} variant='inline' /> : null}
               <span className=" before:content-['_•_']" >
                 {common('messages.item_count', {count: Number(playlist?.items_count) ?? 0})}
               </span>

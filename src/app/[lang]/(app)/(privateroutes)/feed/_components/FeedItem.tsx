@@ -1,6 +1,4 @@
 "use client";
-
-import UserCard from "@/components/User/UserCard/UserCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FeedActivity } from "./FeedActivity";
 import { Link } from "@/lib/i18n/routing";
@@ -12,6 +10,7 @@ import { getMediaDetails } from "@/hooks/get-media-details";
 import { CardReview } from "@/components/Card/CardReview";
 import { cn } from "@/lib/utils";
 import { upperFirst } from "lodash";
+import { CardUser } from "@/components/Card/CardUser";
 
 const FeedItem = ({ activity }: { activity?: UserActivity }) => {
 	const format = useFormatter();
@@ -41,8 +40,8 @@ const FeedItem = ({ activity }: { activity?: UserActivity }) => {
 		<div className="flex flex-col gap-4 w-full">
 			<div className="flex justify-between">
 				{/* USER */}
-				<div className="flex items-center gap-2">
-					{activity.user ? <UserCard user={activity.user} icon /> : null}
+				<div className="flex items-center gap-1">
+					{activity.user ? <CardUser user={activity.user} variant="icon" /> : null}
 					<FeedActivity activity={activity} className="text-sm @md/feed-item:text-base text-muted-foreground"/>
 				</div>
 				<div className='hidden @md/feed-item:block text-sm text-muted-foreground opacity-0 group-hover:opacity-100 duration-500'>

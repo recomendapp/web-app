@@ -1,15 +1,15 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { User } from "@/types/type.db";
+import { Profile, User } from "@/types/type.db";
 import { UserAvatar } from "../User/UserAvatar/UserAvatar";
 import { WithLink } from "../utils/WithLink";
 import { Icons } from "@/config/icons";
 
 interface CardUserProps
 	extends React.ComponentProps<typeof Card> {
-		variant?: "default" | "icon" | "username" | "inline";
-		user: User;
+		variant?: "default" | "vertical" | "icon" | "username" | "inline";
+		user: User | Profile
 		linked?: boolean;
 		width?: number;
 		height?: number;
@@ -30,7 +30,7 @@ const CardUserDefault = React.forwardRef<
 			)}
 			{...props}
 		>
-			<UserAvatar username={user?.username} avatarUrl={user?.avatar_url} />
+			<UserAvatar username={user?.username ?? ''} avatarUrl={user?.avatar_url} />
 			<div className='px-2 py-1 space-y-1'>
 				<p className='line-clamp-2 break-words'>{user?.full_name}</p>
 				<p className="text-muted-foreground">@{user?.username}</p>
@@ -40,6 +40,32 @@ const CardUserDefault = React.forwardRef<
 	);
 });
 CardUserDefault.displayName = "CardUserDefault";
+
+const CardUserVertical = React.forwardRef<
+	HTMLDivElement,
+	Omit<CardUserProps, "variant">
+>(({ className, user, linked, children, ...props }, ref) => {
+	return (
+		<WithLink
+			ref={ref}
+			href={linked ? `/@${user?.username}` : undefined}
+			as={Card}
+			className={cn(
+				"flex flex-col items-center justify-center w-32 rounded-xl bg-muted hover:bg-muted-hover p-2",
+				className
+			)}
+			{...props}
+		>
+			<UserAvatar username={user?.username ?? ''} avatarUrl={user?.avatar_url} className="w-full h-fit aspect-square" />
+			<div className='flex flex-col items-center px-2 py-1 space-y-1'>
+				<p className='line-clamp-2 break-words text-center'>{user?.full_name}</p>
+				<p className="text-muted-foreground text-center">@{user?.username}</p>
+				{children}
+			</div>
+		</WithLink>
+	);
+});
+CardUserVertical.displayName = "CardUserVertical";
 
 const CardUserIcon = React.forwardRef<
 	HTMLDivElement,
@@ -57,7 +83,7 @@ const CardUserIcon = React.forwardRef<
 		>
 			<UserAvatar
 			className={`w-[${width || 25}px] h-[${height || 25}px]`}
-			username={user?.username}
+			username={user?.username ?? ''}
 			avatarUrl={user?.avatar_url}
 			/>
 		</WithLink>
@@ -107,6 +133,8 @@ const CardUser = React.forwardRef<
 >(({ className, user, variant = "default", linked = true, ...props }, ref) => {
 	return variant === "default" ? (
 		<CardUserDefault ref={ref} className={className} user={user} linked={linked} {...props} />
+	) : variant === "vertical" ? (
+		<CardUserVertical ref={ref} className={className} user={user} linked={linked} {...props} />
 	) : variant === "icon" ? (
 		<CardUserIcon ref={ref} className={className} user={user} linked={linked} {...props} />
 	) : variant === "username" ? (
@@ -121,4 +149,5 @@ export {
 	type CardUserProps,
 	CardUser,
 	CardUserDefault,
+	CardUserVertical,
 }

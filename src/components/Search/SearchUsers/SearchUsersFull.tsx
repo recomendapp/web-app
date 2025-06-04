@@ -1,11 +1,10 @@
 'use client';
-
 import { useEffect } from 'react';
 import { Skeleton } from '../../ui/skeleton';
 import { useInView } from 'react-intersection-observer';
-import UserCard from '@/components/User/UserCard/UserCard';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { CardUser } from '@/components/Card/CardUser';
 
 export default function SearchUsersFull({
   query,
@@ -81,7 +80,12 @@ export default function SearchUsersFull({
             key={user.id}
             ref={(i === users.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
           >
-            <UserCard user={user} full />
+            <CardUser
+              variant="vertical"
+              user={user}
+              className="w-full"
+              linked
+            />
           </div>
         ))
       ))}

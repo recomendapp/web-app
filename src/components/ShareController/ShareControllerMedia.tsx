@@ -1,3 +1,4 @@
+"use client";
 import { ShareControllerProps } from "./ShareController";
 import { Media } from "@/types/type.db";
 import socialCanvas from "@/lib/social-canvas";

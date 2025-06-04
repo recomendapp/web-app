@@ -1,3 +1,4 @@
+"use client";
 import { useModal } from "@/context/modal-context";
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { Input } from "@/components/ui/input";

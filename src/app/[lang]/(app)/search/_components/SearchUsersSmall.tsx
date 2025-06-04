@@ -1,7 +1,6 @@
 'use client';
 import { Link } from "@/lib/i18n/routing";
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import UserCard from '@/components/User/UserCard/UserCard';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -9,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
+import { CardUser } from "@/components/Card/CardUser";
 
 export default function SearchUsersSmall({
   query,
@@ -81,7 +81,12 @@ export default function SearchUsersSmall({
             ))
           ) : users?.pages.map((page, i) => (
             page?.map((user, index) => (
-              <UserCard key={user.id} user={user} full />
+              <CardUser
+              variant="vertical"
+              key={`${user.id}-${i}-${index}`}
+              user={user}
+              linked
+              />
             ))
           ))}
         </div>

@@ -1,6 +1,4 @@
 'use client';
-
-import UserCard from '@/components/User/UserCard/UserCard';
 import { cn } from '@/lib/utils';
 import { Profile } from '@/types/type.db';
 import { upperFirst } from 'lodash';
@@ -8,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from "@/lib/i18n/routing";
 import { usePathname } from '@/lib/i18n/routing';
 import { useMemo } from 'react';
+import { CardUser } from '@/components/Card/CardUser';
 
 export default function ProfileNavbar({
   profile,
@@ -47,7 +46,7 @@ export default function ProfileNavbar({
         className
       )}
     >
-      {withProfile && <UserCard user={profile} />}
+      {withProfile && <CardUser user={profile} variant="inline" />}
       <div className="flex w-full md:w-fit justify-between">
         {profileRoutes.map((item) => (
           <Link

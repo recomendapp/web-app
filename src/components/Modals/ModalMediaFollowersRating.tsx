@@ -13,11 +13,9 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
   } from "@/components/ui/chart"
-import UserCard from "@/components/User/UserCard/UserCard";
-import ActivityIcon from "@/components/Review/ActivityIcon";
 import { Card } from "@/components/ui/card";
-import { MediaType } from "@/types/type.db";
 import { IconMediaRating } from "../Media/icons/IconMediaRating";
+import { CardUser } from "../Card/CardUser";
 
 const chartConfig = {
 	count: {
@@ -87,7 +85,7 @@ export const ModalMediaFollowersRating = ({
 											return (
 												<>
 													{ratings.length ? ratings.map((item) => (
-														item.user ? <UserCard key={item.user_id} user={item.user} /> : null
+														item.user ? <CardUser key={item.user_id} user={item.user} variant="inline" /> : null
 													)) : <span className="text-muted-foreground">Aucune note</span>}
 												</>
 											)
@@ -104,11 +102,12 @@ export const ModalMediaFollowersRating = ({
 							<div className="grid grid-cols-2 gap-2">
 								{followersRating.map((item) => (
 									<Card key={item.user_id} className="flex items-center justify-between gap-2 p-2">
-										{item.user ? <UserCard user={item.user} /> : null}
+										{item.user ? <CardUser user={item.user} variant="inline" /> : null}
 										<IconMediaRating
-											rating={item.rating}
-											variant="follower"
-											className="w-8"
+										rating={item.rating}
+										variant="follower"
+										className="w-8"
+										disableTooltip
 										/>
 									</Card>
 								))}

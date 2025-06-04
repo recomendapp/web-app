@@ -10,6 +10,7 @@ import { BadgeMedia } from '@/components/Badge/BadgeMedia';
 import { Media, MediaPerson } from '@/types/type.db';
 import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
+import { ContextMenuMedia } from "@/components/ContextMenu/ContextMenuMedia";
 
 export default async function SearchBestResult({
   media,
@@ -27,44 +28,46 @@ export default async function SearchBestResult({
       <h2 className="text-2xl font-bold">
       {upperFirst(common('messages.top_result'))}
       </h2>
-      <Link href={media.url ?? ''}>
-        <Card className='flex flex-col gap-2 relative p-2 hover:bg-muted-hover'>
-          <BadgeMedia type={media.media_type} variant={"accent-yellow"} className='absolute top-2 right-2' />
-          <div
-          className={`relative w-[100px] shrink-0 overflow-hidden
-            ${getMediaDetails(media).poster_className}
-          `}
-          >
-            <ImageWithFallback
-              src={media.avatar_url ?? ''}
-              alt={media.title ?? ''}
-              layout="fill"
-              objectFit="cover"
-              className="object-cover"
-            />
-          </div>
-          <div>
-            <p className="text-2xl font-bold line-clamp-2 break-all overflow-hidden">
-              {media.title}
-            </p>
-            {media.media_type === 'person' ? (
-              <p className="line-clamp-2 text-muted-foreground">
-                {"known_for_department" in media.extra_data && media.extra_data.known_for_department}
-              </p>
-            ) : null}
-            {media.main_credit ? (
-              <Credits
-                credits={media.main_credit ?? []}
+      <ContextMenuMedia media={media}>
+        <Link href={media.url ?? ''}>
+          <Card className='flex flex-col gap-2 relative p-2 hover:bg-muted-hover'>
+            <BadgeMedia type={media.media_type} variant={"accent-yellow"} className='absolute top-2 right-2' />
+            <div
+            className={`relative w-[100px] shrink-0 overflow-hidden
+              ${getMediaDetails(media).poster_className}
+            `}
+            >
+              <ImageWithFallback
+                src={media.avatar_url ?? ''}
+                alt={media.title ?? ''}
+                layout="fill"
+                objectFit="cover"
+                className="object-cover"
               />
-            ) : null}
-            {(media.media_type === 'movie' || media.media_type === 'tv_series') ? (
-                <p className="text-muted-foreground">
-                  {new Date(media.date ?? '').getFullYear()}
+            </div>
+            <div>
+              <p className="text-2xl font-bold line-clamp-2 break-all overflow-hidden">
+                {media.title}
+              </p>
+              {media.media_type === 'person' ? (
+                <p className="line-clamp-2 text-muted-foreground">
+                  {"known_for_department" in media.extra_data && media.extra_data.known_for_department}
                 </p>
-            ) : null}
-          </div>
-        </Card>
-      </Link>
+              ) : null}
+              {media.main_credit ? (
+                <Credits
+                  credits={media.main_credit ?? []}
+                />
+              ) : null}
+              {(media.media_type === 'movie' || media.media_type === 'tv_series') ? (
+                  <p className="text-muted-foreground">
+                    {new Date(media.date ?? '').getFullYear()}
+                  </p>
+              ) : null}
+            </div>
+          </Card>
+        </Link>
+      </ContextMenuMedia>
     </div>
   )
 }
