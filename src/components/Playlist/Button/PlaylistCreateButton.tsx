@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { useAuth } from '@/context/auth-context';
@@ -22,7 +21,6 @@ export function PlaylistCreateButton({
   const { user } = useAuth();
   const common = useTranslations('common');
   const { openModal } = useModal();
-  const [open, setOpen] = useState(false);
 
   if (!user) return null;
 
@@ -35,6 +33,9 @@ export function PlaylistCreateButton({
           onClick={() => openModal(PlaylistModal, { filmId })}
         >
           {icon ? <Plus /> : common('playlist.actions.create')}
+          {icon && <span className="sr-only">
+            {common('playlist.actions.create')}
+          </span>}
         </Button>
       </TooltipBox>
   )

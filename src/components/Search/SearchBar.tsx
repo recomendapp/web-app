@@ -55,6 +55,7 @@ export default function SearchBar({ className }: SearchBarProps) {
       >
         <button className="py-3 px-4">
           <BiSearch size={20} />
+          <span className="sr-only">Search</span>
         </button>
         <input
           name="searchTerm"

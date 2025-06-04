@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { RightPanelSocial } from '@/components/sidebar/right-panel/RightPanelSocial';
 import { Icons } from '@/config/icons';
 import { cn } from '@/lib/utils';
+import { upperFirst } from 'lodash';
+import { useTranslations } from 'next-intl';
 
 /**
  * Social button
@@ -14,6 +16,7 @@ export const SocialButton = ({
 	className,
 	...props
 } : React.ComponentProps<typeof Button>) => {
+	const common = useTranslations('common');
 	const {
 		toggleRightPanelContent,
 	} = useUI();
@@ -26,6 +29,7 @@ export const SocialButton = ({
 		{...props}
 		>
 			<Icons.users className='w-4 h-4'/>
+			<span className="sr-only">{upperFirst(common('messages.open_social_panel'))}</span>
 		</Button>
 	);
 }

@@ -37,6 +37,7 @@ const CardMediaDefault = React.forwardRef<
 >(({ className, media, activity, profileActivity, children, linked, showRating, posterClassName, ...props }, ref) => {
 	const mediaDetails = getMediaDetails(media);
 	return (
+	<WithLink href={media.url ?? undefined}>
 		<Card
 			ref={ref}
 			className={cn(
@@ -66,6 +67,7 @@ const CardMediaDefault = React.forwardRef<
 				{children}
 			</div>
 		</Card>
+	</WithLink>
 	);
 });
 CardMediaDefault.displayName = "CardMediaDefault";

@@ -105,7 +105,11 @@
       "via": "via",
       "edit": "modifier",
       "guest": "{gender, select, female {invitée} other {invité}}{count, plural, one {} other {s}}",
-      "are_u_sure": "êtes-vous sûr ?"
+      "are_u_sure": "êtes-vous sûr ?",
+      "backward": "précédent",
+      "forward": "suivant",
+      "see_notifications": "voir les notifications",
+      "open_social_panel": "ouvrir le panneau social"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",

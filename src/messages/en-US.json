@@ -105,7 +105,11 @@
       "via": "via",
       "edit": "edit",
       "guest": "{count, plural, one {guest} other {guests}}",
-      "are_u_sure": "Are you sure?"
+      "are_u_sure": "Are you sure?",
+      "backward": "backward",
+      "forward": "forward",
+      "see_notifications": "see notifications",
+      "open_social_panel": "open social panel"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
