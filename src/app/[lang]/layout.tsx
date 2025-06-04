@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.webmanifest',
   icons: {
-    apple: '/icons/icon-512x512.png',
+    apple: '/assets/icons/ios/512.png',
   },
   // itunes: {
   //   appId: '333903271',
@@ -58,9 +58,9 @@ export const metadata: Metadata = {
     title: siteConfig.name,
     statusBarStyle: 'default',
     startupImage: [
-      '/icons/icon-512x512.png',
+      '/assets/icons/ios/512.png',
       {
-        url: '/icons/icon-512x512.png',
+        url: '/assets/icons/ios/512.png',
         media: '(device-width: 768px) and (device-height: 1024px)',
       },
     ],
