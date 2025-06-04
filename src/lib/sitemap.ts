@@ -18,7 +18,7 @@ export const buildSitemap = (
 	urls: MetadataRoute.Sitemap
 ): string => {
 	let xml = '<?xml version="1.0" encoding="UTF-8"?>';
-	xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/TR/xhtml11/xhtml11_schema.html">`;
+	xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">`;
 
 	for (const url of urls) {
 		xml += "<url>";
