@@ -88,6 +88,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next|_vercel|favicon\\.ico|manifest\\.webmanifest|robots\\.txt|sitemaps/|opensearch\\.xml|assets/|.*\\.json$|.*\\.xml$|.*\\.js$).*)',
+    `/((?!api|_next|_vercel|favicon\\.ico|manifest\\.webmanifest|robots\\.txt|sitemaps/|opensearch\\.xml|assets/|.*\\.(?:json|xml|js)$).*)`,
   ],
 };
