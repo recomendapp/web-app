@@ -40,16 +40,16 @@ export default async function CreateReviewPage(
 	const params = await props.params;
 	const supabase = await createServerClient();
 	const {
-		data: { user },
-	} = await supabase.auth.getUser();
-	if (!user) return redirect({
+		data: { session },
+	} = await supabase.auth.getSession();
+	if (!session) return redirect({
 		href: `/auth/login?redirect=${encodeURIComponent(`/review/create/${params.media_id}`)}`,
 		locale: params.lang,
 	});
 	const { data: review } = await supabase
 		.from('user_review')
 		.select(`id, activity:user_activity!inner(media_id)`)
-		.eq('user_id', user.id)
+		.eq('user_id', session.user.id)
 		.eq('activity.media_id', params.media_id)
 		.single();
 	if (review) redirect({

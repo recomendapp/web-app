@@ -45,11 +45,11 @@ export default function SettingsAccountPage() {
 
   const redirectToCustomerPortal = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw Error('Could not get user');
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw Error('Could not get user');
       const customer = await createOrRetrieveCustomer({
-        uuid: user.id || '',
-        email: user.email || '',
+        uuid: session.user.id || '',
+        email: session.user.email || '',
       });
       if (!customer) throw Error('Could not get customer');
       const { url } = await stripe.billingPortal.sessions.create({

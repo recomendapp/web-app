@@ -13,8 +13,8 @@ export async function HeaderMinimal({ className }: HeaderMinimalProps) {
   const word = await getTranslations('word');
 
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
 
   return (
     <header
@@ -30,7 +30,7 @@ export async function HeaderMinimal({ className }: HeaderMinimalProps) {
         </Link>
       </div>
       <div>
-        {user ? (
+        {session ? (
           <UserNav />
         ) : (
           <Button asChild>

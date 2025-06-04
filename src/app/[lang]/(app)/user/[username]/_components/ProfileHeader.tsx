@@ -15,8 +15,8 @@ import { Icons } from '@/config/icons';
 export default async function ProfileHeader({ profile }: { profile: Profile }) {
   const supabase = await createServerClient();
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
 
   return (
     <HeaderBox
@@ -34,7 +34,7 @@ export default async function ProfileHeader({ profile }: { profile: Profile }) {
           <div className="flex items-center @lg/profile-header:hidden">
             <ProfileFollowersButton userId={profile?.id!} disabled={!profile?.visible ? true : false} />
             <ProfileFolloweesButton userId={profile?.id!} disabled={!profile?.visible ? true : false} />
-            {user?.id == profile?.id && (
+            {session?.user?.id == profile?.id && (
               <Button variant={'action'} asChild>
                 <Link href={'/settings/profile'}>
                   <Settings />
@@ -64,7 +64,7 @@ export default async function ProfileHeader({ profile }: { profile: Profile }) {
           <div className="hidden @lg/profile-header:flex items-center gap-2">
             <ProfileFollowersButton userId={profile?.id!} className="hidden sm:block" disabled={!profile?.visible ? true : false} />
             <ProfileFolloweesButton userId={profile?.id!} className="hidden sm:block" disabled={!profile?.visible ? true : false} />
-            {user?.id == profile?.id && (
+            {session?.user?.id == profile?.id && (
               <Button variant={'action'} asChild>
                 <Link href={'/settings/profile'}>
                   <Settings />

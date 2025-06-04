@@ -46,16 +46,16 @@ export default async function CreateReview(
   const supabase = await createServerClient();
 
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  if (!user) redirect(`/auth/login?redirect=${encodeURIComponent(`/film/${movieId}/review/create`)}`);
+  if (!session) redirect(`/auth/login?redirect=${encodeURIComponent(`/film/${movieId}/review/create`)}`);
 
   const { data: review } = await supabase
     .from('user_review')
     .select(`id`)
     .match({
-      user_id: user.id,
+      user_id: session.user.id,
       media_id: movieId,
       media_type: 'movie',
     })
