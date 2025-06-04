@@ -24,7 +24,7 @@ export const buildSitemap = (
 		xml += "<url>";
 		xml += `<loc>${url.url}</loc>`;
 		if (url.lastModified) {
-			xml += `<lastmod>${url.lastModified.toString()}</lastmod>`;
+			xml += `<lastmod>${new Date(url.lastModified).toISOString()}</lastmod>`;
 		}
 		if (url.changeFrequency) {
 			xml += `<changefreq>${url.changeFrequency}</changefreq>`;

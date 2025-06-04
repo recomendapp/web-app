@@ -11,7 +11,7 @@ export async function GET(
 	const { id } = await params;
 	const reviews = await getSitemapReviews(id)
 	const sitemapXML = buildSitemap(reviews.map((review) => ({
-	  url: `${siteConfig.url}/reviews/${review.id}`,
+	  url: `${siteConfig.url}/review/${review.id}`,
 	  lastModified: review.updated_at ? new Date(review.updated_at) : new Date(),
 	  changeFrequency: "daily",
 	  priority: 0.8,

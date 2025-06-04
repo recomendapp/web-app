@@ -11,7 +11,7 @@ export async function GET(
 	const { id } = await params;
 	const playlists = await getSitemapPlaylists(id)
 	const sitemapXML = buildSitemap(playlists.map((playlist) => ({
-	  url: `${siteConfig.url}/playlists/${playlist.id}`,
+	  url: `${siteConfig.url}/playlist/${playlist.id}`,
 	  lastModified: playlist.updated_at ? new Date(playlist.updated_at) : new Date(),
 	  changeFrequency: "daily",
 	  priority: 0.8,
