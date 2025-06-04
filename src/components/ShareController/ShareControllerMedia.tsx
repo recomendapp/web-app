@@ -19,36 +19,41 @@ export const ShareControllerMedia: React.FC<ShareControllerMediaProps> = ({ medi
 	const [showVoteAverage, setShowVoteAverage] = useState(true);
 
 	const fetchImage = useCallback(async () => {
-		if (!media || !media.title || !media.avatar_url) return;
-		setIsLoading(true);
-		const body = {
-			title: media.title,
-			poster: media.avatar_url,
-			credits: media.main_credit?.map(c => c.title).join(', '),
-			background: media.backdrop_url,
-			voteAverage: showVoteAverage ? (media.vote_average ?? media.tmdb_vote_average) : undefined,
-		};
-
-		const response = await fetch(`${socialCanvas.baseUrl}/media/card`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(body),
-		});
-
-		if (response.ok) {
-			const blob = await response.blob();
-			const contentType = response.headers.get('Content-Type') || 'image/png';
-			const extension = contentType.split('/')[1];
-
-			const file = new File([blob], `${media.title}.${extension}`, { type: contentType });
-			setImage(file);
-			if (onFileReady) onFileReady(file);
-		} else {
+		try {
+			setIsLoading(true);
+			if (!media || !media.title || !media.avatar_url) return;
+			const body = {
+				title: media.title,
+				poster: media.avatar_url,
+				credits: media.main_credit?.map(c => c.title).join(', '),
+				background: media.backdrop_url,
+				voteAverage: showVoteAverage ? (media.vote_average ?? media.tmdb_vote_average) : undefined,
+			};
+	
+			const response = await fetch(`${socialCanvas.baseUrl}/media/card`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(body),
+			});
+	
+			if (response.ok) {
+				const blob = await response.blob();
+				const contentType = response.headers.get('Content-Type') || 'image/png';
+				const extension = contentType.split('/')[1];
+	
+				const file = new File([blob], `${media.title}.${extension}`, { type: contentType });
+				setImage(file);
+				if (onFileReady) onFileReady(file);
+			} else {
+				throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+			}
+		} catch (error) {
 			setImage(null);
+		} finally {
+			setIsLoading(false);
 		}
-		setIsLoading(false);
 	}, [media, showVoteAverage, onFileReady]);
 
 	useEffect(() => {
@@ -67,14 +72,14 @@ export const ShareControllerMedia: React.FC<ShareControllerMediaProps> = ({ medi
 				{isLoading ? (
 					<Skeleton className="aspect-[2/3] h-full rounded-md" />
 				) : image ? (
-						<img
-							alt={media.title ?? 'Media Image'}
-							src={URL.createObjectURL(image)}
-							className="object-cover h-full rounded-md"
-						/>
-					) : (
-						<p className="text-muted-foreground">{upperFirst(common('errors.an_error_occurred'))}</p>
-					)}
+					<img
+						alt={media.title ?? 'Media Image'}
+						src={URL.createObjectURL(image)}
+						className="object-cover h-full rounded-md"
+					/>
+				) : (
+					<p className="text-muted-foreground">{upperFirst(common('errors.an_error_occurred'))}</p>
+				)}
 			</div>
 		</div>
 	)
