@@ -5,7 +5,7 @@ import { siteConfig } from "@/config/site";
 import { FacebookIcon, FacebookShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
 import { MediaType } from "@/types/type.db";
 import { ButtonCopy } from "@/components/utils/ButtonCopy";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useUI } from "@/context/ui-context";
 import { useEffect, useMemo, useState } from "react";
@@ -24,10 +24,11 @@ interface ModalShareProps<T> extends ModalType {
 
 export const ModalShare = <T,>({ title, type, path, shareController, ...props }: ModalShareProps<T>) => {
 	const { closeModal } = useModal();
+	const locale = useLocale();
 	const { device } = useUI();
 	const common = useTranslations('common');
 	const url = useMemo(() => (
-		`${location.origin}${path}`
+		`${location.origin}/${locale}${path}`
 	), [path]);
 	const sharedData: ShareData = useMemo(() => ({
 		title: title ?? '',
