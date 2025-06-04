@@ -1,8 +1,6 @@
 'use client';
-
 import { createContext, useState, useEffect, use } from 'react';
 import { Provider, Session } from '@supabase/supabase-js';
-
 import { User } from '@/types/type.db';
 import { useUserQuery } from '@/features/client/user/userQueries';
 import { useSupabaseClient } from '@/context/supabase-context';
@@ -34,7 +32,6 @@ export interface UserState {
   userRefresh: () => Promise<void>;
 }
 
-// create the context
 const AuthContext = createContext<UserState | undefined>(undefined);
 
 interface AuthProviderProps {
@@ -42,7 +39,6 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
-// create the provider component
 export const AuthProvider = ({ session: initialSession, children }: AuthProviderProps) => {
   const router = useRouter();
   const supabase = useSupabaseClient();
@@ -70,6 +66,16 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
   useEffect(() => {
     if (!userLoading) setLoading(false);
   }, [userLoading]);
+
+  // Handle locale sync <= Previously, this was done in the middleware but cause performance issues
+  // useEffect(() => {
+  //   if (user && user.language !== locale) {
+  //     redirect({
+  //       href: `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`,
+  //       locale: user.language,
+  //     })
+  //   }
+  // }, [user]);
 
   const login = async (email: string, password: string, redirect?: string | null) => {
     const { error } = await supabase.auth.signInWithPassword({
