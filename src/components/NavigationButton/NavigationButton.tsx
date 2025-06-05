@@ -14,7 +14,7 @@ export default function NavigationButton() {
         onClick={router.back}
         variant="ghost"
         size="icon"
-        className="rounded-full justify-center"
+        className="rounded-full justify-center shrink-0"
       >
         <ChevronLeft />
         <span className="sr-only">{upperFirst(common('messages.backward'))}</span>
@@ -23,7 +23,7 @@ export default function NavigationButton() {
         onClick={router.forward}
         variant="ghost"
         size="icon"
-        className="rounded-full justify-center"
+        className="rounded-full justify-center shrink-0"
       >
         <ChevronRight />
         <span className="sr-only">{upperFirst(common('messages.forward'))}</span>
