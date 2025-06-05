@@ -41,13 +41,13 @@ export default async function Search(
   const params = await props.params;
   const searchParams = await props.searchParams;
   if (searchParams?.q) {
-    const { results, total_results } = await getSearchMulti({
-      locale: params.lang,
-      filters: {
+    const { results, total_results } = await getSearchMulti(
+      params.lang,
+      {
         query: searchParams.q,
         page: 1,
       }
-    })
+    );
     if (
       (!results || total_results === 0 || results.length === 0)
     ) {

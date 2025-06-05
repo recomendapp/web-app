@@ -23,11 +23,7 @@ export async function generateMetadata(
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.serie.seasons.season' });
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
-  const season = await getTvSeason({
-    serieId: serieId,
-    seasonNumber: params.season_number,
-    locale: params.lang,
-  });
+  const season = await getTvSeason(params.lang, serieId, Number(params.season_number));
   if (!season) return { title: upperFirst(common('errors.season_not_found')) };
   return {
     title: t('metadata.title', { title: season.serie?.title!, number: season.season_number! }),
@@ -75,16 +71,12 @@ export default async function TvSeriesSeason(
   }
 ) {
   const params = await props.params;
-  const { id: seasonId } = getIdFromSlug(params.tv_series_id);
+  const { id: seriesId } = getIdFromSlug(params.tv_series_id);
   const seasonNumber = Number(params.season_number);
   if (isNaN(seasonNumber)) {
     return redirect(`/${params.lang}/tv_series/${params.tv_series_id}`);
   }
-  const season = await getTvSeason({
-    serieId: seasonId,
-    seasonNumber: seasonNumber,
-    locale: params.lang,
-  });
+  const season = await getTvSeason(params.lang, seriesId, seasonNumber);
   if (!season) return redirect(`/${params.lang}/tv_series/${params.tv_series_id}`);
   const jsonLd: WithContext<TVSeason> = {
     '@context': 'https://schema.org',

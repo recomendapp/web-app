@@ -20,10 +20,7 @@ export async function generateMetadata(
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.serie.playlists' });
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
-  const serie = await getTvSeries({
-    id: serieId,
-    locale: params.lang,
-  });
+  const serie = await getTvSeries(params.lang, serieId);
   if (!serie) return { title: upperFirst(common('errors.serie_not_found')) };
   return {
     title: t('metadata.title', { title: serie.title!, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() }),
@@ -69,10 +66,7 @@ export default async function Reviews(
 ) {
   const params = await props.params;
   const { id: seriesId } = getIdFromSlug(params.tv_series_id);
-  const tv_series = await getTvSeries({
-    id: seriesId,
-    locale: params.lang,
-  });
-  if (!tv_series) notFound();
-  return <ShowPlaylists mediaId={tv_series.media_id!} />;
+  const serie = await getTvSeries(params.lang, seriesId);
+  if (!serie) notFound();
+  return <ShowPlaylists mediaId={serie.media_id!} />;
 }

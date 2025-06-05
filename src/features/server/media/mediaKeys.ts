@@ -2,85 +2,24 @@ import { MediaType } from "@/types/type.db";
 import { createTag } from "../create-tag";
 
 export const mediaKeys = {
-	all: ({
-		locale
-	} : {
-		locale?: string;
-	}) => locale ? [locale, 'media'] : ['media'],
+	all: () => ['media'],
 
-	specify: ({
-		locale,
-		type,
-	} : {
-		locale: string;
-		type: MediaType;
-	}) => [locale, type],
+	specify: (type: MediaType) => [...mediaKeys.all(), type],
 
-	detail: ({
-		locale,
-		id,
-		type,
-	} : {
-		locale: string;
-		id: number;
-		type?: MediaType;
-	}) => type
-		? [...mediaKeys.specify({ locale, type }), String(id)]
-		: [...mediaKeys.all({ locale }), String(id)],
+	detail: () => [...mediaKeys.all(), 'detail'],
 
 	/* -------------------------------------------------------------------------- */
 	/*                                    MOVIE                                   */
 	/* -------------------------------------------------------------------------- */
 
-	movieReviews: ({
-		locale,
-		id,
-		filters
-	} : {
-		locale: string;
-		id: number;
-		filters?: any
-	}) => filters ? [...mediaKeys.detail({ locale, id, type: 'movie' }), 'reviews', JSON.stringify(filters)] : [...mediaKeys.detail({ locale, id, type: 'movie' }), 'reviews'],
 	/* -------------------------------------------------------------------------- */
-
-	/* -------------------------------------------------------------------------- */
-	/*                                  TV SERIES                                 */
-	/* -------------------------------------------------------------------------- */
-	tvSeason: ({
-		locale,
-		serieId,
-		seasonNumber,
-	} : {
-		locale: string;
-		serieId: number;
-		seasonNumber: number;
-	}) => [
-		...mediaKeys.detail({ locale, id: serieId, type: 'tv_series' }),
-		'seasons',
-		String(seasonNumber),
-	],
 
 	/* -------------------------------------------------------------------------- */
 
 	/* -------------------------------------------------------------------------- */
 	/*                                   PERSON                                   */
 	/* -------------------------------------------------------------------------- */
-	personCombinedCredits: ({
-		locale,
-		id,
-	} : {
-		locale: string;
-		id: number;
-	}) => [...mediaKeys.detail({ locale, id, type: 'person' }), 'combined-credits'],
-	personFilms: ({
-		locale,
-		id,
-		filters
-	} : {
-		locale: string;
-		id: number;
-		filters: any
-	}) => [...mediaKeys.detail({ locale, id, type: 'person' }), 'films', JSON.stringify(filters)],
+	personFilms: () => [...mediaKeys.specify('person'), 'films'],
 
 	/* -------------------------------------------------------------------------- */
 }

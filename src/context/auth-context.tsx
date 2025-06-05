@@ -50,32 +50,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
   } = useUserQuery({
     userId: session?.user?.id,
     enabled: session !== undefined,
-  })
-
-  useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, updatedSession) => {
-      setSession(updatedSession);
-      if (!updatedSession) router.refresh();
-    });
-
-    return () => {
-      listener?.subscription.unsubscribe();
-    };
-  }, [supabase, router]);
-
-  useEffect(() => {
-    if (!userLoading) setLoading(false);
-  }, [userLoading]);
-
-  // Handle locale sync <= Previously, this was done in the middleware but cause performance issues
-  // useEffect(() => {
-  //   if (user && user.language !== locale) {
-  //     redirect({
-  //       href: `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`,
-  //       locale: user.language,
-  //     })
-  //   }
-  // }, [user]);
+  });
 
   const login = async (email: string, password: string, redirect?: string | null) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -149,6 +124,31 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
     if (error) throw error;
     setSession(session);
   };
+
+  useEffect(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, updatedSession) => {
+      setSession(updatedSession);
+      if (!updatedSession) router.refresh();
+    });
+
+    return () => {
+      listener?.subscription.unsubscribe();
+    };
+  }, [supabase, router]);
+
+  useEffect(() => {
+    if (!userLoading) setLoading(false);
+  }, [userLoading]);
+
+  // Handle locale sync <= Previously, this was done in the middleware but cause performance issues
+  // useEffect(() => {
+  //   if (user && user.language !== locale) {
+  //     redirect({
+  //       href: `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`,
+  //       locale: user.language,
+  //     })
+  //   }
+  // }, [user]);
 
   return (
     <AuthContext.Provider

@@ -22,10 +22,7 @@ export async function generateMetadata(
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.film' });
   const { id: movieId} = getIdFromSlug(params.film_id);
-  const movie = await getMovie({
-    id: movieId,
-    locale: params.lang,
-  });
+  const movie = await getMovie(params.lang, movieId);
   if (!movie) return { title: upperFirst(common('errors.film_not_found')) };
   return {
     title: t('metadata.title', { title: movie.title!, year: new Date(String(movie.extra_data.release_date)).getFullYear() }),
@@ -87,10 +84,7 @@ export default async function MoviePage(
 ) {
   const params = await props.params;
   const { id: movieId } = getIdFromSlug(params.film_id);
-  const movie = await getMovie({
-    id: movieId,
-    locale: params.lang,
-  });
+  const movie = await getMovie(params.lang, movieId);
   if (!movie) notFound();
   const jsonLd: WithContext<Movie> = {
     '@context': 'https://schema.org',

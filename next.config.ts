@@ -11,7 +11,7 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 const withNextIntl = createNextIntlPlugin('./src/lib/i18n/request.ts');
 
 const nextConfig: NextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   output: 'standalone',
   images: {
     // unoptimized: true, // Issue: https://github.com/vercel/next.js/issues/54482

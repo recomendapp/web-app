@@ -20,13 +20,8 @@ export async function generateMetadata(
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.create.metadata' });
   const { id: movieId } = getIdFromSlug(params.film_id);
-  const movie = await getMovie({
-		id: movieId,
-		locale: params.lang,
-	});
-
+  const movie = await getMovie(params.lang, movieId);
   if (!movie) return { title: upperFirst(common('errors.film_not_found')) };
-
   return {
     title: t('title', { title: movie.title! }),
     description: t('description', { title: movie.title! }),
@@ -44,13 +39,10 @@ export default async function CreateReview(
   const params = await props.params;
   const { id: movieId } = getIdFromSlug(params.film_id);
   const supabase = await createServerClient();
-
   const {
     data: { session },
   } = await supabase.auth.getSession();
-
   if (!session) redirect(`/auth/login?redirect=${encodeURIComponent(`/film/${movieId}/review/create`)}`);
-
   const { data: review } = await supabase
     .from('user_review')
     .select(`id`)
@@ -60,16 +52,9 @@ export default async function CreateReview(
       media_type: 'movie',
     })
     .single();
-
   if (review) redirect(`/film/${movieId}/review/${review.id}`);
-
-  const movie = await getMovie({
-    id: movieId,
-    locale: params.lang,
-  });
-
+  const movie = await getMovie(params.lang, movieId);
   if (!movie) notFound();
-
   return (
     <CreateReviewForm media={movie as Media} />
   );

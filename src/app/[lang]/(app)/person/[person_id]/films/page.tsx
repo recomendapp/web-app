@@ -66,10 +66,7 @@ export async function generateMetadata(
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.person.films' });
   const { id } = getIdFromSlug(params.person_id);
-  const person = await getPerson({
-	id: id,
-	locale: params.lang,
-  });
+  const person = await getPerson(params.lang, id);
   if (!person) return { title: upperFirst(common('errors.person_not_found')) };
   return {
 	title: t('metadata.title', { name: person.title! }),
@@ -123,15 +120,12 @@ export default async function FilmsPage(
 	const job = getValidateJob(searchParams.job);
 	const common = await getTranslations({ locale: params.lang, namespace: 'common' });
 	const { id } = getIdFromSlug(params.person_id);
-	const person = await getPerson({
-		id: id,
-		locale: params.lang,
-  	});
+	const person = await getPerson(params.lang, id);
 	if (!person) return notFound();
-	const { data: movies, error, count } = await getPersonFilms({
-		id: id,
-		locale: params.lang,
-		filters: {
+	const { data: movies, error, count } = await getPersonFilms(
+		params.lang,
+		id,
+		{
 			sortBy: sortBy,
 			sortOrder: sortOrder,
 			page: page,
@@ -139,7 +133,7 @@ export default async function FilmsPage(
 			department: department,
 			job: job,
 		}
-	});
+	);
 
 	if (error) {
 		return (

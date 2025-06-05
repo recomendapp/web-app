@@ -16,10 +16,7 @@ export default async function PersonLayout(
 ) {
   const params = await props.params;
   const { id } = getIdFromSlug(params.person_id);
-  const person = await getPerson({
-    id: id,
-    locale: params.lang,
-  });
+  const person = await getPerson(params.lang, id);
   if (!person) notFound();
   return (
     <>

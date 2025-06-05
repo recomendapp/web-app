@@ -20,10 +20,7 @@ export async function generateMetadata(
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.person' });
   const { id } = getIdFromSlug(params.person_id);
-  const person = await getPerson({
-    id: id,
-    locale: params.lang,
-  });
+  const person = await getPerson(params.lang, id);
   if (!person) return { title: upperFirst(common('errors.person_not_found')) };
   return {
     title: t('metadata.title', { name: person.title!, department: person.extra_data.known_for_department }),
@@ -59,10 +56,7 @@ export default async function Person(
 ) {
   const params = await props.params;
   const { id } = getIdFromSlug(params.person_id);
-  const person = await getPerson({
-    id: id,
-    locale: params.lang,
-  });
+  const person = await getPerson(params.lang, id);
   if (!person) notFound();
   return (
     <>

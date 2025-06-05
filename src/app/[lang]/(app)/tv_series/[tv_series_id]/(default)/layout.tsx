@@ -20,10 +20,7 @@ export default async function TvSeriesLayout(
   } = props;
 
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
-  const serie = await getTvSeries({
-    id: serieId,
-    locale: params.lang,
-  });
+  const serie = await getTvSeries(params.lang, serieId);
   if (!serie) notFound();
   const followersAvgRating = await getMediaFollowersAverageRating({
     media_id: serie.media_id!,

@@ -1,10 +1,10 @@
 import { mediaKeys } from "@/features/server/media/mediaKeys";
 import { createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@/lib/supabase/server-no-cookie";
+import { cache } from "@/lib/utils/cache";
 import { Media, MediaMovie, MediaTvSeries, MediaTvSeriesSeason } from "@/types/type.db";
-import { unstable_cache as cache } from "next/cache";
 
-export const MEDIA_REVALIDATE_TIME = 24 * 60 * 60 * 1000;
+export const MEDIA_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 
 export const getMediaFollowersAverageRating = async ({
 	media_id,
@@ -26,209 +26,136 @@ export const getMediaFollowersAverageRating = async ({
 /* -------------------------------------------------------------------------- */
 /*                                    MEDIA                                   */
 /* -------------------------------------------------------------------------- */
-export const getMedia = async ({
-	locale,
-	id,
-} : {
-	locale: string;
-	id: number;
-}) => {
-	return await cache(
-		async () => {
-			const supabase = await createClient(locale);
-			return await supabase
-				.from('media')
-				.select('*')
-				.match({
-					media_id: id,
-				})
-				.returns<Media[]>()
-				.maybeSingle();
-		},
-		mediaKeys.detail({ locale: locale, id: id }),
-		{ revalidate: MEDIA_REVALIDATE_TIME }
-	)();
-};
+export const getMedia = cache(
+	async (locale: string, id: number) => {
+		const supabase = await createClient(locale);
+		return await supabase
+			.from('media')
+			.select('*')
+			.match({
+				media_id: id,
+			})
+			.returns<Media[]>()
+			.maybeSingle();
+	},
+	{ revalidate: MEDIA_REVALIDATE_TIME },
+	mediaKeys.detail()
+);
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
 /*                                    MOVIE                                   */
 /* -------------------------------------------------------------------------- */
-export const getMovie = async ({
-	locale,
-	id,
-} : {
-	locale: string;
-	id: number;
-}) => {
-	return await cache(
-		async () => {
-			const supabase = await createClient(locale);
-			const { data: film, error } = await supabase
-				.from('media_movie')
-				.select(`
-					*,
-					cast:tmdb_movie_credits(
-						id,
-						person:media_person(*),
-						role:tmdb_movie_roles(*)
-					),
-					videos:tmdb_movie_videos(*)
-				`)
-				.match({
-					'id': id,
-					'cast.job': 'Actor',
-					'videos.iso_639_1': locale.split('-')[0],
-					'videos.type': 'Trailer',
-				})
-				.order('published_at', { referencedTable: 'videos', ascending: true, nullsFirst: false })
-				.returns<MediaMovie[]>()
-				.maybeSingle();
-			if (error) throw error;
-			return film;
-		},
-		mediaKeys.detail({ locale: locale, id: id, type: 'movie' }),
-		{
-			revalidate: MEDIA_REVALIDATE_TIME,
-			tags: ['tmdb']
-		}
-	)();
-};
-
-export const getMovieReviews = async ({
-	locale,
-	id,
-	filters,
-} : {
-	locale: string;
-	id: number;
-	filters: {
-		page: number;
-		perPage: number;
-		sortBy: 'updated_at' | 'rating' | 'likes_count';
-		sortOrder: 'asc' | 'desc';
-	};
-}) => {
-	const supabase = await createClient(locale);
-	let from = (filters.page - 1) * filters.perPage;
-	let to = from + filters.perPage - 1;
-	let request = supabase
-		.from('user_review')
-		.select(`
-			*,
-			user(*)
-		`, {
-			count: 'exact',
-		})
-		.match({
-			media_id: id,
-			media_type: 'movie',
-		})
-		.range(from, to)
-	
-	if (filters) {
-		if (filters.sortBy && filters.sortOrder) {
-			request = request.order(filters.sortBy, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
-		}
-	}
-	return await request;
-};
+export const getMovie = cache(
+	async (locale: string, id: number) => {
+		const supabase = await createClient(locale);
+		const { data: film, error } = await supabase
+			.from('media_movie')
+			.select(`
+				*,
+				cast:tmdb_movie_credits(
+					id,
+					person:media_person(*),
+					role:tmdb_movie_roles(*)
+				),
+				videos:tmdb_movie_videos(*)
+			`)
+			.match({
+				'id': id,
+				'cast.job': 'Actor',
+				'videos.iso_639_1': locale.split('-')[0],
+				'videos.type': 'Trailer',
+			})
+			.order('published_at', { referencedTable: 'videos', ascending: true, nullsFirst: false })
+			.returns<MediaMovie[]>()
+			.maybeSingle();
+		if (error) throw error;
+		return film;
+	},
+	{
+		revalidate: MEDIA_REVALIDATE_TIME,
+		tags: ['tmdb']
+	},
+	mediaKeys.specify('movie'),
+);
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
 /*                                  TV_SERIES                                 */
 /* -------------------------------------------------------------------------- */
-export const getTvSeries = async ({
-	locale,
-	id,
-} : {
-	locale: string;
-	id: number;
-}) => {
-	return await cache(
-		async () => {
-			const supabase = await createClient(locale);
-			const { data: rawTvSeries, error } = await supabase
-				.from('media_tv_series')
-				.select(`
+export const getTvSeries = cache(
+	async (locale: string, id: number) => {
+		const supabase = await createClient(locale);
+		const { data: rawTvSeries, error } = await supabase
+			.from('media_tv_series')
+			.select(`
+				*,
+				cast:tmdb_tv_series_credits(
 					*,
-					cast:tmdb_tv_series_credits(
-						*,
-						person:media_person(*)
-					),
-					videos:tmdb_tv_series_videos(*),
-					seasons:media_tv_series_seasons(*)
-				`)
-				.match({
-					'id': id,
-					'cast.job': 'Actor',
-					'videos.iso_639_1': locale.split('-')[0],
-					'videos.type': 'Trailer',
-				})
-				// .filter('seasons.season_number', 'neq', 0)
-				.order('published_at', { referencedTable: 'videos', ascending: true, nullsFirst: false })
-				.maybeSingle()
-				.overrideTypes<MediaTvSeries, { merge: false }>();
-			if (error) throw error;
-			if (!rawTvSeries) return rawTvSeries;
-			const specials = rawTvSeries?.seasons?.filter(season => season.season_number === 0) || [];
-			const regularSeasons = rawTvSeries?.seasons?.filter(season => season.season_number !== 0) || [];
-			const tvSeries: MediaTvSeries = {
-				...rawTvSeries!,
-				seasons: regularSeasons,
-				specials: specials,
-			};
-			return tvSeries;
-		},
-		mediaKeys.detail({ locale: locale, id: id, type: 'tv_series' }),
-		{
-			revalidate: MEDIA_REVALIDATE_TIME,
-			tags: ['tmdb']
-		}
-	)();
-};
+					person:media_person(*)
+				),
+				videos:tmdb_tv_series_videos(*),
+				seasons:media_tv_series_seasons(*)
+			`)
+			.match({
+				'id': id,
+				'cast.job': 'Actor',
+				'videos.iso_639_1': locale.split('-')[0],
+				'videos.type': 'Trailer',
+			})
+			// .filter('seasons.season_number', 'neq', 0)
+			.order('published_at', { referencedTable: 'videos', ascending: true, nullsFirst: false })
+			.maybeSingle()
+			.overrideTypes<MediaTvSeries, { merge: false }>();
+		if (error) throw error;
+		if (!rawTvSeries) return rawTvSeries;
+		const specials = rawTvSeries?.seasons?.filter(season => season.season_number === 0) || [];
+		const regularSeasons = rawTvSeries?.seasons?.filter(season => season.season_number !== 0) || [];
+		const tvSeries: MediaTvSeries = {
+			...rawTvSeries!,
+			seasons: regularSeasons,
+			specials: specials,
+		};
+		return tvSeries;
+	},
+	{
+		revalidate: MEDIA_REVALIDATE_TIME,
+		tags: ['tmdb']
+	},
+	mediaKeys.specify('tv_series'),
+);
 
-export const getTvSeason = async ({
-	locale,
-	serieId,
-	seasonNumber,
-} : {
-	locale: string;
-	serieId: number;
-	seasonNumber: number;
-}) => {
-	return await cache(
-		async () => {
-			const supabase = await createClient(locale);
-			const { data, error } = await supabase
-				.from('media_tv_series_seasons')
-				.select(`
-					*,
-					episodes:media_tv_series_episodes(
-						*
-					),
-					serie:media_tv_series(
-						id,
-						title
-					)
-				`)
-				.match({
-					serie_id: serieId,
-					season_number: seasonNumber,
-				})
-				.order('episode_number', { referencedTable: 'episodes', ascending: true, nullsFirst: false })
-				.maybeSingle()
-				.overrideTypes<MediaTvSeriesSeason, { merge: false }>();
-			if (error) throw error;
-			return data;
-		},
-		mediaKeys.tvSeason({ locale: locale, serieId: serieId, seasonNumber: seasonNumber }),
-		{
-			revalidate: MEDIA_REVALIDATE_TIME,
-			tags: ['tmdb']
-		}
-	)();
-};
+export const getTvSeason = cache(
+	async (locale: string, serieId: number, seasonNumber: number) => {
+		const supabase = await createClient(locale);
+		const { data, error } = await supabase
+			.from('media_tv_series_seasons')
+			.select(`
+				*,
+				episodes:media_tv_series_episodes(
+					*
+				),
+				serie:media_tv_series(
+					id,
+					title
+				)
+			`)
+			.match({
+				serie_id: serieId,
+				season_number: seasonNumber,
+			})
+			.order('episode_number', { referencedTable: 'episodes', ascending: true, nullsFirst: false })
+			.maybeSingle()
+			.overrideTypes<MediaTvSeriesSeason, { merge: false }>();
+		if (error) throw error;
+		return data;
+	},
+	{
+		revalidate: MEDIA_REVALIDATE_TIME,
+		tags: ['tmdb']
+	},
+	mediaKeys.specify('tv_season')
+);
 
 /* -------------------------------------------------------------------------- */
 
@@ -236,15 +163,8 @@ export const getTvSeason = async ({
 /*                                   PERSON                                   */
 /* -------------------------------------------------------------------------- */
 
-export const getPerson = async ({
-	id,
-	locale,
-} : {
-	id: number;
-	locale: string;
-}) => {
-	return await cache(
-	  async () => {
+export const getPerson = cache(
+	async (locale: string, id: number) => {
 		const supabase = await createClient(locale);
 		const { data: person, error } = await supabase
 			.from('media_person')
@@ -263,14 +183,13 @@ export const getPerson = async ({
 			.maybeSingle();
 		if (error) throw error;
 		return person;
-	  },
-	  mediaKeys.detail({ locale: locale, id: id, type: 'person' }),
-	  {
+	},
+	{
 		revalidate: MEDIA_REVALIDATE_TIME,
 		tags: ['tmdb']
-	}
-	)();
-};
+	},
+	mediaKeys.specify('person'),
+);
 
 // export const getPersonCombinedCredits = async ({
 // 	id,
@@ -279,7 +198,7 @@ export const getPerson = async ({
 // 	id: number;
 // 	locale: string;
 // }) => {
-// 	return await cache(
+// 	return await unstable_cache(
 // 		async () => {
 // 			const supabase = await createClient(locale);
 // 			const { data: credits, error } = await supabase
@@ -302,84 +221,74 @@ export const getPerson = async ({
 // 	)();
 // }
 
-export const getPersonFilms = async ({
-	id,
-	locale,
-	filters,
-} : {
-	id: number;
-	locale: string;
-	filters: {
-		page: number;
-		perPage: number;
-		sortBy: 'release_date' | 'vote_average';
-		sortOrder: 'asc' | 'desc';
-		department?: string;
-		job?: string;
-	};
-}) => {
-	return await cache(
-		async () => {
-			const supabase = await createClient(locale);
-			let from = (filters.page - 1) * filters.perPage;
-			let to = from + filters.perPage - 1;
-			let request;
-			if (filters.department || filters.job) {
-				request = supabase
-					.from('tmdb_movie_credits')
-					.select(`
-						*,
-						media:media_movie(*)
-					`, {
-						count: 'exact',
-					})
-					.match({ 'person_id': id })
-					.range(from, to);
-			} else {
-				request = supabase
-					.from('media_movie_aggregate_credits')
-					.select(`
-						*,
-						media:media_movie(*)
-					`, {
-						count: 'exact',
-					})
-					.match({ 'person_id': id })
-					.range(from, to);
-			}
-			if (filters) {
-				if (filters.sortBy && filters.sortOrder) {
-					switch (filters.sortBy) {
-						case 'release_date':
-							request = request.order(`media(date)`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
-							break;
-						case 'vote_average':
-							request = request.order(`media(vote_average)`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
-							request = request.order(`media(tmdb_vote_average)`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
-							break;
-						default:
-							break;
-					}
-				}
-				if (filters.department) {
-					request = request.eq('department', filters.department);
-				}
-				if (filters.job) {
-					request = request.eq('job', filters.job);
+export const getPersonFilms = cache(
+	async (
+		locale: string,
+		id: number,
+		filters: {
+			page: number;
+			perPage: number;
+			sortBy: 'release_date' | 'vote_average';
+			sortOrder: 'asc' | 'desc';
+			department?: string;
+			job?: string;
+		}
+	) => {
+		const supabase = await createClient(locale);
+		let from = (filters.page - 1) * filters.perPage;
+		let to = from + filters.perPage - 1;
+		let request;
+		if (filters.department || filters.job) {
+			request = supabase
+				.from('tmdb_movie_credits')
+				.select(`
+					*,
+					media:media_movie(*)
+				`, {
+					count: 'exact',
+				})
+				.match({ 'person_id': id })
+				.range(from, to);
+		} else {
+			request = supabase
+				.from('media_movie_aggregate_credits')
+				.select(`
+					*,
+					media:media_movie(*)
+				`, {
+					count: 'exact',
+				})
+				.match({ 'person_id': id })
+				.range(from, to);
+		}
+		if (filters) {
+			if (filters.sortBy && filters.sortOrder) {
+				switch (filters.sortBy) {
+					case 'release_date':
+						request = request.order(`media(date)`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
+						break;
+					case 'vote_average':
+						request = request.order(`media(vote_average)`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
+						request = request.order(`media(tmdb_vote_average)`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
+						break;
+					default:
+						break;
 				}
 			}
-			return await request.overrideTypes<Array<{
-				media: Media;
-			}>, { merge: true }>()
-		},
-		mediaKeys.personFilms({
-			locale: locale,
-			id: id,
-			filters: filters,
-		}),
-		{ revalidate: MEDIA_REVALIDATE_TIME }
-	)();
-};
+			if (filters.department) {
+				request = request.eq('department', filters.department);
+			}
+			if (filters.job) {
+				request = request.eq('job', filters.job);
+			}
+		}
+		return await request.overrideTypes<Array<{
+			media: Media;
+		}>, { merge: true }>()
+	},
+	{ revalidate: MEDIA_REVALIDATE_TIME },
+	mediaKeys.personFilms(),
+);
 
 /* -------------------------------------------------------------------------- */
   

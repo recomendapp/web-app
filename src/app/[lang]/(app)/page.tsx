@@ -18,7 +18,7 @@ import { WidgetUserRecos } from "@/components/widgets/WidgetUserRecos";
 import { WidgetUserWatchlist } from "@/components/widgets/WidgetUserWatchlist";
 
 export default function Home() {
-  const { session, user } = useAuth();
+	const { session, user } = useAuth();
 	const { device } = useUI();
 	const common = useTranslations('common');
 	return (

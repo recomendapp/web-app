@@ -2,60 +2,14 @@ import { MediaType } from "@/types/type.db";
 import { createTag } from "../create-tag";
 
 export const searchKeys = {
-	all: ({
-		locale
-	} : {
-		locale: string;
-	}) => [locale, 'search'],
+	all: () => ['search'],
 
-	multi: ({
-		locale,
-		query,
-		filters,
-	} : {
-		locale: string;
-		query: string;
-		filters: any;
-	}) => [locale, 'search', 'multi', query, JSON.stringify(filters)],
+	multi: () => [...searchKeys.all(), 'multi'],
 
 
-	movies: ({
-		locale,
-		query,
-		filters,
-	} : {
-		locale: string;
-		query: string;
-		filters: any;
-	}) => [locale, 'search', 'movies', query, JSON.stringify(filters)],
+	movies: () => [...searchKeys.all(), 'movies'],
 
-	tvSeries: ({
-		locale,
-		query,
-		filters,
-	} : {
-		locale: string;
-		query: string;
-		filters: any;
-	}) => [locale, 'search', 'tv_series', query, JSON.stringify(filters)],
+	tvSeries: () => [...searchKeys.all(), 'tvSeries'],
 
-	persons: ({
-		locale,
-		query,
-		filters,
-	} : {
-		locale: string;
-		query: string;
-		filters: any;
-	}) => [locale, 'search', 'persons', query, JSON.stringify(filters)],
-
-	playlists: ({
-		locale,
-		query,
-		filters,
-	} : {
-		locale: string;
-		query: string;
-		filters: any;
-	}) => [locale, 'search', 'playlists', query, JSON.stringify(filters)],
+	persons: () => [...searchKeys.all(), 'persons'],
 }

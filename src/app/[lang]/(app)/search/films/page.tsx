@@ -57,13 +57,13 @@ export default async function SearchFilms(
   if (!searchParams?.q) redirect({ href: '/search', locale: params.lang });
   const page = getValidatePage(Number(searchParams.page));
 
-  const { results, total_results } = await getSearchMovies({
-    locale: params.lang,
-    filters: {
+  const { results, total_results } = await getSearchMovies(
+    params.lang,
+    {
       query: searchParams.q,
       page: page,
     }
-  })
+  );
 
   if (!results || total_results === 0 || results.length === 0) {
     return (

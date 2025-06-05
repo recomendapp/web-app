@@ -38,21 +38,20 @@ export default async function FeaturedPlaylists(
     };
 	}
 ) {
-  const { params, searchParams } = props;
+  const { searchParams } = props;
   const sortBy = getValidatedSortBy(searchParams?.sort_by);
   const sortOrder = getValidatedSortOrder(searchParams?.sort_order);
   const page = getValidatePage(Number(searchParams?.page));
   const perPage = getValidatePerPage(Number(searchParams?.per_page));
 
-  const { data: playlists } = await getPlaylistsFeatured({
-    locale: params.lang,
-    filters: {
+  const { data: playlists } = await getPlaylistsFeatured(
+    {
       page,
       perPage,
       sortBy,
       sortOrder,
     }
-  });
+  );
 
   return (
     <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">

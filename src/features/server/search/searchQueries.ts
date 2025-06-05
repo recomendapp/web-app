@@ -1,112 +1,80 @@
-import { unstable_cache as cache } from "next/cache";
 import { createServerClient } from "@/lib/supabase/server";
 import { searchKeys } from "./searchKeys";
-import { MEDIA_REVALIDATE_TIME } from "../media/mediaQueries";
 import { getTmdbSearchMovies, getTmdbSearchMulti, getTmdbSearchPersons, getTmdbSearchTvSeries } from "@/lib/tmdb/tmdbQueries";
+import { MEDIA_REVALIDATE_TIME } from "../media/mediaQueries";
+import { cache } from "@/lib/utils/cache";
 
-export const getSearchMulti = async (
-	props: {
-		locale: string;
+export const getSearchMulti = cache(
+	async (
+		locale: string,
 		filters: {
 			query: string;
 			page: number;
 		}
-	}
-) => {
-	return await cache(
-		async () => {
-			return await getTmdbSearchMulti({
-				query: props.filters.query,
-				language: props.locale,
-				page: props.filters.page
-			});
-		},
-		searchKeys.multi({
-			locale: props.locale,
-			query: props.filters.query,
-			filters: props.filters
-		}),
-		{ revalidate: MEDIA_REVALIDATE_TIME }
-	)();
-};
+	) => {
+		return await getTmdbSearchMulti({
+			query: filters.query,
+			language: locale,
+			page: filters.page
+		});
+	},
+	{ revalidate: MEDIA_REVALIDATE_TIME },
+	searchKeys.multi(),
+);
 
-export const getSearchMovies = async (
-	props: {
-		locale: string;
+export const getSearchMovies = cache(
+	async (
+		locale: string,
 		filters: {
 			query: string;
 			page: number;
 		}
-	}
-) => {
-	return await cache(
-		async () => {
-			return await getTmdbSearchMovies({
-				query: props.filters.query,
-				language: props.locale,
-				page: props.filters.page
-			});
-		},
-		searchKeys.movies({
-			locale: props.locale,
-			query: props.filters.query,
-			filters: props.filters
-		}),
-		{ revalidate: MEDIA_REVALIDATE_TIME }
-	)();
-};
+	) => {
+		return await getTmdbSearchMovies({
+			query: filters.query,
+			language: locale,
+			page: filters.page
+		});
+	},
+	{ revalidate: MEDIA_REVALIDATE_TIME },
+	searchKeys.movies(),
+);
 
-export const getSearchTvSeries = async (
-	props: {
-		locale: string;
+export const getSearchTvSeries = cache(
+	async (
+		locale: string,
 		filters: {
 			query: string;
 			page: number;
 		}
-	}
-) => {
-	return await cache(
-		async () => {
-			return await getTmdbSearchTvSeries({
-				query: props.filters.query,
-				language: props.locale,
-				page: props.filters.page
-			});
-		},
-		searchKeys.tvSeries({
-			locale: props.locale,
-			query: props.filters.query,
-			filters: props.filters
-		}),
-		{ revalidate: MEDIA_REVALIDATE_TIME }
-	)();
-};
+	) => {
+		return await getTmdbSearchTvSeries({
+			query: filters.query,
+			language: locale,
+			page: filters.page
+		});
+	},
+	{ revalidate: MEDIA_REVALIDATE_TIME },
+	searchKeys.tvSeries(),
+);
 
-export const getSearchPersons = async (
-	props: {
-		locale: string;
+export const getSearchPersons = cache(
+	async (
+		locale: string,
 		filters: {
 			query: string;
 			page: number;
 		}
-	}
-) => {
-	return await cache(
-		async () => {
-			return await getTmdbSearchPersons({
-				query: props.filters.query,
-				language: props.locale,
-				page: props.filters.page
-			});
-		},
-		searchKeys.persons({
-			locale: props.locale,
-			query: props.filters.query,
-			filters: props.filters
-		}),
-		{ revalidate: MEDIA_REVALIDATE_TIME }
-	)();
-};
+	) => {
+		return await getTmdbSearchPersons({
+			query: filters.query,
+			language: locale,
+			page: filters.page
+		});
+	},
+	{ revalidate: MEDIA_REVALIDATE_TIME },
+	searchKeys.persons(),
+);
 
 export const getSearchPlaylists = async (
 	props: {

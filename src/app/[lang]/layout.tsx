@@ -80,22 +80,14 @@ export const metadata: Metadata = {
   }
 };
 
-interface RootLayoutProps {
+export default async function LangLayout({
+  children,
+  params
+} : {
   children: React.ReactNode;
   params: Promise<{ lang: string }>;
-}
-
-export default async function LangLayout(props: RootLayoutProps) {
-  const params = await props.params;
-
-  const {
-    lang
-  } = params;
-
-  const {
-    children
-  } = props;
-
+}) {
+  const { lang } = await params;
   const direction = getLangDir(lang);
   return (
     <html lang={lang} dir={direction} suppressHydrationWarning>
