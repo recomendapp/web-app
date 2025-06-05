@@ -1,13 +1,13 @@
 "use client";
 import { ShareControllerProps } from "./ShareController";
 import { Media } from "@/types/type.db";
-import socialCanvas from "@/lib/social-canvas";
 import { useCallback, useEffect, useState } from "react";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { Skeleton } from "../ui/skeleton";
+import { getSocialCanvas } from "@/lib/social-canvas";
 
 interface ShareControllerMediaProps extends ShareControllerProps {
 	media: Media;
@@ -31,25 +31,17 @@ export const ShareControllerMedia: React.FC<ShareControllerMediaProps> = ({ medi
 				voteAverage: showVoteAverage ? (media.vote_average ?? media.tmdb_vote_average) : undefined,
 			};
 	
-			const response = await fetch(`${socialCanvas.baseUrl}/media/card`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
+			const { buffer, contentType } = await getSocialCanvas({
+				endpoint: '/media/card',
 				body: JSON.stringify(body),
 			});
-	
-			if (response.ok) {
-				const blob = await response.blob();
-				const contentType = response.headers.get('Content-Type') || 'image/png';
-				const extension = contentType.split('/')[1];
-	
-				const file = new File([blob], `${media.title}.${extension}`, { type: contentType });
-				setImage(file);
-				if (onFileReady) onFileReady(file);
-			} else {
-				throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+			if (!buffer || !contentType) {
+				throw new Error('Invalid response from Social Canvas');
 			}
+			const extension = contentType.split('/')[1];
+			const file = new File([buffer], `${media.title}.${extension}`, { type: contentType });
+			setImage(file);
+			onFileReady?.(file);
 		} catch (error) {
 			setImage(null);
 		} finally {

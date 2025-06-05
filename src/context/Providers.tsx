@@ -12,6 +12,7 @@ import { cookies } from 'next/headers';
 import { getMessages } from 'next-intl/server';
 import { getFallbackLanguage } from '@/lib/i18n/fallback';
 import { createServerClient } from '@/lib/supabase/server';
+import { getNovuSubscriberHash } from '@/lib/novu/novu';
 
 export default async function Provider({
   children,
@@ -32,12 +33,14 @@ export default async function Provider({
   const sidebarOpen = (await cookies()).get("ui-sidebar:open");
   const rightPanelOpen = cookiesStore.get("ui-right-panel:open");
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
+  // Notifications
+  const subscriberHash = session ? await getNovuSubscriberHash(session.user.id) : null;
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <SupabaseProvider locale={locale}>
         <ReactQueryProvider>
           <AuthProvider session={session}>
-            <NotificationsProvider>
+            <NotificationsProvider subscriberHash={subscriberHash}>
               <MapContext>
                 <ThemeProvider
                   // NextThemesProvider

@@ -3,7 +3,6 @@
 import { useAuth } from '@/context/auth-context';
 import useNotificationPermission, { NotificationPermissionProps } from '@/hooks/use-notification-permission';
 import { NovuProvider } from '@novu/react';
-import { createHmac } from 'crypto';
 import { createContext, use } from 'react';
 
 interface NotificationsContextProps {
@@ -14,24 +13,19 @@ const NotificationsContext = createContext<NotificationsContextProps | undefined
 
 export const NotificationsProvider = ({
 	children,
+	subscriberHash,
 } : {
 	children: React.ReactNode;
+	subscriberHash?: string | null;
 }) => {
 	const { session } = useAuth();
 	const notificationPermission = useNotificationPermission();
-
-	const hmac = (subscriberId: string, secret: string) => {
-		return createHmac('sha256', secret)
-			.update(subscriberId)
-			.digest('hex');
-	}
-
-	if (!session) return <>{children}</>;
+	if (!session || !subscriberHash) return children;
 	return (
 		<NovuProvider
 		applicationIdentifier={process.env.NEXT_PUBLIC_NOVU_APP_IDENTIFIER!}
 		subscriberId={session.user.id}
-		subscriberHash={hmac(session.user.id, process.env.NEXT_PUBLIC_NOVU_API_KEY!)}
+		subscriberHash={subscriberHash}
 		>
 			<NotificationsContext.Provider
 			value={{

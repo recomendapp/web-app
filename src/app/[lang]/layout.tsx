@@ -97,8 +97,8 @@ export default async function LangLayout({
       {process.env.NODE_ENV === 'production' ? (
         <Script
         defer
-        src={process.env.NEXT_PUBLIC_ANAYLTICS_URL}
-        data-website-id={process.env.NEXT_PUBLIC_ANALYTICS_ID}
+        src={process.env.ANAYLTICS_URL}
+        data-website-id={process.env.ANALYTICS_ID}
       />) : null}
       <body className={cn('font-sans antialiased', fontSans.variable)}>
         <Providers locale={lang}>{children}</Providers>

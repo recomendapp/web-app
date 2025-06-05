@@ -27,7 +27,7 @@ export const tmdbSearchMulti = async (query: string, language = "en", page = 1) 
 	}
 	const tmdbResults = await (
 		await fetch(
-			`${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/multi?query=${query}&include_adult=false&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}`
+			`${process.env.TMDB_API_URL}/search/multi?query=${query}&include_adult=false&api_key=${process.env.TMDB_API_KEY}&language=${language}&page=${page}`
 		)
 	).json();
 

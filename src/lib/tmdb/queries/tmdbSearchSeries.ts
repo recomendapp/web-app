@@ -27,7 +27,7 @@ export const tmdbSearchSeries = async (query: string, language = routing.default
 		throw new Error(verifiedField.error.errors.join('; '));
 	}
 	const tmdbResults = await fetch(
-		`${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/tv?query=${query}&api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&language=${language}&page=${page}`
+		`${process.env.TMDB_API_URL}/search/tv?query=${query}&api_key=${process.env.TMDB_API_KEY}&language=${language}&page=${page}`
 	).then(res => res.json() as Promise<{ results: { id: number }[] }>);
 	const { data, error } = await supabase
 		.from('media_tv_series')

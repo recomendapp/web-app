@@ -6,10 +6,8 @@ import { useAuth } from '@/context/auth-context';
 import { Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from "@/lib/i18n/routing";
-
 import { useQuery } from '@tanstack/react-query';
-import { createOrRetrieveCustomer } from '@/lib/supabase/supabase-admin';
-import { stripe } from '@/lib/stripe/stripe';
+import { getUrlCustomerPortal } from '@/lib/stripe/stripe-functions';
 import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function SettingsAccountPage() {
@@ -47,15 +45,7 @@ export default function SettingsAccountPage() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw Error('Could not get user');
-      const customer = await createOrRetrieveCustomer({
-        uuid: session.user.id || '',
-        email: session.user.email || '',
-      });
-      if (!customer) throw Error('Could not get customer');
-      const { url } = await stripe.billingPortal.sessions.create({
-        customer,
-        return_url: `${location.origin}/settings/subscription`,
-      });
+      const url = await getUrlCustomerPortal(session, location.origin);
       router.push(url);
     } catch (error) {
       console.error(error);

@@ -3,7 +3,7 @@
 export const handleGetWatchProviders = async (
 	id: number
 ) => {
-	const url = `${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/${id}/watch/providers?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`;
+	const url = `${process.env.TMDB_API_URL}/movie/${id}/watch/providers?api_key=${process.env.TMDB_API_KEY}`;
 	const response = await fetch(url);
 	const data = await response.json();
 
