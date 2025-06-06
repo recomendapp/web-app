@@ -165,6 +165,7 @@ export const SidebarLeftRoutes = () => {
 		<>
 		<SidebarGroup>
 			<SidebarGroupLabel>{common('word.navigation')}</SidebarGroupLabel>
+			<nav>
 			<SidebarMenu className={`${!sidebarOpen ? "items-center" : ""}`}>
 				{routes.map((route, i) => (
 					<SidebarMenuItem key={i}>
@@ -179,6 +180,7 @@ export const SidebarLeftRoutes = () => {
 					</SidebarMenuItem>
 				))}
 			</SidebarMenu>
+			</nav>
 		</SidebarGroup>
 		<SidebarSeparator />
 		<SidebarGroup className="overflow-hidden">

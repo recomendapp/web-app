@@ -1,5 +1,4 @@
 'use client'
-import * as React from "react";
 import { Header } from '@/components/Header/Header';
 import { useUI } from '@/context/ui-context';
 import { Navbar } from "../../components/Navbar/Navbar";
@@ -9,12 +8,9 @@ import { SidebarRight } from './sidebars/sidebar-right/SidebarRight';
 
 export function AppLayout({
 	children,
-	className,
  } : {
 	children: React.ReactNode;
-	className?: string;
  }) {
-	const [isMounted, setIsMounted] = React.useState(false)
 	const {
 		sidebarOpen,
 		sidebarOpenMobile,
@@ -27,11 +23,6 @@ export function AppLayout({
 		device,
 	} = useUI();
 
-	React.useEffect(() => {
-		setIsMounted(true)
-	}, [])
-
-	if (!isMounted) return null;
 	return (
 		<SidebarProvider
 		open={sidebarOpen}
