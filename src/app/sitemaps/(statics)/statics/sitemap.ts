@@ -1,5 +1,5 @@
 import { siteConfig } from '@/config/site'
-import { seoLocales } from '@/lib/i18n/routing'
+import { sitemapLocales } from '@/lib/i18n/routing'
 import type { MetadataRoute } from 'next'
  
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -10,12 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily',
       priority: 1,
       alternates: {
-        languages: Object.fromEntries(
-          seoLocales.map((locale) => [
-            locale,
-            `${siteConfig.url}/${locale}`
-          ])
-        )
+        languages: sitemapLocales('/')
       }
     },
     {
@@ -24,41 +19,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
       alternates: {
-        languages: Object.fromEntries(
-          seoLocales.map((locale) => [
-            locale,
-            `${siteConfig.url}/${locale}/about`
-          ])
-        )
+        languages: sitemapLocales('/about')
       }
     },
-	{
-		url: `${siteConfig.url}/explore`,
-		lastModified: new Date(),
-		changeFrequency: 'monthly',
-		priority: 0.8,
-		alternates: {
-			languages: Object.fromEntries(
-				seoLocales.map((locale) => [
-					locale,
-					`${siteConfig.url}/${locale}/explore`
-				])
-			)
-		}
-	},
-	{
-		url: `${siteConfig.url}/upgrade`,
-		lastModified: new Date(),
-		changeFrequency: 'monthly',
-		priority: 0.8,
-		alternates: {
-			languages: Object.fromEntries(
-				seoLocales.map((locale) => [
-					locale,
-					`${siteConfig.url}/${locale}/upgrade`
-				])
-			)
-		}
-	},
+    {
+      url: `${siteConfig.url}/explore`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+      alternates: {
+        languages: sitemapLocales('/explore')
+      }
+    },
+    {
+      url: `${siteConfig.url}/upgrade`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+      alternates: {
+        languages: sitemapLocales('/upgrade')
+      }
+    },
   ]
 }

@@ -20,13 +20,7 @@ export async function generateMetadata(
   return {
     title: upperFirst(t('title', { full_name: user.full_name!, username: user.username! })),
     description: truncate(upperFirst(t('description', { username: user.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
-    alternates: {
-      canonical: `${siteConfig.url}/@${user.username}`,
-      languages: Object.fromEntries([
-        ['x-default', `${siteConfig.url}/@${user.username}`],
-        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/@${user.username}`])
-      ])
-    },
+    alternates: seoLocales(params.lang, `/@${user.username}`),
     openGraph: {
       siteName: siteConfig.name,
       title: `${upperFirst(t('title', { full_name: user.full_name!, username: user.username! }))} • ${siteConfig.name}`,

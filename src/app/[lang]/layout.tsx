@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import Providers from '@/context/Providers';
 import Script from 'next/script';
 import { getLangDir } from 'rtl-detect';
-import { seoLocales } from '@/lib/i18n/routing';
+import { routing, seoLocales } from '@/lib/i18n/routing';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -24,13 +24,7 @@ export const metadata: Metadata = {
     template: `%s • ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  alternates: {
-    canonical: siteConfig.url,
-    languages: Object.fromEntries([
-      ['x-default', siteConfig.url],
-      ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}`]),
-    ])
-  },
+  alternates: seoLocales(routing.defaultLocale, ''),
   manifest: '/manifest.webmanifest',
   icons: {
     apple: '/assets/icons/ios/512.png',

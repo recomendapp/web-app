@@ -25,13 +25,7 @@ export async function generateMetadata(
   return {
     title: t('title', { title: review.activity?.media?.title!, username: review.activity?.user?.username! }),
     description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
-    alternates: {
-      canonical: `${siteConfig.url}/review/${params.review_id}`,
-      languages: Object.fromEntries([
-        ['x-default', `${siteConfig.url}/review/${params.review_id}`],
-        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/review/${params.review_id}`])
-      ])
-    },
+    alternates: seoLocales(params.lang, `/review/${review.id}`),
     openGraph: {
       siteName: siteConfig.name,
       title: t('title', { title: review.activity?.media?.title!, username: review.activity?.user?.username! }),

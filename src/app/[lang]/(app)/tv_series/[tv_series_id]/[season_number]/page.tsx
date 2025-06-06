@@ -34,13 +34,7 @@ export async function generateMetadata(
       }),
       { length: siteConfig.seo.description.limit }
     ),
-    alternates: {
-      canonical: `${siteConfig.url}/tv_series/${params.tv_series_id}/${params.season_number}`,
-      languages: Object.fromEntries([
-        ['x-default', `${siteConfig.url}/tv_series/${params.tv_series_id}/${params.season_number}`],
-        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${params.tv_series_id}/${params.season_number}`])
-      ])
-    },
+    alternates: seoLocales(params.lang, `/tv_series/${params.tv_series_id}/${params.season_number}`),
     openGraph: {
       siteName: siteConfig.name,
       title: `${t('metadata.title', { title: season.serie?.title!, number: season.season_number! })} • ${siteConfig.name}`,

@@ -25,13 +25,7 @@ export async function generateMetadata(
   return {
     title: t('metadata.title', { name: person.title!, department: person.extra_data.known_for_department }),
     description: truncate(person.extra_data.biography, { length: siteConfig.seo.description.limit }),
-    alternates: {
-      canonical: `${siteConfig.url}/person/${person.slug}`,
-      languages: Object.fromEntries([
-        ['x-default', `${siteConfig.url}/person/${person.slug}`],
-        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/person/${person.slug}`])
-      ])
-    },
+    alternates: seoLocales(params.lang, `/person/${person.slug}`),
     openGraph: {
       siteName: siteConfig.name,
       title: `${person.title} • ${person.extra_data.known_for_department} • ${siteConfig.name}`,

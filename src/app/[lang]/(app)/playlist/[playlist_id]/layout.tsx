@@ -22,13 +22,7 @@ export async function generateMetadata(
     return {
 		title: t('playlist.metadata.title', { title: playlist.title, username: playlist.user?.username }),
 		description: truncate(t('playlist.metadata.description', { username: playlist.user?.username, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
-        alternates: {
-            canonical: `${siteConfig.url}/playlist/${playlist.id}`,
-            languages: Object.fromEntries([
-                ['x-default', `${siteConfig.url}/playlist/${playlist.id}`],
-                ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/playlist/${playlist.id}`])
-            ]),
-        },
+        alternates: seoLocales(params.lang, `/playlist/${playlist.id}`),
         openGraph: {
             siteName: siteConfig.name,
             title: `${t('playlist.metadata.title', { title: playlist.title, username: playlist.user?.username })} • ${siteConfig.name}`,

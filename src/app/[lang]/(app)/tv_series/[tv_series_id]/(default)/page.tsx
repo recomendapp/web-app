@@ -39,13 +39,7 @@ export async function generateMetadata(
         }),
       { length: siteConfig.seo.description.limit }
     ),
-    alternates: {
-      canonical: `${siteConfig.url}/tv_series/${serie.slug}`,
-      languages: Object.fromEntries([
-        ['x-default', `${siteConfig.url}/tv_series/${serie.slug}`],
-        ...seoLocales.map((locale) => [locale, `${siteConfig.url}/${locale}/tv_series/${serie.slug}`])
-      ])
-    },
+    alternates: seoLocales(params.lang, `/tv_series/${serie.slug}`),
     openGraph: {
       siteName: siteConfig.name,
       title: `${t('metadata.title', { title: serie.title!, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
