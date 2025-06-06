@@ -15,6 +15,10 @@ export async function generateMetadata(
   const t = await getTranslations({ locale: params.lang, namespace: 'routes' });
   return {
     title: upperFirst(t('feed')),
+    robots: {
+      index: false,
+      follow: false,
+    }
   };
 }
 

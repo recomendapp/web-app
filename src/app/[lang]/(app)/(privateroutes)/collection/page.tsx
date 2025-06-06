@@ -1,7 +1,6 @@
 import { capitalize } from 'lodash';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { ReactNode } from 'react';
 import Collection from './_components/Collection';
 
 export async function generateMetadata(
@@ -15,6 +14,10 @@ export async function generateMetadata(
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   return {
     title: capitalize(common('library.label')),
+    robots: {
+      index: false,
+      follow: false,
+    }
   };
 }
 

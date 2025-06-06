@@ -15,6 +15,10 @@ export async function generateMetadata(
   const common = await getTranslations({ locale: params.lang, namespace: 'pages' });
   return {
     title: upperFirst(common('settings.label')),
+    robots: {
+      index: false,
+      follow: false,
+    }
   };
 }
 
