@@ -29,7 +29,7 @@ interface SettingsLayoutProps {
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   const t = useTranslations('pages.settings');
   return (
-    <main className="p-4 flex flex-col gap-4">
+    <div className="p-4 flex flex-col gap-4">
       <div className="">
         <h2 className="text-2xl font-bold">{t('label')}</h2>
         <p className="text-muted-foreground">{t('description')}</p>
@@ -40,6 +40,6 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
         </aside>
         <div className="flex-1 lg:max-w-2xl">{children}</div>
       </div>
-    </main>
+    </div>
   );
 }

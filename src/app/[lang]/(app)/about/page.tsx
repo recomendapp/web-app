@@ -105,7 +105,7 @@ export default async function About(
   ];
 
   return (
-    <main className="flex flex-col gap-4 items-center text-justify transition-all">
+    <div className="flex flex-col gap-4 items-center text-justify transition-all">
       {/* ABOUT */}
       <section id="about" className="w-full flex flex-col items-center gap-2">
         <Marquee pauseOnHover className=' bg-blue-500 py-1 uppercase z-0'>
@@ -360,6 +360,6 @@ export default async function About(
           {t('quote.subdescription')}
         </p>
       </section>
-    </main>
+    </div>
   );
 }

@@ -13,13 +13,8 @@ export default function PersonHeader({
   background?: string | null
 }) {
   return (
-    <HeaderBox
-      className='@container/person-header'
-      style={{
-        backgroundImage: background ? `url(${background})` : undefined,
-      }}
-    >
-      <div className="flex flex-col w-full gap-4 items-center @2xl/person-header:flex-row">
+    <HeaderBox background={background ? { src: background, alt: person.title ?? ''} : undefined}>
+      <div className="flex flex-col w-full gap-4 items-center @2xl/header-box:flex-row">
         {/* MOVIE POSTER */}
         <PersonPoster
           className="w-[280px]"
@@ -36,7 +31,7 @@ export default function PersonHeader({
             </span>
           </div>
           {/* NAME */}
-          <div className="text-xl select-text @xl/person-header:text-6xl font-bold line-clamp-2">
+          <div className="text-xl select-text @xl/header-box:text-6xl font-bold line-clamp-2">
             {person.title}
           </div>
           <div className='space-y-2'>

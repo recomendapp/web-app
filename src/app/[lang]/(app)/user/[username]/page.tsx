@@ -14,7 +14,7 @@ export default async function UserPage(
   const user = await getProfile(params.username);
   if (!user) notFound();
   return (
-    <main>
+    <>
       <ProfileHeader profile={user} />
       {user.visible ? (
         <>
@@ -28,6 +28,6 @@ export default async function UserPage(
       ) : (
         <ProfilePrivateAccountCard />
       )}
-    </main>
+    </>
   );
 }

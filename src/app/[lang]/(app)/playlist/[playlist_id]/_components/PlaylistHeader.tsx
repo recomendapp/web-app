@@ -11,7 +11,7 @@ import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { ContextMenuPlaylist } from '@/components/ContextMenu/ContextMenuPlaylist';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { CardUser } from '@/components/Card/CardUser';
 
 export default function PlaylistHeader({
@@ -45,17 +45,9 @@ export default function PlaylistHeader({
     })
   }
 
-  useEffect(() => {
-    console.log('Playlist items updated:', playlistItems);
-  }, [playlistItems]);
-
   return (
   <ContextMenuPlaylist playlist={playlist}>
-    <HeaderBox
-      style={{
-        backgroundImage:  randomBg ? `url(${randomBg?.src})` : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')",
-      }}
-    >
+    <HeaderBox background={{ src: randomBg?.src ?? 'https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif', alt: randomBg?.alt ?? '' }}>
       <div className="flex flex-col w-full gap-4 items-center md:flex-row">
         <div
           className="w-[250px] shadow-md cursor-pointer shrink-0 aspect-square"

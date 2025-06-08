@@ -54,7 +54,7 @@ const Collection = () => {
 	[common]
   );
   return (
-	<main className="h-full @container/collection overflow-y-auto relative">
+	<div className="h-full @container/collection overflow-y-auto relative">
 	  {device === "mobile" ? <div className="flex justify-between items-center w-full p-4 sticky top-0">
 		<div className="flex gap-2 items-center">
 		  <div className="text-2xl font-bold">Bibliothèque</div>
@@ -80,7 +80,7 @@ const Collection = () => {
 		  <UserPlaylistsSaved sidebarExpanded={false} grid />
 		</TabsContent>
 	  </Tabs>
-	</main>
+	</div>
   );
 }
 

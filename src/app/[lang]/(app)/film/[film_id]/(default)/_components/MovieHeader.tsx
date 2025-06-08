@@ -57,13 +57,8 @@ export default function MovieHeader({
   return (
     <div>
       <ContextMenuMedia media={movie}>
-        <HeaderBox
-          className='@container/movie-header'
-          style={{
-            backgroundImage: movie.backdrop_url ? `url(${movie.backdrop_url})` : undefined,
-          }}
-        >
-          <div className="flex flex-col w-full gap-4 items-center @xl/movie-header:flex-row">
+        <HeaderBox background={movie.backdrop_url ? { src: movie.backdrop_url, alt: movie.title ?? ''} : undefined}>
+          <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* MOVIE POSTER */}
             <MoviePoster
               className="w-[200px]"
@@ -178,9 +173,9 @@ export function MovieTrailerButton({
           </Button>
         </DialogTrigger>
       </TooltipBox>
-      <DialogContent className="@xl/movie-header:max-w-[60vw]">
+      <DialogContent className="@xl/header-box:max-w-[60vw]">
         <DialogHeader className="relative flex flex-row gap-4 items-center">
-          <DialogTitle className="absolute left-1/2 transform -translate-x-1/2 -top-12 @xl/movie-header:-top-16 text-accent-yellow-foreground text-2xl @xl/movie-header:text-5xl font-bold rounded-md bg-accent-yellow px-4 py-2 pointer-events-auto">
+          <DialogTitle className="absolute left-1/2 transform -translate-x-1/2 -top-12 @xl/header-box:-top-16 text-accent-yellow-foreground text-2xl @xl/header-box:text-5xl font-bold rounded-md bg-accent-yellow px-4 py-2 pointer-events-auto">
             TRAILER
           </DialogTitle>
           <div className=" pt-4">

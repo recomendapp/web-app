@@ -24,16 +24,11 @@ export default function TvSeasonHeader({
 	})) ?? []);
 	if (!season) return null;
 	return (
-	<HeaderBox
-	className='@container/tv_series_season-header @xl/header-box:h-fit'
-	style={{
-		backgroundImage: randomBg ? `url(${randomBg.src})` : undefined,
-	}}
-	>
+	<HeaderBox className='@xl/header-box:h-fit' background={randomBg ? { src: randomBg.src, alt: randomBg.alt ?? '' } : undefined}>
 		<div className="flex flex-row w-full gap-4 items-center">
 			{/* SERIE POSTER */}
 			<MoviePoster
-			className="w-[80px] @md/tv_series_season-header:w-[100px] @lg/tv_series_season-header:w-[120px] @xl/tv_series_season-header:w-[150px]"
+			className="w-[80px] @md/header-box:w-[100px] @lg/header-box:w-[120px] @xl/header-box:w-[150px]"
 			src={season.avatar_url ?? ''}
 			alt={title}
 			fill

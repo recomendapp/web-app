@@ -52,13 +52,8 @@ export default function TvSerieHeader({
   return (
     <div>
       <ContextMenuMedia media={serie}>
-        <HeaderBox
-          className='@container/serie-header'
-          style={{
-            backgroundImage: serie.backdrop_path ? `url(${serie.backdrop_url})` : undefined,
-          }}
-        >
-          <div className="flex flex-col w-full gap-4 items-center @xl/serie-header:flex-row">
+        <HeaderBox background={serie.backdrop_url ? { src: serie.backdrop_url, alt: serie.title ?? ''} : undefined}>
+          <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* SERIE POSTER */}
             <MoviePoster
               className="w-[200px]"

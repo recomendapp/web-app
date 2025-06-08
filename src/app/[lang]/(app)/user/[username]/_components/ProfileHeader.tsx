@@ -19,19 +19,15 @@ export default async function ProfileHeader({ profile }: { profile: Profile }) {
   } = await supabase.auth.getSession();
 
   return (
-    <HeaderBox
-      style={{ backgroundImage: `url(${profile.background_url})` }}
-      className="!h-fit @container/profile-header"
-      classNameChild="flex-col @lg/profile-header:items-start @lg/profile-header:flex-row gap-4"
-    >
-      <div className="flex gap-4 shrink-0 items-start justify-between w-full @lg/profile-header:w-fit">
+    <HeaderBox className='!h-fit flex-col @lg/header-box:items-start @lg/header-box:flex-row gap-4' background={profile.background_url ? { src: profile.background_url, alt: profile.username ?? ''} : undefined}>
+      <div className="flex gap-4 shrink-0 items-start justify-between w-full @lg/header-box:w-fit">
         {profile.username ? <UserAvatar
           className=" h-20 w-20 @md:h-28 @md:w-28 xl:h-36 xl:w-36"
           avatarUrl={profile.avatar_url}
           username={profile.username}
         /> : null}
         <div className="flex flex-col gap-2 items-end">
-          <div className="flex items-center @lg/profile-header:hidden">
+          <div className="flex items-center @lg/header-box:hidden">
             <ProfileFollowersButton userId={profile?.id!} disabled={!profile?.visible ? true : false} />
             <ProfileFolloweesButton userId={profile?.id!} disabled={!profile?.visible ? true : false} />
             {session?.user?.id == profile?.id && (
@@ -42,7 +38,7 @@ export default async function ProfileHeader({ profile }: { profile: Profile }) {
               </Button>
             )}
           </div>
-          <ProfileFollowButton profileId={profile?.id!} className="@lg/profile-header:hidden" />
+          <ProfileFollowButton profileId={profile?.id!} className="@lg/header-box:hidden" />
         </div>
       </div>
       <div className="flex flex-col gap-2 w-full">
@@ -61,7 +57,7 @@ export default async function ProfileHeader({ profile }: { profile: Profile }) {
             </h2>
             <span className="text-muted-foreground">@{profile?.username}</span>
           </Link>
-          <div className="hidden @lg/profile-header:flex items-center gap-2">
+          <div className="hidden @lg/header-box:flex items-center gap-2">
             <ProfileFollowersButton userId={profile?.id!} className="hidden sm:block" disabled={!profile?.visible ? true : false} />
             <ProfileFolloweesButton userId={profile?.id!} className="hidden sm:block" disabled={!profile?.visible ? true : false} />
             {session?.user?.id == profile?.id && (
@@ -93,7 +89,7 @@ export default async function ProfileHeader({ profile }: { profile: Profile }) {
             )}
           </div>
           {/* ACTION BUTTON */}
-          <ProfileFollowButton profileId={profile?.id!} className="hidden @lg/profile-header:flex" />
+          <ProfileFollowButton profileId={profile?.id!} className="hidden @lg/header-box:flex" />
         </section>
       </div>
     </HeaderBox>

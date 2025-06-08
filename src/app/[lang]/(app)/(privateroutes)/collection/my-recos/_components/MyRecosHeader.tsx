@@ -17,15 +17,7 @@ export function MyRecosHeader({ data }: { data: UserRecosAggregated[] }) {
   };
 
   return (
-    <HeaderBox
-      style={{
-        backgroundImage: `${
-          data.length
-            ? `url(${randomBackdrop(data)})`
-            : "url('https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif')"
-        }`,
-      }}
-    >
+    <HeaderBox background={{ src: randomBackdrop(data) || 'https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif', alt: 'My Recos Header Background' }}>
       <div className="w-full h-full flex flex-col justify-center items-center text-center px-4 py-8 ">
         <h2 className="text-6xl font-bold text-accent-yellow">
         {capitalize(common('messages.my_recos'))}
