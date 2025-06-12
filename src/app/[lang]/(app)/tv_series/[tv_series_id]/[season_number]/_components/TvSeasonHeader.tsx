@@ -8,6 +8,7 @@ import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/lib/i18n/routing';
+import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 
 export default function TvSeasonHeader({
 	urlSerie,
@@ -19,12 +20,12 @@ export default function TvSeasonHeader({
 	const common = useTranslations('common');
 	const title = upperFirst(common('messages.season_value', { number: season.season_number! }));
 	const randomBg = useRandomImage(season.episodes?.map(episode => ({
-		src: episode.avatar_url ?? '',
+		src: episode.avatar_path ?? '',
 		alt: upperFirst(common('messages.episode_value', { number: episode.episode_number! })),
 	})) ?? []);
 	if (!season) return null;
 	return (
-	<HeaderBox className='@xl/header-box:h-fit' background={randomBg ? { src: randomBg.src, alt: randomBg.alt ?? '' } : undefined}>
+	<HeaderBox className='@xl/header-box:h-fit' background={randomBg ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${randomBg.src}`, alt: randomBg.alt ?? '', unoptimized: true } : undefined}>
 		<div className="flex flex-row w-full gap-4 items-center">
 			{/* SERIE POSTER */}
 			<MoviePoster

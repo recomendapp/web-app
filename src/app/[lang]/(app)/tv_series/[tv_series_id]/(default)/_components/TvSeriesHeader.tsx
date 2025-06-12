@@ -38,6 +38,7 @@ import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlaylistAdd';
 import { ModalMediaFollowersRating } from '@/components/Modals/ModalMediaFollowersRating';
 import { ContextMenuMedia } from '@/components/ContextMenu/ContextMenuMedia';
+import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 
 export default function TvSerieHeader({
   serie,
@@ -52,7 +53,7 @@ export default function TvSerieHeader({
   return (
     <div>
       <ContextMenuMedia media={serie}>
-        <HeaderBox background={serie.backdrop_url ? { src: serie.backdrop_url, alt: serie.title ?? ''} : undefined}>
+        <HeaderBox background={serie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${serie.backdrop_path}`, alt: serie.title ?? '', unoptimized: true } : undefined}>
           <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* SERIE POSTER */}
             <MoviePoster

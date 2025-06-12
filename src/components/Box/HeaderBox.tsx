@@ -11,6 +11,8 @@ interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   background?: {
     src: string;
     alt: string;
+    sizes?: string;
+    unoptimized?: boolean;
   }
 }
 
@@ -36,13 +38,12 @@ export const HeaderBox: React.FC<BoxProps> = ({
             alt={background.alt}
             fill
             className="object-cover -z-10"
-            sizes={`
-            (max-width: 640px) 640px,
-            (max-width: 1024px) 800px,
-            1280px
+            sizes={background.sizes || `
+            1140px
             `}
             onError={() => setImageError(true)}
             onLoad={() => setImageLoaded(true)}
+            unoptimized={background.unoptimized}
           />
         )}
         {children}

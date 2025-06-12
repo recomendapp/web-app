@@ -187,7 +187,7 @@ export const Upgrade = ({
 	}
 	return (
 		<>
-		<HeaderBox className="@xl/header-box:h-fit" background={bgImage ? { src: bgImage?.src, alt: bgImage?.alt ?? '' } : undefined}>
+		<HeaderBox className="@xl/header-box:h-fit" background={bgImage ? { src: bgImage?.src, alt: bgImage?.alt ?? '', unoptimized: true } : undefined}>
 			<div className='container flex flex-col w-full gap-4 justify-center max-w-xl mx-0 my-10'>
 				<h1 className='text-3xl @sm/header-box:text-4xl @lg/header-box:text-5xl font-bold text-white'>
 				{upperFirst(t('upgrade.header.title', { app: siteConfig.name }))}

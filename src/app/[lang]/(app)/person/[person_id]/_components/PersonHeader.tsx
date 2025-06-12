@@ -13,7 +13,7 @@ export default function PersonHeader({
   background?: string | null
 }) {
   return (
-    <HeaderBox background={background ? { src: background, alt: person.title ?? ''} : undefined}>
+    <HeaderBox background={background ? { src: background, alt: person.title ?? '', unoptimized: true } : undefined}>
       <div className="flex flex-col w-full gap-4 items-center @2xl/header-box:flex-row">
         {/* MOVIE POSTER */}
         <PersonPoster

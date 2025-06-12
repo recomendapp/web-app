@@ -4,6 +4,7 @@ import PersonNavbar from './_components/PersonNavbar';
 import { getIdFromSlug } from '@/hooks/get-id-from-slug';
 import { getPerson } from '@/features/server/media/mediaQueries';
 import { Media } from '@/types/type.db';
+import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 
 export default async function PersonLayout(
   props: {
@@ -31,11 +32,11 @@ export default async function PersonLayout(
 
 const randomBackdrop = (object: Media[]) => {
   const itemsWithBackdrop = object.filter(
-    (media ) => media?.backdrop_url
+    (media ) => media?.backdrop_path
   );
 
   if (itemsWithBackdrop.length === 0) return null;
 
   const randomIndex = Math.floor(Math.random() * itemsWithBackdrop.length);
-  return itemsWithBackdrop[randomIndex]?.backdrop_url;
+  return `${TMDB_IMAGE_BASE_URL}/w1280${itemsWithBackdrop[randomIndex]?.backdrop_path}`;
 };

@@ -43,6 +43,7 @@ import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlaylistAdd';
 import { ModalMediaFollowersRating } from '@/components/Modals/ModalMediaFollowersRating';
 import { ContextMenuMedia } from '@/components/ContextMenu/ContextMenuMedia';
+import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 
 export default function MovieHeader({
   movie,
@@ -57,7 +58,7 @@ export default function MovieHeader({
   return (
     <div>
       <ContextMenuMedia media={movie}>
-        <HeaderBox background={movie.backdrop_url ? { src: movie.backdrop_url, alt: movie.title ?? ''} : undefined}>
+        <HeaderBox background={movie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${movie.backdrop_path}`, alt: movie.title ?? '', unoptimized: true } : undefined}>
           <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* MOVIE POSTER */}
             <MoviePoster
