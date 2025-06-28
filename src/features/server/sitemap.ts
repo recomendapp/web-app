@@ -73,7 +73,8 @@ export const getSitemapMediaMovies = cache(
 					title
 				)
 			`)
-			.range(start, end);
+			.range(start, end)
+			.order('popularity', { ascending: false });
 		if (error) throw error;
 		return data || [];
 	},
@@ -112,7 +113,8 @@ export const getSitemapMediaTvSeries = cache(
 					name
 				)
 			`)
-			.range(start, end);
+			.range(start, end)
+			.order('popularity', { ascending: false });
 		if (error) throw error;
 		return data || [];
 	},
