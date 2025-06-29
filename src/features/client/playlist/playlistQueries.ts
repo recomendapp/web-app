@@ -196,10 +196,10 @@ export const usePlaylistFeaturedInfiniteQuery = ({
 				if (mergedFilters.sortBy) {
 					switch (mergedFilters.sortBy) {
 						case 'created_at':
-							query = query.order('created_at', { referencedTable: 'playlist', ascending: mergedFilters.sortOrder === 'asc', nullsFirst: false });
+							query = query.order('created_at', { referencedTable: 'playlist', ascending: mergedFilters.sortOrder === 'asc' });
 							break;
 						case 'updated_at':
-							query = query.order('updated_at', { referencedTable: 'playlist', ascending: mergedFilters.sortOrder === 'asc', nullsFirst: false });
+							query = query.order('updated_at', { referencedTable: 'playlist', ascending: mergedFilters.sortOrder === 'asc' });
 							break;
 						default:
 							break;

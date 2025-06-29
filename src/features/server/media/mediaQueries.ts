@@ -66,7 +66,7 @@ export const getMovie = cache(
 				'videos.iso_639_1': locale.split('-')[0],
 				'videos.type': 'Trailer',
 			})
-			.order('published_at', { referencedTable: 'videos', ascending: true, nullsFirst: false })
+			.order('published_at', { referencedTable: 'videos', ascending: true })
 			.returns<MediaMovie[]>()
 			.maybeSingle();
 		if (error) throw error;
@@ -104,7 +104,7 @@ export const getTvSeries = cache(
 				'videos.type': 'Trailer',
 			})
 			// .filter('seasons.season_number', 'neq', 0)
-			.order('published_at', { referencedTable: 'videos', ascending: true, nullsFirst: false })
+			.order('published_at', { referencedTable: 'videos', ascending: true })
 			.maybeSingle()
 			.overrideTypes<MediaTvSeries, { merge: false }>();
 		if (error) throw error;
@@ -144,7 +144,7 @@ export const getTvSeason = cache(
 				serie_id: serieId,
 				season_number: seasonNumber,
 			})
-			.order('episode_number', { referencedTable: 'episodes', ascending: true, nullsFirst: false })
+			.order('episode_number', { referencedTable: 'episodes', ascending: true })
 			.maybeSingle()
 			.overrideTypes<MediaTvSeriesSeason, { merge: false }>();
 		if (error) throw error;
@@ -177,7 +177,7 @@ export const getPerson = cache(
 			.match({
 				'id': id,
 			})
-			.order('media(date)', { referencedTable: 'movies', ascending: false, nullsFirst: false })
+			.order('media(date)', { referencedTable: 'movies', ascending: false })
 			.limit(10, { foreignTable: 'movies' })
 			.limit(10, { foreignTable: 'tv_series' })
 			.maybeSingle();
@@ -265,11 +265,16 @@ export const getPersonFilms = cache(
 			if (filters.sortBy && filters.sortOrder) {
 				switch (filters.sortBy) {
 					case 'release_date':
-						request = request.order(`media(date)`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
+						request = request.order(`media(date)`, { ascending: filters.sortOrder === 'asc' });
 						break;
 					case 'vote_average':
-						request = request.order(`media(vote_average)`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
-						request = request.order(`media(tmdb_vote_average)`, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
+						if (filters.sortOrder === 'asc') {
+							request = request.order(`media(tmdb_vote_average)`, { ascending: true, nullsFirst: true });
+							request = request.order(`media(vote_average)`, { ascending: true, nullsFirst: true });
+						} else {
+							request = request.order(`media(vote_average)`, { ascending: false, nullsFirst: false });
+							request = request.order(`media(tmdb_vote_average)`, { ascending: false, nullsFirst: false });
+						}
 						break;
 					default:
 						break;

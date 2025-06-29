@@ -117,7 +117,7 @@ export const useMediaPlaylistsInfiniteQuery = ({
 			
 			if (filters) {
 				if (filters.sortBy && filters.sortOrder) {
-					request = request.order(filters.sortBy, { ascending: filters.sortOrder === 'asc', nullsFirst: false });
+					request = request.order(filters.sortBy, { ascending: filters.sortOrder === 'asc' });
 				}
 			}
 			const { data, error } = await request;

@@ -25,10 +25,10 @@ export const getPlaylistsFeatured = cache(
 			if (filters.sortBy && filters.sortOrder) {
 				switch (filters.sortBy) {
 					case 'created_at':
-						request = request.order('created_at', { referencedTable: 'playlist', ascending: filters.sortOrder === 'asc', nullsFirst: false });
+						request = request.order('created_at', { referencedTable: 'playlist', ascending: filters.sortOrder === 'asc' });
 						break;
 					case 'updated_at':
-						request = request.order('updated_at', { referencedTable: 'playlist', ascending: filters.sortOrder === 'asc', nullsFirst: false });
+						request = request.order('updated_at', { referencedTable: 'playlist', ascending: filters.sortOrder === 'asc' });
 						break;
 					default:
 						throw new Error('Invalid sortBy');

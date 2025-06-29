@@ -297,7 +297,7 @@ export const useUserRecosQuery = ({
 			if (mergedFilters) {
 				if (mergedFilters?.order !== 'random' && mergedFilters.order) {
 					const [ column, direction ] = mergedFilters.order.split('-');
-					request = request.order(column, { ascending: direction === 'asc', nullsFirst: false });
+					request = request.order(column, { ascending: direction === 'asc' });
 				}
 				if (mergedFilters.limit) {
 					request = request.limit(mergedFilters.limit);
@@ -396,7 +396,7 @@ export const useUserWatchlistQuery = ({
 			if (mergedFilters) {
 				if (mergedFilters?.order !== 'random' && mergedFilters.order) {
 					const [ column, direction ] = mergedFilters.order.split('-');
-					request = request.order(column, { ascending: direction === 'asc', nullsFirst: false });
+					request = request.order(column, { ascending: direction === 'asc' });
 				}
 				if (mergedFilters.limit) {
 					request = request.limit(mergedFilters.limit);
@@ -481,7 +481,7 @@ export const useUserLikesQuery = ({
 			if (mergedFilters) {
 				if (mergedFilters?.order !== 'random' && mergedFilters.order) {
 					const [ column, direction ] = mergedFilters.order.split('-');
-					request = request.order(column, { ascending: direction === 'asc', nullsFirst: false });
+					request = request.order(column, { ascending: direction === 'asc' });
 				}
 				if (mergedFilters.limit) {
 					request = request.limit(mergedFilters.limit);
@@ -648,7 +648,7 @@ export const useUserPlaylistsInfiniteQuery = ({
 			if (mergedFilters) {
 				if (mergedFilters.order) {
 					const [ column, direction ] = mergedFilters.order.split('-');
-					request = request.order(column, { ascending: direction === 'asc', nullsFirst: false });
+					request = request.order(column, { ascending: direction === 'asc' });
 				}
 			}
 			const { data, error } = await request;
@@ -700,10 +700,10 @@ export const useUserPlaylistsSavedInfiniteQuery = ({
 				if (mergedFilters.sortBy) {
 					switch (mergedFilters.sortBy) {
 						case 'created_at':
-							request = request.order('created_at', { referencedTable: 'playlist', ascending: mergedFilters.sortOrder === 'asc', nullsFirst: false });
+							request = request.order('created_at', { referencedTable: 'playlist', ascending: mergedFilters.sortOrder === 'asc' });
 							break;
 						case 'updated_at':
-							request = request.order('updated_at', { referencedTable: 'playlist', ascending: mergedFilters.sortOrder === 'asc', nullsFirst: false });
+							request = request.order('updated_at', { referencedTable: 'playlist', ascending: mergedFilters.sortOrder === 'asc' });
 							break;
 						default:
 							break;
@@ -842,7 +842,7 @@ export const useUserPlaylistsFriendsInfinite = ({
 			if (mergedFilters) {
 				if (mergedFilters.order) {
 					const [ column, direction ] = mergedFilters.order.split('-');
-					request = request.order(column, { ascending: direction === 'asc', nullsFirst: false });
+					request = request.order(column, { ascending: direction === 'asc' });
 				}
 			}
 			const { data, error } = await request;

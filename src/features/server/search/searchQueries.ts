@@ -104,10 +104,10 @@ export const getSearchPlaylists = async (
 				if (props.filters.sortBy && props.filters.sortOrder) {
 					switch (props.filters.sortBy) {
 						case 'created_at':
-							request = request.order('created_at', { referencedTable: 'playlist', ascending: props.filters.sortOrder === 'asc', nullsFirst: false });
+							request = request.order('created_at', { referencedTable: 'playlist', ascending: props.filters.sortOrder === 'asc' });
 							break;
 						case 'updated_at':
-							request = request.order('updated_at', { referencedTable: 'playlist', ascending: props.filters.sortOrder === 'asc', nullsFirst: false });
+							request = request.order('updated_at', { referencedTable: 'playlist', ascending: props.filters.sortOrder === 'asc' });
 							break;
 						default:
 							throw new Error('Invalid sortBy');
