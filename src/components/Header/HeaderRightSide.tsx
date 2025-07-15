@@ -8,6 +8,7 @@ import { SocialButton } from './components/SocialButton';
 import { NotificationsButton } from '../notifications/NotificationsButton';
 import { useAuth } from '@/context/auth-context';
 import { useTranslations } from 'next-intl';
+import { useNotifications } from '@/context/notifications-context';
 
 export default function HeaderRightSide({
   className,
@@ -15,12 +16,13 @@ export default function HeaderRightSide({
   className?: string;
 }) {
   const { session } = useAuth();
+  const { state } = useNotifications();
   const common = useTranslations('common');
   return (
     <div className={cn('flex items-center gap-4', className)}>
       {session ? (
         <>
-          <NotificationsButton />
+          {state === 'success' && <NotificationsButton />}
           <SocialButton />
           <UserNav />
         </>
