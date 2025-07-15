@@ -7,6 +7,7 @@ import { useCounts } from "@novu/react";
 import { CircleIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useNotifications } from "@/context/notifications-context";
 
 export const NotificationsButton = ({
 	onClick,
@@ -14,6 +15,8 @@ export const NotificationsButton = ({
 	...props
 } : React.ComponentProps<typeof Button>) => {
 	const common = useTranslations('common');
+	const { state } = useNotifications();
+	if (state !== 'success') return null;
 	const { counts } = useCounts({ filters: [{ read: false }] });
 	const {
 		toggleRightPanelContent,
