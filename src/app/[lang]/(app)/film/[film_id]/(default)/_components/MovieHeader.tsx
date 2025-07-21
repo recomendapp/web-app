@@ -116,14 +116,14 @@ export default function MovieHeader({
                       <span key={index}>
                         <Button
                           variant="link"
-                          className="w-fit p-0 h-full hover:text-accent-yellow transition"
+                          className="w-fit p-0 h-full"
                           asChild
                         >
                           <Link href={`/person/${director?.slug ?? director?.id}`}>{director?.title}</Link>
                         </Button>
                       </span>
                     </Fragment>
-                  )) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
+                  )) ?? <span className="text-muted-foreground italic">{upperFirst(common('word.unknown'))}</span>}
                   {/* RUNTIME */}
                   <RuntimeTooltip runtime={movie.extra_data.runtime ?? 0} className=" before:content-['_•_']" />
                 </div>

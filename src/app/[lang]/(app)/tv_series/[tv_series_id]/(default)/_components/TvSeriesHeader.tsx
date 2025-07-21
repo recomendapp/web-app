@@ -114,14 +114,14 @@ export default function TvSerieHeader({
                       <span key={index}>
                         <Button
                           variant="link"
-                          className="w-fit p-0 h-full hover:text-accent-yellow transition"
+                          className="w-fit p-0 h-full"
                           asChild
                         >
                           <Link href={director.url ?? ''}>{director?.title}</Link>
                         </Button>
                       </span>
                     </Fragment>
-                  )) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
+                  )) ?? <span className="text-muted-foreground italic">{upperFirst(common('word.unknown'))}</span>}
                   {/* NUMBER OF SEASONS */}
                   <span className="before:content-['_•_']">
                     {common('messages.season_count', { count: serie.extra_data.number_of_seasons })}

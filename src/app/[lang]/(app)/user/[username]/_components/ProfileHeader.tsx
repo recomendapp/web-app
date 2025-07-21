@@ -80,7 +80,7 @@ export default async function ProfileHeader({ profile }: { profile: Profile }) {
             {profile?.website && (
               <Link
                 href={profile?.website}
-                className="flex gap-2 items-center"
+                className="flex gap-2 items-center text-accent-pink hover:text-accent-pink-hover"
                 target="_blank"
               >
                 <LinkIcon width={15} />

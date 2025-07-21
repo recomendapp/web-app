@@ -7,7 +7,6 @@ import { useFormatter, useTranslations } from "next-intl";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { UserAvatar } from "@/components/User/UserAvatar";
 import { ContextMenuMedia } from "@/components/ContextMenu/ContextMenuMedia";
-import { getMediaDetails } from "@/utils/get-media-details";
 import { UserFeedCastCrew } from "@/types/type.db";
 import { upperFirst } from "lodash";
 

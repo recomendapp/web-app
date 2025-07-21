@@ -131,8 +131,14 @@ module.exports = {
   					'--tw-prose-body': '#fff',
   					'--tw-prose-headings': 'hsl(var(--accent-yellow))',
   					'--tw-prose-lead': '#fff',
-  					'--tw-prose-links': 'hsl(var(--accent-pink))',
-  					'--tw-prose-bold': '#fff',
+  					// '--tw-prose-links': 'hsl(var(--accent-pink))',
+					a: {
+						color: 'hsl(var(--accent-pink))',
+						'&:hover': {
+						color: 'hsl(var(--accent-pink-hover))',
+						},
+					},
+  					'--tw-prose-bold': 'hsl(var(--accent-yellow))',
   					'--tw-prose-counters': '#fff',
   					'--tw-prose-bullets': '#fff',
   					'--tw-prose-hr': '#fff',
