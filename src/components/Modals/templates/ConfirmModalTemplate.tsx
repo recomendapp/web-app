@@ -1,6 +1,8 @@
 import { ModalType } from "@/components/Modals/Modal";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useModal } from "@/context/modal-context";
+import { upperFirst } from "lodash";
+import { useTranslations } from "next-intl";
 
 export interface ConfirmModalTemplateProps extends ModalType {
 	title: React.ReactNode;
@@ -14,12 +16,13 @@ export interface ConfirmModalTemplateProps extends ModalType {
 export const ConfirmModalTemplate = ({
 	title,
 	description,
-	cancelLabel = 'Cancel',
-	confirmLabel = 'Confirm',
+	cancelLabel,
+	confirmLabel,
 	onConfirm,
 	onCancel,
 	...props
 } : ConfirmModalTemplateProps) => {
+	const common = useTranslations('common');
 	const { closeModal } = useModal();
 	const handleCancel = () => {
 		onCancel && onCancel();
@@ -29,6 +32,8 @@ export const ConfirmModalTemplate = ({
 		onConfirm && onConfirm();
 		closeModal(props.id);
 	}
+	const cancelLabelText = cancelLabel || upperFirst(common('word.cancel'));
+	const confirmLabelText = confirmLabel || upperFirst(common('messages.confirm'));
 	return (
 		<AlertDialog
 			open={props.open}
@@ -40,8 +45,8 @@ export const ConfirmModalTemplate = ({
 					{description && (<AlertDialogDescription>{description}</AlertDialogDescription>)}
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<AlertDialogCancel onClick={handleCancel}>{cancelLabel}</AlertDialogCancel>
-					<AlertDialogAction onClick={handleConfirm}>{confirmLabel}</AlertDialogAction>
+					<AlertDialogCancel onClick={handleCancel}>{cancelLabelText}</AlertDialogCancel>
+					<AlertDialogAction onClick={handleConfirm}>{confirmLabelText}</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

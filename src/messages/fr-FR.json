@@ -111,7 +111,10 @@
       "backward": "précédent",
       "forward": "suivant",
       "see_notifications": "voir les notifications",
-      "open_social_panel": "ouvrir le panneau social"
+      "open_social_panel": "ouvrir le panneau social",
+      "cancel_change": "{count, plural, one {annuler la modification} other {annuler les modifications}}",
+      "do_you_really_want_to_cancel_change": "Voulez-vous vraiment annuler {count, plural, one {la modification} other {les modifications}} ?",
+      "confirm": "confirmer"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",

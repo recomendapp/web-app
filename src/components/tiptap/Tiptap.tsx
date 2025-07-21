@@ -41,6 +41,11 @@ const Tiptap = ({
   const editor = useEditor(
     {
       editable: editable,
+      editorProps: {
+        attributes: {
+          class: 'prose prose-sm sm:prose lg:prose-lg focus:outline-none',
+        },
+      },
       extensions: [
         ...EDITOR_EXTENSIONS,
         // Code,

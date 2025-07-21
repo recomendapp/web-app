@@ -123,8 +123,8 @@ export default function ReviewForm({
 			return;
 		}
 		createConfirmModal({
-			title: 'Annuler les modifications',
-			description: 'Voulez-vous vraiment annuler les modifications ?',
+			title: upperFirst(common('messages.cancel_change', { count: 2 })),
+			description: upperFirst(common('messages.do_you_really_want_to_cancel_change', { count: 2 })),
 			onConfirm: () => {
 				setTitle(review?.title);
 				setBody(review?.body);
@@ -151,7 +151,7 @@ export default function ReviewForm({
 					{author?.id == user?.id ? (
 						<>
 							{!editable ? (
-								<TooltipBox tooltip="Modifier">							
+								<TooltipBox tooltip={upperFirst(common('messages.edit'))}>							
 									<Button
 									variant={'ghost'}
 									size={'sm'}
@@ -159,31 +159,31 @@ export default function ReviewForm({
 									onClick={() => setEditable(true)}
 									disabled={updateReview.isPending || insertReview.isPending}
 									>
-										<span className="sr-only">Modifier</span>
+										<span className="sr-only">{upperFirst(common('messages.edit'))}</span>
 										<Icons.edit />
 									</Button>
 								</TooltipBox>
 							) : (
 								<>
-								<TooltipBox tooltip="Enregistrer">
+								<TooltipBox tooltip={upperFirst(common('word.save'))}>
 									<Button
 									variant={'accent-yellow'}
 									size={'sm'}
 									onClick={handleUpdateReview}
 									disabled={updateReview.isPending || insertReview.isPending}
 									>
-										<span className="sr-only">Enregistrer</span>
+										<span className="sr-only">{upperFirst(common('word.save'))}</span>
 										<Icons.check />
 									</Button>
 								</TooltipBox>
-								<TooltipBox tooltip="Annuler">
+								<TooltipBox tooltip={upperFirst(common('word.cancel'))}>
 									<Button
 									variant={'accent-yellow-enabled'}
 									size={'sm'}
 									onClick={handleCancel}
 									disabled={updateReview.isPending || insertReview.isPending}
 									>
-										<span className="sr-only">Annuler</span>
+										<span className="sr-only">{upperFirst(common('word.cancel'))}</span>
 										<Icons.close />
 									</Button>
 								</TooltipBox>
@@ -199,14 +199,14 @@ export default function ReviewForm({
 							) : null}
 						</>
 					) : !review ? (
-						<TooltipBox tooltip="Enregistrer">
+						<TooltipBox tooltip={upperFirst(common('word.save'))}>
 							<Button
 							variant={'accent-yellow'}
 							size={'sm'}
 							onClick={handleCreateReview}
 							disabled={updateReview.isPending || insertReview.isPending}
 							>
-								<span className="sr-only">Enregistrer</span>
+								<span className="sr-only">{upperFirst(common('word.save'))}</span>
 								<Icons.check />
 							</Button>
 						</TooltipBox>

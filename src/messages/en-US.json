@@ -111,7 +111,10 @@
       "backward": "backward",
       "forward": "forward",
       "see_notifications": "see notifications",
-      "open_social_panel": "open social panel"
+      "open_social_panel": "open social panel",
+      "cancel_change": "{count, plural, one {cancel change} other {cancel changes}}",
+      "do_you_really_want_to_cancel_change": "Do you really want to cancel {count, plural, one {the change} other {the changes}}?",
+      "confirm": "confirm"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
