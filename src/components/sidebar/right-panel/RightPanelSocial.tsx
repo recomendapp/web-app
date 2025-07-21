@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
-import { useUserAcceptFollowerRequest, useUserDeclineFollowerRequest } from "@/features/client/user/userMutations";
+import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from "@/features/client/user/userMutations";
 import { useUserFolloweesInfiniteQuery, useUserFolloweesQuery, useUserFollowersRequestsQuery } from "@/features/client/user/userQueries";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
@@ -128,10 +128,10 @@ const RightPanelSocialRequests = () => {
 		userId: user?.id,
 	});
 
-	const acceptRequest = useUserAcceptFollowerRequest({
+	const acceptRequest = useUserAcceptFollowerRequestMutation({
 		userId: user?.id,
 	});
-	const declineRequest = useUserDeclineFollowerRequest({
+	const declineRequest = useUserDeclineFollowerRequestMutation({
 		userId: user?.id,
 	});
 

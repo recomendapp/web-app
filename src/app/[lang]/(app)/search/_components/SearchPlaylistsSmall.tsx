@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { CardPlaylist } from "@/components/Card/CardPlaylist";
-import { useSearchPlaylistsInfinite } from "@/features/client/search/searchQueries";
+import { useSearchPlaylistsInfiniteQuery } from "@/features/client/search/searchQueries";
 
 export default function SearchPlaylistsSmall({
   query,
@@ -22,7 +22,7 @@ export default function SearchPlaylistsSmall({
   const {
     data: playlists,
     isLoading,
-  } = useSearchPlaylistsInfinite({
+  } = useSearchPlaylistsInfiniteQuery({
     query: query,
   });
 

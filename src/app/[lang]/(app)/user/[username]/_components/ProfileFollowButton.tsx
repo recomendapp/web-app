@@ -6,8 +6,8 @@ import toast from 'react-hot-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { cn } from '@/lib/utils';
-import { useUserFollowProfile } from '@/features/client/user/userQueries';
-import { useUserFollowProfileInsert, useUserUnfollowProfileDelete } from '@/features/client/user/userMutations';
+import { useUserFollowProfileQuery } from '@/features/client/user/userQueries';
+import { useUserFollowProfileInsertMutation, useUserUnfollowProfileDeleteMutation } from '@/features/client/user/userMutations';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 
@@ -25,13 +25,13 @@ export function ProfileFollowButton({
   const {
     data: isFollow,
     isLoading: loading,
-  } = useUserFollowProfile({
+  } = useUserFollowProfileQuery({
     userId: user?.id,
     followeeId: profileId,
   });
 
-  const insertFollow = useUserFollowProfileInsert();
-  const deleteFollowerMutation = useUserUnfollowProfileDelete();
+  const insertFollow = useUserFollowProfileInsertMutation();
+  const deleteFollowerMutation = useUserUnfollowProfileDeleteMutation();
 
   const followUser = async () => {
     user?.id &&

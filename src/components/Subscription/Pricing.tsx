@@ -15,6 +15,7 @@ import { Prices, Products } from '@/types/type.db';
 import { useQuery } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
+import { useUserSubscriptionsQuery } from '@/features/client/user/userQueries';
 
 interface Props {
   session: Session | null;
@@ -150,33 +151,12 @@ const OfferCard = ({
   session?: Session | null;
   priceIdLoading?: string;
 }) => {
-  const supabase = useSupabaseClient();
   const { user, loading } = useAuth();
-
   const {
     data: subscription,
-    isLoading
-  } = useQuery({
-    queryKey: ['user', user?.id, 'subscription'],
-    queryFn: async () => {
-      if (!user?.id) return;
-      const { data, error } = await supabase
-        .from('user_subscriptions')
-        .select(`
-          *,
-          price:prices(
-            *,
-            product:products(*)
-          )
-        `)
-        .eq('user_id', user.id)
-        .in('status', ['active', 'trialing'])
-        .single();
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!user?.id,
-  })
+  } = useUserSubscriptionsQuery({
+    userId: user?.id
+  });
 
   return (
     <div

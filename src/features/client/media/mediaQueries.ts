@@ -1,4 +1,3 @@
-import { MediaType, UserReview } from "@/types/type.db";
 import { useSupabaseClient } from '@/context/supabase-context';
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { mediaKeys } from "./mediaKeys";

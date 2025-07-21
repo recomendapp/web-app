@@ -21,6 +21,7 @@ import {
 import { useState } from "react"
 import { EyeIcon } from "lucide-react"
 import Loader from "../Loader/Loader"
+import { mediaKeys } from "@/features/client/media/mediaKeys"
 
 export function JustWatchWidget({
 	id,
@@ -50,7 +51,10 @@ export function JustWatchWidget({
 		data: offers,
 		isLoading
 	} = useQuery({
-		queryKey: ['movie', id, 'justwatch'],
+		queryKey: mediaKeys.provider({
+			provider: 'justwatch',
+			type: type === 'show' ? 'tv_series' : 'movie',
+		}),
 		queryFn: async () => {
 			const results = await handleGetWatchProviders(id);
 			return results;

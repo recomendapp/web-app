@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { ScrollArea } from "../ui/scroll-area"
 import { Fragment, useState } from "react"
-import { useUserDiscoveryInfinite } from "@/features/client/user/userQueries"
+import { useUserDiscoveryInfiniteQuery } from "@/features/client/user/userQueries"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "../ui/select"
 import { CardUser } from "../Card/CardUser"
 import { useTranslations } from "next-intl"
@@ -18,7 +18,7 @@ export const WidgetUserDiscovery = ({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useUserDiscoveryInfinite({
+	} = useUserDiscoveryInfiniteQuery({
 		filters: {
 			resultsPerPage: 20,
 			order: order,

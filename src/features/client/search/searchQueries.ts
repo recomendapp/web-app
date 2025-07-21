@@ -2,7 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { searchKeys } from "./searchKeys";
 import { useSupabaseClient } from "@/context/supabase-context";
 
-export const useSearchPlaylistsInfinite = ({
+export const useSearchPlaylistsInfiniteQuery = ({
 	query,
 	filters,
 }: {
@@ -42,7 +42,7 @@ export const useSearchPlaylistsInfinite = ({
 	});
 };
 
-export const useSearchUsersInfinite = ({
+export const useSearchUsersInfiniteQuery = ({
 	query,
 	filters,
 }: {

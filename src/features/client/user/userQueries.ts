@@ -757,7 +757,7 @@ export const useUserPlaylistSavedQuery = ({
  * @param filters The filters
  * @returns The user playlists
 */
-export const useUserPlaylists = ({
+export const useUserPlaylistsQuery = ({
 	userId,
 	filters,
 } : {
@@ -799,7 +799,7 @@ export const useUserPlaylists = ({
 	});
 };
 
-export const useUserPlaylistsFriendsInfinite = ({
+export const useUserPlaylistsFriendsInfiniteQuery = ({
 	userId,
 	filters,
 } : {
@@ -1027,9 +1027,101 @@ export const useUserFolloweesQuery = ({
 	});
 };
 
+export const useUserFollowProfileQuery = ({
+	userId,
+	followeeId,
+} : {
+	userId?: string;
+	followeeId?: string;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.followProfile(userId as string, followeeId as string),
+		queryFn: async () => {
+			if (!userId || !followeeId) throw Error('Missing user id or followee id');
+			const { data, error } = await supabase
+				.from('user_follower')
+				.select('*')
+				.eq('user_id', userId)
+				.eq('followee_id', followeeId)
+				.maybeSingle();
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId && !!followeeId,
+	});
+};
+
+export const useUserFollowPersonQuery = ({
+	userId,
+	personId,
+} : {
+	userId?: string;
+	personId: number;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.followPerson(userId!, personId),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			const { data, error } = await supabase
+				.from('user_person_follower')
+				.select('*')
+				.match({
+					user_id: userId,
+					person_id: personId,
+				})
+				.maybeSingle();
+			if (error) throw error;
+			return data;
+		},
+		meta: {
+			normalize: false,
+		},
+		enabled: !!userId && !!personId,
+	});
+};
+
 /* -------------------------------------------------------------------------- */
 
-export const useUserDiscoveryInfinite = ({
+/* ------------------------------ SUBSCRIPTION ------------------------------ */
+export const useUserSubscriptionsQuery = ({
+	userId,
+} : {
+	userId?: string;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.subscriptions({
+			userId: userId as string
+		}),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			const { data, error } = await supabase
+				.from('user_subscriptions')
+				.select(`
+					*,
+					price:prices(
+						*,
+						product:products(*)
+					)
+				`)
+				.eq('user_id', userId)
+				.in('status', ['active', 'trialing'])
+				.single();
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId,
+	});
+};
+/* -------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------- */
+/*                                   OTHERS                                   */
+/* -------------------------------------------------------------------------- */
+
+export const useUserDiscoveryInfiniteQuery = ({
 	filters,
 } : {
 	filters?: {
@@ -1087,27 +1179,4 @@ export const useUserDiscoveryInfinite = ({
 	});
 }
 
-export const useUserFollowProfile = ({
-	userId,
-	followeeId,
-} : {
-	userId?: string;
-	followeeId?: string;
-}) => {
-	const supabase = useSupabaseClient();
-	return useQuery({
-		queryKey: userKeys.followProfile(userId as string, followeeId as string),
-		queryFn: async () => {
-			if (!userId || !followeeId) throw Error('Missing user id or followee id');
-			const { data, error } = await supabase
-				.from('user_follower')
-				.select('*')
-				.eq('user_id', userId)
-				.eq('followee_id', followeeId)
-				.maybeSingle();
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId && !!followeeId,
-	});
-}
+/* -------------------------------------------------------------------------- */

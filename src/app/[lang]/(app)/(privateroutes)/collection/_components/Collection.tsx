@@ -3,7 +3,6 @@
 import React, { useMemo } from 'react';
 import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
 import { Link } from "@/lib/i18n/routing";
-import { UserPlaylists } from '@/components/User/UserPlaylists/UserPlaylists';
 import { Bookmark, Heart, Send } from 'lucide-react';
 import {
   Tabs,
@@ -17,6 +16,7 @@ import { useUI } from '@/context/ui-context';
 import HeaderRightSide from '@/components/Header/HeaderRightSide';
 import { useTranslations } from 'next-intl';
 import { capitalize } from 'lodash';
+import { UserPlaylists } from './UserPlaylists';
 
 const Collection = () => {
   const { device } = useUI();

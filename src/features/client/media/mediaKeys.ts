@@ -52,4 +52,14 @@ export const mediaKeys = {
 		filters?: any;
 	}) => filters ? [...mediaKeys.detail({ id: personId, type: 'person' }), 'mostRated', filters] as const : [...mediaKeys.detail({ id: personId, type: 'person' }), 'mostRated'] as const,
 	/* -------------------------------------------------------------------------- */
+
+	/* -------------------------------- PROVIDERS ------------------------------- */
+	provider: ({
+		provider,
+		type,
+	}: {
+		provider: 'justwatch';
+		type: MediaType;
+	}) => [...mediaKeys.specify({ type }), 'provider', provider],
+	/* -------------------------------------------------------------------------- */
 }

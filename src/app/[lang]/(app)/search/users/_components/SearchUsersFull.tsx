@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { CardUser } from '@/components/Card/CardUser';
 import { useTranslations } from 'next-intl';
-import { useSearchUsersInfinite } from '@/features/client/search/searchQueries';
+import { useSearchUsersInfiniteQuery } from '@/features/client/search/searchQueries';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function SearchUsersFull({
@@ -20,7 +20,7 @@ export default function SearchUsersFull({
 		isLoading: loading,
 		fetchNextPage,
 		hasNextPage,
-	} = useSearchUsersInfinite({
+	} = useSearchUsersInfiniteQuery({
     query: query,
   });
 

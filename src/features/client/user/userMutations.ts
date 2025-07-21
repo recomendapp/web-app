@@ -10,7 +10,7 @@ import { mediaKeys } from '../media/mediaKeys';
  * Accepts a follower request
  * @returns The mutation
  */
-export const useUserAcceptFollowerRequest = ({
+export const useUserAcceptFollowerRequestMutation = ({
 	userId,
 } : {
 	userId?: string;
@@ -48,7 +48,7 @@ export const useUserAcceptFollowerRequest = ({
  * Declines a follower request
  * @returns The mutation
  */
-export const useUserDeclineFollowerRequest = ({
+export const useUserDeclineFollowerRequestMutation = ({
 	userId,
 } : {
 	userId?: string;
@@ -78,7 +78,7 @@ export const useUserDeclineFollowerRequest = ({
 	});
 };
 
-export const useUserFollowProfileInsert = () => {
+export const useUserFollowProfileInsertMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
 	return useMutation({
@@ -114,7 +114,7 @@ export const useUserFollowProfileInsert = () => {
 	});
 };
 
-export const useUserUnfollowProfileDelete = () => {
+export const useUserUnfollowProfileDeleteMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
 	return useMutation({
@@ -147,6 +147,62 @@ export const useUserUnfollowProfileDelete = () => {
 				),
 				};
 			});
+		},
+	});
+};
+
+export const useUserFollowPersonInsertMutation = () => {
+	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({
+			personId,
+			userId,
+		} : {
+			personId: number;
+			userId: string;
+		}) => {
+			const { data, error } = await supabase
+				.from('user_person_follower')
+				.insert({
+					person_id: personId,
+					user_id: userId,
+				})
+				.select('*')
+				.single();
+			if (error) throw error;
+			return data;
+		},
+		onSuccess: (data) => {
+			queryClient.setQueryData(userKeys.followPerson(data.user_id, data.person_id), data);
+		},
+	});
+};
+
+export const useUserUnfollowPersonDeleteMutation = () => {
+	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({
+			personId,
+			userId,
+		} : {
+			personId: number;
+			userId: string;
+		}) => {
+			if (!userId || !personId) throw new Error('Invalid userId or personId');
+			const { data, error } = await supabase
+				.from('user_person_follower')
+				.delete()
+				.eq('person_id', personId)
+				.eq('user_id', userId)
+				.select('*')
+				.single();
+			if (error) throw error;
+			return data;
+		},
+		onSuccess: (data) => {
+			queryClient.setQueryData(userKeys.followPerson(data.user_id, data.person_id), null);
 		},
 	});
 };

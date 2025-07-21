@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useSearchPlaylistsInfinite } from '@/features/client/search/searchQueries';
+import { useSearchPlaylistsInfiniteQuery } from '@/features/client/search/searchQueries';
 import { useTranslations } from 'next-intl';
 
 export default function SearchPlaylistsFull({
@@ -18,7 +18,7 @@ export default function SearchPlaylistsFull({
     isLoading,
     fetchNextPage,
     hasNextPage,
-  } = useSearchPlaylistsInfinite({
+  } = useSearchPlaylistsInfiniteQuery({
     query: query,
   });
   const loading = isLoading || playlists === undefined;

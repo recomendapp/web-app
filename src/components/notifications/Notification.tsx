@@ -8,7 +8,7 @@ import { Button } from '../ui/button';
 import { Icons } from '@/config/icons';
 import { TooltipBox } from '../Box/TooltipBox';
 import { Skeleton } from '../ui/skeleton';
-import { useUserAcceptFollowerRequest, useUserDeclineFollowerRequest } from '@/features/client/user/userMutations';
+import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from '@/features/client/user/userMutations';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 
@@ -18,10 +18,10 @@ interface NotificationProps extends React.HTMLAttributes<HTMLDivElement | HTMLAn
 
 const NotificationContent = ({ notification }: { notification: NotificationType }) => {
 	const { user } = useAuth();
-	const acceptRequest = useUserAcceptFollowerRequest({
+	const acceptRequest = useUserAcceptFollowerRequestMutation({
 		userId: user?.id,
 	});
-	const declineRequest = useUserDeclineFollowerRequest({
+	const declineRequest = useUserDeclineFollowerRequestMutation({
 		userId: user?.id,
 	});
 

@@ -79,7 +79,7 @@ const CardMediaPoster = React.forwardRef<
 	const { device } = useUI();
 	const [isHovered, setIsHovered] = React.useState(false);
 	return (
-		<TooltipBox tooltip={`${media.title} (${media.date && (new Date(media.date)).getFullYear()})`} side='top'>
+		<TooltipBox tooltip={`${media.title}${media.date ? ` (${(new Date(media.date)).getFullYear()})` : ''}`} side='top'>
 			<Card
 				ref={ref}
 				className={cn(

@@ -1,5 +1,5 @@
 import { useAuth } from "@/context/auth-context";
-import { useUserPlaylistsFriendsInfinite } from "@/features/client/user/userQueries";
+import { useUserPlaylistsFriendsInfiniteQuery } from "@/features/client/user/userQueries";
 import { cn } from "@/lib/utils"
 import { CardPlaylist } from "../Card/CardPlaylist";
 import { Button } from "../ui/button";
@@ -12,7 +12,7 @@ export const WidgetUserFriendsPlaylists = ({
 	const t = useTranslations('widgets');
 	const {
 		data: playlists,
-	} = useUserPlaylistsFriendsInfinite({
+	} = useUserPlaylistsFriendsInfiniteQuery({
 		userId: user?.id,
 		filters: {
 			resultsPerPage: 8,

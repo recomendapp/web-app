@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { CardUser } from "@/components/Card/CardUser";
-import { useSearchUsersInfinite } from "@/features/client/search/searchQueries";
+import { useSearchUsersInfiniteQuery } from "@/features/client/search/searchQueries";
 
 export default function SearchUsersSmall({
   query,
@@ -21,7 +21,7 @@ export default function SearchUsersSmall({
   const {
 		data: users,
 		isLoading,
-	} = useSearchUsersInfinite({
+	} = useSearchUsersInfiniteQuery({
     query: query,
   });
 

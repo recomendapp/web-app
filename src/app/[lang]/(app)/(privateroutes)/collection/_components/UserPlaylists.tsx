@@ -6,49 +6,26 @@ import { Link } from "@/lib/i18n/routing";
 import { usePathname } from '@/lib/i18n/routing';
 import { Fragment, useEffect } from 'react';
 import Loader from '@/components/Loader/Loader';
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
+import { useUserPlaylistsInfiniteQuery } from '@/features/client/user/userQueries';
 
 export function UserPlaylists({
   grid = false,
 }: {
   grid?: boolean;
 }) {
-  const supabase = useSupabaseClient();
   const { user } = useAuth();
 	const pathname = usePathname();
 	const { ref, inView } = useInView();
-	const numberOfResult = 20;
 
   const {
     data: playlists,
     isLoading,
     fetchNextPage,
-    isFetchingNextPage,
     hasNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['user', user?.id, 'playlists', { limit: "inifite", order: 'updated_at-desc'}],
-    queryFn: async ({ pageParam = 1 }) => {
-      if (!user?.id) return;
-      let from = (pageParam - 1) * numberOfResult;
-      let to = from - 1 + numberOfResult;
-
-      const { data, error } = await supabase
-        .from('playlists')
-        .select(`*`)
-        .eq('user_id', user.id)
-        .range(from, to)
-        .order('updated_at', { ascending: false});
-      if (error) throw error;
-      return data;
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, pages) => {
-      return lastPage?.length == numberOfResult ? pages.length + 1 : undefined;
-    },
-    enabled: !!user?.id,
+  } = useUserPlaylistsInfiniteQuery({
+    userId: user?.id,
   });
 
   useEffect(() => {

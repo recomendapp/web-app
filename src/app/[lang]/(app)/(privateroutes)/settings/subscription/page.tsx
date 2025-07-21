@@ -1,4 +1,5 @@
 'use client';
+
 import Loader from '@/components/Loader/Loader';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -6,44 +7,22 @@ import { useAuth } from '@/context/auth-context';
 import { Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from "@/lib/i18n/routing";
-import { useQuery } from '@tanstack/react-query';
 import { getUrlCustomerPortal } from '@/lib/stripe/stripe-functions';
-import { useSupabaseClient } from '@/context/supabase-context';
+import { useUserSubscriptionsQuery } from '@/features/client/user/userQueries';
 
 export default function SettingsAccountPage() {
-  const supabase = useSupabaseClient();
   const { user, session } = useAuth();
   const t = useTranslations('pages.settings');
   const router = useRouter();
 
   const {
     data: subscription,
-    isLoading
-  } = useQuery({
-    queryKey: ['user', user?.id, 'subscription'],
-    queryFn: async () => {
-      if (!user?.id) return;
-      const { data, error } = await supabase
-        .from('user_subscriptions')
-        .select(`
-          *,
-          price:prices(
-            *,
-            product:products(*)
-          )
-        `)
-        .eq('user_id', user.id)
-        .in('status', ['active', 'trialing'])
-        .single();
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!user?.id,
+  } = useUserSubscriptionsQuery({
+    userId: user?.id,
   })
 
   const redirectToCustomerPortal = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw Error('Could not get user');
       const url = await getUrlCustomerPortal(session, location.origin);
       router.push(url);
