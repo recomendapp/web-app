@@ -110,6 +110,9 @@ export const useUserFollowProfileInsertMutation = () => {
 					pages: oldData.pages.map((page) => [...page, data]),
 				}
 			});
+			queryClient.invalidateQueries({
+				queryKey: userKeys.feed({ userId: data.user_id })
+			});
 		},
 	});
 };
@@ -147,6 +150,9 @@ export const useUserUnfollowProfileDeleteMutation = () => {
 				),
 				};
 			});
+			queryClient.invalidateQueries({
+				queryKey: userKeys.feed({ userId: data.user_id })
+			});
 		},
 	});
 };
@@ -175,6 +181,9 @@ export const useUserFollowPersonInsertMutation = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.setQueryData(userKeys.followPerson(data.user_id, data.person_id), data);
+			queryClient.invalidateQueries({
+				queryKey: userKeys.feedCastCrew(data.user_id),
+			});
 		},
 	});
 };
@@ -203,10 +212,12 @@ export const useUserUnfollowPersonDeleteMutation = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.setQueryData(userKeys.followPerson(data.user_id, data.person_id), null);
+			queryClient.invalidateQueries({
+				queryKey: userKeys.feedCastCrew(data.user_id),
+			});
 		},
 	});
 };
-
 
 /* -------------------------------- ACTIVITY -------------------------------- */
 export const useUserActivityInsertMutation = () => {
