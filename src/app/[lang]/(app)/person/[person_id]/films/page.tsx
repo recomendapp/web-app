@@ -3,7 +3,6 @@ import { getPerson, getPersonFilms } from '@/features/server/media/mediaQueries'
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { CardMedia } from '@/components/Card/CardMedia';
-import { z } from "zod";
 import { Pagination } from './_components/Pagination';
 import { Icons } from '@/config/icons';
 import { Link } from "@/lib/i18n/routing";
@@ -14,46 +13,8 @@ import { siteConfig } from '@/config/site';
 import { seoLocales } from '@/lib/i18n/routing';
 import { notFound, redirect } from 'next/navigation';
 import { ActiveFilters } from './_components/ActiveFilters';
+import { getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage, getValidatePerPage } from './_components/constants';
 
-const SORT_BY = ["release_date", "vote_average"] as const;
-const DISPLAY = ["grid", "row"] as const;
-const DEFAULT_PAGE = 1;
-const DEFAULT_PER_PAGE = 20;
-const DEFAULT_DISPLAY = "grid";
-const DEFAULT_SORT_BY = "release_date";
-const DEFAULT_SORT_ORDER = "desc";
-
-const sortBySchema = z.enum(SORT_BY);
-const getValidatedSortBy = (order?: string | null): z.infer<typeof sortBySchema> => {
-  return sortBySchema.safeParse(order).success ? order! as z.infer<typeof sortBySchema> : DEFAULT_SORT_BY;
-};
-const orderSchema = z.enum(["asc", "desc"]);
-const getValidatedSortOrder = (order?: string | null): z.infer<typeof orderSchema> => {
-  return orderSchema.safeParse(order).success ? order! as z.infer<typeof orderSchema> : DEFAULT_SORT_ORDER;
-};
-const pageSchema = z.number().int().positive();
-const getValidatePage = (page?: number | null): number => {
-	return pageSchema.safeParse(page).success ? page! : DEFAULT_PAGE;
-}
-const perPageSchema = z.number().int().positive();
-const getValidatePerPage = (perPage?: number | null): number => {
-	return perPageSchema.safeParse(perPage).success ? perPage! : DEFAULT_PER_PAGE;
-}
-const displaySchema = z.enum(DISPLAY);
-const getValidatedDisplay = (display?: string | null): z.infer<typeof displaySchema> => {
-  return displaySchema.safeParse(display).success ? display! as z.infer<typeof displaySchema> : DEFAULT_DISPLAY;
-};
-
-const departmentSchema = z.string().optional();
-const getValidateDepartment = (department?: string | null): string | undefined => {
-  if (department === null) return undefined;
-  return departmentSchema.safeParse(department).success ? department : undefined;
-};
-const jobSchema = z.string().optional();
-const getValidateJob = (job?: string | null): string | undefined => {
-  if (job === null) return undefined;
-  return jobSchema.safeParse(job).success ? job : undefined;
-};
 export async function generateMetadata(
   props: {
 	params: Promise<{

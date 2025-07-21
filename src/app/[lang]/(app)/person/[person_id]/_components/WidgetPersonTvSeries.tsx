@@ -18,6 +18,7 @@ export async function WidgetPersonTvSeries({
   lang,
 } : WidgetPersonTvSeriesProps) {
   const common = await getTranslations({ locale: lang, namespace: 'common' });
+  if (!credits || credits.length === 0) return null;
   return (
     <div className="flex flex-col gap-2">
       <Button variant={'link'} size={'fit'} className='font-semibold text-xl p-0' asChild>

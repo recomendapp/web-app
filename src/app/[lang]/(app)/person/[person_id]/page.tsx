@@ -7,6 +7,7 @@ import { truncate, upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { seoLocales } from '@/lib/i18n/routing';
+import { WidgetPersonTvSeries } from './_components/WidgetPersonTvSeries';
 
 export async function generateMetadata(
   props: {
@@ -56,6 +57,7 @@ export default async function Person(
     <>
         {/* <WidgetPersonMostRated personId={id} lang={params.lang} /> */}
         <WidgetPersonFilms personSlug={params.person_id} credits={person.movies} lang={params.lang} />
+        <WidgetPersonTvSeries personSlug={params.person_id} credits={person.tv_series} lang={params.lang} />
     </>
   );
 }

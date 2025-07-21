@@ -82,6 +82,7 @@
       "most_old": "{{gender, select, female {{count, plural, one {plus ancienne} other {plus anciennes}}} other {{count, plural, one {plus ancien} other {plus anciens}}}}",
       "known_for": "Connu pour",
       "release_date": "date de sortie",
+      "last_appearance_date": "dernière apparition",
       "vote_average": "note moyenne",
       "added": "ajouté",
       "updated_at": "mis à jour",

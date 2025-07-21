@@ -59,6 +59,11 @@ type ViewExtensions = {
   },
   media_movie_aggregate_credits: {
     media: Media,
+    credits: {
+      job: string,
+      credit_id: string,
+      department: string,
+    }[],
   },
   media_tv_series: {
     id: number,
@@ -79,6 +84,18 @@ type ViewExtensions = {
       status: string,
       type: string,
     },
+  },
+  media_tv_series_aggregate_credits: {
+    media: Media,
+    credits: {
+      credit_id: string,
+      department: string,
+      job: string,
+      character: string | null,
+      episode_count: number,
+      season_id: number,
+      season_number: number,
+    }[],
   },
   media_person: {
     id: number,
