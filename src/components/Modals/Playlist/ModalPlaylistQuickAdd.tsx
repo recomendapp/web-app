@@ -13,12 +13,12 @@ import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitl
 import { Icons } from '@/config/icons';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
-import { useTmdbSearchMoviesInfinite, useTmdbSearchMultiInfinite } from '@/features/client/tmdb/tmdbQueries';
+import { useTmdbSearchMoviesInfiniteQuery, useTmdbSearchMultiInfiniteQuery } from '@/features/client/tmdb/tmdbQueries';
 import { useLocale, useTranslations } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
-import { useAddMediasToPlaylist } from '@/features/client/playlist/playlistMutations';
+import { usePlaylistAddMediasMutation } from '@/features/client/playlist/playlistMutations';
 import { upperFirst } from 'lodash';
 import { CardMedia } from '@/components/Card/CardMedia';
 
@@ -49,12 +49,12 @@ export function ModalPlaylistQuickAdd({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useTmdbSearchMultiInfinite({
+	} = useTmdbSearchMultiInfiniteQuery({
 		query: searchQuery,
 		locale: locale,
 	})
 
-	const addMediasToPlaylist = useAddMediasToPlaylist({
+	const addMediasToPlaylist = usePlaylistAddMediasMutation({
 		userId: user?.id,
 		playlist: playlist,
 	});

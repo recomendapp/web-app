@@ -14,7 +14,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useSupabaseClient } from '@/context/supabase-context';
 import { playlistKeys } from "@/features/client/playlist/playlistKeys";
-import { usePlaylistIsAllowedToEdit } from "@/features/client/playlist/playlistQueries";
+import { usePlaylistIsAllowedToEditQuery } from "@/features/client/playlist/playlistQueries";
 
 interface PlaylistCommentModalProps extends ModalType {
 	playlistItem: PlaylistItem;
@@ -26,7 +26,7 @@ const PlaylistCommentModal = ({
 } : PlaylistCommentModalProps) => {
 
 	const supabase = useSupabaseClient();
-	const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(playlistItem?.playlist_id as number);
+	const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(playlistItem?.playlist_id as number);
 	const { closeModal } = useModal();
 
 	const { mutateAsync: updatePlaylistItem } = useMutation({

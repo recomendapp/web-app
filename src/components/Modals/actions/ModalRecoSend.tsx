@@ -12,7 +12,7 @@ import { User } from '@/types/type.db';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '@/components/Modals/Modal';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Icons } from '@/config/icons';
-import { UserAvatar } from '@/components/User/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/components/User/UserAvatar';
 import { Label } from '@/components/ui/label';
 import { useUserRecosInsertMutation } from '@/features/client/user/userMutations';
 import { useUserRecosSendQuery } from '@/features/client/user/userQueries';

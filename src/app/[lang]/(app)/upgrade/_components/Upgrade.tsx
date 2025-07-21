@@ -13,8 +13,8 @@ import { Images } from "@/config/images";
 import { siteConfig } from "@/config/site";
 import { useAuth } from "@/context/auth-context";
 import { useModal } from "@/context/modal-context";
-import { calculateSave } from "@/hooks/calculate-save";
-import { title } from "@/hooks/custom-lodash";
+import { calculateSave } from "@/utils/calculate-save";
+import { title } from "@/utils/custom-lodash";
 import { useRandomImage } from "@/hooks/use-random-image";
 import { cn } from "@/lib/utils";
 import { Products } from "@/types/type.db";
@@ -40,7 +40,7 @@ export const Upgrade = ({
 	session,
 	product,
 } : {
-	session: Session | null;
+	session?: Session | null;
 	product: Products;
 }) => {
 	const { user } = useAuth();

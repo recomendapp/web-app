@@ -1,7 +1,7 @@
 'use client';
+
 import Image from 'next/image';
 import { ComponentProps, useEffect, useState } from 'react';
-
 import { cn } from '@/lib/utils';
 import { ImageIcon, ListVideo, UserIcon } from 'lucide-react';
 import { MediaType } from '@/types/type.db';

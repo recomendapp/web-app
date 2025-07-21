@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getMediaDetails } from '@/hooks/get-media-details';
+import { getMediaDetails } from '@/utils/get-media-details';
 import { getReview } from '@/features/server/reviews';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';

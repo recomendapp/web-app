@@ -4,7 +4,7 @@ import { Button } from '../ui/button';
 import { Icons } from '@/config/icons';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
-import { useCopyToClipboard } from '@/hooks/copy-to-clipboard';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 
 interface ButtonCopyProps extends React.ComponentPropsWithRef<typeof Button> {
 	text: string;

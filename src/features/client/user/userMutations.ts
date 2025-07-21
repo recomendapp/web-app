@@ -1,5 +1,5 @@
 import { useSupabaseClient } from '@/context/supabase-context';
-import { MediaType, User, UserFollower, UserRecosAggregated, UserReview, UserWatchlist } from '@/types/type.db';
+import { User, UserFollower, UserRecosAggregated, UserWatchlist } from '@/types/type.db';
 import { JSONContent } from '@tiptap/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { userKeys } from './userKeys';

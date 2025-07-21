@@ -5,7 +5,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Loader2 } from 'lucide-react';
 import { Dispatch } from 'react';
 
-export default function PlaylistPictureUpload({
+const PlaylistFormPictureUpload = ({
   playlist,
   loading,
   newPoster,
@@ -15,7 +15,7 @@ export default function PlaylistPictureUpload({
   loading: boolean;
   newPoster: File | undefined;
   setNewPoster: Dispatch<any>;
-}) {
+}) => {
   return (
     <label className="flex w-full h-full items-center overflow-hidden relative cursor-pointer">
       <div className="w-full shadow-2xl">
@@ -52,4 +52,6 @@ export default function PlaylistPictureUpload({
       />
     </label>
   );
-}
+};
+
+export default PlaylistFormPictureUpload;

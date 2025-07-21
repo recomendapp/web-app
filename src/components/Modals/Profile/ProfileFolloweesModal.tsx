@@ -3,7 +3,7 @@
 // COMPONENTS
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import Loader from '@/components/Loader/Loader';
+import Loader from '@/components/Loader';
 
 import { getInitiales } from '@/lib/utils';
 import { useEffect, useState } from 'react';

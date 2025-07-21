@@ -1,5 +1,5 @@
 import { ProfileFollowButton } from '@/app/[lang]/(app)/user/[username]/_components/ProfileFollowButton';
-import { UserAvatar } from '@/components/User/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/components/User/UserAvatar';
 import { Button } from '@/components/ui/button';
 import { LinkIcon, Settings } from 'lucide-react';
 import { Link } from "@/lib/i18n/routing";

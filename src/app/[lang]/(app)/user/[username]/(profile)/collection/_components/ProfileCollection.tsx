@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 import { ArrowDownNarrowWideIcon, ArrowUpNarrowWideIcon, LayoutGrid, List } from 'lucide-react';
-import Loader from '@/components/Loader/Loader';
+import Loader from '@/components/Loader';
 import { useInView } from 'react-intersection-observer';
 import {
   Select,

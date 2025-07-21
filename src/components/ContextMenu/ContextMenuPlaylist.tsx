@@ -10,7 +10,7 @@ import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
 import { PlaylistModal } from "../Modals/Playlist/PlaylistModal";
 import { ModalPlaylistGuest } from "../Modals/Playlist/ModalPlaylistGuest/ModalPlaylistGuest";
-import { useDeletePlaylist } from "@/features/client/playlist/playlistMutations";
+import { usePlaylistDeleteMutation } from "@/features/client/playlist/playlistMutations";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "@/lib/i18n/routing";
 
@@ -33,7 +33,7 @@ export const ContextMenuPlaylist = ({
 	const router = useRouter();
 	const pathname = usePathname();
 	const { openModal, createConfirmModal } = useModal();
-	const playlistDeleteMutation = useDeletePlaylist({
+	const playlistDeleteMutation = usePlaylistDeleteMutation({
 		userId: session?.user.id,
 	})
 	const common = useTranslations('common');

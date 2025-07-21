@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { UserNav } from '../User/UserNav/UserNav';
+import { UserNav } from '../User/UserNav';
 import { Button } from '../ui/button';
 import { Link } from "@/lib/i18n/routing";
 import { SocialButton } from './components/SocialButton';

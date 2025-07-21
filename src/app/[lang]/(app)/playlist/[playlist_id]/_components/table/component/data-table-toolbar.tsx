@@ -9,7 +9,7 @@ import { Playlist } from '@/types/type.db';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { ModalPlaylistQuickAdd } from '@/components/Modals/Playlist/ModalPlaylistQuickAdd';
-import { usePlaylistIsAllowedToEdit } from '@/features/client/playlist/playlistQueries';
+import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { DataTableViewOptions } from './data-table-view-options';
@@ -26,7 +26,7 @@ export function DataTableToolbar<TData>({
   playlist,
 }: DataTableToolbarProps<TData>) {
   const common = useTranslations('common');
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(playlist?.id);
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(playlist?.id);
   const { user } = useAuth();
   const { openModal } = useModal();
   const isFiltered = table.getState().columnFilters.length > 0;

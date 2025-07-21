@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Switch } from "@/components/ui/switch"
-import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar"
+import { UserAvatar } from "@/components/User/UserAvatar"
 import { useAuth } from "@/context/auth-context"
-import { useUpdatePlaylistGuest } from "@/features/client/playlist/playlistMutations"
+import { usePlaylistGuestUpdateMutation } from "@/features/client/playlist/playlistMutations"
 import { PlaylistGuest } from "@/types/type.db"
 import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
 import { ColumnDef } from "@tanstack/react-table"
@@ -83,7 +83,7 @@ const EditSwitch = ({
 	editSate?: boolean;
 }) => {
 	const { user } = useAuth()
-	const updatePlaylistGuest = useUpdatePlaylistGuest()
+	const updatePlaylistGuest = usePlaylistGuestUpdateMutation()
 	const [edit, setEdit] = useState(editSate);
 
 	const handleEdit = (value: boolean) => {

@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { useMap } from "../../../context/map-context"
 import { TriangleAlert, XIcon } from "lucide-react";
-import MoviePoster from "@/components/Movie/MoviePoster";
+import MediaPoster from "@/components/Media/MediaPoster";
 import { useLocale } from "next-intl";
-import Loader from "@/components/Loader/Loader";
+import Loader from "@/components/Loader";
 import { MovieTrailerButton } from "@/app/[lang]/(app)/film/[film_id]/(default)/_components/MovieHeader";
 import { Link } from "@/lib/i18n/routing";
 import { RuntimeTooltip } from "@/components/utils/RuntimeTooltip";
@@ -59,7 +59,7 @@ export const MovieWidget = () => {
 			) : (
 				<div className="w-full h-full flex flex-col gap-2">
 					<div className="w-full h-full flex gap-2 items-center">
-						<MoviePoster
+						<MediaPoster
 							className="h-full w-fit"
 							src={movie.avatar_url ?? ''}
 							alt={movie.title ?? ''}
@@ -86,7 +86,7 @@ export const MovieWidget = () => {
 									className="absolute bottom-2 right-2"
 								/>
 							)}
-						</MoviePoster>
+						</MediaPoster>
 						<div className="flex flex-col justify-between w-full h-full">
 							{/* TYPE & GENRES */}
 							<div className=" line-clamp-1">

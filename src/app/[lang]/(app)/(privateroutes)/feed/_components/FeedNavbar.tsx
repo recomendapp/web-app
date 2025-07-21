@@ -1,7 +1,7 @@
 "use client"
 
 import { useAuth } from "@/context/auth-context";
-import { title } from "@/hooks/custom-lodash";
+import { title } from "@/utils/custom-lodash";
 import { startCase, upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/routing";

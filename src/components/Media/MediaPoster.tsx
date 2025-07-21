@@ -1,21 +1,17 @@
 'use client';
 
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-// import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from '@/lib/utils';
-import { ComponentProps } from 'react';
+import React from 'react';
 
-interface MoviePosterProps extends ComponentProps<typeof ImageWithFallback> {
+interface MediaPosterProps extends React.ComponentProps<typeof ImageWithFallback> {
   classNameFallback?: string;
 }
 
-export default function MoviePoster({
-  children,
-  className,
-  classNameFallback,
-  alt,
-  ...props
-}: MoviePosterProps) {
+const MediaPoster = React.forwardRef<
+  HTMLImageElement,
+  MediaPosterProps
+>(({ children, className, classNameFallback, alt, ...props }, ref) => {
   return (
     <div
       className={cn(
@@ -24,6 +20,7 @@ export default function MoviePoster({
       )}
     >
       <ImageWithFallback
+        ref={ref}
         alt={alt}
         className={cn("rounded-md object-cover", classNameFallback)}
         type='movie'
@@ -32,4 +29,7 @@ export default function MoviePoster({
       {children}
     </div>
   );
-}
+});
+MediaPoster.displayName = 'MediaPoster';
+
+export default MediaPoster;

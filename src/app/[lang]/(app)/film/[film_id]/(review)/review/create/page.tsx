@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
 import { createServerClient } from '@/lib/supabase/server';
-import { getIdFromSlug } from '@/hooks/get-id-from-slug';
+import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { getMovie } from '@/features/server/media/mediaQueries';

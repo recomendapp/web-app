@@ -1,6 +1,6 @@
 'use client';
 import { useEffect } from 'react';
-import Loader from '@/components/Loader/Loader';
+import Loader from '@/components/Loader';
 import { useInView } from 'react-intersection-observer';
 import {
   Select,

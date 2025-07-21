@@ -1,7 +1,7 @@
 'use client'
 import { Header } from '@/components/Header/Header';
 import { useUI } from '@/context/ui-context';
-import { Navbar } from "../../components/Navbar/Navbar";
+import { Navbar } from "../../components/Navbar";
 import { SidebarInset, SidebarProvider } from "../../components/ui/sidebar";
 import { SidebarLeft } from "./sidebars/sidebar-left/SidebarLeft";
 import { SidebarRight } from './sidebars/sidebar-right/SidebarRight';

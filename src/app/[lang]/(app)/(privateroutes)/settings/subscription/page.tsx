@@ -1,6 +1,6 @@
 'use client';
 
-import Loader from '@/components/Loader/Loader';
+import Loader from '@/components/Loader';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/auth-context';

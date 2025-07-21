@@ -1,7 +1,5 @@
 import { Lang } from '@/types/type.i18n';
 import Marquee from "react-fast-marquee";
-
-import Pricing from '@/components/Subscription/Pricing';
 import {
   getActiveProductsWithPrices,
   getSession,
@@ -179,12 +177,6 @@ export default async function About(
           {t('pricing.label')}
         </h2>
         <p>{t('pricing.intro')}</p>
-        <Pricing
-          session={session}
-          products={products}
-          title={false}
-          className="!p-0"
-        />
         <p className="text-xs italic text-muted-foreground">
           {t('pricing.subdescription')}
         </p>

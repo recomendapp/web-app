@@ -43,13 +43,13 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { MouseSensor, TouchSensor } from '@/components/DragNDrop/CustomSensor';
+import { MouseSensor, TouchSensor } from '@/lib/dnd-kit/CustomSensor';
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 import { Playlist, PlaylistItem } from '@/types/type.db';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { useMutation } from '@tanstack/react-query';
-import { usePlaylistIsAllowedToEdit } from '@/features/client/playlist/playlistQueries';
+import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 
@@ -72,7 +72,7 @@ export default function PlaylistTable({
 }: DataTableProps) {
   const supabase = useSupabaseClient();
   const common = useTranslations('common');
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(playlist?.id);
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(playlist?.id);
   
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -294,7 +294,7 @@ const DraggableTableRow = ({
 } : {
   row: Row<PlaylistItem>;
 }) => {
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(row.original?.playlist_id);
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(row.original?.playlist_id);
   const {
     attributes,
     listeners,

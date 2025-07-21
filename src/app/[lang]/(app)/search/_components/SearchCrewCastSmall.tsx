@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Media } from '@/types/type.db';
 import { getTranslations } from 'next-intl/server';
-import { title } from '@/hooks/custom-lodash';
+import { title } from '@/utils/custom-lodash';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 
 export default async function SearchCrewCastSmall({

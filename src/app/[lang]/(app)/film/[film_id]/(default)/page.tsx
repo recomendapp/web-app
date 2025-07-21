@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
-import { getIdFromSlug } from '@/hooks/get-id-from-slug';
+import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getMovie } from '@/features/server/media/mediaQueries';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';

@@ -24,7 +24,7 @@ import {
 // ICONS
 import { Play } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
-import MoviePoster from '@/components/Movie/MoviePoster';
+import MediaPoster from '@/components/Media/MediaPoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import { cn } from '@/lib/utils';
@@ -61,7 +61,7 @@ export default function MovieHeader({
         <HeaderBox background={movie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${movie.backdrop_path}`, alt: movie.title ?? '', unoptimized: true } : undefined}>
           <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* MOVIE POSTER */}
-            <MoviePoster
+            <MediaPoster
               className="w-[200px]"
               src={movie.avatar_url ?? ''}
               alt={movie.title ?? ''}
@@ -91,7 +91,7 @@ export default function MovieHeader({
                   className="absolute bottom-2 right-2"
                 />
               ) : null}
-            </MoviePoster>
+            </MediaPoster>
             {/* MOVIE MAIN DATA */}
             <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
               {/* TYPE & GENRES */}

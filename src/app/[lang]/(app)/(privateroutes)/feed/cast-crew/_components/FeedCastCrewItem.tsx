@@ -5,9 +5,9 @@ import { Link } from "@/lib/i18n/routing";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { useFormatter, useTranslations } from "next-intl";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
-import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
+import { UserAvatar } from "@/components/User/UserAvatar";
 import { ContextMenuMedia } from "@/components/ContextMenu/ContextMenuMedia";
-import { getMediaDetails } from "@/hooks/get-media-details";
+import { getMediaDetails } from "@/utils/get-media-details";
 import { UserFeedCastCrew } from "@/types/type.db";
 import { upperFirst } from "lodash";
 

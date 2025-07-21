@@ -1,6 +1,6 @@
 import { siteConfig } from '@/config/site';
 import { getTvSeries } from '@/features/server/media/mediaQueries';
-import { getIdFromSlug } from '@/hooks/get-id-from-slug';
+import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ShowPlaylists } from './_components/ShowPlaylists';

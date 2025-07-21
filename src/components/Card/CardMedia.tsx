@@ -6,7 +6,7 @@ import { Media, MediaPerson, UserActivity } from "@/types/type.db";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Link, useRouter } from "@/lib/i18n/routing";
 import { ContextMenuMedia } from "../ContextMenu/ContextMenuMedia";
-import { getMediaDetails, getMediaUrlPrefix } from "@/hooks/get-media-details";
+import { getMediaDetails, getMediaUrlPrefix } from "@/utils/get-media-details";
 import { TooltipBox } from "../Box/TooltipBox";
 import { Button } from "../ui/button";
 import { BadgeMedia } from "../Badge/BadgeMedia";
@@ -47,7 +47,7 @@ const CardMediaDefault = React.forwardRef<
 			{...props}
 		>
 			<div
-			className={cn('relative h-full shrink-0 rounded-md overflow-hidden', mediaDetails.poster_className, posterClassName)}
+			className={cn('relative h-full shrink-0 rounded-md overflow-hidden', mediaDetails.posterClassName, posterClassName)}
 			>
 				<ImageWithFallback
 					src={media.avatar_url ?? ''}

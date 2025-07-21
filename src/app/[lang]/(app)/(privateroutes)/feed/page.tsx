@@ -4,7 +4,7 @@ import { useAuth } from "@/context/auth-context";
 import FeedItem from "./_components/FeedItem";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import Loader from "@/components/Loader/Loader";
+import Loader from "@/components/Loader";
 import { useUserFeedInfiniteQuery } from "@/features/client/user/userQueries";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";

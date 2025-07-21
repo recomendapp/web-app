@@ -3,7 +3,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "./Modal";
 import { useModal } from "@/context/modal-context";
-import { useUserFollowersRating } from "@/features/client/user/userQueries";
+import { useUserFollowersRatingQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
@@ -38,7 +38,7 @@ export const ModalMediaFollowersRating = ({
 		data: followersRating,
 		isLoading,
 		isError,
-	} = useUserFollowersRating({
+	} = useUserFollowersRatingQuery({
 		userId: user?.id,
 		mediaId: mediaId,
 	});

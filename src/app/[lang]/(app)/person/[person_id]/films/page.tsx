@@ -1,4 +1,4 @@
-import { getIdFromSlug } from '@/hooks/get-id-from-slug';
+import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getPerson, getPersonFilms } from '@/features/server/media/mediaQueries';
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';

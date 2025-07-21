@@ -1,6 +1,6 @@
 // UI
 import { Button } from '@/components/ui/button';
-import { useCopyToClipboard } from '@/hooks/copy-to-clipboard';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import { cn } from '@/lib/utils';
 import { capitalize } from 'lodash';
 

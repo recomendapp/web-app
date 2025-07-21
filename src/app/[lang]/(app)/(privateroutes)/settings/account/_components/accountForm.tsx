@@ -17,7 +17,7 @@ import toast from 'react-hot-toast';
 import { useAuth } from '@/context/auth-context';
 import { Icons } from '@/config/icons';
 import { useEffect, useState } from 'react';
-import Loader from '@/components/Loader/Loader';
+import Loader from '@/components/Loader';
 import { useMutation } from '@tanstack/react-query';
 import { Switch } from '@/components/ui/switch';
 import { useSupabaseClient } from '@/context/supabase-context';

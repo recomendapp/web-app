@@ -6,8 +6,8 @@ import { PlaylistItem } from '@/types/type.db';
 import useDebounce from '@/hooks/use-debounce';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { usePlaylistFull, usePlaylistIsAllowedToEdit, usePlaylistItems } from '@/features/client/playlist/playlistQueries';
-import { useUpdatePlaylistItemChanges } from '@/features/client/playlist/playlistMutations';
+import { usePlaylistFullQuery, usePlaylistIsAllowedToEditQuery, usePlaylistItemsQuery } from '@/features/client/playlist/playlistQueries';
+import { usePlaylistItemsMutation } from '@/features/client/playlist/playlistMutations';
 import PlaylistHeader from './_components/PlaylistHeader';
 import PlaylistTable from './_components/table/PlaylistTable';
 
@@ -21,11 +21,11 @@ export default function PlaylistPage(
   const { user } = useAuth();
   const [shouldRefresh, setShouldRefresh] = React.useState(false);
   const debouncedRefresh = useDebounce(shouldRefresh, 200);
-  const { data: playlist, refetch } = usePlaylistFull(Number(params.playlist_id));
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(playlist?.id);
-  const { data: playlistItems } = usePlaylistItems(playlist?.id);
+  const { data: playlist, refetch } = usePlaylistFullQuery(Number(params.playlist_id));
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(playlist?.id);
+  const { data: playlistItems } = usePlaylistItemsQuery(playlist?.id);
   const [playlistItemsRender, setPlaylistItemsRender] = React.useState<PlaylistItem[]>(playlistItems || []);
-  const { mutate: updatePlaylistItemChanges } = useUpdatePlaylistItemChanges({
+  const { mutate: updatePlaylistItemChanges } = usePlaylistItemsMutation({
     playlistId: Number(params.playlist_id),
   });
 

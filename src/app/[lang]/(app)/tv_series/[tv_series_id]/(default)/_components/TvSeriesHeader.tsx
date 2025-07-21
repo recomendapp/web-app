@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/select';
 import { Play } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
-import MoviePoster from '@/components/Movie/MoviePoster';
+import MediaPoster from '@/components/Media/MediaPoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
@@ -56,7 +56,7 @@ export default function TvSerieHeader({
         <HeaderBox background={serie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${serie.backdrop_path}`, alt: serie.title ?? '', unoptimized: true } : undefined}>
           <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* SERIE POSTER */}
-            <MoviePoster
+            <MediaPoster
               className="w-[200px]"
               src={serie.avatar_url ?? ''}
               alt={serie.title ?? ''}
@@ -86,7 +86,7 @@ export default function TvSerieHeader({
                   className="absolute bottom-2 right-2"
                 />
               ) : null}
-            </MoviePoster>
+            </MediaPoster>
             {/* MOVIE MAIN DATA */}
             <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
               {/* TYPE & GENRES */}

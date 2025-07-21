@@ -12,16 +12,16 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Playlist, PlaylistType } from '@/types/type.db';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
-import { useAddMediaToPlaylists, useCreatePlaylist } from '@/features/client/playlist/playlistMutations';
+import { usePlaylistAddToPlaylistsMutation, usePlaylistCreateMutation } from '@/features/client/playlist/playlistMutations';
 import { Icons } from '@/config/icons';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Label } from '@/components/ui/label';
 import { useQueryClient } from '@tanstack/react-query';
-import { meKeys } from '@/features/client/me/meKeys';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useTranslations } from 'next-intl';
-import { useMeAddMediaToPlaylist } from '@/features/client/me/meQueries';
 import { upperFirst } from 'lodash';
+import { usePlaylistAddToQuery } from '@/features/client/playlist/playlistQueries';
+import { playlistKeys } from '@/features/client/playlist/playlistKeys';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -47,18 +47,18 @@ export function ModalPlaylistAdd({
 	const {
 		data: playlists,
 		isLoading,
-	} = useMeAddMediaToPlaylist({
+	} = usePlaylistAddToQuery({
 		mediaId: mediaId,
 		userId: user?.id,
 		type,
 	});
 
-	const addMovieToPlaylist = useAddMediaToPlaylists({
+	const addMovieToPlaylist = usePlaylistAddToPlaylistsMutation({
 		mediaId: mediaId,
 		userId: user?.id,
 	});
 
-	const createPlaylistMutation = useCreatePlaylist({
+	const createPlaylistMutation = usePlaylistCreateMutation({
 		userId: user?.id,
 	})
 
@@ -84,7 +84,7 @@ export function ModalPlaylistAdd({
 		}, {
 			onSuccess: (playlist) => {
 				// Update the cache
-				queryClient.setQueryData(meKeys.addMediaToPlaylistType({
+				queryClient.setQueryData(playlistKeys.addToType({
 					mediaId: mediaId,
 					type: 'personal',
 				}), (prev: { playlist: Playlist; already_added: boolean }[] | undefined) => {

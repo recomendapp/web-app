@@ -1,7 +1,7 @@
 import useDebounce from "@/hooks/use-debounce";
 import { useEffect, useRef, useState } from "react";
 import { useMap } from "../../../context/map-context";
-import MoviePoster from "@/components/Movie/MoviePoster";
+import MediaPoster from "@/components/Media/MediaPoster";
 import { SearchIcon } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 import Fuse from "fuse.js";
@@ -118,7 +118,7 @@ export const MapSearchbar = () => {
 						{...(i === displayedCount - 1 ? { ref: ref } : {})}
 					>
 						<div className="flex items-center gap-2">
-							<MoviePoster
+							<MediaPoster
 								className="w-10"
 								src={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
 								alt={movie.title}

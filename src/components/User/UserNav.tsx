@@ -23,7 +23,7 @@ import {
 import { Link } from "@/lib/i18n/routing";
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth-context';
-import { UserAvatar } from '../UserAvatar/UserAvatar';
+import { UserAvatar } from './UserAvatar';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 

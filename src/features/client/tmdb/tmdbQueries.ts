@@ -5,7 +5,7 @@ import { tmdbSearchSeries } from "@/lib/tmdb/queries/tmdbSearchSeries";
 import { tmdbSearchPersons } from "@/lib/tmdb/queries/tmdbSearchPersons";
 import { getTmdbSearchMulti } from "@/lib/tmdb/tmdbQueries";
 
-export const useTmdbSearchMultiInfinite = ({
+export const useTmdbSearchMultiInfiniteQuery = ({
 	query,
 	locale,
 	filters,
@@ -39,7 +39,7 @@ export const useTmdbSearchMultiInfinite = ({
 	});
 };
 
-export const useTmdbSearchMoviesInfinite = ({
+export const useTmdbSearchMoviesInfiniteQuery = ({
 	query,
 	locale,
 	filters,
@@ -69,9 +69,9 @@ export const useTmdbSearchMoviesInfinite = ({
 		throwOnError: true,
 		enabled: !!query && !!locale,
 	});
-}
+};
 
-export const useTmdbSearchSeriesInfinite = ({
+export const useTmdbSearchSeriesInfiniteQuery = ({
 	query,
 	locale,
 	filters,
@@ -101,9 +101,9 @@ export const useTmdbSearchSeriesInfinite = ({
 		throwOnError: true,
 		enabled: !!query && !!locale,
 	});
-}
+};
 
-export const useTmdbSearchPersonsInfinite = ({
+export const useTmdbSearchPersonsInfiniteQuery = ({
 	query,
 	locale,
 	filters,
@@ -133,4 +133,4 @@ export const useTmdbSearchPersonsInfinite = ({
 		throwOnError: true,
 		enabled: !!query && !!locale,
 	});
-}
+};

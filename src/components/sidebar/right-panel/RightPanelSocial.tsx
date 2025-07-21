@@ -2,7 +2,7 @@ import { CardUser } from "@/components/Card/CardUser";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
+import { UserAvatar } from "@/components/User/UserAvatar";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
 import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from "@/features/client/user/userMutations";

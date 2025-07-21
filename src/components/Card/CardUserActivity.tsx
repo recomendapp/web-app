@@ -5,7 +5,7 @@ import { UserActivity } from "@/types/type.db";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { Link } from "@/lib/i18n/routing";
 import { DateOnlyYearTooltip } from "../utils/Date";
-import { UserAvatar } from "../User/UserAvatar/UserAvatar";
+import { UserAvatar } from "../User/UserAvatar";
 import { FeedActivity } from "@/app/[lang]/(app)/(privateroutes)/feed/_components/FeedActivity";
 import { useFormatter, useNow, useTranslations } from "next-intl";
 import { upperFirst } from "lodash";

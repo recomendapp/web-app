@@ -17,8 +17,8 @@ import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentMo
 import { PlaylistItem } from '@/types/type.db';
 import { ModalPlaylistAdd } from '@/components/Modals/actions/ModalPlaylistAdd';
 import { Icons } from '@/config/icons';
-import { useDeletePlaylistItem } from '@/features/client/playlist/playlistMutations';
-import { usePlaylistIsAllowedToEdit } from '@/features/client/playlist/playlistQueries';
+import { usePlaylistItemDeleteMutation } from '@/features/client/playlist/playlistMutations';
+import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { capitalize, upperFirst } from 'lodash';
 import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
@@ -35,9 +35,9 @@ interface DataTableRowActionsProps {
 
 export function DataTableRowActions({ data }: DataTableRowActionsProps) {
   const common = useTranslations('common');
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(data?.playlist_id as number);
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(data?.playlist_id as number);
   const { openModal, createConfirmModal } = useModal();
-  const { mutateAsync: deletePlaylistItem } = useDeletePlaylistItem();
+  const { mutateAsync: deletePlaylistItem } = usePlaylistItemDeleteMutation();
 
   return (
     <>

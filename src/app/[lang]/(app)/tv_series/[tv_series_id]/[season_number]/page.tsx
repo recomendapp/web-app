@@ -2,7 +2,7 @@ import TvSeasonHeader from "./_components/TvSeasonHeader";
 import { redirect } from "next/navigation";
 import { getTvSeason } from "@/features/server/media/mediaQueries";
 import TvSeasonDetails from "./_components/TvSeasonDetails";
-import { getIdFromSlug } from "@/hooks/get-id-from-slug";
+import { getIdFromSlug } from "@/utils/get-id-from-slug";
 import { siteConfig } from "@/config/site";
 import { truncate, upperFirst } from "lodash";
 import { getTranslations } from "next-intl/server";

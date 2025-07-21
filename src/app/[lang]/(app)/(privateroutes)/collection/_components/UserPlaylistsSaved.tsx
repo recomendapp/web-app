@@ -1,6 +1,6 @@
 import { useAuth } from '@/context/auth-context';
 import { Fragment, useEffect } from 'react';
-import Loader from '@/components/Loader/Loader';
+import Loader from '@/components/Loader';
 import { useInView } from 'react-intersection-observer';
 import { Playlist } from '@/types/type.db';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';

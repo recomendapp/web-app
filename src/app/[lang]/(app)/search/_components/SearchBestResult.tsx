@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Card } from '@/components/ui/card';
-import { getMediaDetails } from '@/hooks/get-media-details';
+import { getMediaDetails } from '@/utils/get-media-details';
 import { BadgeMedia } from '@/components/Badge/BadgeMedia';
 import { Media, MediaPerson } from '@/types/type.db';
 import { upperFirst } from 'lodash';
@@ -34,7 +34,7 @@ export default async function SearchBestResult({
             <BadgeMedia type={media.media_type} variant={"accent-yellow"} className='absolute top-2 right-2' />
             <div
             className={`relative w-[100px] shrink-0 overflow-hidden
-              ${getMediaDetails(media).poster_className}
+              ${getMediaDetails(media).posterClassName}
             `}
             >
               <ImageWithFallback

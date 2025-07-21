@@ -5,10 +5,10 @@ import { useAuth } from '@/context/auth-context';
 import { Link } from "@/lib/i18n/routing";
 import { usePathname } from '@/lib/i18n/routing';
 import { Fragment, useEffect } from 'react';
-import Loader from '@/components/Loader/Loader';
 import { useInView } from 'react-intersection-observer';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { useUserPlaylistsInfiniteQuery } from '@/features/client/user/userQueries';
+import Loader from '@/components/Loader';
 
 export function UserPlaylists({
   grid = false,
@@ -27,16 +27,15 @@ export function UserPlaylists({
   } = useUserPlaylistsInfiniteQuery({
     userId: user?.id,
   });
+  const loading = playlists === undefined || isLoading;
 
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage();
   }, [inView, hasNextPage, playlists, fetchNextPage]);
 
-  if (isLoading) return <Loader />;
+  if (loading) return <Loader />;
 
-  if (!user) return null;
-
-  if (!isLoading && !playlists?.pages[0]?.length) return null;
+  if (playlists?.pages[0]?.length === 0) return null;
 
   if (grid) {
     return (

@@ -34,7 +34,7 @@ import toast from 'react-hot-toast';
 import { useEffect, useMemo, useState } from 'react';
 import { Icons } from '@/config/icons';
 import { useRouter } from 'next/navigation';
-import Loader from '@/components/Loader/Loader';
+import Loader from '@/components/Loader';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { routing } from '@/lib/i18n/routing';
 import { useLocalizedLanguageName } from '@/hooks/use-localized-language-name';

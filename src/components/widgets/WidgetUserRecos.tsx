@@ -3,7 +3,7 @@
 import { Link } from "@/lib/i18n/routing";
 import { useAuth } from '@/context/auth-context';
 import { useUserRecosQuery } from '@/features/client/user/userQueries';
-import { UserAvatar } from '@/components/User/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/components/User/UserAvatar';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';

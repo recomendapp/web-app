@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/config/icons"
-import { useDeletePlaylistGuests } from "@/features/client/playlist/playlistMutations"
+import { usePlaylistGuestsDeleteMutation } from "@/features/client/playlist/playlistMutations"
 import toast from "react-hot-toast"
 import { useModal } from "@/context/modal-context"
 
@@ -31,7 +31,7 @@ export const PlaylistGuestTable = ({
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 	const [rowSelection, setRowSelection] = useState({})
-	const deletePlaylistGuests = useDeletePlaylistGuests()
+	const deletePlaylistGuests = usePlaylistGuestsDeleteMutation()
 	const table = useReactTable({
 		data: guests,
 		columns: columns,

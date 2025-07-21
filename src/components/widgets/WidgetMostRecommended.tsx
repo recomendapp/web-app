@@ -21,7 +21,7 @@ import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 import { useAuth } from "@/context/auth-context";
 import { useTranslations } from "next-intl";
-import { useWidgetMostRecommended } from "@/features/client/widget/widgetQueries";
+import { useWidgetMostRecommendedQuery } from "@/features/client/widget/widgetQueries";
 import { ModalRecoSend } from "../Modals/actions/ModalRecoSend";
 import { BadgeMedia } from "../Badge/BadgeMedia";
 import { ContextMenuMedia } from "../ContextMenu/ContextMenuMedia";
@@ -40,7 +40,7 @@ export const WidgetMostRecommended = ({
 		data,
 		isLoading,
 		isError
-	} = useWidgetMostRecommended();
+	} = useWidgetMostRecommendedQuery();
 	const [isPlaying, setIsPlaying] = useState(true);
 	const autoplay = useRef(
 		Autoplay({

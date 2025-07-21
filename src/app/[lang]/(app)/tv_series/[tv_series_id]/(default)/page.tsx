@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import TvSeriesDetails from './_components/TvSeriesDetails';
-import { getIdFromSlug } from '@/hooks/get-id-from-slug';
+import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getTvSeries } from '@/features/server/media/mediaQueries';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';

@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getIdFromSlug } from '@/hooks/get-id-from-slug';
+import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { WidgetPersonFilms } from './_components/WidgetPersonFilms';
 import { getPerson } from '@/features/server/media/mediaQueries';
 import { getTranslations } from 'next-intl/server';

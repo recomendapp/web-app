@@ -11,21 +11,16 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-
 import { DialogFooter } from '@/components/ui/dialog';
-
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-
 import toast from 'react-hot-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
-import PlaylistPictureUpload from '../components/PlaylistPictureUpload';
-
+import PlaylistFormPictureUpload from './PlaylistFormPictureUpload';
 import compressPicture from '@/lib/utils/compressPicture';
 import { Icons } from '@/config/icons';
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -37,12 +32,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
 import { Playlist } from '@/types/type.db';
-import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { useDeletePlaylist } from '@/features/client/playlist/playlistMutations';
+import { usePlaylistDeleteMutation } from '@/features/client/playlist/playlistMutations';
 import { userKeys } from '@/features/client/user/userKeys';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 
@@ -70,7 +64,7 @@ export function PlaylistForm({
 
   const [newPoster, setNewPoster] = useState<File>();
 
-  const deletePlaylistMutation = useDeletePlaylist({
+  const deletePlaylistMutation = usePlaylistDeleteMutation({
     userId: user?.id,
   })
 
@@ -323,7 +317,7 @@ export function PlaylistForm({
       >
         <div className="flex flex-col gap-4 md:grid  md:grid-cols-2 w-full">
           <div className=" w-1/2 md:w-full">
-            <PlaylistPictureUpload
+            <PlaylistFormPictureUpload
               playlist={playlist}
               loading={loading}
               newPoster={newPoster}

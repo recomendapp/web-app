@@ -1,7 +1,7 @@
 import { ShowPlaylists } from '@/app/[lang]/(app)/film/[film_id]/(default)/playlists/_components/ShowPlaylists';
 import { siteConfig } from '@/config/site';
 import { getMovie } from '@/features/server/media/mediaQueries';
-import { getIdFromSlug } from '@/hooks/get-id-from-slug';
+import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { seoLocales } from '@/lib/i18n/routing';
 import { truncate, upperFirst } from 'lodash';
 import { Metadata } from 'next';

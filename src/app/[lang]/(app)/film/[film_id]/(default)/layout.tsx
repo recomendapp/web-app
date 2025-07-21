@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import MovieHeader from './_components/MovieHeader';
 import MovieNavbar from './_components/MovieNavbar';
-import { getIdFromSlug } from '@/hooks/get-id-from-slug';
+import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getMediaFollowersAverageRating, getMovie } from '@/features/server/media/mediaQueries';
 
 export default async function MovieLayout(

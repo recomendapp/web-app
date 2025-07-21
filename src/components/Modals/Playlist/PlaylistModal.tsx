@@ -1,6 +1,5 @@
 'use client';
 
-import { PlaylistForm } from '@/components/modules/MoviePlaylist/form/PlaylistForm';
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
 import { Playlist } from '@/types/type.db';
@@ -9,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { UserCogIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { ModalPlaylistGuest } from './ModalPlaylistGuest/ModalPlaylistGuest';
+import { PlaylistForm } from '@/components/Playlist/PlaylistForm/PlaylistForm';
 
 interface PlaylistModalProps extends ModalType {
   playlist?: Playlist;

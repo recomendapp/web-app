@@ -4,14 +4,14 @@ import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
 import { PlaylistGuest, User } from '@/types/type.db';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
-import { usePlaylistGuests, usePlaylistGuestsSearchInfinite } from '@/features/client/playlist/playlistQueries';
+import { usePlaylistGuestsQuery, usePlaylistGuestsSearchInfiniteQuery } from '@/features/client/playlist/playlistQueries';
 import { useEffect, useState } from 'react';
 import { PlaylistGuestTable } from './components/table/table';
 import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, Check } from 'lucide-react';
-import { UserAvatar } from '@/components/User/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/components/User/UserAvatar';
 import { Icons } from '@/config/icons';
-import { useAddPlaylistGuests } from '@/features/client/playlist/playlistMutations';
+import { usePlaylistGuestsInsertMutation } from '@/features/client/playlist/playlistMutations';
 import { InputSearch } from '@/components/ui/input-search';
 import useDebounce from '@/hooks/use-debounce';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -69,14 +69,14 @@ export const PlaylistGuestAddView = ({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = usePlaylistGuestsSearchInfinite({
+	} = usePlaylistGuestsSearchInfiniteQuery({
     playlistId,
     filters: {
       search: searchQuery,
       alreadyAdded: playlistGuest.map((guest) => guest?.user_id as string).concat(authUser?.id as string)
     }
   });
-  const addUsers = useAddPlaylistGuests();
+  const addUsers = usePlaylistGuestsInsertMutation();
   
   const handleAddGuest = () => {
     addUsers.mutate({
@@ -217,7 +217,7 @@ export function ModalPlaylistGuest({
   playlistId,
   ...props
 } : PlaylistGuestModalProps) {
-  const { data: playlistGuest, isError } = usePlaylistGuests(playlistId);
+  const { data: playlistGuest, isError } = usePlaylistGuestsQuery(playlistId);
   const { user } = useAuth();
   const { closeModal } = useModal();
   const [view, setView] = useState<'guests' | 'add'>('guests');

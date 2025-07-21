@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import TvSeriesHeader from './_components/TvSeriesHeader';
 import TvSeriesNavbar from './_components/TvSeriesNavbar';
-import { getIdFromSlug } from '@/hooks/get-id-from-slug';
+import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getMediaFollowersAverageRating, getTvSeries } from '@/features/server/media/mediaQueries';
 
 export default async function TvSeriesLayout(

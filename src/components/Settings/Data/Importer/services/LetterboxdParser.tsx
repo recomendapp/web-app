@@ -1,4 +1,4 @@
-import Loader from "@/components/Loader/Loader";
+import Loader from "@/components/Loader";
 import JSZip from "jszip";
 import { set } from "lodash";
 import { useEffect, useState } from "react";

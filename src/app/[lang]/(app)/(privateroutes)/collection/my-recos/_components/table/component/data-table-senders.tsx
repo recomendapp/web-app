@@ -1,5 +1,5 @@
 import { ModalRecosSenders } from "@/components/Modals/recos/ModalRecosSenders";
-import { UserAvatar } from "@/components/User/UserAvatar/UserAvatar";
+import { UserAvatar } from "@/components/User/UserAvatar";
 import { useModal } from "@/context/modal-context";
 import { UserRecosAggregated } from "@/types/type.db";
 import { Row } from "@tanstack/react-table";

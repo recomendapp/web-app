@@ -2,11 +2,11 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { FeedActivity } from "./FeedActivity";
 import { Link } from "@/lib/i18n/routing";
-import MoviePoster from "@/components/Movie/MoviePoster";
+import MediaPoster from "@/components/Media/MediaPoster";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useFormatter, useTranslations } from "next-intl";
 import { UserActivity } from "@/types/type.db";
-import { getMediaDetails } from "@/hooks/get-media-details";
+import { getMediaDetails } from "@/utils/get-media-details";
 import { CardReview } from "@/components/Card/CardReview";
 import { cn } from "@/lib/utils";
 import { upperFirst } from "lodash";
@@ -29,7 +29,7 @@ const FeedItem = ({ activity }: { activity?: UserActivity }) => {
 	  <div
 		className="@container/feed-item flex gap-4 bg-muted rounded-xl p-2 group"
 	  >
-		<MoviePoster
+		<MediaPoster
 		className="w-20 @md/feed-item:w-24"
 		src={activity.media?.avatar_url ?? ''}
 		alt={activity.media?.title ?? ''}

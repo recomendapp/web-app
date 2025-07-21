@@ -14,7 +14,7 @@ import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { useUserReviewDeleteMutation } from '@/features/client/user/userMutations';
-import { getMediaUrl } from '@/hooks/get-media-details';
+import { getMediaUrl } from '@/utils/get-media-details';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 
 export function ReviewSettings({

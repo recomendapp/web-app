@@ -2,7 +2,7 @@ import * as React from "react"
 import { Button } from "@/components/ui/button";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import { getMediaDetails } from "@/hooks/get-media-details";
+import { getMediaDetails } from "@/utils/get-media-details";
 import { cn } from "@/lib/utils";
 import { Media, MediaPerson } from "@/types/type.db";
 import { Link } from "@/lib/i18n/routing";
@@ -22,7 +22,7 @@ export const Item = React.forwardRef<
 			<div
 				className={cn(
 				'shadow-md relative shrink-0 overflow-hidden',
-				mediaDetails.poster_className,
+				mediaDetails.posterClassName,
 				className
 				)}
 			>

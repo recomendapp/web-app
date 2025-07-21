@@ -1,5 +1,5 @@
 'use client';
-import MoviePoster from '@/components/Movie/MoviePoster';
+import MediaPoster from '@/components/Media/MediaPoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { MediaTvSeriesSeason } from '@/types/type.db';
 import { upperFirst } from 'lodash';
@@ -28,7 +28,7 @@ export default function TvSeasonHeader({
 	<HeaderBox className='@xl/header-box:h-fit' background={randomBg ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${randomBg.src}`, alt: randomBg.alt ?? '', unoptimized: true } : undefined}>
 		<div className="flex flex-row w-full gap-4 items-center">
 			{/* SERIE POSTER */}
-			<MoviePoster
+			<MediaPoster
 			className="w-[80px] @md/header-box:w-[100px] @lg/header-box:w-[120px] @xl/header-box:w-[150px]"
 			src={season.avatar_url ?? ''}
 			alt={title}
@@ -46,7 +46,7 @@ export default function TvSeasonHeader({
 					className="w-full"
 				/> : null}
 			</div>
-			</MoviePoster>
+			</MediaPoster>
 			<div className="flex flex-col justify-between gap-2 w-full h-full py-4">
 				<div>
 					<span className='text-accent-yellow'>{upperFirst(common('messages.season', { count: 1 }))}</span>

@@ -13,7 +13,7 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination"
 import { cn } from '@/lib/utils';
-import { generatePaginationNumbers } from '@/hooks/generate-pagination-numbers';
+import { generatePaginationNumbers } from '@/utils/generate-pagination-numbers';
 import { redirect } from '@/lib/i18n/routing';
 import { Metadata } from 'next';
 

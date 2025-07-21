@@ -12,8 +12,8 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination"
 import { cn } from '@/lib/utils';
-import { generatePaginationNumbers } from '@/hooks/generate-pagination-numbers';
-import { title } from '@/hooks/custom-lodash';
+import { generatePaginationNumbers } from '@/utils/generate-pagination-numbers';
+import { title } from '@/utils/custom-lodash';
 import { redirect } from '@/lib/i18n/routing';
 import { Metadata } from 'next';
 

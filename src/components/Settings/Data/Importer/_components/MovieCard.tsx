@@ -1,4 +1,4 @@
-import MoviePoster from "@/components/Movie/MoviePoster";
+import MediaPoster from "@/components/Media/MediaPoster";
 import ActivityIcon from "@/components/Review/ActivityIcon";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { MediaPerson } from "@/types/type.db";
@@ -24,15 +24,13 @@ export default function MovieCard({
 	return (
 	  <div className="flex gap-4 items-center">
 		{/* MOVIE POSTER */}
-		{/* <Link href={`/film/${movie.id}`}> */}
-		  <MoviePoster
-			className="w-[60px]"
-			src={poster_url ?? ''}
-			alt={title ?? ''}
-			width={60}
-			height={90}
-		  />
-		{/* </Link> */}
+		<MediaPoster
+		className="w-[60px]"
+		src={poster_url ?? ''}
+		alt={title ?? ''}
+		width={60}
+		height={90}
+		/>
 		{/* MOVIE DATAT */}
 		<div className="w-full block">
 		  {/* TITLE */}

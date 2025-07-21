@@ -2,7 +2,7 @@ import { useSupabaseClient } from "@/context/supabase-context";
 import { useQuery } from "@tanstack/react-query";
 import { widgetKeys } from "./widgetKeys";
 
-export const useWidgetMostRecommended = ({
+export const useWidgetMostRecommendedQuery = ({
 	filters,
 } : {
 	filters?: {

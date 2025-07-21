@@ -15,7 +15,7 @@ import { postData } from '@/lib/stripe/stripe-helpers';
 import { getStripe } from '@/lib/stripe/stripeClient';
 import { upperFirst } from 'lodash';
 import { Badge } from '@/components/ui/badge';
-import { calculateSave } from '@/hooks/calculate-save';
+import { calculateSave } from '@/utils/calculate-save';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 
 

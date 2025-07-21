@@ -3,14 +3,14 @@ import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentMo
 import { PlaylistItem } from '@/types/type.db';
 import { MessageSquarePlusIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { usePlaylistIsAllowedToEdit } from '@/features/client/playlist/playlistQueries';
+import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 
 export function DataComment({ playlistItem }: { playlistItem: PlaylistItem }) {
   const common = useTranslations('common');
   const { openModal } = useModal();
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEdit(playlistItem?.playlist_id as number);
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(playlistItem?.playlist_id as number);
   return (
     <>
       <p

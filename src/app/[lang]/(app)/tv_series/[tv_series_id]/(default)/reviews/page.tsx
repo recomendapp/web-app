@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getIdFromSlug } from '@/hooks/get-id-from-slug';
+import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getTvSeries } from '@/features/server/media/mediaQueries';
 import Reviews from '@/components/Review/Reviews';
 import { Metadata } from 'next';

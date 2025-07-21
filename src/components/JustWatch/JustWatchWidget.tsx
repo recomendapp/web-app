@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dialog"
 import { useState } from "react"
 import { EyeIcon } from "lucide-react"
-import Loader from "../Loader/Loader"
+import Loader from "../Loader"
 import { mediaKeys } from "@/features/client/media/mediaKeys"
 
 export function JustWatchWidget({

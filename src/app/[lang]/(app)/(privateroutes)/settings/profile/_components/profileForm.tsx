@@ -21,7 +21,7 @@ import { useAuth } from '@/context/auth-context';
 import { Icons } from '@/config/icons';
 import { useEffect, useState } from 'react';
 import compressPicture from '@/lib/utils/compressPicture';
-import Loader from '@/components/Loader/Loader';
+import Loader from '@/components/Loader';
 import { useTranslations } from 'next-intl';
 import { useMutation } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';

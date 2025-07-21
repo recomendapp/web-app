@@ -3,9 +3,7 @@ import { Media, Playlist, PlaylistGuest, PlaylistItem } from '@/types/type.db';
 import { matchQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { playlistKeys } from './playlistKeys';
 import { userKeys } from '../user/userKeys';
-import { meKeys } from '../me/meKeys';
 import toast from 'react-hot-toast';
-import { RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 import { mediaKeys } from '../media/mediaKeys';
 
 
@@ -14,7 +12,7 @@ import { mediaKeys } from '../media/mediaKeys';
  * @param userId The user id
  * @returns The mutation
  */
-export const useCreatePlaylist = ({
+export const usePlaylistCreateMutation = ({
 	userId,
 } : {
 	userId?: string;
@@ -64,7 +62,7 @@ export const useCreatePlaylist = ({
  * @param userId The user id
  * @returns The mutation
  */
-export const useDeletePlaylist = ({
+export const usePlaylistDeleteMutation = ({
 	userId,
 } : {
 	userId?: string;
@@ -102,7 +100,7 @@ export const useDeletePlaylist = ({
  * @param userId The user id
  * @returns The mutation
  */
-export const useAddMediaToPlaylists = ({
+export const usePlaylistAddToPlaylistsMutation = ({
 	mediaId,
 	userId,
 } : {
@@ -153,7 +151,7 @@ export const useAddMediaToPlaylists = ({
 		},
 		meta: {
 			invalidates: [
-				meKeys.addMediaToPlaylist({ mediaId }),
+				playlistKeys.addTo({ mediaId }),
 			]
 		}
 	});
@@ -165,7 +163,7 @@ export const useAddMediaToPlaylists = ({
  * @param playlist The playlist
  * @returns The mutation
  */
-export const useAddMediasToPlaylist = ({
+export const usePlaylistAddMediasMutation = ({
 	userId,
 	playlist,
 } : {
@@ -209,7 +207,7 @@ export const useAddMediasToPlaylist = ({
 	});
 }
 
-export const useDeletePlaylistItem = () => {
+export const usePlaylistItemDeleteMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
 	return useMutation({
@@ -230,12 +228,8 @@ export const useDeletePlaylistItem = () => {
 			return { playlistId, playlistItemId, mediaId };
 		},
 		onSuccess: ({ playlistId, playlistItemId, mediaId }) => {
-			// queryClient.setQueryData(playlistKeys.items(playlistId), (data: PlaylistItem[]) => {
-			// 	if (!data) return null;
-			// 	return data.filter((item) => item?.id !== playlistItemId);
-			// });
 			queryClient.invalidateQueries({
-				queryKey: meKeys.addMediaToPlaylist({ mediaId }),
+				queryKey: playlistKeys.addTo({ mediaId }),
 			});
 			queryClient.invalidateQueries({
 				queryKey: mediaKeys.playlists({
@@ -256,7 +250,7 @@ export const useDeletePlaylistItem = () => {
 	});
 }
 
-export const useUpdatePlaylistItemChanges = ({
+export const usePlaylistItemsMutation = ({
 	playlistId
 } : {
 	playlistId: number;
@@ -337,7 +331,7 @@ export const useUpdatePlaylistItemChanges = ({
 	});
 }
 
-export const useUpdatePlaylistGuest = () => {
+export const usePlaylistGuestUpdateMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
 	return useMutation({
@@ -376,7 +370,7 @@ export const useUpdatePlaylistGuest = () => {
 	});
 }
 
-export const useDeletePlaylistGuests = () => {
+export const usePlaylistGuestsDeleteMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
 	return useMutation({
@@ -403,7 +397,7 @@ export const useDeletePlaylistGuests = () => {
 	});
 }
 
-export const useAddPlaylistGuests = () => {
+export const usePlaylistGuestsInsertMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
 	return useMutation({
