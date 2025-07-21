@@ -1,51 +1,27 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useSearchPlaylistsInfinite } from '@/features/client/search/searchQueries';
+import { useTranslations } from 'next-intl';
 
 export default function SearchPlaylistsFull({
   query,
 }: {
   query: string | undefined;
 }) {
-  const supabase = useSupabaseClient();
-  const [order, setOrder] = useState('popular');
-
+  const t = useTranslations('common')
   const { ref, inView } = useInView();
-
-  const numberOfResult = 8;
-
   const {
-		data: playlists,
-		isLoading: loading,
-		fetchNextPage,
-		isFetchingNextPage,
-		hasNextPage,
-	} = useInfiniteQuery({
-		queryKey: ['search', 'playlist', { search: query }],
-		queryFn: async ({ pageParam = 1 }) => {
-      if (!query) return null;
-			let from = (pageParam - 1) * numberOfResult;
-			let to = from - 1 + numberOfResult;
-
-			const { data } = await supabase
-        .from('playlists')
-        .select('*, user(*)')
-        .order('updated_at', { ascending: false})
-        .range(from, to)
-        .ilike(`title`, `${query}%`);
-        
-			return (data);
-		},
-		initialPageParam: 1,
-		getNextPageParam: (data, pages) => {
-			return data?.length == numberOfResult ? pages.length + 1 : undefined;
-		},
-		enabled: !!query
-	});
+    data: playlists,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+  } = useSearchPlaylistsInfinite({
+    query: query,
+  });
+  const loading = isLoading || playlists === undefined;
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -54,7 +30,14 @@ export default function SearchPlaylistsFull({
   }, [inView, hasNextPage, playlists, fetchNextPage]);
 
   if (!loading && !playlists?.pages[0]?.length) {
-    return <div>Aucun résultat.</div>;
+    return (
+      <p className='text-muted-foreground'>
+        {t.rich('messages.no_results_for', {
+          query: query,
+          strong: (chunks) => <strong>{chunks}</strong>,
+        })}
+      </p>
+    );
   }
 
   return (

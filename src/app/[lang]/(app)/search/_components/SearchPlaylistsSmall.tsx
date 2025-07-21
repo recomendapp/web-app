@@ -2,14 +2,13 @@
 
 import { Link } from "@/lib/i18n/routing";
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { CardPlaylist } from "@/components/Card/CardPlaylist";
+import { useSearchPlaylistsInfinite } from "@/features/client/search/searchQueries";
 
 export default function SearchPlaylistsSmall({
   query,
@@ -19,40 +18,13 @@ export default function SearchPlaylistsSmall({
   className?: string;
 }) {
   const common = useTranslations('common');
-  const supabase = useSupabaseClient();
-  const numberOfResult = 8;
 
   const {
-		data: playlists,
-		isLoading,
-		fetchNextPage,
-		isFetchingNextPage,
-		hasNextPage,
-	} = useInfiniteQuery({
-		queryKey: ['search', 'playlist', { search: query }],
-		queryFn: async ({ pageParam = 1 }) => {
-      if (!query) return null;
-			let from = (pageParam - 1) * numberOfResult;
-			let to = from - 1 + numberOfResult;
-
-      // simulate a delay
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-
-			const { data } = await supabase
-        .from('playlists')
-        .select('*, user(*)')
-        .order('updated_at', { ascending: false})
-        .range(from, to)
-        .ilike(`title`, `${query}%`);
-        
-			return (data);
-		},
-		initialPageParam: 1,
-		getNextPageParam: (data, pages) => {
-			return data?.length == numberOfResult ? pages.length + 1 : undefined;
-		},
-		enabled: !!query
-	});
+    data: playlists,
+    isLoading,
+  } = useSearchPlaylistsInfinite({
+    query: query,
+  });
 
   const showSkeleton = playlists === undefined || isLoading;
 
@@ -89,7 +61,7 @@ export default function SearchPlaylistsSmall({
               </div>
           ))
         ) : playlists?.pages.map((page, i) => (
-            page?.map((playlist, index) => (
+            page?.map((playlist) => (
               <CardPlaylist
               key={playlist?.id}
               playlist={playlist}

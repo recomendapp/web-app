@@ -55,6 +55,7 @@ export default async function SearchTvSeries(
   const params = await props.params;
   const searchParams = await props.searchParams;
   if (!searchParams?.q) redirect({ href: '/search', locale: params.lang });
+  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const page = getValidatePage(Number(searchParams.page));
 
   const { results, total_results } = await getSearchTvSeries(
@@ -67,9 +68,12 @@ export default async function SearchTvSeries(
 
   if (!results || total_results === 0 || results.length === 0) {
     return (
-      <div>
-        No results found for <strong>{searchParams.q}</strong>
-      </div>
+      <p className='text-muted-foreground'>
+        {common.rich('messages.no_results_for', {
+          query: searchParams.q,
+          strong: (chunks) => <strong>{chunks}</strong>,
+        })}
+      </p>
     )
   }
   

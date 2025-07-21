@@ -1,47 +1,28 @@
 'use client';
+
 import { useEffect } from 'react';
-import { Skeleton } from '../../ui/skeleton';
 import { useInView } from 'react-intersection-observer';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { CardUser } from '@/components/Card/CardUser';
+import { useTranslations } from 'next-intl';
+import { useSearchUsersInfinite } from '@/features/client/search/searchQueries';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function SearchUsersFull({
   query,
 }: {
   query: string | undefined;
 }) {
-  const supabase = useSupabaseClient();
+  const t = useTranslations('common');
   const { ref, inView } = useInView();
-
-  const numberOfResult = 20;
 
   const {
 		data: users,
 		isLoading: loading,
 		fetchNextPage,
-		isFetchingNextPage,
 		hasNextPage,
-	} = useInfiniteQuery({
-		queryKey: ['search', 'user', { search: query }],
-		queryFn: async ({ pageParam = 1 }) => {
-      if (!query) return null;
-			let from = (pageParam - 1) * numberOfResult;
-			let to = from - 1 + numberOfResult;
-
-			const { data } = await supabase
-        .from('user')
-        .select('*')
-        .range(from, to)
-        .ilike(`username`, `${query}%`);
-			return (data);
-		},
-		initialPageParam: 1,
-		getNextPageParam: (data, pages) => {
-			return data?.length == numberOfResult ? pages.length + 1 : undefined;
-		},
-		enabled: !!query
-	});
+	} = useSearchUsersInfinite({
+    query: query,
+  });
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -69,7 +50,14 @@ export default function SearchUsersFull({
   }
 
   if (!loading && !users?.pages[0]?.length) {
-    return <div>Aucun résultat.</div>;
+    return (
+      <p className='text-muted-foreground'>
+        {t.rich('messages.no_results_for', {
+          query: query,
+          strong: (chunks) => <strong>{chunks}</strong>,
+        })}
+      </p>
+    )
   }
 
   return (

@@ -1,6 +1,7 @@
-import SearchUsersFull from '@/components/Search/SearchUsers/SearchUsersFull';
+
 import { redirect } from '@/lib/i18n/routing';
 import { Metadata } from 'next';
+import SearchUsersFull from './_components/SearchUsersFull';
 
 export async function generateMetadata(
   props: {

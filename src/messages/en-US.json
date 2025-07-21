@@ -2,6 +2,7 @@
   "common": {
     "messages": {
       "no_results": "no results",
+      "no_results_for": "No results for <strong>{query}</strong>",
       "added_by": "added by",
       "sort_by": "sort by",
       "sort_order": "sort order",

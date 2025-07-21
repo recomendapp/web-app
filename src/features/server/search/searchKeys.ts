@@ -1,6 +1,3 @@
-import { MediaType } from "@/types/type.db";
-import { createTag } from "../create-tag";
-
 export const searchKeys = {
 	all: () => ['search'],
 
