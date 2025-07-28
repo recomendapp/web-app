@@ -114,7 +114,12 @@
       "open_social_panel": "open social panel",
       "cancel_change": "{count, plural, one {cancel change} other {cancel changes}}",
       "do_you_really_want_to_cancel_change": "Do you really want to cancel {count, plural, one {the change} other {the changes}}?",
-      "confirm": "confirm"
+      "confirm": "confirm",
+      "terms_of_use": "terms of use",
+      "privacy_policy": "privacy policy",
+      "request_made": "request made",
+      "request_canceled": "request canceled",
+      "cancel_request": "cancel request"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
@@ -568,6 +573,15 @@
         },
         "email": {
           "description": "To change your email address, please contact support."
+        },
+        "delete_account": {
+          "label": "Delete account ?",
+          "description": "Once you request deletion, your account will be scheduled for permanent removal in 30 days. All your data will be permanently erased. We do not retain any user information after deletion. You can cancel the request at any time before this deadline by returning to this page.",
+          "button": "Request account deletion",
+          "confirm": {
+            "description": "Your account will be permanently deleted on <strong>{date}</strong>. Once this date has passed, you will no longer be able to recover it."
+          },
+          "deletion_requested": "A deletion request has been made and will be effective on <strong>{date}</strong>."
         }
       },
       "appearance": {
@@ -734,6 +748,22 @@
         "title": "Explore Paradise Pictures",
         "description": "Embark on a journey to discover the island and its diverse landscapes. The many films that inhabit it are set in their diegetic environments. Will you manage to explore every one of its corners?"
       }
+    },
+    "legal": {
+      "label": "Legal",
+      "description": "Read the legal documents of {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Terms of Use",
+          "description": "Read the terms of use of {app}."
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Privacy Policy",
+          "description": "Read the privacy policy of {app}."
+        }
+      }
     }
   },
   "routes": {
@@ -743,6 +773,7 @@
     "search": "Search",
     "shop": "Shop",
     "about": "About",
+    "legal": "Legal",
     "help": "Help",
     "upgrade": "Upgrade to Premium",
     "settings": "Settings",

@@ -131,6 +131,13 @@ export const SidebarLeftRoutes = () => {
 			href: '/about',
 			target: undefined,
 		  },
+		  {
+			icon: Icons.legal,
+			label: routesDic('legal'),
+			active: pathname.startsWith('/legal'),
+			href: '/legal/terms-of-use',
+			target: undefined,
+		  }
 	], [pathname, routesDic]);
 
 	const {
@@ -264,7 +271,7 @@ export const SidebarLeftRoutes = () => {
 				<SidebarMenu className={`h-full ${!sidebarOpen ? "items-center" : ""}`}>
 					{unloggedRoutes.map((route, i) => (
 						<SidebarMenuItem key={i}>
-							<SidebarMenuButton tooltip={route.label} asChild>
+							<SidebarMenuButton tooltip={route.label} isActive={route.active}  asChild>
 								<Link href={route.href} target={route.target}>
 									<route.icon className="w-4" />
 									<span className={`line-clamp-1 transition-all duration-300 ${!sidebarOpen ? "opacity-0 hidden" : "opacity-100"}`}>

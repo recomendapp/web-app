@@ -71,6 +71,28 @@ export const useUserFriendsQuery = ({
 		enabled: !!userId,
 	});
 };
+
+export const useUserDeleteRequestQuery = ({
+	userId,
+} : {
+	userId?: string;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.deleteRequest({ userId: userId! }),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			const { data, error } = await supabase
+				.from('user_deletion_requests')
+				.select('*')
+				.eq('user_id', userId)
+				.maybeSingle();
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId,
+	});
+};
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- ACTIVITY -------------------------------- */

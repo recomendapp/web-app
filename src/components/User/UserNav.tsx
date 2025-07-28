@@ -1,14 +1,5 @@
 'use client';
 
-import {
-  HelpCircle,
-  Info,
-  LogOut,
-  Settings,
-  Sparkles,
-  Store,
-  StoreIcon,
-} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -26,6 +17,7 @@ import { useAuth } from '@/context/auth-context';
 import { UserAvatar } from './UserAvatar';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
+import { Icons } from '@/config/icons';
 
 export function UserNav({
   className,
@@ -37,7 +29,7 @@ export function UserNav({
 
   const routes = useMemo(() => [
     {
-      icon: StoreIcon,
+      icon: Icons.shop,
       label: 'shop',
       href: 'https://shop.recomend.app/',
       shortcut: '↗',
@@ -45,7 +37,7 @@ export function UserNav({
       visble: true,
     },
     {
-      icon: HelpCircle,
+      icon: Icons.help,
       label: 'help',
       href: 'https://help.recomend.app/',
       shortcut: '↗',
@@ -53,7 +45,7 @@ export function UserNav({
       visble: true,
     },
     {
-      icon: Info,
+      icon: Icons.about,
       label: 'about',
       href: '/about',
       shortcut: null,
@@ -61,7 +53,15 @@ export function UserNav({
       visble: true,
     },
     {
-      icon: Sparkles,
+      icon: Icons.legal,
+      label: 'legal',
+      href: '/legal/terms-of-use',
+      shortcut: null,
+      target: undefined,
+      visble: true,
+    },
+    {
+      icon: Icons.sparkles,
       label: 'upgrade',
       href: '/upgrade',
       shortcut: null,
@@ -69,7 +69,7 @@ export function UserNav({
       visble: !user?.premium,
     },
     {
-      icon: Settings,
+      icon: Icons.settings,
       label: 'settings',
       href: '/settings/profile',
       shortcut: null,
@@ -121,9 +121,8 @@ export function UserNav({
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout}>
-          <LogOut className="w-4" />
+          <Icons.logout className="w-4" />
           <span>{t('logout')}</span>
-          {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -3191,6 +3191,42 @@ export type Database = {
           },
         ]
       }
+      user_deletion_requests: {
+        Row: {
+          delete_after: string
+          id: number
+          requested_at: string
+          user_id: string
+        }
+        Insert: {
+          delete_after?: string
+          id?: number
+          requested_at?: string
+          user_id: string
+        }
+        Update: {
+          delete_after?: string
+          id?: number
+          requested_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_deletion_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_deletion_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_follower: {
         Row: {
           created_at: string
@@ -5032,6 +5068,10 @@ export type Database = {
       utils_check_user_privacy: {
         Args: { user_id: string }
         Returns: boolean
+      }
+      utils_delete_expired_users: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       utils_generate_username: {
         Args: { user_details: unknown }

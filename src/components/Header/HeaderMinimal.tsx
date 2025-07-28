@@ -10,7 +10,7 @@ interface HeaderMinimalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export async function HeaderMinimal({ className }: HeaderMinimalProps) {
   const supabase = await createServerClient();
-  const word = await getTranslations('word');
+  const word = await getTranslations('common.word');
 
   const {
     data: { session },
@@ -23,23 +23,19 @@ export async function HeaderMinimal({ className }: HeaderMinimalProps) {
         className
       )}
     >
-      <div className="flex gap-4 w-full items-center">
-        <Link href={'/'} className={'py-1 px-1 lg:p-4'}>
-          <Icons.site.logo className="hidden lg:block fill-accent-yellow w-48" />
-          <Icons.site.icon className="lg:hidden fill-accent-yellow w-10" />
-        </Link>
-      </div>
-      <div>
-        {session ? (
-          <UserNav />
-        ) : (
-          <Button asChild>
-            <Link href={'/auth/login'} className="whitespace-nowrap">
-              {word('login')}
-            </Link>
-          </Button>
-        )}
-      </div>
+      <Link href={'/'} className={'p-1'}>
+        <Icons.site.logo className="hidden sm:block fill-accent-yellow w-48" />
+        <Icons.site.icon className="sm:hidden fill-accent-yellow w-10" />
+      </Link>
+      {session ? (
+        <UserNav />
+      ) : (
+        <Button asChild>
+          <Link href={'/auth/login'} className="whitespace-nowrap">
+            {word('login')}
+          </Link>
+        </Button>
+      )}
     </header>
   );
 }

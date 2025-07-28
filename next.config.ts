@@ -56,6 +56,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/legal',
+        destination: '/legal/terms-of-use',
+        permanent: true,
+      },
+      {
         source: '/auth',
         destination: '/auth/login',
         permanent: true,

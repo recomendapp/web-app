@@ -2,6 +2,7 @@
 import { Separator } from '@/components/ui/separator';
 import { AccountForm } from '@/app/[lang]/(app)/(privateroutes)/settings/account/_components/accountForm';
 import { useTranslations } from 'next-intl';
+import AccountDelete from './_components/accountDelete';
 
 export default function SettingsAccountPage() {
   const t = useTranslations('pages.settings');
@@ -15,6 +16,7 @@ export default function SettingsAccountPage() {
       </div>
       <Separator />
       <AccountForm />
+      <AccountDelete />
     </div>
   );
 }

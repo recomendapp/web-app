@@ -114,7 +114,12 @@
       "open_social_panel": "ouvrir le panneau social",
       "cancel_change": "{count, plural, one {annuler la modification} other {annuler les modifications}}",
       "do_you_really_want_to_cancel_change": "Voulez-vous vraiment annuler {count, plural, one {la modification} other {les modifications}} ?",
-      "confirm": "confirmer"
+      "confirm": "confirmer",
+      "terms_of_use": "conditions d'utilisation",
+      "privacy_policy": "politique de confidentialité",
+      "request_made": "demande effectuée",
+      "request_canceled": "demande annulée",
+      "cancel_request": "annuler la demande"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",
@@ -568,6 +573,15 @@
         },
         "email": {
           "description": "Pour modifier votre adresse email, veuillez contacter le support."
+        },
+        "delete_account": {
+          "label": "Supprimer le compte ?",
+          "description": "Une fois que vous demandez la suppression, votre compte sera programmé pour une suppression définitive dans 30 jours. Toutes vos données seront définitivement effacées. Nous ne conservons aucune information utilisateur après la suppression. Vous pouvez annuler la demande à tout moment avant cette date limite en revenant sur cette page.",
+          "button": "Demander la suppression de mon compte",
+          "confirm": {
+            "description": "Votre compte sera supprimé définitivement le <strong>{date}</strong>. Une fois cette date passée, vous ne pourrez plus le récupérer."
+          },
+          "deletion_requested": "Une demande de suppression de compte a été effectuée et sera effective le <strong>{date}</strong>."
         }
       },
       "appearance": {
@@ -734,6 +748,22 @@
         "title": "Explorer Paradise Pictures",
         "description": "Partez à la découverte de l'île et de ses divers décors. Les nombreux films qui la peuplent sont localisés dans leur environnement diégétique. Arriverez-vous à explorer chacun de ses recoins ?"
       }
+    },
+    "legal": {
+      "label": "Légal",
+      "description": "Lisez les documents juridiques de {app}.",
+      "terms_of_use": {
+        "metadata": {
+          "title": "Conditions d'utilisation",
+          "description": "Lisez les conditions d'utilisation de {app}."
+        }
+      },
+      "privacy_policy": {
+        "metadata": {
+          "title": "Politique de confidentialité",
+          "description": "Lisez la politique de confidentialité de {app}."
+        }
+      }
     }
   },
   "routes": {
@@ -743,6 +773,7 @@
     "search": "Recherche",
     "shop": "Shop",
     "about": "À propos",
+    "legal": "Légal",
     "help": "Aide",
     "upgrade": "Passer à Premium",
     "settings": "Paramètres",

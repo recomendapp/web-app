@@ -40,5 +40,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: sitemapLocales('/upgrade')
       }
     },
+    // Legal pages
+    {
+      url: `${siteConfig.url}/legal/terms-of-use`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+      alternates: {
+        languages: sitemapLocales('/legal/terms-of-use')
+      }
+    },
+    {
+      url: `${siteConfig.url}/legal/privacy-policy`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+      alternates: {
+        languages: sitemapLocales('/legal/privacy-policy')
+      }
+    },
   ]
 }
