@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { RectangleEllipsisIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 export default function Login() {
   const { loginOAuth2 } = useAuth();
@@ -36,7 +37,7 @@ export default function Login() {
       setIsLoading(true);
       await loginOAuth2(provider, redirectTo);
     } catch (error) {
-      toast.error(common('error'));
+      toast.error(upperFirst(common('errors.an_error_occurred')));
     } finally {
       setIsLoading(false);
     }

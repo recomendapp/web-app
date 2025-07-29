@@ -4,12 +4,13 @@ import { cn } from "@/lib/utils"
 import { CardPlaylist } from "../Card/CardPlaylist";
 import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
+import { upperFirst } from "lodash";
 
 export const WidgetUserFriendsPlaylists = ({
 	className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
 	const { user } = useAuth();
-	const t = useTranslations('widgets');
+	const t = useTranslations('common');
 	const {
 		data: playlists,
 	} = useUserPlaylistsFriendsInfiniteQuery({
@@ -22,7 +23,7 @@ export const WidgetUserFriendsPlaylists = ({
 	return (
 	<div className={cn('@container/widget-user-friends-playlists space-y-4', className)}>
 		<Button variant={'link'} className="p-0 w-fit font-semibold text-xl hover:text-primary hover:no-underline cursor-default">
-			{t('user_friends_playlists.label')}
+			{upperFirst(t('messages.friends_playlists'))}
 		</Button>
 		<div className="grid grid-cols-4 @5xl/widget-user-friends-playlists:grid-cols-8 gap-4">
 			{playlists.pages[0].map((playlist, index) => (

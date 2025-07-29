@@ -24,6 +24,7 @@ import { useSupabaseClient } from '@/context/supabase-context';
 import { useTranslations } from 'next-intl';
 import { useUsernameAvailability } from '@/hooks/use-username-availability';
 import useDebounce from '@/hooks/use-debounce';
+import { upperFirst } from 'lodash';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -135,7 +136,7 @@ export function AccountForm() {
       });
       toast.success(common('word.saved'));
     } catch (error) {
-      toast.error(common('error'));
+      toast.error(upperFirst(common('errors.an_error_occurred')));
     } finally {
       setLoading(false);
     }

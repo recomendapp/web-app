@@ -36,19 +36,19 @@ export const ContextMenuPlaylist = ({
 	const playlistDeleteMutation = usePlaylistDeleteMutation({
 		userId: session?.user.id,
 	})
-	const common = useTranslations('common');
+	const t = useTranslations();
 	const items: Item[][] = useMemo(() => {
 		return [
 		[
 			{
 				icon: Icons.playlist,
 				href: `/playlist/${playlist.id}`,
-				label: upperFirst(common('messages.go_to_playlist')),
+				label: upperFirst(t('common.messages.go_to_playlist')),
 			},
 			{
 				icon: Icons.user,
 				href: `/@${playlist.user?.username}`,
-				label: upperFirst(common('messages.go_to_user')),
+				label: upperFirst(t('common.messages.go_to_user')),
 			},
 			...(session?.user.id === playlist.user_id ? [
 				{
@@ -58,14 +58,14 @@ export const ContextMenuPlaylist = ({
 							playlist: playlist,
 						})
 					},
-					label: upperFirst(common('messages.edit')),
+					label: upperFirst(t('common.messages.edit')),
 				},
 				{
 					icon: Icons.users,
 					onClick: () => openModal(ModalPlaylistGuest, {
 						playlistId: playlist.id,
 					}),
-					label: upperFirst(common('messages.guest', { gender: 'male', count: 2 })),
+					label: upperFirst(t('common.messages.guest', { gender: 'male', count: 2 })),
 				},
 			] : []),
 		],
@@ -77,15 +77,15 @@ export const ContextMenuPlaylist = ({
 					type: 'playlist',
 					path: `/playlist/${playlist.id}`,
 				}),
-				label: upperFirst(common('word.share')),
+				label: upperFirst(t('common.word.share')),
 			},
 			...(session?.user.id === playlist.user_id ? [
 				{
 					icon: Icons.delete,
 					onClick: () => {
 						createConfirmModal({
-							title: upperFirst(common('messages.are_u_sure')),
-							description: common.rich('playlist.actions.delete.description', {
+							title: upperFirst(t('common.messages.are_u_sure')),
+							description: t.rich('pages.playlist.actions.delete.description', {
 								title: playlist.title,
 								important: (chunk) => <b>{chunk}</b>,
 							}),
@@ -94,24 +94,24 @@ export const ContextMenuPlaylist = ({
 									{ playlistId: playlist.id },
 									{
 										onSuccess: async () => {
-											toast.success(upperFirst(common('word.deleted')));
+											toast.success(upperFirst(t('common.word.deleted')));
 											if (pathname.startsWith(`/playlist/${playlist.id}`)) {
 												router.replace('/collection');
 											}
 										},
 										onError: () => {
-											toast.error(upperFirst(common('errors.an_error_occurred')));
+											toast.error(upperFirst(t('common.errors.an_error_occurred')));
 										},
 									}
 								);
 							},
 						});
 					},
-					label: upperFirst(common('word.delete')),
+					label: upperFirst(t('common.word.delete')),
 				}
 			] : []),
 		],
-	]}, [playlist, session, common]);
+	]}, [playlist, session, t]);
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger>

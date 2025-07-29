@@ -36,7 +36,7 @@ export function ModalPlaylistAdd({
 	...props
 } : ModalPlaylistAddProps) {
 	const { user } = useAuth();
-	const common = useTranslations('common');
+	const t = useTranslations();
 	const queryClient = useQueryClient();
 	const { closeModal } = useModal();
 	const [selectedPlaylists, setSelectedPlaylists] = useState<Playlist[]>([]);
@@ -68,11 +68,11 @@ export function ModalPlaylistAdd({
 			comment: comment,
 		}, {
 			onSuccess: () => {
-				toast.success(upperFirst(common('messages.added')));
+				toast.success(upperFirst(t('common.messages.added')));
 				closeModal(props.id);
 			},
 			onError: () => {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(t('common.errors.an_error_occurred')));
 			}
 		});
 	}
@@ -99,7 +99,7 @@ export function ModalPlaylistAdd({
 				setCreatePlaylistName('');
 			},
 			onError: (error: any) => {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(t('common.errors.an_error_occurred')));
 			}
 		});
 	}
@@ -171,7 +171,7 @@ export function ModalPlaylistAdd({
 								onClick={() => setCreatePlaylist(true)}
 								>
 									<Icons.add size={20} className="mr-2" />
-									{common('playlist.actions.create')}
+									{t('pages.playlist.actions.create')}
 								</Button>
 								)}
 								<CommandSeparator className='my-1' />

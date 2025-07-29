@@ -27,6 +27,7 @@ import { BadgeMedia } from "../Badge/BadgeMedia";
 import { ContextMenuMedia } from "../ContextMenu/ContextMenuMedia";
 import { Media } from "@/types/type.db";
 import Image from "next/image";
+import { upperFirst } from "lodash";
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -35,7 +36,7 @@ export const WidgetMostRecommended = ({
 } : WidgetMostRecommendedProps) => {
 	const { session } = useAuth();
 	const { openModal } = useModal();
-	const t = useTranslations('widgets');
+	const t = useTranslations('common');
 	const {
 		data,
 		isLoading,
@@ -85,7 +86,7 @@ export const WidgetMostRecommended = ({
 							)}
 							<CardHeader className="flex-row justify-between items-center gap-2 text-xl font-semibold leading-none tracking-tight ">
 								<h3 className="text-xl">
-									{t('movies_most_recommended.label')}
+									{upperFirst(t('messages.most_recommended', { count: 0 }))}
 								</h3>
 								<div className="flex flex-col items-end gap-2">
 									<div># {index + 1}</div>

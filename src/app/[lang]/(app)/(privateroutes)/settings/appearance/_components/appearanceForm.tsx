@@ -40,6 +40,7 @@ import { routing } from '@/lib/i18n/routing';
 import { useLocalizedLanguageName } from '@/hooks/use-localized-language-name';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ChevronsUpDown } from 'lucide-react';
+import { upperFirst } from 'lodash';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
@@ -111,7 +112,7 @@ export function AppearanceForm() {
       }
       toast.success(common('word.saved'));
     } catch (error) {
-      toast.error(common('error'));
+      toast.error(upperFirst(common('errors.an_error_occurred')));
     } finally {
       setLoading(false);
     }

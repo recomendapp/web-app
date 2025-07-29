@@ -7,12 +7,13 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import { CardMedia } from '@/components/Card/CardMedia';
+import { upperFirst } from "lodash";
 
 export const WidgetUserWatchlist = ({
   className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
   const { user } = useAuth();
-  const t = useTranslations('widgets');
+  const t = useTranslations('common');
 
   const { data: watchlist } = useUserWatchlistQuery({
     userId: user?.id,
@@ -30,7 +31,7 @@ export const WidgetUserWatchlist = ({
   <div className={cn('@container/widget-user-watchlist space-y-2', className)}>
     <Button variant={'link'} className="p-0 w-fit font-semibold text-xl" asChild>
 			<Link href={'/collection/watchlist'}>
-        {t('user_watchlist.label')}
+        {upperFirst(t('messages.to_watch'))}
 			</Link>
 		</Button>
     <div className='grid grid-cols-2 @2xl/widget-user-watchlist:grid-cols-3 gap-4'>

@@ -12,14 +12,14 @@ className,
 activity: UserActivity;
 className?: string;
 }) {
-	const t = useTranslations('feed');
+	const t = useTranslations('pages.feed.actions');
   
 	return (
 	  <div className={cn("space-x-2", className)}>
 		{activity?.review ? (
 		  <>
 			<span>
-			  {t.rich('user_movie_activity.reviewed', {
+			  {t.rich('reviewed', {
 				name: () => (
 				  <Link href={`/@${activity.user?.username}`} className="text-foreground hover:underline">
 					{activity.user?.username}
@@ -36,7 +36,7 @@ className?: string;
 		  <>
 			{activity?.is_liked && activity?.rating ? (
 			  <span>
-				{t.rich('user_movie_activity.rated_liked', {
+				{t.rich('rated_liked', {
 				  name: () => (
 					<Link href={`/@${activity.user?.username}`} className="text-foreground hover:underline">
 					  {activity.user?.username}
@@ -46,7 +46,7 @@ className?: string;
 			  </span>
 			) : activity?.is_liked && !activity?.rating ? (
 			  <span>
-				{t.rich('user_movie_activity.liked', {
+				{t.rich('liked', {
 				  name: () => (
 					<Link href={`/@${activity.user?.username}`} className="text-foreground hover:underline">
 					  {activity.user?.username}
@@ -56,7 +56,7 @@ className?: string;
 			  </span>
 			) : !activity?.is_liked && activity?.rating ? (
 			  <span>
-				{t.rich('user_movie_activity.rated', {
+				{t.rich('rated', {
 				  name: () => (
 					<Link href={`/@${activity.user?.username}`} className="text-foreground hover:underline">
 					  {activity.user?.username}
@@ -66,7 +66,7 @@ className?: string;
 			  </span>
 			) : (
 			  <span>
-				{t.rich('user_movie_activity.watched', {
+				{t.rich('watched', {
 				  name: () => (
 					<Link href={`/@${activity?.user?.username}`} className="text-foreground hover:underline">
 					  {activity?.user?.username}

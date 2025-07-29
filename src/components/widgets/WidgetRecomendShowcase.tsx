@@ -8,7 +8,7 @@ import { useTranslations } from "next-intl";
 export const WidgetRecomendShowcase = ({
 	className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
-	const t = useTranslations('features');
+	const t = useTranslations('pages.showcase');
 	if (!siteConfig.features.length) return null;
 	return (
 		<div className={cn('@container/widget-recomend-showcase space-y-4', className)}>
@@ -26,9 +26,9 @@ export const WidgetRecomendShowcase = ({
 					<CardHeader>
 						<CardTitle className="flex gap-2 items-center text-xl">
 							<feature.icon className={cn("w-4 text-accent-yellow", feature.iconClass)} />
-							{t(`${feature.key}.label`)}
+							{t(`features.${feature.key}.label`)}
 						</CardTitle>
-						<CardDescription className="ml-6">{t(`${feature.key}.description`)}</CardDescription>
+						<CardDescription className="ml-6">{t(`features.${feature.key}.description`)}</CardDescription>
 					</CardHeader>
 				</Card>
 			))}

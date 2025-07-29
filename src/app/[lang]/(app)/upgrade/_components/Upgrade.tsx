@@ -46,24 +46,23 @@ export const Upgrade = ({
 	const { user } = useAuth();
 	const locale = useLocale();
 	const { openModal } = useModal();
-	const common = useTranslations('common');
-	const t = useTranslations('pages');
+	const t = useTranslations();
 	const bgImage = useRandomImage(Images.upgrade.background);
 	const [billingInterval, setBillingInterval] = useState<'year' | 'month'>('month');
 
 	const planFeatures: PlanFeature[] = [
 		{
-			type: upperFirst(common('subscription.features.activities.label')),
+			type: upperFirst(t('pages.upgrade.subscription.features.activities.label')),
 			features: [
 				{
-					name: upperFirst(common('subscription.features.activities.unlimited_activities.label')),
-					description: upperFirst(common('subscription.features.activities.unlimited_activities.description')),
+					name: upperFirst(t('pages.upgrade.subscription.features.activities.unlimited_activities.label')),
+					description: upperFirst(t('pages.upgrade.subscription.features.activities.unlimited_activities.description')),
 					free: true,
 					premium: true,
 				},
 				{
-					name: upperFirst(common('subscription.features.activities.favorites.label')),
-					description: upperFirst(common('subscription.features.activities.favorites.description')),
+					name: upperFirst(t('pages.upgrade.subscription.features.activities.favorites.label')),
+					description: upperFirst(t('pages.upgrade.subscription.features.activities.favorites.description')),
 					free: true,
 					premium: true,
 					soon: true,
@@ -71,17 +70,17 @@ export const Upgrade = ({
 			],
 		},
 		{
-			type: upperFirst(common('subscription.features.playlists.label')),
+			type: upperFirst(t('pages.upgrade.subscription.features.playlists.label')),
 			features: [
 				{
-					name: upperFirst(common('subscription.features.playlists.unlimited_playlists.label')),
-					description: upperFirst(common('subscription.features.playlists.unlimited_playlists.description')),
+					name: upperFirst(t('pages.upgrade.subscription.features.playlists.unlimited_playlists.label')),
+					description: upperFirst(t('pages.upgrade.subscription.features.playlists.unlimited_playlists.description')),
 					free: true,
 					premium: true,
 				},
 				{
-					name: upperFirst(common('subscription.features.playlists.shared_playlists.label')),
-					description: upperFirst(common('subscription.features.playlists.shared_playlists.description')),
+					name: upperFirst(t('pages.upgrade.subscription.features.playlists.shared_playlists.label')),
+					description: upperFirst(t('pages.upgrade.subscription.features.playlists.shared_playlists.description')),
 					free: false,
 					premium: true,
 
@@ -89,17 +88,17 @@ export const Upgrade = ({
 			]
 		},
 		{
-			type: upperFirst(common('subscription.features.feed.label')),
+			type: upperFirst(t('pages.upgrade.subscription.features.feed.label')),
 			features: [
 				{
-					name: upperFirst(common('subscription.features.feed.followees.label')),
-					description: upperFirst(common('subscription.features.feed.followees.description')),
+					name: upperFirst(t('pages.upgrade.subscription.features.feed.followees.label')),
+					description: upperFirst(t('pages.upgrade.subscription.features.feed.followees.description')),
 					free: true,
 					premium: true,
 				},
 				{
-					name: title(common('subscription.features.feed.cast_and_crew.label')),
-					description: upperFirst(common('subscription.features.feed.cast_and_crew.description')),
+					name: title(t('pages.upgrade.subscription.features.feed.cast_and_crew.label')),
+					description: upperFirst(t('pages.upgrade.subscription.features.feed.cast_and_crew.description')),
 					free: false,
 					premium: true,
 					soon: true,
@@ -107,18 +106,18 @@ export const Upgrade = ({
 			]
 		},
 		{
-			type: upperFirst(common('subscription.features.support.label')),
+			type: upperFirst(t('pages.upgrade.subscription.features.support.label')),
 			features: [
 				{
-					name: upperFirst(common('subscription.features.support.team.label', {
+					name: upperFirst(t('pages.upgrade.subscription.features.support.team.label', {
 						app: siteConfig.name,
 					})),
 					free: "+",
 					premium: "+++",
 				},
 				{
-					name: upperFirst(common('subscription.features.support.credits.label')),
-					description: upperFirst(common('subscription.features.support.credits.description')),
+					name: upperFirst(t('pages.upgrade.subscription.features.support.credits.label')),
+					description: upperFirst(t('pages.upgrade.subscription.features.support.credits.description')),
 					free: false,
 					premium: true,
 					soon: true,
@@ -126,7 +125,7 @@ export const Upgrade = ({
 			]
 		},
 		{
-			type: upperFirst(common('word.price')),
+			type: upperFirst(t('common.word.price')),
 			features: [
 				{
 					name: '',
@@ -153,7 +152,7 @@ export const Upgrade = ({
 				asChild
 				>
 					<Link href={`/auth/login?redirect=${encodeURIComponent('/upgrade')}`}>
-					{upperFirst(common('messages.get_started'))}
+					{upperFirst(t('common.messages.get_started'))}
 					</Link>
 				</Button>
 			)
@@ -166,7 +165,7 @@ export const Upgrade = ({
 					asChild
 					>
 						<Link href={`/settings/subscription`}>
-						{upperFirst(common('word.manage'))}
+						{upperFirst(t('common.word.manage'))}
 						</Link>
 					</Button>
 				)
@@ -177,7 +176,7 @@ export const Upgrade = ({
 					className='w-full'
 					onClick={() => openModal(ModalSubscription, { product: product, preselectedPrice: product?.prices?.find((price) => price?.interval === billingInterval) })}
 					>
-					{upperFirst(common('messages.upgrade_to_plan', {
+					{upperFirst(t('common.messages.upgrade_to_plan', {
 						plan: product?.name!,
 					}))}
 					</Button>
@@ -190,10 +189,10 @@ export const Upgrade = ({
 		<HeaderBox className="@xl/header-box:h-fit" background={bgImage ? { src: bgImage?.src, alt: bgImage?.alt ?? '', unoptimized: true } : undefined}>
 			<div className='container flex flex-col w-full gap-4 justify-center max-w-xl mx-0 my-10'>
 				<h1 className='text-3xl @sm/header-box:text-4xl @lg/header-box:text-5xl font-bold text-white'>
-				{upperFirst(t('upgrade.header.title', { app: siteConfig.name }))}
+				{upperFirst(t('pages.upgrade.header.title', { app: siteConfig.name }))}
 				</h1>
 				<h2>
-				{upperFirst(t('upgrade.header.subtitle', { price: `${formatPrice(product?.prices?.find((price) => price?.interval === 'month')!, locale)}` }))}
+				{upperFirst(t('pages.upgrade.header.subtitle', { price: `${formatPrice(product?.prices?.find((price) => price?.interval === 'month')!, locale)}` }))}
 				</h2>
 				<div className='flex gap-4 max-w-xs'>
 					<GetStarted />
@@ -203,7 +202,7 @@ export const Upgrade = ({
 					asChild
 					>
 						<Link href='#features'>
-						{upperFirst(common('messages.compare_plans'))}
+						{upperFirst(t('common.messages.compare_plans'))}
 						</Link>
 					</Button>
 				</div>
@@ -214,11 +213,11 @@ export const Upgrade = ({
               <TableRow className="">
                 <TableHead className=" text-primary flex items-center">
 					<Label htmlFor="payment-schedule" className="me-3">
-					{upperFirst(common('word.monthly'))}
+					{upperFirst(t('common.word.monthly'))}
 					</Label>
 					<Switch id="payment-schedule" checked={billingInterval === 'year'} onCheckedChange={() => setBillingInterval(billingInterval === 'year' ? 'month' : 'year')} />
 					<Label htmlFor="payment-schedule" className="relative ms-3">
-						{upperFirst(common('word.yearly'))}
+						{upperFirst(t('common.word.yearly'))}
 						<span className="absolute -top-10 start-auto -end-28">
 						<span className="flex items-center">
 							<svg
@@ -235,13 +234,13 @@ export const Upgrade = ({
 								className="text-muted-foreground"
 							/>
 							</svg>
-							<Badge className="mt-3 uppercase shrink-0">{(common('messages.save_up_to_percent', { percent: calculateSave(product?.prices?.find((price) => price?.interval === 'year')!, product?.prices?.find((price) => price?.interval === 'month')!) }))}</Badge>
+							<Badge className="mt-3 uppercase shrink-0">{(t('common.messages.save_up_to_percent', { percent: calculateSave(product?.prices?.find((price) => price?.interval === 'year')!, product?.prices?.find((price) => price?.interval === 'month')!) }))}</Badge>
 						</span>
 						</span>
 					</Label>
 				</TableHead>
                 <TableHead className="w-2/12 text-primary text-lg font-medium text-center">
-                {upperFirst(common('word.free'))}
+                {upperFirst(t('common.word.free'))}
                 </TableHead>
                 <TableHead className="w-2/12 text-primary text-lg font-medium text-center">
                 {upperFirst(product?.name ?? '')}
@@ -259,7 +258,7 @@ export const Upgrade = ({
 					{featureType.features.map((feature, i) => (
 					<TableRow key={i}>
 						<TableCell>
-							{feature.name} {feature.soon && <span className="text-xs text-accent-yellow">{`(${common('word.soon')})`}</span>}
+							{feature.name} {feature.soon && <span className="text-xs text-accent-yellow">{`(${t('common.word.soon')})`}</span>}
 							{feature.description && (
 								<p className="text-muted-foreground text-sm">
 									{feature.description}

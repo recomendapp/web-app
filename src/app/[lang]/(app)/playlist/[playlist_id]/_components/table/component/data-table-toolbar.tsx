@@ -25,7 +25,7 @@ export function DataTableToolbar<TData>({
   table,
   playlist,
 }: DataTableToolbarProps<TData>) {
-  const common = useTranslations('common');
+  const t = useTranslations();
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(playlist?.id);
   const { user } = useAuth();
   const { openModal } = useModal();
@@ -35,7 +35,7 @@ export function DataTableToolbar<TData>({
     <div className="flex flex-col-reverse items-end lg:flex-row lg:items-center lg:justify-between gap-4">
       <div className="flex flex-1 items-center gap-2 w-full">
         <Input
-          placeholder={upperFirst(common('playlist.search.placeholder'))}
+          placeholder={upperFirst(t('pages.playlist.search.placeholder'))}
           value={
             (table.getColumn('item')?.getFilterValue() as string) ??
             ''
@@ -53,7 +53,7 @@ export function DataTableToolbar<TData>({
             onClick={() => table.resetColumnFilters()}
             className="h-8 px-2 lg:px-3"
           >
-            {upperFirst(common('word.cancel'))}
+            {upperFirst(t('common.word.cancel'))}
             <Cross2Icon className="ml-2 h-4 w-4" />
           </Button>
         )}
@@ -73,7 +73,7 @@ export function DataTableToolbar<TData>({
           })}
           >
             <Icons.share />
-            <span className='sr-only'>{upperFirst(common('word.share'))}</span>
+            <span className='sr-only'>{upperFirst(t('common.word.share'))}</span>
           </Button>
         </div>
         <div className="w-fit flex items-center gap-2">
@@ -85,7 +85,7 @@ export function DataTableToolbar<TData>({
           >
             <Icons.add className='h-4 w-4 mr-0 group-hover:mr-2 transition-all duration-300' />
             <span className='group-hover:w-20 w-0 group-hover:opacity-100 opacity-0 transition-all duration-500'>
-            {upperFirst(common('messages.quick_add'))}
+            {upperFirst(t('common.messages.quick_add'))}
             </span>
           </Button> : null}
           <DataTableSortOptions table={table} />

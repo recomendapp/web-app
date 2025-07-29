@@ -19,22 +19,22 @@ export function PlaylistCreateButton({
   filmId?: string;
 }) {
   const { user } = useAuth();
-  const common = useTranslations('common');
+  const t = useTranslations();
   const { openModal } = useModal();
 
   if (!user) return null;
 
   return (
-      <TooltipBox tooltip={common('playlist.actions.create')}>
+      <TooltipBox tooltip={t('pages.playlist.actions.create')}>
         <Button
           variant={'ghost'}
           size={'icon'}
           className={cn("rounded-full shrink-0", className)}
           onClick={() => openModal(PlaylistModal, { filmId })}
         >
-          {icon ? <Plus /> : common('playlist.actions.create')}
+          {icon ? <Plus /> : t('pages.playlist.actions.create')}
           {icon && <span className="sr-only">
-            {common('playlist.actions.create')}
+            {t('pages.playlist.actions.create')}
           </span>}
         </Button>
       </TooltipBox>

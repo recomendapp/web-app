@@ -12,6 +12,7 @@ import { useAuth } from '@/context/auth-context';
 import { useState } from 'react';
 import { InputPassword } from '@/components/ui/input-password';
 import { useTranslations } from 'next-intl';
+import { upperFirst } from "lodash";
 
 export function LoginPasswordForm({
   className,
@@ -50,7 +51,7 @@ export function LoginPasswordForm({
             toast.error(error.message);
         }
       } else {
-        toast.error(common('error'));
+        toast.error(upperFirst(common('errors.an_error_occurred')));
       }
     } finally {
       setIsLoading(false);

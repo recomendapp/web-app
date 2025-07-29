@@ -20,7 +20,7 @@ const FeedCastCrewItemDefault = React.forwardRef<
 	FeedCastCrewItemProps
 >(({ className, activity, ...props }, ref) => {
 	const format = useFormatter();
-	const common = useTranslations('common');
+	const t = useTranslations();
 	return (
 		<Card
 		ref={ref}
@@ -55,9 +55,9 @@ const FeedCastCrewItemDefault = React.forwardRef<
 							{activity?.person?.title ? <UserAvatar className="w-8 h-8 rounded-md" avatarUrl={activity?.person?.avatar_url ?? ''} username={activity?.person?.title} /> : null}
 						</Link>
 						<p className="text-muted-foreground line-clamp-2">
-							{common.rich('feed.persons.new_activity', {
+							{t.rich('pages.feed.cast_and_crew.new_activity', {
 								name: activity?.person?.title!,
-								roles: activity?.jobs?.length ? activity.jobs.join(', ').toLowerCase() : common('word.unknown'),
+								roles: activity?.jobs?.length ? activity.jobs.join(', ').toLowerCase() : t('common.word.unknown'),
 								film: activity?.media?.title!,
 								linkPerson: (chunk) => <Link href={activity?.person?.url ?? ''} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
 								linkFilm: (chunk) => <Link href={activity?.media?.url ?? ''} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
@@ -82,7 +82,7 @@ const FeedCastCrewItemDefault = React.forwardRef<
 							${"overview" in activity.media.extra_data && activity.media?.extra_data.overview?.length ? '' : 'text-muted-foreground'}
 						`}
 					>
-						{"overview" in activity.media.extra_data && activity.media?.extra_data.overview?.length ? activity.media.extra_data.overview : upperFirst(common('messages.no_overview'))}
+						{"overview" in activity.media.extra_data && activity.media?.extra_data.overview?.length ? activity.media.extra_data.overview : upperFirst(t('common.messages.no_overview'))}
 					</p>
 				</Link>}
 			</div>

@@ -15,6 +15,7 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/lib/i18n/routing';
+import { upperFirst } from 'lodash';
 
 export function LoginOtpForm({
   className,
@@ -60,7 +61,7 @@ export function LoginOtpForm({
             toast.error(error.message);
         }
       } else {
-        toast.error(common('error'));
+        toast.error(upperFirst(common('errors.an_error_occurred')));
       }
     } finally {
       setIsLoading(false);
@@ -89,7 +90,7 @@ export function LoginOtpForm({
             toast.error(error.message);
         }
       } else {
-        toast.error(common('error'));
+        toast.error(upperFirst(common('errors.an_error_occurred')));
       }
     } finally {
       setIsLoading(false);

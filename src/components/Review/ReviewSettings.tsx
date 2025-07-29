@@ -61,16 +61,11 @@ export function ReviewSettings({
 	<DropdownMenu>
 		<DropdownMenuTrigger asChild>
 		<Button variant="ghost" size={'icon'} className="rounded-full">
-			<span className="sr-only">{upperFirst(common('sr.open_menu'))}</span>
+			<span className="sr-only">{upperFirst(common('messages.open_menu'))}</span>
 			<MoreHorizontal />
 		</Button>
 		</DropdownMenuTrigger>
 		<DropdownMenuContent align="end">
-		{/* {(!user || user.id != review?.user_id) && (
-			<DropdownMenuItem onSelect={() => setIsOpen(true)}>
-			Signaler la critique
-			</DropdownMenuItem>
-		)} */}
 		{user && user.id == author?.id ? (
 			<DropdownMenuItem
 			onSelect={() => createConfirmModal({

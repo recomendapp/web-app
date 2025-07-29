@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { LoginOtpForm } from './_components/LoginOtpForm';
 import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 export default function Login() {
   const t = useTranslations('pages.auth.login');
@@ -59,7 +60,7 @@ export default function Login() {
                   query: redirectTo ? { redirect: redirectTo } : undefined,
                 }}
               >
-                {common('click_here')}
+                {upperFirst(common('click_here'))}
               </Link>
             </Button>
           </p>

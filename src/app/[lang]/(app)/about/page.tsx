@@ -17,9 +17,9 @@ export async function generateMetadata(
     }
 ): Promise<Metadata> {
   const params = await props.params;
-  const common = await getTranslations({ locale: params.lang, namespace: 'routes' });
+  const t = await getTranslations({ locale: params.lang, namespace: 'common' });
   return {
-    title: upperFirst(common('about')),
+    title: upperFirst(t('messages.about')),
   };
 }
 

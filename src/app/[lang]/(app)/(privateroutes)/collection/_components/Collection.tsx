@@ -15,12 +15,12 @@ import CollectionIcon from '@/components/Collection/CollectionIcon';
 import { useUI } from '@/context/ui-context';
 import HeaderRightSide from '@/components/Header/HeaderRightSide';
 import { useTranslations } from 'next-intl';
-import { capitalize } from 'lodash';
+import { upperFirst } from 'lodash';
 import { UserPlaylists } from './UserPlaylists';
 
 const Collection = () => {
   const { device } = useUI();
-  const common = useTranslations('common');
+  const t = useTranslations('common');
   const collectionRoutes = useMemo(
 	() => [
 	  {
@@ -29,7 +29,7 @@ const Collection = () => {
 			<Send fill="#fff" className="w-2/5 h-2/5" />
 		  </CollectionIcon>
 		),
-		label: capitalize(common('messages.my_recos')),
+		label: upperFirst(t('messages.my_recos')),
 		href: '/collection/my-recos',
 	  },
 	  {
@@ -38,7 +38,7 @@ const Collection = () => {
 			<Bookmark fill="#fff" className="w-2/5 h-2/5" />
 		  </CollectionIcon>
 		),
-		label: capitalize(common('library.collection.watchlist.label')),
+		label: upperFirst(t('messages.watchlist')),
 		href: '/collection/watchlist',
 	  },
 	  {
@@ -47,11 +47,11 @@ const Collection = () => {
 			<Heart fill="#fff" className="w-2/5 h-2/5" />
 		  </CollectionIcon>
 		),
-		label: capitalize(common('library.collection.likes.label')),
+		label: upperFirst(t('messages.heart_pick', { count: 2 })),
 		href: '/collection/likes',
 	  },
 	],
-	[common]
+	[t]
   );
   return (
 	<div className="h-full @container/collection overflow-y-auto relative">

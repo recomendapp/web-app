@@ -6,12 +6,13 @@ import { useUserDiscoveryInfiniteQuery } from "@/features/client/user/userQuerie
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "../ui/select"
 import { CardUser } from "../Card/CardUser"
 import { useTranslations } from "next-intl"
+import { upperFirst } from "lodash"
 
 export const WidgetUserDiscovery = ({
 	className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
 	const [order, setOrder] = useState<'created_at-desc' | 'created_at-asc' | 'popularity-desc' | 'popularity-asc'>('created_at-desc')
-	const t = useTranslations('widgets');
+	const t = useTranslations('common');
 	const {
 		data: users,
 		isLoading,
@@ -29,7 +30,7 @@ export const WidgetUserDiscovery = ({
 	<div className={cn('flex flex-col gap-4 overflow-hidden', className)}>
 		<div className="flex items-center justify-between">
 			<Button variant={'link'} className="p-0 w-fit font-semibold text-xl hover:text-primary hover:no-underline cursor-default">
-				{t('user_discovery.label')}
+				{upperFirst(t('messages.discover_users'))}
 			</Button>
 			<Select onValueChange={(value) => setOrder(value as any)} value={order}>
 				<SelectTrigger className="w-fit">

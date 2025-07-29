@@ -1,3 +1,4 @@
+import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
@@ -11,7 +12,7 @@ export async function generateMetadata(
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang, namespace: 'common' });
   return {
-    title: t('error'),
+    title: upperFirst(t('errors.an_error_occurred'))
   }
 }
 

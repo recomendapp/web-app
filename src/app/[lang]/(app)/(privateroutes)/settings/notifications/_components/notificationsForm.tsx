@@ -18,6 +18,7 @@ import toast from 'react-hot-toast';
 import { useNotifications } from '@/context/notifications-context';
 import { Switch } from '@/components/ui/switch';
 import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 export function NotificationsForm() {
 	const { permission } = useNotifications();
@@ -47,7 +48,7 @@ export function NotificationsForm() {
         permission.disableNotifications();
 		  toast.success(common('word.saved'));
     } catch (error) {
-    	toast.error(common('error'));
+    	toast.error(upperFirst(common('errors.an_error_occurred')));
       form.reset();
     }
   }

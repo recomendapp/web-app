@@ -31,6 +31,7 @@ import useDebounce from '@/hooks/use-debounce';
 import { useUsernameAvailability } from '@/hooks/use-username-availability';
 import { InputPassword } from '@/components/ui/input-password';
 import { Turnstile } from "next-turnstile";
+import { upperFirst } from 'lodash';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -179,7 +180,7 @@ export default function Signup() {
 						toast.error(error.message);
 				}
 			} else {
-				toast.error(common('error'));
+				toast.error(upperFirst(common('errors.an_error_occurred')));
 			}
 		} finally {
 			setIsLoading(false);
@@ -201,7 +202,7 @@ export default function Signup() {
 						toast.error(error.message);
 				}
 			} else {
-				toast.error(common('error'));
+				toast.error(upperFirst(common('errors.an_error_occurred')));
 			}
 		} finally {
 			setIsLoading(false);
@@ -230,7 +231,7 @@ export default function Signup() {
 				toast.error(error.message);
 			}
 		  } else {
-			toast.error(common('error'));
+			toast.error(upperFirst(common('errors.an_error_occurred')));
 		  }
 		} finally {
 		  setIsLoading(false);

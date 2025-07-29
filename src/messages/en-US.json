@@ -1,6 +1,12 @@
 {
   "common": {
     "messages": {
+      "hello": "hello",
+      "click_here": "click here",
+      "see_more": "see more",
+      "library": "library",
+      "watchlist": "watchlist",
+      "heart_pick": "heart {count, plural, one {pick} other {picks}}",
       "no_results": "no results",
       "no_results_for": "No results for <strong>{query}</strong>",
       "added_by": "added by",
@@ -119,7 +125,24 @@
       "privacy_policy": "privacy policy",
       "request_made": "request made",
       "request_canceled": "request canceled",
-      "cancel_request": "cancel request"
+      "cancel_request": "cancel request",
+      "open_menu": "open menu",
+      "feed": "feed",
+      "about": "about",
+      "home": "home",
+      "search": "search",
+      "explore": "explore",
+      "shop": "shop",
+      "help": "help",
+      "legal": "legal",
+      "setting": "{count, plural, one {setting} other {settings}}",
+      "logout": "logout",
+      "to_watch": "to watch",
+      "reco_by_your_friends": "reco by your friends",
+      "friends_playlists": "friends playlists",
+      "latest_activity": "latest {count, plural, one {activity} other {activities}}",
+      "discover_users": "discover users",
+      "most_recommended": "most recommended"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
@@ -137,7 +160,6 @@
       "no_media_found": "no media found"
     },
     "word": {
-      "hello": "Hello",
       "save": "Save",
       "saved": "Saved",
       "film_count": "{count, plural, one {# film} other {# films}}",
@@ -174,9 +196,6 @@
       "profile": "profile",
       "overview": "synopsis"
     },
-    "error": "An error occurred",
-    "click_here": "Click here",
-    "see_more": "See more",
     "form": {
       "email": {
         "label": "Email address",
@@ -233,137 +252,6 @@
       "resend_code": "Resend code",
       "code_verified": "Code verified",
       "code_sent": "Code sent"
-    },
-    "library": {
-      "label": "library",
-      "collection": {
-        "guidelist": {
-          "label": "guidelist",
-          "search": {
-            "placeholder": "seach in the guidelist..."
-          },
-          "modal": {
-            "delete_confirm": {
-              "title": "delete from the guidelist",
-              "description": "Are you sure you want to delete <important>{film}</important> from your guidelist?"
-            }
-          }
-        },
-        "my_recos": {
-          "label": "my recos",
-          "search": {
-            "placeholder": "search in my recos..."
-          },
-          "modal": {
-            "delete_confirm": {
-              "title": "delete from my recos",
-              "description": "Are you sure you want to delete <important>{title}</important> from your recos?"
-            },
-            "complete_confirm": {
-              "title": "complete the reco",
-              "description": "Are you sure you want to complete the reco <important>{title}</important>?"
-            }
-          }
-        },
-        "watchlist": {
-          "label": "watchlist",
-          "search": {
-            "placeholder": "search in the watchlist..."
-          },
-          "modal": {
-            "delete_confirm": {
-              "title": "delete from the watchlist",
-              "description": "Are you sure you want to delete <important>{title}</important> from your watchlist?"
-            }
-          }
-        },
-        "likes": {
-          "label": "likes",
-          "search": {
-            "placeholder": "search in the likes..."
-          },
-          "modal": {
-            "delete_confirm": {
-              "title": "delete from the likes",
-              "description": "Are you sure you want to delete <important>{title}</important> from your likes?"
-            }
-          }
-        }
-      }
-    },
-    "playlist": {
-      "label": "{count, plural, one {Playlist} other {Playlists}}",
-      "actions": {
-        "create": "Create a playlist",
-        "edit": "Edit the playlist",
-        "delete": {
-          "description": "This will permanently delete <important>{title}</important> from your playlists."
-        }
-      },
-      "search": {
-        "placeholder": "search in the playlist..."
-      },
-      "modal": {
-        "delete_confirm": {
-          "title": "delete from the playlist",
-          "description": "Are you sure you want to delete <important>{title}</important> from your playlist?"
-        }
-      }
-    },
-    "feed": {
-      "persons": {
-        "new_activity": "<linkPerson>{name}</linkPerson> is <important>{roles}</important> in <linkFilm>{film}</linkFilm>"
-      }
-    },
-    "subscription": {
-      "features": {
-        "activities": {
-          "label": "activities",
-          "unlimited_activities": {
-            "label": "unlimited activities",
-            "description": "ratings, likes, reviews, watchlist and recommendations"
-          },
-          "favorites": {
-            "label": "favorites",
-            "description": "add your favorite films to your profile"
-          }
-        },
-        "playlists": {
-          "label": "playlists",
-          "unlimited_playlists": {
-            "label": "unlimited",
-            "description": "create an unlimited number of playlists"
-          },
-          "shared_playlists": {
-            "label": "shared",
-            "description": "share your playlists with other users"
-          }
-        },
-        "feed": {
-          "label": "feed",
-          "followees": {
-            "label": "followed users",
-            "description": "see the activities of the users you follow"
-          },
-          "cast_and_crew": {
-            "label": "cast & crew",
-            "description": "follow the activities of the people involved in the films"
-          }
-        },
-        "support": {
-          "label": "support",
-          "team": {
-            "label": "Support the {app} team"
-          },
-          "credits": {
-            "label": "credits",
-            "description": "your profile in the app credits"
-          }
-        }
-      }
-    },
-    "sr": {
-      "open_menu": "open menu"
     }
   },
   "pages": {
@@ -371,6 +259,103 @@
       "404": {
         "label": "Page not found",
         "description": "oops, this page does not exist..."
+      }
+    },
+    "showcase": {
+      "features": {
+        "tracking": {
+          "label": "Tracking",
+          "description": "Keep an eye on the films you have seen"
+        },
+        "recos": {
+          "label": "Recos",
+          "description": "Send films recommendations to your friends"
+        },
+        "explore": {
+          "label": "Explore",
+          "description": "Discover new films on Paradise Pictures, an interactive map with more than 1400 films"
+        },
+        "like": {
+          "label": "Like",
+          "description": "Show your love for your favorite films, playlists and reviews"
+        },
+        "rating": {
+          "label": "Rating",
+          "description": "Rate the films you have seen"
+        },
+        "watchlist": {
+          "label": "Watchlist",
+          "description": "Save films you want to see"
+        },
+        "playlists": {
+          "label": "Playlists",
+          "description": "Organize your films in playlists and share them"
+        },
+        "reviews": {
+          "label": "Reviews",
+          "description": "Write reviews to bring out the bitter cinephile in you"
+        },
+        "feed": {
+          "label": "Feed",
+          "description": "Follow your friends' activity"
+        },
+        "adsFree": {
+          "label": "Sans publicités",
+          "description": "Enjoy Recomend without ads, forever"
+        }
+      }
+    },
+    "collection": {
+      "label": "library",
+      "my_recos": {
+        "label": "my recos",
+        "search": {
+          "placeholder": "search in my recos..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "delete from my recos",
+            "description": "Are you sure you want to delete <important>{title}</important> from your recos?"
+          },
+          "complete_confirm": {
+            "title": "complete the reco",
+            "description": "Are you sure you want to complete the reco <important>{title}</important>?"
+          }
+        }
+      },
+      "watchlist": {
+        "search": {
+          "placeholder": "search in the watchlist..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "title": "delete from the watchlist",
+            "description": "Are you sure you want to delete <important>{title}</important> from your watchlist?"
+          }
+        }
+      },
+      "heart_picks": {
+        "search": {
+          "placeholder": "search in heart picks..."
+        },
+        "modal": {
+          "delete_confirm": {
+            "label": "delete from heart picks",
+            "description": "Are you sure you want to delete <important>{title}</important> from your heart picks?"
+          }
+        }
+      }
+    },
+    "feed": {
+      "actions": {
+        "watched": "<name></name> watched",
+        "rated": "<name></name> rated",
+        "liked": "<name></name> liked",
+        "rated_liked": "<name></name> liked and rated",
+        "reviewed": "<name></name> reviewed"
+      },
+      "cast_and_crew": {
+        "new_activity": "<linkPerson>{name}</linkPerson> is <important>{roles}</important> in <linkFilm>{film}</linkFilm>"
       }
     },
     "auth": {
@@ -651,12 +636,75 @@
       "header": {
         "title": "expand your cinema, share more, support {app}",
         "subtitle": "try 1 month for free, then {price}/month"
+      },
+      "subscription": {
+        "features": {
+          "activities": {
+            "label": "activities",
+            "unlimited_activities": {
+              "label": "unlimited activities",
+              "description": "ratings, likes, reviews, watchlist and recommendations"
+            },
+            "favorites": {
+              "label": "favorites",
+              "description": "add your favorite films to your profile"
+            }
+          },
+          "playlists": {
+            "label": "playlists",
+            "unlimited_playlists": {
+              "label": "unlimited",
+              "description": "create an unlimited number of playlists"
+            },
+            "shared_playlists": {
+              "label": "shared",
+              "description": "share your playlists with other users"
+            }
+          },
+          "feed": {
+            "label": "feed",
+            "followees": {
+              "label": "followed users",
+              "description": "see the activities of the users you follow"
+            },
+            "cast_and_crew": {
+              "label": "cast & crew",
+              "description": "follow the activities of the people involved in the films"
+            }
+          },
+          "support": {
+            "label": "support",
+            "team": {
+              "label": "Support the {app} team"
+            },
+            "credits": {
+              "label": "credits",
+              "description": "your profile in the app credits"
+            }
+          }
+        }
       }
     },
     "playlist": {
       "metadata": {
         "title": "{title} - playlist by @{username}",
         "description": "Discover the playlist of films by @{username} on {app}."
+      },
+      "actions": {
+        "create": "Create a playlist",
+        "edit": "Edit the playlist",
+        "delete": {
+          "description": "This will permanently delete <important>{title}</important> from your playlists."
+        }
+      },
+      "search": {
+        "placeholder": "search in the playlist..."
+      },
+      "modal": {
+        "delete_confirm": {
+          "title": "delete from the playlist",
+          "description": "Are you sure you want to delete <important>{title}</important> from your playlist?"
+        }
       }
     },
     "user": {
@@ -764,91 +812,6 @@
           "description": "Read the privacy policy of {app}."
         }
       }
-    }
-  },
-  "routes": {
-    "home": "Home",
-    "explore": "Explore",
-    "feed": "Feed",
-    "search": "Search",
-    "shop": "Shop",
-    "about": "About",
-    "legal": "Legal",
-    "help": "Help",
-    "upgrade": "Upgrade to Premium",
-    "settings": "Settings",
-    "library": "Library",
-    "logout": "Logout"
-  },
-  "feed": {
-    "user_movie_activity": {
-      "watched": "<name></name> watched",
-      "rated": "<name></name> rated",
-      "liked": "<name></name> liked",
-      "rated_liked": "<name></name> liked and rated",
-      "reviewed": "<name></name> reviewed"
-    }
-  },
-  "features": {
-    "tracking": {
-      "label": "Tracking",
-      "description": "Keep an eye on the films you have seen"
-    },
-    "recos": {
-      "label": "Recos",
-      "description": "Send films recommendations to your friends"
-    },
-    "explore": {
-      "label": "Explore",
-      "description": "Discover new films on Paradise Pictures, an interactive map with more than 1400 films"
-    },
-    "like": {
-      "label": "Like",
-      "description": "Show your love for your favorite films, playlists and reviews"
-    },
-    "rating": {
-      "label": "Rating",
-      "description": "Rate the films you have seen"
-    },
-    "watchlist": {
-      "label": "Watchlist",
-      "description": "Save films you want to see"
-    },
-    "playlists": {
-      "label": "Playlists",
-      "description": "Organize your films in playlists and share them"
-    },
-    "reviews": {
-      "label": "Reviews",
-      "description": "Write reviews to bring out the bitter cinephile in you"
-    },
-    "feed": {
-      "label": "Feed",
-      "description": "Follow your friends' activity"
-    },
-    "adsFree": {
-      "label": "Sans publicités",
-      "description": "Enjoy Recomend without ads, forever"
-    }
-  },
-  "widgets": {
-    "user_watchlist": {
-      "label": "To watch"
-    },
-    "user_recos": {
-      "label": "Reco by your friends"
-    },
-    "user_friends_playlists": {
-      "label": "Friends playlists"
-    },
-    "user_feed": {
-      "label": "Latest activities"
-    },
-    "user_discovery": {
-      "label": "Discover users"
-    },
-    "movies_most_recommended": {
-      "label": "Most recommended."
     }
   }
 }

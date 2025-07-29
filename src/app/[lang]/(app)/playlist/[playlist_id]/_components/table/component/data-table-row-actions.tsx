@@ -2,7 +2,6 @@
 
 import { Link } from "@/lib/i18n/routing";
 import { Column, Row, Table } from '@tanstack/react-table';
-// UI
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -20,7 +19,7 @@ import { Icons } from '@/config/icons';
 import { usePlaylistItemDeleteMutation } from '@/features/client/playlist/playlistMutations';
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
-import { capitalize, upperFirst } from 'lodash';
+import { upperFirst } from 'lodash';
 import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { createShareController } from "@/components/ShareController/ShareController";
@@ -34,7 +33,7 @@ interface DataTableRowActionsProps {
 }
 
 export function DataTableRowActions({ data }: DataTableRowActionsProps) {
-  const common = useTranslations('common');
+  const t = useTranslations();
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(data?.playlist_id as number);
   const { openModal, createConfirmModal } = useModal();
   const { mutateAsync: deletePlaylistItem } = usePlaylistItemDeleteMutation();
@@ -49,7 +48,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
               className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
             >
               <DotsHorizontalIcon className="h-4 w-4 text-accent-yellow" />
-              <span className="sr-only">{upperFirst(common('sr.open_menu'))}</span>
+              <span className="sr-only">{upperFirst(t('common.messages.open_menu'))}</span>
             </Button>
           </DropdownMenuTrigger>
         </div>
@@ -59,24 +58,24 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
             onClick={() => openModal(ModalPlaylistAdd, { mediaId: data?.media_id!, mediaTitle: data?.media?.title })}
           >
             <Icons.addPlaylist className='w-4' />
-            {upperFirst(common('messages.add_to_playlist'))}
+            {upperFirst(t('common.messages.add_to_playlist'))}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id!, mediaTitle: data?.media?.title })}
           >
             <Icons.send className='w-4' />
-            {upperFirst(common('messages.send_to_friend'))}
+            {upperFirst(t('common.messages.send_to_friend'))}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href={data?.media?.url ?? ''}>
               <Icons.eye className='w-4' />
               {data?.media?.media_type === 'movie'
-                ? capitalize(common('messages.go_to_film'))
+                ? upperFirst(t('common.messages.go_to_film'))
                 : data?.media?.media_type === 'tv_series'
-                ? capitalize(common('messages.go_to_serie'))
+                ? upperFirst(t('common.messages.go_to_serie'))
                 : data?.media?.media_type === 'person'
-                ? capitalize(common('messages.go_to_person'))
+                ? upperFirst(t('common.messages.go_to_person'))
                 : ''
               }
             </Link>
@@ -91,7 +90,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
               onClick={() => openModal(PlaylistCommentModal, { playlistItem: data! })}
             >
               <Icons.comment className='w-4' />
-              {data?.comment ? upperFirst(common('messages.view_comment', { count: 1 })) : upperFirst(common('messages.add_comment', { count: 1 }))}
+              {data?.comment ? upperFirst(t('common.messages.view_comment', { count: 1 })) : upperFirst(t('common.messages.add_comment', { count: 1 }))}
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
@@ -106,13 +105,13 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
             })}
           >
             <Icons.share className='w-4' />
-            {capitalize(common('word.share'))}
+            {upperFirst(t('common.word.share'))}
           </DropdownMenuItem>
           {isAllowedToEdit && (
             <DropdownMenuItem
               onClick={() => createConfirmModal({
-                title: upperFirst(common('playlist.modal.delete_confirm.title')),
-                description: common.rich('playlist.modal.delete_confirm.description', {
+                title: upperFirst(t('pages.playlist.modal.delete_confirm.title')),
+                description: t.rich('pages.playlist.modal.delete_confirm.description', {
                   title: data?.media?.title!,
                   important: (chunk) => <b>{chunk}</b>,
                 }),
@@ -120,7 +119,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
               })}
             >
               <Icons.delete className='w-4' />
-              {upperFirst(common('word.delete'))}
+              {upperFirst(t('common.word.delete'))}
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>

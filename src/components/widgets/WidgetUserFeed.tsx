@@ -5,6 +5,7 @@ import { Link } from "@/lib/i18n/routing";
 import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 import { CardUserActivity } from "../Card/CardUserActivity";
+import { upperFirst } from "lodash";
 
 const WIDGET_USER_FEED_LIMIT = 4;
 
@@ -12,7 +13,7 @@ export const WidgetUserFeed = ({
 	className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
 	const { user } = useAuth();
-	const t = useTranslations('widgets');
+	const t = useTranslations('common');
 	const {
 		data: feed,
 		isLoading,
@@ -25,7 +26,7 @@ export const WidgetUserFeed = ({
 		<div className={cn('@container/widget-user-feed space-y-4', className)}>
 			<Button variant={'link'} className="p-0 w-fit font-semibold text-xl" asChild>
 				<Link href={'/feed'}>
-				{t('user_feed.label')}
+				{upperFirst(t('messages.latest_activity', { count: 0 }))}
 				</Link>
 			</Button>
 			<div className="grid gap-2 grid-cols-1 @5xl/widget-user-feed:grid-cols-2">

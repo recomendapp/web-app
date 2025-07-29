@@ -14,44 +14,44 @@ import {
 import { useAuth } from '@/context/auth-context';
 import { Icons } from '@/config/icons';
 import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 interface NavbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function Navbar({ className }: NavbarProps) {
   const { session } = useAuth();
-  const routesDic = useTranslations('routes');
-  const common = useTranslations('common');
+  const t = useTranslations('common');
   const pathname = usePathname();
   const routes = useMemo(
     () => [
       {
         icon: Home,
-        label: routesDic('home'),
+        label: upperFirst(t('messages.home')),
         active: pathname === '/',
         href: '/',
       },
       {
         icon: Search,
-        label: routesDic('search'),
+        label: upperFirst(t('messages.search')),
         active: pathname.startsWith('/search') || pathname.startsWith('/movie'),
         href: '/search',
       },
       {
         icon: Compass,
-        label: routesDic('explore'),
+        label: upperFirst(t('messages.explore')),
         active: pathname === '/map',
         href: '/explore',
       },
       {
         icon: session ? Zap : Icons.shop,
-        label: session ? routesDic('feed') : routesDic('shop'),
+        label: session ? upperFirst(t('messages.feed')) : upperFirst(t('messages.shop')),
         active: session ? pathname.startsWith('/feed') : false,
         href: session ? '/feed' : 'https://shop.recomend.app',
         target: session ? undefined : '_blank',
       },
       {
         icon: session ? Library : Icons.user,
-        label: session ? routesDic('library') : common('word.login'),
+        label: session ? upperFirst(t('messages.library')) : upperFirst(t('word.login')),
         active:
         session ?
             pathname.startsWith('/collection') ||
@@ -62,7 +62,7 @@ export function Navbar({ className }: NavbarProps) {
         href: session ? '/collection' : '/auth/login',
       },
     ],
-    [pathname, session, routesDic, common]
+    [pathname, session, t]
   );
 
   return (

@@ -18,6 +18,7 @@ import { UserAvatar } from './UserAvatar';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import { Icons } from '@/config/icons';
+import { upperFirst } from 'lodash';
 
 export function UserNav({
   className,
@@ -25,12 +26,12 @@ export function UserNav({
   className?: string;
 }) {
   const { user, loading, logout } = useAuth();
-  const t = useTranslations('routes');
+  const t = useTranslations('common');
 
   const routes = useMemo(() => [
     {
       icon: Icons.shop,
-      label: 'shop',
+      label: upperFirst(t('messages.shop')),
       href: 'https://shop.recomend.app/',
       shortcut: '↗',
       target: '_blank',
@@ -38,7 +39,7 @@ export function UserNav({
     },
     {
       icon: Icons.help,
-      label: 'help',
+      label: upperFirst(t('messages.help')),
       href: 'https://help.recomend.app/',
       shortcut: '↗',
       target: '_blank',
@@ -46,7 +47,7 @@ export function UserNav({
     },
     {
       icon: Icons.about,
-      label: 'about',
+      label: upperFirst(t('messages.about')),
       href: '/about',
       shortcut: null,
       target: undefined,
@@ -54,7 +55,7 @@ export function UserNav({
     },
     {
       icon: Icons.legal,
-      label: 'legal',
+      label: upperFirst(t('messages.legal')),
       href: '/legal/terms-of-use',
       shortcut: null,
       target: undefined,
@@ -62,7 +63,7 @@ export function UserNav({
     },
     {
       icon: Icons.sparkles,
-      label: 'upgrade',
+      label: upperFirst(t('messages.upgrade_to_plan', { plan: 'Premium' })),
       href: '/upgrade',
       shortcut: null,
       target: undefined,
@@ -70,7 +71,7 @@ export function UserNav({
     },
     {
       icon: Icons.settings,
-      label: 'settings',
+      label: upperFirst(t('messages.setting', { count: 0 })),
       href: '/settings/profile',
       shortcut: null,
       target: undefined,
@@ -112,7 +113,7 @@ export function UserNav({
               <DropdownMenuItem key={i} asChild>
                 <Link href={route.href} target={route.target}>
                   <route.icon className="w-4" />
-                  <span>{t(route.label)}</span>
+                  <span>{route.label}</span>
                   {route.shortcut ? <DropdownMenuShortcut>{route.shortcut}</DropdownMenuShortcut> : null}
                 </Link>
               </DropdownMenuItem>
@@ -122,7 +123,7 @@ export function UserNav({
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout}>
           <Icons.logout className="w-4" />
-          <span>{t('logout')}</span>
+          <span>{upperFirst(t('messages.logout'))}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

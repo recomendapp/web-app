@@ -18,6 +18,7 @@ import { Input } from '@/components/ui/input';
 import toast from 'react-hot-toast';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 export function SecurityForm() {
   const supabase = useSupabaseClient();
@@ -69,7 +70,7 @@ export function SecurityForm() {
       toast.success(common('word.saved'));
       form.reset();
     } catch (error) {
-      toast.error(common('error'));
+      toast.error(upperFirst(common('errors.an_error_occurred')));
     }
   }
 

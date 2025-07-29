@@ -12,9 +12,9 @@ export async function generateMetadata(
     }
 ): Promise<Metadata> {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang, namespace: 'routes' });
+  const t = await getTranslations({ locale: params.lang, namespace: 'common' });
   return {
-    title: upperFirst(t('feed')),
+    title: upperFirst(t('messages.feed')),
     robots: {
       index: false,
       follow: false,

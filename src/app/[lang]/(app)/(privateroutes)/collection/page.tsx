@@ -1,4 +1,4 @@
-import { capitalize } from 'lodash';
+import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import Collection from './_components/Collection';
@@ -11,9 +11,9 @@ export async function generateMetadata(
     }
 ): Promise<Metadata> {
   const params = await props.params;
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+  const t = await getTranslations({ locale: params.lang, namespace: 'common' });
   return {
-    title: capitalize(common('library.label')),
+    title: upperFirst(t('messages.library')),
     robots: {
       index: false,
       follow: false,

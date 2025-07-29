@@ -29,6 +29,7 @@ import {
 import { ArrowLeftIcon } from 'lucide-react';
 import { AuthError } from '@supabase/supabase-js';
 import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 export default function ForgotPassword() {
   const supabase = useSupabaseClient();
@@ -75,7 +76,7 @@ export default function ForgotPassword() {
             toast.error(error.message);
         }
       } else {
-        toast.error(common('error'));
+        toast.error(upperFirst(common('errors.an_error_occurred')));
       }
     } finally {
       setIsLoading(false);
@@ -104,7 +105,7 @@ export default function ForgotPassword() {
             toast.error(error.message);
         }
       } else {
-        toast.error(common('error'));
+        toast.error(upperFirst(common('errors.an_error_occurred')));
       }
     } finally {
       setIsLoading(false);

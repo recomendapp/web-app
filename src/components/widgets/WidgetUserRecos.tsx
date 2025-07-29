@@ -8,12 +8,13 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import { CardMedia } from '@/components/Card/CardMedia';
+import { upperFirst } from "lodash";
 
 export const WidgetUserRecos = ({
   className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
   const { user } = useAuth();
-  const t = useTranslations('widgets');
+  const t = useTranslations('common');
 
   const { data: recos } = useUserRecosQuery({
     userId: user?.id,
@@ -33,7 +34,7 @@ export const WidgetUserRecos = ({
   <div className={cn('@container/widget-user-recos space-y-2', className)}>
     <Button variant={'link'} className="p-0 w-fit font-semibold text-xl" asChild>
 			<Link href={'/collection/my-recos'}>
-        {t('user_recos.label')}
+        {upperFirst(t('messages.reco_by_your_friends'))}
 			</Link>
 		</Button>
     <div className='grid grid-cols-2 @2xl/widget-user-recos:grid-cols-3 gap-4'>

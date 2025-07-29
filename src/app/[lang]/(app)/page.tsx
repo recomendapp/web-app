@@ -28,7 +28,7 @@ export default function Home() {
 					{session ?
 					(
 						<span className="line-clamp-1 break-all">
-							{`${common('word.hello')} `}
+							{`${upperFirst(common('messages.hello'))} `}
 							{user?.full_name ?? <Skeleton className='w-32' />}
 						</span>
 					) : (
