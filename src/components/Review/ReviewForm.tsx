@@ -49,7 +49,7 @@ export default function ReviewForm({
 	className
 } : ReviewFormProps) {
 	const { user } = useAuth();
-	const t = useTranslations('t');
+	const t = useTranslations('common');
 	const router = useRouter();
 	const { createConfirmModal } = useModal();
 	const [title, setTitle] = useState(review?.title);
