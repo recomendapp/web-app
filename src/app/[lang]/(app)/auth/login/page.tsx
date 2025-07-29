@@ -116,7 +116,7 @@ export default function Login() {
                   query: redirectTo ? { redirect: redirectTo } : undefined,
                 }}
               >
-              {common('word.signup')}
+              {upperFirst(common('word.signup'))}
               </Link>
             </Button>
           </p>

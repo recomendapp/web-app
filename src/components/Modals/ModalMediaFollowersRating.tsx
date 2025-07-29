@@ -16,6 +16,8 @@ import {
 import { Card } from "@/components/ui/card";
 import { IconMediaRating } from "../Media/icons/IconMediaRating";
 import { CardUser } from "../Card/CardUser";
+import { upperFirst } from "lodash";
+import { useTranslations } from "next-intl";
 
 const chartConfig = {
 	count: {
@@ -33,6 +35,7 @@ export const ModalMediaFollowersRating = ({
 	...props
   } : ModalMediaFollowersRatingProps) => {
 	const { user } = useAuth();
+	const t = useTranslations();
 	const { closeModal } = useModal();
 	const {
 		data: followersRating,
@@ -54,7 +57,7 @@ export const ModalMediaFollowersRating = ({
 			onOpenChange={(open) => !open && closeModal(props.id)}
 		>
 			<ModalHeader>
-				<ModalTitle>Notes des followers</ModalTitle>
+				<ModalTitle>{upperFirst(t('common.messages.followers_ratings'))}</ModalTitle>
 			</ModalHeader>
 			<ModalBody>
 				{followersRating ? (
@@ -86,7 +89,7 @@ export const ModalMediaFollowersRating = ({
 												<>
 													{ratings.length ? ratings.map((item) => (
 														item.user ? <CardUser key={item.user_id} user={item.user} variant="inline" /> : null
-													)) : <span className="text-muted-foreground">Aucune note</span>}
+													)) : <span className="text-muted-foreground">{upperFirst(t('common.messages.no_rating'))}</span>}
 												</>
 											)
 										}}
@@ -117,9 +120,9 @@ export const ModalMediaFollowersRating = ({
 				) : (isLoading || followersRating === undefined) ? (
 					<Skeleton className="h-[40vh]" />
 				) : isError ? (
-					<div className="text-muted-foreground">Une erreur s&apos;est produite</div>
+					<div className="text-muted-foreground">{upperFirst(t('common.errors.an_error_occurred'))}</div>
 				) : (
-					<div className="text-muted-foreground">Aucune note</div>
+					<div className="text-muted-foreground">{upperFirst(t('common.messages.no_rating'))}</div>
 				)}
 			</ModalBody>
 		</Modal>

@@ -170,7 +170,7 @@ export const SidebarLeftRoutes = () => {
 	return (
 		<>
 		<SidebarGroup>
-			<SidebarGroupLabel>{t('word.navigation')}</SidebarGroupLabel>
+			<SidebarGroupLabel>{upperFirst(t('word.navigation'))}</SidebarGroupLabel>
 			<nav>
 			<SidebarMenu className={`${!sidebarOpen ? "items-center" : ""}`}>
 				{routes.map((route, i) => (

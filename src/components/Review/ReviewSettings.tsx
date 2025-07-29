@@ -29,7 +29,7 @@ export function ReviewSettings({
 	author: User;
 }) {
 	const { user } = useAuth();
-	const common = useTranslations('common');
+	const t = useTranslations('common');
 	const { createConfirmModal } = useModal();
 	const pathname = usePathname();
 	const router = useRouter();
@@ -44,13 +44,13 @@ export function ReviewSettings({
 		}, {
 			onSuccess: () => {
 				const mediaUrl = getMediaUrl({ id: media.id, type: media.media_type! });
-				toast.success(upperFirst(common('word.deleted')));
+				toast.success(upperFirst(t('word.deleted')));
 				if (pathname.startsWith(`/review/${review.id}`)) {
 					router.replace(mediaUrl);
 				}
 			},
 			onError: () => {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(t('errors.an_error_occurred')));
 			}
 		});
 	};
@@ -61,7 +61,7 @@ export function ReviewSettings({
 	<DropdownMenu>
 		<DropdownMenuTrigger asChild>
 		<Button variant="ghost" size={'icon'} className="rounded-full">
-			<span className="sr-only">{upperFirst(common('messages.open_menu'))}</span>
+			<span className="sr-only">{upperFirst(t('messages.open_menu'))}</span>
 			<MoreHorizontal />
 		</Button>
 		</DropdownMenuTrigger>
@@ -75,7 +75,7 @@ export function ReviewSettings({
 			})}
 			>
 			<Icons.delete />
-			{upperFirst(common('word.delete'))}
+			{upperFirst(t('word.delete'))}
 			</DropdownMenuItem>
 		) : null}
 		</DropdownMenuContent>

@@ -1,4 +1,5 @@
 import { siteConfig } from '@/config/site';
+import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
@@ -13,7 +14,7 @@ export async function generateMetadata(
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.auth.signup' });
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   return {
-    title: common('word.signup'),
+    title: upperFirst(common('word.signup')),
     description: t('metadata.description', { app: siteConfig.name }),
   };
 }

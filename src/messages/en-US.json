@@ -7,8 +7,18 @@
       "library": "library",
       "watchlist": "watchlist",
       "heart_pick": "heart {count, plural, one {pick} other {picks}}",
+      "add_to_heart_picks": "add to heart picks",
+      "remove_from_heart_picks": "remove from heart picks",
+      "add_rating": "add rating",
+      "edit_rating": "edit rating",
+      "remove_rating": "remove rating",
+      "add_to_watchlist": "add to watchlist",
+      "remove_from_watchlist": "remove from watchlist",
       "no_results": "no results",
       "no_results_for": "No results for <strong>{query}</strong>",
+      "no_followees": "no followees",
+      "no_rating": "no rating",
+      "followers_ratings": "follower's ratings",
       "added_by": "added by",
       "sort_by": "sort by",
       "sort_order": "sort order",
@@ -92,12 +102,15 @@
       "last_appearance_date": "last appearance date",
       "vote_average": "vote average",
       "added": "added",
+      "add": "add",
       "updated_at": "updated at",
       "created_at": "created at",
       "likes": "likes",
       "likes_count": "likes count",
       "search_media": "search a media",
       "watched_date": "watched date",
+      "mark_as_watched": "mark as watched",
+      "remove_from_watched": "remove from watched",
       "rating": "rating",
       "create_a_playlist": "create a playlist",
       "by_name": "by {name}",
@@ -142,7 +155,31 @@
       "friends_playlists": "friends playlists",
       "latest_activity": "latest {count, plural, one {activity} other {activities}}",
       "discover_users": "discover users",
-      "most_recommended": "most recommended"
+      "most_recommended": "most recommended",
+      "archive": "archive",
+      "unarchive": "unarchive",
+      "mark_as_read": "mark as read",
+      "mark_as_unread": "mark as unread",
+      "request_accepted": "{count, plural, =1 {request accepted} other {requests accepted}}",
+      "request_declined": "{count, plural, =1 {request declined} other {requests declined}}",
+      "unread": "unread",
+      "archived": "archived",
+      "no_notifications": "no notifications",
+      "all": "all",
+      "mark_all_as_read": "mark all as read",
+      "archive_all": "archive all",
+      "archive_all_read": "archive all read",
+      "please_login": "please login",
+      "like": "like",
+      "unlike": "unlike",
+      "name": "name",
+      "add_a_name": "add a name",
+      "description": "description",
+      "add_a_description": "add a description",
+      "visibility": "visibility",
+      "search_an_user": "search an user",
+      "select_an_item_to_add_to_playlist": "select an item to add to playlist",
+      "add_one_or_more_items_to": "Add one or more items to <important>{title}</important>"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
@@ -157,15 +194,17 @@
       "review_not_found": "review not found",
       "person_not_found": "person not found",
       "wrong_arguments": "wrong arguments",
-      "no_media_found": "no media found"
+      "no_media_found": "no media found",
+      "unknown_action": "unknown action"
     },
     "word": {
       "save": "Save",
       "saved": "Saved",
+      "create": "create",
       "film_count": "{count, plural, one {# film} other {# films}}",
-      "login": "Login",
-      "signup": "Sign up",
-      "navigation": "Navigation",
+      "login": "login",
+      "signup": "sign up",
+      "navigation": "navigation",
       "delete": "delete",
       "deleted": "deleted",
       "share": "share",
@@ -810,6 +849,25 @@
         "metadata": {
           "title": "Privacy Policy",
           "description": "Read the privacy policy of {app}."
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Search for a film, serie, person or user..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Are you sure you want to remove this work from your watched list? If you have a rating or a review, they will also be deleted."
+          }
+        },
+        "rating": {
+          "remove_rating": {
+            "has_review": "You cannot remove a rating associated with a review."
+          }
         }
       }
     }

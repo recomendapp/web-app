@@ -58,7 +58,7 @@ export const ContextMenuUserActivity = ({
 				{
 					icon: Icons.addPlaylist,
 					onClick: () => openModal(ModalPlaylistAdd, { mediaId: activity.media?.media_id!, mediaTitle: activity.media?.title }),
-					label: 'Ajouter à une playlist',
+					label: upperFirst(common('messages.add_to_playlist')),
 				},
 				{
 					icon: Icons.send,

@@ -51,15 +51,6 @@ export const ContextMenuMedia = ({
 					? upperFirst(common('messages.go_to_person'))
 					: ''
 			},
-			// {
-			// 	icon: Icons.user,
-			// 	href: movie?.directors && movie.directors.length === 1 ? `/person/${movie.directors[0].slug ?? movie.directors[0].id}` : undefined,
-			// 	label: `Accéder ${movie?.directors && movie?.directors.length === 1 ? 'au réalisateur' : 'aux réalisateurs'}`,
-			// 	submenu: (movie?.directors && movie.directors.length > 1) ? movie?.directors?.map((director) => ({
-			// 		href: `/person/${director.slug ?? director.id}`,
-			// 		label: director.name,
-			// 	})) : undefined,
-			// },
 			...(session ? [
 				{
 					icon: Icons.addPlaylist,

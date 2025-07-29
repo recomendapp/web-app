@@ -49,7 +49,7 @@ export default function ReviewForm({
 	className
 } : ReviewFormProps) {
 	const { user } = useAuth();
-	const common = useTranslations('common');
+	const t = useTranslations('t');
 	const router = useRouter();
 	const { createConfirmModal } = useModal();
 	const [title, setTitle] = useState(review?.title);
@@ -81,11 +81,11 @@ export default function ReviewForm({
 		}, {
 			onSuccess: () => {
 				setEditable(false);
-				toast.success(upperFirst(common('word.saved')));
+				toast.success(upperFirst(t('word.saved')));
 				router
 			},
 			onError: () => {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(t('errors.an_error_occurred')));
 			}
 		});	
 	};
@@ -107,12 +107,12 @@ export default function ReviewForm({
 		}, {
 			onSuccess: (data) => {
 				setEditable(false);
-				toast.success(upperFirst(common('word.saved')));
+				toast.success(upperFirst(t('word.saved')));
 				router.replace(`/review/${data.id}`);
 				// router.replace(`${getMediaUrl({ id: mediaId, type: mediaType })}/review/${data.id}`);
 			},
 			onError: () => {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(t('errors.an_error_occurred')));
 			}
 		});
 	};
@@ -123,8 +123,8 @@ export default function ReviewForm({
 			return;
 		}
 		createConfirmModal({
-			title: upperFirst(common('messages.cancel_change', { count: 2 })),
-			description: upperFirst(common('messages.do_you_really_want_to_cancel_change', { count: 2 })),
+			title: upperFirst(t('messages.cancel_change', { count: 2 })),
+			description: upperFirst(t('messages.do_you_really_want_to_cancel_change', { count: 2 })),
 			onConfirm: () => {
 				setTitle(review?.title);
 				setBody(review?.body);
@@ -151,7 +151,7 @@ export default function ReviewForm({
 					{author?.id == user?.id ? (
 						<>
 							{!editable ? (
-								<TooltipBox tooltip={upperFirst(common('messages.edit'))}>							
+								<TooltipBox tooltip={upperFirst(t('messages.edit'))}>							
 									<Button
 									variant={'ghost'}
 									size={'sm'}
@@ -159,31 +159,31 @@ export default function ReviewForm({
 									onClick={() => setEditable(true)}
 									disabled={updateReview.isPending || insertReview.isPending}
 									>
-										<span className="sr-only">{upperFirst(common('messages.edit'))}</span>
+										<span className="sr-only">{upperFirst(t('messages.edit'))}</span>
 										<Icons.edit />
 									</Button>
 								</TooltipBox>
 							) : (
 								<>
-								<TooltipBox tooltip={upperFirst(common('word.save'))}>
+								<TooltipBox tooltip={upperFirst(t('word.save'))}>
 									<Button
 									variant={'accent-yellow'}
 									size={'sm'}
 									onClick={handleUpdateReview}
 									disabled={updateReview.isPending || insertReview.isPending}
 									>
-										<span className="sr-only">{upperFirst(common('word.save'))}</span>
+										<span className="sr-only">{upperFirst(t('word.save'))}</span>
 										<Icons.check />
 									</Button>
 								</TooltipBox>
-								<TooltipBox tooltip={upperFirst(common('word.cancel'))}>
+								<TooltipBox tooltip={upperFirst(t('word.cancel'))}>
 									<Button
 									variant={'accent-yellow-enabled'}
 									size={'sm'}
 									onClick={handleCancel}
 									disabled={updateReview.isPending || insertReview.isPending}
 									>
-										<span className="sr-only">{upperFirst(common('word.cancel'))}</span>
+										<span className="sr-only">{upperFirst(t('word.cancel'))}</span>
 										<Icons.close />
 									</Button>
 								</TooltipBox>
@@ -199,14 +199,14 @@ export default function ReviewForm({
 							) : null}
 						</>
 					) : !review ? (
-						<TooltipBox tooltip={upperFirst(common('word.save'))}>
+						<TooltipBox tooltip={upperFirst(t('word.save'))}>
 							<Button
 							variant={'accent-yellow'}
 							size={'sm'}
 							onClick={handleCreateReview}
 							disabled={updateReview.isPending || insertReview.isPending}
 							>
-								<span className="sr-only">{upperFirst(common('word.save'))}</span>
+								<span className="sr-only">{upperFirst(t('word.save'))}</span>
 								<Icons.check />
 							</Button>
 						</TooltipBox>

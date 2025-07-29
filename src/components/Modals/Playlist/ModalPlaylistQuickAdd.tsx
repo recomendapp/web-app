@@ -5,7 +5,6 @@ import toast from 'react-hot-toast';
 import { useModal } from '@/context/modal-context';
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { Check } from 'lucide-react';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Media, Playlist } from '@/types/type.db';
@@ -13,7 +12,7 @@ import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitl
 import { Icons } from '@/config/icons';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
-import { useTmdbSearchMoviesInfiniteQuery, useTmdbSearchMultiInfiniteQuery } from '@/features/client/tmdb/tmdbQueries';
+import { useTmdbSearchMultiInfiniteQuery } from '@/features/client/tmdb/tmdbQueries';
 import { useLocale, useTranslations } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -33,7 +32,7 @@ export function ModalPlaylistQuickAdd({
 	...props
 } : ModalPlaylistQuickAddProps) {
 	const { user } = useAuth();
-	const common = useTranslations('common');
+	const t = useTranslations();
 	const locale = useLocale();
 	const { closeModal } = useModal();
 	const [selectedMedias, setSelectedMedias] = useState<Media[]>([]);
@@ -71,11 +70,11 @@ export function ModalPlaylistQuickAdd({
 			comment: comment,
 		}, {
 			onSuccess: () => {
-				toast.success(`Ajouté${selectedMedias.length > 1 ? 's' : ''}`);
+				toast.success(upperFirst(t('common.messages.added')));
 				closeModal(props.id);
 			},
 			onError: () => {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(t('common.errors.an_error_occurred')));
 			}
 		});
 	}
@@ -87,16 +86,19 @@ export function ModalPlaylistQuickAdd({
 			className='gap-0 p-0 outline-none'
 		>
 			<ModalHeader className='px-4 pb-4 pt-5'>
-				<ModalTitle>Ajouter à la playlist</ModalTitle>
+				<ModalTitle>{upperFirst(t('common.messages.add_to_playlist'))}</ModalTitle>
 				<ModalDescription>
-					Ajouter un ou plusieurs films à <strong>{playlist?.title}</strong>
+					{t.rich('common.messages.add_one_or_more_items_to', {
+						title: playlist?.title,
+						important: (chunks) => <strong>{chunks}</strong>,
+					})}
 				</ModalDescription>
 			</ModalHeader>
 			<ModalBody className='!p-0 border-t bg-popover text-popover-foreground'>
 				<InputSearch
 				value={search}
 				onChange={(e) => setSearch(e.target.value)}
-				placeholder={upperFirst(common('messages.search_media'))}
+				placeholder={upperFirst(t('common.messages.search_media'))}
 				/>
 				<ScrollArea className={`h-[40vh]`}>
 					<div className='p-2 flex flex-col gap-1'>
@@ -130,15 +132,15 @@ export function ModalPlaylistQuickAdd({
 						))
 					) : isError ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						{upperFirst(common('errors.an_error_occurred'))}
+						{upperFirst(t('common.errors.an_error_occurred'))}
 						</div>
 					) : (searchQuery && !isLoading) ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						{upperFirst(common('errors.no_media_found'))}
+						{upperFirst(t('common.errors.no_media_found'))}
 						</div>
 					) : !isLoading ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						{upperFirst(common('messages.search_media'))}
+						{upperFirst(t('common.messages.search_media'))}
 						</div>
 					) : null}
 					 {(isLoading || isFetchingNextPage) ? <Icons.loader className='w-full'/> : null}
@@ -146,11 +148,11 @@ export function ModalPlaylistQuickAdd({
 				</ScrollArea>
 			</ModalBody>
 			<div className='px-2 pt-2'>
-				<Label htmlFor="comment" className='sr-only'>{upperFirst(common('word.comment', {count: 1}))}</Label>
+				<Label htmlFor="comment" className='sr-only'>{upperFirst(t('common.word.comment', {count: 1}))}</Label>
 				<Input
 				value={comment}
 				onChange={(e) => setComment(e.target.value)}
-				placeholder='Écrire un commentaire...'
+				placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
 				maxLength={COMMENT_MAX_LENGTH}
 				/>
 			</div>
@@ -184,7 +186,7 @@ export function ModalPlaylistQuickAdd({
 				</div>
 				) : (
 					<p className="text-sm text-muted-foreground">
-						Select a movie to add to the playlist
+						{upperFirst(t('common.messages.select_an_item_to_add_to_playlist'))}
 					</p>
 				)}
 				<Button
@@ -192,7 +194,7 @@ export function ModalPlaylistQuickAdd({
 				onClick={submit}
 				>
 				{addMediasToPlaylist.isPending && <Icons.loader className="mr-2" />}
-				Ajouter
+				{upperFirst(t('common.messages.add'))}
 				</Button>
 			</ModalFooter>
 		</Modal>

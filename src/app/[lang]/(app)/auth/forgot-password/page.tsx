@@ -163,7 +163,7 @@ export default function ForgotPassword() {
                   query: redirectTo ? { redirect: redirectTo } : undefined,
                 }}
               >
-                {common('word.login')}
+                {upperFirst(common('word.login'))}
               </Link>
 
             </Button>

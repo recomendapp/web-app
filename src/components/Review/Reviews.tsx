@@ -46,7 +46,7 @@ interface ReviewProps {
 export default function Reviews({
   mediaId,
 } : ReviewProps) {
-  const common = useTranslations('common');
+  const t = useTranslations('common');
   const searchParams = useSearchParams();
   const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
   const sortOrder = getValidatedSortOrder(searchParams.get('sort_order'));
@@ -95,7 +95,7 @@ export default function Reviews({
             </SelectTrigger>
             <SelectContent>
               {SORT_BY.map((sort) => (
-                <SelectItem key={sort} value={sort}>{upperFirst(common(`messages.${sort}`))}</SelectItem>
+                <SelectItem key={sort} value={sort}>{upperFirst(t(`messages.${sort}`))}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -121,7 +121,7 @@ export default function Reviews({
               })
             ))
         ) : (
-          <p className="text-muted-foreground text-center font-semibold">{upperFirst(common('messages.no_reviews'))}</p>
+          <p className="text-muted-foreground text-center font-semibold">{upperFirst(t('messages.no_reviews'))}</p>
         )}
         {isFetchingNextPage ? <Icons.loader /> : null}
       </div>

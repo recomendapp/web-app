@@ -2,11 +2,8 @@
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
-// COMPONENTS
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-
 import { useModal } from "@/context/modal-context";
 import { UserWatchlist } from "@/types/type.db";
 import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
@@ -57,7 +54,7 @@ const ModalWatchlistComment = ({
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
 			<ModalHeader>
-				<ModalTitle>Commentaire</ModalTitle>
+				<ModalTitle>{upperFirst(common('word.comment', { count: 1 }))}</ModalTitle>
 			</ModalHeader>
 			<ModalBody>
 				<Textarea
@@ -69,11 +66,11 @@ const ModalWatchlistComment = ({
 				maxLength={180}
 				disabled={updateWatchlist.isPending}
 				className="col-span-3 resize-none h-48"
-				placeholder='Ajouter un commentaire...'
+				placeholder={upperFirst(common('messages.add_comment', { count: 1 }))}
 				/>
 			</ModalBody>
 			<ModalFooter>
-				<Button type="submit" onClick={onSubmit}>Enregistrer</Button>
+				<Button type="submit" onClick={onSubmit}>{upperFirst(common('word.save'))}</Button>
 			</ModalFooter>
 		</Modal>
 	);

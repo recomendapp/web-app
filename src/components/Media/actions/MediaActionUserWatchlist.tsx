@@ -26,7 +26,7 @@ const MediaActionUserWatchlist = React.forwardRef<
 	MediaActionUserWatchlistProps
 >(({ mediaId, stopPropagation = true, className, ...props }, ref) => {
 	const { user } = useAuth();
-	const common = useTranslations('common');
+	const t = useTranslations();
 	const pathname = usePathname();
 
 	const {
@@ -53,7 +53,7 @@ const MediaActionUserWatchlist = React.forwardRef<
 		stopPropagation && e.stopPropagation();
 		if (watchlist) return;
 		if (!user || !mediaId) {
-			toast.error(upperFirst(common('errors.an_error_occurred')));
+			toast.error(upperFirst(t('common.errors.an_error_occurred')));
 			return;
 		}
 		await insertWatchlist.mutateAsync({
@@ -61,7 +61,7 @@ const MediaActionUserWatchlist = React.forwardRef<
 			mediaId: mediaId,
 		}, {
 		  onError: () => {
-			toast.error(upperFirst(common('errors.an_error_occurred')));
+			toast.error(upperFirst(t('common.errors.an_error_occurred')));
 		  }
 		});
 	}
@@ -69,21 +69,21 @@ const MediaActionUserWatchlist = React.forwardRef<
 		stopPropagation && e.stopPropagation();
 		if (!watchlist) return;
 		if (!watchlist.id) {
-			toast.error(upperFirst(common('errors.an_error_occurred')));
+			toast.error(upperFirst(t('common.errors.an_error_occurred')));
 			return;
 		}
 		await deleteWatchlist.mutateAsync({
 		  watchlistId: watchlist.id,
 		}, {
 		  onError: () => {
-			toast.error(upperFirst(common('errors.an_error_occurred')));
+			toast.error(upperFirst(t('common.errors.an_error_occurred')));
 		  }
 		});
 	  }
 
 	if (user == null) {
 		return (
-		<TooltipBox tooltip={'Connectez-vous'}>
+		<TooltipBox tooltip={upperFirst(t('common.please_login'))}>
 			<Button
 			size={'icon'}
 			variant={'action'}
@@ -101,19 +101,7 @@ const MediaActionUserWatchlist = React.forwardRef<
 
 	return (
 		<ContextMenuWatchlistAction watchlistItem={watchlist}>
-			<TooltipBox tooltip={
-			activity ? (
-				watchlist ? (
-				'Supprimer des films à revoir'
-				) : (
-				'Envie de le revoir'
-				)
-			) : watchlist ? (
-				'Supprimer des films à voir'
-			) : (
-				'Envie de le voir'
-			)
-			}>
+			<TooltipBox tooltip={watchlist ? upperFirst(t('common.messages.remove_from_watchlist')) : upperFirst(t('common.messages.add_to_watchlist'))}>
 				<Button
 					onClick={async (e) => watchlist ? await handleUnwatchlist(e) : await handleWatchlist(e)}
 					disabled={isLoading || isError || activity === undefined || watchlist === undefined || insertWatchlist.isPending || deleteWatchlist.isPending}

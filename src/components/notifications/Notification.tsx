@@ -11,6 +11,8 @@ import { Skeleton } from '../ui/skeleton';
 import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from '@/features/client/user/userMutations';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 interface NotificationProps extends React.HTMLAttributes<HTMLDivElement | HTMLAnchorElement> {
 	notification: NotificationType;
@@ -18,6 +20,7 @@ interface NotificationProps extends React.HTMLAttributes<HTMLDivElement | HTMLAn
 
 const NotificationContent = ({ notification }: { notification: NotificationType }) => {
 	const { user } = useAuth();
+	const t = useTranslations('common');
 	const acceptRequest = useUserAcceptFollowerRequestMutation({
 		userId: user?.id,
 	});
@@ -28,13 +31,13 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 	const handleAction = async (action: 'primary' | 'secondary', key: string, id: number) => {
 		switch (key) {
 			case 'follower_request_accept':
-				acceptRequest.mutate({ requestId: id }, { onSuccess: () => { toast.success('Demande acceptée') }, onError: () => { toast.error("Une erreur s'est produite") } });
+				acceptRequest.mutate({ requestId: id }, { onSuccess: () => { toast.success(upperFirst(t('messages.request_accepted', { count: 1 }))) }, onError: () => { toast.error(upperFirst(t('errors.an_error_occurred'))) } });
 				break;
 			case 'follower_request_decline':
-				declineRequest.mutate({ requestId: id }, { onSuccess: () => { toast.success('Demande refusée') }, onError: () => { toast.error("Une erreur s'est produite") } });
+				declineRequest.mutate({ requestId: id }, { onSuccess: () => { toast.success(upperFirst(t('messages.request_declined', { count: 1 }))) }, onError: () => { toast.error(upperFirst(t('errors.an_error_occurred'))) } });
 				break;
 			default:
-				toast.error('Unknown action');
+				toast.error(upperFirst(t('errors.unknown_action')));
 				return;
 		}
 		if (action === 'primary') {
@@ -120,6 +123,7 @@ export const Notification = React.forwardRef<
 	HTMLDivElement,
 	NotificationProps
 >(({ className, onClick, notification, ...props }, ref) => {
+	const t = useTranslations('common');
 	return (
 		<div
 		ref={ref as React.RefObject<HTMLDivElement>}
@@ -139,7 +143,7 @@ export const Notification = React.forwardRef<
 			<div className='flex flex-col shrink-0'>
 			{notification.isArchived ? (
 				<>
-				<TooltipBox tooltip='Désarchiver'>
+				<TooltipBox tooltip={upperFirst(t('messages.unarchive'))}>
 					<Button
 					variant='ghost'
 					size={'icon'}
@@ -152,7 +156,7 @@ export const Notification = React.forwardRef<
 				</>
 			) : (
 				<>
-				<TooltipBox tooltip={notification.isRead ? 'Marquer comme non lu' : 'Marquer comme lu'}>
+				<TooltipBox tooltip={notification.isRead ? upperFirst(t('messages.mark_as_unread', { count: 1, gender: 'female' })) : upperFirst(t('messages.mark_as_read', { count: 1, gender: 'female' }))}>
 					<Button
 					variant='ghost'
 					size={'icon'}
@@ -162,7 +166,7 @@ export const Notification = React.forwardRef<
 						<Icons.check size={14} />
 					</Button>
 				</TooltipBox>
-				<TooltipBox tooltip='Archiver'>
+				<TooltipBox tooltip={upperFirst(t('messages.archive'))}>
 					<Button
 					variant='ghost'
 					size={'icon'}

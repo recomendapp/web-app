@@ -1,34 +1,28 @@
 'use client';
 
-// COMPONENTS
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Loader from '@/components/Loader';
-
 import { getInitiales } from '@/lib/utils';
-import { Fragment, useEffect, useState } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { useInView } from 'react-intersection-observer';
 import { Search } from 'lucide-react';
 import useDebounce from '@/hooks/use-debounce';
 import { Link } from "@/lib/i18n/routing";
 import { useUserFollowersInfiniteQuery } from '@/features/client/user/userQueries';
-import { useSupabaseClient } from '@/context/supabase-context';
-
+import { upperFirst } from 'lodash';
+import { useTranslations } from 'next-intl';
 
 export function ProfileFollowersModal({
 	userId,
 } : {
 	userId: string;
 }) {
-	const supabase = useSupabaseClient();
+	const t = useTranslations();
 	const [ search, setSearch ] = useState<null | string>(null);
-
 	const debouncedSearch = useDebounce(search);
-
 	const { ref, inView } = useInView();
-
 	const {
 		data: followers,
 		isLoading: loading,
@@ -40,41 +34,7 @@ export function ProfileFollowersModal({
 		filters: {
 			search: debouncedSearch,
 		}
-	})
-
-	// const {
-	// 	data: followers,
-	// 	isLoading: loading,
-	// 	fetchNextPage,
-	// 	isFetchingNextPage,
-	// 	hasNextPage,
-	// } = useInfiniteQuery({
-	// 	queryKey: debouncedSearch ? ['user', userId, 'followers', { search: debouncedSearch }] : ['user', userId, 'followers'],
-	// 	queryFn: async ({ pageParam = 1 }) => {
-	// 		if (!userId) throw Error('Missing user id');
-	// 		let from = (pageParam - 1) * numberOfResult;
-	// 		let to = from - 1 + numberOfResult;
-
-	// 		let query = supabase
-	// 			.from('user_follower')
-	// 			.select('id, follower:user_id!inner(*)')
-	// 			.eq('followee_id', userId)
-	// 			.eq('is_pending', false)
-	// 			.range(from, to)
-
-	// 		if (debouncedSearch) {
-	// 			query = query
-	// 				.ilike(`follower.username`, `${debouncedSearch}%`)
-	// 		}
-	// 		const { data } = await query;
-	// 		return data;
-	// 	},
-	// 	initialPageParam: 1,
-	// 	getNextPageParam: (data, pages) => {
-	// 		return data?.length == numberOfResult ? pages.length + 1 : undefined;
-	// 	},
-	// 	enabled: !!userId,
-	// });
+	});
 
 	useEffect(() => {
 		if (inView && hasNextPage) {
@@ -89,7 +49,7 @@ export function ProfileFollowersModal({
 				<Input
 					value={search ?? ''}
 					onChange={(e) => setSearch(e.target.value)}
-					placeholder='Rechercher un user...'
+					placeholder={upperFirst(t('common.messages.search_an_user'))}
 					autoFocus={false}
 					className="pl-8"
 				/>
@@ -126,9 +86,9 @@ export function ProfileFollowersModal({
 					))
 				))
 			) : (debouncedSearch && !loading && !isFetchingNextPage) ? (
-				<p className="text-center p-2">Aucun résultat</p>
+				<p className="text-center p-2">{upperFirst(t('common.messages.no_results'))}</p>
 			) : followers != null ? (
-				<p className="text-center p-2">Aucun follower</p>
+				<p className="text-center p-2">{upperFirst(t('common.messages.no_followers'))}</p>
 			) : (
 				<></>
 			)}

@@ -14,6 +14,8 @@ import {
 	DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
 import { createRightPanel } from "./RightPanelUtils";
+import { useTranslations } from "next-intl";
+import { upperFirst } from "lodash";
 
 export const RightPanelNotifications = () => createRightPanel({
 	title: 'Notifications',
@@ -23,6 +25,7 @@ export const RightPanelNotifications = () => createRightPanel({
 })
 
 const RightPanelNotificationsContent = () => {
+	const t = useTranslations('common');
 	const [show, setShow] = useState<'all' | 'unread' | 'archived'>('all');
 	const {
 		notifications,
@@ -48,9 +51,9 @@ const RightPanelNotificationsContent = () => {
 							<SelectValue />
 						</SelectTrigger>
 						<SelectContent align="start">
-							<SelectItem value="all">All</SelectItem>
-							<SelectItem value="unread">Unread</SelectItem>
-							<SelectItem value="archived">Archived</SelectItem>
+							<SelectItem value="all">{upperFirst(t('messages.all', { count: 0, gender: 'female' }))}</SelectItem>
+							<SelectItem value="unread">{upperFirst(t('messages.unread', { count: 0, gender: 'female' }))}</SelectItem>
+							<SelectItem value="archived">{upperFirst(t('messages.archived', { count: 0, gender: 'female' }))}</SelectItem>
 						</SelectContent>
 					</Select>
 					<DropdownMenu>
@@ -60,9 +63,9 @@ const RightPanelNotificationsContent = () => {
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end">
-							<DropdownMenuItem onClick={readAll}>Mark all read</DropdownMenuItem>
-							<DropdownMenuItem onClick={archiveAll}>Archive all</DropdownMenuItem>
-							<DropdownMenuItem onClick={archiveAllRead}>Archive all read</DropdownMenuItem>
+							<DropdownMenuItem onClick={readAll}>{upperFirst(t('messages.mark_all_as_read'))}</DropdownMenuItem>
+							<DropdownMenuItem onClick={archiveAll}>{upperFirst(t('messages.archive_all'))}</DropdownMenuItem>
+							<DropdownMenuItem onClick={archiveAllRead}>{upperFirst(t('messages.archive_all_read'))}</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
@@ -85,7 +88,7 @@ const RightPanelNotificationsContent = () => {
 						))}
 					</InfiniteScroll>
 				) : (
-					<p className="mx-auto text-muted-foreground">No notifications</p>
+					<p className="mx-auto text-muted-foreground">{upperFirst(t('messages.no_notifications'))}</p>
 				)}
 			</div>
 			</ScrollArea>

@@ -9,6 +9,7 @@ import { NotificationsButton } from '../notifications/NotificationsButton';
 import { useAuth } from '@/context/auth-context';
 import { useTranslations } from 'next-intl';
 import { useNotifications } from '@/context/notifications-context';
+import { upperFirst } from 'lodash';
 
 export default function HeaderRightSide({
   className,
@@ -29,7 +30,7 @@ export default function HeaderRightSide({
       ) : (
         <Button asChild>
           <Link href={'/auth/login'} className="whitespace-nowrap">
-            {common('word.login')}
+            {upperFirst(common('word.login'))}
           </Link>
         </Button>
       )}

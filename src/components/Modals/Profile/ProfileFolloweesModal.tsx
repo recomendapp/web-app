@@ -1,10 +1,8 @@
 'use client';
 
-// COMPONENTS
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Loader from '@/components/Loader';
-
 import { getInitiales } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -13,6 +11,8 @@ import { Search } from 'lucide-react';
 import useDebounce from '@/hooks/use-debounce';
 import { Link } from "@/lib/i18n/routing";
 import { useUserFolloweesInfiniteQuery } from '@/features/client/user/userQueries';
+import { upperFirst } from 'lodash';
+import { useTranslations } from 'next-intl';
 
 
 export function ProfileFolloweesModal({
@@ -20,13 +20,10 @@ export function ProfileFolloweesModal({
 } : {
 	userId: string;
 }) {
-
+	const t = useTranslations();
 	const [ search, setSearch ] = useState<null | string>(null);
-
 	const debouncedSearch = useDebounce(search);
-
 	const { ref, inView } = useInView();
-
 	const {
 		data: followees,
 		isLoading: loading,
@@ -53,7 +50,7 @@ export function ProfileFolloweesModal({
 				<Input
 					value={search ?? ''}
 					onChange={(e) => setSearch(e.target.value)}
-					placeholder='Rechercher un user...'
+					placeholder={upperFirst(t('common.messages.search_an_user'))}
 					autoFocus={false}
 					className="pl-8"
 				/>
@@ -90,9 +87,9 @@ export function ProfileFolloweesModal({
 					))
 				))
 			) : (debouncedSearch && !loading && !isFetchingNextPage) ? (
-				<p className="text-center p-2">Aucun résultat</p>
+				<p className="text-center p-2">{upperFirst(t('common.messages.no_results'))}</p>
 			) : followees != null ? (
-				<p className="text-center p-2">Aucun followee</p>
+				<p className="text-center p-2">{upperFirst(t('common.messages.no_followees'))}</p>
 			) : (
 				<></>
 			)}

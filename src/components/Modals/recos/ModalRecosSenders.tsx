@@ -5,6 +5,8 @@ import { UserRecosAggregated } from "@/types/type.db";
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useModal } from "@/context/modal-context";
 import { CardUser } from "@/components/Card/CardUser";
+import { useTranslations } from "next-intl";
+import { upperFirst } from "lodash";
 
 interface ModalRecosSendersProps extends ModalType {
 	comments: UserRecosAggregated['senders'];
@@ -14,6 +16,7 @@ export const ModalRecosSenders = ({
 	comments,
 	...props
   } : ModalRecosSendersProps) => {
+	const t = useTranslations();
 	const { closeModal } = useModal();
 	return (
 		<Modal
@@ -21,7 +24,7 @@ export const ModalRecosSenders = ({
 			onOpenChange={(open) => !open && closeModal(props.id)}
 		>
 			<ModalHeader>
-				<ModalTitle>Recos</ModalTitle>
+				<ModalTitle>{upperFirst(t('common.messages.reco', { count: comments.length }))}</ModalTitle>
 			</ModalHeader>
 			<ModalBody>
 				<ScrollArea className="h-[40vh]">

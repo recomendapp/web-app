@@ -9,6 +9,8 @@ import { usePathname } from '@/lib/i18n/routing';
 import { cn } from "@/lib/utils";
 import { useModal } from "@/context/modal-context";
 import { ModalRecoSend } from "../../Modals/actions/ModalRecoSend";
+import { useTranslations } from "next-intl";
+import { upperFirst } from "lodash";
 
 interface MediaActionUserRecosProps
 	extends React.ComponentProps<typeof Button> {
@@ -22,12 +24,13 @@ const MediaActionUserRecos = React.forwardRef<
 	MediaActionUserRecosProps
 >(({ mediaId, stopPropagation = true, mediaTitle, className, ...props }, ref) => {
 	const { user } = useAuth();
+	const t = useTranslations('common');
 	const pathname = usePathname();
 	const { openModal } = useModal();
 
 	if (user === null) {
 		return (
-		  <TooltipBox tooltip={'Connectez-vous'}>
+		  <TooltipBox tooltip={upperFirst(t('messages.please_login'))}>
 			<Button
 			  size="icon"
 			  variant={'action'}
@@ -44,7 +47,7 @@ const MediaActionUserRecos = React.forwardRef<
 	  }
 
 	  return (
-		<TooltipBox tooltip={'Envoyer à un(e) ami(e)'}>
+		<TooltipBox tooltip={upperFirst(t('messages.send_to_friend'))}>
 		  <Button
 			disabled={user === undefined}
 			size="icon"

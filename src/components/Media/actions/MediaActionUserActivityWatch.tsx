@@ -26,7 +26,7 @@ const MediaActionUserActivityWatch = React.forwardRef<
 >(({ mediaId, stopPropagation = true, className, ...props }, ref) => {
 	const { user } = useAuth();
   const { createConfirmModal } = useModal();
-  const common = useTranslations('common');
+  const t = useTranslations();
 	const pathname = usePathname();
 	const {
 		data: activity,
@@ -47,7 +47,7 @@ const MediaActionUserActivityWatch = React.forwardRef<
       mediaId: mediaId,
     }), {
       onError: () => {
-        toast.error(upperFirst(common('errors.an_error_occurred')));
+        toast.error(upperFirst(t('common.errors.an_error_occurred')));
       }
     };
   };
@@ -59,14 +59,14 @@ const MediaActionUserActivityWatch = React.forwardRef<
         activityId: activity.id,
       }), {
         onError: () => {
-          toast.error(upperFirst(common('errors.an_error_occurred')));
+          toast.error(upperFirst(t('common.errors.an_error_occurred')));
         }
       };
   };
 
 	if (user === null) {
     return (
-      <TooltipBox tooltip={'Connectez-vous'}>
+      <TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
         <Button
           size="icon"
           variant={'action'}
@@ -87,14 +87,14 @@ const MediaActionUserActivityWatch = React.forwardRef<
   }
 
 	return (
-		<TooltipBox tooltip={activity ? 'Retirer des films vus' : 'Marquer comme vu'}>
+		<TooltipBox tooltip={activity ? upperFirst(t('common.messages.remove_from_watched')) : upperFirst(t('common.messages.mark_as_watched'))}>
 			<Button
       onClick={(e) => {
         e.stopPropagation();
         activity
         ? createConfirmModal({
-          title: 'Retirer des films vus',
-          description: 'Êtes-vous sûr de vouloir retirer ce film de vos films vus ? Si vous avez écrit une critique, elle sera également supprimée.',
+          title: upperFirst(t('common.messages.remove_from_watched')),
+          description: t('components.media.actions.watch.remove_from_watched.description'),
           onConfirm: () => handleDeleteActivity(),
         })
         : handleInsertActivity()

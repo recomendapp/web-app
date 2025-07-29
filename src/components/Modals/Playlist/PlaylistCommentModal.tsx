@@ -2,19 +2,16 @@
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
-// COMPONENTS
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-
-import { useAuth } from "@/context/auth-context";
 import { useModal } from "@/context/modal-context";
-import { Playlist, PlaylistGuest, PlaylistItem } from "@/types/type.db";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
+import { PlaylistItem } from "@/types/type.db";
+import { useMutation } from "@tanstack/react-query";
+import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useSupabaseClient } from '@/context/supabase-context';
-import { playlistKeys } from "@/features/client/playlist/playlistKeys";
 import { usePlaylistIsAllowedToEditQuery } from "@/features/client/playlist/playlistQueries";
+import { useTranslations } from "next-intl";
+import { upperFirst } from "lodash";
 
 interface PlaylistCommentModalProps extends ModalType {
 	playlistItem: PlaylistItem;
@@ -24,7 +21,7 @@ const PlaylistCommentModal = ({
 	playlistItem,
 	...props
 } : PlaylistCommentModalProps) => {
-
+	const t = useTranslations();
 	const supabase = useSupabaseClient();
 	const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(playlistItem?.playlist_id as number);
 	const { closeModal } = useModal();
@@ -60,10 +57,10 @@ const PlaylistCommentModal = ({
 	  try {
 		setIsLoading(true);      
 		await updatePlaylistItem({ comment });
-		toast.success("Enregistré");
+		toast.success(upperFirst(t('common.word.saved')));
 		closeModal(props.id);
 	  } catch (error) {
-		toast.error("Une erreur s\'est produite");
+		toast.error(upperFirst(t('common.errors.an_error_occurred')));
 	  } finally {
 		setIsLoading(false);
 	  }
@@ -72,7 +69,7 @@ const PlaylistCommentModal = ({
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
 			<ModalHeader>
-				<ModalTitle>Commentaire</ModalTitle>
+				<ModalTitle>{upperFirst(t('common.word.comment', { count: 1 }))}</ModalTitle>
 			</ModalHeader>
 			<ModalBody>
 				<Textarea
@@ -84,13 +81,13 @@ const PlaylistCommentModal = ({
 				maxLength={180}
 				disabled={isLoading}
 				className="col-span-3 resize-none h-48"
-				placeholder='Ajouter un commentaire...'
+				placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
 				readOnly={!isAllowedToEdit}
 				/>
 			</ModalBody>
 			{isAllowedToEdit &&
 				<ModalFooter>
-					<Button type="submit" onClick={onSubmit}>Enregistrer</Button>
+					<Button type="submit" onClick={onSubmit}>{upperFirst(t('common.word.save'))}</Button>
 				</ModalFooter>
 			}
 		</Modal>

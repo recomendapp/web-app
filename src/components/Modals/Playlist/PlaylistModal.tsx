@@ -9,6 +9,8 @@ import { UserCogIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { ModalPlaylistGuest } from './ModalPlaylistGuest/ModalPlaylistGuest';
 import { PlaylistForm } from '@/components/Playlist/PlaylistForm/PlaylistForm';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 interface PlaylistModalProps extends ModalType {
   playlist?: Playlist;
@@ -20,6 +22,7 @@ export function PlaylistModal({
   playlist,
   ...props
 } : PlaylistModalProps) {
+  const t = useTranslations();
   const { user } = useAuth();
   const { openModal, closeModal } = useModal();
 
@@ -29,9 +32,9 @@ export function PlaylistModal({
     <Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
       <ModalHeader>
         <ModalTitle className='flex gap-4 items-center'>
-          {playlist ? 'Edit playlist' : 'Create playlist'}
+          {playlist ? t('pages.playlist.actions.edit') : t('pages.playlist.actions.create')}
           {playlist && (
-            <TooltipBox tooltip='Members'>
+            <TooltipBox tooltip={upperFirst(t('common.messages.guest', { count: 2, gender: 'male' }))}>
               <Button
                 variant={'muted'}
                 size={'icon'}

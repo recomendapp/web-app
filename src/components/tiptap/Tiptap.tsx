@@ -19,6 +19,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { EDITOR_EXTENSIONS } from './TiptapExtensions';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 interface TiptapProps {
   onUpdate?: (data: JSONContent) => void;
@@ -155,6 +157,7 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
 }
 
 function LinkAction({ editor }: { editor: Editor | null }) {
+  const t = useTranslations('common')
   const [open, setOpen] = useState(false);
 
   const saveLink = (e: FormEvent<HTMLFormElement>) => {
@@ -183,7 +186,7 @@ function LinkAction({ editor }: { editor: Editor | null }) {
         <form onSubmit={saveLink} className="flex items-center gap-2">
           <div className="flex flex-1 flex-col gap-2">
             <Label htmlFor="link" className="sr-only">
-              Lien
+            {upperFirst(t('messages.link'))}
             </Label>
             <Input
               name="link"
@@ -193,7 +196,7 @@ function LinkAction({ editor }: { editor: Editor | null }) {
             />
           </div>
           <Button type="submit" size="sm">
-            <span className="sr-only">Save</span>
+            <span className="sr-only">{upperFirst(t('word.save'))}</span>
             <Icons.Save className="h-4 w-4" />
           </Button>
         </form>

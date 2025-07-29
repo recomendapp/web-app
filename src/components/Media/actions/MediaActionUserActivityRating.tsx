@@ -34,7 +34,7 @@ const MediaActionUserActivityRating = React.forwardRef<
 	MediaActionUserActivityRatingProps
 >(({ mediaId, stopPropagation = true, className, ...props }, ref) => {
 	const { user } = useAuth();
-	const common = useTranslations('common');
+	const t = useTranslations();
 	const pathname = usePathname();
 	const [ratingValue, setRatingValue] = React.useState(5);
 	const {
@@ -57,7 +57,7 @@ const MediaActionUserActivityRating = React.forwardRef<
 				rating: ratingValue,
 			}, {
 				onError: () => {
-					toast.error(upperFirst(common('errors.an_error_occurred')));
+					toast.error(upperFirst(t('common.errors.an_error_occurred')));
 				}
 			});
 		} else {
@@ -67,7 +67,7 @@ const MediaActionUserActivityRating = React.forwardRef<
 				rating: ratingValue,
 			}, {
 				onError: () => {
-					toast.error(upperFirst(common('errors.an_error_occurred')));
+					toast.error(upperFirst(t('common.errors.an_error_occurred')));
 				}
 			});
 		}
@@ -75,14 +75,14 @@ const MediaActionUserActivityRating = React.forwardRef<
 	const handleUnrate = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
 		if (activity?.review) {
-			return toast.error('Impossible car vous avez une critique sur ce film');
+			return toast.error(t('components.media.actions.rating.remove_rating.has_review'));
 		}
 		await updateActivity.mutateAsync({
 		  activityId: activity!.id!,
 		  rating: null,
 		}, {
 			onError: () => {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(t('common.errors.an_error_occurred')));
 			}
 		});
 	  };
@@ -93,7 +93,7 @@ const MediaActionUserActivityRating = React.forwardRef<
 
 	if (user == null) {
 		return (
-		<TooltipBox tooltip={'Connectez-vous'}>
+		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
 			variant={'rating'}
 			className={cn('', className)}
@@ -110,7 +110,7 @@ const MediaActionUserActivityRating = React.forwardRef<
 
 	return (
 		<Dialog>
-		  <TooltipBox tooltip={activity?.rating ? 'Modifier la note' : 'Ajouter une note'}>
+		  <TooltipBox tooltip={activity?.rating ? upperFirst(t('common.messages.edit_rating')) : upperFirst(t('common.messages.add_rating'))}>
 			<DialogTrigger asChild>
 			  <Button
 				disabled={isLoading || isError || activity === undefined || insertActivity.isPending || updateActivity.isPending}
@@ -136,7 +136,7 @@ const MediaActionUserActivityRating = React.forwardRef<
 				</p>
 				<Icons.star size={80} className="text-accent-yellow fill-accent-yellow" />
 			  </div>
-			  <DialogTitle className="text-center pt-4">NOTER</DialogTitle>
+			  <DialogTitle className="text-center pt-4">{activity?.rating ? upperFirst(t('common.messages.edit_rating')) : upperFirst(t('common.messages.add_rating'))}</DialogTitle>
 			</DialogHeader>
 			<div className="grid gap-4 py-4">
 			  <div className="flex">
@@ -145,12 +145,12 @@ const MediaActionUserActivityRating = React.forwardRef<
 			</div>
 			<DialogFooter className="flex flex-col justify-center">
 			  <DialogClose asChild>
-				<Button onClick={async (e) => handleRate(e)}>Enregistrer</Button>
+				<Button onClick={async (e) => handleRate(e)}>{upperFirst(t('common.word.save'))}</Button>
 			  </DialogClose>
 			  {activity?.rating && (
 				<DialogClose asChild>
 				  <Button variant="destructive" onClick={async (e) => handleUnrate(e)}>
-					Supprimer la note
+					{upperFirst(t('common.messages.remove_rating'))}
 				  </Button>
 				</DialogClose>
 			  )}

@@ -24,7 +24,7 @@ const ActionReviewLike = React.forwardRef<
 	ActionReviewLikeProps
 >(({ reviewId, reviewLikesCount, className, ...props }, ref) => {
 	const { user } = useAuth();
-	const common = useTranslations('common');
+	const t = useTranslations('common');
 	const pathname = usePathname();
 	const {
 		data: like,
@@ -41,7 +41,7 @@ const ActionReviewLike = React.forwardRef<
 	const handleLike = async (e: React.MouseEvent) => {
 		e.stopPropagation();
 		if (!user) {
-			toast.error(upperFirst(common('errors.not_logged_in')));
+			toast.error(upperFirst(t('errors.not_logged_in')));
 			return;
 		}
 		await insertLike.mutateAsync({
@@ -52,14 +52,14 @@ const ActionReviewLike = React.forwardRef<
 				setLikeCount((prev) => (prev ?? 0) + 1);
 			},
 			onError: () => {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(t('errors.an_error_occurred')));
 			}
 		});
 	};
 	const handleUnlike = async (e: React.MouseEvent) => {
 		e.stopPropagation();
 		if (!like) {
-			toast.error(upperFirst(common('errors.an_error_occurred')));
+			toast.error(upperFirst(t('errors.an_error_occurred')));
 			return;
 		}
 		await deleteLike.mutateAsync({
@@ -69,14 +69,14 @@ const ActionReviewLike = React.forwardRef<
 				setLikeCount((prev) => (prev ?? 0) - 1);
 			},
 			onError: () => {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(t('errors.an_error_occurred')));
 			}
 		});
 	};
 
 	if (user == null) {
 		return (
-		<TooltipBox tooltip={'Connectez-vous'}>
+		<TooltipBox tooltip={upperFirst(t('messages.please_login'))}>
 			<Button
 			size={'icon'}
 			variant={'action'}
@@ -97,7 +97,7 @@ const ActionReviewLike = React.forwardRef<
 	}
 
 	return (
-		<TooltipBox tooltip={like ? 'Ne plus aimer' : 'Aimer'}>
+		<TooltipBox tooltip={like ? upperFirst(t('messages.unlike')) : upperFirst(t('messages.like'))}>
 			<Button
 			onClick={like ? handleUnlike : handleLike}
 			disabled={isLoading || isError || like === undefined || insertLike.isPending || deleteLike.isPending}

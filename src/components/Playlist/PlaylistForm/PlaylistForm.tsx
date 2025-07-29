@@ -39,6 +39,8 @@ import { useSupabaseClient } from '@/context/supabase-context';
 import { usePlaylistDeleteMutation } from '@/features/client/playlist/playlistMutations';
 import { userKeys } from '@/features/client/user/userKeys';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -53,17 +55,12 @@ export function PlaylistForm({
 }: PlaylistFormProps) {
   const supabase = useSupabaseClient();
   const { user } = useAuth();
-
+  const t = useTranslations();
   const router = useRouter();
-
   const queryClient = useQueryClient();
-
   const pathname = usePathname();
-
   const [loading, setLoading] = useState(false);
-
   const [newPoster, setNewPoster] = useState<File>();
-
   const deletePlaylistMutation = usePlaylistDeleteMutation({
     userId: user?.id,
   })
@@ -89,17 +86,6 @@ export function PlaylistForm({
       queryClient.invalidateQueries({
         queryKey: userKeys.playlists({ userId: user?.id as string }),
       });
-      // queryClient.setQueryData(['user', user?.id, 'playlists', { order: 'updated_at-desc'}], (oldData: InfiniteData<Playlist[], unknown>) => {
-      //   if (!oldData || !oldData.pages) {
-      //       return oldData;
-      //   }
-      //   const newPage = [data, ...oldData.pages[0]];
-      //   const newData: InfiniteData<Playlist[], unknown> = {
-      //     ...oldData,
-      //     pages: [newPage, ...oldData.pages.slice(1)],
-      //   };
-      //   return newData;
-      // });
     },
   });
 
@@ -128,48 +114,22 @@ export function PlaylistForm({
     }
   });
 
-  // const { mutateAsync: deletePlaylistMutation } = useMutation({
-  //   mutationFn: async ({
-  //     playlistId
-  //   } : {
-  //     playlistId: number
-  //   }) => {
-  //     if (!playlistId) throw Error('Missing playlist id');
-  //     const { error } = await supabase
-  //       .from('playlist')
-  //       .delete()
-  //       .eq('id', playlistId)
-  //     if (error) throw error;
-  //     return (playlist);
-  //   },
-  //   onSuccess: (data, variables) => {
-  //     queryClient.setQueryData(['user', user?.id, 'playlists', { order: 'updated_at-desc'}], (oldData: any) => {
-  //       if (!oldData || !oldData.pages) {
-  //           return oldData;
-  //       }
-  //       const updatedPages = oldData.pages.map((page: Playlist[]) => {
-  //           return page.filter((playlist) => playlist?.id !== data?.id);
-  //       });
-  //       return { ...oldData, pages: updatedPages };
-  //     });
-  //     queryClient.setQueryData(playlistKeys.detail(data?.id as number), null);
-  //   }
-  // });
-
   const CreatePlaylistFormSchema = z.object({
     title: z
       .string()
       .min(1, {
-        message: 'Le nom est obligatoire',
+        message: t('common.form.length.char_min', { count: 1 }),
       })
       .max(100, {
-        message: 'Le nom ne doit pas dépasser 100 caractères.',
+        message: t('common.form.length.char_max', { count: 100 }),
       })
-      .regex(/^[a-zA-Z0-9\s\S]*$/),
+      .regex(/^[a-zA-Z0-9\s\S]*$/, {
+        message: t('common.form.format.only_letters_numbers_spaces'),
+      }),
     description: z
       .string()
       .max(300, {
-        message: 'La description ne doit pas dépasser 300 caractères.',
+        message: t('common.form.length.char_max', { count: 300 }),
       })
       .optional(),
     private: z.boolean(),
@@ -196,12 +156,7 @@ export function PlaylistForm({
       const newPlaylist = await insertPlaylistMutation({
         user_id: user?.id,
         title: data.title ?? '',
-        // title: data.title.replace(/\s+/g, ' ').trim(),
         description: data.description?.trim() ?? '',
-        // description: data.description
-        //   ?.replace(/[\r\n]+/g, '\n') // Multiple new lines
-        //   .replace(/[^\S\r\n]+/g, ' ') // Multiple spaces
-        //   .trim() ?? '',
         private: data.private,
       });
       // if (filmId) {
@@ -225,10 +180,10 @@ export function PlaylistForm({
           },
         });
       }
-      toast.success('Enregistré');
+      toast.success(upperFirst(t('common.word.saved')));
       success();
     } catch (error) {
-      toast.error("Une erreur s'est produite");
+      toast.error(upperFirst(t('common.errors.an_error_occurred')));
     } finally {
       setLoading(false);
     }
@@ -256,10 +211,10 @@ export function PlaylistForm({
         playlistId: playlist.id,
         payload,
       });
-      toast.success('Enregistré');
+      toast.success(upperFirst(t('common.word.saved')));
       success();
     } catch (error) {
-      toast.error("Une erreur s'est produite");
+      toast.error(upperFirst(t('common.errors.an_error_occurred')));
     } finally {
       setLoading(false);
     }
@@ -274,11 +229,11 @@ export function PlaylistForm({
       }, {
         onSuccess: () => {
           if (pathname.startsWith(`/playlist/${playlist.id}`)) router.push('/');
-          toast.success('Supprimé');
+          toast.success(upperFirst(t('common.word.deleted')));
           success();
         },
         onError: () => {
-          toast.error("Une erreur s'est produite");
+          toast.error(upperFirst(t('common.errors.an_error_occurred')));
         }
       });
     } finally {
@@ -330,9 +285,9 @@ export function PlaylistForm({
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nom</FormLabel>
+                  <FormLabel>{upperFirst(t('common.messages.name'))}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Ajoutez un nom" />
+                    <Input {...field} placeholder={upperFirst(t('common.messages.add_a_name'))} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -343,11 +298,11 @@ export function PlaylistForm({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>{upperFirst(t('common.messages.description'))}</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
-                      placeholder="Ajoutez une description..."
+                      placeholder={upperFirst(t('common.messages.add_a_description'))}
                       className="resize-none h-32"
                       maxLength={300}
                       onChange={(e) => {
@@ -367,7 +322,7 @@ export function PlaylistForm({
               name="private"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Visibilité</FormLabel>
+                  <FormLabel>{upperFirst(t('common.messages.visibility'))}</FormLabel>
                   <FormControl className="flex items-center space-x-2">
                     <div className="flex items-center space-x-2">
                       <Switch
@@ -375,7 +330,7 @@ export function PlaylistForm({
                         onCheckedChange={field.onChange}
                       />
                       <Label htmlFor="airplane-mode">
-                        {field.value ? 'Privée' : 'Public'}
+                        {field.value ? upperFirst(t('common.word.private', { count: 1, gender: 'female' })) : upperFirst(t('common.word.public'))}
                       </Label>
                     </div>
                   </FormControl>
@@ -393,38 +348,27 @@ export function PlaylistForm({
                   type="button"
                   variant={'outline'}
                 >
-                  Supprimer
+                  {upperFirst(t('common.word.delete'))}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>T&apos;es sur ?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Cela supprimera <strong className='text-foreground'>{playlist.title}</strong> définitivement.
-                  </AlertDialogDescription>
+                  <AlertDialogTitle>{upperFirst(t('common.messages.are_u_sure'))}</AlertDialogTitle>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogCancel>{upperFirst(t('common.word.cancel'))}</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleDeletePlaylist}
                   >
-                    Supprimer
+                    {upperFirst(t('common.word.delete'))}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            // <Button
-            //   disabled={loading}
-            //   type="button"
-            //   variant={'destructive'}
-            //   onClick={handleDeletePlaylist}
-            // >
-            //   Supprimer
-            // </Button>
           )}
           <Button disabled={loading} type="submit">
             {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-            {playlist ? 'Sauvegarder' : 'Créer'}
+            {playlist ? upperFirst(t('common.word.save')) : upperFirst(t('common.word.create'))}
           </Button>
         </DialogFooter>
       </form>

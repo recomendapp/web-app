@@ -28,7 +28,7 @@ const MediaActionUserActivityLike = React.forwardRef<
 >(({ mediaId, stopPropagation = true, className, ...props }, ref) => {
 	const { user } = useAuth();
 	const queryClient = useQueryClient();
-	const common = useTranslations('common');
+	const t = useTranslations('common');
 	const pathname = usePathname();
 	const {
 		data: activity,
@@ -55,7 +55,7 @@ const MediaActionUserActivityLike = React.forwardRef<
 					});
 				},
 				onError: () => {
-					toast.error(upperFirst(common('errors.an_error_occurred')));
+					toast.error(upperFirst(t('errors.an_error_occurred')));
 				}
 			});
 		} else {
@@ -70,7 +70,7 @@ const MediaActionUserActivityLike = React.forwardRef<
 					});
 				},
 				onError: () => {
-					toast.error(upperFirst(common('errors.an_error_occurred')));
+					toast.error(upperFirst(t('errors.an_error_occurred')));
 				}
 			});
 		}
@@ -88,14 +88,14 @@ const MediaActionUserActivityLike = React.forwardRef<
 				});
 			},
 			onError: () => {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(t('errors.an_error_occurred')));
 			}
 		});
 	};
 
 	if (user == null) {
 		return (
-		<TooltipBox tooltip={'Connectez-vous'}>
+		<TooltipBox tooltip={upperFirst(t('messages.please_login'))}>
 			<Button
 			size={'icon'}
 			variant={'action'}
@@ -112,7 +112,7 @@ const MediaActionUserActivityLike = React.forwardRef<
 	}
 
 	return (
-		<TooltipBox tooltip={activity?.is_liked ? 'Retirer des coups de coeur' : 'Ajouter aux coups de coeur'}>
+		<TooltipBox tooltip={activity?.is_liked ? upperFirst(t('messages.remove_from_heart_picks')) : upperFirst(t('messages.add_to_heart_picks'))}>
 			<Button
 			onClick={(e) => activity?.is_liked ? handleUnlike(e) : handleLike(e)}
 			disabled={isLoading || isError || activity === undefined || insertActivity.isPending || updateActivity.isPending}

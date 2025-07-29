@@ -1,10 +1,13 @@
 'use client';
+
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { BiSearch } from 'react-icons/bi';
 import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 interface SearchBarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -12,6 +15,7 @@ export default function SearchBar({ className }: SearchBarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const t = useTranslations();
   const q = searchParams.get('q');
   const [searchQuery, setSearchQuery] = useState(q ?? '');
   const [isSearching, setIsSearching] = useState(false);
@@ -55,12 +59,12 @@ export default function SearchBar({ className }: SearchBarProps) {
       >
         <button className="py-3 px-4">
           <BiSearch size={20} />
-          <span className="sr-only">Search</span>
+          <span className="sr-only">{upperFirst(t('common.messages.search'))}</span>
         </button>
         <input
           name="searchTerm"
           type="search"
-          placeholder="Faire une recherche"
+          placeholder={t('pages.search.placeholder')}
           className="w-full bg-transparent pr-4 focus:outline-none focus:outline-offset-2"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}

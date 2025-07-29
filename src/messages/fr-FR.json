@@ -7,8 +7,20 @@
       "library": "bibliothèque",
       "watchlist": "watchlist",
       "heart_pick": "{count, plural, one {coup} other {coups}} de coeurs",
+      "add_to_heart_picks": "ajouter aux coups de coeur",
+      "remove_from_heart_picks": "retirer des coups de coeur",
+      "add_rating": "ajouter une note",
+      "edit_rating": "modifier la note",
+      "remove_rating": "retirer la note",
+      "mark_as_watched": "marquer comme vu",
+      "remove_from_watched": "retirer des vus",
+      "add_to_watchlist": "ajouter à la watchlist",
+      "remove_from_watchlist": "retirer de la watchlist",
       "no_results": "aucun résultat",
       "no_results_for": "Aucun résultat pour <strong>{query}</strong>",
+      "no_followees": "aucun suivi(e)",
+      "no_rating": "aucune note",
+      "followers_ratings": "notes des followers",
       "added_by": "ajouté par",
       "sort_by": "trier par",
       "sort_order": "ordre de tri",
@@ -32,8 +44,8 @@
       "save_up_to_percent": "économisez jusqu'à {percent}%",
       "is_empty": "c'est un peu vide ici",
       "add_to_playlist": "ajouter à une playlist",
-      "send_to_friend": "envoyer à un ami",
-      "custom_sort": "trier personnalisé",
+      "send_to_friend": "envoyer à un(e) ami(e)",
+      "custom_sort": "tri personnalisé",
       "quick_add": "ajout rapide",
       "favorite_films": "films favoris",
       "follow": "suivre",
@@ -92,6 +104,7 @@
       "last_appearance_date": "dernière apparition",
       "vote_average": "note moyenne",
       "added": "ajouté",
+      "add": "ajouter",
       "updated_at": "mis à jour",
       "created_at": "créé",
       "likes": "likes",
@@ -142,7 +155,31 @@
       "friends_playlists": "playlists de vos amis",
       "latest_activity": "{count, plural, one {dernière activité} other {dernières activités}}",
       "discover_users": "découvrir des utilisateurs",
-      "most_recommended": "{count, plural, one {le plus recommandé} other {les plus recommandés}}"
+      "most_recommended": "{count, plural, one {le plus recommandé} other {les plus recommandés}}",
+      "archive": "archiver",
+      "unarchive": "désarchiver",
+      "mark_as_read": "{count, plural, =1 {marquer comme {gender, select, male {lu} female {lue} other {lu(e)}}} other {marquer comme {gender, select, male {lus} female {lues} other {lu(e)s}}}}",
+      "mark_as_unread": "{count, plural, =1 {marquer comme {gender, select, male {non lu} female {non lue} other {non lu(e)}}} other {marquer comme {gender, select, male {non lus} female {non lues} other {non lu(e)s}}}}",
+      "request_accepted": "{count, plural, =1 {demande acceptée} other {demandes acceptées}}",
+      "request_declined": "{count, plural, =1 {demande refusée} other {demandes refusées}}",
+      "unread": "{count, plural, =1 {{gender, select, male {non lu} female {non lue} other {non lu(e)}}} other {{gender, select, male {non lus} female {non lues} other {non lu(e)s}}}}",
+      "archived": "{count, plural, =1 {{gender, select, male {archivé} female {archivée} other {archivé(e)}}} other {{gender, select, male {archivés} female {archivées} other {archivé(e)s}}}}",
+      "no_notifications": "aucune notification",
+      "all": "{count, plural, =1 {{gender, select, female {toute} other {tout}}} other {{gender, select, female {toutes} other {tous}}}}",
+      "mark_all_as_read": "tout marquer comme lu",
+      "archive_all": "tout archiver",
+      "archive_all_read": "archiver tout ce qui est lu",
+      "please_login": "connectez-vous",
+      "like": "aimer",
+      "unlike": "ne plus aimer",
+      "name": "nom",
+      "add_a_name": "ajouter un nom",
+      "description": "description",
+      "add_a_description": "ajouter une description",
+      "visibility": "visibilité",
+      "search_an_user": "rechercher un utilisateur",
+      "select_an_item_to_add_to_playlist": "sélectionner un élément à ajouter à la playlist",
+      "add_one_or_more_items_to": "Ajouter un ou plusieurs éléments à <important>{title}</important>"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",
@@ -157,15 +194,17 @@
       "review_not_found": "critique introuvable",
       "person_not_found": "personne introuvable",
       "wrong_arguments": "arguments incorrects",
-      "no_media_found": "aucun média trouvé"
+      "no_media_found": "aucun média trouvé",
+      "unknown_action": "action inconnue"
     },
     "word": {
       "save": "Enregistrer",
       "saved": "Enregistré",
+      "create": "créer",
       "film_count": "{count, plural, one {# film} other {# films}}",
-      "login": "Se connecter",
-      "signup": "S'inscrire",
-      "navigation": "Navigation",
+      "login": "se connecter",
+      "signup": "s'inscrire",
+      "navigation": "navigation",
       "delete": "supprimer",
       "deleted": "supprimé",
       "share": "partager",
@@ -810,6 +849,25 @@
         "metadata": {
           "title": "Politique de confidentialité",
           "description": "Lisez la politique de confidentialité de {app}."
+        }
+      }
+    },
+    "search": {
+      "placeholder": "Rechercher un film, une série, une personne ou un utilisateur..."
+    }
+  },
+  "components": {
+    "media": {
+      "actions": {
+        "watch": {
+          "remove_from_watched": {
+            "description": "Êtes-vous sûr de vouloir retirer cette oeuvre de votre liste de vues ? Si vous avez une note ou une critique, elles seront également supprimées."
+          }
+        },
+        "rating": {
+          "remove_rating": {
+            "has_review": "Vous ne pouvez pas retirer une note associée à une critique."
+          }
         }
       }
     }

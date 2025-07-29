@@ -9,6 +9,8 @@ import { usePathname } from '@/lib/i18n/routing';
 import { cn } from "@/lib/utils";
 import { useModal } from "@/context/modal-context";
 import { ModalPlaylistAdd } from "@/components/Modals/actions/ModalPlaylistAdd";
+import { useTranslations } from "next-intl";
+import { upperFirst } from "lodash";
 
 interface MediaActionPlaylistAddProps
 	extends React.ComponentProps<typeof Button> {
@@ -22,12 +24,13 @@ const MediaActionPlaylistAdd = React.forwardRef<
 	MediaActionPlaylistAddProps
 >(({ mediaId, stopPropagation = true, mediaTitle, className, ...props }, ref) => {
 	const { user } = useAuth();
+	const t = useTranslations('common');
 	const pathname = usePathname();
 	const { openModal } = useModal();
 
 	if (user === null) {
 		return (
-		  <TooltipBox tooltip={'Connectez-vous'}>
+		  <TooltipBox tooltip={upperFirst(t('messages.please_login'))}>
 			<Button
 			  size="icon"
 			  variant={'action'}
@@ -44,7 +47,7 @@ const MediaActionPlaylistAdd = React.forwardRef<
 	  }
 
 	  return (
-		<TooltipBox tooltip={'Ajouter à une playlist'}>
+		<TooltipBox tooltip={upperFirst(t('messages.add_to_playlist'))}>
 		  <Button
 			disabled={user === undefined}
 			size="icon"
