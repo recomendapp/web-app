@@ -821,7 +821,7 @@
     },
     "review": {
       "metadata": {
-        "title": "Critique de {title} par (@{username})"
+        "title": "Critique de {title} par @{username}"
       },
       "create": {
         "metadata": {
