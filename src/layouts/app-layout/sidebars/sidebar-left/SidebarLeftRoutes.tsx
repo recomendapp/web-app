@@ -266,7 +266,7 @@ export const SidebarLeftRoutes = () => {
 			</SidebarMenu>
 			) : (
 			<>
-				<SidebarGroupLabel>{upperFirst(t('see_more'))}</SidebarGroupLabel>
+				<SidebarGroupLabel>{upperFirst(t('messages.see_more'))}</SidebarGroupLabel>
 				<SidebarMenu className={`h-full ${!sidebarOpen ? "items-center" : ""}`}>
 					{unloggedRoutes.map((route, i) => (
 						<SidebarMenuItem key={i}>

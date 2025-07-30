@@ -1,19 +1,20 @@
 import { cn } from "@/lib/utils"
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { siteConfig } from "@/config/site";
-import { Button } from "../ui/button";
-import { Link } from "@/lib/i18n/routing";
 import { useTranslations } from "next-intl";
 
 export const WidgetRecomendShowcase = ({
 	className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
-	const t = useTranslations('pages.showcase');
+	const t = useTranslations();
 	if (!siteConfig.features.length) return null;
 	return (
 		<div className={cn('@container/widget-recomend-showcase space-y-4', className)}>
 			<h2 className="text-xl font-semibold">
-				Qu&apos;est-ce que c&apos;est ?
+				{t.rich('common.messages.what_is_title', {
+					title: siteConfig.name,
+					strong: (chunks) => <strong className="text-accent-yellow">{chunks}</strong>,
+				})}
 			</h2>
 			<div
 			className={`grid grid-cols-1 gap-4
@@ -26,9 +27,9 @@ export const WidgetRecomendShowcase = ({
 					<CardHeader>
 						<CardTitle className="flex gap-2 items-center text-xl">
 							<feature.icon className={cn("w-4 text-accent-yellow", feature.iconClass)} />
-							{t(`features.${feature.key}.label`)}
+							{t(`pages.showcase.features.${feature.key}.label`)}
 						</CardTitle>
-						<CardDescription className="ml-6">{t(`features.${feature.key}.description`)}</CardDescription>
+						<CardDescription className="ml-6">{t(`pages.showcase.features.${feature.key}.description`)}</CardDescription>
 					</CardHeader>
 				</Card>
 			))}

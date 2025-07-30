@@ -217,7 +217,10 @@
       "already_added": "déjà ajouté{gender, select, female {e} other {}}{count, plural, one {} other {s}}",
       "recommend_to_friend_to_discover": "Recommander <strong>{title}</strong> à un(e) ami(e) pour lui faire découvrir",
       "add_to_one_or_more_playlists": "Ajouter <strong>{title}</strong> à une ou plusieurs de vos playlists",
-      "my_playlist": "{count, plural, one {ma playlist} other {mes playlists}}"
+      "my_playlist": "{count, plural, one {ma playlist} other {mes playlists}}",
+      "what_is_title": "Qu'est-ce que <strong>{title}</strong> ?",
+      "try_again": "réessayer",
+      "error": "erreur"
     },
     "errors": {
       "not_logged_in": "vous n'êtes pas connecté",

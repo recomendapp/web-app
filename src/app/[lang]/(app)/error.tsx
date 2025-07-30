@@ -13,8 +13,9 @@ import {
 import { Icons } from "@/config/icons";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/lib/i18n/routing";
 import { ButtonCopy } from "@/components/utils/ButtonCopy";
+import { useTranslations } from "next-intl";
+import { upperFirst } from "lodash";
 export default function Error({
 	error,
 	reset,
@@ -22,6 +23,7 @@ export default function Error({
 	error: Error & { digest?: string },
 	reset: () => void,
 }) {
+	const t = useTranslations();
 	const bgImage = useRandomImage(Images.auth.error.background);
 	return (
 		<div
@@ -37,10 +39,10 @@ export default function Error({
 		  <CardHeader className='gap-2'>
 			<CardTitle className='inline-flex gap-2 items-center justify-center'>
 			  <Icons.site.icon className='fill-accent-yellow w-8' />
-			  Erreur
+			  {upperFirst(t('common.messages.error', { count: 1 }))}
 			</CardTitle>
 			<CardDescription>
-			  Une erreur s&apos;est produite.
+			 {upperFirst(t('common.errors.an_error_occurred'))}
 			</CardDescription>
 		  </CardHeader>
 		  <CardContent className='grid gap-4'>
@@ -51,7 +53,7 @@ export default function Error({
 		  </CardContent>
 		  <CardFooter>
 			<Button className='w-full' onClick={reset}>
-				Try again
+				{upperFirst(t('common.messages.try_again'))}
 			</Button>
 		  </CardFooter>
 		</Card>

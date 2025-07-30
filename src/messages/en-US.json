@@ -217,7 +217,10 @@
       "already_added": "already added",
       "recommend_to_friend_to_discover": "Recommend <strong>{title}</strong> to a friend to discover",
       "add_to_one_or_more_playlists": "Add <strong>{title}</strong> to one or more of your playlists",
-      "my_playlist": "my {count, plural, one {playlist} other {playlists}}"
+      "my_playlist": "my {count, plural, one {playlist} other {playlists}}",
+      "what_is_title": "What is <strong>{title}</strong>?",
+      "try_again": "try again",
+      "error": "error"
     },
     "errors": {
       "not_logged_in": "you are not logged in",
