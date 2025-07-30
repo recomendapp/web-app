@@ -1,7 +1,7 @@
 import { PlaylistGuest } from "@/types/type.db"
 import { ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table"
 import { useState } from "react"
-import { columns } from "./columns"
+import { Columns } from "./columns"
 import {
 	Table,
 	TableBody,
@@ -16,6 +16,8 @@ import { Icons } from "@/config/icons"
 import { usePlaylistGuestsDeleteMutation } from "@/features/client/playlist/playlistMutations"
 import toast from "react-hot-toast"
 import { useModal } from "@/context/modal-context"
+import { upperFirst } from "lodash"
+import { useTranslations } from "next-intl"
 
 export const PlaylistGuestTable = ({
 	guests,
@@ -26,6 +28,7 @@ export const PlaylistGuestTable = ({
 	playlistId: number,
 	setView: (view: 'guests' | 'add') => void
 }) => {
+	const t = useTranslations();
 	const { createConfirmModal } = useModal()
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -34,7 +37,7 @@ export const PlaylistGuestTable = ({
 	const deletePlaylistGuests = usePlaylistGuestsDeleteMutation()
 	const table = useReactTable({
 		data: guests,
-		columns: columns,
+		columns: Columns(),
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
@@ -54,17 +57,17 @@ export const PlaylistGuestTable = ({
 	const handleDelete = () => {
 		const selectedRows = table.getFilteredSelectedRowModel().rows
 		const ids = selectedRows.map((row) => row.original?.id as number)
-		if (!ids.length) toast.error('Aucun utilisateur sélectionné')
+		if (!ids.length) toast.error(upperFirst(t('common.messages.no_selected_users')))
 		deletePlaylistGuests.mutate({
 			ids: ids,
 			playlistId: playlistId
 		}, {
 			onSuccess: () => {
-				toast.success(`Supprimé${ids.length > 1 ? 's' : ''}`)
+				toast.success(upperFirst(t('common.word.deleted', { count: selectedRows.length })))
 				setRowSelection({})
 			},
 			onError: () => {
-				toast.error('Une erreur s\'est produite')
+				toast.error(upperFirst(t('common.errors.an_error_occurred')))
 			}
 		})
 	}
@@ -74,7 +77,7 @@ export const PlaylistGuestTable = ({
 		<>
 		<div className="mb-4 flex items-center gap-4">
 			<Input
-				placeholder="Search user..."
+				placeholder={upperFirst(t('common.messages.search_user'))}
 				value={(table.getColumn("user")?.getFilterValue() as string) ?? ""}
 				onChange={(event) =>
 				table.getColumn("user")?.setFilterValue(event.target.value)
@@ -86,7 +89,7 @@ export const PlaylistGuestTable = ({
 			onClick={() => setView("add")}
 			>
 				<Icons.add className="mr-2 h-4 w-4" />
-				Ajouter
+				{upperFirst(t('common.messages.add'))}
 			</Button>
 		</div>
 		<Table className="bg-popover">
@@ -134,34 +137,38 @@ export const PlaylistGuestTable = ({
 				) : (
 				<TableRow>
 					<TableCell
-					colSpan={columns.length}
+					colSpan={table.getAllColumns().length}
 					className="h-24 text-center"
 					>
-					No results.
+						{upperFirst(t('common.messages.no_results'))}
 					</TableCell>
 				</TableRow>
 				)}
 			</TableBody>
 		</Table>
 		<div className=" p-4 flex items-center justify-end space-x-2">
-          <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} user(s) selected.
-          </div>
+          <p className="flex-1 text-sm text-muted-foreground">
+			{t('common.messages.selection_count', {
+				number: table.getFilteredSelectedRowModel().rows.length,
+				total: table.getFilteredRowModel().rows.length,
+				type: t('common.messages.user', { count: table.getFilteredRowModel().rows.length }),
+				gender: 'male',
+				count: table.getFilteredSelectedRowModel().rows.length,
+			})}
+          </p>
           <div className="flex items-center gap-2">
 			{table.getFilteredSelectedRowModel().rows.length > 0 ? (
 				<Button
 					variant="outline"
 					className="h-8"
 					onClick={() => createConfirmModal({
-						title: 'Delete user(s)',
-						description: 'Are you sure you want to delete the selected user(s)?',
+						title: upperFirst(t('common.messages.are_u_sure')),
 						onConfirm: handleDelete
 					})}
 					disabled={deletePlaylistGuests.isPending}
 				>
 					<Icons.delete className="h-4 w-4" />
-					<span className="sr-only">Delete</span>
+					<span className="sr-only">{upperFirst(t('common.word.delete'))}</span>
 				</Button>
 			) : null}
 			</div>

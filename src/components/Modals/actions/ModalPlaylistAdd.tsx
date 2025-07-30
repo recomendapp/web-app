@@ -68,7 +68,7 @@ export function ModalPlaylistAdd({
 			comment: comment,
 		}, {
 			onSuccess: () => {
-				toast.success(upperFirst(t('common.messages.added')));
+				toast.success(upperFirst(t('common.messages.added', { gender: 'male', count: selectedPlaylists.length })));
 				closeModal(props.id);
 			},
 			onError: () => {
@@ -111,18 +111,21 @@ export function ModalPlaylistAdd({
 			className='gap-0 p-0 outline-none'
 		>
 			<ModalHeader className='px-4 pb-4 pt-5'>
-				<ModalTitle>Ajouter à une playlist</ModalTitle>
+				<ModalTitle>{upperFirst(t('common.messages.add_to_playlist'))}</ModalTitle>
 				<ModalDescription>
-					Ajouter {mediaTitle ? (<strong>{mediaTitle}</strong>) : 'ce film'} à une ou plusieurs de vos playlists.
+					{t.rich('common.messages.add_to_one_or_more_playlists', {
+						title: mediaTitle,
+						strong: (chunks) => <strong>{chunks}</strong>,
+					})}
 				</ModalDescription>
 			</ModalHeader>
 			<ModalBody className='!p-0 overflow-hidden'>
 				<Command className="overflow-hidden rounded-t-none border-t">
-					<CommandInput placeholder="Search playlist..." />
+					<CommandInput placeholder={upperFirst(t('common.messages.search_playlist'))} />
 					<Tabs onValueChange={setType as Dispatch<SetStateAction<string>>} defaultValue={type} className="w-full">
 						<TabsList className="grid w-full grid-cols-2">
-							<TabsTrigger value="personal">Mes playlists</TabsTrigger>
-							<TabsTrigger value="shared">Enregistrées</TabsTrigger>
+							<TabsTrigger value="personal">{upperFirst(t('common.messages.my_playlist', { count: 2 }))}</TabsTrigger>
+							<TabsTrigger value="shared">{upperFirst(t('common.word.saved', { gender: 'female', count: 2 }))}</TabsTrigger>
 						</TabsList>
 					</Tabs>
 					<CommandList>
@@ -132,16 +135,16 @@ export function ModalPlaylistAdd({
 								<>
 								{createPlaylist ? (
 									<>
-									<Label htmlFor="playlist" className="sr-only">Playlist Name</Label>
+									<Label htmlFor="playlist" className="sr-only">{upperFirst(t('common.messages.playlist_name'))}</Label>
 									<div className='relative'>
 										<Input
-											placeholder="Nom de la playlist"
+											placeholder={upperFirst(t('common.messages.playlist_name'))}
 											className="w-full pr-20"
 											value={createPlaylistName}
 											onChange={(e) => setCreatePlaylistName(e.target.value)}
 										/>
 										<div className='absolute top-1/2 right-2 transform -translate-y-1/2 flex items-center gap-2'>
-											<TooltipBox tooltip='Créer'>
+											<TooltipBox tooltip={upperFirst(t('common.word.create'))}>
 												<Button
 												variant={'ghost'}
 												size={'icon'}
@@ -151,7 +154,7 @@ export function ModalPlaylistAdd({
 													<Icons.check size={20} />
 												</Button>
 											</TooltipBox>
-											<TooltipBox tooltip='Annuler'>
+											<TooltipBox tooltip={upperFirst(t('common.word.cancel'))}>
 												<Button
 												variant={'ghost'}
 												size={'icon'}
@@ -214,7 +217,7 @@ export function ModalPlaylistAdd({
 									<div className="flex items-center gap-2 shrink-0">
 										{already_added && (
 											<Badge variant="destructive">
-												Déjà ajouté
+												{upperFirst(t('common.messages.already_added', { count: 1, gender: 'male' }))}
 											</Badge>
 										)}
 										<Check size={20} className={`text-primary ${!selectedPlaylists.some((selectedPlaylist) => selectedPlaylist?.id === playlist?.id) ? 'opacity-0' : ''}`} />
@@ -227,16 +230,16 @@ export function ModalPlaylistAdd({
 								<Icons.loader />
 							</div>
 						)}
-						<CommandEmpty>No playlists found.</CommandEmpty>
+						<CommandEmpty>{upperFirst(t('common.messages.no_playlists_found'))}</CommandEmpty>
 					</CommandList>
 				</Command>
 			</ModalBody>
 			<div className='px-2 pt-2'>
-				<Label htmlFor="comment" className='sr-only'>Commentaire</Label>
+				<Label htmlFor="comment" className='sr-only'>{upperFirst(t('common.word.comment', { count: 1 }))}</Label>
 				<Input
 				value={comment}
 				onChange={(e) => setComment(e.target.value)}
-				placeholder='Écrire un commentaire...'
+				placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
 				maxLength={COMMENT_MAX_LENGTH}
 				/>
 			</div>
@@ -265,7 +268,7 @@ export function ModalPlaylistAdd({
 				</div>
 				) : (
 					<p className="text-sm text-muted-foreground">
-						Select a playlist to add the movie
+						{}{upperFirst(t('common.messages.select_playlists_to_add_the_item'))}
 					</p>
 				)}
 				<Button
@@ -273,7 +276,7 @@ export function ModalPlaylistAdd({
 				onClick={submit}
 				>
 				{addMovieToPlaylist.isPending && <Icons.loader className="mr-2" />}
-				Ajouter
+				{upperFirst(t('common.messages.add'))}
 				</Button>
 			</ModalFooter>
 		</Modal>

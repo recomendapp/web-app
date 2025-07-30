@@ -17,6 +17,8 @@ import useDebounce from '@/hooks/use-debounce';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 
 export const PlaylistGuestView = ({
@@ -28,14 +30,15 @@ export const PlaylistGuestView = ({
   playlistId: number,
   setView: (view: 'guests' | 'add') => void
 }) => {
+  const t = useTranslations();
   return (
     <>
       <ModalHeader className='px-4 pb-4 pt-5'>
         <ModalTitle>
-          Membres de la playlist
+          {upperFirst(t('common.messages.guests_playlist'))}
         </ModalTitle>
         <ModalDescription>
-          Gerez les droits d&apos;accès à votre playlist.
+          {upperFirst(t('common.messages.manage_playlist_access_rights'))}
         </ModalDescription>
       </ModalHeader>
       <ModalBody>
@@ -56,6 +59,7 @@ export const PlaylistGuestAddView = ({
   playlistGuest: PlaylistGuest[],
   setView: (view: 'guests' | 'add') => void
 }) => {
+  const t = useTranslations();
   const { user: authUser } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const [search, setSearch] = useState<string>('');
@@ -84,12 +88,12 @@ export const PlaylistGuestAddView = ({
       userIds: selectedUsers.map((user) => user?.id as string)
     }, {
       onSuccess: () => {
-        toast.success(`Ajouté${selectedUsers.length > 1 ? 's' : ''}`);
+        toast.success(upperFirst(t('common.messages.added', { gender: 'male', count: selectedUsers.length })));
         setSelectedUsers([]);
         setView('guests');
       },
       onError: () => {
-        toast.error('Une erreur s\'est produite');
+        toast.error(upperFirst(t('common.errors.an_error_occurred')));
       }
     });
   }
@@ -110,19 +114,19 @@ export const PlaylistGuestAddView = ({
             onClick={() => setView('guests')}
           >
             <ArrowLeftIcon size={20} />
-            <span className='sr-only'>Retour</span>
+            <span className='sr-only'>{upperFirst(t('common.messages.back'))}</span>
           </Button>
-          Ajouter un membre
+          {upperFirst(t('common.messages.add_guest', { count: 2 }))}
         </ModalTitle>
         <ModalDescription className='text-left'>
-          Ajoutez un utilisateur à votre playlist.
+          {upperFirst(t('common.messages.add_guests_to_your_playlist'))}
         </ModalDescription>
       </ModalHeader>
       <ModalBody className='!p-0 border-t bg-popover text-popover-foreground'>
         <InputSearch
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Rechercher un utilisateur..."
+          placeholder={upperFirst(t('common.messages.search_user'))}
 				/>
         <ScrollArea className={`h-[40vh]`}>
 					<div className='p-2 grid justify-items-center'>
@@ -162,15 +166,15 @@ export const PlaylistGuestAddView = ({
 						))
 					) : isError ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						Une erreur s&apos;est produite.
+						{upperFirst(t('common.errors.an_error_occurred'))}
 						</div>
 					) : (searchQuery && !isLoading) ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						Aucun utilisateur trouvé.
+						{upperFirst(t('common.errors.no_user_found'))}
 						</div>
 					) : !isLoading ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						Rechercher un utilisateur.
+						{upperFirst(t('common.messages.search_user'))}
 						</div>
 					) : null}
 					 {(isLoading || isFetchingNextPage) ? <Icons.loader /> : null}
@@ -194,7 +198,7 @@ export const PlaylistGuestAddView = ({
 				</div>
 				) : (
 				<p className="text-sm text-muted-foreground">
-					Select users to add to the playlist
+					{upperFirst(t('common.messages.select_users_to_add_to_playlist'))}
 				</p>
 				)}
 				<Button
@@ -202,7 +206,7 @@ export const PlaylistGuestAddView = ({
 				onClick={handleAddGuest}
 				>
 				{addUsers.isPending && <Icons.loader className="mr-2" />}	
-				Envoyer
+				{upperFirst(t('common.messages.send'))}
 				</Button>
 			</ModalFooter>
     </>
@@ -217,6 +221,7 @@ export function ModalPlaylistGuest({
   playlistId,
   ...props
 } : PlaylistGuestModalProps) {
+  const t = useTranslations();
   const { data: playlistGuest, isError } = usePlaylistGuestsQuery(playlistId);
   const { user } = useAuth();
   const { closeModal } = useModal();
@@ -238,7 +243,7 @@ export function ModalPlaylistGuest({
           <PlaylistGuestAddView playlistId={playlistId} playlistGuest={playlistGuest} setView={setView} />
         )
       ) : isError ? (
-        <div>Erreur</div>
+        <p>{upperFirst(t('common.errors.an_error_occurred'))}</p>
       ) : null}
     </Modal>
   )

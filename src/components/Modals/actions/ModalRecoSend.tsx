@@ -16,6 +16,8 @@ import { UserAvatar } from '@/components/User/UserAvatar';
 import { Label } from '@/components/ui/label';
 import { useUserRecosInsertMutation } from '@/features/client/user/userMutations';
 import { useUserRecosSendQuery } from '@/features/client/user/userQueries';
+import { upperFirst } from 'lodash';
+import { useTranslations } from 'next-intl';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -29,6 +31,7 @@ export function ModalRecoSend({
 	mediaTitle,
 	...props
 } : ModalRecoSendProps) {
+	const t = useTranslations();
 	const { user } = useAuth();
 	const { closeModal } = useModal();
 	const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
@@ -51,7 +54,7 @@ export function ModalRecoSend({
 			comment: comment,
 		}, {
 			onSuccess: () => {
-				toast.success('Envoyé');
+				toast.success(upperFirst(t('common.messages.sent', { count: selectedUsers.length, gender: 'female' })));
 				closeModal(props.id);
 			},
 			onError: (error: any) => {
@@ -59,12 +62,6 @@ export function ModalRecoSend({
 					toast.error(error.message);
 				} else {
 					switch (error.code) {
-						case '23505':
-							toast.error(`Vous avez déjà envoyé ce film à ${selectedUsers.length === 1 ? 'cet ami(e)' : 'un ou plusieurs de ces amis'}`);
-							break;
-						case '23514':
-							toast.error(`Le commentaire est trop long (max ${COMMENT_MAX_LENGTH} caractère${COMMENT_MAX_LENGTH > 1 ? 's' : ''})`);
-							break;
 						default:
 							toast.error(error.message);
 							break;
@@ -81,21 +78,24 @@ export function ModalRecoSend({
 			className='gap-0 p-0 outline-none'
 		>
 			<ModalHeader className='px-4 pb-4 pt-5'>
-				<ModalTitle>Envoyer à un(e) ami(e)</ModalTitle>
+				<ModalTitle>{upperFirst(t('common.messages.send_to_friend'))}</ModalTitle>
 				<ModalDescription>
-					Recomender <strong>{mediaTitle}</strong> à un ami pour lui faire découvrir.
+					{t.rich('common.messages.recommend_to_friend_to_discover', {
+						title: mediaTitle,
+						strong: (chunks) => <strong>{chunks}</strong>,
+					})}
 				</ModalDescription>
 			</ModalHeader>
 			<ModalBody className='!p-0 overflow-hidden'>
 				<Command className="overflow-hidden rounded-t-none border-t">
-					<CommandInput placeholder="Search user..." />
+					<CommandInput placeholder={upperFirst(t('common.messages.search_user'))} />
 					<CommandList>
 						{isLoading && (
 							<div className="flex items-center justify-center p-4">
 								<Icons.loader />
 							</div>
 						)}
-						<CommandEmpty>No users found.</CommandEmpty>
+						<CommandEmpty>{upperFirst(t('common.errors.no_user_found'))}</CommandEmpty>
 						<CommandGroup className="p-2">
 							{friends?.map(({friend, as_watched, already_sent}) => (
 								<CommandItem
@@ -125,12 +125,12 @@ export function ModalRecoSend({
 									<div className="flex items-center gap-2 shrink-0">
 										{already_sent && (
 											<Badge variant="accent-yellow">
-												Déjà envoyé
+												{upperFirst(t('common.messages.already_sent'))}
 											</Badge>
 										)}
 										{as_watched && (
 											<Badge variant="destructive">
-												Déjà vu
+												{upperFirst(t('common.messages.already_watched'))}
 											</Badge>
 										)}
 										<Check size={20} className={`text-primary ${!selectedUsers.some((selectedUser) => selectedUser?.id === friend?.id) ? 'opacity-0' : ''}`} />
@@ -142,11 +142,11 @@ export function ModalRecoSend({
 				</Command>
 			</ModalBody>
 			<div className='px-2 pt-2'>
-				<Label htmlFor="comment" className='sr-only'>Commentaire</Label>
+				<Label htmlFor="comment" className='sr-only'>{upperFirst(t('common.messages.comment', { count: 1 }))}</Label>
 				<Input
 				value={comment}
 				onChange={(e) => setComment(e.target.value)}
-				placeholder="Écrire un commentaire..."
+				placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
 				maxLength={COMMENT_MAX_LENGTH}
 				/>
 			</div>
@@ -167,7 +167,7 @@ export function ModalRecoSend({
 				</div>
 				) : (
 				<p className="text-sm text-muted-foreground">
-					Select users to send the movie to
+					{upperFirst(t('common.messages.select_users_to_send_reco'))}
 				</p>
 				)}
 				<Button
@@ -175,7 +175,7 @@ export function ModalRecoSend({
 				onClick={submit}
 				>
 				{sendMovie.isPending && <Icons.loader className="mr-2" />}	
-				Envoyer
+				{upperFirst(t('common.messages.send'))}
 				</Button>
 			</ModalFooter>
 		</Modal>

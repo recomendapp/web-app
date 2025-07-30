@@ -70,7 +70,7 @@ export function ModalPlaylistQuickAdd({
 			comment: comment,
 		}, {
 			onSuccess: () => {
-				toast.success(upperFirst(t('common.messages.added')));
+				toast.success(upperFirst(t('common.messages.added', { gender: 'male', count: selectedMedias.length })));
 				closeModal(props.id);
 			},
 			onError: () => {
