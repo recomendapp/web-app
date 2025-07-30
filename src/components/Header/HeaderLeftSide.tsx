@@ -19,7 +19,7 @@ export default function HeaderLeftSide({
   const pathname = usePathname();
   const common = useTranslations('common');
   return (
-    <div className={cn("flex items-center gap-4", className)}>
+    <div className={cn("flex items-center gap-4 w-full", className)}>
       <SidebarTrigger className='md:hidden'/>
       <Button
         onClick={router.back}

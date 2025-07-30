@@ -49,7 +49,7 @@ export default function SearchBar({ className }: SearchBarProps) {
   return (
     <div
       ref={searchbarRef}
-      className={cn('pointer-events-auto w-full h-full lg:w-fit', className)}
+      className={cn('pointer-events-auto w-full h-full lg:max-w-lg', className)}
     >
       <form
         onSubmit={handleSubmit}
