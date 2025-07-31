@@ -27,5 +27,5 @@ export default function ButtonShare({
     );
   }
 
-  return <p onClick={() => copyToClipboard(url)}>{capitalize(common('word.share'))}</p>;
+  return <p onClick={() => copyToClipboard(url)}>{capitalize(common('messages.share'))}</p>;
 }

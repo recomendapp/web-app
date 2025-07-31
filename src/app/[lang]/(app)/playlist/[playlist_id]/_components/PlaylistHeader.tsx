@@ -66,9 +66,9 @@ export default function PlaylistHeader({
         <div className="flex flex-col justify-between gap-2 w-full">
           {/* TYPE & GENRES */}
           <div>
-            <span className='text-accent-yellow'>{upperFirst(common('word.playlist', {count: 1}))}</span>
+            <span className='text-accent-yellow'>{upperFirst(common('messages.playlist', {count: 1}))}</span>
             <span className=" before:content-['_|_']">
-              {playlist?.private ? upperFirst(common('word.private', {gender: 'female', count: 1})) : upperFirst(common('word.public'))}
+              {playlist?.private ? upperFirst(common('messages.private', {gender: 'female', count: 1})) : upperFirst(common('messages.public'))}
             </span>
           </div>
           <div>
@@ -85,7 +85,7 @@ export default function PlaylistHeader({
               className='cursor-pointer text-muted-foreground font-light line-clamp-2'
               onClick={() => createModal({
                 header: {
-                  title: upperFirst(common('word.description')),
+                  title: upperFirst(common('messages.description')),
                 },
                 content: <p className='p-4 bg-muted rounded-md'>{playlist?.description}</p>
               })}

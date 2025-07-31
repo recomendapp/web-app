@@ -22,7 +22,7 @@ export async function generateMetadata(
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.person' });
   const { id } = getIdFromSlug(params.person_id);
   const person = await getPerson(params.lang, id);
-  if (!person) return { title: upperFirst(common('errors.person_not_found')) };
+  if (!person) return { title: upperFirst(common('messages.person_not_found')) };
   return {
     title: t('metadata.title', { name: person.title!, department: person.extra_data.known_for_department }),
     description: truncate(person.extra_data.biography, { length: siteConfig.seo.description.limit }),

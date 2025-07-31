@@ -40,7 +40,7 @@ export default function SearchPlaylistsSmall({
           className="text-2xl font-bold justify-start p-0"
           asChild
           >
-            <Link href={`/search/playlists?q=${query}`}>{upperFirst(common('word.playlist', { count: 2}))}</Link>
+            <Link href={`/search/playlists?q=${query}`}>{upperFirst(common('messages.playlist', { count: 2}))}</Link>
           </Button>
         )}
       <ScrollArea className="pb-4">

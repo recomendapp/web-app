@@ -88,7 +88,7 @@ export default function ProfileCollection({
       <div className="flex justify-between gap-4 items-center">
         <div className='flex items-center gap-2'>
           <p className='text-muted-foreground'>Filters</p>
-          <Badge variant={'accent-yellow'}>{upperFirst(common('word.soon'))}</Badge>
+          <Badge variant={'accent-yellow'}>{upperFirst(common('messages.soon'))}</Badge>
         </div>
         <div className="flex items-center gap-2">
           <Button variant={'ghost'} size={'sm'} onClick={(e) => {

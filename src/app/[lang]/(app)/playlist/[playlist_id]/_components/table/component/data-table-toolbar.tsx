@@ -53,7 +53,7 @@ export function DataTableToolbar<TData>({
             onClick={() => table.resetColumnFilters()}
             className="h-8 px-2 lg:px-3"
           >
-            {upperFirst(t('common.word.cancel'))}
+            {upperFirst(t('common.messages.cancel'))}
             <Cross2Icon className="ml-2 h-4 w-4" />
           </Button>
         )}
@@ -73,7 +73,7 @@ export function DataTableToolbar<TData>({
           })}
           >
             <Icons.share />
-            <span className='sr-only'>{upperFirst(t('common.word.share'))}</span>
+            <span className='sr-only'>{upperFirst(t('common.messages.share'))}</span>
           </Button>
         </div>
         <div className="w-fit flex items-center gap-2">

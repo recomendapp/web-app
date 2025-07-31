@@ -20,7 +20,7 @@ const BadgeMedia = React.forwardRef<
 			: type === 'tv_series'
 			? common('messages.tv_series', { count: 1 })
 			: type === 'person'
-			? common('word.cast_and_crew')
+			? common('messages.cast_and_crew')
 			: type
 		}
 		</Badge>

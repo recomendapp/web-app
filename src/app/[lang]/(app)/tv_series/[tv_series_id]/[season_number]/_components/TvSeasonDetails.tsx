@@ -50,7 +50,7 @@ export default function TvSeasonDetails({
                 {episode.title ?? upperFirst(common('messages.episode_value', { number: episode.episode_number! }))}
               </h3>
               <p className="line-clamp-2 break-words">{episode.overview ?? upperFirst(common('messages.no_overview'))}</p>
-              <h4 className='text-sm text-muted-foreground'>{`${upperFirst(common('messages.first_air_date'))} : ${episode.air_date ? format.dateTime(new Date(episode.air_date), { year: 'numeric', month: 'long', day: 'numeric' }) : upperFirst(common('word.unknown'))}`}</h4>
+              <h4 className='text-sm text-muted-foreground'>{`${upperFirst(common('messages.first_air_date'))} : ${episode.air_date ? format.dateTime(new Date(episode.air_date), { year: 'numeric', month: 'long', day: 'numeric' }) : upperFirst(common('messages.unknown'))}`}</h4>
             </div>
           </Card>
         ))}

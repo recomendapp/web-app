@@ -93,7 +93,7 @@ export const PlaylistGuestAddView = ({
         setView('guests');
       },
       onError: () => {
-        toast.error(upperFirst(t('common.errors.an_error_occurred')));
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
   }
@@ -166,11 +166,11 @@ export const PlaylistGuestAddView = ({
 						))
 					) : isError ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						{upperFirst(t('common.errors.an_error_occurred'))}
+						{upperFirst(t('common.messages.an_error_occurred'))}
 						</div>
 					) : (searchQuery && !isLoading) ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						{upperFirst(t('common.errors.no_user_found'))}
+						{upperFirst(t('common.messages.no_user_found'))}
 						</div>
 					) : !isLoading ? (
 						<div className='p-4 text-center text-muted-foreground'>
@@ -243,7 +243,7 @@ export function ModalPlaylistGuest({
           <PlaylistGuestAddView playlistId={playlistId} playlistGuest={playlistGuest} setView={setView} />
         )
       ) : isError ? (
-        <p>{upperFirst(t('common.errors.an_error_occurred'))}</p>
+        <p>{upperFirst(t('common.messages.an_error_occurred'))}</p>
       ) : null}
     </Modal>
   )

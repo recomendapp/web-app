@@ -42,7 +42,7 @@ export default function Error({
 			  {upperFirst(t('common.messages.error', { count: 1 }))}
 			</CardTitle>
 			<CardDescription>
-			 {upperFirst(t('common.errors.an_error_occurred'))}
+			 {upperFirst(t('common.messages.an_error_occurred'))}
 			</CardDescription>
 		  </CardHeader>
 		  <CardContent className='grid gap-4'>

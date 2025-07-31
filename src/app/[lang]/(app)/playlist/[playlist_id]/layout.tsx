@@ -17,7 +17,7 @@ export async function generateMetadata(
     const t = await getTranslations({ locale: params.lang, namespace: 'pages' });
     const playlist = await getPlaylist(params.playlist_id);
     if (!playlist) return {
-		title: upperFirst(common('errors.playlist_not_found')),
+		title: upperFirst(common('messages.playlist_not_found')),
 	};
     return {
 		title: t('playlist.metadata.title', { title: playlist.title, username: playlist.user?.username }),

@@ -75,7 +75,7 @@ export const ContextMenuUserActivity = ({
 					type: activity.media?.media_type,
 					path: activity.media?.url ?? '',
 				}),
-				label: upperFirst(common('word.share')),
+				label: upperFirst(common('messages.share')),
 			},
 			...additionalItemsBottom
 		],

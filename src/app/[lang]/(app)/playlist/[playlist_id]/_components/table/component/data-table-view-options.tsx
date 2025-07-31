@@ -32,11 +32,11 @@ export function DataTableViewOptions<TData>({
           className="ml-auto hidden h-8 lg:flex"
         >
           <MixerHorizontalIcon className="mr-2 h-4 w-4" />
-          {upperFirst(common('word.show'))}
+          {upperFirst(common('messages.show'))}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>{upperFirst(common('word.column', {count:2}))}</DropdownMenuLabel>
+        <DropdownMenuLabel>{upperFirst(common('messages.column', {count:2}))}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()

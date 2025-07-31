@@ -18,7 +18,7 @@ export default function TvSerieNavbar({
   const regex = `^/${type}/${serieId}(-[a-z0-9-]*)?`;
   const routes = [
     {
-      label: upperFirst(common('word.details')),
+      label: upperFirst(common('messages.details')),
       active: pathname.match(new RegExp(regex + '$')),
       href: `/${type}/${serieId}`,
     },
@@ -28,7 +28,7 @@ export default function TvSerieNavbar({
       href: `/${type}/${serieId}/reviews`,
     },
     {
-      label: upperFirst(common('word.playlist', { count: 2 })),
+      label: upperFirst(common('messages.playlist', { count: 2 })),
       active: pathname.match(new RegExp(regex + '/playlists')),
       href: `/${type}/${serieId}/playlists`,
     },

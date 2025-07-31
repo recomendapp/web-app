@@ -47,10 +47,10 @@ export function DataTableRowActions({
       isLiked: false,
     }, {
       onSuccess: () => {
-        toast.success(upperFirst(t('common.word.deleted')));
+        toast.success(upperFirst(t('common.messages.deleted')));
       },
       onError: () => {
-        toast.error(upperFirst(t('common.errors.an_error_occurred')));
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
   }
@@ -101,7 +101,7 @@ export function DataTableRowActions({
             })}
           >
             <Icons.share className='w-4' />
-            {upperFirst(t('common.word.share'))}
+            {upperFirst(t('common.messages.share'))}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={async () => createConfirmModal({
@@ -114,7 +114,7 @@ export function DataTableRowActions({
             })}
           >
             <Icons.delete className='w-4' />
-            {upperFirst(t('common.word.delete'))}
+            {upperFirst(t('common.messages.delete'))}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

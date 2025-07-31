@@ -47,10 +47,10 @@ export const Columns = (): ColumnDef<PlaylistItem>[] => {
     //   id: 'release_date',
     //   accessorFn: (row) => row?.movie?.release_date,
     //   meta: {
-    //     displayName: upperFirst(common('word.date')),
+    //     displayName: upperFirst(common('messages.date')),
     //   },
     //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={upperFirst(common('word.date'))} />
+    //     <DataTableColumnHeader column={column} title={upperFirst(common('messages.date'))} />
     //   ),
     //   cell: ({ row }) => (
     //     <DateOnlyYearTooltip date={row.original?.movie?.release_date} className='text-muted-foreground'/>
@@ -60,7 +60,7 @@ export const Columns = (): ColumnDef<PlaylistItem>[] => {
     //   id: 'runtime',
     //   accessorFn: (row) => row?.movie?.runtime,
     //   meta: {
-    //     displayName: upperFirst(common('word.duration')),
+    //     displayName: upperFirst(common('messages.duration')),
     //   },
     //   header: ({ column }) => (
     //     <DataTableColumnHeader column={column} Icon={Clock} />
@@ -72,10 +72,10 @@ export const Columns = (): ColumnDef<PlaylistItem>[] => {
     {
       accessorKey: 'comment',
       meta: {
-        displayName: upperFirst(common('word.comment', {count: 1})),
+        displayName: upperFirst(common('messages.comment', {count: 1})),
       },
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={upperFirst(common('word.comment', {count: 1}))} />
+        <DataTableColumnHeader column={column} title={upperFirst(common('messages.comment', {count: 1}))} />
       ),
       cell: ({ row }) => <DataComment playlistItem={row.original} />,
       enableSorting: false,

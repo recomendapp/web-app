@@ -81,11 +81,11 @@ export default function ReviewForm({
 		}, {
 			onSuccess: () => {
 				setEditable(false);
-				toast.success(upperFirst(t('word.saved')));
+				toast.success(upperFirst(t('messages.saved')));
 				router
 			},
 			onError: () => {
-				toast.error(upperFirst(t('errors.an_error_occurred')));
+				toast.error(upperFirst(t('messages.an_error_occurred')));
 			}
 		});	
 	};
@@ -107,12 +107,12 @@ export default function ReviewForm({
 		}, {
 			onSuccess: (data) => {
 				setEditable(false);
-				toast.success(upperFirst(t('word.saved')));
+				toast.success(upperFirst(t('messages.saved')));
 				router.replace(`/review/${data.id}`);
 				// router.replace(`${getMediaUrl({ id: mediaId, type: mediaType })}/review/${data.id}`);
 			},
 			onError: () => {
-				toast.error(upperFirst(t('errors.an_error_occurred')));
+				toast.error(upperFirst(t('messages.an_error_occurred')));
 			}
 		});
 	};
@@ -165,25 +165,25 @@ export default function ReviewForm({
 								</TooltipBox>
 							) : (
 								<>
-								<TooltipBox tooltip={upperFirst(t('word.save'))}>
+								<TooltipBox tooltip={upperFirst(t('messages.save'))}>
 									<Button
 									variant={'accent-yellow'}
 									size={'sm'}
 									onClick={handleUpdateReview}
 									disabled={updateReview.isPending || insertReview.isPending}
 									>
-										<span className="sr-only">{upperFirst(t('word.save'))}</span>
+										<span className="sr-only">{upperFirst(t('messages.save'))}</span>
 										<Icons.check />
 									</Button>
 								</TooltipBox>
-								<TooltipBox tooltip={upperFirst(t('word.cancel'))}>
+								<TooltipBox tooltip={upperFirst(t('messages.cancel'))}>
 									<Button
 									variant={'accent-yellow-enabled'}
 									size={'sm'}
 									onClick={handleCancel}
 									disabled={updateReview.isPending || insertReview.isPending}
 									>
-										<span className="sr-only">{upperFirst(t('word.cancel'))}</span>
+										<span className="sr-only">{upperFirst(t('messages.cancel'))}</span>
 										<Icons.close />
 									</Button>
 								</TooltipBox>
@@ -199,14 +199,14 @@ export default function ReviewForm({
 							) : null}
 						</>
 					) : !review ? (
-						<TooltipBox tooltip={upperFirst(t('word.save'))}>
+						<TooltipBox tooltip={upperFirst(t('messages.save'))}>
 							<Button
 							variant={'accent-yellow'}
 							size={'sm'}
 							onClick={handleCreateReview}
 							disabled={updateReview.isPending || insertReview.isPending}
 							>
-								<span className="sr-only">{upperFirst(t('word.save'))}</span>
+								<span className="sr-only">{upperFirst(t('messages.save'))}</span>
 								<Icons.check />
 							</Button>
 						</TooltipBox>

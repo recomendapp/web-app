@@ -53,7 +53,7 @@ const MediaActionUserWatchlist = React.forwardRef<
 		stopPropagation && e.stopPropagation();
 		if (watchlist) return;
 		if (!user || !mediaId) {
-			toast.error(upperFirst(t('common.errors.an_error_occurred')));
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
 		await insertWatchlist.mutateAsync({
@@ -61,7 +61,7 @@ const MediaActionUserWatchlist = React.forwardRef<
 			mediaId: mediaId,
 		}, {
 		  onError: () => {
-			toast.error(upperFirst(t('common.errors.an_error_occurred')));
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		});
 	}
@@ -69,14 +69,14 @@ const MediaActionUserWatchlist = React.forwardRef<
 		stopPropagation && e.stopPropagation();
 		if (!watchlist) return;
 		if (!watchlist.id) {
-			toast.error(upperFirst(t('common.errors.an_error_occurred')));
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
 		await deleteWatchlist.mutateAsync({
 		  watchlistId: watchlist.id,
 		}, {
 		  onError: () => {
-			toast.error(upperFirst(t('common.errors.an_error_occurred')));
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		});
 	  }

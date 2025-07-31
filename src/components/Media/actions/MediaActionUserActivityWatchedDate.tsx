@@ -44,7 +44,7 @@ const MediaActionUserActivityWatchedDate = React.forwardRef<
       watchedDate: date,
     }), {
       onError: () => {
-        toast.error(upperFirst(common('errors.an_error_occurred')));
+        toast.error(upperFirst(common('messages.an_error_occurred')));
       }
     };
   };

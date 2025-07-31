@@ -55,7 +55,7 @@ const MediaActionUserActivityLike = React.forwardRef<
 					});
 				},
 				onError: () => {
-					toast.error(upperFirst(t('errors.an_error_occurred')));
+					toast.error(upperFirst(t('messages.an_error_occurred')));
 				}
 			});
 		} else {
@@ -70,7 +70,7 @@ const MediaActionUserActivityLike = React.forwardRef<
 					});
 				},
 				onError: () => {
-					toast.error(upperFirst(t('errors.an_error_occurred')));
+					toast.error(upperFirst(t('messages.an_error_occurred')));
 				}
 			});
 		}
@@ -88,7 +88,7 @@ const MediaActionUserActivityLike = React.forwardRef<
 				});
 			},
 			onError: () => {
-				toast.error(upperFirst(t('errors.an_error_occurred')));
+				toast.error(upperFirst(t('messages.an_error_occurred')));
 			}
 		});
 	};

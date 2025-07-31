@@ -30,7 +30,7 @@ export default function HeaderRightSide({
       ) : (
         <Button asChild>
           <Link href={'/auth/login'} className="whitespace-nowrap">
-            {upperFirst(common('word.login'))}
+            {upperFirst(common('messages.login'))}
           </Link>
         </Button>
       )}

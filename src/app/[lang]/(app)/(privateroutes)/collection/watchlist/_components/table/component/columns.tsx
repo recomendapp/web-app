@@ -28,10 +28,10 @@ export const Columns = (): ColumnDef<UserWatchlist>[] => {
     //   id: 'release_date',
     //   accessorFn: (row) => row?.movie?.release_date,
     //   meta: {
-    //     displayName: capitalize(common('word.date')),
+    //     displayName: capitalize(common('messages.date')),
     //   },
     //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={capitalize(common('word.date'))} />
+    //     <DataTableColumnHeader column={column} title={capitalize(common('messages.date'))} />
     //   ),
     //   cell: ({ row }) => (
     //     <DateOnlyYearTooltip date={row.original?.movie?.release_date} className='text-muted-foreground'/>
@@ -41,7 +41,7 @@ export const Columns = (): ColumnDef<UserWatchlist>[] => {
     //   id: 'runtime',
     //   accessorFn: (row) => row?.movie?.runtime,
     //   meta: {
-    //     displayName: capitalize(common('word.duration')),
+    //     displayName: capitalize(common('messages.duration')),
     //   },
     //   header: ({ column }) => (
     //     <DataTableColumnHeader column={column} Icon={Clock} />
@@ -54,10 +54,10 @@ export const Columns = (): ColumnDef<UserWatchlist>[] => {
       id: 'comment',
       accessorKey: 'comment',
       meta: {
-        displayName: capitalize(common('word.comment', { count: 1 })),
+        displayName: capitalize(common('messages.comment', { count: 1 })),
       },
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={capitalize(common('word.comment', { count: 1 }))} />
+        <DataTableColumnHeader column={column} title={capitalize(common('messages.comment', { count: 1 }))} />
       ),
       cell: ({ row }) => <DataComment watchlistItem={row.original} />,
       enableSorting: false,

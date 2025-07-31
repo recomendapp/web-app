@@ -104,7 +104,7 @@ const EditSwitch = ({
 			},
 			onError: () => {
 				setEdit(!value)
-				toast.error(upperFirst(t('common.errors.an_error_occurred')));
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		})
 	}

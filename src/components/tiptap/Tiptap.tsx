@@ -196,7 +196,7 @@ function LinkAction({ editor }: { editor: Editor | null }) {
             />
           </div>
           <Button type="submit" size="sm">
-            <span className="sr-only">{upperFirst(t('word.save'))}</span>
+            <span className="sr-only">{upperFirst(t('messages.save'))}</span>
             <Icons.Save className="h-4 w-4" />
           </Button>
         </form>

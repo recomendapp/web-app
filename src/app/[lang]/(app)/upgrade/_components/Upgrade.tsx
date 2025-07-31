@@ -125,7 +125,7 @@ export const Upgrade = ({
 			]
 		},
 		{
-			type: upperFirst(t('common.word.price')),
+			type: upperFirst(t('common.messages.price')),
 			features: [
 				{
 					name: '',
@@ -165,7 +165,7 @@ export const Upgrade = ({
 					asChild
 					>
 						<Link href={`/settings/subscription`}>
-						{upperFirst(t('common.word.manage'))}
+						{upperFirst(t('common.messages.manage'))}
 						</Link>
 					</Button>
 				)
@@ -213,11 +213,11 @@ export const Upgrade = ({
               <TableRow className="">
                 <TableHead className=" text-primary flex items-center">
 					<Label htmlFor="payment-schedule" className="me-3">
-					{upperFirst(t('common.word.monthly'))}
+					{upperFirst(t('common.messages.monthly'))}
 					</Label>
 					<Switch id="payment-schedule" checked={billingInterval === 'year'} onCheckedChange={() => setBillingInterval(billingInterval === 'year' ? 'month' : 'year')} />
 					<Label htmlFor="payment-schedule" className="relative ms-3">
-						{upperFirst(t('common.word.yearly'))}
+						{upperFirst(t('common.messages.yearly'))}
 						<span className="absolute -top-10 start-auto -end-28">
 						<span className="flex items-center">
 							<svg
@@ -240,7 +240,7 @@ export const Upgrade = ({
 					</Label>
 				</TableHead>
                 <TableHead className="w-2/12 text-primary text-lg font-medium text-center">
-                {upperFirst(t('common.word.free'))}
+                {upperFirst(t('common.messages.free'))}
                 </TableHead>
                 <TableHead className="w-2/12 text-primary text-lg font-medium text-center">
                 {upperFirst(product?.name ?? '')}
@@ -258,7 +258,7 @@ export const Upgrade = ({
 					{featureType.features.map((feature, i) => (
 					<TableRow key={i}>
 						<TableCell>
-							{feature.name} {feature.soon && <span className="text-xs text-accent-yellow">{`(${t('common.word.soon')})`}</span>}
+							{feature.name} {feature.soon && <span className="text-xs text-accent-yellow">{`(${t('common.messages.soon')})`}</span>}
 							{feature.description && (
 								<p className="text-muted-foreground text-sm">
 									{feature.description}

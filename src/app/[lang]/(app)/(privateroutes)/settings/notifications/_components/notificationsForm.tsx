@@ -46,9 +46,9 @@ export function NotificationsForm() {
       data.pushNotifications ?
         await permission.enableNotifications() :
         permission.disableNotifications();
-		  toast.success(common('word.saved'));
+		  toast.success(common('messages.saved'));
     } catch (error) {
-    	toast.error(upperFirst(common('errors.an_error_occurred')));
+    	toast.error(upperFirst(common('messages.an_error_occurred')));
       form.reset();
     }
   }
@@ -82,7 +82,7 @@ export function NotificationsForm() {
         type="submit"
         disabled={form.formState.isSubmitting || (permission.permission === 'granted' || permission.permission === 'denied')}
         >
-          {common('word.save')}
+          {common('messages.save')}
         </Button>
       </form>
     </Form>

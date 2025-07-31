@@ -12,7 +12,7 @@ export async function generateMetadata(
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang, namespace: 'common' });
   return {
-    title: upperFirst(t('errors.an_error_occurred'))
+    title: upperFirst(t('messages.an_error_occurred'))
   }
 }
 

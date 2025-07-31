@@ -125,9 +125,9 @@ export function ProfileForm() {
         await updateProfile(userPayload);
       }
 
-      toast.success(upperFirst(common('word.saved')));
+      toast.success(upperFirst(common('messages.saved')));
     } catch (error: any) {
-      toast.error(upperFirst(common('errors.an_error_occurred')));
+      toast.error(upperFirst(common('messages.an_error_occurred')));
       // toast.error(error.message);
     } finally {
       setLoading(false);
@@ -139,9 +139,9 @@ export function ProfileForm() {
       await updateProfile({
         avatar_url: null,
       });
-      toast.success(upperFirst(common('word.saved')));
+      toast.success(upperFirst(common('messages.saved')));
     } catch (error) {
-      toast.error(upperFirst(common('errors.an_error_occurred')));
+      toast.error(upperFirst(common('messages.an_error_occurred')));
     } finally {
       setLoading(false);
     }
@@ -244,7 +244,7 @@ export function ProfileForm() {
         />
         <Button type="submit" disabled={loading}>
           {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          {common('word.save')}
+          {common('messages.save')}
         </Button>
       </form>
     </Form>

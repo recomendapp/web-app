@@ -41,7 +41,7 @@ const ActionReviewLike = React.forwardRef<
 	const handleLike = async (e: React.MouseEvent) => {
 		e.stopPropagation();
 		if (!user) {
-			toast.error(upperFirst(t('errors.not_logged_in')));
+			toast.error(upperFirst(t('messages.not_logged_in')));
 			return;
 		}
 		await insertLike.mutateAsync({
@@ -52,14 +52,14 @@ const ActionReviewLike = React.forwardRef<
 				setLikeCount((prev) => (prev ?? 0) + 1);
 			},
 			onError: () => {
-				toast.error(upperFirst(t('errors.an_error_occurred')));
+				toast.error(upperFirst(t('messages.an_error_occurred')));
 			}
 		});
 	};
 	const handleUnlike = async (e: React.MouseEvent) => {
 		e.stopPropagation();
 		if (!like) {
-			toast.error(upperFirst(t('errors.an_error_occurred')));
+			toast.error(upperFirst(t('messages.an_error_occurred')));
 			return;
 		}
 		await deleteLike.mutateAsync({
@@ -69,7 +69,7 @@ const ActionReviewLike = React.forwardRef<
 				setLikeCount((prev) => (prev ?? 0) - 1);
 			},
 			onError: () => {
-				toast.error(upperFirst(t('errors.an_error_occurred')));
+				toast.error(upperFirst(t('messages.an_error_occurred')));
 			}
 		});
 	};

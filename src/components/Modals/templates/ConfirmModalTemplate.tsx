@@ -32,7 +32,7 @@ export const ConfirmModalTemplate = ({
 		onConfirm && onConfirm();
 		closeModal(props.id);
 	}
-	const cancelLabelText = cancelLabel || upperFirst(common('word.cancel'));
+	const cancelLabelText = cancelLabel || upperFirst(common('messages.cancel'));
 	const confirmLabelText = confirmLabel || upperFirst(common('messages.confirm'));
 	return (
 		<AlertDialog

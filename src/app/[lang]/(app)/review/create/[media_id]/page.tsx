@@ -19,7 +19,7 @@ export async function generateMetadata(
 	const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.create.metadata' });
 	const { data: media, error } = await getMedia(params.lang, params.media_id);
 	if (error) throw error;
-	if (!media) return { title: upperFirst(common('errors.film_not_found')) };
+	if (!media) return { title: upperFirst(common('messages.media_not_found')) };
 	return {
 	  title: t('title', { title: media.title! }),
 	  description: t('description', { title: media.title! }),

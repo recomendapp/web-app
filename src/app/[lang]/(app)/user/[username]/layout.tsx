@@ -15,7 +15,7 @@ export async function generateMetadata(
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.user.metadata' });
   const user = await getProfile(params.username);
   if (!user) return {
-      title: upperFirst(common('errors.user_not_found')),
+      title: upperFirst(common('messages.user_not_found')),
   };
   return {
     title: upperFirst(t('title', { full_name: user.full_name!, username: user.username! })),

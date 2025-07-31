@@ -15,7 +15,7 @@ export async function generateMetadata(
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.auth.login' });
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   return {
-    title: upperFirst(common('word.login')),
+    title: upperFirst(common('messages.login')),
     description: t('metadata.description', { app: siteConfig.name }),
   };
 }

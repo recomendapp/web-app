@@ -28,10 +28,10 @@ export const Columns = (): ColumnDef<UserRecosAggregated>[] => {
     //   id: 'release_date',
     //   accessorFn: (row) => row?.movie?.release_date,
     //   meta: {
-    //     displayName: capitalize(common('word.date')),
+    //     displayName: capitalize(common('messages.date')),
     //   },
     //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={capitalize(common('word.date'))} />
+    //     <DataTableColumnHeader column={column} title={capitalize(common('messages.date'))} />
     //   ),
     //   cell: ({ row }) => (
     //     <DateOnlyYearTooltip date={row.original?.movie?.release_date} className='text-muted-foreground'/>
@@ -41,7 +41,7 @@ export const Columns = (): ColumnDef<UserRecosAggregated>[] => {
     //   id: 'runtime',
     //   accessorFn: (row) => row?.movie?.runtime,
     //   meta: {
-    //     displayName: capitalize(common('word.duration')),
+    //     displayName: capitalize(common('messages.duration')),
     //   },
     //   header: ({ column }) => (
     //     <DataTableColumnHeader column={column} Icon={Clock} />

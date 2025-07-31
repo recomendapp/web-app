@@ -43,7 +43,7 @@ const PlaylistActionSave = React.forwardRef<
 		stopPropagation && e.stopPropagation();
 		if (saved) return;
 		if (!user || !playlistId) {
-			toast.error(upperFirst(t('common.errors.an_error_occurred')));
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
 		await insertPlaylistSaved.mutateAsync({
@@ -51,7 +51,7 @@ const PlaylistActionSave = React.forwardRef<
 			playlistId: playlistId,
 		}, {
 		  onError: () => {
-			toast.error(upperFirst(t('common.errors.an_error_occurred')));
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		});
 	}
@@ -59,14 +59,14 @@ const PlaylistActionSave = React.forwardRef<
 		stopPropagation && e.stopPropagation();
 		if (!saved) return;
 		if (!saved.id) {
-			toast.error(upperFirst(t('common.errors.an_error_occurred')));
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
 		await deletePlaylistSaved.mutateAsync({
 		  savedId: saved.id,
 		}, {
 		  onError: () => {
-			toast.error(upperFirst(t('common.errors.an_error_occurred')));
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		});
 	  }
@@ -90,7 +90,7 @@ const PlaylistActionSave = React.forwardRef<
 	}
 
 	return (
-		<TooltipBox tooltip={saved ? upperFirst(t('common.word.delete')) : upperFirst(t('common.word.save'))}>
+		<TooltipBox tooltip={saved ? upperFirst(t('common.messages.delete')) : upperFirst(t('common.messages.save'))}>
 			<Button
 				onClick={async (e) => saved ? await handleUnwatchlist(e) : await handleWatchlist(e)}
 				disabled={isLoading || isError || saved === undefined || insertPlaylistSaved.isPending || deletePlaylistSaved.isPending}

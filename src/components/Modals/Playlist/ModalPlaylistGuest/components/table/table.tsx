@@ -63,11 +63,11 @@ export const PlaylistGuestTable = ({
 			playlistId: playlistId
 		}, {
 			onSuccess: () => {
-				toast.success(upperFirst(t('common.word.deleted', { count: selectedRows.length })))
+				toast.success(upperFirst(t('common.messages.deleted', { count: selectedRows.length })))
 				setRowSelection({})
 			},
 			onError: () => {
-				toast.error(upperFirst(t('common.errors.an_error_occurred')))
+				toast.error(upperFirst(t('common.messages.an_error_occurred')))
 			}
 		})
 	}
@@ -168,7 +168,7 @@ export const PlaylistGuestTable = ({
 					disabled={deletePlaylistGuests.isPending}
 				>
 					<Icons.delete className="h-4 w-4" />
-					<span className="sr-only">{upperFirst(t('common.word.delete'))}</span>
+					<span className="sr-only">{upperFirst(t('common.messages.delete'))}</span>
 				</Button>
 			) : null}
 			</div>

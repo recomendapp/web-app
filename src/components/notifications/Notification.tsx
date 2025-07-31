@@ -31,13 +31,13 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 	const handleAction = async (action: 'primary' | 'secondary', key: string, id: number) => {
 		switch (key) {
 			case 'follower_request_accept':
-				acceptRequest.mutate({ requestId: id }, { onSuccess: () => { toast.success(upperFirst(t('messages.request_accepted', { count: 1 }))) }, onError: () => { toast.error(upperFirst(t('errors.an_error_occurred'))) } });
+				acceptRequest.mutate({ requestId: id }, { onSuccess: () => { toast.success(upperFirst(t('messages.request_accepted', { count: 1 }))) }, onError: () => { toast.error(upperFirst(t('messages.an_error_occurred'))) } });
 				break;
 			case 'follower_request_decline':
-				declineRequest.mutate({ requestId: id }, { onSuccess: () => { toast.success(upperFirst(t('messages.request_declined', { count: 1 }))) }, onError: () => { toast.error(upperFirst(t('errors.an_error_occurred'))) } });
+				declineRequest.mutate({ requestId: id }, { onSuccess: () => { toast.success(upperFirst(t('messages.request_declined', { count: 1 }))) }, onError: () => { toast.error(upperFirst(t('messages.an_error_occurred'))) } });
 				break;
 			default:
-				toast.error(upperFirst(t('errors.unknown_action')));
+				toast.error(upperFirst(t('messages.unknown_action')));
 				return;
 		}
 		if (action === 'primary') {

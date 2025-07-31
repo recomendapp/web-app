@@ -15,7 +15,7 @@ export default async function NotFound() {
       }}
     >
       <div className="text-4xl font-bold">
-      {upperFirst(t('errors.film_not_found'))}
+      {upperFirst(t('messages.film_not_found'))}
       </div>
     </div>
   );

@@ -72,7 +72,7 @@ export function ModalPlaylistAdd({
 				closeModal(props.id);
 			},
 			onError: () => {
-				toast.error(upperFirst(t('common.errors.an_error_occurred')));
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
 	}
@@ -99,7 +99,7 @@ export function ModalPlaylistAdd({
 				setCreatePlaylistName('');
 			},
 			onError: (error: any) => {
-				toast.error(upperFirst(t('common.errors.an_error_occurred')));
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
 	}
@@ -125,7 +125,7 @@ export function ModalPlaylistAdd({
 					<Tabs onValueChange={setType as Dispatch<SetStateAction<string>>} defaultValue={type} className="w-full">
 						<TabsList className="grid w-full grid-cols-2">
 							<TabsTrigger value="personal">{upperFirst(t('common.messages.my_playlist', { count: 2 }))}</TabsTrigger>
-							<TabsTrigger value="shared">{upperFirst(t('common.word.saved', { gender: 'female', count: 2 }))}</TabsTrigger>
+							<TabsTrigger value="shared">{upperFirst(t('common.messages.saved', { gender: 'female', count: 2 }))}</TabsTrigger>
 						</TabsList>
 					</Tabs>
 					<CommandList>
@@ -144,7 +144,7 @@ export function ModalPlaylistAdd({
 											onChange={(e) => setCreatePlaylistName(e.target.value)}
 										/>
 										<div className='absolute top-1/2 right-2 transform -translate-y-1/2 flex items-center gap-2'>
-											<TooltipBox tooltip={upperFirst(t('common.word.create'))}>
+											<TooltipBox tooltip={upperFirst(t('common.messages.create'))}>
 												<Button
 												variant={'ghost'}
 												size={'icon'}
@@ -154,7 +154,7 @@ export function ModalPlaylistAdd({
 													<Icons.check size={20} />
 												</Button>
 											</TooltipBox>
-											<TooltipBox tooltip={upperFirst(t('common.word.cancel'))}>
+											<TooltipBox tooltip={upperFirst(t('common.messages.cancel'))}>
 												<Button
 												variant={'ghost'}
 												size={'icon'}
@@ -235,7 +235,7 @@ export function ModalPlaylistAdd({
 				</Command>
 			</ModalBody>
 			<div className='px-2 pt-2'>
-				<Label htmlFor="comment" className='sr-only'>{upperFirst(t('common.word.comment', { count: 1 }))}</Label>
+				<Label htmlFor="comment" className='sr-only'>{upperFirst(t('common.messages.comment', { count: 1 }))}</Label>
 				<Input
 				value={comment}
 				onChange={(e) => setComment(e.target.value)}

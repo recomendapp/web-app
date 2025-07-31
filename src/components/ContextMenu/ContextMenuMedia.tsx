@@ -75,7 +75,7 @@ export const ContextMenuMedia = ({
 						media: media,
 					}),
 				}),
-				label: upperFirst(common('word.share')),
+				label: upperFirst(common('messages.share')),
 			},
 			...additionalItemsBottom
 		],

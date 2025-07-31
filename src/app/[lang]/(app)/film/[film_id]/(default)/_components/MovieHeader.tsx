@@ -123,7 +123,7 @@ export default function MovieHeader({
                         </Button>
                       </span>
                     </Fragment>
-                  )) ?? <span className="text-muted-foreground italic">{upperFirst(common('word.unknown'))}</span>}
+                  )) ?? <span className="text-muted-foreground italic">{upperFirst(common('messages.unknown'))}</span>}
                   {/* RUNTIME */}
                   <RuntimeTooltip runtime={movie.extra_data.runtime ?? 0} className=" before:content-['_•_']" />
                 </div>

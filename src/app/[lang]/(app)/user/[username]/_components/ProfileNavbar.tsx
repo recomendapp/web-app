@@ -22,7 +22,7 @@ export default function ProfileNavbar({
   const profileRoutes = useMemo(
     () => [
       {
-        label: upperFirst(common('word.profile')),
+        label: upperFirst(common('messages.profile')),
         active: pathname === `/@${profile?.username}`,
         href: `/@${profile?.username}`,
       },
@@ -32,7 +32,7 @@ export default function ProfileNavbar({
         href: `/@${profile?.username}/collection`,
       },
       {
-        label: upperFirst(common('word.playlist', { count: 2 })),
+        label: upperFirst(common('messages.playlist', { count: 2 })),
         active: pathname === `/@${profile?.username}/playlists`,
         href: `/@${profile?.username}/playlists`,
       },

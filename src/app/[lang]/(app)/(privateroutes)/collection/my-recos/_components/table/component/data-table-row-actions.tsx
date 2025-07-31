@@ -44,7 +44,7 @@ export function DataTableRowActions({
 
   const handleDeleteReco = async () => {
     if (!user || !data?.media_id) {
-      toast.error(upperFirst(t('common.errors.an_error_occurred')));
+      toast.error(upperFirst(t('common.messages.an_error_occurred')));
       return;
     }
     await deleteRecoMutation.mutateAsync({
@@ -52,17 +52,17 @@ export function DataTableRowActions({
       mediaId: data?.media_id,
     }, {
       onSuccess: () => {
-        toast.success(upperFirst(t('common.word.deleted')));
+        toast.success(upperFirst(t('common.messages.deleted')));
       },
       onError: () => {
-        toast.error(upperFirst(t('common.errors.an_error_occurred')));
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
   };
 
   const handleCompleteReco = async () => {
     if (!user || !data?.media_id) {
-      toast.error(upperFirst(t('common.errors.an_error_occurred')));
+      toast.error(upperFirst(t('common.messages.an_error_occurred')));
       return;
     }
     await completeRecoMutation.mutateAsync({
@@ -73,7 +73,7 @@ export function DataTableRowActions({
         toast.success(upperFirst(t('common.messages.completed')));
       },
       onError: () => {
-        toast.error(upperFirst(t('common.errors.an_error_occurred')));
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
   }
@@ -145,7 +145,7 @@ export function DataTableRowActions({
             })}
           >
             <Icons.share className='w-4' />
-            {upperFirst(t('common.word.share'))}
+            {upperFirst(t('common.messages.share'))}
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={async () => createConfirmModal({
@@ -158,7 +158,7 @@ export function DataTableRowActions({
             })}
           >
             <Icons.delete className='w-4' />
-            {upperFirst(t('common.word.delete'))}
+            {upperFirst(t('common.messages.delete'))}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -27,7 +27,7 @@ export default async function SearchCrewCastSmall({
       className="text-2xl font-bold justify-start p-0"
       asChild
       >
-        <Link href={`/search/crew-cast?q=${query}`}>{title(common('word.cast_and_crew'))}</Link>
+        <Link href={`/search/crew-cast?q=${query}`}>{title(common('messages.cast_and_crew'))}</Link>
       </Button>
       <div className="grid grid-cols-2 gap-2 @sm/search-widget:grid-cols-3 @md/search-widget:grid-cols-4 @lg/search-widget:grid-cols-5 @2xl/search-widget:grid-cols-6 @4xl/search-widget:grid-cols-7">
       {medias.slice(0, 5).map((media, index) => (

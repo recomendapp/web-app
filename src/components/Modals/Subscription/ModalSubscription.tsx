@@ -41,11 +41,11 @@ export function ModalSubscription({
 	const handleCheckout = async (price: Prices) => {
 		setIsLoading(true);
 		if (!user) {
-			toast.error(upperFirst(common('errors.not_logged_in')));
+			toast.error(upperFirst(common('messages.not_logged_in')));
 		  return router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
 		}
 		if (user?.premium) {
-			toast.error(upperFirst(common('errors.already_premium')));
+			toast.error(upperFirst(common('messages.already_premium')));
 		  return router.push('/settings/subscription');
 		}
 	

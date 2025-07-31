@@ -37,7 +37,7 @@ export default function Login() {
       setIsLoading(true);
       await loginOAuth2(provider, redirectTo);
     } catch (error) {
-      toast.error(upperFirst(common('errors.an_error_occurred')));
+      toast.error(upperFirst(common('messages.an_error_occurred')));
     } finally {
       setIsLoading(false);
     }
@@ -116,7 +116,7 @@ export default function Login() {
                   query: redirectTo ? { redirect: redirectTo } : undefined,
                 }}
               >
-              {upperFirst(common('word.signup'))}
+              {upperFirst(common('messages.signup'))}
               </Link>
             </Button>
           </p>

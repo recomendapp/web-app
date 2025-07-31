@@ -47,7 +47,7 @@ const MediaActionUserActivityWatch = React.forwardRef<
       mediaId: mediaId,
     }), {
       onError: () => {
-        toast.error(upperFirst(t('common.errors.an_error_occurred')));
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     };
   };
@@ -59,7 +59,7 @@ const MediaActionUserActivityWatch = React.forwardRef<
         activityId: activity.id,
       }), {
         onError: () => {
-          toast.error(upperFirst(t('common.errors.an_error_occurred')));
+          toast.error(upperFirst(t('common.messages.an_error_occurred')));
         }
       };
   };

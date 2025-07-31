@@ -57,7 +57,7 @@ const MediaActionUserActivityRating = React.forwardRef<
 				rating: ratingValue,
 			}, {
 				onError: () => {
-					toast.error(upperFirst(t('common.errors.an_error_occurred')));
+					toast.error(upperFirst(t('common.messages.an_error_occurred')));
 				}
 			});
 		} else {
@@ -67,7 +67,7 @@ const MediaActionUserActivityRating = React.forwardRef<
 				rating: ratingValue,
 			}, {
 				onError: () => {
-					toast.error(upperFirst(t('common.errors.an_error_occurred')));
+					toast.error(upperFirst(t('common.messages.an_error_occurred')));
 				}
 			});
 		}
@@ -82,7 +82,7 @@ const MediaActionUserActivityRating = React.forwardRef<
 		  rating: null,
 		}, {
 			onError: () => {
-				toast.error(upperFirst(t('common.errors.an_error_occurred')));
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
 	  };
@@ -145,7 +145,7 @@ const MediaActionUserActivityRating = React.forwardRef<
 			</div>
 			<DialogFooter className="flex flex-col justify-center">
 			  <DialogClose asChild>
-				<Button onClick={async (e) => handleRate(e)}>{upperFirst(t('common.word.save'))}</Button>
+				<Button onClick={async (e) => handleRate(e)}>{upperFirst(t('common.messages.save'))}</Button>
 			  </DialogClose>
 			  {activity?.rating && (
 				<DialogClose asChild>

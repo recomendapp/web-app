@@ -77,7 +77,7 @@ export const ContextMenuPlaylist = ({
 					type: 'playlist',
 					path: `/playlist/${playlist.id}`,
 				}),
-				label: upperFirst(t('common.word.share')),
+				label: upperFirst(t('common.messages.share')),
 			},
 			...(session?.user.id === playlist.user_id ? [
 				{
@@ -94,20 +94,20 @@ export const ContextMenuPlaylist = ({
 									{ playlistId: playlist.id },
 									{
 										onSuccess: async () => {
-											toast.success(upperFirst(t('common.word.deleted')));
+											toast.success(upperFirst(t('common.messages.deleted')));
 											if (pathname.startsWith(`/playlist/${playlist.id}`)) {
 												router.replace('/collection');
 											}
 										},
 										onError: () => {
-											toast.error(upperFirst(t('common.errors.an_error_occurred')));
+											toast.error(upperFirst(t('common.messages.an_error_occurred')));
 										},
 									}
 								);
 							},
 						});
 					},
-					label: upperFirst(t('common.word.delete')),
+					label: upperFirst(t('common.messages.delete')),
 				}
 			] : []),
 		],

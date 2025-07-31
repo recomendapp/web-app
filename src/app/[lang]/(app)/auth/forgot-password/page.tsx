@@ -76,7 +76,7 @@ export default function ForgotPassword() {
             toast.error(error.message);
         }
       } else {
-        toast.error(upperFirst(common('errors.an_error_occurred')));
+        toast.error(upperFirst(common('messages.an_error_occurred')));
       }
     } finally {
       setIsLoading(false);
@@ -105,7 +105,7 @@ export default function ForgotPassword() {
             toast.error(error.message);
         }
       } else {
-        toast.error(upperFirst(common('errors.an_error_occurred')));
+        toast.error(upperFirst(common('messages.an_error_occurred')));
       }
     } finally {
       setIsLoading(false);
@@ -163,7 +163,7 @@ export default function ForgotPassword() {
                   query: redirectTo ? { redirect: redirectTo } : undefined,
                 }}
               >
-                {upperFirst(common('word.login'))}
+                {upperFirst(common('messages.login'))}
               </Link>
 
             </Button>

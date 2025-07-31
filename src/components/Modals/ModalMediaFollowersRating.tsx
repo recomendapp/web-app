@@ -120,7 +120,7 @@ export const ModalMediaFollowersRating = ({
 				) : (isLoading || followersRating === undefined) ? (
 					<Skeleton className="h-[40vh]" />
 				) : isError ? (
-					<div className="text-muted-foreground">{upperFirst(t('common.errors.an_error_occurred'))}</div>
+					<div className="text-muted-foreground">{upperFirst(t('common.messages.an_error_occurred'))}</div>
 				) : (
 					<div className="text-muted-foreground">{upperFirst(t('common.messages.no_rating'))}</div>
 				)}

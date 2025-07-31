@@ -61,7 +61,7 @@ export function LoginOtpForm({
             toast.error(error.message);
         }
       } else {
-        toast.error(upperFirst(common('errors.an_error_occurred')));
+        toast.error(upperFirst(common('messages.an_error_occurred')));
       }
     } finally {
       setIsLoading(false);
@@ -90,7 +90,7 @@ export function LoginOtpForm({
             toast.error(error.message);
         }
       } else {
-        toast.error(upperFirst(common('errors.an_error_occurred')));
+        toast.error(upperFirst(common('messages.an_error_occurred')));
       }
     } finally {
       setIsLoading(false);

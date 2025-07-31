@@ -40,7 +40,7 @@ const AccountDelete = () => {
 				toast.success(upperFirst(common('messages.request_made')));
 			},
 			onError: (error) => {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(common('messages.an_error_occurred')));
 			}
 		});
 	};
@@ -53,7 +53,7 @@ const AccountDelete = () => {
 				toast.success(upperFirst(common('messages.request_canceled')));
 			},
 			onError: (error) => {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(common('messages.an_error_occurred')));
 			}
 		});
 	};

@@ -180,7 +180,7 @@ export default function Signup() {
 						toast.error(error.message);
 				}
 			} else {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(common('messages.an_error_occurred')));
 			}
 		} finally {
 			setIsLoading(false);
@@ -202,7 +202,7 @@ export default function Signup() {
 						toast.error(error.message);
 				}
 			} else {
-				toast.error(upperFirst(common('errors.an_error_occurred')));
+				toast.error(upperFirst(common('messages.an_error_occurred')));
 			}
 		} finally {
 			setIsLoading(false);
@@ -231,7 +231,7 @@ export default function Signup() {
 				toast.error(error.message);
 			}
 		  } else {
-			toast.error(upperFirst(common('errors.an_error_occurred')));
+			toast.error(upperFirst(common('messages.an_error_occurred')));
 		  }
 		} finally {
 		  setIsLoading(false);
@@ -255,7 +255,7 @@ export default function Signup() {
 					<CardHeader className='gap-2'>
 					<CardTitle className='inline-flex gap-2 items-center justify-center'>
 						<Icons.site.icon className='fill-accent-yellow w-8' />
-						{upperFirst(common('word.signup'))}
+						{upperFirst(common('messages.signup'))}
 					</CardTitle>
 					<CardDescription className='text-center'>{t('description')}</CardDescription>
 					</CardHeader>
@@ -407,7 +407,7 @@ export default function Signup() {
 						disabled={isLoading || turnstileStatus !== 'success' || !form.formState.isValid}
 						>
 							{isLoading ? (<Icons.loader />) : null}
-							{upperFirst(common('word.signup'))}
+							{upperFirst(common('messages.signup'))}
 						</Button>
 						<p className="px-8 text-center text-sm text-muted-foreground">
 							{t('return_to_login')}{' '}
@@ -422,7 +422,7 @@ export default function Signup() {
 										query: redirectTo ? { redirect: redirectTo } : undefined,
 									}}
 								>
-								{upperFirst(common('word.login'))}
+								{upperFirst(common('messages.login'))}
 								</Link>
 							</Button>
 						</p>

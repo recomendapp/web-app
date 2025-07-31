@@ -24,7 +24,7 @@ export async function generateMetadata(
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.serie.seasons.season' });
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
   const season = await getTvSeason(params.lang, serieId, Number(params.season_number));
-  if (!season) return { title: upperFirst(common('errors.season_not_found')) };
+  if (!season) return { title: upperFirst(common('messages.season_not_found')) };
   return {
     title: t('metadata.title', { title: season.serie?.title!, number: season.season_number! }),
     description: truncate(

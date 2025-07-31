@@ -57,7 +57,7 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 				}
 				console.error(err);
 			}
-			toast.error(upperFirst(common('errors.an_error_occurred')));
+			toast.error(upperFirst(common('messages.an_error_occurred')));
 		}
 	};
 
@@ -100,7 +100,7 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 							disabled={!canShareController}
 							onClick={() => onShare(sharedControllerData)}
 							>
-								{upperFirst(common('word.share'))}
+								{upperFirst(common('messages.share'))}
 							</Button>
 							<Separator />
 						</>

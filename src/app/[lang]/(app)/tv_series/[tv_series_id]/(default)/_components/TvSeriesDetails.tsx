@@ -24,7 +24,7 @@ export default function TvSerieDetails({
     <div className="@container/movie-details flex flex-col gap-4">
       <div className="flex flex-col @4xl/movie-details:grid @4xl/movie-details:grid-cols-3 gap-4">
         <div className="@4xl/movie-details:col-span-2">
-          <h2 className="text-lg font-medium">{upperFirst(common('word.overview'))}</h2>
+          <h2 className="text-lg font-medium">{upperFirst(common('messages.overview'))}</h2>
           <div className="text-justify text-muted-foreground">
             {serie.extra_data.overview ?? upperFirst(common('messages.no_overview'))}
           </div>

@@ -57,10 +57,10 @@ const PlaylistCommentModal = ({
 	  try {
 		setIsLoading(true);      
 		await updatePlaylistItem({ comment });
-		toast.success(upperFirst(t('common.word.saved')));
+		toast.success(upperFirst(t('common.messages.saved')));
 		closeModal(props.id);
 	  } catch (error) {
-		toast.error(upperFirst(t('common.errors.an_error_occurred')));
+		toast.error(upperFirst(t('common.messages.an_error_occurred')));
 	  } finally {
 		setIsLoading(false);
 	  }
@@ -69,7 +69,7 @@ const PlaylistCommentModal = ({
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
 			<ModalHeader>
-				<ModalTitle>{upperFirst(t('common.word.comment', { count: 1 }))}</ModalTitle>
+				<ModalTitle>{upperFirst(t('common.messages.comment', { count: 1 }))}</ModalTitle>
 			</ModalHeader>
 			<ModalBody>
 				<Textarea
@@ -87,7 +87,7 @@ const PlaylistCommentModal = ({
 			</ModalBody>
 			{isAllowedToEdit &&
 				<ModalFooter>
-					<Button type="submit" onClick={onSubmit}>{upperFirst(t('common.word.save'))}</Button>
+					<Button type="submit" onClick={onSubmit}>{upperFirst(t('common.messages.save'))}</Button>
 				</ModalFooter>
 			}
 		</Modal>

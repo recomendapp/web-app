@@ -180,10 +180,10 @@ export function PlaylistForm({
           },
         });
       }
-      toast.success(upperFirst(t('common.word.saved')));
+      toast.success(upperFirst(t('common.messages.saved')));
       success();
     } catch (error) {
-      toast.error(upperFirst(t('common.errors.an_error_occurred')));
+      toast.error(upperFirst(t('common.messages.an_error_occurred')));
     } finally {
       setLoading(false);
     }
@@ -211,10 +211,10 @@ export function PlaylistForm({
         playlistId: playlist.id,
         payload,
       });
-      toast.success(upperFirst(t('common.word.saved')));
+      toast.success(upperFirst(t('common.messages.saved')));
       success();
     } catch (error) {
-      toast.error(upperFirst(t('common.errors.an_error_occurred')));
+      toast.error(upperFirst(t('common.messages.an_error_occurred')));
     } finally {
       setLoading(false);
     }
@@ -229,11 +229,11 @@ export function PlaylistForm({
       }, {
         onSuccess: () => {
           if (pathname.startsWith(`/playlist/${playlist.id}`)) router.push('/');
-          toast.success(upperFirst(t('common.word.deleted')));
+          toast.success(upperFirst(t('common.messages.deleted')));
           success();
         },
         onError: () => {
-          toast.error(upperFirst(t('common.errors.an_error_occurred')));
+          toast.error(upperFirst(t('common.messages.an_error_occurred')));
         }
       });
     } finally {
@@ -330,7 +330,7 @@ export function PlaylistForm({
                         onCheckedChange={field.onChange}
                       />
                       <Label htmlFor="airplane-mode">
-                        {field.value ? upperFirst(t('common.word.private', { count: 1, gender: 'female' })) : upperFirst(t('common.word.public'))}
+                        {field.value ? upperFirst(t('common.messages.private', { count: 1, gender: 'female' })) : upperFirst(t('common.messages.public'))}
                       </Label>
                     </div>
                   </FormControl>
@@ -348,7 +348,7 @@ export function PlaylistForm({
                   type="button"
                   variant={'outline'}
                 >
-                  {upperFirst(t('common.word.delete'))}
+                  {upperFirst(t('common.messages.delete'))}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
@@ -356,11 +356,11 @@ export function PlaylistForm({
                   <AlertDialogTitle>{upperFirst(t('common.messages.are_u_sure'))}</AlertDialogTitle>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>{upperFirst(t('common.word.cancel'))}</AlertDialogCancel>
+                  <AlertDialogCancel>{upperFirst(t('common.messages.cancel'))}</AlertDialogCancel>
                   <AlertDialogAction
                     onClick={handleDeletePlaylist}
                   >
-                    {upperFirst(t('common.word.delete'))}
+                    {upperFirst(t('common.messages.delete'))}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -368,7 +368,7 @@ export function PlaylistForm({
           )}
           <Button disabled={loading} type="submit">
             {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-            {playlist ? upperFirst(t('common.word.save')) : upperFirst(t('common.word.create'))}
+            {playlist ? upperFirst(t('common.messages.save')) : upperFirst(t('common.messages.create'))}
           </Button>
         </DialogFooter>
       </form>

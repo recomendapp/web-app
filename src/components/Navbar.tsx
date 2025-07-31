@@ -51,7 +51,7 @@ export function Navbar({ className }: NavbarProps) {
       },
       {
         icon: session ? Library : Icons.user,
-        label: session ? upperFirst(t('messages.library')) : upperFirst(t('word.login')),
+        label: session ? upperFirst(t('messages.library')) : upperFirst(t('messages.login')),
         active:
         session ?
             pathname.startsWith('/collection') ||

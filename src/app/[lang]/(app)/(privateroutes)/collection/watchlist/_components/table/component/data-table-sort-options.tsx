@@ -34,7 +34,7 @@ export function DataTableSortOptions<TData>({
           className="ml-auto flex h-8 lg:hidden"
         >
           <Filter className="mr-2 h-4 w-4" />
-          {capitalize(common('word.sort'))}
+          {capitalize(common('messages.sort'))}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">

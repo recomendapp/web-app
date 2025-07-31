@@ -105,7 +105,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
             })}
           >
             <Icons.share className='w-4' />
-            {upperFirst(t('common.word.share'))}
+            {upperFirst(t('common.messages.share'))}
           </DropdownMenuItem>
           {isAllowedToEdit && (
             <DropdownMenuItem
@@ -119,7 +119,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
               })}
             >
               <Icons.delete className='w-4' />
-              {upperFirst(t('common.word.delete'))}
+              {upperFirst(t('common.messages.delete'))}
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>

@@ -17,7 +17,7 @@ export default function MovieNavbar({
   const regex = `^/${type}/${movieSlug}(-[a-z0-9-]*)?`;
   const routes = [
     {
-      label: upperFirst(common('word.details')),
+      label: upperFirst(common('messages.details')),
       active: pathname.match(new RegExp(regex + '$')),
       href: `/${type}/${movieSlug}`,
     },
@@ -27,7 +27,7 @@ export default function MovieNavbar({
       href: `/${type}/${movieSlug}/reviews`,
     },
     {
-      label: upperFirst(common('word.playlist', { count: 2 })),
+      label: upperFirst(common('messages.playlist', { count: 2 })),
       active: pathname.match(new RegExp(regex + '/playlists')),
       href: `/${type}/${movieSlug}/playlists`,
     },

@@ -18,7 +18,7 @@ export async function generateMetadata(
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.metadata' });
   const review = await getReview(params.review_id, params.lang);
-  if (!review) return { title: upperFirst(common('errors.review_not_found')) };
+  if (!review) return { title: upperFirst(common('messages.review_not_found')) };
   return {
     title: t('title', { title: review.activity?.media?.title!, username: review.activity?.user?.username! }),
   };

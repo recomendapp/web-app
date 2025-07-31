@@ -28,7 +28,7 @@ export async function generateMetadata(
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.person.tv_series' });
   const { id } = getIdFromSlug(params.person_id);
   const person = await getPerson(params.lang, id);
-  if (!person) return { title: upperFirst(common('errors.person_not_found')) };
+  if (!person) return { title: upperFirst(common('messages.person_not_found')) };
   return {
 	title: t('metadata.title', { name: person.title! }),
 	description: truncate(t('metadata.description', { name: person.title! }), { length: siteConfig.seo.description.limit }),
@@ -95,7 +95,7 @@ export default async function TvSeriesPage(
 			<div className='flex flex-col items-center justify-center h-full gap-2'>
 				<div className='flex items-center'>
 					<Icons.error className='mr-1'/>
-					{upperFirst(common('errors.wrong_arguments'))}
+					{upperFirst(common('messages.wrong_arguments'))}
 				</div>
 				<Button variant='accent-yellow'>
 					<Link href={`/person/${params.person_id}/tv_series`}>

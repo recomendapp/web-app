@@ -44,13 +44,13 @@ export function ReviewSettings({
 		}, {
 			onSuccess: () => {
 				const mediaUrl = getMediaUrl({ id: media.id, type: media.media_type! });
-				toast.success(upperFirst(t('word.deleted')));
+				toast.success(upperFirst(t('messages.deleted')));
 				if (pathname.startsWith(`/review/${review.id}`)) {
 					router.replace(mediaUrl);
 				}
 			},
 			onError: () => {
-				toast.error(upperFirst(t('errors.an_error_occurred')));
+				toast.error(upperFirst(t('messages.an_error_occurred')));
 			}
 		});
 	};
@@ -75,7 +75,7 @@ export function ReviewSettings({
 			})}
 			>
 			<Icons.delete />
-			{upperFirst(t('word.delete'))}
+			{upperFirst(t('messages.delete'))}
 			</DropdownMenuItem>
 		) : null}
 		</DropdownMenuContent>

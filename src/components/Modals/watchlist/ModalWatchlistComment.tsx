@@ -34,7 +34,7 @@ const ModalWatchlistComment = ({
 		return;
 	  }
 	  if (!watchlistItem?.id) {
-		toast.error(upperFirst(common('errors.an_error_occurred')));
+		toast.error(upperFirst(common('messages.an_error_occurred')));
 		return;
 	  }
 	  await updateWatchlist.mutateAsync({
@@ -42,11 +42,11 @@ const ModalWatchlistComment = ({
 		comment: comment,
 	  }, {
 		onSuccess: () => {
-			toast.success(upperFirst(common('word.saved')));
+			toast.success(upperFirst(common('messages.saved')));
 			closeModal(props.id);
 		},
 		onError: () => {
-		  toast.error(upperFirst(common('errors.an_error_occurred')));
+		  toast.error(upperFirst(common('messages.an_error_occurred')));
 		}
 	  });
 	}
@@ -54,7 +54,7 @@ const ModalWatchlistComment = ({
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
 			<ModalHeader>
-				<ModalTitle>{upperFirst(common('word.comment', { count: 1 }))}</ModalTitle>
+				<ModalTitle>{upperFirst(common('messages.comment', { count: 1 }))}</ModalTitle>
 			</ModalHeader>
 			<ModalBody>
 				<Textarea
@@ -70,7 +70,7 @@ const ModalWatchlistComment = ({
 				/>
 			</ModalBody>
 			<ModalFooter>
-				<Button type="submit" onClick={onSubmit}>{upperFirst(common('word.save'))}</Button>
+				<Button type="submit" onClick={onSubmit}>{upperFirst(common('messages.save'))}</Button>
 			</ModalFooter>
 		</Modal>
 	);

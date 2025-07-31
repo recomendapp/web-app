@@ -21,7 +21,7 @@ export async function generateMetadata(
   const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.create.metadata' });
   const { id: movieId } = getIdFromSlug(params.film_id);
   const movie = await getMovie(params.lang, movieId);
-  if (!movie) return { title: upperFirst(common('errors.film_not_found')) };
+  if (!movie) return { title: upperFirst(common('messages.film_not_found')) };
   return {
     title: t('title', { title: movie.title! }),
     description: t('description', { title: movie.title! }),

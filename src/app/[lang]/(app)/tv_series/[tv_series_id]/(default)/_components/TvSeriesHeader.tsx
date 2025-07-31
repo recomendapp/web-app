@@ -121,7 +121,7 @@ export default function TvSerieHeader({
                         </Button>
                       </span>
                     </Fragment>
-                  )) ?? <span className="text-muted-foreground italic">{upperFirst(common('word.unknown'))}</span>}
+                  )) ?? <span className="text-muted-foreground italic">{upperFirst(common('messages.unknown'))}</span>}
                   {/* NUMBER OF SEASONS */}
                   <span className="before:content-['_•_']">
                     {common('messages.season_count', { count: serie.extra_data.number_of_seasons })}

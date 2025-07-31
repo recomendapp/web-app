@@ -95,7 +95,7 @@ export function ModalRecoSend({
 								<Icons.loader />
 							</div>
 						)}
-						<CommandEmpty>{upperFirst(t('common.errors.no_user_found'))}</CommandEmpty>
+						<CommandEmpty>{upperFirst(t('common.messages.no_user_found'))}</CommandEmpty>
 						<CommandGroup className="p-2">
 							{friends?.map(({friend, as_watched, already_sent}) => (
 								<CommandItem

@@ -40,7 +40,7 @@ export function ProfileFollowButton({
         followeeId: profileId,
       }, {
         onError: (error) => {
-          toast.error(upperFirst(common('errors.an_error_occurred')));
+          toast.error(upperFirst(common('messages.an_error_occurred')));
         }
       }));
   }
@@ -52,7 +52,7 @@ export function ProfileFollowButton({
         followeeId: profileId,
       }, {
         onError: (error) => {
-          toast.error(upperFirst(common('errors.an_error_occurred')));
+          toast.error(upperFirst(common('messages.an_error_occurred')));
         }
       }));
   }

@@ -187,7 +187,7 @@ export default function PlaylistTable({
           const newIndex = items.indexOf(over.id);
           return arrayMove(data, newIndex, oldIndex);
         });
-        toast.error(upperFirst(common('errors.an_error_occurred')));
+        toast.error(upperFirst(common('messages.an_error_occurred')));
       }
     }
 

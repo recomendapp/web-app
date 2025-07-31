@@ -13,13 +13,13 @@ export const FeedNavbar = () => {
 	const pathname = usePathname();
 	const routes = [
 		{
-			label: upperFirst(common('word.community')),
+			label: upperFirst(common('messages.community')),
 			active: pathname === '/feed',
 			href: `/feed`,
 			disabled: false,
 		},
 		{
-			label: title(common('word.cast_and_crew')),
+			label: title(common('messages.cast_and_crew')),
 			active: pathname === '/feed/cast-crew',
 			href: `/feed/cast-crew`,
 			disabled: !user?.premium,

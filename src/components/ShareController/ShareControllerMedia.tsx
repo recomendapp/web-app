@@ -71,7 +71,7 @@ export const ShareControllerMedia: React.FC<ShareControllerMediaProps> = ({ medi
 						className="object-cover h-full rounded-md"
 					/>
 				) : (
-					<p className="text-muted-foreground">{upperFirst(common('errors.an_error_occurred'))}</p>
+					<p className="text-muted-foreground">{upperFirst(common('messages.an_error_occurred'))}</p>
 				)}
 			</div>
 		</div>
