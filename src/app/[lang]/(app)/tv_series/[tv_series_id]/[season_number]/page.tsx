@@ -21,10 +21,10 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const common = await getTranslations({ locale: params.lang, namespace: 'common' });
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.serie.seasons.season' });
+  const t = await getTranslations({ locale: params.lang, namespace: 'pages.tv_series.seasons.season' });
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
   const season = await getTvSeason(params.lang, serieId, Number(params.season_number));
-  if (!season) return { title: upperFirst(common('messages.season_not_found')) };
+  if (!season) return { title: upperFirst(common('messages.tv_season_not_found')) };
   return {
     title: t('metadata.title', { title: season.serie?.title!, number: season.season_number! }),
     description: truncate(

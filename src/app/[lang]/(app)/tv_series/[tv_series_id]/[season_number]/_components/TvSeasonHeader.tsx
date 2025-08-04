@@ -18,10 +18,10 @@ export default function TvSeasonHeader({
 	season: MediaTvSeriesSeason;
 }) {
 	const common = useTranslations('common');
-	const title = upperFirst(common('messages.season_value', { number: season.season_number! }));
+	const title = upperFirst(common('messages.tv_season_value', { number: season.season_number! }));
 	const randomBg = useRandomImage(season.episodes?.map(episode => ({
 		src: episode.avatar_path ?? '',
-		alt: upperFirst(common('messages.episode_value', { number: episode.episode_number! })),
+		alt: upperFirst(common('messages.tv_episode_value', { number: episode.episode_number! })),
 	})) ?? []);
 	if (!season) return null;
 	return (
@@ -49,7 +49,7 @@ export default function TvSeasonHeader({
 			</MediaPoster>
 			<div className="flex flex-col justify-between gap-2 w-full h-full py-4">
 				<div>
-					<span className='text-accent-yellow'>{upperFirst(common('messages.season', { count: 1 }))}</span>
+					<span className='text-accent-yellow'>{upperFirst(common('messages.tv_season', { count: 1 }))}</span>
 					{season.serie && <span className="before:content-['_|_']">
 						<Button variant={'link'} className=" w-fit p-0 font-normal" asChild>
 							<Link href={urlSerie}>
@@ -65,7 +65,7 @@ export default function TvSeasonHeader({
 					)}
 				</h1>
 				<div>
-					{common('messages.episode_count', { count: season.episode_count! })}
+					{common('messages.tv_episode_count', { count: season.episode_count! })}
 				</div>
 			</div>
 		</div>

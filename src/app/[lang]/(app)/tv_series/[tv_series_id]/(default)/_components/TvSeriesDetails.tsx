@@ -39,7 +39,7 @@ export default function TvSerieDetails({
       <div className="flex flex-col @4xl/movie-details:grid @4xl/movie-details:grid-cols-3 gap-4">
          <div className={`@4xl/movie-details:col-span-${serie.specials && serie.specials.length > 0 ? '2' : '3'}`}>
           <h2 className="text-lg font-medium">
-            {upperFirst(common('messages.season', { count: serie.seasons?.length! }))}
+            {upperFirst(common('messages.tv_season', { count: serie.seasons?.length! }))}
             <span className="text-muted-foreground">{` ${serie.seasons?.length}`}</span>
           </h2>
           <ScrollArea className="w-full">
@@ -50,7 +50,7 @@ export default function TvSerieDetails({
                     <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
                       <ImageWithFallback
                         src={season.avatar_url ?? ''}
-                        alt={upperFirst(common('messages.season_value', { number: season.season_number! }))}
+                        alt={upperFirst(common('messages.tv_season_value', { number: season.season_number! }))}
                         fill
                         className="object-cover"
                         type="tv_season"
@@ -69,8 +69,8 @@ export default function TvSerieDetails({
                       </div>
                     </div>
                     <div className="text-center">
-                      <p className="line-clamp-2 break-words">{upperFirst(common('messages.season_value', { number: season.season_number! }))}</p>
-                      <p className="text-sm text-muted-foreground">{upperFirst(common('messages.episode_count', { count: season.episode_count! }))}</p>
+                      <p className="line-clamp-2 break-words">{upperFirst(common('messages.tv_season_value', { number: season.season_number! }))}</p>
+                      <p className="text-sm text-muted-foreground">{upperFirst(common('messages.tv_episode_count', { count: season.episode_count! }))}</p>
                     </div>
                   </Card>
                 </Link>
@@ -82,7 +82,7 @@ export default function TvSerieDetails({
         {(serie.specials && serie.specials.length > 0) && (
           <div className="@4xl/movie-details:col-span-1">
             <h2 className="text-lg font-medium">
-              {upperFirst(common('messages.special_episode', { count: serie.specials?.reduce((acc, s) => acc + (s.episode_count ?? 0), 0) }))}
+              {upperFirst(common('messages.tv_special_episode', { count: serie.specials?.reduce((acc, s) => acc + (s.episode_count ?? 0), 0) }))}
               <span className="text-muted-foreground">{` ${serie.specials?.length}`}</span>
             </h2>
             <ScrollArea className="w-full">
@@ -93,7 +93,7 @@ export default function TvSerieDetails({
                       <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
                         <ImageWithFallback
                           src={special.avatar_url ?? ''}
-                          alt={upperFirst(common('messages.season_value', { number: special.season_number! }))}
+                          alt={upperFirst(common('messages.tv_season_value', { number: special.season_number! }))}
                           fill
                           className="object-cover"
                           type="tv_season"
@@ -112,8 +112,8 @@ export default function TvSerieDetails({
                         </div>
                       </div>
                       <div className="text-center">
-                        <p className="line-clamp-2 break-words">{upperFirst(common('messages.season_value', { number: special.season_number! }))}</p>
-                        <p className="text-sm text-muted-foreground">{upperFirst(common('messages.episode_count', { count: special.episode_count! }))}</p>
+                        <p className="line-clamp-2 break-words">{upperFirst(common('messages.tv_season_value', { number: special.season_number! }))}</p>
+                        <p className="text-sm text-muted-foreground">{upperFirst(common('messages.tv_episode_count', { count: special.episode_count! }))}</p>
                       </div>
                     </Card>
                   </Link>

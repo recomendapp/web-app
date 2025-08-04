@@ -124,7 +124,7 @@ export default function TvSerieHeader({
                   )) ?? <span className="text-muted-foreground italic">{upperFirst(common('messages.unknown'))}</span>}
                   {/* NUMBER OF SEASONS */}
                   <span className="before:content-['_•_']">
-                    {common('messages.season_count', { count: serie.extra_data.number_of_seasons })}
+                    {common('messages.tv_season_count', { count: serie.extra_data.number_of_seasons })}
                   </span>
                 </div>
               </div>
