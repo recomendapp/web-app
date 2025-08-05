@@ -17,7 +17,6 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { cn } from '@/lib/utils';
 import { useLocale, useTranslations } from 'next-intl';
-import { Lang } from '@/types/type.i18n';
 import {
   Command,
   CommandEmpty,
@@ -27,7 +26,6 @@ import {
   CommandList,
 } from "@/components/ui/command"
 import { useTheme } from 'next-themes';
-import { Theme } from '@/types/type.theme';
 import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
@@ -84,8 +82,8 @@ export function AppearanceForm() {
   });
 
   const defaultValues = useMemo(() => ({
-    language: locale as Lang | undefined,
-    theme: theme as Theme | undefined,
+    language: locale,
+    theme: theme as 'light' | 'dark' | undefined,
   }), [locale, theme]);
 
   const form = useForm<AppearanceFormValues>({

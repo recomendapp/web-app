@@ -29,7 +29,7 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { MediaMovie } from '@/types/type.db';
+import { Media, MediaMovie } from '@/types/type.db';
 import { useModal } from '@/context/modal-context';
 import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
@@ -57,7 +57,7 @@ export default function MovieHeader({
   if (!movie) return null;
   return (
     <div>
-      <ContextMenuMedia media={movie}>
+      <ContextMenuMedia media={movie as Media}>
         <HeaderBox background={movie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${movie.backdrop_path}`, alt: movie.title ?? '', unoptimized: true } : undefined}>
           <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* MOVIE POSTER */}

@@ -1,4 +1,3 @@
-import { Lang } from '@/types/type.i18n';
 import Marquee from "react-fast-marquee";
 import {
   getActiveProductsWithPrices,
@@ -25,7 +24,9 @@ export async function generateMetadata(
 
 export default async function About(
   props: {
-    params: Promise<{ lang: Lang }>;
+    params: Promise<{
+      lang: string;
+    }>;
   }
 ) {
   const params = await props.params;

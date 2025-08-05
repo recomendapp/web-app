@@ -24,7 +24,7 @@ import MediaPoster from '@/components/Media/MediaPoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { MediaTvSeries } from '@/types/type.db';
+import { Media, MediaTvSeries } from '@/types/type.db';
 import { useModal } from '@/context/modal-context';
 import { upperFirst } from 'lodash';
 import { useLocale, useTranslations } from 'next-intl';
@@ -52,7 +52,7 @@ export default function TvSerieHeader({
   if (!serie) return null;
   return (
     <div>
-      <ContextMenuMedia media={serie}>
+      <ContextMenuMedia media={serie as Media}>
         <HeaderBox background={serie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${serie.backdrop_path}`, alt: serie.title ?? '', unoptimized: true } : undefined}>
           <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* SERIE POSTER */}

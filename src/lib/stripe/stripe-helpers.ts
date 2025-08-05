@@ -1,5 +1,4 @@
 import { Prices } from '@/types/type.db';
-import { Price } from '@/types/type.stripe';
 
 export const getURL = () => {
   let url =
