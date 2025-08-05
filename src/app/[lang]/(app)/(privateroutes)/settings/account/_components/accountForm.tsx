@@ -134,7 +134,7 @@ export function AccountForm() {
         username: data.username,
         private: data.private,
       });
-      toast.success(common('messages.saved'));
+      toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
     } catch (error) {
       toast.error(upperFirst(common('messages.an_error_occurred')));
     } finally {
@@ -207,7 +207,7 @@ export function AccountForm() {
         />
         <Button type="submit" disabled={loading}>
           {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          {common('messages.save')}
+          {upperFirst(common('messages.save'))}
         </Button>
       </form>
     </Form>

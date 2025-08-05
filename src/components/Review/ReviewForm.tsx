@@ -81,7 +81,7 @@ export default function ReviewForm({
 		}, {
 			onSuccess: () => {
 				setEditable(false);
-				toast.success(upperFirst(t('messages.saved')));
+				toast.success(upperFirst(t('messages.saved', { gender: 'male', count: 1 })));
 				router
 			},
 			onError: () => {
@@ -107,7 +107,7 @@ export default function ReviewForm({
 		}, {
 			onSuccess: (data) => {
 				setEditable(false);
-				toast.success(upperFirst(t('messages.saved')));
+				toast.success(upperFirst(t('messages.saved', { gender: 'male', count: 1 })));
 				router.replace(`/review/${data.id}`);
 				// router.replace(`${getMediaUrl({ id: mediaId, type: mediaType })}/review/${data.id}`);
 			},

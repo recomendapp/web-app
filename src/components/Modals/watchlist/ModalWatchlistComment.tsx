@@ -42,7 +42,7 @@ const ModalWatchlistComment = ({
 		comment: comment,
 	  }, {
 		onSuccess: () => {
-			toast.success(upperFirst(common('messages.saved')));
+			toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
 			closeModal(props.id);
 		},
 		onError: () => {

@@ -67,7 +67,7 @@ export function SecurityForm() {
         password: data.newpassword,
       });
       if (error) throw error;
-      toast.success(common('messages.saved'));
+      toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
       form.reset();
     } catch (error) {
       toast.error(upperFirst(common('messages.an_error_occurred')));
@@ -115,7 +115,7 @@ export function SecurityForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">{common('messages.save')}</Button>
+        <Button type="submit">{upperFirst(common('messages.save'))}</Button>
       </form>
     </Form>
   );

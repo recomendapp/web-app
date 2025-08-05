@@ -180,7 +180,7 @@ export function PlaylistForm({
           },
         });
       }
-      toast.success(upperFirst(t('common.messages.saved')));
+      toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
       success();
     } catch (error) {
       toast.error(upperFirst(t('common.messages.an_error_occurred')));
@@ -211,7 +211,7 @@ export function PlaylistForm({
         playlistId: playlist.id,
         payload,
       });
-      toast.success(upperFirst(t('common.messages.saved')));
+      toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
       success();
     } catch (error) {
       toast.error(upperFirst(t('common.messages.an_error_occurred')));

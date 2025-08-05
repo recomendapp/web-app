@@ -57,7 +57,7 @@ const PlaylistCommentModal = ({
 	  try {
 		setIsLoading(true);      
 		await updatePlaylistItem({ comment });
-		toast.success(upperFirst(t('common.messages.saved')));
+		toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
 		closeModal(props.id);
 	  } catch (error) {
 		toast.error(upperFirst(t('common.messages.an_error_occurred')));
