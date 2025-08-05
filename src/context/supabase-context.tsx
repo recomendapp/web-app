@@ -1,6 +1,7 @@
 "use client";
 
 import { routing } from "@/lib/i18n/routing";
+import { Database } from "@/types";
 import { createBrowserClient } from "@supabase/ssr";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, use, useMemo } from "react";

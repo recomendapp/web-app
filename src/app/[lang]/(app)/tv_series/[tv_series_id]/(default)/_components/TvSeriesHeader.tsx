@@ -39,6 +39,7 @@ import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlayli
 import { ModalMediaFollowersRating } from '@/components/Modals/ModalMediaFollowersRating';
 import { ContextMenuMedia } from '@/components/ContextMenu/ContextMenuMedia';
 import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
+import { Database } from '@/types';
 
 export default function TvSerieHeader({
   serie,

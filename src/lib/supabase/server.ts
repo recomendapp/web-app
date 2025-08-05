@@ -3,6 +3,7 @@ import {
   createServerClient as createServerClientSupabase,
 } from '@supabase/ssr';
 import { routing } from '../i18n/routing';
+import { Database } from '@/types';
 
 
 export const createServerClient = async (localeParam?: string) => {

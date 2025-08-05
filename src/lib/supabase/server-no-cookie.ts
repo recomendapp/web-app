@@ -1,3 +1,4 @@
+import { Database } from '@/types';
 import { createClient as createClientSupabase } from '@supabase/supabase-js';
 
 export const createClient = async (locale?: string) => {

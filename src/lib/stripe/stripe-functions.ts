@@ -2,11 +2,11 @@
 
 import Stripe from 'stripe';
 import { Session } from '@supabase/supabase-js';
-import { Database } from '@/types/__generated__/type.db';
 import { stripe } from '@/lib/stripe/stripe';
 import { toDateTime } from '@/lib/stripe/stripe-helpers';
 import { supabaseAdmin } from '../supabase/supabase-admin';
 import { siteConfig } from '@/config/site';
+import { Database } from '@/types';
 
 const upsertProductRecord = async (product: Stripe.Product) => {
   const productData: Database['public']['Tables']['products']['Row'] = {
