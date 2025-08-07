@@ -115,7 +115,7 @@ export function ProfileForm() {
       if (newAvatar || user.full_name !== data.full_name || user.bio !== data.bio || user.website !== data.website) {
         const userPayload: Record<string, any> = {
           full_name: data.full_name,
-          bio: data.bio?.trim() ?? null,
+          bio: data.bio?.trim() || null,
           website: data.website?.trim() || null,
         };
         if (newAvatar) {
