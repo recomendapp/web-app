@@ -62,7 +62,7 @@ export function ProfileForm() {
       .min(1, {
         message: t('profile.full_name.form.min_length'),
       })
-      .max(50, {
+      .max(30, {
         message: t('profile.full_name.form.max_length'),
       })
       .regex(/^(?!\s+$)[a-zA-Z0-9\s\S]*$/),

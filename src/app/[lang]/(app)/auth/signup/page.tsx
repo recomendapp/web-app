@@ -36,7 +36,7 @@ import { upperFirst } from 'lodash';
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
 const FULL_NAME_MIN_LENGTH = 1;
-const FULL_NAME_MAX_LENGTH = 50;
+const FULL_NAME_MAX_LENGTH = 30;
 const PASSWORD_MIN_LENGTH = 8;
 
 export default function Signup() {
