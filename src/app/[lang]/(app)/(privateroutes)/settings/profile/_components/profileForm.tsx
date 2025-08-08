@@ -26,6 +26,7 @@ import { useTranslations } from 'next-intl';
 import { useMutation } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { upperFirst } from 'lodash';
+import { v4 as uuidv4 } from "uuid";
 
 export function ProfileForm() {
   const supabase = useSupabaseClient();
@@ -150,7 +151,7 @@ export function ProfileForm() {
   async function uploadAvatar(file: File, userId: string) {
     try {
       const fileExt = file.name.split('.').pop();
-      const filePath = `${userId}.${fileExt}`;
+      const filePath = `${userId}.${uuidv4()}.${fileExt}`;
       const avatarCompressed = await compressPicture(file, filePath, 400, 400);
       const { data, error } = await supabase.storage
         .from('avatars')

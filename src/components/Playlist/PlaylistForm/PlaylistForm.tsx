@@ -41,6 +41,7 @@ import { userKeys } from '@/features/client/user/userKeys';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { v4 as uuidv4 } from "uuid";
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -244,7 +245,7 @@ export function PlaylistForm({
   async function uploadPoster(file: File, playlistId: number) {
     try {
       const fileExt = file.name.split('.').pop();
-      const filePath = `${playlistId}.${fileExt}`;
+      const filePath = `${playlistId}.${uuidv4()}.${fileExt}`;
       const posterCompressed = await compressPicture(file, filePath, 400, 400);
       let { data, error } = await supabase.storage
         .from('playlist_posters')
