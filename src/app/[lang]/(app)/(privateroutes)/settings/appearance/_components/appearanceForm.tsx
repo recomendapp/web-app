@@ -39,12 +39,13 @@ import { useLocalizedLanguageName } from '@/hooks/use-localized-language-name';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ChevronsUpDown } from 'lucide-react';
 import { upperFirst } from 'lodash';
+import { SupportedLocale } from '@/translations/locales';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
     required_error: 'Please select a theme.',
   }),
-  language: z.enum(routing.locales as [string, ...string[]], {
+  language: z.enum([...routing.locales], {
     invalid_type_error: 'Select a language',
     required_error: 'Please select a language.',
   }),
@@ -63,7 +64,7 @@ export function AppearanceForm() {
   const { setTheme, theme } = useTheme();
   const router = useRouter();
   const { user, loading: userLoading } = useAuth();
-  const locales = useLocalizedLanguageName(routing.locales);
+  const locales = useLocalizedLanguageName([...routing.locales]);
 
   const { mutateAsync: updateProfile } = useMutation({
     mutationFn: async (payload: any) => {
@@ -82,7 +83,7 @@ export function AppearanceForm() {
   });
 
   const defaultValues = useMemo(() => ({
-    language: locale,
+    language: locale as SupportedLocale,
     theme: theme as 'light' | 'dark' | undefined,
   }), [locale, theme]);
 
@@ -160,7 +161,7 @@ export function AppearanceForm() {
                           <CommandItem
                           key={i}
                           value={`${locale.iso_639_1} ${locale.iso_3166_1}`}
-                          onSelect={() => form.setValue('language', locale.language)}
+                          onSelect={() => form.setValue('language', locale.language as SupportedLocale)}
                           >
                             <Icons.check
                               className={cn(

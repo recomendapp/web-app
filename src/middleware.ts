@@ -3,6 +3,7 @@ import createIntlMiddleware from 'next-intl/middleware';
 import { createMiddlewareClient } from './lib/supabase/middleware';
 import { routing } from './lib/i18n/routing';
 import { siteConfig } from './config/site';
+import { SupportedLocale } from './translations/locales';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -11,7 +12,7 @@ export async function middleware(request: NextRequest) {
 
   const url = request.nextUrl.clone();
   const localeMatch = url.pathname.split('/')[1];
-  const hasLocale = routing.locales.includes(localeMatch);
+  const hasLocale = routing.locales.includes(localeMatch as SupportedLocale);
   if (hasLocale) url.pathname = url.pathname.replace(`/${localeMatch}`, '');
   // IMPORTANT: Avoid writing any logic between createServerClient and
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
@@ -29,7 +30,7 @@ export async function middleware(request: NextRequest) {
     user_id: user?.id,
   }).single();
 
-  if (user && config?.user_language && routing.locales.includes(config.user_language)) {
+  if (user && config?.user_language && routing.locales.includes(config.user_language as SupportedLocale)) {
     const wrongLocale =
       (hasLocale && localeMatch !== config.user_language) ||
       (localeHeader && localeHeader !== config.user_language);

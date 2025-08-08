@@ -20,6 +20,7 @@ import { useInView } from 'react-intersection-observer';
 import { usePlaylistAddMediasMutation } from '@/features/client/playlist/playlistMutations';
 import { upperFirst } from 'lodash';
 import { CardMedia } from '@/components/Card/CardMedia';
+import { SupportedLocale } from '@/translations/locales';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -50,7 +51,7 @@ export function ModalPlaylistQuickAdd({
 		hasNextPage,
 	} = useTmdbSearchMultiInfiniteQuery({
 		query: searchQuery,
-		locale: locale,
+		locale: locale as SupportedLocale,
 	})
 
 	const addMediasToPlaylist = usePlaylistAddMediasMutation({

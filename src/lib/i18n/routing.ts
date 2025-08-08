@@ -2,13 +2,13 @@ import { defineRouting } from 'next-intl/routing';
 import { createNavigation } from 'next-intl/navigation';
 import { AlternateURLs } from 'next/dist/lib/metadata/types/alternative-urls-types';
 import { siteConfig } from '@/config/site';
-import { defaultLocales, supportedLocales } from '@/translations/locales';
+import { defaultLocale, supportedLocales } from '@/translations/locales';
  
 export const routing = defineRouting({
   // A list of all locales that are supported
   locales: supportedLocales,
   // Used when no locale matches
-  defaultLocale: defaultLocales,
+  defaultLocale: defaultLocale,
   // Prefix for all locale-aware routes
   localePrefix: 'as-needed',
 });

@@ -2,12 +2,13 @@ import { getRequestConfig } from 'next-intl/server';
 import { routing } from './routing';
 import { getFallbackLanguage } from './fallback';
 import deepmerge from 'deepmerge';
+import { SupportedLocale } from '@/translations/locales';
 
 
 export default getRequestConfig(async ({ requestLocale }) => {
   let locale = await requestLocale;
 
-  if (!locale || !routing.locales.includes(locale)) {
+  if (!locale || !routing.locales.includes(locale as SupportedLocale)) {
     locale = routing.defaultLocale;
   }
 
@@ -15,7 +16,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
   try {
     messages = (await import(`../../translations/${locale}.json`)).default;
   } catch (error) {}
-  const fallbackLocale = getFallbackLanguage({ locale });
+  const fallbackLocale = locale ? getFallbackLanguage({ locale }) : undefined;
   if (fallbackLocale !== locale) {
     let messagesFallback = {};
     try {

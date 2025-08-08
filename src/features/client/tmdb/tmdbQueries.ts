@@ -4,6 +4,7 @@ import { tmdbSearchMovies } from "@/lib/tmdb/queries/tmdbSearchMovies";
 import { tmdbSearchSeries } from "@/lib/tmdb/queries/tmdbSearchSeries";
 import { tmdbSearchPersons } from "@/lib/tmdb/queries/tmdbSearchPersons";
 import { getTmdbSearchMulti } from "@/lib/tmdb/tmdbQueries";
+import { SupportedLocale } from "@/translations/locales";
 
 export const useTmdbSearchMultiInfiniteQuery = ({
 	query,
@@ -11,7 +12,7 @@ export const useTmdbSearchMultiInfiniteQuery = ({
 	filters,
 } : {
 	query: string;
-	locale: string;
+	locale: SupportedLocale;
 	filters?: {
 		resultsPerPage?: number;
 	}
@@ -45,7 +46,7 @@ export const useTmdbSearchMoviesInfiniteQuery = ({
 	filters,
 } : {
 	query?: string | null;
-	locale?: string;
+	locale?: SupportedLocale;
 	filters?: {
 		resultsPerPage?: number;
 	}
@@ -77,7 +78,7 @@ export const useTmdbSearchSeriesInfiniteQuery = ({
 	filters,
 } : {
 	query?: string | null;
-	locale?: string;
+	locale?: SupportedLocale;
 	filters?: {
 		resultsPerPage?: number;
 	}
@@ -109,7 +110,7 @@ export const useTmdbSearchPersonsInfiniteQuery = ({
 	filters,
 } : {
 	query?: string | null;
-	locale?: string;
+	locale?: SupportedLocale;
 	filters?: {
 		resultsPerPage?: number;
 	}
