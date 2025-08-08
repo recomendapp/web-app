@@ -63,7 +63,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
   };
 
   const logout = async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut({ scope: 'local' });
     if (error) throw error;
     setSession(null);
     router.refresh();
