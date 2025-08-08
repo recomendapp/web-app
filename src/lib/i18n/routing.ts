@@ -1,14 +1,14 @@
 import { defineRouting } from 'next-intl/routing';
 import { createNavigation } from 'next-intl/navigation';
-import { locales } from './locales';
 import { AlternateURLs } from 'next/dist/lib/metadata/types/alternative-urls-types';
 import { siteConfig } from '@/config/site';
+import { defaultLocales, supportedLocales } from '@/translations/locales';
  
 export const routing = defineRouting({
   // A list of all locales that are supported
-  locales,
+  locales: supportedLocales,
   // Used when no locale matches
-  defaultLocale: 'en-US',
+  defaultLocale: defaultLocales,
   // Prefix for all locale-aware routes
   localePrefix: 'as-needed',
 });
@@ -23,7 +23,7 @@ export const seoLocales = (currentLocale: string, endpoint: string): AlternateUR
     canonical: `${siteConfig.url}${localePrefix}${normalizedEndpoint}`,
     languages: Object.fromEntries([
       ['x-default', `${siteConfig.url}${normalizedEndpoint}`],
-      ...locales.map((locale) => {
+      ...supportedLocales.map((locale) => {
         const prefix = locale === routing.defaultLocale ? '' : `/${locale}`;
         return [locale, `${siteConfig.url}${prefix}${normalizedEndpoint}`];
       }),
@@ -34,7 +34,7 @@ export const seoLocales = (currentLocale: string, endpoint: string): AlternateUR
 export const sitemapLocales = (endpoint: string) => {
   const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
   return Object.fromEntries(
-    locales.map((locale) => {
+    supportedLocales.map((locale) => {
       const prefix = locale === routing.defaultLocale ? '' : `/${locale}`;
       return [locale, `${siteConfig.url}${prefix}${normalizedEndpoint}`];
     })
