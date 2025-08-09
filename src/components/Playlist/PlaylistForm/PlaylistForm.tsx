@@ -71,7 +71,7 @@ export function PlaylistForm({
       payload: {
         user_id: string;
         title: string;
-        description: string;
+        description: string | null;
         private: boolean;
       }
     ) => {
@@ -98,7 +98,7 @@ export function PlaylistForm({
       playlistId: number,
       payload: {
         title?: string;
-        description?: string;
+        description?: string | null;
         private?: boolean;
         poster_url?: string | null;
       }
@@ -157,7 +157,7 @@ export function PlaylistForm({
       const newPlaylist = await insertPlaylistMutation({
         user_id: user?.id,
         title: data.title ?? '',
-        description: data.description?.trim() ?? '',
+        description: data.description?.trim() || null,
         private: data.private,
       });
       // if (filmId) {
@@ -196,7 +196,7 @@ export function PlaylistForm({
       if (!playlist?.id ) throw Error('Missing activity id');
       const payload = {
         title: data.title.replace(/\s+/g, ' ').trim(),
-        description: data.description?.trim() ?? '',
+        description: data.description?.trim() || null,
         // description: data.description
         //   ?.replace(/[\r\n]+/g, '\n') // Multiple new lines
         //   .replace(/[^\S\r\n]+/g, ' ') // Multiple spaces
