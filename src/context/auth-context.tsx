@@ -30,6 +30,7 @@ export interface UserState {
   loginOAuth2: (provider: Provider, redirectTo?: string | null) => Promise<void>;
   loginWithOtp: (email: string, redirectTo?: string | null) => Promise<void>;
   userRefresh: () => Promise<void>;
+  setPushToken: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const AuthContext = createContext<UserState | undefined>(undefined);
@@ -44,6 +45,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
   const supabase = useSupabaseClient();
   const [session, setSession] = useState<Session | null>(initialSession);
   const [loading, setLoading] = useState(true);
+  const [pushToken, setPushToken] = useState<string | null>(null);
   const {
     data: user,
     isLoading: userLoading,
@@ -63,6 +65,10 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
   };
 
   const logout = async () => {
+    if (!session) return;
+    if (pushToken) {
+        await supabase.from('user_notification_tokens').delete().match({ user_id: session?.user.id, token: pushToken, provider: 'fcm' });
+    }
     const { error } = await supabase.auth.signOut({ scope: 'local' });
     if (error) throw error;
     setSession(null);
@@ -162,6 +168,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
         loginOAuth2,
         loginWithOtp,
         userRefresh,
+        setPushToken,
       }}
     >
       {children}

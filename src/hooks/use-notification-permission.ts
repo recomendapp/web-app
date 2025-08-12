@@ -1,6 +1,6 @@
 import { useAuth } from "@/context/auth-context";
+import { useSupabaseClient } from "@/context/supabase-context";
 import { fetchToken } from "@/lib/firebase/firebase.config";
-import { updateFcmToken } from "@/lib/firebase/queries/updateFcmToken";
 import { useEffect, useRef, useState } from "react";
 
 const LOCAL_STORAGE_KEY = 'notification-prompt-permission';
@@ -16,7 +16,8 @@ export interface NotificationPermissionProps {
 
 
 const useNotificationPermission = () => {
-	const { user } = useAuth();
+	const { session, setPushToken } = useAuth();
+	const supabase = useSupabaseClient();
 	const [permission, setPermission] = useState<NotificationPermission>('default');
 	const [token, setToken] = useState<string | null>(null);
 	const retryLoadToken = useRef(0);
@@ -38,6 +39,7 @@ const useNotificationPermission = () => {
 			return await loadToken();
 		}
 		setToken(token);
+		setPushToken(token);
 		isLoading.current;
 	}
 
@@ -46,7 +48,7 @@ const useNotificationPermission = () => {
 			console.warn('This browser does not support notifications');
 			return;
 		}
-		if (user) {
+		if (session) {
 			const newPermission = await Notification.requestPermission();
 			if (newPermission !== 'granted') throw new Error('Permission denied');
 			setPermission(newPermission);
@@ -71,7 +73,7 @@ const useNotificationPermission = () => {
 		handler();
 		const storedPermission = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-		if (user && !storedPermission) {
+		if (session && !storedPermission) {
 			const timeoutId = setTimeout(() => {
 				Notification.requestPermission().then((newPermission) => {
 					setPermission(newPermission);
@@ -89,26 +91,34 @@ const useNotificationPermission = () => {
 
 			return () => clearTimeout(timeoutId);
 		}
-	}, [user]);
+	}, [session]);
 
 	// FCM token
 	useEffect(() => {
-		if (user && permission === 'granted') {
+		if (session && permission === 'granted') {
 			loadToken();
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [user, permission]);
+	}, [session, permission]);
 
 	// Store token
 	useEffect(() => {
-		if (user?.id && token) {
-			try {
-				updateFcmToken(user.id, token);
-			} catch (error) {
-				console.error('Error updating FCM token in the database', error);
-			}
-		}
-	}, [token, user?.id]);
+		if (!token || !session) return;
+
+		const saveToken = async () => {
+			await supabase.from('user_notification_tokens').upsert({
+				user_id: session.user.id,
+				token: token,
+				device_type: 'web',
+				provider: 'fcm',
+				updated_at: new Date().toISOString(),
+			}, {
+				onConflict: "user_id, provider, device_type, token"
+			});
+		};
+
+		saveToken();
+	}, [token, session?.user?.id]);
 
 
 	return {
