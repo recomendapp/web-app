@@ -113,7 +113,7 @@ const useNotificationPermission = () => {
 				provider: 'fcm',
 				updated_at: new Date().toISOString(),
 			}, {
-				onConflict: "user_id, provider, device_type, token"
+				onConflict: "user_id, provider, token"
 			});
 		};
 

@@ -67,7 +67,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
   const logout = async () => {
     if (!session) return;
     if (pushToken) {
-        await supabase.from('user_notification_tokens').delete().match({ user_id: session?.user.id, token: pushToken, provider: 'fcm' });
+        await supabase.from('user_notification_tokens').delete().match({ token: pushToken, provider: 'fcm' });
     }
     const { error } = await supabase.auth.signOut({ scope: 'local' });
     if (error) throw error;
