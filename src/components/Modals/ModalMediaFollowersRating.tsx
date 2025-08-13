@@ -98,7 +98,7 @@ export const ModalMediaFollowersRating = ({
 									)
 								}}
 								/>
-								<Bar dataKey="count" radius={4} className=" fill-blue-500" />
+								<Bar dataKey="count" radius={4} className=" fill-accent-blue" />
 							</BarChart>
 						</ChartContainer>
 						<ScrollArea className="h-[10vh]">

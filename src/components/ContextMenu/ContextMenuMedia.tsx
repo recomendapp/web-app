@@ -35,7 +35,7 @@ export const ContextMenuMedia = ({
 }) => {
 	const { session } = useAuth();
 	const { openModal } = useModal();
-	const common = useTranslations('common');
+	const t = useTranslations();
 	const items: Item[][] = useMemo(() => {
 		return [
 		additionalItemsTop,
@@ -44,23 +44,23 @@ export const ContextMenuMedia = ({
 				icon: Icons.movie,
 				href: media.url ?? '',
 				label: media.media_type === 'movie'
-					? upperFirst(common('messages.go_to_film'))
+					? upperFirst(t('common.messages.go_to_film'))
 					: media.media_type === 'tv_series'
-					? upperFirst(common('messages.go_to_serie'))
+					? upperFirst(t('common.messages.go_to_serie'))
 					: media.media_type === 'person'
-					? upperFirst(common('messages.go_to_person'))
+					? upperFirst(t('common.messages.go_to_person'))
 					: ''
 			},
 			...(session ? [
 				{
 					icon: Icons.addPlaylist,
 					onClick: () => openModal(ModalPlaylistAdd, { mediaId: media.media_id!, mediaTitle: media.title }),
-					label: 'Ajouter à une playlist',
+					label: upperFirst(t('common.messages.add_to_playlist')),
 				},
 				{
 					icon: Icons.send,
 					onClick: () => openModal(ModalRecoSend, { mediaId: media.media_id!, mediaTitle: media.title }),
-					label: upperFirst(common('messages.send_to_friend')),
+					label: upperFirst(t('common.messages.send_to_friend')),
 				}
 			] : []),
 		],
@@ -75,11 +75,11 @@ export const ContextMenuMedia = ({
 						media: media,
 					}),
 				}),
-				label: upperFirst(common('messages.share')),
+				label: upperFirst(t('common.messages.share')),
 			},
 			...additionalItemsBottom
 		],
-	]}, [media, session, common]);
+	]}, [media, session, t]);
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger>

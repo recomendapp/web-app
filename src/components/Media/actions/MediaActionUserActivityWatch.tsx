@@ -76,7 +76,7 @@ const MediaActionUserActivityWatch = React.forwardRef<
         >
           <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
             <div
-              className={`transition border-2 rounded-full p-[0.5px] border-foreground hover:border-blue-500 hover:text-blue-500`}
+              className={`transition border-2 rounded-full p-[0.5px] border-foreground hover:border-accent-blue hover:text-accent-blue`}
             >
               <Icons.check />
             </div>
@@ -112,8 +112,8 @@ const MediaActionUserActivityWatch = React.forwardRef<
         ) : (
           <div
           className={`
-            transition border-2 rounded-full p-[0.5px] hover:border-blue-500
-            ${activity ? 'bg-blue-500 border-blue-500' : 'text-foreground border-foreground hover:text-blue-500'}
+            transition border-2 rounded-full p-[0.5px] hover:border-accent-blue
+            ${activity ? 'bg-accent-blue border-accent-blue' : 'text-foreground border-foreground hover:text-accent-blue'}
           `}
           >
             <Icons.check />

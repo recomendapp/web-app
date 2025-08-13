@@ -8,7 +8,7 @@ const iconMediaRatingVariants = cva(
 		variants: {
 			variant: {
 				general: "text-accent-yellow border-accent-yellow",
-				follower: "text-blue-500 border-blue-500",
+				follower: "text-accent-blue border-accent-blue",
 				user: "text-accent-yellow border-accent-yellow",
 				profile: "text-white border-muted",
 			}

@@ -110,8 +110,8 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
           {isAllowedToEdit && (
             <DropdownMenuItem
               onClick={() => createConfirmModal({
-                title: upperFirst(t('pages.playlist.modal.delete_confirm.title')),
-                description: t.rich('pages.playlist.modal.delete_confirm.description', {
+                title: upperFirst(t('common.messages.are_u_sure')),
+                description: t.rich('pages.playlist.modal.delete_item_confirm.description', {
                   title: data?.media?.title!,
                   important: (chunk) => <b>{chunk}</b>,
                 }),

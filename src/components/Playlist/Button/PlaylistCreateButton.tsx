@@ -8,6 +8,7 @@ import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { cn } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
+import { upperFirst } from 'lodash';
 
 export function PlaylistCreateButton({
   className,
@@ -25,16 +26,16 @@ export function PlaylistCreateButton({
   if (!user) return null;
 
   return (
-      <TooltipBox tooltip={t('pages.playlist.actions.create')}>
+      <TooltipBox tooltip={upperFirst(t('common.messages.create_a_playlist'))}>
         <Button
           variant={'ghost'}
           size={'icon'}
           className={cn("rounded-full shrink-0", className)}
           onClick={() => openModal(PlaylistModal, { filmId })}
         >
-          {icon ? <Plus /> : t('pages.playlist.actions.create')}
+          {icon ? <Plus /> : upperFirst(t('common.messages.create_a_playlist'))}
           {icon && <span className="sr-only">
-            {t('pages.playlist.actions.create')}
+            {upperFirst(t('common.messages.create_a_playlist'))}
           </span>}
         </Button>
       </TooltipBox>

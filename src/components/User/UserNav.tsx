@@ -19,6 +19,17 @@ import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import { Icons } from '@/config/icons';
 import { upperFirst } from 'lodash';
+import { cn } from '@/lib/utils';
+
+type Route = {
+  icon: React.ElementType;
+  label: string;
+  href: string;
+  shortcut?: string;
+  target?: string;
+  visible?: boolean;
+  className?: string;
+};
 
 export function UserNav({
   className,
@@ -28,14 +39,13 @@ export function UserNav({
   const { user, loading, logout } = useAuth();
   const t = useTranslations('common');
 
-  const routes = useMemo(() => [
+  const routes = useMemo((): Route[] => [
     {
       icon: Icons.shop,
       label: upperFirst(t('messages.shop')),
       href: 'https://shop.recomend.app/',
       shortcut: '↗',
       target: '_blank',
-      visble: true,
     },
     {
       icon: Icons.help,
@@ -43,39 +53,28 @@ export function UserNav({
       href: 'https://help.recomend.app/',
       shortcut: '↗',
       target: '_blank',
-      visble: true,
     },
     {
       icon: Icons.about,
       label: upperFirst(t('messages.about')),
       href: '/about',
-      shortcut: null,
-      target: undefined,
-      visble: true,
     },
     {
       icon: Icons.legal,
       label: upperFirst(t('messages.legal')),
       href: '/legal/terms-of-use',
-      shortcut: null,
-      target: undefined,
-      visble: true,
     },
     {
-      icon: Icons.sparkles,
+      icon: Icons.premium,
       label: upperFirst(t('messages.upgrade_to_plan', { plan: 'Premium' })),
       href: '/upgrade',
-      shortcut: null,
-      target: undefined,
-      visble: !user?.premium,
+      visible: !user?.premium,
+      className: 'fill-accent-blue !text-accent-blue',
     },
     {
       icon: Icons.settings,
       label: upperFirst(t('messages.setting', { count: 0 })),
       href: '/settings/profile',
-      shortcut: null,
-      target: undefined,
-      visble: true,
     },
   ], [user]);
 
@@ -86,7 +85,7 @@ export function UserNav({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button variant="ghost" className={cn("relative h-8 w-8 rounded-full", className)}>
           <UserAvatar avatarUrl={user.avatar_url} username={user.username} />
         </Button>
       </DropdownMenuTrigger>
@@ -108,16 +107,14 @@ export function UserNav({
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {routes.map((route, i) => (
-            route.visble && (
-              <DropdownMenuItem key={i} asChild>
-                <Link href={route.href} target={route.target}>
-                  <route.icon className="w-4" />
-                  <span>{route.label}</span>
-                  {route.shortcut ? <DropdownMenuShortcut>{route.shortcut}</DropdownMenuShortcut> : null}
-                </Link>
-              </DropdownMenuItem>
-            )
+          {routes.filter((route) => route.visible !== false).map((route, i) => (
+            <DropdownMenuItem key={i} asChild className={route.className}>
+              <Link href={route.href} target={route.target}>
+                <route.icon className={"w-4"} />
+                <span>{route.label}</span>
+                {route.shortcut && <DropdownMenuShortcut>{route.shortcut}</DropdownMenuShortcut>}
+              </Link>
+            </DropdownMenuItem>
           ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

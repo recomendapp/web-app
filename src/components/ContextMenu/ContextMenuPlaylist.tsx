@@ -52,20 +52,20 @@ export const ContextMenuPlaylist = ({
 			},
 			...(session?.user.id === playlist.user_id ? [
 				{
+					icon: Icons.users,
+					onClick: () => openModal(ModalPlaylistGuest, {
+						playlistId: playlist.id,
+					}),
+					label: upperFirst(t('common.messages.manage_guests', { gender: 'male', count: 2 })),
+				},
+				{
 					icon: Icons.edit,
 					onClick: () => {
 						openModal(PlaylistModal, {
 							playlist: playlist,
 						})
 					},
-					label: upperFirst(t('common.messages.edit')),
-				},
-				{
-					icon: Icons.users,
-					onClick: () => openModal(ModalPlaylistGuest, {
-						playlistId: playlist.id,
-					}),
-					label: upperFirst(t('common.messages.guest', { gender: 'male', count: 2 })),
+					label: upperFirst(t('common.messages.edit_playlist')),
 				},
 			] : []),
 		],

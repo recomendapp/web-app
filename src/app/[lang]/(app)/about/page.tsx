@@ -107,9 +107,9 @@ export default async function About(
     <div className="flex flex-col gap-4 items-center text-justify transition-all">
       {/* ABOUT */}
       <section id="about" className="w-full flex flex-col items-center gap-2">
-        <Marquee pauseOnHover className=' bg-blue-500 py-1 uppercase z-0'>
+        <Marquee pauseOnHover className='bg-accent-blue py-1 uppercase z-0'>
             {Array.from({ length: 3 }).map((_, index) => (
-              <p key={index} className='mr-8 font-bold'>
+              <p key={index} className='mr-8 font-bold text-accent-blue-foreground'>
                 {t('about.marquee')}
               </p>
             ))}

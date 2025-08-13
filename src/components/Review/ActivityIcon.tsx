@@ -36,7 +36,7 @@ export default function ActivityIcon({
             ${onClick && 'cursor-pointer'}
             ${variant === 'user' && 'border-accent-yellow'}
             ${variant === 'general' && 'border-accent-pink'}
-            ${variant === 'follower' && ' border-blue-500'}
+            ${variant === 'follower' && ' border-accent-blue'}
           `,
           className)}
           onClick={onClick}
@@ -54,7 +54,7 @@ export default function ActivityIcon({
               font-bold text-sm
               ${variant === 'user' && 'text-accent-yellow'}
               ${variant === 'general' && 'text-accent-pink'}
-              ${variant === 'follower' && 'text-blue-500'}
+              ${variant === 'follower' && 'text-accent-blue'}
             `}
           >
             {/* make to fixed only if it's a float */}

@@ -15,16 +15,16 @@ export const ContextMenuWatchlistAction = ({
 	watchlistItem?: UserWatchlist | null,
 }) => {
 	const { openModal } = useModal();
-	const common = useTranslations('common');
+	const t = useTranslations();
 	const items = useMemo(() => [
 		[
 			{
 				icon: Icons.comment,
 				onClick: () => watchlistItem && openModal(ModalWatchlistComment, { watchlistItem }),
-				label: watchlistItem?.comment ? upperFirst(common('messages.edit_comment', { count: 1 })) : upperFirst(common('messages.add_comment', { count: 1 })),
+				label: watchlistItem?.comment ? upperFirst(t('common.messages.edit_comment', { count: 1 })) : upperFirst(t('common.messages.add_comment', { count: 1 })),
 			}
 		]
-	], [watchlistItem, common]);
+	], [watchlistItem, t]);
 	if (!watchlistItem) return children;
 	return (
 		<ContextMenu>

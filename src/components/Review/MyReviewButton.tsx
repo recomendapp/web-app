@@ -33,7 +33,7 @@ export function MyReviewButton({
 		return (
 			<Link
 			href={`/review/create/${mediaId}`}
-			className="bg-blue-500 rounded-full px-4 py-1 flex gap-2 items-center"
+			className="bg-accent-blue rounded-full px-4 py-1 flex gap-2 items-center"
 			>
 				<FileEdit />
 				{upperFirst(common('messages.write_review'))}
@@ -44,7 +44,7 @@ export function MyReviewButton({
 	return (
 		<Link
 		href={`/review/${activity?.review?.id}`}
-		className="bg-blue-500 rounded-full px-4 py-1 flex gap-2 items-center"
+		className="bg-accent-blue rounded-full px-4 py-1 flex gap-2 items-center"
 		>
 			<FileEdit />
 			{upperFirst(common('messages.my_review', { count: 1 }))}

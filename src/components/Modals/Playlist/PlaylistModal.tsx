@@ -32,7 +32,7 @@ export function PlaylistModal({
     <Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
       <ModalHeader>
         <ModalTitle className='flex gap-4 items-center'>
-          {playlist ? t('pages.playlist.actions.edit') : t('pages.playlist.actions.create')}
+          {playlist ? upperFirst(t('common.messages.edit_playlist')) : upperFirst(t('common.messages.create_a_playlist'))}
           {playlist && (
             <TooltipBox tooltip={upperFirst(t('common.messages.guest', { count: 2, gender: 'male' }))}>
               <Button

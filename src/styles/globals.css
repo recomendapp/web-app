@@ -13,6 +13,10 @@
     --accent-pink-foreground: 0 0% 0%;
     --accent-pink-hover: 320 89% 57%;
 
+    --accent-blue: 217.2 91.2% 59.8%;
+    --accent-blue-foreground: 0 100% 100%;
+    --accent-blue-hover: 217.2 91.2% 49.8%;
+
     --background: 0 0% 6%;
     --background-border: 0 0% 0%;
     --foreground: 0 100% 100%;
@@ -85,6 +89,10 @@
     --accent-pink: 320 87% 75%;
     --accent-pink-foreground: 0 0% 0%;
     --accent-pink-hover: 320 89% 57%;
+
+    --accent-blue: 217.2 91.2% 59.8%;
+    --accent-blue-foreground: 0 100% 100%;
+    --accent-blue-hover: 217.2 91.2% 49.8%;
 
     --background: 0 0% 6%;
     --background-border: 0 0% 0%;

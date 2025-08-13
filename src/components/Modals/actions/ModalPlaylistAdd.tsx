@@ -174,7 +174,7 @@ export function ModalPlaylistAdd({
 								onClick={() => setCreatePlaylist(true)}
 								>
 									<Icons.add size={20} className="mr-2" />
-									{t('pages.playlist.actions.create')}
+									{upperFirst(t('common.messages.create_a_playlist'))}
 								</Button>
 								)}
 								<CommandSeparator className='my-1' />

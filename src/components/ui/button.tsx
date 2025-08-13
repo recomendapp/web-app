@@ -33,7 +33,7 @@ const buttonVariants = cva(
         'rating-enabled':
           '!p-0 !aspect-[3/2] border-2 border-accent-yellow rounded-sm text-accent-yellow hover:text-accent-yellow-foreground hover:bg-accent-yellow bg-background',
         share:
-          'text-destructive-foreground hover:bg-blue-500/10 hover:text-blue-300 rounded-full',
+          'text-destructive-foreground hover:bg-accent-blue/10 hover:text-accent-blue rounded-full',
       },
       size: {
         default: "h-10 px-4 py-2",

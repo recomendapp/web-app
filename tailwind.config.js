@@ -37,6 +37,11 @@ module.exports = {
   				foreground: 'hsl(var(--accent-pink-foreground))',
   				hover: 'hsl(var(--accent-pink-hover))'
   			},
+			'accent-blue': {
+  				DEFAULT: 'hsl(var(--accent-blue))',
+  				foreground: 'hsl(var(--accent-blue-foreground))',
+  				hover: 'hsl(var(--accent-blue-hover))'
+  			},
   			primary: {
   				DEFAULT: 'hsl(var(--primary))',
   				subued: 'hsl(var(--primary-subued))',
