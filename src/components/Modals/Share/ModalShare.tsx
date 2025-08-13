@@ -7,7 +7,7 @@ import { FacebookIcon, FacebookShareButton, RedditIcon, RedditShareButton, Teleg
 import { MediaType } from "@/types/type.db";
 import { ButtonCopy } from "@/components/utils/ButtonCopy";
 import { useLocale, useTranslations } from "next-intl";
-import { upperFirst } from "lodash";
+import { findKey, upperFirst } from "lodash";
 import { useUI } from "@/context/ui-context";
 import { useEffect, useMemo, useState } from "react";
 import { Icons } from "@/config/icons";
@@ -79,6 +79,8 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 		}
 	}, [shareController, sharedControllerData]);
 
+	console.log('fileToShare', fileToShare)
+
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
 			<ModalHeader>
@@ -104,6 +106,23 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 							</Button>
 							<Separator />
 						</>
+					)}
+					{fileToShare && (
+						<Button
+						onClick={() => {
+							if (!fileToShare) return;
+							const url = URL.createObjectURL(fileToShare);
+							const a = document.createElement('a');
+							a.href = url;
+							a.download = fileToShare.name || 'image-generee.png';
+							document.body.appendChild(a);
+							a.click();
+							document.body.removeChild(a);
+							URL.revokeObjectURL(url);
+						}}
+						>
+							{upperFirst(common('messages.download'))}
+						</Button>
 					)}
 				</div>
 				<div>
