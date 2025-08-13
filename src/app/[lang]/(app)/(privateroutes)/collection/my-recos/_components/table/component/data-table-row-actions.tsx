@@ -130,7 +130,7 @@ export function DataTableRowActions({
               onClick={() => openModal(ModalRecosSenders, { comments: row.original?.senders })}
             >
               <Icons.comment className='w-4' />
-              {upperFirst(t('common.messages.view_recommendations', { count: data?.senders?.length }))}
+              {upperFirst(t('common.messages.view_recommendation', { count: data?.senders?.length }))}
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />

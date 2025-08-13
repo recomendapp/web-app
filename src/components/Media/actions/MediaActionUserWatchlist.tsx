@@ -83,7 +83,7 @@ const MediaActionUserWatchlist = React.forwardRef<
 
 	if (user == null) {
 		return (
-		<TooltipBox tooltip={upperFirst(t('common.please_login'))}>
+		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
 			size={'icon'}
 			variant={'action'}
