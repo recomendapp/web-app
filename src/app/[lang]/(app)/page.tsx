@@ -33,7 +33,7 @@ export default function Home() {
 		<div className="p-4 gap-4 gap-x-8 grid grid-cols-1 @4xl/main:grid-cols-2">
 			<div className="flex justify-between items-center w-full">
 				<h2 className="text-xl md:text-4xl break-all line-clamp-2">
-					{session ? upperFirst(t('common.messages.greeting_with_name', { timeOfDay: getTimeOfDay, name: user?.full_name! })) : upperFirst(t('common.messages.welcome_on_app', { app: siteConfig.name }))}
+					{session ? upperFirst(t('common.messages.greeting_with_name', { timeOfDay: getTimeOfDay, name: user?.full_name! })) : upperFirst(t('common.messages.welcome_to_app', { app: siteConfig.name }))}
 				</h2>
 				{device === "mobile" ? <HeaderRightSide /> : null}
 			</div>
