@@ -1,13 +1,38 @@
 import { Media, MediaType } from "@/types/type.db";
 
-const getMediaDetails = (media?: Media) => {
+const getMediaDetails = (media: Media) => {
+	const getTitle = () => {
+		switch (media.media_type) {
+			case 'movie':
+				return media.title;
+			case 'tv_series':
+				return media.title;
+			case 'person':
+				return media.title;
+			default:
+				return null;
+		}
+	}
+	const getImage = () => {
+		switch (media.media_type) {
+			case 'movie':
+				return media.avatar_url;
+			case 'tv_series':
+				return media.avatar_url;
+			case 'person':
+				return media.avatar_url;
+			default:
+				return null;
+		}
+	};
 	return {
-		...media,
-		posterClassName: media?.media_type === 'movie'
+		title: getTitle(),
+		imageUrl: getImage(),
+		posterClassName: media.media_type === 'movie'
 			? 'aspect-[2/3] rounded-md'
-			: media?.media_type === 'tv_series'
+			: media.media_type === 'tv_series'
 			? 'aspect-[2/3] rounded-md'
-			: media?.media_type === 'person'
+			: media.media_type === 'person'
 			? 'aspect-[1/1] rounded-full'
 			: 'aspect-[2/3] rounded-md',
 	}

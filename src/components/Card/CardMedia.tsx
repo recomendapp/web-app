@@ -35,7 +35,11 @@ const CardMediaDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardMediaProps, "variant">
 >(({ className, media, activity, profileActivity, children, linked, showRating, posterClassName, ...props }, ref) => {
-	const mediaDetails = getMediaDetails(media);
+	const {
+		title,
+		imageUrl,
+		posterClassName: mediaPosterClassName,
+	} = getMediaDetails(media);
 	return (
 	<WithLink href={media.url ?? undefined}>
 		<Card
@@ -47,11 +51,11 @@ const CardMediaDefault = React.forwardRef<
 			{...props}
 		>
 			<div
-			className={cn('relative h-full shrink-0 rounded-md overflow-hidden', mediaDetails.posterClassName, posterClassName)}
+			className={cn('relative h-full shrink-0 rounded-md overflow-hidden', mediaPosterClassName, posterClassName)}
 			>
 				<ImageWithFallback
-					src={media.avatar_url ?? ''}
-					alt={media.title ?? ''}
+					src={imageUrl}
+					alt={title ?? ''}
 					fill
 					className="object-cover"
 					type="playlist"
@@ -63,7 +67,7 @@ const CardMediaDefault = React.forwardRef<
 				/>
 			</div>
 			<div className='px-2 py-1 space-y-1'>
-				<p className='line-clamp-2 break-words'>{media.title}</p>
+				<p className='line-clamp-2 break-words'>{title}</p>
 				{children}
 			</div>
 		</Card>
