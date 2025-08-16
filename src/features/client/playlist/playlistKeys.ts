@@ -4,8 +4,12 @@ export const playlistKeys = {
 	all: ['playlist'] as const,
 	details: () => [...playlistKeys.all, 'details'] as const,
 	detail: (playlistId: number) => [...playlistKeys.all, playlistId] as const,
+
+	// Items
 	items: (playlistId: number) => [...playlistKeys.detail(playlistId), 'items'] as const,
 	item: (playlistId: number, itemId: number) => [...playlistKeys.items(playlistId), itemId] as const,
+	
+	// Guests
 	guests: (playlistId: number) => [...playlistKeys.detail(playlistId), 'guests'] as const,
 	guestsAdd: ({
 		playlistId,
@@ -17,7 +21,13 @@ export const playlistKeys = {
 	guest: (playlistId: number, guestId: number) => [...playlistKeys.guests(playlistId), guestId] as const,
 	
 	
-	allowedToEdit: (playlistId: number) => [...playlistKeys.detail(playlistId), 'allowedToEdit'] as const,
+	allowedToEdit: ({
+		playlistId,
+		userId
+	} : {
+		playlistId: number;
+		userId: string;
+	}) => [...playlistKeys.detail(playlistId), 'allowedToEdit', userId] as const,
 
 	featured: ({
 		filters,

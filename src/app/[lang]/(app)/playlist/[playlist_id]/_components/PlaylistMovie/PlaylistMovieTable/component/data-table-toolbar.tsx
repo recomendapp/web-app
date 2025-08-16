@@ -3,7 +3,6 @@ import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { DataTableSortOptions } from './data-table-sort-options';
 import { useAuth } from '@/context/auth-context';
 import { Playlist } from '@/types/type.db';
 import { Icons } from '@/config/icons';
@@ -12,9 +11,10 @@ import { ModalPlaylistQuickAdd } from '@/components/Modals/playlists/ModalPlayli
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { DataTableViewOptions } from './data-table-view-options';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import PlaylistActionSave from '@/components/Playlist/actions/PlaylistActionSave';
+import { TableViewOptions } from '@/components/tables/TableViewOptions';
+import { TableSortOptions } from '@/components/tables/TableSortOptions';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -26,8 +26,11 @@ export function DataTableToolbar<TData>({
   playlist,
 }: DataTableToolbarProps<TData>) {
   const t = useTranslations();
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(playlist?.id);
   const { session } = useAuth();
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
+    playlistId: playlist?.id,
+    userId: session?.user.id
+  });
   const { openModal } = useModal();
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -88,8 +91,8 @@ export function DataTableToolbar<TData>({
             {upperFirst(t('common.messages.quick_add'))}
             </span>
           </Button> : null}
-          <DataTableSortOptions table={table} />
-          <DataTableViewOptions table={table} />
+          <TableSortOptions table={table} />
+          <TableViewOptions table={table} />
         </div>
       </div>
     </div>

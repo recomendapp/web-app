@@ -25,14 +25,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { DataTableToolbar } from './component/data-table-toolbar';
 import { Columns } from './component/columns';
 import { useMediaQuery } from 'react-responsive';
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import toast from 'react-hot-toast';
-
-// Drag and drop
 import {
   DndContext,
   DragEndEvent,
@@ -45,13 +42,13 @@ import {
 } from '@dnd-kit/core';
 import { MouseSensor, TouchSensor } from '@/lib/dnd-kit/CustomSensor';
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-
-import { Playlist, PlaylistItem } from '@/types/type.db';
-import { useSupabaseClient } from '@/context/supabase-context';
-import { useMutation } from '@tanstack/react-query';
+import { Playlist, PlaylistItemMovie } from '@/types/type.db';
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { DataTableToolbar } from './component/data-table-toolbar';
+import { usePlaylistMovieUpdateMutation } from '@/features/client/playlist/playlistMutations';
+import { useAuth } from '@/context/auth-context';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -61,35 +58,28 @@ declare module '@tanstack/react-table' {
 
 interface DataTableProps {
   playlist: Playlist;
-  playlistItems: PlaylistItem[];
-  setPlaylistItems: React.Dispatch<React.SetStateAction<PlaylistItem[]>>;
+  playlistItems: PlaylistItemMovie[];
+  setPlaylistItems: React.Dispatch<React.SetStateAction<PlaylistItemMovie[]>>;
 }
 
-export default function PlaylistTable({
+export default function PlaylistMovieTable({
   playlist,
   playlistItems,
   setPlaylistItems,
 }: DataTableProps) {
-  const supabase = useSupabaseClient();
   const common = useTranslations('common');
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(playlist?.id);
-  
+  const { session } = useAuth();
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
+	playlistId: playlist?.id,
+	userId: session?.user.id
+  });
+  // Mutations
+  const updatePlaylistItem = usePlaylistMovieUpdateMutation();
+
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-
-  const { mutateAsync: updatePlaylistItem } = useMutation({
-    mutationFn: async ({ id, rank } : { id: UniqueIdentifier, rank: number }) => {
-      if (!id || !rank) throw Error('Missing id or rank');
-      const { error } = await supabase
-        .from('playlist_items')
-        .update({ rank })
-        .eq('id', id as number)
-      if (error) throw error;
-      // return data;
-    },
-  });
   const [activeId, setActiveId] = React.useState<UniqueIdentifier | null>(null);
   const items = React.useMemo<UniqueIdentifier[]>(() => playlistItems?.map((item) => item!.id), [playlistItems]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -177,8 +167,8 @@ export default function PlaylistTable({
           const newIndex = items.indexOf(over.id);
           return arrayMove(data, oldIndex, newIndex);
         });
-        await updatePlaylistItem({
-          id: active.id,
+        await updatePlaylistItem.mutateAsync({
+          itemId: Number(active.id),
           rank: over?.data.current?.sortable.index + 1
         })
       } catch (error) {
@@ -210,7 +200,7 @@ export default function PlaylistTable({
   }, [activeId, rowData]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 mx-4">
       <DataTableToolbar table={table} playlist={playlist} />
       <div className="rounded-md">
         {(isAllowedToEdit && !sorting.length && !globalFilter && !columnFilters.length) ? (
@@ -245,7 +235,7 @@ const TableContainer = ({
   table,
   items,
 } : {
-  table: TableType<PlaylistItem>;
+  table: TableType<PlaylistItemMovie>;
   items: UniqueIdentifier[];
 }) => {
   const common = useTranslations('common');
@@ -292,9 +282,13 @@ const TableContainer = ({
 const DraggableTableRow = ({
   row,
 } : {
-  row: Row<PlaylistItem>;
+  row: Row<PlaylistItemMovie>;
 }) => {
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(row.original?.playlist_id);
+  const { session } = useAuth();
+  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
+	playlistId: row.original.playlist_id,
+	userId: session?.user.id
+  });
   const {
     attributes,
     listeners,
@@ -331,7 +325,7 @@ const DraggableTableRow = ({
   );
 };
 
-export const StaticTableRow = ({ row } : { row:  Row<PlaylistItem> | null | undefined}) => {
+export const StaticTableRow = ({ row } : { row:  Row<PlaylistItemMovie> | null | undefined}) => {
   return (
     <TableRow className='bg-background'>
       {row?.getVisibleCells().map((cell, i) => {

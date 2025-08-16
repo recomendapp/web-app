@@ -1,6 +1,5 @@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { upperFirst } from 'lodash';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { getTranslations } from 'next-intl/server';
 import { MediaMovieAggregateCredits } from '@/types/type.db';
 import { Link } from "@/lib/i18n/routing";

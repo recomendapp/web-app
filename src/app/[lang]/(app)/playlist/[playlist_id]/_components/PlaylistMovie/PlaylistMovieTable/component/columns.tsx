@@ -1,0 +1,97 @@
+'use client';
+import { ColumnDef } from '@tanstack/react-table';
+import { DataTableRowActions } from './data-table-row-actions';
+import { PlaylistItemMovie } from '@/types/type.db';
+import { useTranslations } from 'next-intl';
+import { Item } from './item';
+import { capitalize, upperFirst } from 'lodash';
+import { TableColumnHeader } from '@/components/tables/TableColumnHeader';
+import Senders from './senders';
+import { DateOnlyYearTooltip } from '@/components/utils/Date';
+import { Icons } from '@/config/icons';
+import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
+import { DataComment } from './comment';
+
+export const Columns = (): ColumnDef<PlaylistItemMovie>[] => {
+  const t = useTranslations();
+  return [
+    {
+      id: 'rank',
+      accessorFn: (row) => row?.rank,
+      header: ({ column }) => (
+        <TableColumnHeader column={column} title="#"/>
+      ),
+      cell: ({ row }) => (
+        <div className="text-muted-foreground text-center w-fit font-bold">
+          {Number(row.id) + 1}
+        </div>
+      ),
+      enableHiding: false,
+      enableResizing: false,
+      size: 4,
+      maxSize: 10,
+      minSize: 10,
+    
+    },
+    {
+      id: 'item',
+      accessorFn: (row) => row?.movie?.title,
+      meta: {
+        displayName: upperFirst(t('common.messages.film', { count: 1 })),
+      },
+      header: ({ column }) => (
+        <TableColumnHeader column={column} title={upperFirst(t('common.messages.film', { count: 1 }))} />
+      ),
+      cell: ({ row }) => <Item key={row.index} movie={row.original?.movie!} />,
+      enableHiding: false,
+    },
+    {
+      id: 'release_date',
+      accessorFn: (row) => row?.movie?.extra_data.release_date,
+      meta: {
+        displayName: upperFirst(t('common.messages.date')),
+      },
+      header: ({ column }) => (
+        <TableColumnHeader column={column} title={upperFirst(t('common.messages.date'))} />
+      ),
+      cell: ({ row }) => (
+        <DateOnlyYearTooltip date={row.original?.movie?.extra_data.release_date} className='text-muted-foreground'/>
+      ),
+    },
+    {
+      id: 'runtime',
+      accessorFn: (row) => row?.movie?.extra_data.runtime,
+      meta: {
+        displayName: upperFirst(t('common.messages.duration')),
+      },
+      header: ({ column }) => (
+        <TableColumnHeader column={column} Icon={Icons.clock} />
+      ),
+      cell: ({ row }) => (
+        <RuntimeTooltip runtime={row.original?.movie?.extra_data.runtime ?? 0} className='text-muted-foreground'/>
+      ),
+    },
+    {
+      accessorKey: 'comment',
+      meta: {
+        displayName: upperFirst(t('common.messages.comment', {count: 1})),
+      },
+      header: ({ column }) => (
+        <TableColumnHeader column={column} title={upperFirst(t('common.messages.comment', {count: 1}))} />
+      ),
+      cell: ({ row }) => <DataComment playlistItem={row.original} />,
+      enableSorting: false,
+    },
+    {
+      id: 'actions',
+      cell: ({ row, table, column }) => (
+        <DataTableRowActions
+          data={row.original}
+          table={table}
+          row={row}
+          column={column}
+        />
+      ),
+    },
+  ];
+};

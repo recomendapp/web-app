@@ -272,7 +272,7 @@ export function PlaylistForm({
               name="type"
               disabled={!!playlist}
               render={({ field }) => (
-                <TooltipBox tooltip={!!playlist ? upperFirst(t('common.messages.playlist_type_cannot_be_changed_once_created')) : undefined}>
+                <TooltipBox tooltip={!!playlist ? upperFirst(t('common.messages.cannot_be_changed')) : undefined}>
                   <FormItem className={field.disabled ? 'text-muted-foreground cursor-not-allowed' : ''}>
                     <FormLabel>{upperFirst(t('common.messages.universe'))}</FormLabel>
                     <FormControl className="grid grid-cols-2 gap-2">

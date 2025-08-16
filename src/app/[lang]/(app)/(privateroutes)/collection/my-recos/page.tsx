@@ -25,7 +25,6 @@ export default function MyRecos() {
     : recosTvSeries?.map(item => ({ src: item.tv_series?.backdrop_url, alt: item.tv_series?.title }))
   )?.filter(item => item.src !== null && item.src !== undefined) as ImageObject[];
 
-  console.log('data', recosTvSeries);
   return (
     <div className="h-full">
       <MyRecosHeader

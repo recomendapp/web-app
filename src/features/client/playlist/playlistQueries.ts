@@ -1,74 +1,152 @@
 import { useSupabaseClient } from "@/context/supabase-context";
 import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { playlistKeys } from "./playlistKeys";
-import { Playlist, PlaylistGuest, PlaylistItem, PlaylistSource } from "@/types/type.db";
+import { Playlist, PlaylistGuest, PlaylistItemMovie, PlaylistItemTvSeries, PlaylistSource } from "@/types/type.db";
 import { useAuth } from "@/context/auth-context";
 
-export const usePlaylistFullQuery = (playlistId: number) => {
-	const queryClient = useQueryClient();
+// export const usePlaylistFullQuery = (playlistId: number) => {
+// 	const queryClient = useQueryClient();
+// 	const supabase = useSupabaseClient();
+// 	const { user } = useAuth();
+// 	return useQuery({
+// 		queryKey: playlistKeys.detail(playlistId),
+// 		queryFn: async () => {
+// 			if (!playlistId) throw Error('Missing playlist id');
+// 			const { data, error } = await supabase
+// 				.from('playlists')
+// 				.select(`
+// 					*,
+// 					user(*),
+// 					items:playlist_items(*, media(*)),
+// 					guests:playlist_guests(
+// 						*,
+// 						user:user(*)
+// 					)
+// 				`)
+// 				.eq('id', playlistId)
+// 				.order('rank', { ascending: true, referencedTable: 'playlist_items' })
+// 				.returns<Playlist[]>()
+// 				.single();
+// 			if (error || !data) throw error;
+			
+// 			// Set the playlist items and guests in the queryClient
+// 			queryClient.setQueryData(playlistKeys.items(playlistId), data.items);
+// 			queryClient.setQueryData(playlistKeys.guests(playlistId), data.guests);
+// 			// queryClient.setQueryData(playlistKeys.allowedToEdit(playlistId), Boolean(
+// 			// 	user?.id === data.user_id ||
+// 			// 	(
+// 			// 		data.guests?.some(
+// 			// 			(guest) => guest?.user_id === user?.id && guest?.edit
+// 			// 		) &&
+// 			// 		data.user?.premium
+// 			// 	)
+// 			// ));
+// 			const { items, guests, ...playlistData } = data;
+// 			return playlistData;	
+// 			// return data;
+// 		},
+// 		enabled: !!playlistId,
+// 	});
+// }
+
+// export const usePlaylistItemsQuery = (playlistId?: number) => {
+// 	const supabase = useSupabaseClient();
+// 	return useQuery({
+// 		queryKey: playlistKeys.items(playlistId as number),
+// 		queryFn: async () => {
+// 			if (!playlistId) throw Error('Missing playlist id');
+// 			const { data, error } = await supabase
+// 				.from('playlist_items')
+// 				.select(`*, media(*)`)
+// 				.eq('playlist_id', playlistId)
+// 				.order('rank', { ascending: true })
+// 				.returns<PlaylistItem[]>()
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		enabled: !!playlistId,
+// 		structuralSharing: false,
+// 	});
+// }
+
+export const usePlaylistQuery = ({
+	playlistId,
+	initialData
+} : {
+	playlistId?: number;
+	initialData?: Playlist;
+}) => {
 	const supabase = useSupabaseClient();
-	const { user } = useAuth();
 	return useQuery({
-		queryKey: playlistKeys.detail(playlistId),
+		queryKey: playlistKeys.detail(playlistId!),
 		queryFn: async () => {
 			if (!playlistId) throw Error('Missing playlist id');
 			const { data, error } = await supabase
 				.from('playlists')
 				.select(`
 					*,
-					user(*),
-					items:playlist_items(*, media(*)),
-					guests:playlist_guests(
-						*,
-						user:user(*)
-					)
+					user(*)
 				`)
 				.eq('id', playlistId)
-				.order('rank', { ascending: true, referencedTable: 'playlist_items' })
-				.returns<Playlist[]>()
-				.single();
+				.maybeSingle()
+				.overrideTypes<Playlist, { merge: false }>();
 			if (error || !data) throw error;
-			
-			// Set the playlist items and guests in the queryClient
-			queryClient.setQueryData(playlistKeys.items(playlistId), data.items);
-			queryClient.setQueryData(playlistKeys.guests(playlistId), data.guests);
-			// queryClient.setQueryData(playlistKeys.allowedToEdit(playlistId), Boolean(
-			// 	user?.id === data.user_id ||
-			// 	(
-			// 		data.guests?.some(
-			// 			(guest) => guest?.user_id === user?.id && guest?.edit
-			// 		) &&
-			// 		data.user?.premium
-			// 	)
-			// ));
-			const { items, guests, ...playlistData } = data;
-			return playlistData;	
-			// return data;
+			return data;
 		},
+		initialData: initialData,
+		structuralSharing: false,
 		enabled: !!playlistId,
 	});
-}
-
-export const usePlaylistItemsQuery = (playlistId?: number) => {
+};
+// Items
+export const usePlaylistItemsMovieQuery = ({
+	playlistId,
+} : {
+	playlistId?: number;
+}) => {
 	const supabase = useSupabaseClient();
 	return useQuery({
 		queryKey: playlistKeys.items(playlistId as number),
 		queryFn: async () => {
 			if (!playlistId) throw Error('Missing playlist id');
 			const { data, error } = await supabase
-				.from('playlist_items')
-				.select(`*, media(*)`)
+				.from('playlist_items_movie')
+				.select(`*, movie:media_movie(*)`)
 				.eq('playlist_id', playlistId)
 				.order('rank', { ascending: true })
-				.returns<PlaylistItem[]>()
+				.overrideTypes<PlaylistItemMovie[]>();
 			if (error) throw error;
 			return data;
 		},
 		enabled: !!playlistId,
 		structuralSharing: false,
 	});
-}
+};
+export const usePlaylistItemsTvSeriesQuery = ({
+	playlistId,
+} : {
+	playlistId?: number;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: playlistKeys.items(playlistId as number),
+		queryFn: async () => {
+			if (!playlistId) throw Error('Missing playlist id');
+			const { data, error } = await supabase
+				.from('playlist_items_tv_series')
+				.select(`*, tv_series:media_tv_series(*)`)
+				.eq('playlist_id', playlistId)
+				.order('rank', { ascending: true })
+				.overrideTypes<PlaylistItemTvSeries[]>();
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!playlistId,
+		structuralSharing: false,
+	});
+};
 
+/* --------------------------------- GUESTS --------------------------------- */
 export const usePlaylistGuestsQuery = (playlistId?: number) => {
 	const supabase = useSupabaseClient();
 	return useQuery({
@@ -88,31 +166,42 @@ export const usePlaylistGuestsQuery = (playlistId?: number) => {
 		enabled: !!playlistId,
 		structuralSharing: false,
 	});
-}
+};
 
-export const usePlaylistIsAllowedToEditQuery = (playlistId?: number) => {
-	const { user } = useAuth();
-	const queryClient = useQueryClient();
+export const usePlaylistIsAllowedToEditQuery = ({
+	playlistId,
+	userId,
+} : {
+	playlistId: number;
+	userId?: string;
+}) => {
+	const supabase = useSupabaseClient();
 	return useQuery({
-		queryKey: playlistKeys.allowedToEdit(playlistId as number),
+		queryKey: playlistKeys.allowedToEdit({
+			playlistId,
+			userId: userId!,
+		}),
 		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
 			if (!playlistId) throw Error('Missing playlist id');
-			const playlist = queryClient.getQueryData<Playlist>(playlistKeys.detail(playlistId));
-			const playlistGuests = queryClient.getQueryData<PlaylistGuest[]>(playlistKeys.guests(playlistId));
-			if (!playlist) throw Error('No playlist data');
+			const { data, error } = await supabase
+				.from('playlists')
+				.select(`
+					user_id,
+					playlist_guests(user_id, edit)
+				`)
+				.eq('id', playlistId)
+				.eq('playlist_guests.user_id', userId)
+				.eq('playlist_guests.edit', true)
+				.maybeSingle();
+			if (error) throw error;
 			return Boolean(
-				user?.id === playlist.user_id ||
-				(
-					playlistGuests?.some(
-						(guest) => guest?.user_id === user?.id && guest?.edit
-					) &&
-					playlist.user?.premium
-				)
-			);
+				data?.user_id === userId || data?.playlist_guests.length
+			)
 		},
-		enabled: !!playlistId,
+		enabled: !!playlistId && !!userId,
 	});
-}
+};
 
 export const usePlaylistGuestsSearchInfiniteQuery = ({
 	playlistId,
@@ -163,7 +252,8 @@ export const usePlaylistGuestsSearchInfiniteQuery = ({
 		throwOnError: true,
 		enabled: !!playlistId,
 	});
-}
+};
+/* -------------------------------------------------------------------------- */
 
 /* -------------------------------- FEATURED -------------------------------- */
 export const usePlaylistFeaturedInfiniteQuery = ({
@@ -216,7 +306,7 @@ export const usePlaylistFeaturedInfiniteQuery = ({
 		},
 		throwOnError: true,
 	});
-}
+};
 /* -------------------------------------------------------------------------- */
 
 /* --------------------------------- ADD TO --------------------------------- */

@@ -5,46 +5,35 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useModal } from "@/context/modal-context";
-import { PlaylistItem } from "@/types/type.db";
-import { useMutation } from "@tanstack/react-query";
+import { PlaylistItemMovie } from "@/types/type.db";
 import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
-import { useSupabaseClient } from '@/context/supabase-context';
 import { usePlaylistIsAllowedToEditQuery } from "@/features/client/playlist/playlistQueries";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useAuth } from "@/context/auth-context";
+import { usePlaylistMovieUpdateMutation } from "@/features/client/playlist/playlistMutations";
 
-interface PlaylistCommentModalProps extends ModalType {
-	playlistItem: PlaylistItem;
+interface ModalPlaylistMovieCommentProps extends ModalType {
+	playlistItem: PlaylistItemMovie;
 }
 
-const PlaylistCommentModal = ({
+const ModalPlaylistMovieComment = ({
 	playlistItem,
 	...props
-} : PlaylistCommentModalProps) => {
+} : ModalPlaylistMovieCommentProps) => {
 	const t = useTranslations();
-	const supabase = useSupabaseClient();
-	const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(playlistItem?.playlist_id as number);
+	const { session } = useAuth();
 	const { closeModal } = useModal();
+	const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
+		playlistId: playlistItem.playlist_id,
+		userId: session?.user.id
+	});
 
-	const { mutateAsync: updatePlaylistItem } = useMutation({
-		mutationFn: async ({ comment } : { comment: string}) => {
-			if (!playlistItem?.id) throw Error('Missing id');
-			const { error } = await supabase
-			  .from('playlist_items')
-			  .update({
-				comment: comment,
-			  })
-			  .eq('id', playlistItem.id)
-			  .select(`*`)
-			if (error) throw error;
-			// return data;
-		},
-	})
+	// Mutations
+	const updatePlaylistItem = usePlaylistMovieUpdateMutation();
 
-	const [isLoading, setIsLoading] = useState<boolean>(false);
-  
+	// States
 	const [comment, setComment] = useState<string>(playlistItem?.comment ?? '');
-
 	useEffect(() => {
 		setComment(playlistItem?.comment ?? '');
 	}, [playlistItem?.comment]);
@@ -54,16 +43,18 @@ const PlaylistCommentModal = ({
 		closeModal(props.id);
 		return;
 	  }
-	  try {
-		setIsLoading(true);      
-		await updatePlaylistItem({ comment });
-		toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
-		closeModal(props.id);
-	  } catch (error) {
-		toast.error(upperFirst(t('common.messages.an_error_occurred')));
-	  } finally {
-		setIsLoading(false);
-	  }
+	  await updatePlaylistItem.mutateAsync({
+		itemId: playlistItem.id,
+		comment: comment,
+	  }, {
+		onSuccess: () => {
+			toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+			closeModal(props.id);
+		},
+		onError: () => {
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
+		}
+	  })
 	}
   
 	return (
@@ -79,7 +70,7 @@ const PlaylistCommentModal = ({
 					setComment(e.target.value.replace(/\s+/g, ' ').trimStart())
 				}
 				maxLength={180}
-				disabled={isLoading}
+				disabled={updatePlaylistItem.isPending}
 				className="col-span-3 resize-none h-48"
 				placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
 				readOnly={!isAllowedToEdit}
@@ -94,4 +85,4 @@ const PlaylistCommentModal = ({
 	);
 };
 
-export default PlaylistCommentModal;
+export default ModalPlaylistMovieComment;
