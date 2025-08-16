@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getMovie } from '@/features/server/media/mediaQueries';
-import Reviews from '@/components/Review/Reviews';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { truncate, upperFirst } from 'lodash';
 import { seoLocales } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
+import { MovieReviews } from './_components/MovieReviews';
 
 export async function generateMetadata(
   props: {
@@ -62,5 +62,5 @@ export default async function MovieReviewsPage(
   const { id: movieId } = getIdFromSlug(params.film_id);
   const movie = await getMovie(params.lang, movieId);
   if (!movie) notFound();
-  return <Reviews mediaId={movie.media_id!} />;
+  return <MovieReviews movie={movie} />;
 }

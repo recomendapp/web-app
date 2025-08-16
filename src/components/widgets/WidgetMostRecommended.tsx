@@ -22,12 +22,11 @@ import { Skeleton } from "../ui/skeleton";
 import { useAuth } from "@/context/auth-context";
 import { useTranslations } from "next-intl";
 import { useWidgetMostRecommendedQuery } from "@/features/client/widget/widgetQueries";
-import { ModalRecoSend } from "../Modals/actions/ModalRecoSend";
 import { BadgeMedia } from "../Badge/BadgeMedia";
-import { ContextMenuMedia } from "../ContextMenu/ContextMenuMedia";
-import { Media } from "@/types/type.db";
 import Image from "next/image";
 import { upperFirst } from "lodash";
+import { ModalUserRecosMovieSend } from "../Modals/recos/ModalUserRecosMovieSend";
+import { ModalUserRecosTvSeriesSend } from "../Modals/recos/ModalUserRecosTvSeriesSend";
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -65,11 +64,11 @@ export const WidgetMostRecommended = ({
 	onMouseLeave={() => isPlaying && autoplay.current.play()}
 	>
 		<CarouselContent>
-			{data.map(({media, recommendation_count}, index) => {
+			{data.map(({media_id, media, recommendation_count}, index) => {
 				if (!media) return null;
 				return (
 				<CarouselItem key={index}>
-					<ContextMenuMedia media={media as Media}>
+					<>
 						<Card className="relative bg-black/40 flex flex-col h-full justify-between gap-2">
 							{media?.backdrop_url && (
 								<Image
@@ -125,20 +124,30 @@ export const WidgetMostRecommended = ({
 								)}
 							</CardContent>
 							<CardFooter className="flex items-center gap-2">
-								<TooltipBox tooltip={session ? 'Envoyer à un(e) ami(e)' : undefined}>
+								{session && <TooltipBox tooltip={session ? 'Envoyer à un(e) ami(e)' : undefined}>
 									<Button
 									size={"icon"}
 									variant={"muted"}
 									className="bg-muted/60"
-									onClick={() => (session && media) && openModal(ModalRecoSend, { mediaId: media.media_id!, mediaTitle: media.title })}
-									>
+									onClick={() => {
+										if (media) {
+											switch (media.media_type) {
+												case 'movie':
+													openModal(ModalUserRecosMovieSend, { movieId: media_id!, movieTitle: media.title })
+													break;
+												case 'tv_series':
+													openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: media_id!, tvSeriesTitle: media.title })
+													break;
+											}
+										}
+									}}>
 										<SendIcon className="w-4 h-4 fill-primary" />
 									</Button>
-								</TooltipBox>
+								</TooltipBox>}
 								{recommendation_count} reco{Number(recommendation_count) > 1 ? 's' : ''}
 							</CardFooter>
 						</Card>
-					</ContextMenuMedia>
+					</>
 				</CarouselItem>
 				)
 			})}

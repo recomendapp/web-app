@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { User } from '@/types/type.db';
+import { User, UserRecosType } from '@/types/type.db';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '@/components/Modals/Modal';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Icons } from '@/config/icons';
@@ -23,6 +23,7 @@ const COMMENT_MAX_LENGTH = 180;
 
 interface ModalRecoSendProps extends ModalType {
 	mediaId: number;
+	mediaType: UserRecosType;
 	mediaTitle?: string | null;
 }
 

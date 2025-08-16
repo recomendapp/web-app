@@ -2,27 +2,25 @@ import * as React from "react"
 import { Button } from "@/components/ui/button";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import { getMediaDetails } from "@/utils/get-media-details";
 import { cn } from "@/lib/utils";
-import { Media, MediaPerson } from "@/types/type.db";
+import { MediaMovie, MediaPerson, MediaTvSeries } from "@/types/type.db";
 import { Link } from "@/lib/i18n/routing";
 
 interface ItemProps
 	extends React.ComponentProps<'div'> {
-		media: Media;
+		media: MediaMovie | MediaTvSeries;
 	}
 
 export const Item = React.forwardRef<
 	HTMLDivElement,
 	ItemProps
 >(({ media, className, ...props }, ref) => {
-	const mediaDetails = getMediaDetails(media);
 	return (
 		<div ref={ref} className={cn("flex gap-4 items-center", className)} {...props}>
 			<div
 				className={cn(
 				'shadow-md relative shrink-0 overflow-hidden',
-				mediaDetails.posterClassName,
+				'aspect-[2/3] rounded-md',
 				className
 				)}
 			>

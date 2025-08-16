@@ -5,16 +5,49 @@ import { Link } from "@/lib/i18n/routing";
 import MediaPoster from "@/components/Media/MediaPoster";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useFormatter, useTranslations } from "next-intl";
-import { UserActivity } from "@/types/type.db";
-import { getMediaDetails } from "@/utils/get-media-details";
-import { CardReview } from "@/components/Card/CardReview";
+import { UserActivity, UserActivityMovie, UserActivityTvSeries, UserReviewMovie, UserReviewTvSeries } from "@/types/type.db";
 import { cn } from "@/lib/utils";
 import { upperFirst } from "lodash";
 import { CardUser } from "@/components/Card/CardUser";
+import { CardReviewTvSeries } from "@/components/Card/CardReviewTvSeries";
+import { CardReviewMovie } from "@/components/Card/CardReviewMovie";
 
 const FeedItem = ({ activity }: { activity?: UserActivity }) => {
 	const format = useFormatter();
 	const common = useTranslations('common');
+
+	const renderReview = () => {
+		if (!activity?.review) return null;
+		switch (activity?.type){
+			case 'movie':
+				return (
+					<CardReviewMovie
+						className="bg-background"
+						review={activity.review as UserReviewMovie}
+						activity={{
+							...activity,
+							movie_id: activity.media_id!,
+						} as UserActivityMovie}
+						author={activity.user!}
+						url={`${activity.media.url}/review/${activity.review.id}`}
+					/>
+				);
+			case 'tv_series':
+				return (
+					<CardReviewTvSeries
+					className="bg-background"
+					review={activity.review as UserReviewTvSeries}
+					activity={{
+						...activity,
+						tv_series_id: activity.media_id!,
+					} as UserActivityTvSeries}
+					author={activity.user!}
+					url={`${activity.media.url}/review/${activity.review.id}`}
+					/>
+				);
+		}
+	};
+
 	if (!activity) {
 	  return (
 		<Skeleton className="flex bg-secondary h-full rounded-xl p-2 gap-2">
@@ -44,9 +77,9 @@ const FeedItem = ({ activity }: { activity?: UserActivity }) => {
 					{activity.user ? <CardUser user={activity.user} variant="icon" /> : null}
 					<FeedActivity activity={activity} className="text-sm @md/feed-item:text-base text-muted-foreground"/>
 				</div>
-				<div className='hidden @md/feed-item:block text-sm text-muted-foreground opacity-0 group-hover:opacity-100 duration-500'>
+				{activity.watched_date && <div className='hidden @md/feed-item:block text-sm text-muted-foreground opacity-0 group-hover:opacity-100 duration-500'>
 					{format.relativeTime(new Date(activity.watched_date), new Date())}
-				</div>
+				</div>}
 			</div>
 			<Link href={activity.media?.url ?? ''} className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
 				<span className='font-bold'>{activity.media?.title}</span>
@@ -55,14 +88,7 @@ const FeedItem = ({ activity }: { activity?: UserActivity }) => {
 					<DateOnlyYearTooltip date={activity.media?.date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
 				</sup>
 			</Link>
-			{activity.review ? (
-				activity.user ? <CardReview
-					className="bg-background"
-					review={activity.review}
-					activity={activity}
-					author={activity.user}
-				/> : null
-			) : (
+			{activity.review ? renderReview() : (
 				<>
 				{(activity.media?.extra_data && "overview" in activity.media.extra_data) ? (
 					<>

@@ -1,26 +1,27 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { User, UserActivity, UserReview } from "@/types/type.db";
+import { User, UserActivityTvSeries, UserReviewTvSeries,  } from "@/types/type.db";
 import { WithLink } from "../utils/WithLink";
 import { CardUser } from "./CardUser";
 import { useFormatter, useNow } from "next-intl";
 import { JSONContent } from "@tiptap/react";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
-import ActionReviewLike from "@/components/Review/actions/ActionReviewLike";
+import ButtonUserReviewTvSeriesLike from "../buttons/ButtonUserReviewTvSeriesLike";
 
-interface CardReviewProps
+interface CardReviewTvSeriesProps
 	extends React.ComponentProps<typeof Card> {
 		variant?: "default";
-		review: UserReview;
-		activity: UserActivity;
+		review: UserReviewTvSeries;
+		activity: UserActivityTvSeries;
 		author: User;
 		linked?: boolean;
+		url: string;
 	}
 
-const CardReviewDefault = React.forwardRef<
+const CardReviewTvSeriesDefault = React.forwardRef<
 	HTMLDivElement,
-	Omit<CardReviewProps, "variant">
+	Omit<CardReviewTvSeriesProps, "variant" | "url">
 >(({ className, review, activity, author, linked, children, ...props }, ref) => {
 	const now = useNow({ updateInterval: 1000 * 10 });
 	const format = useFormatter();
@@ -54,39 +55,33 @@ const CardReviewDefault = React.forwardRef<
 				) : null}
 				<Overview data={review?.body} />
 				<div className="flex items-center justify-end m-1">
-					<ActionReviewLike reviewId={review?.id} reviewLikesCount={review.likes_count} />
+					<ButtonUserReviewTvSeriesLike reviewId={review?.id} reviewLikesCount={review.likes_count} />
 				</div>
 			</div>
 		</Card>
 	);
 });
-CardReviewDefault.displayName = "CardReviewDefault";
+CardReviewTvSeriesDefault.displayName = "CardReviewTvSeriesDefault";
 
 
-const CardReview = React.forwardRef<
+const CardReviewTvSeries = React.forwardRef<
 	HTMLDivElement,
-	CardReviewProps
->(({ className, review, linked = true, variant = "default", ...props }, ref) => {
-	// const mediaUrl = (review?.media_id && review.media_type)
-	// 	? `${getMediaUrl({ id: review.media_id, type: review.media_type, slug: review.media?.slug })}/review/${review?.id}`
-	// 	: `/review/${review?.id}`;
-	const mediaUrl = `/review/${review?.id}`;
+	CardReviewTvSeriesProps
+>(({ className, review, linked = true, variant = "default", url, ...props }, ref) => {
 	return (
-	// <ContextMenuReview media={media}>
-		<WithLink href={linked ? mediaUrl : undefined} withOnClick>
-			{variant === "default" ? (
-				<CardReviewDefault ref={ref} className={className} review={review} linked={linked} {...props} />
-			) : null}
-		</WithLink>
-	// </ContextMenuReview>
+	<WithLink href={linked ? url : undefined} withOnClick>
+		{variant === "default" ? (
+			<CardReviewTvSeriesDefault ref={ref} className={className} review={review} linked={linked} {...props} />
+		) : null}
+	</WithLink>
 	);
 });
-CardReview.displayName = "CardReview";
+CardReviewTvSeries.displayName = "CardReviewTvSeries";
 
 export {
-	type CardReviewProps,
-	CardReview,
-	CardReviewDefault,
+	type CardReviewTvSeriesProps,
+	CardReviewTvSeries,
+	CardReviewTvSeriesDefault,
 }
 
 export function Overview({ data }: { data: JSONContent }) {

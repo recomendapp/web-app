@@ -9,7 +9,7 @@ import { Icons } from "@/config/icons";
 import { usePathname } from '@/lib/i18n/routing';
 import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
-import { useUserPlaylistSavedDeleteMutation, useUserPlaylistSavedInsertMutation, useUserWatchlistDeleteMutation, useUserWatchlistInsertMutation } from "@/features/client/user/userMutations";
+import { useUserPlaylistSavedDeleteMutation, useUserPlaylistSavedInsertMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";

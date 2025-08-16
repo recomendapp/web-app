@@ -1,10 +1,10 @@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { upperFirst } from 'lodash';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { getTranslations } from 'next-intl/server';
 import { Link } from "@/lib/i18n/routing";
 import { Button } from '@/components/ui/button';
 import { MediaTvSeriesAggregateCredits } from '@/types/type.db';
+import { CardTvSeries } from '@/components/Card/CardTvSeries';
 
 interface WidgetPersonTvSeriesProps extends React.HTMLAttributes<HTMLDivElement> {
   personSlug: string;
@@ -29,10 +29,10 @@ export async function WidgetPersonTvSeries({
       <ScrollArea className="rounded-md">
         <div className="flex space-x-4 pb-4">
           {credits?.map((credit, i) => (
-            <CardMedia
+            <CardTvSeries
             key={i}
             variant='poster'
-            media={credit.media!}
+            tvSeries={credit.tv_series}
             className='w-24 lg:w-32'
             />
           ))}

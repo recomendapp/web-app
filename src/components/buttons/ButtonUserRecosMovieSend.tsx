@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { MediaType } from "@/types/type.db";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { Link } from "@/lib/i18n/routing";
@@ -8,21 +7,21 @@ import { Icons } from "@/config/icons";
 import { usePathname } from '@/lib/i18n/routing';
 import { cn } from "@/lib/utils";
 import { useModal } from "@/context/modal-context";
-import { ModalRecoSend } from "../../Modals/actions/ModalRecoSend";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { ModalUserRecosMovieSend } from "../Modals/recos/ModalUserRecosMovieSend";
 
-interface MediaActionUserRecosProps
+interface ButtonUserRecosMovieSendProps
 	extends React.ComponentProps<typeof Button> {
-		mediaId: number;
-		mediaTitle?: string | null;
+		movieId: number;
+		movieTitle?: string | null;
 		stopPropagation?: boolean;
 	}
 
-const MediaActionUserRecos = React.forwardRef<
+const ButtonUserRecosMovieSend = React.forwardRef<
 	HTMLDivElement,
-	MediaActionUserRecosProps
->(({ mediaId, stopPropagation = true, mediaTitle, className, ...props }, ref) => {
+	ButtonUserRecosMovieSendProps
+>(({ movieId, stopPropagation = true, movieTitle, className, ...props }, ref) => {
 	const { user } = useAuth();
 	const t = useTranslations('common');
 	const pathname = usePathname();
@@ -55,7 +54,10 @@ const MediaActionUserRecos = React.forwardRef<
 			className={cn("rounded-full", className)}
 			onClick={(e) => {
 				stopPropagation && e.stopPropagation();
-				openModal(ModalRecoSend, { mediaId, mediaTitle })
+				openModal(ModalUserRecosMovieSend, {
+					movieId,
+					movieTitle,
+				})
 			}}
 			{...props}
 		  >
@@ -64,6 +66,6 @@ const MediaActionUserRecos = React.forwardRef<
 		</TooltipBox>
 	  );
 });
-MediaActionUserRecos.displayName = 'MediaActionUserRecos';
+ButtonUserRecosMovieSend.displayName = 'ButtonUserRecosMovieSend';
 
-export default MediaActionUserRecos;
+export default ButtonUserRecosMovieSend;

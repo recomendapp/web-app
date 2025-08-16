@@ -6,8 +6,10 @@ import { useUserWatchlistQuery } from '@/features/client/user/userQueries';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { upperFirst } from "lodash";
+import { CardMovie } from "../Card/CardMovie";
+import { MediaMovie, MediaTvSeries } from "@/types/type.db";
+import { CardTvSeries } from "../Card/CardTvSeries";
 
 export const WidgetUserWatchlist = ({
   className,
@@ -18,7 +20,7 @@ export const WidgetUserWatchlist = ({
   const { data: watchlist } = useUserWatchlistQuery({
     userId: user?.id,
     filters: {
-      order: 'random',
+      sortBy: 'random',
       limit: 6,
     }
   })
@@ -36,7 +38,9 @@ export const WidgetUserWatchlist = ({
 		</Button>
     <div className='grid grid-cols-2 @2xl/widget-user-watchlist:grid-cols-3 gap-4'>
       {watchlist.map((item, index) => (
-      <CardMedia key={index} media={item?.media!} />
+        item.type === 'movie'
+          ? <CardMovie key={index} movie={item.media as MediaMovie} />
+          : <CardTvSeries key={index} tvSeries={item.media as MediaTvSeries} />
       ))}
     </div>
   </div>

@@ -9,11 +9,11 @@ import { notFound, redirect } from 'next/navigation';
 import { Icons } from '@/config/icons';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { Pagination } from './_components/Pagination';
 import { ActiveFilters } from './_components/ActiveFilters';
 import { Filters } from './_components/Filters';
 import { getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage, getValidatePerPage } from './_components/constants';
+import { CardTvSeries } from '@/components/Card/CardTvSeries';
 
 export async function generateMetadata(
   props: {
@@ -148,10 +148,10 @@ export default async function TvSeriesPage(
 			`}
 			>
 				{series.map((credits, index) => (
-					<CardMedia
+					<CardTvSeries
 					key={index}
 					variant={display === 'grid' ? 'poster' : 'row'}
-					media={credits.media!}
+					tvSeries={credits.tv_series!}
 					className='w-full'
 					/>
 				))}

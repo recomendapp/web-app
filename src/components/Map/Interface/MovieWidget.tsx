@@ -10,13 +10,13 @@ import { RuntimeTooltip } from "@/components/utils/RuntimeTooltip";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useMediaMovieDetailsQuery } from "@/features/client/media/mediaQueries";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
-import MediaActionUserActivityRating from "@/components/Media/actions/MediaActionUserActivityRating";
-import MediaActionUserActivityLike from "@/components/Media/actions/MediaActionUserActivityLike";
-import MediaActionUserActivityWatch from "@/components/Media/actions/MediaActionUserActivityWatch";
-import MediaActionUserWatchlist from "@/components/Media/actions/MediaActionUserWatchlist";
-import MediaActionUserActivityWatchedDate from "@/components/Media/actions/MediaActionUserActivityWatchedDate";
 import MediaActionPlaylistAdd from "@/components/Media/actions/MediaActionPlaylistAdd";
-import MediaActionUserRecos from "@/components/Media/actions/MediaActionUserRecos";
+import ButtonUserWatchlistMovie from "@/components/buttons/ButtonUserWatchlistMovie";
+import ButtonUserActivityMovieLike from "@/components/buttons/ButtonUserActivityMovieLike";
+import ButtonUserActivityMovieRating from "@/components/buttons/ButtonUserActivityMovieRating";
+import ButtonUserActivityMovieWatch from "@/components/buttons/ButtonUserActivityMovieWatch";
+import ButtonUserActivityMovieWatchedDate from "@/components/buttons/ButtonUserActivityMovieWatchedDate";
+import ButtonUserRecosMovieSend from "@/components/buttons/ButtonUserRecosMovieSend";
 
 export const MovieWidget = () => {
 	const {
@@ -157,15 +157,15 @@ export const MovieWidget = () => {
 					</div>
 					<div className="flex justify-between gap-2 px-4 pb-4">
 						<div className="flex gap-2 overflow-x-auto items-center">
-						<MediaActionUserActivityRating mediaId={movie.media_id!} />
-						<MediaActionUserActivityLike mediaId={movie.media_id!} />
-						<MediaActionUserActivityWatch mediaId={movie.media_id!} />
-						<MediaActionUserWatchlist mediaId={movie.media_id!} />
-						<MediaActionUserActivityWatchedDate mediaId={movie.media_id!} />
+						<ButtonUserActivityMovieRating movieId={movie.id} />
+						<ButtonUserActivityMovieLike movieId={movie.id} />
+						<ButtonUserActivityMovieWatch movieId={movie.id} />
+						<ButtonUserWatchlistMovie movieId={movie.id} />
+						<ButtonUserActivityMovieWatchedDate movieId={movie.id} />
 						</div>
 						<div className="flex gap-2 items-center">
 						<MediaActionPlaylistAdd mediaId={movie.media_id!} mediaTitle={movie.title} />
-						<MediaActionUserRecos mediaId={movie.media_id!} mediaTitle={movie.title} />
+						<ButtonUserRecosMovieSend movieId={movie.media_id!} movieTitle={movie.title} />
 						</div>
 					</div>
 				</div>

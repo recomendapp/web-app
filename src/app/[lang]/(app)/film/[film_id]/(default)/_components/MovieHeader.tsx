@@ -29,22 +29,22 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { Media, MediaMovie } from '@/types/type.db';
+import { MediaMovie } from '@/types/type.db';
 import { useModal } from '@/context/modal-context';
 import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import MediaActionUserActivityRating from '@/components/Media/actions/MediaActionUserActivityRating';
-import MediaActionUserActivityLike from '@/components/Media/actions/MediaActionUserActivityLike';
-import MediaActionUserActivityWatch from '@/components/Media/actions/MediaActionUserActivityWatch';
-import MediaActionUserWatchlist from '@/components/Media/actions/MediaActionUserWatchlist';
-import MediaActionUserActivityWatchedDate from '@/components/Media/actions/MediaActionUserActivityWatchedDate';
-import MediaActionUserRecos from '@/components/Media/actions/MediaActionUserRecos';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlaylistAdd';
 import { ModalMediaFollowersRating } from '@/components/Modals/ModalMediaFollowersRating';
-import { ContextMenuMedia } from '@/components/ContextMenu/ContextMenuMedia';
 import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 import { Database } from '@/types';
+import ButtonUserWatchlistMovie from '@/components/buttons/ButtonUserWatchlistMovie';
+import ButtonUserActivityMovieLike from '@/components/buttons/ButtonUserActivityMovieLike';
+import ButtonUserActivityMovieRating from '@/components/buttons/ButtonUserActivityMovieRating';
+import ButtonUserActivityMovieWatch from '@/components/buttons/ButtonUserActivityMovieWatch';
+import ButtonUserActivityMovieWatchedDate from '@/components/buttons/ButtonUserActivityMovieWatchedDate';
+import { ContextMenuMovie } from '@/components/ContextMenu/ContextMenuMovie';
+import ButtonUserRecosMovieSend from '@/components/buttons/ButtonUserRecosMovieSend';
 
 export default function MovieHeader({
   movie,
@@ -58,7 +58,7 @@ export default function MovieHeader({
   if (!movie) return null;
   return (
     <div>
-      <ContextMenuMedia media={movie as Media}>
+      <ContextMenuMovie movie={movie}>
         <HeaderBox background={movie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${movie.backdrop_path}`, alt: movie.title ?? '', unoptimized: true } : undefined}>
           <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* MOVIE POSTER */}
@@ -132,18 +132,18 @@ export default function MovieHeader({
             </div>
           </div>
         </HeaderBox>
-      </ContextMenuMedia>
+      </ContextMenuMovie>
       <div className="flex justify-between gap-2 px-4 pb-4">
         <div className="flex gap-2 overflow-x-auto items-center">
-          <MediaActionUserActivityRating mediaId={movie.media_id!} />
-          <MediaActionUserActivityLike mediaId={movie.media_id!}  />
-          <MediaActionUserActivityWatch mediaId={movie.media_id!} />
-          <MediaActionUserWatchlist mediaId={movie.media_id!} />
-          <MediaActionUserActivityWatchedDate mediaId={movie.media_id!} />
+          <ButtonUserActivityMovieRating movieId={movie.id} />
+          <ButtonUserActivityMovieLike movieId={movie.id} />
+          <ButtonUserActivityMovieWatch movieId={movie.id} />
+          <ButtonUserWatchlistMovie movieId={movie.id} />
+          <ButtonUserActivityMovieWatchedDate movieId={movie.id} />
         </div>
         <div className="flex gap-2 items-center">
           <MediaActionPlaylistAdd mediaId={movie.media_id!} mediaTitle={movie.title} />
-          <MediaActionUserRecos mediaId={movie.media_id!} mediaTitle={movie.title} />
+          <ButtonUserRecosMovieSend movieId={movie.id} movieTitle={movie.title} />
         </div>
       </div>
     </div>

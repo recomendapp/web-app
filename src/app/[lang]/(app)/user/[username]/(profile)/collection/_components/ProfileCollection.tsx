@@ -22,6 +22,9 @@ import { upperFirst } from 'lodash';
 import { Badge } from '@/components/ui/badge';
 import { useSearchParams } from 'next/navigation';
 import { z } from "zod";
+import { CardMovie } from '@/components/Card/CardMovie';
+import { MediaMovie, MediaTvSeries, UserActivityMovie, UserActivityTvSeries } from '@/types/type.db';
+import { CardTvSeries } from '@/components/Card/CardTvSeries';
 
 const DISPLAY = ["grid", "row"] as const;
 const SORT_BY = ["watched_date", "rating"] as const;
@@ -127,14 +130,39 @@ export default function ProfileCollection({
         >
           {activities.pages.map((page, i) => (
             page?.map((activity, index) => (
-              <CardMedia
-              key={activity?.id}
-              ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
-              variant={display === 'grid' ? 'poster' : 'row'}
-              media={activity?.media!}
-              profileActivity={activity}
-              className='w-full'
-              />
+              activity.type === 'movie' ? (
+                <CardMovie
+                ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+                key={index}
+                variant={display === 'grid' ? 'poster' : 'row'}
+                movie={activity.media as MediaMovie}
+                profileActivity={{
+                  ...activity,
+                  movie_id: activity.media_id!
+                } as UserActivityMovie}
+                className='w-full'
+                />
+              ) : (
+                <CardTvSeries
+                ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+                key={index}
+                variant={display === 'grid' ? 'poster' : 'row'}
+                tvSeries={activity.media as MediaTvSeries}
+                profileActivity={{
+                  ...activity,
+                  tv_series_id: activity.media_id!
+                } as UserActivityTvSeries}
+                className='w-full'
+                />
+              )
+              // <CardMedia
+              // key={activity?.id}
+              // ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+              // variant={display === 'grid' ? 'poster' : 'row'}
+              // media={activity?.media!}
+              // profileActivity={activity}
+              // className='w-full'
+              // />
             ))
           ))}
           {isFetchingNextPage && (

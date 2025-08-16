@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useModal } from "@/context/modal-context";
 import { UserWatchlist } from "@/types/type.db";
 import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
-import { useUserWatchlistUpdateMutation } from "@/features/client/user/userMutations";
+import { useUserWatchlistMovieUpdateMutation, useUserWatchlistTvSeriesUpdateMutation } from "@/features/client/user/userMutations";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 
@@ -21,34 +21,38 @@ const ModalWatchlistComment = ({
 } : ModalWatchlistCommentProps) => {
 	const { closeModal } = useModal();
 	const common = useTranslations('common');
-	const updateWatchlist = useUserWatchlistUpdateMutation();
 	const [comment, setComment] = useState<string>(watchlistItem?.comment ?? '');
+	const updateWatchlistMovie = useUserWatchlistMovieUpdateMutation();
+	const updateWatchlistTvSeries = useUserWatchlistTvSeriesUpdateMutation();
+	const updateMutation = watchlistItem.type === 'movie'
+			? updateWatchlistMovie
+			: updateWatchlistTvSeries;
 
 	useEffect(() => {
 		setComment(watchlistItem?.comment ?? '');
 	}, [watchlistItem?.comment]);
 
 	async function onSubmit() {  
-	  if (comment == watchlistItem?.comment) {
-		closeModal(props.id);
-		return;
-	  }
-	  if (!watchlistItem?.id) {
-		toast.error(upperFirst(common('messages.an_error_occurred')));
-		return;
-	  }
-	  await updateWatchlist.mutateAsync({
-		watchlistId: watchlistItem?.id,
-		comment: comment,
-	  }, {
-		onSuccess: () => {
-			toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
+		if (comment == watchlistItem?.comment) {
 			closeModal(props.id);
-		},
-		onError: () => {
-		  toast.error(upperFirst(common('messages.an_error_occurred')));
+			return;
 		}
-	  });
+		if (!watchlistItem?.id) {
+			toast.error(upperFirst(common('messages.an_error_occurred')));
+			return;
+		}
+		await updateMutation.mutateAsync({
+			watchlistId: watchlistItem?.id,
+			comment: comment,
+		}, {
+			onSuccess: () => {
+				toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
+				closeModal(props.id);
+			},
+			onError: () => {
+				toast.error(upperFirst(common('messages.an_error_occurred')));
+			}
+		});
 	}
   
 	return (
@@ -64,7 +68,7 @@ const ModalWatchlistComment = ({
 					setComment(e.target.value.replace(/\s+/g, ' ').trimStart())
 				}
 				maxLength={180}
-				disabled={updateWatchlist.isPending}
+				disabled={updateMutation.isPending}
 				className="col-span-3 resize-none h-48"
 				placeholder={upperFirst(common('messages.add_comment', { count: 1 }))}
 				/>

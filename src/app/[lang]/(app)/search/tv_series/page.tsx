@@ -1,7 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { getSearchTvSeries } from '@/features/server/search/searchQueries';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { z } from "zod";
 import {
 	Pagination,
@@ -16,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { generatePaginationNumbers } from '@/utils/generate-pagination-numbers';
 import { redirect } from '@/lib/i18n/routing';
 import { Metadata } from 'next';
+import { CardTvSeries } from '@/components/Card/CardTvSeries';
 
 export async function generateMetadata(
   props: {
@@ -81,10 +81,10 @@ export default async function SearchTvSeries(
     <div className='flex flex-col gap-4'>
       <PaginationComponent searchParams={searchParams} total={total_results} page={page} />
       {results.map((serie, i) => (
-        <CardMedia
+        <CardTvSeries
         key={i}
         variant='row'
-        media={serie}
+        tvSeries={serie}
         className='border-none bg-transparent'
         posterClassName='w-[50px]'
         />

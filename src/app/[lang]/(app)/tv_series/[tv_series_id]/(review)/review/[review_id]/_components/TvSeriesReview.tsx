@@ -1,24 +1,44 @@
 'use client';
-import { MediaPerson, UserReview } from "@/types/type.db";
+import { JSONContent, MediaPerson, UserReviewMovie, UserReviewTvSeries } from "@/types/type.db";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link } from "@/lib/i18n/routing";
 import { Card } from "@/components/ui/card";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import ReviewForm from "@/components/Review/ReviewForm";
-import { useUserReviewQuery } from "@/features/client/user/userQueries";
+import { useUserReviewTvSeriesQuery } from "@/features/client/user/userQueries";
+import ButtonUserActivityMovieRating from "@/components/buttons/ButtonUserActivityMovieRating";
+import { useUserReviewTvSeriesUpsertMutation } from "@/features/client/user/userMutations";
+import { useAuth } from "@/context/auth-context";
+import ButtonUserReviewTvSeriesLike from "@/components/buttons/ButtonUserReviewTvSeriesLike";
 
-export default function Review({
+export const TvSeriesReview = ({
 	reviewServer,
 } : {
-	reviewServer: UserReview;
-}) {
+	reviewServer: UserReviewTvSeries;
+}) => {
+	const { session } = useAuth();
 	const {
 		data: review
-	} = useUserReviewQuery({
+	} = useUserReviewTvSeriesQuery({
 		reviewId: reviewServer.id,
 		initialData: reviewServer,
-	})
+	});
+	const upsertReview = useUserReviewTvSeriesUpsertMutation({
+		userId: session?.user?.id,
+		tvSeriesId: review?.activity?.tv_series_id!,
+	});
+
+	const handleSubmit = async (data: { title?: string; body: JSONContent }) => {
+		await upsertReview.mutateAsync({
+			activityId: review?.id,
+			...data
+		}, {
+			onError: (error) => {
+				throw error;
+			}
+		});
+	};
 
 	if (!review) return null;
 	
@@ -26,7 +46,7 @@ export default function Review({
 	<div className="@container/review">
 		<div className="flex flex-col @3xl/review:flex-row gap-4 p-2">
 			{/* MEDIA */}
-			<Link href={review?.activity?.media?.url ?? ''} className="shrink-0">
+			<Link href={review?.activity?.tv_series?.url ?? ''} className="shrink-0">
 				<Card
 				className={`
 					flex items-center rounded-xl bg-muted hover:bg-muted-hover p-1 h-20
@@ -37,11 +57,11 @@ export default function Review({
 					className={cn('relative h-full shrink-0 rounded-md overflow-hidden @3xl/review:w-56 aspect-[2/3]')}
 					>
 						<ImageWithFallback
-						src={review?.activity?.media?.avatar_url ?? ''}
-						alt={review?.activity?.media?.title ?? ''}
+						src={review?.activity?.tv_series?.avatar_url ?? ''}
+						alt={review?.activity?.tv_series?.title ?? ''}
 						fill
 						className="object-cover"
-						type={review?.activity?.media?.media_type}
+						type={review?.activity?.tv_series?.media_type}
 						sizes={`
 						(max-width: 640px) 96px,
 						(max-width: 1024px) 120px,
@@ -50,17 +70,18 @@ export default function Review({
 						/>
 					</div>
 					<div className='px-2 py-1 space-y-1'>
-						<h3 className='text-xl font-semibold line-clamp-2 break-words'>{review?.activity?.media?.title}</h3>
-						{review?.activity?.media?.main_credit ? <Credits credits={review?.activity?.media.main_credit ?? []} /> : null}
+						<h3 className='text-xl font-semibold line-clamp-2 break-words'>{review?.activity?.tv_series?.title}</h3>
+						{review?.activity?.tv_series?.main_credit ? <Credits credits={review?.activity?.tv_series.main_credit ?? []} /> : null}
 					</div>
 				</Card>
 			</Link>
 			<ReviewForm
-			mediaId={review?.activity?.media_id!}
-			media={review?.activity?.media!}
+			mediaAction={<ButtonUserActivityMovieRating movieId={review?.activity?.tv_series_id!} />}
+			reviewActions={<ButtonUserReviewTvSeriesLike reviewId={review?.id} reviewLikesCount={review.likes_count} />}
 			review={review}
-			activity={review.activity} 
+			rating={review?.activity?.rating || undefined}
 			author={review.activity?.user}
+			onUpdate={handleSubmit}
 			/>
 		</div>
 	</div>
@@ -95,5 +116,5 @@ const Credits = ({
 		))}
 	  </p>
 	)
-  }
+}
   

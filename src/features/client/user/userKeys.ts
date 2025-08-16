@@ -1,4 +1,4 @@
-import { MediaType, PlaylistType } from "@/types/type.db"
+import { UserActivityType, UserRecosType, UserReviewType, UserWatchlistType } from "@/types/type.db"
 
 export const userKeys = {
 	all: ['user'] as const,
@@ -65,21 +65,45 @@ export const userKeys = {
 
 
 	/* -------------------------------- ACTIVITY -------------------------------- */
+	// activities: ({
+	// 	userId,
+	// 	filters,
+	// } : {
+	// 	userId: string;
+	// 	filters?: any;
+	// }) => filters ? [...userKeys.detail(userId), 'activities', filters] as const : [...userKeys.detail(userId), 'activities'] as const,
 	activities: ({
 		userId,
+		type,
 		filters,
 	} : {
 		userId: string;
+		type?: UserActivityType;
 		filters?: any;
-	}) => filters ? [...userKeys.detail(userId), 'activities', filters] as const : [...userKeys.detail(userId), 'activities'] as const,
+	}) => {
+		const sub = [...(type ? [type] : []), ...(filters ? [filters] : [])]
+		return [...userKeys.detail(userId), 'activities', ...sub] as const
+	},
 
 	activity: ({
+		id,
+		type,
 		userId,
-		mediaId,
 	} : {
+		id: number;
+		type: UserActivityType;
 		userId: string;
-		mediaId: number;
-	}) => [...userKeys.detail(userId), 'activity', mediaId] as const,
+	}) => {
+		return [...userKeys.activities({ userId, type }), id] as const
+	},
+
+	// activity: ({
+	// 	userId,
+	// 	mediaId,
+	// } : {
+	// 	userId: string;
+	// 	mediaId: number;
+	// }) => [...userKeys.detail(userId), 'activity', mediaId] as const,
 
 	followersRating: ({
 		userId,
@@ -100,18 +124,22 @@ export const userKeys = {
 	}) => filters ? [...userKeys.detail(userId), 'reviews', filters] as const : [...userKeys.detail(userId), 'reviews'] as const,
 
 	review: ({
-		reviewId,
+		id,
+		type,
 	} : {
-		reviewId: number;
-	}) => [...userKeys.all, 'review', reviewId] as const,
+		id: number;
+		type: UserReviewType;
+	}) => [...userKeys.all, 'review', type, id] as const,
 
 	reviewLike: ({
 		reviewId,
+		type,
 		userId,
 	} : {
 		reviewId: number;
+		type: UserReviewType;
 		userId: string;
-	}) => [...userKeys.detail(userId), 'review-like', reviewId] as const,
+	}) => [...userKeys.detail(userId), 'review-like', type, reviewId] as const,
 	/* -------------------------------------------------------------------------- */
 
 	/* ---------------------------------- RECOS --------------------------------- */
@@ -124,38 +152,56 @@ export const userKeys = {
 	}) => filters ? [...userKeys.detail(userId), 'recos', filters] as const : [...userKeys.detail(userId), 'recos'] as const,
 
 	recosSend: ({
-		mediaId,
+		id,
+		type,
 	} : {
-		mediaId: number;
-	}) => [...userKeys.all, 'recos-send', mediaId] as const,
+		id: number;
+		type: UserRecosType;
+	}) => [...userKeys.all, 'recos-send', type, id] as const,
 	/* -------------------------------------------------------------------------- */
 
 	/* -------------------------------- WATCHLIST ------------------------------- */
 	watchlist: ({
 		userId,
+		type,
 		filters,
 	} : {
 		userId: string;
+		type?: UserWatchlistType;
 		filters?: any;
-	}) => filters ? [...userKeys.detail(userId), 'watchlist', filters] as const : [...userKeys.detail(userId), 'watchlist'] as const,
+	}) => {
+		const sub = [...(type ? [type] : []), ...(filters ? [filters] : [])]
+		return [...userKeys.detail(userId), 'watchlist', ...sub] as const
+	},
 
 	watchlistItem: ({
+		id,
+		type,
 		userId,
-		mediaId,
 	} : {
+		id: number;
+		type: UserWatchlistType;
 		userId: string;
-		mediaId: number;
-	}) => [...userKeys.detail(userId), 'watchlist-item', mediaId] as const,
+	}) => {
+		const sub = [type, id]
+		return [...userKeys.detail(userId), 'watchlist-item', ...sub] as const
+	},
+
 	/* -------------------------------------------------------------------------- */
 
 	/* ---------------------------------- LIKES --------------------------------- */
 	likes: ({
 		userId,
+		type,
 		filters,
 	} : {
 		userId: string;
+		type?: UserActivityType;
 		filters?: any;
-	}) => filters ? [...userKeys.detail(userId), 'likes', filters] as const : [...userKeys.detail(userId), 'likes'] as const,
+	}) => {
+		const sub = [...(type ? [type] : []), ...(filters ? [filters] : [])]
+		return [...userKeys.detail(userId), 'heart-pick', ...sub] as const
+	},
 	/* -------------------------------------------------------------------------- */
 
 	/* ---------------------------------- FEED ---------------------------------- */

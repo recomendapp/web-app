@@ -2,7 +2,7 @@ import { mediaKeys } from "@/features/server/media/mediaKeys";
 import { createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@/lib/supabase/server-no-cookie";
 import { cache } from "@/lib/utils/cache";
-import { Media, MediaMovie, MediaTvSeries, MediaTvSeriesSeason } from "@/types/type.db";
+import { MediaMovie, MediaTvSeries, MediaTvSeriesSeason } from "@/types/type.db";
 
 export const MEDIA_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 
@@ -23,24 +23,6 @@ export const getMediaFollowersAverageRating = async ({
 	return data;
 };
 
-/* -------------------------------------------------------------------------- */
-/*                                    MEDIA                                   */
-/* -------------------------------------------------------------------------- */
-export const getMedia = cache(
-	async (locale: string, id: number) => {
-		const supabase = await createClient(locale);
-		return await supabase
-			.from('media')
-			.select('*')
-			.match({
-				media_id: id,
-			})
-			.returns<Media[]>()
-			.maybeSingle();
-	},
-	{ revalidate: MEDIA_REVALIDATE_TIME },
-	mediaKeys.detail()
-);
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
@@ -170,16 +152,16 @@ export const getPerson = cache(
 			.from('media_person')
 			.select(`
 				*,
-				movies:media_movie_aggregate_credits(*, media:media_movie!inner(*)),
-				tv_series:media_tv_series_aggregate_credits(*, media:media_tv_series!inner(*)),
+				movies:media_movie_aggregate_credits(*, movie:media_movie!inner(*)),
+				tv_series:media_tv_series_aggregate_credits(*, tv_series:media_tv_series!inner(*)),
 				jobs:person_jobs(*)
 			`)
 			.match({
 				'id': id,
 			})
-			.filter('movies.media.date', 'not.is', null)
+			.filter('movies.movie.date', 'not.is', null)
 			.filter('tv_series.last_appearance_date', 'not.is', null)
-			.order('media(date)', { referencedTable: 'movies', ascending: false })
+			.order('movie(date)', { referencedTable: 'movies', ascending: false })
 			.order('last_appearance_date', { referencedTable: 'tv_series', ascending: false })
 			.limit(10, { foreignTable: 'movies' })
 			.limit(10, { foreignTable: 'tv_series' })
@@ -246,7 +228,7 @@ export const getPersonFilms = cache(
 				.from('tmdb_movie_credits')
 				.select(`
 					*,
-					media:media_movie!inner(*)
+					movie:media_movie!inner(*)
 				`, {
 					count: 'exact',
 				})
@@ -257,7 +239,7 @@ export const getPersonFilms = cache(
 				.from('media_movie_aggregate_credits')
 				.select(`
 					*,
-					media:media_movie!inner(*)
+					movie:media_movie!inner(*)
 				`, {
 					count: 'exact',
 				})
@@ -268,15 +250,15 @@ export const getPersonFilms = cache(
 			if (filters.sortBy && filters.sortOrder) {
 				switch (filters.sortBy) {
 					case 'release_date':
-						request = request.order(`media(date)`, { ascending: filters.sortOrder === 'asc' });
+						request = request.order(`movie(date)`, { ascending: filters.sortOrder === 'asc' });
 						break;
 					case 'vote_average':
 						if (filters.sortOrder === 'asc') {
-							request = request.order(`media(tmdb_vote_average)`, { ascending: true, nullsFirst: true });
-							request = request.order(`media(vote_average)`, { ascending: true, nullsFirst: true });
+							request = request.order(`movie(tmdb_vote_average)`, { ascending: true, nullsFirst: true });
+							request = request.order(`movie(vote_average)`, { ascending: true, nullsFirst: true });
 						} else {
-							request = request.order(`media(vote_average)`, { ascending: false, nullsFirst: false });
-							request = request.order(`media(tmdb_vote_average)`, { ascending: false, nullsFirst: false });
+							request = request.order(`movie(vote_average)`, { ascending: false, nullsFirst: false });
+							request = request.order(`movie(tmdb_vote_average)`, { ascending: false, nullsFirst: false });
 						}
 						break;
 					default:
@@ -291,9 +273,9 @@ export const getPersonFilms = cache(
 			}
 		}
 		return await request
-			.filter('media.date', 'not.is', null)
+			.filter('movie.date', 'not.is', null)
 			.overrideTypes<Array<{
-			media: Media;
+				movie: MediaMovie;
 			}>, { merge: true }>()
 	},
 	{ revalidate: MEDIA_REVALIDATE_TIME },
@@ -322,7 +304,7 @@ export const getPersonTvSeries = cache(
 				.from('tmdb_tv_series_credits')
 				.select(`
 					*,
-					media:media_tv_series!inner(*)
+					tv_series:media_tv_series!inner(*)
 				`, {
 					count: 'exact',
 				})
@@ -333,7 +315,7 @@ export const getPersonTvSeries = cache(
 				.from('media_tv_series_aggregate_credits')
 				.select(`
 					*,
-					media:media_tv_series!inner(*)
+					tv_series:media_tv_series!inner(*)
 				`, {
 					count: 'exact',
 				})
@@ -344,15 +326,15 @@ export const getPersonTvSeries = cache(
 			if (filters.sortBy && filters.sortOrder) {
 				switch (filters.sortBy) {
 					case 'release_date':
-						request = request.order(`media(date)`, { ascending: filters.sortOrder === 'asc' });
+						request = request.order(`tv_series(date)`, { ascending: filters.sortOrder === 'asc' });
 						break;
 					case 'vote_average':
 						if (filters.sortOrder === 'asc') {
-							request = request.order(`media(tmdb_vote_average)`, { ascending: true, nullsFirst: true });
-							request = request.order(`media(vote_average)`, { ascending: true, nullsFirst: true });
+							request = request.order(`tv_series(tmdb_vote_average)`, { ascending: true, nullsFirst: true });
+							request = request.order(`tv_series(vote_average)`, { ascending: true, nullsFirst: true });
 						} else {
-							request = request.order(`media(vote_average)`, { ascending: false, nullsFirst: false });
-							request = request.order(`media(tmdb_vote_average)`, { ascending: false, nullsFirst: false });
+							request = request.order(`tv_series(vote_average)`, { ascending: false, nullsFirst: false });
+							request = request.order(`tv_series(tmdb_vote_average)`, { ascending: false, nullsFirst: false });
 						}
 						break;
 					default:
@@ -370,7 +352,7 @@ export const getPersonTvSeries = cache(
 		return await request
 			.filter('last_appearance_date', 'not.is', null)
 			.overrideTypes<Array<{
-			media: Media;
+			tv_series: MediaTvSeries;
 			}>, { merge: true }>()
 	},
 	{ revalidate: MEDIA_REVALIDATE_TIME },

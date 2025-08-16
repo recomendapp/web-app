@@ -1,7 +1,6 @@
 import { Link } from "@/lib/i18n/routing";
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Card } from '@/components/ui/card';
@@ -10,14 +9,13 @@ import { BadgeMedia } from '@/components/Badge/BadgeMedia';
 import { Media, MediaPerson } from '@/types/type.db';
 import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
-import { ContextMenuMedia } from "@/components/ContextMenu/ContextMenuMedia";
 
 export default async function SearchBestResult({
   media,
   locale,
   className,
 }: {
-  media: Media;
+  media: any;
   locale: string;
   className?: string;
 }) {
@@ -28,7 +26,7 @@ export default async function SearchBestResult({
       <h2 className="text-2xl font-bold">
       {upperFirst(common('messages.top_result'))}
       </h2>
-      <ContextMenuMedia media={media}>
+      <>
         <Link href={media.url ?? ''}>
           <Card className='flex flex-col gap-2 relative p-2 hover:bg-muted-hover'>
             <BadgeMedia type={media.media_type} variant={"accent-yellow"} className='absolute top-2 right-2' />
@@ -67,7 +65,7 @@ export default async function SearchBestResult({
             </div>
           </Card>
         </Link>
-      </ContextMenuMedia>
+      </>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { useUserReviewLikeQuery } from "@/features/client/user/userQueries";
+import { useUserReviewMovieLikeQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { Link } from "@/lib/i18n/routing";
@@ -8,20 +8,20 @@ import { Icons } from "@/config/icons";
 import { usePathname } from '@/lib/i18n/routing';
 import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
-import { useUserReviewLikeDeleteMutation, useUserReviewLikeInsertMutation } from "@/features/client/user/userMutations";
+import { useUserReviewMovieLikeDeleteMutation, useUserReviewMovieLikeInsertMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 
-interface ActionReviewLikeProps
+interface ButtonUserReviewMovieLikeProps
 	extends React.ComponentProps<typeof Button> {
 		reviewId: number;
 		reviewLikesCount?: number;
 	}
 
-const ActionReviewLike = React.forwardRef<
-	HTMLDivElement,
-	ActionReviewLikeProps
+const ButtonUserReviewMovieLike = React.forwardRef<
+	React.ComponentRef<typeof Button>,
+	ButtonUserReviewMovieLikeProps
 >(({ reviewId, reviewLikesCount, className, ...props }, ref) => {
 	const { user } = useAuth();
 	const t = useTranslations();
@@ -30,13 +30,13 @@ const ActionReviewLike = React.forwardRef<
 		data: like,
 		isLoading,
 		isError,
-	} = useUserReviewLikeQuery({
+	} = useUserReviewMovieLikeQuery({
 		reviewId: reviewId,
 		userId: user?.id,
 	});
 	const [likeCount, setLikeCount] = React.useState(reviewLikesCount ?? undefined);
-	const insertLike = useUserReviewLikeInsertMutation();
-	const deleteLike = useUserReviewLikeDeleteMutation();
+	const insertLike = useUserReviewMovieLikeInsertMutation();
+	const deleteLike = useUserReviewMovieLikeDeleteMutation();
 
 	const handleLike = async (e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -78,6 +78,7 @@ const ActionReviewLike = React.forwardRef<
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
+			ref={ref}
 			size={'icon'}
 			variant={'action'}
 			className={cn(
@@ -99,6 +100,7 @@ const ActionReviewLike = React.forwardRef<
 	return (
 		<TooltipBox tooltip={like ? upperFirst(t('common.messages.unlike')) : upperFirst(t('common.messages.like'))}>
 			<Button
+			ref={ref}
 			onClick={like ? handleUnlike : handleLike}
 			disabled={isLoading || isError || like === undefined || insertLike.isPending || deleteLike.isPending}
 			size="fit"
@@ -127,6 +129,6 @@ const ActionReviewLike = React.forwardRef<
 		</TooltipBox>
 	);
 });
-ActionReviewLike.displayName = 'ActionReviewLike';
+ButtonUserReviewMovieLike.displayName = 'ButtonUserReviewMovieLike';
 
-export default ActionReviewLike;
+export default ButtonUserReviewMovieLike;

@@ -1,4 +1,4 @@
-import { MediaType } from "@/types/type.db"
+import { MediaType, UserReviewType } from "@/types/type.db"
 
 export const mediaKeys = {
 	all: ['media'] as const,
@@ -22,11 +22,16 @@ export const mediaKeys = {
 	/* --------------------------------- REVIEWS -------------------------------- */
 	reviews: ({
 		id,
+		type,
 		filters,
 	} : {
 		id: number;
+		type: UserReviewType;
 		filters?: any;
-	}) => filters ? [...mediaKeys.detail({ id }), 'reviews', filters] as const : [...mediaKeys.detail({ id }), 'reviews'] as const,
+	}) => {
+		const sub = [...(filters ? [filters] : [])];
+		return [...mediaKeys.detail({ id, type }), 'reviews', ...sub] as const;
+	},
 	/* -------------------------------------------------------------------------- */
 
 	/* -------------------------------- PLAYLISTS ------------------------------- */

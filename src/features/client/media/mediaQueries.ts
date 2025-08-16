@@ -33,11 +33,11 @@ export const useMediaMovieDetailsQuery = ({
 /* -------------------------------------------------------------------------- */
 
 /* --------------------------------- REVIEWS -------------------------------- */
-export const useMediaReviewsInfiniteQuery = ({
-	id,
+export const useMediaReviewsMovieInfiniteQuery = ({
+	movieId,
 	filters,
 } : {
-	id: number;
+	movieId: number;
 	filters: {
 		perPage: number;
 		sortBy: 'updated_at';
@@ -47,19 +47,20 @@ export const useMediaReviewsInfiniteQuery = ({
 	const supabase = useSupabaseClient();
 	return useInfiniteQuery({
 		queryKey: mediaKeys.reviews({
-			id,
+			id: movieId,
+			type: 'movie',
 			filters,
 		}),
 		queryFn: async ({ pageParam = 1 }) => {
 			let from = (pageParam - 1) * filters.perPage;
 	  		let to = from - 1 + filters.perPage;
 			let request = supabase
-				.from('user_review')
+				.from('user_reviews_movie')
 				.select(`
 					*,
-					activity:user_activity!inner(*, user(*))
+					activity:user_activities_movie!inner(*, user(*))
 				`)
-				.eq('activity.media_id', id)
+				.eq('activity.movie_id', movieId)
 				.range(from, to)
 			
 			if (filters) {
@@ -81,10 +82,63 @@ export const useMediaReviewsInfiniteQuery = ({
 		getNextPageParam: (lastPage, pages) => {
 			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
 		},
-		enabled: !!id,
+		enabled: !!movieId,
 	});
 
 };
+export const useMediaReviewsTvSeriesInfiniteQuery = ({
+	tvSeriesId,
+	filters,
+} : {
+	tvSeriesId: number;
+	filters: {
+		perPage: number;
+		sortBy: 'updated_at';
+		sortOrder: 'asc' | 'desc';
+	};
+}) => {
+	const supabase = useSupabaseClient();
+	return useInfiniteQuery({
+		queryKey: mediaKeys.reviews({
+			id: tvSeriesId,
+			type: 'tv_series',
+			filters,
+		}),
+		queryFn: async ({ pageParam = 1 }) => {
+			let from = (pageParam - 1) * filters.perPage;
+	  		let to = from - 1 + filters.perPage;
+			let request = supabase
+				.from('user_reviews_tv_series')
+				.select(`
+					*,
+					activity:user_activities_tv_series!inner(*, user(*))
+				`)
+				.eq('activity.tv_series_id', tvSeriesId)
+				.range(from, to)
+
+			if (filters) {
+				if (filters.sortBy && filters.sortOrder) {
+					switch (filters.sortBy) {
+						case 'updated_at':
+							request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
+							break;
+						default:
+							break;
+					}
+				}
+			}
+			const { data, error } = await request;
+			if (error) throw error;
+			return data;
+		},
+		initialPageParam: 1,
+		getNextPageParam: (lastPage, pages) => {
+			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
+		},
+		enabled: !!tvSeriesId,
+	});
+};
+
 /* -------------------------------------------------------------------------- */
 export const useMediaPlaylistsInfiniteQuery = ({
 	id,

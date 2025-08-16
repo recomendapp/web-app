@@ -1,18 +1,17 @@
 "use client";
-import { Media } from "@/types/type.db"
+import { MediaTvSeries } from "@/types/type.db"
 import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
 import { WithLink } from "../utils/WithLink";
 import { useModal } from "@/context/modal-context";
 import { Fragment, useMemo } from "react";
 import { ModalShare } from "../Modals/Share/ModalShare";
-import { ModalRecoSend } from "../Modals/actions/ModalRecoSend";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { ModalPlaylistAdd } from "../Modals/actions/ModalPlaylistAdd";
 import { useAuth } from "@/context/auth-context";
 import { createShareController } from "../ShareController/ShareController";
-import { ShareControllerMedia } from "../ShareController/ShareControllerMedia";
+import { ShareControllerTvSeries } from "../ShareController/ShareControllerTvSeries";
+import { ModalUserRecosTvSeriesSend } from "../Modals/recos/ModalUserRecosTvSeriesSend";
 
 interface Item {
 	icon: React.ElementType;
@@ -22,14 +21,14 @@ interface Item {
 	onClick?: () => void;
 }
 
-export const ContextMenuMedia = ({
+export const ContextMenuTvSeries = ({
 	children,
-	media,
+	tvSeries,
 	additionalItemsTop = [],
 	additionalItemsBottom = [],
 }: {
 	children: React.ReactNode,
-	media: Media,
+	tvSeries: MediaTvSeries,
 	additionalItemsTop?: Item[],
 	additionalItemsBottom?: Item[],
 }) => {
@@ -42,24 +41,18 @@ export const ContextMenuMedia = ({
 		[
 			{
 				icon: Icons.movie,
-				href: media.url ?? '',
-				label: media.media_type === 'movie'
-					? upperFirst(t('common.messages.go_to_film'))
-					: media.media_type === 'tv_series'
-					? upperFirst(t('common.messages.go_to_serie'))
-					: media.media_type === 'person'
-					? upperFirst(t('common.messages.go_to_person'))
-					: ''
+				href: tvSeries.url ?? '',
+				label: upperFirst(t('common.messages.go_to_film'))
 			},
 			...(session ? [
-				{
-					icon: Icons.addPlaylist,
-					onClick: () => openModal(ModalPlaylistAdd, { mediaId: media.media_id!, mediaTitle: media.title }),
-					label: upperFirst(t('common.messages.add_to_playlist')),
-				},
+				// {
+				// 	icon: Icons.addPlaylist,
+				// 	onClick: () => openModal(ModalPlaylistAdd, { mediaId: media.media_id!, mediaTitle: media.title }),
+				// 	label: upperFirst(t('common.messages.add_to_playlist')),
+				// },
 				{
 					icon: Icons.send,
-					onClick: () => openModal(ModalRecoSend, { mediaId: media.media_id!, mediaTitle: media.title }),
+					onClick: () => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: tvSeries.media_id!, tvSeriesTitle: tvSeries.title }),
 					label: upperFirst(t('common.messages.send_to_friend')),
 				}
 			] : []),
@@ -68,18 +61,18 @@ export const ContextMenuMedia = ({
 			{
 				icon: Icons.share,
 				onClick: () => openModal(ModalShare, {
-					title: media.title,
-					type: media.media_type,
-					path: media.url ?? '',
-					shareController: createShareController(ShareControllerMedia, {
-						media: media,
+					title: tvSeries.title,
+					type: tvSeries.media_type,
+					path: tvSeries.url ?? '',
+					shareController: createShareController(ShareControllerTvSeries, {
+						tvSeries: tvSeries,
 					}),
 				}),
 				label: upperFirst(t('common.messages.share')),
 			},
 			...additionalItemsBottom
 		],
-	]}, [media, session, t]);
+	]}, [tvSeries, session, t]);
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger>

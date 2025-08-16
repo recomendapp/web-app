@@ -2,7 +2,6 @@ import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getPerson, getPersonFilms } from '@/features/server/media/mediaQueries';
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { Pagination } from './_components/Pagination';
 import { Icons } from '@/config/icons';
 import { Link } from "@/lib/i18n/routing";
@@ -14,6 +13,7 @@ import { seoLocales } from '@/lib/i18n/routing';
 import { notFound, redirect } from 'next/navigation';
 import { ActiveFilters } from './_components/ActiveFilters';
 import { getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage, getValidatePerPage } from './_components/constants';
+import { CardMovie } from '@/components/Card/CardMovie';
 
 export async function generateMetadata(
   props: {
@@ -148,10 +148,10 @@ export default async function FilmsPage(
 			`}
 			>
 				{movies.map((credits, index) => (
-					<CardMedia
+					<CardMovie
 					key={index}
 					variant={display === 'grid' ? 'poster' : 'row'}
-					media={credits.media!}
+					movie={credits.movie!}
 					className='w-full'
 					/>
 				))}

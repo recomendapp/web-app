@@ -1,7 +1,6 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { MediaType } from "@/types/type.db";
-import { useUserActivityQuery, useUserWatchlistItemQuery } from "@/features/client/user/userQueries";
+import { useUserActivityTvSeriesQuery, useUserWatchlistTvSeriesQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { Link } from "@/lib/i18n/routing";
@@ -9,56 +8,53 @@ import { Icons } from "@/config/icons";
 import { usePathname } from '@/lib/i18n/routing';
 import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
-import { useUserWatchlistDeleteMutation, useUserWatchlistInsertMutation } from "@/features/client/user/userMutations";
+import { useUserWatchlistTvSeriesDeleteMutation, useUserWatchlistTvSeriesInsertMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { ContextMenuWatchlistAction } from "../../ContextMenu/ContextMenuWatchlistAction";
 
-interface MediaActionUserWatchlistProps
+interface ButtonUserWatchlistTvSeriesProps
 	extends React.ComponentProps<typeof Button> {
-		mediaId: number;
+		tvSeriesId: number;
 		stopPropagation?: boolean;
 	}
 
-const MediaActionUserWatchlist = React.forwardRef<
-	HTMLDivElement,
-	MediaActionUserWatchlistProps
->(({ mediaId, stopPropagation = true, className, ...props }, ref) => {
+const ButtonUserWatchlistTvSeries = React.forwardRef<
+	React.ComponentRef<typeof Button>,
+	ButtonUserWatchlistTvSeriesProps
+>(({ tvSeriesId, stopPropagation = true, className, ...props }, ref) => {
 	const { user } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 
 	const {
 		data: activity,
-	} = useUserActivityQuery({
+	} = useUserActivityTvSeriesQuery({
 		userId: user?.id,
-		mediaId: mediaId,
+		tvSeriesId: tvSeriesId,
 	});
 
 	const {
 		data: watchlist,
 		isLoading,
 		isError,
-	} = useUserWatchlistItemQuery({
-		userId: user?.id,
-		mediaId: mediaId,
-	});
-	const insertWatchlist = useUserWatchlistInsertMutation({
+	} = useUserWatchlistTvSeriesQuery({
+		tvSeriesId: tvSeriesId,
 		userId: user?.id,
 	});
-	const deleteWatchlist = useUserWatchlistDeleteMutation();
+	const insertWatchlist = useUserWatchlistTvSeriesInsertMutation();
+	const deleteWatchlist = useUserWatchlistTvSeriesDeleteMutation();
 
 	const handleWatchlist = async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (watchlist) return;
-		if (!user || !mediaId) {
+		if (!user || !tvSeriesId) {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
 		await insertWatchlist.mutateAsync({
-		  	userId: user?.id,
-			mediaId: mediaId,
+			tvSeriesId: tvSeriesId,
+		  	userId: user.id,
 		}, {
 		  onError: () => {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
@@ -85,6 +81,7 @@ const MediaActionUserWatchlist = React.forwardRef<
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
+			ref={ref}
 			size={'icon'}
 			variant={'action'}
 			className={cn("rounded-full", className)}
@@ -100,14 +97,16 @@ const MediaActionUserWatchlist = React.forwardRef<
 	}
 
 	return (
-		<ContextMenuWatchlistAction watchlistItem={watchlist}>
+		// <ContextMenuWatchlistAction watchlistItem={watchlist}>
 			<TooltipBox tooltip={watchlist ? upperFirst(t('common.messages.remove_from_watchlist')) : upperFirst(t('common.messages.add_to_watchlist'))}>
 				<Button
+					ref={ref}
 					onClick={async (e) => watchlist ? await handleUnwatchlist(e) : await handleWatchlist(e)}
-					disabled={isLoading || isError || activity === undefined || watchlist === undefined || insertWatchlist.isPending || deleteWatchlist.isPending}
+					disabled={isLoading || isError || watchlist === undefined || insertWatchlist.isPending || deleteWatchlist.isPending}
 					size="icon"
 					variant={'action'}
 					className={`rounded-full`}
+					{...props}
 				>
 					{(isLoading || watchlist === undefined)  ? (
 					<Icons.spinner className="animate-spin" />
@@ -118,9 +117,9 @@ const MediaActionUserWatchlist = React.forwardRef<
 					)}
 				</Button>
 			</TooltipBox>
-		</ContextMenuWatchlistAction>
+		// </ContextMenuWatchlistAction>
 	);
 });
-MediaActionUserWatchlist.displayName = 'MediaActionUserWatchlist';
+ButtonUserWatchlistTvSeries.displayName = 'ButtonUserWatchlistTvSeries';
 
-export default MediaActionUserWatchlist;
+export default ButtonUserWatchlistTvSeries;

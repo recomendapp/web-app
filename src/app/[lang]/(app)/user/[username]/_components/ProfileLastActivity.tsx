@@ -2,13 +2,12 @@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Profile } from '@/types/type.db';
+import { MediaMovie, MediaTvSeries, Profile, UserActivityMovie, UserActivityTvSeries } from '@/types/type.db';
 import { useUserActivitiesInfiniteQuery } from '@/features/client/user/userQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { CardMedia } from '@/components/Card/CardMedia';
-import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
-import { Icons } from '@/config/icons';
+import { CardMovie } from '@/components/Card/CardMovie';
+import { CardTvSeries } from '@/components/Card/CardTvSeries';
 
 export default function ProfileLastActivity({ profile }: { profile: Profile }) {
   const common = useTranslations('common');
@@ -40,14 +39,31 @@ export default function ProfileLastActivity({ profile }: { profile: Profile }) {
         <div className="flex space-x-4 pb-4">
           {activities?.pages.map((page, i) => (
               page?.map((activity, index) => (
-                  <CardMedia
+                activity.type === 'movie' ? (
+                  <CardMovie
+                  ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
                   key={index}
                   variant='poster'
-                  ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
-                  media={activity?.media!}
-                  profileActivity={activity}
+                  movie={activity.media as MediaMovie}
+                  profileActivity={{
+                    ...activity,
+                    movie_id: activity.media_id!
+                  } as UserActivityMovie}
                   className='w-24 lg:w-32'
                   />
+                ) : (
+                  <CardTvSeries
+                  ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+                  key={index}
+                  variant='poster'
+                  tvSeries={activity.media as MediaTvSeries}
+                  profileActivity={{
+                    ...activity,
+                    tv_series_id: activity.media_id!
+                  } as UserActivityTvSeries}
+                  className='w-24 lg:w-32'
+                  />
+                )
               ))
             ))}
         </div>

@@ -2,17 +2,14 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { Media, MediaPerson, UserActivity } from "@/types/type.db";
+import { MediaPerson, UserActivity } from "@/types/type.db";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Link, useRouter } from "@/lib/i18n/routing";
-import { ContextMenuMedia } from "../ContextMenu/ContextMenuMedia";
 import { getMediaDetails, getMediaUrlPrefix } from "@/utils/get-media-details";
 import { TooltipBox } from "../Box/TooltipBox";
 import { Button } from "../ui/button";
 import { BadgeMedia } from "../Badge/BadgeMedia";
 import { Icons } from "@/config/icons";
-import MediaActionUserActivityWatch from "@/components/Media/actions/MediaActionUserActivityWatch";
-import MediaActionUserWatchlist from "@/components/Media/actions/MediaActionUserWatchlist";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { useUI } from "@/context/ui-context";
 import { DateOnlyYearTooltip } from "../utils/Date";
@@ -132,12 +129,12 @@ const CardMediaPoster = React.forwardRef<
 				) : null}
 				{(device === 'desktop' && !disableActions) ? (
 					<div className="hidden absolute bottom-2 group-hover:flex w-full justify-center pointer-events-none">
-					{isHovered ? (
+					{/* {isHovered ? (
 						<div className="bg-background rounded-md w-fit pointer-events-auto">
 							<MediaActionUserActivityWatch mediaId={media.media_id!} />
 							<MediaActionUserWatchlist mediaId={media.media_id!} />
 						</div>
-					) : null}
+					) : null} */}
 					</div>
 				) : null}
 			</Card>
@@ -251,7 +248,7 @@ const CardMedia = React.forwardRef<
 		onClick && onClick(e);
 	};
 	return (
-	<ContextMenuMedia media={media}>
+	<>
 		{variant === "default" ? (
 			<CardMediaDefault ref={ref} className={cn(linked ? 'cursor-pointer' : '', className)} media={media} linked={linked} onClick={customOnClick} showRating={showRating} {...props} />
 		) : variant == "poster" ? (
@@ -259,7 +256,7 @@ const CardMedia = React.forwardRef<
 		) : variant == "row" ? (
 			<CardMediaRow ref={ref} className={cn(linked ? 'cursor-pointer' : '', className)} media={media} linked={linked} onClick={customOnClick} showRating={showRating} hideMediaType={hideMediaType} {...props} />
 		) : null}
-	</ContextMenuMedia>
+	</>
 	);
 });
 CardMedia.displayName = "CardMedia";

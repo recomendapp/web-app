@@ -1,12 +1,12 @@
-import { notFound } from 'next/navigation';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getTvSeries } from '@/features/server/media/mediaQueries';
-import Reviews from '@/components/Review/Reviews';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { seoLocales } from '@/lib/i18n/routing';
+import { TvSeriesReviews } from './_components/TvSeriesReviews';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata(
   props: {
@@ -60,7 +60,7 @@ export default async function MovieReviewsPage(
 ) {
   const params = await props.params;
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
-  const serie = await getTvSeries(params.lang, serieId);
-  if (!serie) notFound();
-  return <Reviews mediaId={serie.media_id!} />;
+  const tvSeries = await getTvSeries(params.lang, serieId);
+  if (!tvSeries) notFound();
+  return <TvSeriesReviews tvSeries={tvSeries} />;
 }

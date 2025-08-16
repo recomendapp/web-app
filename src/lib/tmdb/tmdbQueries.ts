@@ -1,6 +1,6 @@
 "use server"
 
-import { Media } from "@/types/type.db";
+import { Media, MediaMovie, MediaTvSeries } from "@/types/type.db";
 import { createClient } from "../supabase/server-no-cookie";
 
 export const getTmdbSearchMulti = async ({
@@ -98,7 +98,7 @@ export const getTmdbSearchMovies = async ({
   }).filter(Boolean) as typeof data;
 
   return {
-    results: orderedData as Media[],
+    results: orderedData as MediaMovie[],
     total_results: tmdbResults.total_results,
   }
 };
@@ -136,7 +136,7 @@ export const getTmdbSearchTvSeries = async ({
   }).filter(Boolean) as typeof data;
 
   return {
-    results: orderedData as Media[],
+    results: orderedData as MediaTvSeries[],
     total_results: tmdbResults.total_results,
   }
 };

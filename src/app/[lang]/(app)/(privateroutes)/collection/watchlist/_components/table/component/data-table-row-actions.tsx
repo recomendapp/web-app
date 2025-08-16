@@ -12,17 +12,19 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import toast from 'react-hot-toast';
-import { UserWatchlist } from '@/types/type.db';
+import { MediaMovie, MediaTvSeries, UserWatchlist } from '@/types/type.db';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
-import { useUserWatchlistDeleteMutation } from '@/features/client/user/userMutations';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
-import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
 import { ModalWatchlistComment } from '@/components/Modals/watchlist/ModalWatchlistComment';
 import { createShareController } from "@/components/ShareController/ShareController";
-import { ShareControllerMedia } from "@/components/ShareController/ShareControllerMedia";
+import { useUserWatchlistMovieDeleteMutation, useUserWatchlistTvSeriesDeleteMutation } from "@/features/client/user/userMutations";
+import { ShareControllerMovie } from "@/components/ShareController/ShareControllerMovie";
+import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
+import { ModalUserRecosMovieSend } from "@/components/Modals/recos/ModalUserRecosMovieSend";
+import { ModalUserRecosTvSeriesSend } from "@/components/Modals/recos/ModalUserRecosTvSeriesSend";
 
 interface DataTableRowActionsProps {
   table: Table<UserWatchlist>;
@@ -39,11 +41,24 @@ export function DataTableRowActions({
 }: DataTableRowActionsProps) {
   const t = useTranslations();
   const { openModal, createConfirmModal } = useModal();
-  const deleteWatchlist = useUserWatchlistDeleteMutation();
 
+  const deleteWatchlistMovie = useUserWatchlistMovieDeleteMutation();
+  const deleteWatchlistTvSeries = useUserWatchlistTvSeriesDeleteMutation();
+  const deleteMutation = data.media?.media_type === 'movie'
+    ? deleteWatchlistMovie
+    : deleteWatchlistTvSeries;
+
+  const sharedController = data.media?.media_type === 'movie'
+    ? createShareController(ShareControllerMovie, { movie: data.media as MediaMovie })
+    : createShareController(ShareControllerTvSeries, { tvSeries: data.media as MediaTvSeries });
+
+  const sendModal = data.media?.media_type === 'movie'
+    ? () => openModal(ModalUserRecosMovieSend, { movieId: data.media_id!, movieTitle: data.media.title})
+    : () => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: data.media_id!, tvSeriesTitle: data.media.title});
+  
   const handleUnwatchlist = async () => {
     if (!data) return;
-    await deleteWatchlist.mutateAsync({
+    await deleteMutation.mutateAsync({
       watchlistId: data.id,
     }, {
       onSuccess: () => {
@@ -70,7 +85,7 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
-            onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id, mediaTitle: data?.media?.title })}
+            onClick={sendModal}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}
@@ -106,9 +121,7 @@ export function DataTableRowActions({
               title: data?.media?.title,
               type: data?.media?.media_type,
               path: data?.media?.url ?? '',
-              shareController: createShareController(ShareControllerMedia, {
-                media: data?.media!,
-              }),
+              shareController: sharedController,
             })}
           >
             <Icons.share className='w-4' />

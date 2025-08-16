@@ -1,7 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { getSearchMovies } from '@/features/server/search/searchQueries';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { z } from "zod";
 import {
 	Pagination,
@@ -16,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { generatePaginationNumbers } from '@/utils/generate-pagination-numbers';
 import { redirect } from '@/lib/i18n/routing';
 import { Metadata } from 'next';
+import { CardMovie } from '@/components/Card/CardMovie';
 
 export async function generateMetadata(
   props: {
@@ -80,11 +80,11 @@ export default async function SearchFilms(
   return (
     <div className='flex flex-col gap-4'>
       <PaginationComponent searchParams={searchParams} total={total_results} page={page} />
-      {results.map((film, i) => (
-        <CardMedia
+      {results.map((movie, i) => (
+        <CardMovie
         key={i}
         variant='row'
-        media={film}
+        movie={movie}
         className='border-none bg-transparent'
         posterClassName='w-[50px]'
         />

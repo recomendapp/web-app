@@ -24,22 +24,22 @@ import MediaPoster from '@/components/Media/MediaPoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { Media, MediaTvSeries } from '@/types/type.db';
+import { MediaTvSeries } from '@/types/type.db';
 import { useModal } from '@/context/modal-context';
 import { upperFirst } from 'lodash';
 import { useLocale, useTranslations } from 'next-intl';
-import MediaActionUserActivityLike from '@/components/Media/actions/MediaActionUserActivityLike';
-import MediaActionUserActivityWatch from '@/components/Media/actions/MediaActionUserActivityWatch';
-import MediaActionUserActivityWatchedDate from '@/components/Media/actions/MediaActionUserActivityWatchedDate';
-import MediaActionUserActivityRating from '@/components/Media/actions/MediaActionUserActivityRating';
-import MediaActionUserRecos from '@/components/Media/actions/MediaActionUserRecos';
-import MediaActionUserWatchlist from '@/components/Media/actions/MediaActionUserWatchlist';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlaylistAdd';
 import { ModalMediaFollowersRating } from '@/components/Modals/ModalMediaFollowersRating';
-import { ContextMenuMedia } from '@/components/ContextMenu/ContextMenuMedia';
 import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 import { Database } from '@/types';
+import ButtonUserWatchlistTvSeries from '@/components/buttons/ButtonUserWatchlistTvSeries';
+import ButtonUserActivityTvSeriesLike from '@/components/buttons/ButtonUserActivityTvSeriesLike';
+import ButtonUserActivityTvSeriesRating from '@/components/buttons/ButtonUserActivityTvSeriesRating';
+import ButtonUserActivityTvSeriesWatch from '@/components/buttons/ButtonUserActivityTvSeriesWatch';
+import ButtonUserActivityTvSeriesWatchedDate from '@/components/buttons/ButtonUserActivityTvSeriesWatchedDate';
+import { ContextMenuTvSeries } from '@/components/ContextMenu/ContextMenuTvSeries';
+import ButtonUserRecosTvSeriesSend from '@/components/buttons/ButtonUserRecosTvSeriesSend';
 
 export default function TvSerieHeader({
   serie,
@@ -53,7 +53,7 @@ export default function TvSerieHeader({
   if (!serie) return null;
   return (
     <div>
-      <ContextMenuMedia media={serie as Media}>
+      <ContextMenuTvSeries tvSeries={serie}>
         <HeaderBox background={serie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${serie.backdrop_path}`, alt: serie.title ?? '', unoptimized: true } : undefined}>
           <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* SERIE POSTER */}
@@ -132,18 +132,18 @@ export default function TvSerieHeader({
             </div>
           </div>
         </HeaderBox>
-      </ContextMenuMedia>
+      </ContextMenuTvSeries>
       <div className="flex justify-between gap-2 px-4 pb-4">
         <div className="flex gap-2 overflow-x-auto items-center">
-          <MediaActionUserActivityRating mediaId={serie.media_id!} />
-          <MediaActionUserActivityLike mediaId={serie.media_id!} />
-          <MediaActionUserActivityWatch mediaId={serie.media_id!} />
-          <MediaActionUserWatchlist mediaId={serie.media_id!} />
-          <MediaActionUserActivityWatchedDate mediaId={serie.media_id!} />
+          <ButtonUserActivityTvSeriesRating tvSeriesId={serie.id} />
+          <ButtonUserActivityTvSeriesLike tvSeriesId={serie.id} />
+          <ButtonUserActivityTvSeriesWatch tvSeriesId={serie.id} />
+          <ButtonUserWatchlistTvSeries tvSeriesId={serie.id} />
+          <ButtonUserActivityTvSeriesWatchedDate tvSeriesId={serie.id} />
         </div>
         <div className="flex gap-2 items-center">
           <MediaActionPlaylistAdd mediaId={serie.media_id!} mediaTitle={serie.title} />
-          <MediaActionUserRecos mediaId={serie.media_id!} mediaTitle={serie.title} />
+          <ButtonUserRecosTvSeriesSend tvSeriesId={serie.id} tvSeriesTitle={serie.title} />
         </div>
       </div>
     </div>

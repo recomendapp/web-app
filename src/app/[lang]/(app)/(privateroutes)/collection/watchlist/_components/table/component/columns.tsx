@@ -24,32 +24,6 @@ export const Columns = (): ColumnDef<UserWatchlist>[] => {
       cell: ({ row }) => <Item key={row.index} media={row.original?.media!} />,
       enableHiding: false,
     },
-    // {
-    //   id: 'release_date',
-    //   accessorFn: (row) => row?.movie?.release_date,
-    //   meta: {
-    //     displayName: capitalize(common('messages.date')),
-    //   },
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} title={capitalize(common('messages.date'))} />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <DateOnlyYearTooltip date={row.original?.movie?.release_date} className='text-muted-foreground'/>
-    //   ),
-    // },
-    // {
-    //   id: 'runtime',
-    //   accessorFn: (row) => row?.movie?.runtime,
-    //   meta: {
-    //     displayName: capitalize(common('messages.duration')),
-    //   },
-    //   header: ({ column }) => (
-    //     <DataTableColumnHeader column={column} Icon={Clock} />
-    //   ),
-    //   cell: ({ row }) => (
-    //     <RuntimeTooltip runtime={row.original?.movie?.runtime ?? 0} className='text-muted-foreground'/>
-    //   ),
-    // },
     {
       id: 'comment',
       accessorKey: 'comment',

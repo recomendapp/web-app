@@ -1,11 +1,11 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { useUserActivityQuery } from "@/features/client/user/userQueries";
+import { useUserActivityTvSeriesQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { cn } from "@/lib/utils";
 import { CalendarDaysIcon } from "lucide-react";
-import { useUserActivityUpdateMutation } from "@/features/client/user/userMutations";
+import { useUserActivityTvSeriesUpdateMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
@@ -13,46 +13,46 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { fr, enUS } from 'date-fns/locale';
 
-interface MediaActionUserActivityWatchedDateProps
+interface ButtonUserActivityTvSeriesWatchedDateProps
 	extends React.ComponentProps<typeof Button> {
-		mediaId: number;
+    tvSeriesId: number;
     stopPropagation?: boolean;
 	}
 
-const MediaActionUserActivityWatchedDate = React.forwardRef<
-	HTMLDivElement,
-	MediaActionUserActivityWatchedDateProps
->(({ mediaId, stopPropagation = true, className, ...props }, ref) => {
+const ButtonUserActivityTvSeriesWatchedDate = React.forwardRef<
+	React.ComponentRef<typeof Button>,
+	ButtonUserActivityTvSeriesWatchedDateProps
+>(({ tvSeriesId, stopPropagation = true, className, ...props }, ref) => {
 	const { user } = useAuth();
-  const locale = useLocale();
-  const format = useFormatter();
-  const common = useTranslations('common');
+	const locale = useLocale();
+	const format = useFormatter();
+	const t = useTranslations();
 	const {
 		data: activity,
 		isLoading,
 		isError,
-	} = useUserActivityQuery({
+	} = useUserActivityTvSeriesQuery({
 		userId: user?.id,
-		mediaId: mediaId,
+		tvSeriesId: tvSeriesId,
 	});
-	const updateDate = useUserActivityUpdateMutation();
+	const updateDate = useUserActivityTvSeriesUpdateMutation();
 
 	const handleUpdateDate = async (date: Date) => {
-    if (!activity) return;
-    await updateDate.mutateAsync({
-      activityId: activity.id,
-      watchedDate: date,
-    }), {
-      onError: () => {
-        toast.error(upperFirst(common('messages.an_error_occurred')));
-      }
-    };
-  };
+		if (!activity) return;
+		await updateDate.mutateAsync({
+		activityId: activity.id,
+		watchedDate: date,
+		}), {
+			onError: () => {
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
+			}
+		};
+	};
 
 	if (!activity) return null;
 
 	return (
-		<Popover>
+	<Popover>
       <TooltipBox tooltip={'Changer la date de visionnage'}>
         <PopoverTrigger asChild>
           <Button
@@ -91,6 +91,6 @@ const MediaActionUserActivityWatchedDate = React.forwardRef<
     </Popover>
 	);
 });
-MediaActionUserActivityWatchedDate.displayName = 'MediaActionUserActivityWatchedDate';
+ButtonUserActivityTvSeriesWatchedDate.displayName = 'ButtonUserActivityTvSeriesWatchedDate';
 
-export default MediaActionUserActivityWatchedDate;
+export default ButtonUserActivityTvSeriesWatchedDate;
