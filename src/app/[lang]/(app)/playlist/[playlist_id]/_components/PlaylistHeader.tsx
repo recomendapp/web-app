@@ -5,7 +5,7 @@ import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { ConvertHoursMinutes } from '@/lib/utils';
 import { useModal } from '@/context/modal-context';
-import { PlaylistModal } from '@/components/Modals/Playlist/PlaylistModal';
+import { PlaylistModal } from '@/components/Modals/playlists/PlaylistModal';
 import { Playlist, PlaylistItem } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
@@ -23,7 +23,7 @@ export default function PlaylistHeader({
   playlistItems: PlaylistItem[],
   totalRuntime?: number,
 }) {
-  const { user } = useAuth();
+  const { session } = useAuth();
   const { openModal, createModal } = useModal();
   const common = useTranslations('common');
 
@@ -39,7 +39,7 @@ export default function PlaylistHeader({
   const randomBg = useRandomImage(randomImageList);
 
   const openPlaylistModal = () => {
-    if (playlist?.user_id !== user?.id) return;
+    if (playlist?.user_id !== session?.user.id) return;
     openModal(PlaylistModal, {
       playlist,
     })

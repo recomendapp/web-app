@@ -106,12 +106,14 @@ export const userKeys = {
 	// }) => [...userKeys.detail(userId), 'activity', mediaId] as const,
 
 	followersRating: ({
+		id,
+		type,
 		userId,
-		mediaId,
 	} : {
+		id: number;
+		type: UserActivityType;
 		userId: string;
-		mediaId: number;
-	}) => [...userKeys.detail(userId), 'followers-rating', mediaId] as const,
+	}) => [...userKeys.detail(userId), 'followers-rating', type, id] as const,
 	/* -------------------------------------------------------------------------- */
 
 	/* --------------------------------- REVIEW --------------------------------- */
@@ -145,11 +147,16 @@ export const userKeys = {
 	/* ---------------------------------- RECOS --------------------------------- */
 	recos: ({
 		userId,
+		type,
 		filters,
 	} : {
 		userId: string;
+		type: 'all' | UserRecosType;
 		filters?: any;
-	}) => filters ? [...userKeys.detail(userId), 'recos', filters] as const : [...userKeys.detail(userId), 'recos'] as const,
+	}) => {
+		const sub = [...(type ? [type] : []), ...(filters ? [filters] : [])]
+		return [...userKeys.detail(userId), 'recos', ...sub] as const;
+	},
 
 	recosSend: ({
 		id,
@@ -167,10 +174,10 @@ export const userKeys = {
 		filters,
 	} : {
 		userId: string;
-		type?: UserWatchlistType;
+		type: 'all' | UserWatchlistType;
 		filters?: any;
 	}) => {
-		const sub = [...(type ? [type] : []), ...(filters ? [filters] : [])]
+		const sub = [type, ...(filters ? [filters] : [])]
 		return [...userKeys.detail(userId), 'watchlist', ...sub] as const
 	},
 
@@ -190,7 +197,7 @@ export const userKeys = {
 	/* -------------------------------------------------------------------------- */
 
 	/* ---------------------------------- LIKES --------------------------------- */
-	likes: ({
+	heartPicks: ({
 		userId,
 		type,
 		filters,
@@ -200,7 +207,7 @@ export const userKeys = {
 		filters?: any;
 	}) => {
 		const sub = [...(type ? [type] : []), ...(filters ? [filters] : [])]
-		return [...userKeys.detail(userId), 'heart-pick', ...sub] as const
+		return [...userKeys.detail(userId), 'heart-picks', ...sub] as const
 	},
 	/* -------------------------------------------------------------------------- */
 

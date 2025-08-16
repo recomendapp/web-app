@@ -12,6 +12,7 @@ import { useAuth } from "@/context/auth-context";
 import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerTvSeries } from "../ShareController/ShareControllerTvSeries";
 import { ModalUserRecosTvSeriesSend } from "../Modals/recos/ModalUserRecosTvSeriesSend";
+import { ModalPlaylistTvSeriesAdd } from "../Modals/playlists/ModalPlaylistTvSeriesAdd";
 
 interface Item {
 	icon: React.ElementType;
@@ -42,17 +43,17 @@ export const ContextMenuTvSeries = ({
 			{
 				icon: Icons.movie,
 				href: tvSeries.url ?? '',
-				label: upperFirst(t('common.messages.go_to_film'))
+				label: upperFirst(t('common.messages.go_to_tv_series'))
 			},
 			...(session ? [
-				// {
-				// 	icon: Icons.addPlaylist,
-				// 	onClick: () => openModal(ModalPlaylistAdd, { mediaId: media.media_id!, mediaTitle: media.title }),
-				// 	label: upperFirst(t('common.messages.add_to_playlist')),
-				// },
+				{
+					icon: Icons.addPlaylist,
+					onClick: () => openModal(ModalPlaylistTvSeriesAdd, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.title }),
+					label: upperFirst(t('common.messages.add_to_playlist')),
+				},
 				{
 					icon: Icons.send,
-					onClick: () => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: tvSeries.media_id!, tvSeriesTitle: tvSeries.title }),
+					onClick: () => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.title }),
 					label: upperFirst(t('common.messages.send_to_friend')),
 				}
 			] : []),

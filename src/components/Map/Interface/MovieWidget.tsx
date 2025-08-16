@@ -10,13 +10,13 @@ import { RuntimeTooltip } from "@/components/utils/RuntimeTooltip";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useMediaMovieDetailsQuery } from "@/features/client/media/mediaQueries";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
-import MediaActionPlaylistAdd from "@/components/Media/actions/MediaActionPlaylistAdd";
 import ButtonUserWatchlistMovie from "@/components/buttons/ButtonUserWatchlistMovie";
 import ButtonUserActivityMovieLike from "@/components/buttons/ButtonUserActivityMovieLike";
 import ButtonUserActivityMovieRating from "@/components/buttons/ButtonUserActivityMovieRating";
 import ButtonUserActivityMovieWatch from "@/components/buttons/ButtonUserActivityMovieWatch";
 import ButtonUserActivityMovieWatchedDate from "@/components/buttons/ButtonUserActivityMovieWatchedDate";
 import ButtonUserRecosMovieSend from "@/components/buttons/ButtonUserRecosMovieSend";
+import ButtonPlaylistMovieAdd from "@/components/buttons/ButtonPlaylistMovieAdd";
 
 export const MovieWidget = () => {
 	const {
@@ -164,8 +164,8 @@ export const MovieWidget = () => {
 						<ButtonUserActivityMovieWatchedDate movieId={movie.id} />
 						</div>
 						<div className="flex gap-2 items-center">
-						<MediaActionPlaylistAdd mediaId={movie.media_id!} mediaTitle={movie.title} />
-						<ButtonUserRecosMovieSend movieId={movie.media_id!} movieTitle={movie.title} />
+						<ButtonPlaylistMovieAdd movieId={movie.id} movieTitle={movie.title} />
+						<ButtonUserRecosMovieSend movieId={movie.id} movieTitle={movie.title} />
 						</div>
 					</div>
 				</div>

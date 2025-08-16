@@ -32,7 +32,7 @@ export function ModalUserRecosTvSeriesSend({
 	...props
 } : ModalUserRecosTvSeriesSendProps) {
 	const t = useTranslations();
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const { closeModal } = useModal();
 	const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 	const [comment, setComment] = useState<string>('');
@@ -40,15 +40,15 @@ export function ModalUserRecosTvSeriesSend({
 		data: friends,
 		isLoading,
 	} = useUserRecosTvSeriesSendQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 		tvSeriesId: tvSeriesId,
 	});
 	const sendTvSeries = useUserRecosTvSeriesInsertMutation();
 
 	function submit() {
-		if (!user || !tvSeriesId) return;
+		if (!session || !tvSeriesId) return;
 		sendTvSeries.mutate({
-			senderId: user.id,
+			senderId: session.user.id,
 			tvSeriesId: tvSeriesId,
 			receivers: selectedUsers,
 			comment: comment,

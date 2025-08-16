@@ -42,7 +42,7 @@ export async function GET(
 
     const gzippedXML = gzipSync(sitemapXML);
 
-    return new NextResponse(gzippedXML, {
+    return new NextResponse(Uint8Array.from(gzippedXML), {
       headers: {
         "Content-Type": "application/xml",
         "Content-Encoding": "gzip",

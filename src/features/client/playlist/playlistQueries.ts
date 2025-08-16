@@ -1,7 +1,7 @@
 import { useSupabaseClient } from "@/context/supabase-context";
 import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { playlistKeys } from "./playlistKeys";
-import { Playlist, PlaylistGuest, PlaylistItem, PlaylistType } from "@/types/type.db";
+import { Playlist, PlaylistGuest, PlaylistItem, PlaylistSource } from "@/types/type.db";
 import { useAuth } from "@/context/auth-context";
 
 export const usePlaylistFullQuery = (playlistId: number) => {
@@ -220,40 +220,35 @@ export const usePlaylistFeaturedInfiniteQuery = ({
 /* -------------------------------------------------------------------------- */
 
 /* --------------------------------- ADD TO --------------------------------- */
-/**
- * Fetches the user playlists to add a movie
- * @param userId The user id
- * @param movieId The movie id
- * @returns The user playlists
- */
-export const usePlaylistAddToQuery = ({
-	mediaId,
+export const usePlaylistMovieAddToQuery = ({
+	movieId,
 	userId,
-	type = 'personal',
+	source = 'personal',
 } : {
-	mediaId: number;
+	movieId: number;
 	userId?: string;
-	type: PlaylistType;
+	source: PlaylistSource;
 }) => {
 	const supabase = useSupabaseClient();
 	return useQuery({
-		queryKey: playlistKeys.addToType({ mediaId: mediaId, type: type }),
+		queryKey: playlistKeys.addToSource({ id: movieId, type: 'movie', source }),
 		queryFn: async () => {
 			if (!userId) throw Error('Missing user id');
-			if (!type) throw Error('Missing type');
-			if (type === 'personal') { // personal
+			if (!source) throw Error('Missing source');
+			if (source === 'personal') { // personal
 				const { data, error } = await supabase
 					.from('playlists')
-					.select('*, playlist_items(count)')
+					.select('*, playlist_items_movie(count)')
 					.match({
 						'user_id': userId,
-						'playlist_items.media_id': mediaId,
+						'playlist_items_movie.movie_id': movieId,
+						'type': 'movie'
 					})
 					.order('updated_at', { ascending: false })
 				if (error) throw error;
-				const output = data?.map(({ playlist_items, ...playlist }) => ({
+				const output = data?.map(({ playlist_items_movie, ...playlist }) => ({
 					playlist: playlist,
-					already_added: playlist_items[0]?.count > 0,
+					already_added: playlist_items_movie[0]?.count > 0,
 				}));
 				return output;
 			} else { // shared
@@ -265,7 +260,7 @@ export const usePlaylistAddToQuery = ({
 							*,
 							playlist_guests!inner(*),
 							user!inner(*),
-							playlist_items(count)
+							playlist_items_movie(count)
 						)
 					`)
 					.match({
@@ -273,22 +268,90 @@ export const usePlaylistAddToQuery = ({
 						'playlist.playlist_guests.user_id': userId,
 						'playlist.playlist_guests.edit': true,
 						'playlist.user.premium': true,
-						'playlist.playlist_items.media_id': mediaId,
+						'playlist.playlist_items_movie.movie_id': movieId,
+						'playlist.type': 'movie'
 					})
 					.order('updated_at', {
 						referencedTable: 'playlist',
 						ascending: false 
 					})
 				if (error) throw error;
-				const output = data?.map(({ playlist: { playlist_items, playlist_guests, user, ...playlist }, ...playlists_saved }) => ({
+				const output = data?.map(({ playlist: { playlist_items_movie, playlist_guests, user, ...playlist }, ...playlists_saved }) => ({
 					playlist: playlist,
-					already_added: playlist_items[0]?.count > 0,
+					already_added: playlist_items_movie[0]?.count > 0,
 				}));
 				return output;
 			}
 		},
-		enabled: !!userId && !!mediaId,
+		enabled: !!userId && !!movieId,
 	});
 };
+export const usePlaylistTvSeriesAddToQuery = ({
+	tvSeriesId,
+	userId,
+	source = 'personal',
+} : {
+	tvSeriesId: number;
+	userId?: string;
+	source: PlaylistSource;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: playlistKeys.addToSource({ id: tvSeriesId, type: 'tv_series', source }),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			if (!source) throw Error('Missing source');
+			if (source === 'personal') { // personal
+				const { data, error } = await supabase
+					.from('playlists')
+					.select('*, playlist_items_tv_series(count)')
+					.match({
+						'user_id': userId,
+						'playlist_items_tv_series.tv_series_id': tvSeriesId,
+						'type': 'tv_series'
+					})
+					.order('updated_at', { ascending: false })
+				if (error) throw error;
+				const output = data?.map(({ playlist_items_tv_series, ...playlist }) => ({
+					playlist: playlist,
+					already_added: playlist_items_tv_series[0]?.count > 0,
+				}));
+				return output;
+			} else { // shared
+				const { data, error } = await supabase
+					.from('playlists_saved')
+					.select(`
+						id,
+						playlist:playlists!inner(
+							*,
+							playlist_guests!inner(*),
+							user!inner(*),
+							playlist_items_tv_series(count)
+						)
+					`)
+					.match({
+						'user_id': userId,
+						'playlist.playlist_guests.user_id': userId,
+						'playlist.playlist_guests.edit': true,
+						'playlist.user.premium': true,
+						'playlist.playlist_items_tv_series.tv_series_id': tvSeriesId,
+						'playlist.type': 'tv_series'
+					})
+					.order('updated_at', {
+						referencedTable: 'playlist',
+						ascending: false
+					})
+				if (error) throw error;
+				const output = data?.map(({ playlist: { playlist_items_tv_series, playlist_guests, user, ...playlist }, ...playlists_saved }) => ({
+					playlist: playlist,
+					already_added: playlist_items_tv_series[0]?.count > 0,
+				}));
+				return output;
+			}
+		},
+		enabled: !!userId && !!tvSeriesId,
+	});
+};
+
 /* -------------------------------------------------------------------------- */
 

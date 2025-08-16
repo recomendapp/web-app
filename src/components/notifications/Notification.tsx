@@ -19,13 +19,13 @@ interface NotificationProps extends React.HTMLAttributes<HTMLDivElement | HTMLAn
 }
 
 const NotificationContent = ({ notification }: { notification: NotificationType }) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const t = useTranslations('common');
 	const acceptRequest = useUserAcceptFollowerRequestMutation({
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 	const declineRequest = useUserDeclineFollowerRequestMutation({
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 
 	const handleAction = async (action: 'primary' | 'secondary', key: string, id: number) => {

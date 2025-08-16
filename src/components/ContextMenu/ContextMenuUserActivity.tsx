@@ -5,10 +5,8 @@ import { WithLink } from "../utils/WithLink";
 import { useModal } from "@/context/modal-context";
 import { Fragment, useMemo } from "react";
 import { ModalShare } from "../Modals/Share/ModalShare";
-import { ModalRecoSend } from "../Modals/actions/ModalRecoSend";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { ModalPlaylistAdd } from "../Modals/actions/ModalPlaylistAdd";
 import { useAuth } from "@/context/auth-context";
 
 interface Item {
@@ -49,22 +47,22 @@ export const ContextMenuUserActivity = ({
 				label: activity.media?.media_type === 'movie'
 					? upperFirst(common('messages.go_to_film'))
 					: activity.media?.media_type === 'tv_series'
-					? upperFirst(common('messages.go_to_serie'))
+					? upperFirst(common('messages.go_to_tv_series'))
 					: activity.media?.media_type === 'person'
 					? upperFirst(common('messages.go_to_person'))
 					: ''
 			},
 			...(session ? [
-				{
-					icon: Icons.addPlaylist,
-					onClick: () => openModal(ModalPlaylistAdd, { mediaId: activity.media?.media_id!, mediaTitle: activity.media?.title }),
-					label: upperFirst(common('messages.add_to_playlist')),
-				},
-				{
-					icon: Icons.send,
-					onClick: () => openModal(ModalRecoSend, { mediaId: activity.media?.media_id!, mediaTitle: activity.media?.title }),
-					label: upperFirst(common('messages.send_to_friend')),
-				}
+				// {
+				// 	icon: Icons.addPlaylist,
+				// 	onClick: () => openModal(ModalPlaylistAdd, { mediaId: activity.media?.media_id!, mediaTitle: activity.media?.title }),
+				// 	label: upperFirst(common('messages.add_to_playlist')),
+				// },
+				// {
+				// 	icon: Icons.send,
+				// 	onClick: () => openModal(ModalRecoSend, { mediaId: activity.media?.media_id!, mediaTitle: activity.media?.title }),
+				// 	label: upperFirst(common('messages.send_to_friend')),
+				// }
 			] : []),
 		],
 		[

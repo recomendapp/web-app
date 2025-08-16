@@ -25,7 +25,7 @@ export const TvSeriesReview = ({
 		initialData: reviewServer,
 	});
 	const upsertReview = useUserReviewTvSeriesUpsertMutation({
-		userId: session?.user?.id,
+		userId: session?.user.id,
 		tvSeriesId: review?.activity?.tv_series_id!,
 	});
 

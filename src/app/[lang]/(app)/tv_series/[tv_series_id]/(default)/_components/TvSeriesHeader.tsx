@@ -29,8 +29,6 @@ import { useModal } from '@/context/modal-context';
 import { upperFirst } from 'lodash';
 import { useLocale, useTranslations } from 'next-intl';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
-import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlaylistAdd';
-import { ModalMediaFollowersRating } from '@/components/Modals/ModalMediaFollowersRating';
 import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 import { Database } from '@/types';
 import ButtonUserWatchlistTvSeries from '@/components/buttons/ButtonUserWatchlistTvSeries';
@@ -40,6 +38,8 @@ import ButtonUserActivityTvSeriesWatch from '@/components/buttons/ButtonUserActi
 import ButtonUserActivityTvSeriesWatchedDate from '@/components/buttons/ButtonUserActivityTvSeriesWatchedDate';
 import { ContextMenuTvSeries } from '@/components/ContextMenu/ContextMenuTvSeries';
 import ButtonUserRecosTvSeriesSend from '@/components/buttons/ButtonUserRecosTvSeriesSend';
+import ButtonPlaylistTvSeriesAdd from '@/components/buttons/ButtonPlaylistTvSeriesAdd';
+import { ModalUserActivityTvSeriesFollowersRating } from '@/components/Modals/activities/ModalUserActivityTvSeriesFollowersRating';
 
 export default function TvSerieHeader({
   serie,
@@ -78,7 +78,7 @@ export default function TvSerieHeader({
                     rating={followersAvgRating}
                     variant="follower"
                     className="w-full cursor-pointer"
-                    onClick={() => openModal(ModalMediaFollowersRating, { mediaId: serie.media_id! })}
+                    onClick={() => openModal(ModalUserActivityTvSeriesFollowersRating, { tvSeriesId: serie.id })}
                   /> : null}
                 </div>
               {(serie?.videos && serie.videos.length > 0) ? (
@@ -142,7 +142,7 @@ export default function TvSerieHeader({
           <ButtonUserActivityTvSeriesWatchedDate tvSeriesId={serie.id} />
         </div>
         <div className="flex gap-2 items-center">
-          <MediaActionPlaylistAdd mediaId={serie.media_id!} mediaTitle={serie.title} />
+          <ButtonPlaylistTvSeriesAdd tvSeriesId={serie.id} tvSeriesTitle={serie.title} />
           <ButtonUserRecosTvSeriesSend tvSeriesId={serie.id} tvSeriesTitle={serie.title} />
         </div>
       </div>

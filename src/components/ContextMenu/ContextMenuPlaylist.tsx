@@ -8,8 +8,8 @@ import { ModalShare } from "../Modals/Share/ModalShare";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
-import { PlaylistModal } from "../Modals/Playlist/PlaylistModal";
-import { ModalPlaylistGuest } from "../Modals/Playlist/ModalPlaylistGuest/ModalPlaylistGuest";
+import { PlaylistModal } from "../Modals/playlists/PlaylistModal";
+import { ModalPlaylistGuest } from "../Modals/playlists/ModalPlaylistGuest/ModalPlaylistGuest";
 import { usePlaylistDeleteMutation } from "@/features/client/playlist/playlistMutations";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "@/lib/i18n/routing";
@@ -33,9 +33,7 @@ export const ContextMenuPlaylist = ({
 	const router = useRouter();
 	const pathname = usePathname();
 	const { openModal, createConfirmModal } = useModal();
-	const playlistDeleteMutation = usePlaylistDeleteMutation({
-		userId: session?.user.id,
-	})
+	const playlistDeleteMutation = usePlaylistDeleteMutation()
 	const t = useTranslations();
 	const items: Item[][] = useMemo(() => {
 		return [
@@ -91,7 +89,7 @@ export const ContextMenuPlaylist = ({
 							}),
 							onConfirm: async () => {
 								await playlistDeleteMutation.mutateAsync(
-									{ playlistId: playlist.id },
+									{ playlistId: playlist.id, userId: session.user.id },
 									{
 										onSuccess: async () => {
 											toast.success(upperFirst(t('common.messages.deleted')));

@@ -32,7 +32,7 @@ export function ModalUserRecosMovieSend({
 	...props
 } : ModalUserRecosMovieSendProps) {
 	const t = useTranslations();
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const { closeModal } = useModal();
 	const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 	const [comment, setComment] = useState<string>('');
@@ -40,15 +40,15 @@ export function ModalUserRecosMovieSend({
 		data: friends,
 		isLoading,
 	} = useUserRecosMovieSendQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 		movieId: movieId,
 	});
 	const sendMovie = useUserRecosMovieInsertMutation();
 
 	function submit() {
-		if (!user || !movieId) return;
+		if (!session || !movieId) return;
 		sendMovie.mutate({
-			senderId: user.id,
+			senderId: session.user.id,
 			movieId: movieId,
 			receivers: selectedUsers,
 			comment: comment,

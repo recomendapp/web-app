@@ -19,17 +19,17 @@ export const TvSeriesCreateReview = ({
 	tvSeries: MediaTvSeries;
 	slug: string;
 }) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const router = useRouter();
 
 	const {
 		data: activity,
 	} = useUserActivityTvSeriesQuery({
 		tvSeriesId: tvSeries.id,
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 	const upsertReview = useUserReviewTvSeriesUpsertMutation({
-		userId: user?.id,
+		userId: session?.user.id,
 		tvSeriesId: tvSeries.id,
 	});
 

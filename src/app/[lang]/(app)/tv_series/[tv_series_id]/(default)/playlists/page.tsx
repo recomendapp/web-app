@@ -3,7 +3,7 @@ import { getTvSeries } from '@/features/server/media/mediaQueries';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ShowPlaylists } from './_components/ShowPlaylists';
+import { TvSeriesPlaylists } from './_components/TvSeriesPlaylists';
 import { truncate, upperFirst } from 'lodash';
 import { seoLocales } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
@@ -62,5 +62,5 @@ export default async function Reviews(
   const { id: seriesId } = getIdFromSlug(params.tv_series_id);
   const serie = await getTvSeries(params.lang, seriesId);
   if (!serie) notFound();
-  return <ShowPlaylists mediaId={serie.media_id!} />;
+  return <TvSeriesPlaylists tvSeriesId={seriesId} />;
 }

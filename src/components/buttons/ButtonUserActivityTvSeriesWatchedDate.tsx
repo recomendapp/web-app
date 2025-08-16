@@ -23,7 +23,7 @@ const ButtonUserActivityTvSeriesWatchedDate = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserActivityTvSeriesWatchedDateProps
 >(({ tvSeriesId, stopPropagation = true, className, ...props }, ref) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const locale = useLocale();
 	const format = useFormatter();
 	const t = useTranslations();
@@ -32,7 +32,7 @@ const ButtonUserActivityTvSeriesWatchedDate = React.forwardRef<
 		isLoading,
 		isError,
 	} = useUserActivityTvSeriesQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 		tvSeriesId: tvSeriesId,
 	});
 	const updateDate = useUserActivityTvSeriesUpdateMutation();

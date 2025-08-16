@@ -17,6 +17,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ClapperboardIcon,
+  ClockIcon,
   CompassIcon,
   CopyIcon,
   CreditCard,
@@ -271,6 +272,7 @@ export const Icons = {
   X: Cross2Icon,
   orderAsc: ArrowUpNarrowWideIcon,
   orderDesc: ArrowDownNarrowWideIcon,
+  clock: ClockIcon,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path

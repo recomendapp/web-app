@@ -10,7 +10,7 @@ import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 
 export default function Feed() {
-  const { user } = useAuth();
+  const { session } = useAuth();
   const common = useTranslations('common');
 
   const { ref, inView } = useInView();
@@ -22,7 +22,7 @@ export default function Feed() {
     isFetchingNextPage,
     hasNextPage,
   } = useUserFeedInfiniteQuery({
-    userId: user?.id,
+    userId: session?.user.id,
   });
 
   useEffect(() => {

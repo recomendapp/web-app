@@ -12,6 +12,7 @@ import { useAuth } from "@/context/auth-context";
 import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerMovie } from "../ShareController/ShareControllerMovie";
 import { ModalUserRecosMovieSend } from "../Modals/recos/ModalUserRecosMovieSend";
+import { ModalPlaylistMovieAdd } from "../Modals/playlists/ModalPlaylistMovieAdd";
 
 interface Item {
 	icon: React.ElementType;
@@ -45,11 +46,11 @@ export const ContextMenuMovie = ({
 				label: upperFirst(t('common.messages.go_to_film'))
 			},
 			...(session ? [
-				// {
-				// 	icon: Icons.addPlaylist,
-				// 	onClick: () => openModal(ModalPlaylistAdd, { mediaId: media.media_id!, mediaTitle: media.title }),
-				// 	label: upperFirst(t('common.messages.add_to_playlist')),
-				// },
+				{
+					icon: Icons.addPlaylist,
+					onClick: () => openModal(ModalPlaylistMovieAdd, { movieId: movie.id, movieTitle: movie.title }),
+					label: upperFirst(t('common.messages.add_to_playlist')),
+				},
 				{
 					icon: Icons.send,
 					onClick: () => openModal(ModalUserRecosMovieSend, { movieId: movie.id, movieTitle: movie.title }),

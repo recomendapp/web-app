@@ -1,5 +1,5 @@
 import { useSupabaseClient } from '@/context/supabase-context';
-import { User, UserFollower, UserRecosAggregated, UserWatchlist } from '@/types/type.db';
+import { User, UserActivityMovie, UserActivityTvSeries, UserFollower, UserRecosMovieAggregated, UserRecosTvSeriesAggregated, UserWatchlist, UserWatchlistMovie, UserWatchlistTvSeries } from '@/types/type.db';
 import { JSONContent } from '@tiptap/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { userKeys } from './userKeys';
@@ -257,12 +257,22 @@ export const useUserActivityMovieInsertMutation = () => {
 				userId: data.user_id,
 			}), data);
 
-			// Remove media from watchlist
+			// Watchlist
 			queryClient.setQueryData(userKeys.watchlistItem({
 				id: data.movie_id,
 				type: 'movie',
 				userId: data.user_id,
 			}), null);
+
+			// Heart picks
+			if (data.is_liked) {
+				queryClient.invalidateQueries({
+					queryKey: userKeys.heartPicks({
+						userId: data.user_id,
+						type: 'movie',
+					})
+				});
+			}
 
 			// TODO: Remove media from recommendations
 			// queryClient.setQueryData(userKeys.recos({userId: data.user_id}), (oldData: UserRecosAggregated[]) => {
@@ -301,6 +311,17 @@ export const useUserActivityMovieDeleteMutation = () => {
 				userId: data.user_id,
 			}), null);
 
+			// Heart picks
+			if (data.is_liked) {
+				queryClient.setQueryData(userKeys.heartPicks({
+					userId: data.user_id,
+					type: 'movie',
+				}), (oldData: UserActivityMovie[] | undefined) => {
+					if (!oldData) return oldData;
+					return oldData.filter((pick) => pick.id !== data.id);
+				});
+			}
+
 			queryClient.invalidateQueries({
 				queryKey: userKeys.feed({ userId: data.user_id })
 			})
@@ -335,7 +356,7 @@ export const useUserActivityMovieUpdateMutation = () => {
 			if (error) throw error;
 			return {
 				...data,
-				isLikedChange: isLiked !== undefined,
+				isLikedChange: isLiked,
 			};
 		},
 		onSuccess: ({ isLikedChange, ...data}) => {
@@ -345,18 +366,26 @@ export const useUserActivityMovieUpdateMutation = () => {
 				userId: data.user_id,
 			}), data);
 
-			// TODO: Update media in watchlist
-			// queryClient.setQueryData(userKeys.watchlistItem({
-			// 	id: data.movie_id,
-			// 	type: 'movie',
-			// 	userId: data.user_id,
-			// }), null);
-
-			// TODO: Update media in recommendations
-			// queryClient.setQueryData(userKeys.recos({userId: data.user_id}), (oldData: UserRecosAggregated[]) => {
-			// 	if (!oldData) return oldData;
-			// 	return oldData.filter((reco: any) => !(reco.media_id === data.media_id && reco.media_type === data.media_type));
-			// });
+			// Heart picks
+			if (isLikedChange !== undefined) {
+				if (isLikedChange) {
+					queryClient.invalidateQueries({
+						queryKey: userKeys.heartPicks({
+							userId: data.user_id,
+							type: 'movie',
+						})
+					})
+				} else {
+					// Remove from heart pick
+					queryClient.setQueryData(userKeys.heartPicks({
+						userId: data.user_id,
+						type: 'movie',
+					}), (oldData: UserActivityMovie[] | undefined) => {
+						if (!oldData) return oldData;
+						return oldData.filter((pick) => pick.id !== data.id);
+					});
+				}
+			}
 
 			queryClient.invalidateQueries({
 				queryKey: userKeys.feed({ userId: data.user_id })
@@ -401,12 +430,22 @@ export const useUserActivityTvSeriesInsertMutation = () => {
 				userId: data.user_id,
 			}), data);
 
-			// Remove media from watchlist
+			// Watchlist
 			queryClient.setQueryData(userKeys.watchlistItem({
 				id: data.tv_series_id,
 				type: 'tv_series',
 				userId: data.user_id,
 			}), null);
+
+			// Heart picks
+			if (data.is_liked) {
+				queryClient.invalidateQueries({
+					queryKey: userKeys.heartPicks({
+						userId: data.user_id,
+						type: 'tv_series',
+					})
+				});
+			}
 
 			// TODO: Remove media from recommendations
 			// queryClient.setQueryData(userKeys.recos({userId: data.user_id}), (oldData: UserRecosAggregated[]) => {
@@ -445,6 +484,17 @@ export const useUserActivityTvSeriesDeleteMutation = () => {
 				userId: data.user_id,
 			}), null);
 
+			// Heart picks
+			if (data.is_liked) {
+				queryClient.setQueryData(userKeys.heartPicks({
+					userId: data.user_id,
+					type: 'tv_series',
+				}), (oldData: UserActivityTvSeries[] | undefined) => {
+					if (!oldData) return oldData;
+					return oldData.filter((pick) => pick.id !== data.id);
+				});
+			}
+
 			queryClient.invalidateQueries({
 				queryKey: userKeys.feed({ userId: data.user_id })
 			})
@@ -479,7 +529,7 @@ export const useUserActivityTvSeriesUpdateMutation = () => {
 			if (error) throw error;
 			return {
 				...data,
-				isLikedChange: isLiked !== undefined,
+				isLikedChange: isLiked,
 			};
 		},
 		onSuccess: ({ isLikedChange, ...data}) => {
@@ -488,6 +538,26 @@ export const useUserActivityTvSeriesUpdateMutation = () => {
 				type: 'tv_series',
 				userId: data.user_id,
 			}), data);
+
+			// Heart picks
+			if (isLikedChange !== undefined) {
+				if (isLikedChange) {
+					queryClient.invalidateQueries({
+						queryKey: userKeys.heartPicks({
+							userId: data.user_id,
+							type: 'tv_series',
+						})
+					});
+				} else {
+					queryClient.setQueryData(userKeys.heartPicks({
+						userId: data.user_id,
+						type: 'tv_series',
+					}), (oldData: UserActivityTvSeries[] | undefined) => {
+						if (!oldData) return oldData;
+						return oldData.filter((pick) => pick.id !== data.id);
+					});
+				}
+			}
 
 			queryClient.invalidateQueries({
 				queryKey: userKeys.feed({ userId: data.user_id })
@@ -837,7 +907,25 @@ export const useUserRecosMovieDeleteMutation = () => {
 			};
 		},
 		onSuccess: (data) => {
-			// invalidate
+			/* -------------- Delete the item in all the my recos queries -------------- */
+			const baseKey = userKeys.recos({ userId: data.userId, type: 'movie' });
+			const recosQueries = queryClient.getQueriesData<UserRecosMovieAggregated[]>({
+				predicate: (query) => {
+					const key = query.queryKey
+					return Array.isArray(key) && baseKey.every((v, i) => v === key[i]);
+				}
+			});
+
+			recosQueries.forEach(([key, oldData]) => {
+				if (!oldData) return;
+				queryClient.setQueryData(key, (currentData: UserRecosMovieAggregated[] | undefined) => {
+					if (!currentData) return currentData;
+					return currentData.filter(
+						(reco) => reco.movie_id !== data.movieId
+					);
+				});
+			});
+			/* -------------------------------------------------------------------------- */
 		}
 	});
 };
@@ -870,7 +958,25 @@ export const useUserRecosMovieCompleteMutation = () => {
 			}
 		},
 		onSuccess: (data) => {
-			// Invalidate
+			/* -------------- Delete the item in all the my recos queries -------------- */
+			const baseKey = userKeys.recos({ userId: data.userId, type: 'movie' });
+			const recosQueries = queryClient.getQueriesData<UserRecosMovieAggregated[]>({
+				predicate: (query) => {
+					const key = query.queryKey
+					return Array.isArray(key) && baseKey.every((v, i) => v === key[i]);
+				}
+			});
+
+			recosQueries.forEach(([key, oldData]) => {
+				if (!oldData) return;
+				queryClient.setQueryData(key, (currentData: UserRecosMovieAggregated[] | undefined) => {
+					if (!currentData) return currentData;
+					return currentData.filter(
+						(reco) => reco.movie_id !== data.movieId
+					);
+				});
+			});
+			/* -------------------------------------------------------------------------- */
 		}
 	});
 };
@@ -940,7 +1046,25 @@ export const useUserRecosTvSeriesDeleteMutation = () => {
 			};
 		},
 		onSuccess: (data) => {
-			// Invalidate
+			/* -------------- Delete the item in all the my recos queries -------------- */
+			const baseKey = userKeys.recos({ userId: data.userId, type: 'tv_series' });
+			const recosQueries = queryClient.getQueriesData<UserRecosTvSeriesAggregated[]>({
+				predicate: (query) => {
+					const key = query.queryKey
+					return Array.isArray(key) && baseKey.every((v, i) => v === key[i]);
+				}
+			});
+
+			recosQueries.forEach(([key, oldData]) => {
+				if (!oldData) return;
+				queryClient.setQueryData(key, (currentData: UserRecosTvSeriesAggregated[] | undefined) => {
+					if (!currentData) return currentData;
+					return currentData.filter(
+						(reco) => reco.tv_series_id !== data.tvSeriesId
+					);
+				});
+			});
+			/* -------------------------------------------------------------------------- */
 		}
 	});
 };
@@ -973,142 +1097,28 @@ export const useUserRecosTvSeriesCompleteMutation = () => {
 			}
 		},
 		onSuccess: (data) => {
-			// Invalidate
+			/* -------------- Delete the item in all the my recos queries -------------- */
+			const baseKey = userKeys.recos({ userId: data.userId, type: 'tv_series' });
+			const recosQueries = queryClient.getQueriesData<UserRecosTvSeriesAggregated[]>({
+				predicate: (query) => {
+					const key = query.queryKey
+					return Array.isArray(key) && baseKey.every((v, i) => v === key[i]);
+				}
+			});
+
+			recosQueries.forEach(([key, oldData]) => {
+				if (!oldData) return;
+				queryClient.setQueryData(key, (currentData: UserRecosTvSeriesAggregated[] | undefined) => {
+					if (!currentData) return currentData;
+					return currentData.filter(
+						(reco) => reco.tv_series_id !== data.tvSeriesId
+					);
+				});
+			});
+			/* -------------------------------------------------------------------------- */
 		}
 	});
 };
-// 			senderId,
-// 			mediaId,
-// 			receivers,
-// 			comment,
-// 		} : {
-// 			senderId: string;
-// 			mediaId: number;
-// 			receivers: User[];
-// 			comment: string;
-// 		}) => {
-// 			if (receivers.length === 0) throw Error('Missing receivers');
-// 			const { error } = await supabase
-// 				.rpc('user_recos_insert', {
-// 					mediaid: mediaId,
-// 					receiver_user_ids: receivers.map((user) => String(user?.id)),
-// 					sender_user_id: senderId,
-// 					comment: comment,
-// 				})
-// 			if (error) throw error;
-// 			return {
-// 				senderId,
-// 				mediaId,
-// 			}
-// 		},
-// 		onSuccess: ({ mediaId }) => {
-// 			queryClient.invalidateQueries({
-// 				queryKey: userKeys.recosSend({ mediaId: mediaId }),
-// 			});
-// 		}
-// 	});	
-// };
-
-// export const useUserRecosDeleteMutation = () => {
-// 	const supabase = useSupabaseClient();
-// 	const queryClient = useQueryClient();
-// 	return useMutation({
-// 		mutationFn: async ({
-// 			userId,
-// 			mediaId,
-// 		} : {
-// 			userId: string;
-// 			mediaId: number;
-// 		}) => {
-// 			const { error } = await supabase
-// 				.from('user_recos')
-// 				.update({
-// 					status: 'deleted',
-// 				})
-// 				.match({
-// 					media_id: mediaId,
-// 					user_id: userId,
-// 					status: 'active',
-// 				})
-// 				if (error) throw error;
-// 				return {
-// 					userId,
-// 					mediaId,
-// 				};
-// 		},
-// 		onSuccess: (data) => {
-// 			/* ---------------- Delete the reco in all the recos queries ---------------- */
-// 			const baseKey = userKeys.recos({ userId: data.userId});
-// 			const recosQueries = queryClient.getQueriesData<UserRecosAggregated[]>({
-// 				predicate: (query) => {
-// 					const key = query.queryKey
-// 					return Array.isArray(key) && baseKey.every((v, i) => v === key[i]);
-// 				}
-// 			});
-// 			recosQueries.forEach(([key, oldData]) => {
-// 				if (!oldData) return;
-// 				queryClient.setQueryData(key, (currentData: UserRecosAggregated[] | undefined) => {
-// 					if (!currentData) return currentData;
-// 					return currentData.filter(
-// 						(reco) => reco.media_id !== data.mediaId
-// 					);
-// 				});
-// 			});
-// 			/* -------------------------------------------------------------------------- */
-// 		},
-// 	});
-// };
-
-// export const useUserRecosCompleteMutation = () => {
-// 	const supabase = useSupabaseClient();
-// 	const queryClient = useQueryClient();
-// 	return useMutation({
-// 		mutationFn: async ({
-// 			userId,
-// 			mediaId,
-// 		} : {
-// 			userId: string;
-// 			mediaId: number;
-// 		}) => {
-// 			const { error } = await supabase
-// 				.from('user_recos')
-// 				.update({
-// 					status: 'completed',
-// 				})
-// 				.match({
-// 					media_id: mediaId,
-// 					user_id: userId,
-// 					status: 'active',
-// 				})
-// 				.single();
-// 			if (error) throw error;
-// 			return {
-// 				userId,
-// 				mediaId,
-// 			}
-// 		},
-// 		onSuccess: (data) => {
-// 			/* ---------------- Delete the reco in all the recos queries ---------------- */
-// 			const baseKey = userKeys.recos({ userId: data.userId});
-// 			const recosQueries = queryClient.getQueriesData<UserRecosAggregated[]>({
-// 				predicate: (query) => {
-// 					const key = query.queryKey
-// 					return Array.isArray(key) && baseKey.every((v, i) => v === key[i]);
-// 				}
-// 			});
-// 			recosQueries.forEach(([key, oldData]) => {
-// 				if (!oldData) return;
-// 				queryClient.setQueryData(key, (currentData: UserRecosAggregated[] | undefined) => {
-// 					if (!currentData) return currentData;
-// 					return currentData.filter(
-// 						(reco) => reco.media_id !== data.mediaId
-// 					);
-// 				});
-// 			});
-// 			/* -------------------------------------------------------------------------- */
-// 		},
-// 	});
-// };
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- WATCHLIST ------------------------------- */
@@ -1145,6 +1155,7 @@ export const useUserWatchlistMovieInsertMutation = () => {
 			queryClient.invalidateQueries({
 				queryKey: userKeys.watchlist({
 					userId: data.user_id,
+					type: 'movie',
 				})
 			});
 		}
@@ -1176,30 +1187,24 @@ export const useUserWatchlistMovieDeleteMutation = () => {
 				userId: data.user_id,
 			}), null);
 
-			queryClient.invalidateQueries({
-				queryKey: userKeys.watchlist({
-					userId: data.user_id,
-				})
+			/* -------------- Delete the item in all the watchlist queries -------------- */
+			const baseKey = userKeys.watchlist({ userId: data.user_id, type: 'movie' });
+			const watchlistQueries = queryClient.getQueriesData<UserWatchlistMovie[]>({
+				predicate: (query) => {
+					const key = query.queryKey
+					return Array.isArray(key) && baseKey.every((v, i) => v === key[i]);
+				}
 			});
 
-			/* -------------- Delete the item in all the watchlist queries -------------- */
-			// const baseKey = userKeys.watchlist({ userId: data.user_id});
-			// const watchlistQueries = queryClient.getQueriesData<UserWatchlist[]>({
-			// 	predicate: (query) => {
-			// 		const key = query.queryKey
-			// 		return Array.isArray(key) && baseKey.every((v, i) => v === key[i]);
-			// 	}
-			// });
-
-			// watchlistQueries.forEach(([key, oldData]) => {
-			// 	if (!oldData) return;
-			// 	queryClient.setQueryData(key, (currentData: UserWatchlist[] | undefined) => {
-			// 		if (!currentData) return currentData;
-			// 		return currentData.filter(
-			// 			(watchlist) => watchlist?.id !== data.id
-			// 		);
-			// 	});
-			// });
+			watchlistQueries.forEach(([key, oldData]) => {
+				if (!oldData) return;
+				queryClient.setQueryData(key, (currentData: UserWatchlistMovie[] | undefined) => {
+					if (!currentData) return currentData;
+					return currentData.filter(
+						(watchlist) => watchlist?.id !== data.id
+					);
+				});
+			});
 			// /* -------------------------------------------------------------------------- */
 		}
 	});
@@ -1234,12 +1239,31 @@ export const useUserWatchlistMovieUpdateMutation = () => {
 				userId: data.user_id,
 			}), data);
 
+
+			// Watchlist
+			// All
 			queryClient.setQueryData(userKeys.watchlist({
 				userId: data.user_id,
 			}), (oldData: UserWatchlist[]) => {
 				if (!oldData) return oldData;
 				return oldData.map((item) => {
 					if (item.type === 'movie' && item.id === data.id) {
+						return {
+							...item,
+							...data,
+						};
+					}
+					return item;
+				});
+			});
+			// Movies
+			queryClient.setQueryData(userKeys.watchlist({
+				userId: data.user_id,
+				type: 'movie',
+			}), (oldData: UserWatchlistMovie[]) => {
+				if (!oldData) return oldData;
+				return oldData.map((item) => {
+					if (item.id === data.id) {
 						return {
 							...item,
 							...data,
@@ -1285,6 +1309,7 @@ export const useUserWatchlistTvSeriesInsertMutation = () => {
 			queryClient.invalidateQueries({
 				queryKey: userKeys.watchlist({
 					userId: data.user_id,
+					type: 'tv_series',
 				})
 			});
 		}
@@ -1316,29 +1341,24 @@ export const useUserWatchlistTvSeriesDeleteMutation = () => {
 				userId: data.user_id,
 			}), null);
 
-			queryClient.invalidateQueries({
-				queryKey: userKeys.watchlist({
-					userId: data.user_id,
-				})
-			});
 			/* -------------- Delete the item in all the watchlist queries -------------- */
-			// const baseKey = userKeys.watchlist({ userId: data.user_id});
-			// const watchlistQueries = queryClient.getQueriesData<UserWatchlist[]>({
-			// 	predicate: (query) => {
-			// 		const key = query.queryKey
-			// 		return Array.isArray(key) && baseKey.every((v, i) => v === key[i]);
-			// 	}
-			// });
+			const baseKey = userKeys.watchlist({ userId: data.user_id, type: 'tv_series' });
+			const watchlistQueries = queryClient.getQueriesData<UserWatchlistTvSeries[]>({
+				predicate: (query) => {
+					const key = query.queryKey
+					return Array.isArray(key) && baseKey.every((v, i) => v === key[i]);
+				}
+			});
 
-			// watchlistQueries.forEach(([key, oldData]) => {
-			// 	if (!oldData) return;
-			// 	queryClient.setQueryData(key, (currentData: UserWatchlist[] | undefined) => {
-			// 		if (!currentData) return currentData;
-			// 		return currentData.filter(
-			// 			(watchlist) => watchlist?.id !== data.id
-			// 		);
-			// 	});
-			// });
+			watchlistQueries.forEach(([key, oldData]) => {
+				if (!oldData) return;
+				queryClient.setQueryData(key, (currentData: UserWatchlistTvSeries[] | undefined) => {
+					if (!currentData) return currentData;
+					return currentData.filter(
+						(watchlist) => watchlist?.id !== data.id
+					);
+				});
+			});
 			/* -------------------------------------------------------------------------- */
 		}
 	});
@@ -1373,12 +1393,30 @@ export const useUserWatchlistTvSeriesUpdateMutation = () => {
 				userId: data.user_id,
 			}), data);
 
+			// Watchlist
+			// All
 			queryClient.setQueryData(userKeys.watchlist({
 				userId: data.user_id,
 			}), (oldData: UserWatchlist[]) => {
 				if (!oldData) return oldData;
 				return oldData.map((item) => {
 					if (item.type === 'tv_series' && item.id === data.id) {
+						return {
+							...item,
+							...data,
+						};
+					}
+					return item;
+				});
+			});
+			// Movies
+			queryClient.setQueryData(userKeys.watchlist({
+				userId: data.user_id,
+				type: 'tv_series',
+			}), (oldData: UserWatchlistTvSeries[]) => {
+				if (!oldData) return oldData;
+				return oldData.map((item) => {
+					if (item.id === data.id) {
 						return {
 							...item,
 							...data,

@@ -23,7 +23,7 @@ const ButtonUserReviewMovieLike = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserReviewMovieLikeProps
 >(({ reviewId, reviewLikesCount, className, ...props }, ref) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 	const {
@@ -32,7 +32,7 @@ const ButtonUserReviewMovieLike = React.forwardRef<
 		isError,
 	} = useUserReviewMovieLikeQuery({
 		reviewId: reviewId,
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 	const [likeCount, setLikeCount] = React.useState(reviewLikesCount ?? undefined);
 	const insertLike = useUserReviewMovieLikeInsertMutation();
@@ -40,12 +40,12 @@ const ButtonUserReviewMovieLike = React.forwardRef<
 
 	const handleLike = async (e: React.MouseEvent) => {
 		e.stopPropagation();
-		if (!user) {
+		if (!session) {
 			toast.error(upperFirst(t('common.messages.not_logged_in')));
 			return;
 		}
 		await insertLike.mutateAsync({
-			userId: user.id,
+			userId: session.user.id,
 			reviewId: reviewId,
 		}, {
 			onSuccess: () => {
@@ -74,7 +74,7 @@ const ButtonUserReviewMovieLike = React.forwardRef<
 		});
 	};
 
-	if (user == null) {
+	if (session == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button

@@ -19,17 +19,17 @@ export const MovieCreateReview = ({
 	movie: MediaMovie;
 	slug: string;
 }) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const router = useRouter();
 
 	const {
 		data: activity,
 	} = useUserActivityMovieQuery({
 		movieId: movie.id,
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 	const upsertReview = useUserReviewMovieUpsertMutation({
-		userId: user?.id,
+		userId: session?.user.id,
 		movieId: movie.id,
 	});
 

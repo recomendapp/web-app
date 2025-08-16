@@ -48,7 +48,7 @@ export default function ReviewForm({
 	onUpdate,
 	onCreate,
 } : ReviewFormProps) {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const t = useTranslations('common');
 	const { createConfirmModal } = useModal();
 	const [title, setTitle] = useState(review?.title);
@@ -137,7 +137,7 @@ export default function ReviewForm({
 				{author ? (review ? <CardUser variant="inline" user={author} /> : <CardUser variant="inline" user={author} />) : null}
 				<div className='flex items-center gap-1 text-sm text-muted-foreground'>
 					{review ? format.relativeTime(new Date(review?.created_at ?? ''), now) : null}
-					{author?.id == user?.id ? (
+					{author?.id == session?.user.id ? (
 						<>
 							{!editable ? (
 								<TooltipBox tooltip={upperFirst(t('messages.edit'))}>							

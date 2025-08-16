@@ -20,13 +20,13 @@ export function ProfileFollowButton({
   profileId,
 }: UserFollowButtonProps) {
   const common = useTranslations('common');
-  const { user } = useAuth();
+  const { session } = useAuth();
 
   const {
     data: isFollow,
     isLoading: loading,
   } = useUserFollowProfileQuery({
-    userId: user?.id,
+    userId: session?.user.id,
     followeeId: profileId,
   });
 
@@ -34,9 +34,9 @@ export function ProfileFollowButton({
   const deleteFollowerMutation = useUserUnfollowProfileDeleteMutation();
 
   const followUser = async () => {
-    user?.id &&
+    session?.user.id &&
       (await insertFollow.mutateAsync({
-        userId: user?.id,
+        userId: session?.user.id,
         followeeId: profileId,
       }, {
         onError: (error) => {
@@ -46,9 +46,9 @@ export function ProfileFollowButton({
   }
 
   const unfollowUser = async () => {
-    user?.id &&
+    session?.user.id &&
       (await deleteFollowerMutation.mutateAsync({
-        userId: user?.id,
+        userId: session?.user.id,
         followeeId: profileId,
       }, {
         onError: (error) => {
@@ -57,7 +57,7 @@ export function ProfileFollowButton({
       }));
   }
 
-  if (!user || user.id == profileId) return null;
+  if (!session || session.user.id == profileId) return null;
 
   return (
     <div className={cn('flex items-center', className)}>

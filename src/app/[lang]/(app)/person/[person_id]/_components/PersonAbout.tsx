@@ -1,7 +1,7 @@
 'use client'
 import { MediaPerson } from "@/types/type.db";
 import { useModal } from "@/context/modal-context";
-import { PersonAboutModal } from "@/components/Modals/Person/PersonAboutModal";
+import { PersonAboutModal } from "@/components/Modals/persons/PersonAboutModal";
 
 export function PersonAbout({
   person,

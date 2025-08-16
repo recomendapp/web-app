@@ -25,7 +25,7 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserActivityMovieLikeProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 	const queryClient = useQueryClient();
@@ -35,7 +35,7 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 		isLoading,
 		isError,
 	} = useUserActivityMovieQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 		movieId: movieId,
 	});
 
@@ -44,7 +44,7 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 
 	const handleLike = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
-		if (!user?.id) return;
+		if (!session?.user.id) return;
 		if (activity) {
 			await updateActivity.mutateAsync({
 				activityId: activity.id,
@@ -52,7 +52,7 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 			}, {
 				onSuccess: () => {
 					queryClient.invalidateQueries({
-						queryKey: userKeys.likes({ userId: user.id })
+						queryKey: userKeys.heartPicks({ userId: session.user.id, type: 'movie' })
 					});
 				},
 				onError: () => {
@@ -61,13 +61,13 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 			});
 		} else {
 			await insertActivity.mutateAsync({
-				userId: user?.id,
+				userId: session?.user.id,
 				movieId: movieId,
 				isLiked: true,
 			}, {
 				onSuccess: (data) => {
 					queryClient.invalidateQueries({
-						queryKey: userKeys.likes({ userId: user.id })
+						queryKey: userKeys.heartPicks({ userId: session.user.id, type: 'movie' })
 					});
 				},
 				onError: () => {
@@ -78,7 +78,7 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 	};
 	const handleUnlike = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
-		if (!user?.id) return;
+		if (!session?.user.id) return;
 		if (!activity) return;
 		await updateActivity.mutateAsync({
 			activityId: activity.id,
@@ -86,7 +86,7 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 		}, {
 			onSuccess: () => {
 				queryClient.invalidateQueries({
-					queryKey: userKeys.likes({ userId: user.id })
+					queryKey: userKeys.heartPicks({ userId: session.user.id, type: 'movie' })
 				});
 			},
 			onError: () => {
@@ -95,7 +95,7 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 		});
 	};
 
-	if (user == null) {
+	if (session == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button

@@ -142,16 +142,16 @@ const MyReviewButton = ({
 }) => {
 	const pathname = usePathname();
 	const common = useTranslations('common');
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const {
 	  data: activity,
 	  isLoading,  
 	} = useUserActivityTvSeriesQuery({
 		tvSeriesId: tvSeries.id,
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 
-	if (!user) return;
+	if (!session) return;
 
 	if (isLoading || activity === undefined) return <Skeleton className="w-36 h-10 rounded-full"/>;
   

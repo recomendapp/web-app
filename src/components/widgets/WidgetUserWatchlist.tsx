@@ -14,18 +14,18 @@ import { CardTvSeries } from "../Card/CardTvSeries";
 export const WidgetUserWatchlist = ({
   className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
-  const { user } = useAuth();
+  const { session } = useAuth();
   const t = useTranslations('common');
 
   const { data: watchlist } = useUserWatchlistQuery({
-    userId: user?.id,
+    userId: session?.user.id,
     filters: {
       sortBy: 'random',
       limit: 6,
     }
   })
 
-  if (!user) return null;
+  if (!session) return null;
 
   if (!watchlist || !watchlist.length) return (null);
 

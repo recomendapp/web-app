@@ -32,7 +32,7 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserActivityMovieRatingProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 	const [ratingValue, setRatingValue] = React.useState(5);
@@ -42,7 +42,7 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 		isLoading,
 		isError,
 	} = useUserActivityMovieQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 		movieId: movieId,
 	});
 
@@ -52,7 +52,7 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 
 	const handleRate = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
-		if (!user?.id) return;
+		if (!session?.user.id) return;
 		if (activity) {
 			await updateActivity.mutateAsync({
 				activityId: activity.id,
@@ -64,7 +64,7 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 			});
 		} else {
 			await insertActivity.mutateAsync({
-				userId: user?.id,
+				userId: session?.user.id,
 				movieId: movieId,
 				rating: ratingValue,
 			}, {
@@ -93,7 +93,7 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 		activity?.rating && setRatingValue(activity?.rating);
 	  }, [activity]);
 
-	if (user == null) {
+	if (session == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button

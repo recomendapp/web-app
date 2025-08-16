@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import { userKeys } from "./userKeys"
 import { useSupabaseClient } from '@/context/supabase-context';
-import { UserFeedCastCrew, Playlist, UserActivity, UserFollower, UserFriend, UserRecosAggregated, UserReview, UserWatchlist, UserWatchlistMovie, UserWatchlistTvSeries, UserReviewMovie, UserReviewTvSeries } from "@/types/type.db";
+import { UserFeedCastCrew, Playlist, UserActivity, UserFollower, UserFriend, UserWatchlistMovie, UserWatchlistTvSeries, UserReviewMovie, UserReviewTvSeries, UserActivityTvSeries, UserActivityMovie, UserRecosMovieAggregated, UserRecosTvSeriesAggregated, UserRecosAggregated, UserWatchlist } from "@/types/type.db";
 
 /* ---------------------------------- USER ---------------------------------- */
 
@@ -190,7 +190,6 @@ export const useUserActivityMovieQuery = ({
 		enabled: !!userId && !!movieId,
 	});
 };
-
 // TV Series
 export const useUserActivityTvSeriesQuery = ({
 	userId,
@@ -223,36 +222,63 @@ export const useUserActivityTvSeriesQuery = ({
 	});
 };
 
-export const useUserFollowersRatingQuery = ({
+
+export const useUserActivityMovieFollowersRatingQuery = ({
+	movieId,
 	userId,
-	mediaId,
 } : {
+	movieId: number;
 	userId?: string;
-	mediaId: number;
 }) => {
 	const supabase = useSupabaseClient();
 	return useQuery({
 		queryKey: userKeys.followersRating({
-			userId: userId as string,
-			mediaId: mediaId,
+			id: movieId,
+			type: 'movie',
+			userId: userId!,
 		}),
 		queryFn: async () => {
 			if (!userId) throw Error('Missing user id');
 			const { data, error } = await supabase
-				.from('user_followers_rating')
-				.select(`
-					*,
-					user(*)
-				`)
-				.eq('media_id', mediaId)
+				.from('user_activities_movie_follower')
+				.select('*, user(*)')
+				.eq('movie_id', movieId)
 				.not('rating', 'is', null)
 				.order('created_at', { ascending: false });
 			if (error) throw error;
 			return data;
 		},
-		enabled: !!userId && !!mediaId,
+		enabled: !!userId && !!movieId,
 	});
-}
+};
+export const useUserActivityTvSeriesFollowersRatingQuery = ({
+	tvSeriesId,
+	userId,
+} : {
+	tvSeriesId: number;
+	userId?: string;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.followersRating({
+			id: tvSeriesId,
+			type: 'tv_series',
+			userId: userId!,
+		}),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			const { data, error } = await supabase
+				.from('user_activities_tv_series_follower')
+				.select('*, user(*)')
+				.eq('tv_series_id', tvSeriesId)
+				.not('rating', 'is', null)
+				.order('created_at', { ascending: false });
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId && !!tvSeriesId,
+	});
+};
 /* -------------------------------------------------------------------------- */
 
 /* --------------------------------- REVIEWS -------------------------------- */
@@ -385,43 +411,42 @@ export const useUserRecosQuery = ({
 } : {
 	userId?: string;
 	filters?: {
-		order?: 'created_at-desc' | 'created_at-asc' | 'random';
+		sortBy?: 'created_at' | 'random';
+		sortOrder?: 'asc' | 'desc';
 		limit?: number;
 	};
 }) => {
-	const mergedFilters = {
-		order: 'created_at-asc',
-		...filters
-	} as typeof filters;
 	const supabase = useSupabaseClient();
 	return useQuery({
 		queryKey: userKeys.recos({
-			userId: userId as string,
-			filters: mergedFilters,
+			userId: userId!,
+			type: 'all',
+			filters: filters,
 		}),
 		queryFn: async () => {
 			if (!userId) throw Error('Missing user id');
 			let request = supabase
-				.from(mergedFilters?.order === 'random' ? 'user_recos_aggregated_random' : 'user_recos_aggregated')
-				.select(`
-					*,
-					media(*)
-				`)
+				.from(filters?.sortBy === 'random' ? 'user_recos_aggregated_random' : 'user_recos_aggregated')
+				.select('*')
 				.match({
 					'user_id': userId,
 					'status': 'active',
 				})
-			if (mergedFilters) {
-				if (mergedFilters?.order !== 'random' && mergedFilters.order) {
-					const [ column, direction ] = mergedFilters.order.split('-');
-					request = request.order(column, { ascending: direction === 'asc' });
+			
+			if (filters) {
+				if (filters.sortBy !== 'random') {
+					switch (filters.sortBy) {
+						default:
+							request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
+							break;
+					}
 				}
-				if (mergedFilters.limit) {
-					request = request.limit(mergedFilters.limit);
+				if (filters.limit) {
+					request = request.limit(filters.limit);
 				}
 			}
 			const { data, error } = await request
-				.returns<UserRecosAggregated[]>();
+				.overrideTypes<UserRecosAggregated[], { merge: false }>();
 			if (error) throw error;
 			return data;
 		},
@@ -429,6 +454,124 @@ export const useUserRecosQuery = ({
 	})
 };
 
+export const useUserRecosMovieQuery = ({
+	userId,
+	filters,
+} : {
+	userId?: string;
+	filters?: {
+		sortBy?: 'created_at' | 'random';
+		sortOrder?: 'asc' | 'desc';
+		limit?: number;
+	};
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.recos({
+			userId: userId!,
+			type: 'movie',
+			filters: filters,
+		}),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			let request = supabase
+					.from(filters?.sortBy === 'random' ? 'user_recos_movie_aggregated_random' : 'user_recos_movie_aggregated')
+					.select(`
+						*,
+						movie:media_movie(*)
+					`)
+					.match({
+						'user_id': userId,
+						'status': 'active',
+					});
+			
+			const mergedFilters = {
+				sortBy: 'created_at',
+				sortOrder: 'asc',
+				...filters
+			};
+
+			if (mergedFilters) {
+				if (mergedFilters.sortBy !== 'random') {
+					switch (mergedFilters.sortBy) {
+						default:
+							request = request.order('created_at', { ascending: mergedFilters.sortOrder === 'asc' });
+							break;
+					}
+				}
+
+				if (mergedFilters.limit) {
+					request = request.limit(mergedFilters.limit);
+				}
+			}
+			const { data, error } = await request
+				.overrideTypes<UserRecosMovieAggregated[], { merge: false }>();
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId,
+	});
+};
+export const useUserRecosTvSeriesQuery = ({
+	userId,
+	filters,
+} : {
+	userId?: string;
+	filters?: {
+		sortBy?: 'created_at' | 'random';
+		sortOrder?: 'asc' | 'desc';
+		limit?: number;
+	};
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.recos({
+			userId: userId!,
+			type: 'tv_series',
+			filters: filters,
+		}),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			let request = supabase
+					.from(filters?.sortBy === 'random' ? 'user_recos_tv_series_aggregated_random' : 'user_recos_tv_series_aggregated')
+					.select(`
+						*,
+						tv_series:media_tv_series(*)
+					`)
+					.match({
+						'user_id': userId,
+						'status': 'active',
+					});
+
+			const mergedFilters = {
+				sortBy: 'created_at',
+				sortOrder: 'asc',
+				...filters
+			};
+
+			if (mergedFilters) {
+				if (mergedFilters.sortBy !== 'random') {
+					switch (mergedFilters.sortBy) {
+						default:
+							request = request.order('created_at', { ascending: mergedFilters.sortOrder === 'asc' });
+							break;
+					}
+				}
+
+				if (mergedFilters.limit) {
+					request = request.limit(mergedFilters.limit);
+				}
+			}
+			const { data, error } = await request
+				.overrideTypes<UserRecosTvSeriesAggregated[], { merge: false }>();
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId,
+	});
+};
+
+// ========== SEND ========== //
 // Movies
 export const useUserRecosMovieSendQuery = ({
 	userId,
@@ -599,6 +742,7 @@ export const useUserWatchlistQuery = ({
 	return useQuery({
 		queryKey: userKeys.watchlist({
 			userId: userId!,
+			type: 'all',
 			filters: filters,
 		}),
 		queryFn: async () => {
@@ -632,7 +776,62 @@ export const useUserWatchlistQuery = ({
 	});
 };
 
-export const useUserWatchlistMovieQuery = ({
+// Movies
+export const useUserWatchlistMoviesQuery = ({
+	userId,
+} : {
+	userId?: string;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.watchlist({
+			userId: userId!,
+			type: 'movie',
+		}),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			const { data, error } = await supabase
+				.from('user_watchlists_movie')
+				.select(`*, movie:media_movie(*)`)
+				.match({
+					'user_id': userId,
+					'status': 'active',
+				});
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId,
+	});
+};
+// TV Series
+export const useUserWatchlistTvSeriesQuery = ({
+	userId,
+} : {
+	userId?: string;
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.watchlist({
+			userId: userId!,
+			type: 'tv_series',
+		}),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			const { data, error } = await supabase
+				.from('user_watchlists_tv_series')
+				.select(`*, tv_series:media_tv_series(*)`)
+				.match({
+					'user_id': userId,
+					'status': 'active',
+				});
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId,
+	});
+};
+
+export const useUserWatchlistMovieItemQuery = ({
 	userId,
 	movieId,
 } : {
@@ -665,7 +864,7 @@ export const useUserWatchlistMovieQuery = ({
 	});
 };
 
-export const useUserWatchlistTvSeriesQuery = ({
+export const useUserWatchlistTvSeriesItemQuery = ({
 	userId,
 	tvSeriesId,
 } : {
@@ -699,53 +898,162 @@ export const useUserWatchlistTvSeriesQuery = ({
 };
 /* -------------------------------------------------------------------------- */
 
-/* ---------------------------------- LIKES --------------------------------- */
-export const useUserLikesQuery = ({
+/* ------------------------------- HEART PICKS ------------------------------ */
+// export const useUserLikesQuery = ({
+// 	userId,
+// 	filters,
+// } : {
+// 	userId?: string;
+// 	filters?: {
+// 		sortBy?: 'created_at' | 'random';
+// 		sortOrder?: 'asc' | 'desc';
+// 		limit?: number;
+// 	};
+// }) => {
+// 	const supabase = useSupabaseClient();
+// 	return useQuery({
+// 		queryKey: userKeys.likes({
+// 			userId: userId!,
+// 			filters: filters,
+// 		}),
+// 		queryFn: async () => {
+// 			if (!userId) throw Error('Missing user id');
+// 			let request = supabase
+// 				.from('user_activities')
+// 				.select(`*`)
+// 				.match({
+// 					'user_id': userId,
+// 					'is_liked': true,
+// 				})
+
+// 			const mergedFilters = {
+// 				sortBy: 'created_at',
+// 				sortOrder: 'asc',
+// 				...filters
+// 			} as typeof filters;
+			
+// 			if (mergedFilters) {
+// 				if (mergedFilters?.sortBy !== 'random') {
+// 					switch (mergedFilters.sortBy) {
+// 						default: request = request.order('created_at', { ascending: mergedFilters.sortOrder === 'asc' });
+// 					}
+// 				}
+// 				if (mergedFilters.limit) {
+// 					request = request.limit(mergedFilters.limit);
+// 				}
+// 			}
+	
+// 			const { data, error } = await request
+// 				.overrideTypes<UserActivity[], { merge: false }>();
+// 			if (error) throw error;
+// 			return data;
+// 		},
+// 		enabled: !!userId,
+// 	});
+// };
+
+// Movies
+export const useUserHeartPicksMovieQuery = ({
 	userId,
 	filters,
 } : {
 	userId?: string;
 	filters?: {
-		sortBy?: 'created_at' | 'random';
+		sortBy?: 'liked_at' | 'random';
 		sortOrder?: 'asc' | 'desc';
 		limit?: number;
 	};
 }) => {
 	const supabase = useSupabaseClient();
 	return useQuery({
-		queryKey: userKeys.likes({
+		queryKey: userKeys.heartPicks({
 			userId: userId!,
+			type: 'movie',
 			filters: filters,
 		}),
 		queryFn: async () => {
 			if (!userId) throw Error('Missing user id');
 			let request = supabase
-				.from('user_activities')
-				.select(`*`)
+				.from('user_activities_movie')
+				.select(`*, movie:media_movie(*)`)
 				.match({
 					'user_id': userId,
 					'is_liked': true,
 				})
 
 			const mergedFilters = {
-				sortBy: 'created_at',
-				sortOrder: 'asc',
+				sortBy: 'liked_at',
+				sortOrder: 'desc',
 				...filters
 			} as typeof filters;
-			
+
 			if (mergedFilters) {
 				if (mergedFilters?.sortBy !== 'random') {
 					switch (mergedFilters.sortBy) {
-						default: request = request.order('created_at', { ascending: mergedFilters.sortOrder === 'asc' });
+						default: request = request.order('liked_at', { ascending: mergedFilters.sortOrder === 'asc' });
 					}
 				}
 				if (mergedFilters.limit) {
 					request = request.limit(mergedFilters.limit);
 				}
 			}
-	
+
 			const { data, error } = await request
-				.overrideTypes<UserActivity[], { merge: false }>();
+				.overrideTypes<UserActivityMovie[], { merge: false }>();
+			if (error) throw error;
+			return data;
+		},
+		enabled: !!userId,
+	});
+};
+// TV Series
+export const useUserHeartPicksTvSeriesQuery = ({
+	userId,
+	filters,
+} : {
+	userId?: string;
+	filters?: {
+		sortBy?: 'liked_at' | 'random';
+		sortOrder?: 'asc' | 'desc';
+		limit?: number;
+	};
+}) => {
+	const supabase = useSupabaseClient();
+	return useQuery({
+		queryKey: userKeys.heartPicks({
+			userId: userId!,
+			type: 'tv_series',
+			filters: filters,
+		}),
+		queryFn: async () => {
+			if (!userId) throw Error('Missing user id');
+			let request = supabase
+				.from('user_activities_tv_series')
+				.select(`*, tv_series:media_tv_series(*)`)
+				.match({
+					'user_id': userId,
+					'is_liked': true,
+				})
+
+			const mergedFilters = {
+				sortBy: 'liked_at',
+				sortOrder: 'desc',
+				...filters
+			} as typeof filters;
+
+			if (mergedFilters) {
+				if (mergedFilters?.sortBy !== 'random') {
+					switch (mergedFilters.sortBy) {
+						default: request = request.order('liked_at', { ascending: mergedFilters.sortOrder === 'asc' });
+					}
+				}
+				if (mergedFilters.limit) {
+					request = request.limit(mergedFilters.limit);
+				}
+			}
+
+			const { data, error } = await request
+				.overrideTypes<UserActivityTvSeries[], { merge: false }>();
 			if (error) throw error;
 			return data;
 		},

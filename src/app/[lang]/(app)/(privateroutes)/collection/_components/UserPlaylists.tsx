@@ -15,7 +15,7 @@ export function UserPlaylists({
 }: {
   grid?: boolean;
 }) {
-  const { user } = useAuth();
+  const { session } = useAuth();
 	const pathname = usePathname();
 	const { ref, inView } = useInView();
 
@@ -25,7 +25,7 @@ export function UserPlaylists({
     fetchNextPage,
     hasNextPage,
   } = useUserPlaylistsInfiniteQuery({
-    userId: user?.id,
+    userId: session?.user.id,
   });
   const loading = playlists === undefined || isLoading;
 

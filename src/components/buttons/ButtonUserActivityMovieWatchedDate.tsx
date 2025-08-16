@@ -23,7 +23,7 @@ const ButtonUserActivityMovieWatchedDate = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserActivityMovieWatchedDateProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const locale = useLocale();
 	const format = useFormatter();
 	const t = useTranslations();
@@ -32,7 +32,7 @@ const ButtonUserActivityMovieWatchedDate = React.forwardRef<
 		isLoading,
 		isError,
 	} = useUserActivityMovieQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 		movieId: movieId,
 	});
 	const updateDate = useUserActivityMovieUpdateMutation();

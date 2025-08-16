@@ -24,7 +24,7 @@ const ButtonUserActivityMovieWatch = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserActivityMovieWatchProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
   	const { createConfirmModal } = useModal();
 	const t = useTranslations();
 	const pathname = usePathname();
@@ -33,7 +33,7 @@ const ButtonUserActivityMovieWatch = React.forwardRef<
 		isLoading,
 		isError,
 	} = useUserActivityMovieQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 		movieId: movieId,
 	});
 	const insertActivity = useUserActivityMovieInsertMutation();
@@ -41,9 +41,9 @@ const ButtonUserActivityMovieWatch = React.forwardRef<
 
 	const handleInsertActivity = async (e?: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e?.stopPropagation();
-		if (activity || !user?.id) return;
+		if (activity || !session?.user.id) return;
 		await insertActivity.mutateAsync({
-		userId: user?.id,
+		userId: session?.user.id,
 		movieId: movieId,
 		}), {
 		onError: () => {
@@ -64,28 +64,28 @@ const ButtonUserActivityMovieWatch = React.forwardRef<
 		};
 	};
 
-	if (user === null) {
-    return (
-      <TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
-        <Button
-		ref={ref}
-		size="icon"
-		variant={'action'}
-		className={cn(`rounded-full hover:text-foreground`, className)}
-		asChild
-		{...props}
-        >
-          <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
-            <div
-              className={`transition border-2 rounded-full p-[0.5px] border-foreground hover:border-accent-blue hover:text-accent-blue`}
-            >
-              <Icons.check />
-            </div>
-          </Link>
-        </Button>
-      </TooltipBox>
-    );
-  }
+	if (session === null) {
+		return (
+		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
+			<Button
+			ref={ref}
+			size="icon"
+			variant={'action'}
+			className={cn(`rounded-full hover:text-foreground`, className)}
+			asChild
+			{...props}
+			>
+			<Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
+				<div
+				className={`transition border-2 rounded-full p-[0.5px] border-foreground hover:border-accent-blue hover:text-accent-blue`}
+				>
+				<Icons.check />
+				</div>
+			</Link>
+			</Button>
+		</TooltipBox>
+		);
+	}
 
 	return (
 		<TooltipBox tooltip={activity ? upperFirst(t('common.messages.remove_from_watched')) : upperFirst(t('common.messages.mark_as_watched'))}>

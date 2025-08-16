@@ -25,7 +25,7 @@ export const MovieReview = ({
 		initialData: reviewServer,
 	});
 	const upsertReview = useUserReviewMovieUpsertMutation({
-		userId: session?.user?.id,
+		userId: session?.user.id,
 		movieId: review?.activity?.movie_id!,
 	});
 

@@ -1,5 +1,5 @@
 import { useModal } from '@/context/modal-context';
-import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentModal';
+import PlaylistCommentModal from '@/components/Modals/playlists/PlaylistCommentModal';
 import { PlaylistItem } from '@/types/type.db';
 import { MessageSquarePlusIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';

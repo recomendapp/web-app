@@ -28,13 +28,13 @@ export function ReviewSettings({
 	review: UserReview;
 	author: User;
 }) {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const t = useTranslations('common');
 	const { createConfirmModal } = useModal();
 	const pathname = usePathname();
 	const router = useRouter();
 	const deleteReview = useUserReviewDeleteMutation({
-		userId: user?.id,
+		userId: session?.user.id,
 		mediaId,
 	});
 
@@ -55,8 +55,8 @@ export function ReviewSettings({
 		});
 	};
 
-	if (user?.id != author?.id) return null;
-  
+	if (session?.user.id != author?.id) return null;
+
 	return (
 	<DropdownMenu>
 		<DropdownMenuTrigger asChild>
@@ -66,7 +66,7 @@ export function ReviewSettings({
 		</Button>
 		</DropdownMenuTrigger>
 		<DropdownMenuContent align="end">
-		{user && user.id == author?.id ? (
+		{session?.user.id && session?.user.id == author?.id ? (
 			<DropdownMenuItem
 			onSelect={() => createConfirmModal({
 				title: 'Supprimer la critique',

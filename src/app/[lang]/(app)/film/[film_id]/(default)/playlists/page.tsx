@@ -1,4 +1,3 @@
-import { ShowPlaylists } from '@/app/[lang]/(app)/film/[film_id]/(default)/playlists/_components/ShowPlaylists';
 import { siteConfig } from '@/config/site';
 import { getMovie } from '@/features/server/media/mediaQueries';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
@@ -7,6 +6,7 @@ import { truncate, upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { MoviePlaylists } from './_components/MoviePlaylists';
 
 export async function generateMetadata(
   props: {
@@ -62,5 +62,5 @@ export default async function Reviews(
   const { id: movieId } = getIdFromSlug(params.film_id);
   const movie = await getMovie(params.lang, movieId);
   if (!movie) notFound();
-  return <ShowPlaylists mediaId={movie.media_id!} />;
+  return <MoviePlaylists movieId={movieId} />;
 }

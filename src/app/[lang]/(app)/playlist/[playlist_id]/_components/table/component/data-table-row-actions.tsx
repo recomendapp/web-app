@@ -12,15 +12,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { useModal } from '@/context/modal-context';
-import PlaylistCommentModal from '@/components/Modals/Playlist/PlaylistCommentModal';
+import PlaylistCommentModal from '@/components/Modals/playlists/PlaylistCommentModal';
 import { PlaylistItem } from '@/types/type.db';
-import { ModalPlaylistAdd } from '@/components/Modals/actions/ModalPlaylistAdd';
 import { Icons } from '@/config/icons';
 import { usePlaylistItemDeleteMutation } from '@/features/client/playlist/playlistMutations';
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
+// import { ModalRecoSend } from '@/components/Modals/actions/ModalRecoSend';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { createShareController } from "@/components/ShareController/ShareController";
 import { ShareControllerMedia } from "@/components/ShareController/ShareControllerMedia";
@@ -54,18 +53,18 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
         </div>
 
         <DropdownMenuContent align="end" className="max-w-sm">
-          <DropdownMenuItem
+          {/* <DropdownMenuItem
             onClick={() => openModal(ModalPlaylistAdd, { mediaId: data?.media_id!, mediaTitle: data?.media?.title })}
           >
             <Icons.addPlaylist className='w-4' />
             {upperFirst(t('common.messages.add_to_playlist'))}
-          </DropdownMenuItem>
-          <DropdownMenuItem
+          </DropdownMenuItem> */}
+          {/* <DropdownMenuItem
             onClick={() => openModal(ModalRecoSend, { mediaId: data?.media_id!, mediaTitle: data?.media?.title })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href={data?.media?.url ?? ''}>
@@ -73,7 +72,7 @@ export function DataTableRowActions({ data }: DataTableRowActionsProps) {
               {data?.media?.media_type === 'movie'
                 ? upperFirst(t('common.messages.go_to_film'))
                 : data?.media?.media_type === 'tv_series'
-                ? upperFirst(t('common.messages.go_to_serie'))
+                ? upperFirst(t('common.messages.go_to_tv_series'))
                 : data?.media?.media_type === 'person'
                 ? upperFirst(t('common.messages.go_to_person'))
                 : ''

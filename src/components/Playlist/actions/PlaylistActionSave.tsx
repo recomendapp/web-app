@@ -24,7 +24,7 @@ const PlaylistActionSave = React.forwardRef<
 	HTMLDivElement,
 	PlaylistActionSaveProps
 >(({ playlistId, stopPropagation = true, className, ...props }, ref) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 
@@ -33,7 +33,7 @@ const PlaylistActionSave = React.forwardRef<
 		isLoading,
 		isError,
 	} = useUserPlaylistSavedQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 		playlistId: playlistId,
 	});
 	const insertPlaylistSaved = useUserPlaylistSavedInsertMutation();
@@ -42,12 +42,12 @@ const PlaylistActionSave = React.forwardRef<
 	const handleWatchlist = async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (saved) return;
-		if (!user || !playlistId) {
+		if (!session || !playlistId) {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
 		await insertPlaylistSaved.mutateAsync({
-		  	userId: user?.id,
+		  	userId: session.user.id,
 			playlistId: playlistId,
 		}, {
 		  onError: () => {
@@ -71,7 +71,7 @@ const PlaylistActionSave = React.forwardRef<
 		});
 	  }
 
-	if (user == null) {
+	if (session == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button

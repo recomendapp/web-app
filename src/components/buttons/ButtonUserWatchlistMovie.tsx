@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { useUserActivityMovieQuery, useUserWatchlistMovieQuery } from "@/features/client/user/userQueries";
+import { useUserActivityMovieQuery, useUserWatchlistMovieItemQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { Link } from "@/lib/i18n/routing";
@@ -23,14 +23,14 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserWatchlistMovieProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 
 	const {
 		data: activity,
 	} = useUserActivityMovieQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 		movieId: movieId,
 	});
 
@@ -38,9 +38,9 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 		data: watchlist,
 		isLoading,
 		isError,
-	} = useUserWatchlistMovieQuery({
+	} = useUserWatchlistMovieItemQuery({
 		movieId: movieId,
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 
 	const insertWatchlist = useUserWatchlistMovieInsertMutation();
@@ -49,12 +49,12 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 	const handleWatchlist = async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (watchlist) return;
-		if (!user || !movieId) {
+		if (!session || !movieId) {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
 		await insertWatchlist.mutateAsync({
-		  	userId: user?.id,
+		  	userId: session.user.id,
 			movieId: movieId,
 		}, {
 		  onError: () => {
@@ -78,7 +78,7 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 		});
 	  }
 
-	if (user == null) {
+	if (session == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button

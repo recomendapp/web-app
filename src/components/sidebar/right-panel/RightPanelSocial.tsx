@@ -6,10 +6,9 @@ import { UserAvatar } from "@/components/User/UserAvatar";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
 import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from "@/features/client/user/userMutations";
-import { useUserFolloweesInfiniteQuery, useUserFolloweesQuery, useUserFollowersRequestsQuery } from "@/features/client/user/userQueries";
+import { useUserFolloweesQuery, useUserFollowersRequestsQuery } from "@/features/client/user/userQueries";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
-import { useInView } from "react-intersection-observer";
 import { createRightPanel } from "./RightPanelUtils";
 import Fuse from "fuse.js";
 import { UserFollower } from "@/types/type.db";
@@ -40,8 +39,7 @@ const RightPanelSocialContent = () => {
 }
 
 const RightPanelSocialFollows = () => {
-	const { user } = useAuth();
-	const { ref, inView } = useInView();
+	const { session } = useAuth();
 	const [search, setSearch] = useState('');
 	const [results, setResults] = useState<UserFollower[] | undefined>(undefined);
 	const {
@@ -49,7 +47,7 @@ const RightPanelSocialFollows = () => {
 		isLoading,
 		isError,
 	} = useUserFolloweesQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 	const fuse = useMemo(() => {
 		if (!followees?.length) return null;
@@ -86,53 +84,23 @@ const RightPanelSocialFollows = () => {
 			)}
 		</>
 	)
-
-	// return (
-	// 	<>
-	// 		{followees?.pages[0]?.length ? (
-	// 			<>
-	// 				{followees?.pages.map((page, i) => (
-	// 					page?.map(({ followee }, index) => (
-	// 						<CardUser
-	// 						key={index}
-	// 						user={followee}
-	// 						{...(i === followees.pages.length - 1 &&
-	// 							index === page.length - 1
-	// 								? { ref: ref }
-	// 								: {})}
-	// 						/>
-	// 					))
-	// 				))}
-	// 				{(isFetchingNextPage) ? (
-	// 					<Icons.loader className='w-8 h-8 mx-auto' />
-	// 				) : null}
-	// 			</>
-	// 		) : (isLoading || followees === undefined) ? (
-	// 			<Icons.loader className='w-8 h-8 mx-auto' />
-	// 		) : isError ? (
-	// 			<div className='text-center text-muted-foreground'>Une erreur s&apos;est produite</div>
-	// 		) : (
-	// 			<div className='text-center text-muted-foreground'>Aucun suivi</div>
-	// 		)}
-	// 	</>
-	// );
 }
 
 const RightPanelSocialRequests = () => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const {
 		data: requests,
 		isLoading,
 		isError,
 	} = useUserFollowersRequestsQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 
 	const acceptRequest = useUserAcceptFollowerRequestMutation({
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 	const declineRequest = useUserDeclineFollowerRequestMutation({
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 
 	const handleAcceptRequest = (requestId: number) => {

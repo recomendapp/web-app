@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { useUserActivityTvSeriesQuery, useUserWatchlistTvSeriesQuery } from "@/features/client/user/userQueries";
+import { useUserActivityTvSeriesQuery, useUserWatchlistTvSeriesItemQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { Link } from "@/lib/i18n/routing";
@@ -23,14 +23,14 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 	React.ComponentRef<typeof Button>,
 	ButtonUserWatchlistTvSeriesProps
 >(({ tvSeriesId, stopPropagation = true, className, ...props }, ref) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 
 	const {
 		data: activity,
 	} = useUserActivityTvSeriesQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 		tvSeriesId: tvSeriesId,
 	});
 
@@ -38,9 +38,9 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 		data: watchlist,
 		isLoading,
 		isError,
-	} = useUserWatchlistTvSeriesQuery({
+	} = useUserWatchlistTvSeriesItemQuery({
 		tvSeriesId: tvSeriesId,
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 	const insertWatchlist = useUserWatchlistTvSeriesInsertMutation();
 	const deleteWatchlist = useUserWatchlistTvSeriesDeleteMutation();
@@ -48,13 +48,13 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 	const handleWatchlist = async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (watchlist) return;
-		if (!user || !tvSeriesId) {
+		if (!session || !tvSeriesId) {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
 		await insertWatchlist.mutateAsync({
 			tvSeriesId: tvSeriesId,
-		  	userId: user.id,
+		  	userId: session.user.id,
 		}, {
 		  onError: () => {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
@@ -77,7 +77,7 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 		});
 	  }
 
-	if (user == null) {
+	if (session == null) {
 		return (
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button

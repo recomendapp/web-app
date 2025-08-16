@@ -8,7 +8,7 @@ import { useAuth } from '@/context/auth-context';
 import { Playlist } from '@/types/type.db';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
-import { ModalPlaylistQuickAdd } from '@/components/Modals/Playlist/ModalPlaylistQuickAdd';
+import { ModalPlaylistQuickAdd } from '@/components/Modals/playlists/ModalPlaylistQuickAdd';
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
@@ -27,7 +27,7 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
   const t = useTranslations();
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery(playlist?.id);
-  const { user } = useAuth();
+  const { session } = useAuth();
   const { openModal } = useModal();
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -60,7 +60,7 @@ export function DataTableToolbar<TData>({
       </div>
       <div className="w-full lg:w-fit flex items-center justify-between gap-2">
         <div className='flex items-center gap-2'>
-          {user?.id !== playlist?.user_id ? (
+          {session?.user.id !== playlist?.user_id ? (
             <PlaylistActionSave playlistId={playlist?.id!} />
           ) : null}
           <Button

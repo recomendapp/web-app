@@ -15,6 +15,7 @@ import { useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 import { useUI } from "@/context/ui-context";
 import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylist";
+import { count } from "console";
 
 const SidebarCollectionContainerIcon = ({
 	className,
@@ -44,7 +45,7 @@ const SidebarCollectionContainerIcon = ({
 }
 
 export const SidebarLeftRoutes = () => {
-	const { user, session } = useAuth();
+	const { session } = useAuth();
 	const { open } = useSidebar();
 	const { isMobile } = useUI();
 	const t = useTranslations('common');
@@ -103,8 +104,8 @@ export const SidebarLeftRoutes = () => {
 			bgFrom: '#e6619b',
 			bgTo: '#e84749',
 			label: upperFirst(t('messages.heart_pick', { count: 0 })),
-			active: pathname.startsWith('/collection/likes'),
-			href: '/collection/likes',
+			active: pathname.startsWith('/collection/heart-picks'),
+			href: '/collection/heart-picks',
 		},
 	], [pathname, t]);
 
@@ -146,7 +147,7 @@ export const SidebarLeftRoutes = () => {
 		isFetchingNextPage,
 		hasNextPage,
 	} = useUserPlaylistsInfiniteQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 		filters: {
 			order: 'updated_at-desc',
 		}
@@ -253,7 +254,13 @@ export const SidebarLeftRoutes = () => {
 											</SidebarCollectionContainerIcon>
 											<div className={`line-clamp-1 transition-all duration-300 ${!sidebarOpen ? "opacity-0 hidden" : "opacity-100"}`}>
 												<p className="line-clamp-1">{playlist.title}</p>
-												<p className='text-muted-foreground line-clamp-1'>{t('messages.item_count', { count: playlist.items_count ?? 0 })}</p>
+												<p className='text-muted-foreground line-clamp-1'>
+													{playlist.type === 'movie' ? (
+														t('messages.film_count', { count: playlist.items_count ?? 0 })
+													) : playlist.type === 'tv_series' ? (
+														t('messages.tv_series_count', { count: playlist.items_count ?? 0 })
+													) : t('messages.item_count', { count: playlist.items_count ?? 0 })}
+												</p>
 											</div>
 										</Link>
 									</SidebarMenuButton>

@@ -3,7 +3,6 @@
 import { Fragment, useState } from 'react';
 import { Link } from "@/lib/i18n/routing";
 import YoutubeEmbed from '@/components/utils/Youtube';
-
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -20,8 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-// ICONS
 import { Play } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MediaPoster from '@/components/Media/MediaPoster';
@@ -34,8 +31,6 @@ import { useModal } from '@/context/modal-context';
 import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
-import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlaylistAdd';
-import { ModalMediaFollowersRating } from '@/components/Modals/ModalMediaFollowersRating';
 import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 import { Database } from '@/types';
 import ButtonUserWatchlistMovie from '@/components/buttons/ButtonUserWatchlistMovie';
@@ -45,6 +40,8 @@ import ButtonUserActivityMovieWatch from '@/components/buttons/ButtonUserActivit
 import ButtonUserActivityMovieWatchedDate from '@/components/buttons/ButtonUserActivityMovieWatchedDate';
 import { ContextMenuMovie } from '@/components/ContextMenu/ContextMenuMovie';
 import ButtonUserRecosMovieSend from '@/components/buttons/ButtonUserRecosMovieSend';
+import ButtonPlaylistMovieAdd from '@/components/buttons/ButtonPlaylistMovieAdd';
+import { ModalUserActivityMovieFollowersRating } from '@/components/Modals/activities/ModalUserActivityMovieFollowersRating';
 
 export default function MovieHeader({
   movie,
@@ -83,7 +80,7 @@ export default function MovieHeader({
                   rating={followersAvgRating}
                   variant="follower"
                   className="w-full cursor-pointer"
-                  onClick={() => openModal(ModalMediaFollowersRating, { mediaId: movie.media_id! })}
+                  onClick={() => openModal(ModalUserActivityMovieFollowersRating, { movieId: movie.id })}
                 /> : null}
               </div>
               {(movie?.videos && movie.videos.length > 0) ? (
@@ -142,7 +139,7 @@ export default function MovieHeader({
           <ButtonUserActivityMovieWatchedDate movieId={movie.id} />
         </div>
         <div className="flex gap-2 items-center">
-          <MediaActionPlaylistAdd mediaId={movie.media_id!} mediaTitle={movie.title} />
+          <ButtonPlaylistMovieAdd movieId={movie.id} movieTitle={movie.title} />
           <ButtonUserRecosMovieSend movieId={movie.id} movieTitle={movie.title} />
         </div>
       </div>
