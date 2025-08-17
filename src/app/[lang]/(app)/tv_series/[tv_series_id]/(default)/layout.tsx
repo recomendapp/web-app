@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import TvSeriesHeader from './_components/TvSeriesHeader';
 import TvSeriesNavbar from './_components/TvSeriesNavbar';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
-import { getMediaFollowersAverageRating, getTvSeries } from '@/features/server/media/mediaQueries';
+import { getTvSeries, getTvSeriesUserActivitiesFollowerAverageRating } from '@/features/server/media/mediaQueries';
 
 export default async function TvSeriesLayout(
   props: {
@@ -22,8 +22,8 @@ export default async function TvSeriesLayout(
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
   const serie = await getTvSeries(params.lang, serieId);
   if (!serie) notFound();
-  const followersAvgRating = await getMediaFollowersAverageRating({
-    media_id: serie.media_id!,
+  const followersAvgRating = await getTvSeriesUserActivitiesFollowerAverageRating({
+    tvSeriesId: serieId,
   })
   return (
   <>

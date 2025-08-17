@@ -3,7 +3,6 @@
 import { Fragment, useState } from 'react';
 import { Link } from "@/lib/i18n/routing";
 import YoutubeEmbed from '@/components/utils/Youtube';
-
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -20,8 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-// ICONS
 import { Play } from 'lucide-react';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import MediaPoster from '@/components/Media/MediaPoster';
@@ -29,22 +26,22 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { Media, MediaMovie } from '@/types/type.db';
+import { MediaMovie } from '@/types/type.db';
 import { useModal } from '@/context/modal-context';
 import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import MediaActionUserActivityRating from '@/components/Media/actions/MediaActionUserActivityRating';
-import MediaActionUserActivityLike from '@/components/Media/actions/MediaActionUserActivityLike';
-import MediaActionUserActivityWatch from '@/components/Media/actions/MediaActionUserActivityWatch';
-import MediaActionUserWatchlist from '@/components/Media/actions/MediaActionUserWatchlist';
-import MediaActionUserActivityWatchedDate from '@/components/Media/actions/MediaActionUserActivityWatchedDate';
-import MediaActionUserRecos from '@/components/Media/actions/MediaActionUserRecos';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
-import MediaActionPlaylistAdd from '@/components/Media/actions/MediaActionPlaylistAdd';
-import { ModalMediaFollowersRating } from '@/components/Modals/ModalMediaFollowersRating';
-import { ContextMenuMedia } from '@/components/ContextMenu/ContextMenuMedia';
 import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 import { Database } from '@/types';
+import ButtonUserWatchlistMovie from '@/components/buttons/ButtonUserWatchlistMovie';
+import ButtonUserActivityMovieLike from '@/components/buttons/ButtonUserActivityMovieLike';
+import ButtonUserActivityMovieRating from '@/components/buttons/ButtonUserActivityMovieRating';
+import ButtonUserActivityMovieWatch from '@/components/buttons/ButtonUserActivityMovieWatch';
+import ButtonUserActivityMovieWatchedDate from '@/components/buttons/ButtonUserActivityMovieWatchedDate';
+import { ContextMenuMovie } from '@/components/ContextMenu/ContextMenuMovie';
+import ButtonUserRecosMovieSend from '@/components/buttons/ButtonUserRecosMovieSend';
+import ButtonPlaylistMovieAdd from '@/components/buttons/ButtonPlaylistMovieAdd';
+import { ModalUserActivityMovieFollowersRating } from '@/components/Modals/activities/ModalUserActivityMovieFollowersRating';
 
 export default function MovieHeader({
   movie,
@@ -58,13 +55,13 @@ export default function MovieHeader({
   if (!movie) return null;
   return (
     <div>
-      <ContextMenuMedia media={movie as Media}>
+      <ContextMenuMovie movie={movie}>
         <HeaderBox background={movie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${movie.backdrop_path}`, alt: movie.title ?? '', unoptimized: true } : undefined}>
           <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* MOVIE POSTER */}
             <MediaPoster
               className="w-[200px]"
-              src={movie.avatar_url ?? ''}
+              src={movie.poster_url ?? ''}
               alt={movie.title ?? ''}
               fill
               sizes={`
@@ -74,8 +71,8 @@ export default function MovieHeader({
               `}
             >
               <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                {(movie.vote_average || movie.tmdb_vote_average) ? <IconMediaRating
-                  rating={movie.vote_average ?? movie.tmdb_vote_average}
+                {movie.vote_average ? <IconMediaRating
+                  rating={movie.vote_average}
                   variant="general"
                   className="w-full"
                 /> : null}
@@ -83,7 +80,7 @@ export default function MovieHeader({
                   rating={followersAvgRating}
                   variant="follower"
                   className="w-full cursor-pointer"
-                  onClick={() => openModal(ModalMediaFollowersRating, { mediaId: movie.media_id! })}
+                  onClick={() => openModal(ModalUserActivityMovieFollowersRating, { movieId: movie.id })}
                 /> : null}
               </div>
               {(movie?.videos && movie.videos.length > 0) ? (
@@ -105,13 +102,13 @@ export default function MovieHeader({
                 <span className='font-bold select-text'>{movie.title}</span>
                 {/* DATE */}
                 <sup>
-                  <DateOnlyYearTooltip date={movie.extra_data.release_date ?? ''} className=' text-base font-medium'/>
+                  <DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-base font-medium'/>
                 </sup>
-                {movie.extra_data.original_title !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.extra_data.original_title}</div> : null}
+                {movie.original_title !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.original_title}</div> : null}
               </h1>
               <div className=" space-y-2">
                 <div>
-                  {movie.main_credit?.map((director, index: number) => (
+                  {movie.directors?.map((director, index: number) => (
                     <Fragment key={index}>
                       {index > 0 && <span>, </span>}
                       <span key={index}>
@@ -120,30 +117,30 @@ export default function MovieHeader({
                           className="w-fit p-0 h-full"
                           asChild
                         >
-                          <Link href={`/person/${director?.slug ?? director?.id}`}>{director?.title}</Link>
+                          <Link href={`/person/${director?.slug ?? director?.id}`}>{director.name}</Link>
                         </Button>
                       </span>
                     </Fragment>
                   )) ?? <span className="text-muted-foreground italic">{upperFirst(common('messages.unknown'))}</span>}
                   {/* RUNTIME */}
-                  <RuntimeTooltip runtime={movie.extra_data.runtime ?? 0} className=" before:content-['_•_']" />
+                  <RuntimeTooltip runtime={movie.runtime ?? 0} className=" before:content-['_•_']" />
                 </div>
               </div>
             </div>
           </div>
         </HeaderBox>
-      </ContextMenuMedia>
+      </ContextMenuMovie>
       <div className="flex justify-between gap-2 px-4 pb-4">
         <div className="flex gap-2 overflow-x-auto items-center">
-          <MediaActionUserActivityRating mediaId={movie.media_id!} />
-          <MediaActionUserActivityLike mediaId={movie.media_id!}  />
-          <MediaActionUserActivityWatch mediaId={movie.media_id!} />
-          <MediaActionUserWatchlist mediaId={movie.media_id!} />
-          <MediaActionUserActivityWatchedDate mediaId={movie.media_id!} />
+          <ButtonUserActivityMovieRating movieId={movie.id} />
+          <ButtonUserActivityMovieLike movieId={movie.id} />
+          <ButtonUserActivityMovieWatch movieId={movie.id} />
+          <ButtonUserWatchlistMovie movieId={movie.id} />
+          <ButtonUserActivityMovieWatchedDate movieId={movie.id} />
         </div>
         <div className="flex gap-2 items-center">
-          <MediaActionPlaylistAdd mediaId={movie.media_id!} mediaTitle={movie.title} />
-          <MediaActionUserRecos mediaId={movie.media_id!} mediaTitle={movie.title} />
+          <ButtonPlaylistMovieAdd movieId={movie.id} movieTitle={movie.title} />
+          <ButtonUserRecosMovieSend movieId={movie.id} movieTitle={movie.title} />
         </div>
       </div>
     </div>

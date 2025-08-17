@@ -48,7 +48,7 @@ const Collection = () => {
 		  </CollectionIcon>
 		),
 		label: upperFirst(t('messages.heart_pick', { count: 2 })),
-		href: '/collection/likes',
+		href: '/collection/heart-picks',
 	  },
 	],
 	[t]

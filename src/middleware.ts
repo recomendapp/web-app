@@ -23,39 +23,6 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   /**
-   * Check locale if user is logged in
-   */
-  const localeHeader = response.headers.get('x-middleware-request-x-next-intl-locale');
-  const { data: config } = await supabase.rpc('get_config', {
-    user_id: user?.id,
-  }).single();
-
-  if (user && config?.user_language && routing.locales.includes(config.user_language as SupportedLocale)) {
-    const wrongLocale =
-      (hasLocale && localeMatch !== config.user_language) ||
-      (localeHeader && localeHeader !== config.user_language);
-    if (wrongLocale) {
-      url.pathname = `/${config.user_language}${url.pathname}`;
-      return (NextResponse.redirect(url));
-    }
-  }
-
-  /**
-   * Check maintenance mode
-   * 
-   * If the app is in maintenance mode, redirect all users to the maintenance page
-   * If the app is not in maintenance mode, redirect all users to the home page
-   * 
-   */
-  if (config?.maintenance_mode && url.pathname !== '/maintenance' && process.env.NODE_ENV !== 'development') {
-    url.pathname = `/maintenance`;
-    return (NextResponse.redirect(url));
-  } else if (url.pathname === '/maintenance' && !config?.maintenance_mode) {
-    url.pathname = '/';
-    return (NextResponse.redirect(url));
-  }
-
-  /**
    * Redirect user if not logged in
    */
   if (user && siteConfig.routes.anonRoutes.some((path) => url.pathname.startsWith(path))) {
@@ -73,14 +40,6 @@ export async function middleware(request: NextRequest) {
   if (!user && siteConfig.routes.authRoutes.some((path) => url.pathname.startsWith(path))) {
     url.pathname = '/auth/login';
     url.searchParams.set('redirect', request.nextUrl.pathname);
-    return (NextResponse.redirect(url));
-  }
-
-  /**
-   * Redirect user if not premium
-   */
-  if (user && !config?.user_premium && siteConfig.routes.premiumRoutes.some((path) => url.pathname.startsWith(path))) {
-    url.pathname = '/upgrade';
     return (NextResponse.redirect(url));
   }
   

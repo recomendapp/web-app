@@ -79,8 +79,6 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 		}
 	}, [shareController, sharedControllerData]);
 
-	console.log('fileToShare', fileToShare)
-
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
 			<ModalHeader>

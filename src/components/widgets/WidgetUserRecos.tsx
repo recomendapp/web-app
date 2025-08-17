@@ -7,26 +7,46 @@ import { UserAvatar } from '@/components/User/UserAvatar';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { upperFirst } from "lodash";
+import { MediaMovie, MediaTvSeries, UserRecosAggregated } from "@/types/type.db";
+import { CardMovie } from "../Card/CardMovie";
+import { CardTvSeries } from "../Card/CardTvSeries";
 
 export const WidgetUserRecos = ({
   className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
-  const { user } = useAuth();
+  const { session } = useAuth();
   const t = useTranslations('common');
 
-  const { data: recos } = useUserRecosQuery({
-    userId: user?.id,
+  const { data: recos, error } = useUserRecosQuery({
+    userId: session?.user.id,
     filters: {
-      order: 'random',
+      sortBy: 'random',
       limit: 6,
     }
   })
 
   const sendersShow = 3;
 
-  if (!user) return null;
+  const renderContent = (item: UserRecosAggregated) => (
+    <div className="flex -space-x-2 overflow-hidden">
+      {item.senders?.slice(0, sendersShow).map(({user}:any, index) => (
+      <UserAvatar
+        key={index}
+        avatarUrl={user?.avatar_url ?? ''}
+        username={user?.username ?? ''}
+        className='w-4 h-4'
+      />
+      ))}
+      {item.senders?.length! > sendersShow ? (
+        <div className='h-4 w-4 flex items-center justify-center bg-black/60 rounded-full border text-xs text-muted-foreground'>
+          +{item.senders?.length! - sendersShow}
+        </div>
+      ) : null}
+    </div>
+  )
+
+  if (!session) return null;
 
   if (!recos || !recos.length) return null;
 
@@ -39,23 +59,15 @@ export const WidgetUserRecos = ({
 		</Button>
     <div className='grid grid-cols-2 @2xl/widget-user-recos:grid-cols-3 gap-4'>
       {recos.map((item, index) => (
-      <CardMedia key={index} media={item.media!}>
-        <div className="flex -space-x-2 overflow-hidden">
-          {item.senders?.slice(0, sendersShow).map(({user}:any, index) => (
-          <UserAvatar
-            key={index}
-            avatarUrl={user?.avatar_url ?? ''}
-            username={user?.username ?? ''}
-            className='w-4 h-4'
-          />
-          ))}
-          {item.senders?.length! > sendersShow ? (
-            <div className='h-4 w-4 flex items-center justify-center bg-black/60 rounded-full border text-xs text-muted-foreground'>
-              +{item.senders?.length! - sendersShow}
-            </div>
-          ) : null}
-        </div>
-      </CardMedia>
+        item.type === 'movie' ? (
+          <CardMovie key={index} movie={item.media as MediaMovie}>
+            {renderContent(item)}
+          </CardMovie>
+        ) : (
+          <CardTvSeries key={index} tvSeries={item.media as MediaTvSeries}>
+            {renderContent(item)}
+          </CardTvSeries>
+        )
       ))}
     </div>
   </div>

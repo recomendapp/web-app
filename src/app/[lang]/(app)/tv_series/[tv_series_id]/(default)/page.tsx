@@ -24,42 +24,42 @@ export async function generateMetadata(
   const serie = await getTvSeries(params.lang, serieId);
   if (!serie) return { title: upperFirst(common('messages.tv_series_not_found')) };
   return {
-    title: t('metadata.title', { title: serie.title!, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() }),
+    title: t('metadata.title', { title: serie.name, year: new Date(String(serie.first_air_date)).getFullYear() }),
     description: truncate(
-      serie.main_credit
+      serie.created_by
         ? t('metadata.description', {
-          title: serie.title!,
-          creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.main_credit.map((creator) => creator.title ?? '')),
-          year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
-          overview: serie.extra_data.overview,
+          title: serie.name,
+          creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.created_by.map((creator) => creator.name ?? '')),
+          year: new Date(String(serie.first_air_date)).getFullYear(),
+          overview: serie.overview,
         }) : t('metadata.description_no_creator', {
-          title: serie.title!,
-          year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
-          overview: serie.extra_data.overview,
+          title: serie.name,
+          year: new Date(String(serie.first_air_date)).getFullYear(),
+          overview: serie.overview,
         }),
       { length: siteConfig.seo.description.limit }
     ),
     alternates: seoLocales(params.lang, `/tv_series/${serie.slug}`),
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: serie.title!, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
+      title: `${t('metadata.title', { title: serie.name, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
-        serie.main_credit
+        serie.created_by
           ? t('metadata.description', {
-            title: serie.title!,
-            creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.main_credit.map((creator) => creator.title ?? '')),
-            year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
-            overview: serie.extra_data.overview,
+            title: serie.name,
+            creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.created_by.map((creator) => creator.name ?? '')),
+            year: new Date(String(serie.first_air_date)).getFullYear(),
+            overview: serie.overview,
           }) : t('metadata.description_no_creator', {
-            title: serie.title!,
-            year: new Date(String(serie.extra_data.first_air_date)).getFullYear(),
-            overview: serie.extra_data.overview,
+            title: serie.name,
+            year: new Date(String(serie.first_air_date)).getFullYear(),
+            overview: serie.overview,
           }),
         { length: siteConfig.seo.description.limit }
       ),
       url: `${siteConfig.url}/${params.lang}/tv_series/${serie.slug}`,
-      images: serie.avatar_url ? [
-        { url: serie.avatar_url }
+      images: serie.poster_url ? [
+        { url: serie.poster_url }
       ] : undefined,
       type: 'video.tv_show',
       locale: params.lang,
@@ -82,28 +82,28 @@ export default async function TvSeriesPage(
   const jsonLd: WithContext<TVSeries> = {
     '@context': 'https://schema.org',
     '@type': 'TVSeries',
-    name: serie.title ?? undefined,
-    image: serie.avatar_url ?? undefined,
-    description: serie.extra_data.overview ?? undefined,
-    datePublished: serie.date ?? undefined,
+    name: serie.name?? undefined,
+    image: serie.poster_url ?? undefined,
+    description: serie.overview ?? undefined,
+    datePublished: serie.first_air_date ?? undefined,
     dateModified: new Date().toISOString(),
-    director: serie.main_credit
+    director: serie.created_by
       ?.map(director => ({
         '@type': 'Person',
-        name: director.title ?? undefined,
-        image: director.avatar_url ?? undefined,
+        name: director.name ?? undefined,
+        image: director.profile_url ?? undefined,
       })),
     actor: serie.cast
       ?.map((actor) => ({
         '@type': 'Person',
-        name: actor.person?.title ?? undefined,
-        image: actor.person?.avatar_url ?? undefined,
+        name: actor.person?.name ?? undefined,
+        image: actor.person?.profile_url ?? undefined,
       })),
     genre: serie.genres?.map((genre) => genre.name),
-    aggregateRating: (serie.vote_average || serie.tmdb_vote_average) ? {
+    aggregateRating: serie.vote_average ? {
       '@type': 'AggregateRating',
-      ratingValue: serie.vote_average ?? serie.tmdb_vote_average ?? undefined,
-      ratingCount: serie.vote_count ?? serie.tmdb_vote_count ?? 0,
+      ratingValue: serie.vote_average ?? undefined,
+      ratingCount: serie.vote_count ?? 0,
       bestRating: 10,
       worstRating: 1,
     } : undefined,

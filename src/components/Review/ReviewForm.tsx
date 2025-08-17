@@ -13,44 +13,44 @@ import { Textarea } from '@/components/ui/textarea';
 import toast from 'react-hot-toast';
 import { Icons } from '@/config/icons';
 import { useAuth } from '@/context/auth-context';
-import { Media, User, UserActivity, UserReview } from '@/types/type.db';
+import { User, UserReview } from '@/types/type.db';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { CardUser } from '@/components/Card/CardUser';
 import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import Tiptap from '@/components/tiptap/Tiptap';
-import { useUserReviewInsertMutation, useUserReviewUpdateMutation } from '@/features/client/user/userMutations';
 import { upperFirst } from 'lodash';
 import { useModal } from '@/context/modal-context';
-import { ReviewSettings } from './ReviewSettings';
-import MediaActionUserActivityRating from '@/components/Media/actions/MediaActionUserActivityRating';
-import ActionReviewLike from './actions/ActionReviewLike';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
-import { useRouter } from '@/lib/i18n/routing';
 
 const MAX_TITLE_LENGTH = 50;
 const MAX_BODY_LENGTH = 5000;
 
 interface ReviewFormProps extends React.HTMLAttributes<HTMLDivElement> {
-	mediaId: number;
-	media: Media;
 	review?: UserReview;
 	author?: User;
-	activity?: UserActivity | null;
+	rating?: number;
+	mediaAction: React.ReactNode | (() => React.ReactNode);
+	reviewActions?: React.ReactNode | (() => React.ReactNode);
+	reviewSettings?: React.ReactNode | (() => React.ReactNode);
+	onUpdate?: (data: { title?: string; body: JSONContent }) => void;
+	onCreate?: (data: { title?: string; body: JSONContent }) => void;
 }
 
 export default function ReviewForm({
-	mediaId,
-	media,
 	review,
 	author,
-	activity,
-	className
+	rating,
+	className,
+	mediaAction,
+	reviewActions,
+	reviewSettings,
+	onUpdate,
+	onCreate,
 } : ReviewFormProps) {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const t = useTranslations('common');
-	const router = useRouter();
 	const { createConfirmModal } = useModal();
 	const [title, setTitle] = useState(review?.title);
 	const [body, setBody] = useState<JSONContent | undefined>(review?.body ?? undefined);
@@ -58,63 +58,53 @@ export default function ReviewForm({
 	const [editable, setEditable] = useState(review ? false : true);
 	const now = useNow({ updateInterval: 1000 * 10 });
 	const format = useFormatter();
-	const updateReview = useUserReviewUpdateMutation();
-	const insertReview = useUserReviewInsertMutation({
-		userId: user?.id,
-		mediaId,
-	});
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleUpdateReview = async () => {
-		if (title == review?.title && body == review?.body) {
-			setEditable(false);
-			return;
-		}
-		if (!body || bodyLength == 0) {
-			toast.error('Le contenu est obligatoire');
-			return;
-		}
-
-		await updateReview.mutateAsync({
-			id: review!.id,
-			title: title?.trim(),
-			body: body,
-		}, {
-			onSuccess: () => {
+		try{
+			setIsLoading(true);
+			if (title == review?.title && body == review?.body) {
 				setEditable(false);
-				toast.success(upperFirst(t('messages.saved', { gender: 'male', count: 1 })));
-				router
-			},
-			onError: () => {
-				toast.error(upperFirst(t('messages.an_error_occurred')));
+				return;
 			}
-		});	
+			if (!body || bodyLength == 0) {
+				toast.error('Le contenu est obligatoire');
+				return;
+			}
+
+			await onUpdate?.({
+				title: title?.trim(),
+				body: body,
+			});
+			setEditable(false);
+			toast.success(upperFirst(t('messages.saved', { gender: 'male', count: 1 })));
+		} catch (error) {
+			toast.error(upperFirst(t('messages.an_error_occurred')));
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const handleCreateReview = async () => {
-		if (!activity?.rating) {
-			toast.error('Vous devez noter ce film pour ajouter une critique');
-			return;
-		}
-		if (!body || bodyLength == 0) {
-			toast.error('Le contenu est obligatoire');
-			return;
-		}
-
-		await insertReview.mutateAsync({
-			activityId: activity.id,
-			title: title?.trim(),
-			body: body,
-		}, {
-			onSuccess: (data) => {
-				setEditable(false);
-				toast.success(upperFirst(t('messages.saved', { gender: 'male', count: 1 })));
-				router.replace(`/review/${data.id}`);
-				// router.replace(`${getMediaUrl({ id: mediaId, type: mediaType })}/review/${data.id}`);
-			},
-			onError: () => {
-				toast.error(upperFirst(t('messages.an_error_occurred')));
+		try {
+			setIsLoading(true);
+			if (!rating) {
+				toast.error('Vous devez noter ce film pour ajouter une critique');
+				return;
 			}
-		});
+			if (!body || bodyLength == 0) {
+				toast.error('Le contenu est obligatoire');
+				return;
+			}
+	
+			await onCreate?.({
+				title: title?.trim(),
+				body: body,
+			});
+			toast.success(upperFirst(t('messages.saved', { gender: 'male', count: 1 })));
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	const handleCancel = () => {
@@ -139,8 +129,10 @@ export default function ReviewForm({
 	>
 		<div className="flex flex-col items-center gap-1">
 			{review
-				? <IconMediaRating rating={activity?.rating} className="h-fit"/>
-				: <MediaActionUserActivityRating mediaId={mediaId} />}
+				? <IconMediaRating rating={rating} className="h-fit"/>
+				: (
+					typeof mediaAction === 'function' ? mediaAction() : mediaAction
+				)}
 			<div className="bg-muted-hover h-full w-0.5 rounded-full"></div>
 		</div>
 		<div className="w-full flex flex-col gap-2">
@@ -148,7 +140,7 @@ export default function ReviewForm({
 				{author ? (review ? <CardUser variant="inline" user={author} /> : <CardUser variant="inline" user={author} />) : null}
 				<div className='flex items-center gap-1 text-sm text-muted-foreground'>
 					{review ? format.relativeTime(new Date(review?.created_at ?? ''), now) : null}
-					{author?.id == user?.id ? (
+					{author?.id == session?.user.id ? (
 						<>
 							{!editable ? (
 								<TooltipBox tooltip={upperFirst(t('messages.edit'))}>							
@@ -157,7 +149,7 @@ export default function ReviewForm({
 									size={'sm'}
 									className='hover:text-foreground'
 									onClick={() => setEditable(true)}
-									disabled={updateReview.isPending || insertReview.isPending}
+									disabled={isLoading}
 									>
 										<span className="sr-only">{upperFirst(t('messages.edit'))}</span>
 										<Icons.edit />
@@ -170,7 +162,7 @@ export default function ReviewForm({
 									variant={'accent-yellow'}
 									size={'sm'}
 									onClick={handleUpdateReview}
-									disabled={updateReview.isPending || insertReview.isPending}
+									disabled={isLoading}
 									>
 										<span className="sr-only">{upperFirst(t('messages.save'))}</span>
 										<Icons.check />
@@ -181,7 +173,7 @@ export default function ReviewForm({
 									variant={'accent-yellow-enabled'}
 									size={'sm'}
 									onClick={handleCancel}
-									disabled={updateReview.isPending || insertReview.isPending}
+									disabled={isLoading}
 									>
 										<span className="sr-only">{upperFirst(t('messages.cancel'))}</span>
 										<Icons.close />
@@ -189,14 +181,9 @@ export default function ReviewForm({
 								</TooltipBox>
 								</>
 							)}
-							{review ? (
-								author ? <ReviewSettings
-								mediaId={mediaId}
-								media={media}
-								review={review}
-								author={author}
-								/> : null
-							) : null}
+							{reviewSettings && (
+								typeof reviewSettings === 'function' ? reviewSettings() : reviewSettings
+							)}
 						</>
 					) : !review ? (
 						<TooltipBox tooltip={upperFirst(t('messages.save'))}>
@@ -204,7 +191,7 @@ export default function ReviewForm({
 							variant={'accent-yellow'}
 							size={'sm'}
 							onClick={handleCreateReview}
-							disabled={updateReview.isPending || insertReview.isPending}
+							disabled={isLoading}
 							>
 								<span className="sr-only">{upperFirst(t('messages.save'))}</span>
 								<Icons.check />
@@ -223,8 +210,8 @@ export default function ReviewForm({
 			onUpdate={(content) => setBody(content)}
 			onCharacterCountChange={(count) => setBodyLength(count)}
 			/>
-			{review ? <div className="flex items-center justify-end m-1">
-				<ActionReviewLike reviewId={review?.id} reviewLikesCount={review.likes_count} />
+			{reviewActions ? <div className="flex items-center justify-end m-1">
+				{typeof reviewActions === 'function' ? reviewActions() : reviewActions}
 			</div> : null}
 		</div>
 	</Card>

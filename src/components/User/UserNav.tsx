@@ -37,43 +37,43 @@ export function UserNav({
   className?: string;
 }) {
   const { user, loading, logout } = useAuth();
-  const t = useTranslations('common');
+  const t = useTranslations();
 
   const routes = useMemo((): Route[] => [
     {
       icon: Icons.shop,
-      label: upperFirst(t('messages.shop')),
+      label: upperFirst(t('common.messages.shop')),
       href: 'https://shop.recomend.app/',
       shortcut: '↗',
       target: '_blank',
     },
     {
       icon: Icons.help,
-      label: upperFirst(t('messages.help')),
+      label: upperFirst(t('common.messages.help')),
       href: 'https://help.recomend.app/',
       shortcut: '↗',
       target: '_blank',
     },
     {
       icon: Icons.about,
-      label: upperFirst(t('messages.about')),
+      label: upperFirst(t('common.messages.about')),
       href: '/about',
     },
     {
       icon: Icons.legal,
-      label: upperFirst(t('messages.legal')),
+      label: upperFirst(t('common.messages.legal')),
       href: '/legal/terms-of-use',
     },
     {
       icon: Icons.premium,
-      label: upperFirst(t('messages.upgrade_to_plan', { plan: 'Premium' })),
+      label: upperFirst(t('common.messages.upgrade_to_plan', { plan: 'Premium' })),
       href: '/upgrade',
       visible: !user?.premium,
       className: 'fill-accent-blue !text-accent-blue',
     },
     {
       icon: Icons.settings,
-      label: upperFirst(t('messages.setting', { count: 0 })),
+      label: upperFirst(t('common.messages.setting', { count: 0 })),
       href: '/settings/profile',
     },
   ], [user]);
@@ -120,7 +120,7 @@ export function UserNav({
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout}>
           <Icons.logout className="w-4" />
-          <span>{upperFirst(t('messages.logout'))}</span>
+          <span>{upperFirst(t('common.messages.logout'))}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

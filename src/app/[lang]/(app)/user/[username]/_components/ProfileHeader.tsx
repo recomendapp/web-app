@@ -30,7 +30,7 @@ export default async function ProfileHeader({ profile }: { profile: Profile }) {
           <div className="flex items-center @lg/header-box:hidden">
             <ProfileFollowersButton userId={profile?.id!} disabled={!profile?.visible ? true : false} />
             <ProfileFolloweesButton userId={profile?.id!} disabled={!profile?.visible ? true : false} />
-            {session?.user?.id == profile?.id && (
+            {session?.user.id == profile?.id && (
               <Button variant={'action'} asChild>
                 <Link href={'/settings/profile'}>
                   <Settings />
@@ -38,7 +38,7 @@ export default async function ProfileHeader({ profile }: { profile: Profile }) {
               </Button>
             )}
           </div>
-          <ProfileFollowButton profileId={profile?.id!} className="@lg/header-box:hidden" />
+          {session?.user.id !== profile?.id && <ProfileFollowButton profileId={profile?.id!} className="@lg/header-box:hidden" />}
         </div>
       </div>
       <div className="flex flex-col gap-2 w-full">
@@ -60,7 +60,7 @@ export default async function ProfileHeader({ profile }: { profile: Profile }) {
           <div className="hidden @lg/header-box:flex items-center gap-2">
             <ProfileFollowersButton userId={profile?.id!} className="hidden sm:block" disabled={!profile?.visible ? true : false} />
             <ProfileFolloweesButton userId={profile?.id!} className="hidden sm:block" disabled={!profile?.visible ? true : false} />
-            {session?.user?.id == profile?.id && (
+            {session?.user.id == profile?.id && (
               <Button variant={'action'} asChild>
                 <Link href={'/settings/profile'}>
                   <Settings />

@@ -3,27 +3,23 @@ import { useAuth } from "@/context/auth-context";
 import { useModal } from "@/context/modal-context";
 import { useUserDeleteRequestDeleteMutation, useUserDeleteRequestInsertMutation } from "@/features/client/user/userMutations";
 import { useUserDeleteRequestQuery } from "@/features/client/user/userQueries";
-import { CheckedState } from "@radix-ui/react-checkbox";
 import { upperFirst } from "lodash";
 import { useFormatter, useTranslations } from "next-intl";
-import { useState } from "react";
 import toast from "react-hot-toast";
 
 const DELETION_DELAY = 1000 * 60 * 60 * 24 * 30; // 30 days
 
 const AccountDelete = () => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const format = useFormatter();
 	const common = useTranslations('common');
 	const t = useTranslations('pages.settings.account.delete_account');
-	const [confirmed, setConfirmed] = useState<CheckedState>(false);
-	console.log('AccountDelete', confirmed);
 	const { createConfirmModal } = useModal();
 	const {
 		data,
 		isLoading,
 	} = useUserDeleteRequestQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 	});
 	const loading = data === undefined || isLoading;
 
@@ -32,9 +28,9 @@ const AccountDelete = () => {
 
 	// Handlers
 	const handleInsertRequest = () => {
-		if (!user) return;
+		if (!session) return;
 		insertRequestMutation.mutate({
-			userId: user.id,
+			userId: session.user.id,
 		}, {
 			onSuccess: () => {
 				toast.success(upperFirst(common('messages.request_made')));
@@ -45,9 +41,9 @@ const AccountDelete = () => {
 		});
 	};
 	const handleDeleteRequest = () => {
-		if (!user) return;
+		if (!session) return;
 		deleteRequestMutation.mutate({
-			userId: user.id,
+			userId: session.user.id,
 		}, {
 			onSuccess: () => {
 				toast.success(upperFirst(common('messages.request_canceled')));

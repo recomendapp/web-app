@@ -1,7 +1,12 @@
 "use server"
 
-import { Media } from "@/types/type.db";
+import { MediaMovie, MediaPerson, MediaTvSeries } from "@/types/type.db";
 import { createClient } from "../supabase/server-no-cookie";
+
+export type MultiResult =
+  | { type: "movie"; media: MediaMovie }
+  | { type: "tv_series"; media: MediaTvSeries }
+  | { type: "person"; media: MediaPerson };
 
 export const getTmdbSearchMulti = async ({
   query,
@@ -20,48 +25,54 @@ export const getTmdbSearchMulti = async ({
   ).json();
 
   if (!tmdbResults || tmdbResults.total_results === 0 || tmdbResults.success === false) return {
-    results: [],
+    best_result: null,
+    movies: [],
+    tv_series: [],
+    persons: [],
     total_results: 0,
     error: tmdbResults.status_message || 'No results found',
-  }
+  };
 
-  const { data, error } = await supabase
-    .from('medias')
-    .select('*, media_movie(*), media_tv_series(*), media_person(*)')
-    .or(
-      tmdbResults.results
-        .filter((result: any) => ['movie', 'tv', 'person'].includes(result.media_type))
-        .map((result: any) => {
-          return `${result.media_type === 'tv' ? 'tv_series' : result.media_type}_id.eq.${result.id}`;
-        })
-        .join(',')
-    );
+  const { data: moviesResults, error: moviesResultsError } = await supabase.from('media_movie').select('*').in('id', tmdbResults.results.filter((result: any) => result.media_type === 'movie').map((result: any) => result.id));
+	const { data: tvSeriesResults, error: tvSeriesResultsError } = await supabase.from('media_tv_series').select('*').in('id', tmdbResults.results.filter((result: any) => result.media_type === 'tv').map((result: any) => result.id));
+	const { data: personsResults, error: personsResultsError } = await supabase.from('media_person').select('*').in('id', tmdbResults.results.filter((result: any) => result.media_type === 'person').map((result: any) => result.id));
+	if (moviesResultsError || tvSeriesResultsError || personsResultsError) {
+		throw new Error(moviesResultsError?.message || tvSeriesResultsError?.message || personsResultsError?.message);
+	}
+	const moviesMap = new Map(moviesResults?.map(m => [m.id, m]));
+	const tvMap = new Map(tvSeriesResults?.map(t => [t.id, t]));
+	const personsMap = new Map(personsResults?.map(p => [p.id, p]));
 
-  if (!data || error) throw error;
-
-  const orderedData = tmdbResults.results.map((tmdbResult: any) => {
-    return data.find((result) => {
-      if (tmdbResult.media_type === 'movie') {
-        return result.movie_id === tmdbResult.id;
-      } else if (tmdbResult.media_type === 'tv') {
-        return result.tv_series_id === tmdbResult.id;
-      } else if (tmdbResult.media_type === 'person') {
-        return result.person_id === tmdbResult.id;
+	const orderedData = tmdbResults.results
+		.map((r: any): MultiResult | null => {
+      if (r.media_type === "movie") {
+        const media = moviesMap.get(r.id);
+        return media ? { type: "movie", media } : null;
       }
-      return false;
-    });
-  }).filter(Boolean) as typeof data;
+      if (r.media_type === "tv") {
+        const media = tvMap.get(r.id);
+        return media ? { type: "tv_series", media } : null;
+      }
+      if (r.media_type === "person") {
+        const media = personsMap.get(r.id);
+        return media ? { type: "person", media } : null;
+      }
+      return null;
+		})
+		.filter((x: any): x is MultiResult => Boolean(x)) as MultiResult[];
 
-  return {
-    results: orderedData.map((result) => {
-      return {
-        ...result.media_movie,
-        ...result.media_tv_series,
-        ...result.media_person,
-      } as Media;
-    }),
-    total_results: tmdbResults.total_results,
-  }
+  const best_result = orderedData[0];
+	const movies = orderedData.filter((result) => result.type === 'movie').map((result) => result.media);
+	const tv_series = orderedData.filter((result) => result.type === 'tv_series').map((result) => result.media);
+	const persons = orderedData.filter((result) => result.type === 'person').map((result) => result.media);
+
+	return {
+		best_result: best_result,
+		movies: movies,
+		tv_series: tv_series,
+		persons: persons,
+		total_results: tmdbResults.total_results,
+	};
 };
 
 export const getTmdbSearchMovies = async ({
@@ -98,7 +109,7 @@ export const getTmdbSearchMovies = async ({
   }).filter(Boolean) as typeof data;
 
   return {
-    results: orderedData as Media[],
+    results: orderedData as MediaMovie[],
     total_results: tmdbResults.total_results,
   }
 };
@@ -136,7 +147,7 @@ export const getTmdbSearchTvSeries = async ({
   }).filter(Boolean) as typeof data;
 
   return {
-    results: orderedData as Media[],
+    results: orderedData as MediaTvSeries[],
     total_results: tmdbResults.total_results,
   }
 };
@@ -175,7 +186,7 @@ export const getTmdbSearchPersons = async ({
   }).filter(Boolean) as typeof data;
 
   return {
-    results: orderedData as Media[],
+    results: orderedData as MediaPerson[],
     total_results: tmdbResults.total_results,
   }
 };

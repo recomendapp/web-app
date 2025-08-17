@@ -21,7 +21,7 @@ export const FeedNavbar = () => {
 		{
 			label: title(common('messages.cast_and_crew')),
 			active: pathname === '/feed/cast-crew',
-			href: `/feed/cast-crew`,
+			href: user?.premium ? `/feed/cast-crew` : '/upgrade',
 			disabled: !user?.premium,
 		},
 	];

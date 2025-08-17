@@ -18,7 +18,7 @@ export function PersonFollowButton({
   className,
   personId,
 }: PersonFollowButtonProps) {
-  const { user } = useAuth();
+  const { session } = useAuth();
   const common = useTranslations('common');
 
   const {
@@ -26,15 +26,15 @@ export function PersonFollowButton({
     isLoading: loading
   } = useUserFollowPersonQuery({
     personId: personId,
-    userId: user?.id,
+    userId: session?.user.id,
   });
   const insertFollow = useUserFollowPersonInsertMutation();
   const deleteFollow = useUserUnfollowPersonDeleteMutation();
 
   const followPerson = async () => {
-    user?.id &&
+    session?.user.id &&
       (await insertFollow.mutateAsync({
-        userId: user?.id,
+        userId: session?.user.id,
         personId: personId,
       }, {
         onError: (error) => {
@@ -44,9 +44,9 @@ export function PersonFollowButton({
   };
 
   const unfollowUser = async () => {
-    user?.id &&
+    session?.user.id &&
       (await deleteFollow.mutateAsync({
-        userId: user?.id,
+        userId: session?.user.id,
         personId: personId,
       }, {
         onError: (error) => {
@@ -55,7 +55,7 @@ export function PersonFollowButton({
       }));
   };
 
-  if (!user) return (null);
+  if (!session) return (null);
 
   return (
     <div className={cn('flex items-center', className)}>

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 
 // ICONS
 import { cn } from '@/lib/utils';
-import { ProfileFolloweesModal } from '@/components/Modals/Profile/ProfileFolloweesModal';
+import { ProfileFolloweesModal } from '@/components/Modals/profiles/ProfileFolloweesModal';
 import { useModal } from '@/context/modal-context';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useTranslations } from 'next-intl';

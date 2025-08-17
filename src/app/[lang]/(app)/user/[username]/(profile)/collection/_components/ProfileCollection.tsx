@@ -16,12 +16,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useUserActivitiesInfiniteQuery } from '@/features/client/user/userQueries';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Badge } from '@/components/ui/badge';
 import { useSearchParams } from 'next/navigation';
 import { z } from "zod";
+import { CardMovie } from '@/components/Card/CardMovie';
+import { MediaMovie, MediaTvSeries, UserActivityMovie, UserActivityTvSeries } from '@/types/type.db';
+import { CardTvSeries } from '@/components/Card/CardTvSeries';
 
 const DISPLAY = ["grid", "row"] as const;
 const SORT_BY = ["watched_date", "rating"] as const;
@@ -52,7 +54,7 @@ export default function ProfileCollection({
 } : {
   userId: string,
 }) {
-  const common = useTranslations('common');
+  const t = useTranslations();
   const searchParams = useSearchParams();
   const display = getValidatedDisplay(searchParams.get('display'));
   const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
@@ -88,7 +90,7 @@ export default function ProfileCollection({
       <div className="flex justify-between gap-4 items-center">
         <div className='flex items-center gap-2'>
           <p className='text-muted-foreground'>Filters</p>
-          <Badge variant={'accent-yellow'}>{upperFirst(common('messages.soon'))}</Badge>
+          <Badge variant={'accent-yellow'}>{upperFirst(t('common.messages.soon'))}</Badge>
         </div>
         <div className="flex items-center gap-2">
           <Button variant={'ghost'} size={'sm'} onClick={(e) => {
@@ -102,8 +104,8 @@ export default function ProfileCollection({
               <SelectValue />
             </SelectTrigger>
             <SelectContent align="end">
-              <SelectItem value={'watched_date'}>{upperFirst(common('messages.watched_date'))}</SelectItem>
-              <SelectItem value={'rating'}>{upperFirst(common('messages.rating'))}</SelectItem>
+              <SelectItem value={'watched_date'}>{upperFirst(t('common.messages.watched_date'))}</SelectItem>
+              <SelectItem value={'rating'}>{upperFirst(t('common.messages.rating'))}</SelectItem>
             </SelectContent>
           </Select>
           <Button variant={'ghost'} onClick={(e) => handleChange({ name: 'display', value: display === 'grid' ? 'row' : 'grid' })}>
@@ -127,14 +129,31 @@ export default function ProfileCollection({
         >
           {activities.pages.map((page, i) => (
             page?.map((activity, index) => (
-              <CardMedia
-              key={activity?.id}
-              ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
-              variant={display === 'grid' ? 'poster' : 'row'}
-              media={activity?.media!}
-              profileActivity={activity}
-              className='w-full'
-              />
+              activity.type === 'movie' ? (
+                <CardMovie
+                ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+                key={index}
+                variant={display === 'grid' ? 'poster' : 'row'}
+                movie={activity.media as MediaMovie}
+                profileActivity={{
+                  ...activity,
+                  movie_id: activity.media_id!
+                } as UserActivityMovie}
+                className='w-full'
+                />
+              ) : (
+                <CardTvSeries
+                ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
+                key={index}
+                variant={display === 'grid' ? 'poster' : 'row'}
+                tvSeries={activity.media as MediaTvSeries}
+                profileActivity={{
+                  ...activity,
+                  tv_series_id: activity.media_id!
+                } as UserActivityTvSeries}
+                className='w-full'
+                />
+              )
             ))
           ))}
           {isFetchingNextPage && (
@@ -142,7 +161,7 @@ export default function ProfileCollection({
           )}
         </div>
       ) : (
-        <p className="text-center font-semibold">Aucune activité.</p>
+        <p className="text-center font-semibold">{upperFirst(t('common.messages.no_activity'))}</p>
       )}
     </div>
   );

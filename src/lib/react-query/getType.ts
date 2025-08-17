@@ -9,8 +9,14 @@ export const getType = (obj: any) => {
 	else if ('playlist_id' in obj && 'user_id' in obj && 'created_at' in obj && 'edit' in obj) return ('playlist_guests');
 	// PLAYLIST_ITEMS
 	else if ('comment' in obj && 'created_at' in obj && 'media_id' in obj && 'playlist_id' in obj && 'rank' in obj && 'user_id' in obj) return ('playlist_items');
-	// USER_WATCHLIST
-	else if ('comment' in obj && 'created_at' in obj && 'media_id' in obj && 'status' in obj) return ('user_watchlist');
+	
+	
+	/* ----------------------------- USER_WATCHLISTS ---------------------------- */
+	else if ('comment' in obj && 'created_at' in obj && 'type' in obj && 'status' in obj) return ('user_watchlists');
+	else if ('comment' in obj && 'created_at' in obj && 'movie_id' in obj && 'status' in obj) return ('user_watchlists_movie');
+	else if ('comment' in obj && 'created_at' in obj && 'tv_series_id' in obj && 'status' in obj) return ('user_watchlists_tv_series');
+	/* -------------------------------------------------------------------------- */
+	
 	// TMDB_PERSON
 	else if ('id' in obj && 'name' in obj && 'gender' in obj && 'profile_path' in obj && 'popularity' in obj && 'known_for_department' in obj) return ('person');
 	// TMDB_MOVIE

@@ -20,7 +20,7 @@ export async function GET() {
     const sitemapIndexXML = buildSitemapIndex(sitemapIndexes);
     const gzipped = gzipSync(sitemapIndexXML);
 
-    return new NextResponse(gzipped, {
+    return new NextResponse(Uint8Array.from(gzipped), {
       headers: {
         "Content-Type": "application/xml",
         "Content-Encoding": "gzip",

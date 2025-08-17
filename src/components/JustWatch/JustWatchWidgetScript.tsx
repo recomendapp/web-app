@@ -117,7 +117,7 @@ export function JustWatchWidget({
 				{type === 'movie'
 					? upperFirst(common('messages.see_film'))
 					: type === 'show'
-					? upperFirst(common('messages.see_serie'))
+					? upperFirst(common('messages.see_tv_series'))
 					: type === 'season'}
 				<Icons.eye size={15} className="inline-block ml-1 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
 			</div>

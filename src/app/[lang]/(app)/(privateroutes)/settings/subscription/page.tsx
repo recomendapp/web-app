@@ -11,14 +11,14 @@ import { getUrlCustomerPortal } from '@/lib/stripe/stripe-functions';
 import { useUserSubscriptionsQuery } from '@/features/client/user/userQueries';
 
 export default function SettingsAccountPage() {
-  const { user, session } = useAuth();
+  const { session } = useAuth();
   const t = useTranslations('pages.settings');
   const router = useRouter();
 
   const {
     data: subscription,
   } = useUserSubscriptionsQuery({
-    userId: user?.id,
+    userId: session?.user.id,
   })
 
   const redirectToCustomerPortal = async () => {
@@ -40,7 +40,7 @@ export default function SettingsAccountPage() {
         </p> */}
       </div>
       <Separator />
-      {!user ? (
+      {!session ? (
         <Loader />
       ) : (
         <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">

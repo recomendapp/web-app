@@ -6,9 +6,10 @@ import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { useFormatter, useTranslations } from "next-intl";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { UserAvatar } from "@/components/User/UserAvatar";
-import { ContextMenuMedia } from "@/components/ContextMenu/ContextMenuMedia";
 import { UserFeedCastCrew } from "@/types/type.db";
 import { upperFirst } from "lodash";
+import { ContextMenuMovie } from "@/components/ContextMenu/ContextMenuMovie";
+import { getMediaDetails } from "@/utils/get-media-details";
 
 interface FeedCastCrewItemProps
 	extends React.ComponentProps<typeof Card> {
@@ -21,6 +22,7 @@ const FeedCastCrewItemDefault = React.forwardRef<
 >(({ className, activity, ...props }, ref) => {
 	const format = useFormatter();
 	const t = useTranslations();
+	const details = getMediaDetails({ type: 'movie', media: activity.movie! })
 	return (
 		<Card
 		ref={ref}
@@ -31,12 +33,12 @@ const FeedCastCrewItemDefault = React.forwardRef<
 		{...props}
 		>
 			<Link
-			href={activity?.media?.url ?? ''}
+			href={activity?.movie?.url ?? ''}
 			className="w-20 @md/feed-item:w-24 relative h-full shrink-0 rounded-md overflow-hidden aspect-[2/3]"
 			>
 				<ImageWithFallback
-					src={activity?.media?.avatar_url ??''}
-					alt={activity?.media?.title ?? ''}
+					src={activity?.movie?.poster_url ??''}
+					alt={activity?.movie?.title ?? ''}
 					fill
 					className="object-cover"
 					type="movie"
@@ -52,37 +54,37 @@ const FeedCastCrewItemDefault = React.forwardRef<
 					{/* PERSON */}
 					<div className="flex gap-2">
 						<Link href={activity?.person?.url ?? ''} className="shrink-0">
-							{activity?.person?.title ? <UserAvatar className="w-8 h-8 rounded-md" avatarUrl={activity?.person?.avatar_url ?? ''} username={activity?.person?.title} /> : null}
+							{activity?.person?.name ? <UserAvatar className="w-8 h-8 rounded-md" avatarUrl={activity?.person?.profile_url ?? ''} username={activity?.person?.name} /> : null}
 						</Link>
 						<p className="text-muted-foreground line-clamp-2">
 							{t.rich('pages.feed.cast_and_crew.new_activity', {
-								name: activity?.person?.title!,
+								name: activity?.person?.name!,
 								roles: activity?.jobs?.length ? activity.jobs.join(', ').toLowerCase() : t('common.messages.unknown'),
-								film: activity?.media?.title!,
+								film: activity?.movie?.title!,
 								linkPerson: (chunk) => <Link href={activity?.person?.url ?? ''} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
-								linkFilm: (chunk) => <Link href={activity?.media?.url ?? ''} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
+								linkFilm: (chunk) => <Link href={activity?.movie?.url ?? ''} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
 								important: (chunk) => <span className="text-foreground">{chunk}</span>
 							})}
 						</p>
 					</div>
-					{activity?.media?.date ? <div className='hidden @md/feed-item:block text-sm text-muted-foreground'>
-						{format.relativeTime(new Date(activity?.media.date ?? ''), new Date())}
+					{activity?.movie?.release_date ? <div className='hidden @md/feed-item:block text-sm text-muted-foreground'>
+						{format.relativeTime(new Date(activity?.movie.release_date ?? ''), new Date())}
 					</div> : null}
 				</div>
-				{activity.media && <Link href={activity?.media?.url ?? ''} className="space-y-2">
+				{activity.movie && <Link href={activity?.movie?.url ?? ''} className="space-y-2">
 					<div className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
-						<span className='font-bold'>{activity?.media?.title}</span>
-						<sup>
-							<DateOnlyYearTooltip date={activity?.media?.date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
-						</sup>
+						<span className='font-bold'>{activity?.movie?.title}</span>
+						{activity?.movie?.release_date && <sup>
+							<DateOnlyYearTooltip date={activity.movie.release_date} className='text-xs @md/feed-item:text-sm font-medium'/>
+						</sup>}
 					</div>
 					<p
 						className={`
 							text-xs @md/feed-item:text-sm line-clamp-3 text-justify
-							${"overview" in activity.media.extra_data && activity.media?.extra_data.overview?.length ? '' : 'text-muted-foreground'}
+							${details.description && details.description.length ? '' : 'text-muted-foreground'}
 						`}
 					>
-						{"overview" in activity.media.extra_data && activity.media?.extra_data.overview?.length ? activity.media.extra_data.overview : upperFirst(t('common.messages.no_overview'))}
+						{details.description && activity.movie?.overview?.length ? details.description : upperFirst(t('common.messages.no_overview'))}
 					</p>
 				</Link>}
 			</div>
@@ -97,9 +99,9 @@ const FeedCastCrewItem = React.forwardRef<
 	FeedCastCrewItemProps
 >(({ className, activity, ...props }, ref) => {
 	return (
-		<ContextMenuMedia media={activity?.media!}>
+		<ContextMenuMovie movie={activity?.movie!}>
 			<FeedCastCrewItemDefault ref={ref} className={className} activity={activity} {...props} />
-		</ContextMenuMedia>
+		</ContextMenuMovie>
 	)
 });
 FeedCastCrewItem.displayName = "FeedCastCrewItem";

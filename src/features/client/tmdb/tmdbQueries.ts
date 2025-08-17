@@ -1,44 +1,9 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { tmdbKeys } from "./tmdbKeys";
 import { tmdbSearchMovies } from "@/lib/tmdb/queries/tmdbSearchMovies";
-import { tmdbSearchSeries } from "@/lib/tmdb/queries/tmdbSearchSeries";
+import { tmdbSearchTvSeries } from "@/lib/tmdb/queries/tmdbSearchTvSeries";
 import { tmdbSearchPersons } from "@/lib/tmdb/queries/tmdbSearchPersons";
-import { getTmdbSearchMulti } from "@/lib/tmdb/tmdbQueries";
 import { SupportedLocale } from "@/translations/locales";
-
-export const useTmdbSearchMultiInfiniteQuery = ({
-	query,
-	locale,
-	filters,
-} : {
-	query: string;
-	locale: SupportedLocale;
-	filters?: {
-		resultsPerPage?: number;
-	}
-}) => {
-	const mergedFilters = {
-		resultsPerPage: 20,
-		...filters,
-	};
-	return useInfiniteQuery({
-		queryKey: tmdbKeys.searchMulti(query, mergedFilters),
-		queryFn: async ({ pageParam = 1 }) => {
-			const data = await getTmdbSearchMulti({
-				query: query,
-				language: locale,
-				page: pageParam,
-			});
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.results.length === mergedFilters.resultsPerPage ? pages.length + 1 : undefined;
-		},
-		throwOnError: true,
-		enabled: !!query && !!locale,
-	});
-};
 
 export const useTmdbSearchMoviesInfiniteQuery = ({
 	query,
@@ -72,7 +37,7 @@ export const useTmdbSearchMoviesInfiniteQuery = ({
 	});
 };
 
-export const useTmdbSearchSeriesInfiniteQuery = ({
+export const useTmdbSearchTvSeriesInfiniteQuery = ({
 	query,
 	locale,
 	filters,
@@ -92,7 +57,7 @@ export const useTmdbSearchSeriesInfiniteQuery = ({
 		queryFn: async ({ pageParam = 1 }) => {
 			if (!query) throw Error('You must provide a query');
 			if (!locale) throw Error('You must provide a locale');
-			const data = await tmdbSearchSeries(query, locale, pageParam);
+			const data = await tmdbSearchTvSeries(query, locale, pageParam);
 			return data;
 		},
 		initialPageParam: 1,

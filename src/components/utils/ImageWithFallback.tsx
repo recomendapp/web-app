@@ -6,8 +6,8 @@ import { cn } from '@/lib/utils';
 import { ImageIcon, ListVideo, UserIcon } from 'lucide-react';
 import { MediaType } from '@/types/type.db';
 
-interface ImageWithFallbackProps extends ComponentProps<typeof Image> {
-  src: string;
+interface ImageWithFallbackProps extends Omit<ComponentProps<typeof Image>, 'src'> {
+  src?: string | null;
   type?: 'default' | 'playlist' | 'service' | 'watch-provider' | MediaType | null;
   blurDataURL?: string;
 }

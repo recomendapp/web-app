@@ -3,23 +3,23 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
-import { Media } from '@/types/type.db';
+import { MediaMovie } from '@/types/type.db';
 import { getTranslations } from 'next-intl/server';
-import { CardMedia } from '@/components/Card/CardMedia';
+import { CardMovie } from "@/components/Card/CardMovie";
 
 export default async function SearchFilmsSmall({
-  medias,
+  movies,
   query,
   locale,
   className,
 }: {
-  medias?: Media[];
+  movies?: MediaMovie[];
   query: string;
   locale: string;
   className?: string;
 }) {
   const common = await getTranslations({ locale: locale, namespace: 'common' });
-  if (!medias || medias.length === 0) return null;
+  if (!movies || movies.length === 0) return null;
   return (
     <div className={cn('flex flex-col gap-2', className)}>
       <Button
@@ -30,11 +30,11 @@ export default async function SearchFilmsSmall({
         <Link href={`/search/films?q=${query}`}>{upperFirst(common('messages.film', { count: 2}))}</Link>
       </Button>
       <div className="flex flex-col gap-2">
-      {medias.slice(0, 4).map((media, i) => (
-        <CardMedia
+      {movies.slice(0, 4).map((movie, i) => (
+        <CardMovie
         key={i}
         variant='row'
-        media={media}
+        movie={movie}
         className='border-none bg-transparent'
         posterClassName='w-[50px]'
         />

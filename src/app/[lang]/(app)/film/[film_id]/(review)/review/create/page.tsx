@@ -1,12 +1,13 @@
-import { notFound, redirect } from 'next/navigation';
+
 import { createServerClient } from '@/lib/supabase/server';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { getMovie } from '@/features/server/media/mediaQueries';
-import CreateReviewForm from '@/components/Review/CreateReviewForm';
-import { Media } from '@/types/type.db';
 import { Metadata } from 'next';
+import { MovieCreateReview } from './_components/MovieCreateReview';
+import { redirect } from '@/lib/i18n/routing';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata(
   props: {
@@ -42,20 +43,25 @@ export default async function CreateReview(
   const {
     data: { session },
   } = await supabase.auth.getSession();
-  if (!session) redirect(`/auth/login?redirect=${encodeURIComponent(`/film/${movieId}/review/create`)}`);
-  const { data: review } = await supabase
-    .from('user_review')
-    .select(`id`)
+  if (!session) return redirect({
+    href: `/auth/login?redirect=${encodeURIComponent(`/film/${params.film_id}/review/create`)}`,
+    locale: params.lang,
+  });
+  const { data: review, error } = await supabase
+    .from('user_activities_movie')
+    .select(`review:user_reviews_movie!inner(id)`)
     .match({
       user_id: session.user.id,
-      media_id: movieId,
-      media_type: 'movie',
+      movie_id: movieId,
     })
-    .single();
-  if (review) redirect(`/film/${movieId}/review/${review.id}`);
+    .not('review', 'is', null)
+    .maybeSingle();
+  if (error) throw error;
+  if (review) return redirect({
+    href: `/film/${params.film_id}/review/${review.review.id}`,
+    locale: params.lang,
+  });
   const movie = await getMovie(params.lang, movieId);
   if (!movie) notFound();
-  return (
-    <CreateReviewForm media={movie as Media} />
-  );
+  return <MovieCreateReview movie={movie} slug={params.film_id} />;
 }

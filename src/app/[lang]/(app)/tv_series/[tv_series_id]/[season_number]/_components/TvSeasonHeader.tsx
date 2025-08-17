@@ -20,7 +20,7 @@ export default function TvSeasonHeader({
 	const common = useTranslations('common');
 	const title = upperFirst(common('messages.tv_season_value', { number: season.season_number! }));
 	const randomBg = useRandomImage(season.episodes?.map(episode => ({
-		src: episode.avatar_path ?? '',
+		src: episode.still_path ?? '',
 		alt: upperFirst(common('messages.tv_episode_value', { number: episode.episode_number! })),
 	})) ?? []);
 	if (!season) return null;
@@ -30,7 +30,7 @@ export default function TvSeasonHeader({
 			{/* SERIE POSTER */}
 			<MediaPoster
 			className="w-[80px] @md/header-box:w-[100px] @lg/header-box:w-[120px] @xl/header-box:w-[150px]"
-			src={season.avatar_url ?? ''}
+			src={season.poster_url ?? ''}
 			alt={title}
 			fill
 			sizes={`
@@ -40,8 +40,8 @@ export default function TvSeasonHeader({
 			`}
 			>
 			<div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-				{(season.tmdb_vote_average) ? <IconMediaRating
-					rating={season.tmdb_vote_average}
+				{season.vote_average ? <IconMediaRating
+					rating={season.vote_average}
 					variant="general"
 					className="w-full"
 				/> : null}
@@ -53,15 +53,15 @@ export default function TvSeasonHeader({
 					{season.serie && <span className="before:content-['_|_']">
 						<Button variant={'link'} className=" w-fit p-0 font-normal" asChild>
 							<Link href={urlSerie}>
-							{season.serie.title}
+							{season.serie.name}
 							</Link>
 						</Button>
 					</span>}
 				</div>
 				<h1 className="text-clamp space-x-1">
 					<span className='font-bold select-text'>{title}</span>
-					{season.title && (
-						<div className='text-base font-semibold text-muted-foreground'>{season.title}</div>
+					{season.name && (
+						<div className='text-base font-semibold text-muted-foreground'>{season.name}</div>
 					)}
 				</h1>
 				<div>

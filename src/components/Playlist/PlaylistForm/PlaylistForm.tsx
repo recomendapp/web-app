@@ -33,15 +33,15 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Playlist } from '@/types/type.db';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { usePlaylistDeleteMutation } from '@/features/client/playlist/playlistMutations';
-import { userKeys } from '@/features/client/user/userKeys';
+import { usePlaylistDeleteMutation, usePlaylistInsertMutation, usePlaylistUpdateMutation } from '@/features/client/playlist/playlistMutations';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { v4 as uuidv4 } from "uuid";
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -55,66 +55,23 @@ export function PlaylistForm({
   playlist,
 }: PlaylistFormProps) {
   const supabase = useSupabaseClient();
-  const { user } = useAuth();
+  const { session } = useAuth();
   const t = useTranslations();
   const router = useRouter();
-  const queryClient = useQueryClient();
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);
   const [newPoster, setNewPoster] = useState<File>();
-  const deletePlaylistMutation = usePlaylistDeleteMutation({
-    userId: user?.id,
-  })
 
-  const { mutateAsync: insertPlaylistMutation } = useMutation({
-    mutationFn: async (
-      payload: {
-        user_id: string;
-        title: string;
-        description: string | null;
-        private: boolean;
-      }
-    ) => {
-      const {data: response, error } = await supabase
-        .from('playlists')
-        .insert(payload)
-        .select(`*`)
-        .single()
-      if (error) throw error;
-      return response;
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: userKeys.playlists({ userId: user?.id as string }),
-      });
-    },
-  });
+  // Mutations
+  const insertPlaylistMutation = usePlaylistInsertMutation();
+  const deletePlaylistMutation = usePlaylistDeleteMutation();
+  const updatePlaylistMutation = usePlaylistUpdateMutation();
 
-  const { mutateAsync: updatePlaylistMutation } = useMutation({
-    mutationFn: async ({
-      playlistId,
-      payload
-    } : {
-      playlistId: number,
-      payload: {
-        title?: string;
-        description?: string | null;
-        private?: boolean;
-        poster_url?: string | null;
-      }
-    }) => {
-      if (!playlistId) throw Error('Missing activity id');
-      const {data: response, error } = await supabase
-        .from('playlists')
-        .update(payload)
-        .eq('id', playlistId)
-        .select(`*`)
-        .single()
-      if (error) throw error;
-      return response;
-    }
-  });
-
+  // Form
+  const typeOptions = [
+    { value: 'movie', label: upperFirst(t('common.messages.film', { count: 2 })) },
+    { value: 'tv_series', label: upperFirst(t('common.messages.tv_series', { count: 2 })) },
+  ];
   const CreatePlaylistFormSchema = z.object({
     title: z
       .string()
@@ -133,32 +90,33 @@ export function PlaylistForm({
         message: t('common.form.length.char_max', { count: 300 }),
       })
       .optional(),
+    type: z.enum(['movie', 'tv_series']),
     private: z.boolean(),
   });
-
   type CreatePlaylistFormValues = z.infer<typeof CreatePlaylistFormSchema>;
-
   const defaultValues: Partial<CreatePlaylistFormValues> = {
     title: playlist?.title ?? '',
     description: playlist?.description ?? '',
     private: playlist?.private ?? false,
+    type: playlist?.type ?? 'movie',
   };
-
   const form = useForm<CreatePlaylistFormValues>({
     resolver: zodResolver(CreatePlaylistFormSchema),
     defaultValues,
     mode: 'onChange',
   });
 
-  async function handleCeatePlaylist(data: CreatePlaylistFormValues) {
+  // Handlers
+  const handleCreatePlaylist = async (data: CreatePlaylistFormValues) => {
     try {
       setLoading(true);
-      if (!user?.id) throw Error('Missing user id');
-      const newPlaylist = await insertPlaylistMutation({
-        user_id: user?.id,
+      if (!session?.user.id) throw Error('Missing user id');
+      const newPlaylist = await insertPlaylistMutation.mutateAsync({
+        userId: session?.user.id,
         title: data.title ?? '',
         description: data.description?.trim() || null,
         private: data.private,
+        type: data.type,
       });
       // if (filmId) {
       //   await insertPlaylistItemMutation({
@@ -174,11 +132,9 @@ export function PlaylistForm({
       if (newPoster) {
         if (!newPlaylist.id) throw Error('Playlist id not found');
         const newPosterUrl = await uploadPoster(newPoster, newPlaylist.id);
-        await updatePlaylistMutation({
+        await updatePlaylistMutation.mutateAsync({
           playlistId: newPlaylist.id,
-          payload: {
-            poster_url: newPosterUrl,
-          },
+          poster_url: newPosterUrl,
         });
       }
       toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
@@ -188,19 +144,14 @@ export function PlaylistForm({
     } finally {
       setLoading(false);
     }
-  }
-
-  async function handleUpdatePlaylist(data: CreatePlaylistFormValues) {
+  };
+  const handleUpdatePlaylist = async (data: CreatePlaylistFormValues) => {
     try {
       setLoading(true);
       if (!playlist?.id ) throw Error('Missing activity id');
       const payload = {
         title: data.title.replace(/\s+/g, ' ').trim(),
         description: data.description?.trim() || null,
-        // description: data.description
-        //   ?.replace(/[\r\n]+/g, '\n') // Multiple new lines
-        //   .replace(/[^\S\r\n]+/g, ' ') // Multiple spaces
-        //   .trim() ?? '',
         private: data.private,
         poster_url: playlist?.poster_url,
       };
@@ -208,9 +159,9 @@ export function PlaylistForm({
         const newPosterUrl = await uploadPoster(newPoster, playlist?.id);
         payload.poster_url = newPosterUrl;
       }
-      await updatePlaylistMutation({
+      await updatePlaylistMutation.mutateAsync({
         playlistId: playlist.id,
-        payload,
+        ...payload,
       });
       toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
       success();
@@ -219,9 +170,8 @@ export function PlaylistForm({
     } finally {
       setLoading(false);
     }
-  }
-
-  async function handleDeletePlaylist() {
+  };
+  const handleDeletePlaylist = async () => {
     try {
       setLoading(true);
       if (!playlist?.id) throw Error('Missing activity id');
@@ -240,9 +190,8 @@ export function PlaylistForm({
     } finally {
       setLoading(false);
     }
-  }
-
-  async function uploadPoster(file: File, playlistId: number) {
+  };
+  const uploadPoster = async (file: File, playlistId: number) => {
     try {
       const fileExt = file.name.split('.').pop();
       const filePath = `${playlistId}.${uuidv4()}.${fileExt}`;
@@ -261,13 +210,13 @@ export function PlaylistForm({
     } catch (error) {
       throw error;
     }
-  }
+  };
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(
-          playlist ? handleUpdatePlaylist : handleCeatePlaylist
+          playlist ? handleUpdatePlaylist : handleCreatePlaylist
         )}
         className=" space-y-8 h-full flex flex-col justify-between"
       >
@@ -316,6 +265,29 @@ export function PlaylistForm({
                   </FormControl>
                   <FormMessage />
                 </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="type"
+              disabled={!!playlist}
+              render={({ field }) => (
+                <TooltipBox tooltip={!!playlist ? upperFirst(t('common.messages.cannot_be_changed')) : undefined}>
+                  <FormItem className={field.disabled ? 'text-muted-foreground cursor-not-allowed' : ''}>
+                    <FormLabel>{upperFirst(t('common.messages.universe'))}</FormLabel>
+                    <FormControl className="grid grid-cols-2 gap-2">
+                      <RadioGroup value={field.value} onValueChange={field.onChange} disabled={field.disabled}>
+                      {typeOptions.map((option, index) => (
+                          <div key={index} className="flex items-center space-x-2">
+                            <RadioGroupItem value={option.value} id={`option-${index}`} />
+                            <Label htmlFor={`option-${index}`}>{option.label}</Label>
+                          </div>
+                      ))}
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                </TooltipBox>
               )}
             />
             <FormField

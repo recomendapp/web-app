@@ -3,23 +3,23 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
-import { Media } from '@/types/type.db';
+import { MediaTvSeries } from '@/types/type.db';
 import { getTranslations } from 'next-intl/server';
-import { CardMedia } from '@/components/Card/CardMedia';
+import { CardTvSeries } from "@/components/Card/CardTvSeries";
 
 export default async function SearchTvSeriesSmall({
-  medias,
+  tvSeries,
   query,
   locale,
   className,
 }: {
-  medias?: Media[];
+  tvSeries?: MediaTvSeries[];
   query: string;
   locale: string;
   className?: string;
 }) {
   const common = await getTranslations({ locale: locale, namespace: 'common' });
-  if (!medias || medias.length === 0) return null;
+  if (!tvSeries || tvSeries.length === 0) return null;
   return (
     <div className={cn('flex flex-col gap-2', className)}>
       <Button
@@ -30,11 +30,11 @@ export default async function SearchTvSeriesSmall({
     <Link href={`/search/tv_series?q=${query}`}>{upperFirst(common('messages.tv_series', { count: 2}))}</Link>
       </Button>
       <div className="flex flex-col gap-2">
-      {medias.slice(0, 4).map((media, i) => (
-        <CardMedia
+      {tvSeries.slice(0, 4).map((item, i) => (
+        <CardTvSeries
         key={i}
         variant='row'
-        media={media}
+        tvSeries={item}
         className='border-none bg-transparent'
         posterClassName='w-[50px]'
         />

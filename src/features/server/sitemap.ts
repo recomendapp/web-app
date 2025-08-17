@@ -178,11 +178,11 @@ export const getSitemapPlaylists = cache(
 /* -------------------------------------------------------------------------- */
 
 /* --------------------------------- REVIEWS -------------------------------- */
-export const getSitemapReviewCount = cache(
+export const getSitemapReviewMovieCount = cache(
 	async (perPage: number = 10000): Promise<number> => {
 		const supabase = await createClient(routing.defaultLocale);
 		const { count, error } = await supabase
-			.from('user_review')
+			.from('user_reviews_movie')
 			.select('*', { count: 'exact', head: true })
 		if (error) throw error;
 		if (count === null) {
@@ -192,14 +192,43 @@ export const getSitemapReviewCount = cache(
 	},
 	{ revalidate: REVIEW_REVALIDATE_TIME },
 );
-export const getSitemapReviews = cache(
+export const getSitemapReviewTvSeriesCount = cache(
+	async (perPage: number = 10000): Promise<number> => {
+		const supabase = await createClient(routing.defaultLocale);
+		const { count, error } = await supabase
+			.from('user_reviews_tv_series')
+			.select('*', { count: 'exact', head: true })
+		if (error) throw error;
+		if (count === null) {
+			return 0;
+		}
+		return count ? Math.ceil(count / perPage) : 0;
+	},
+	{ revalidate: REVIEW_REVALIDATE_TIME },
+);
+
+export const getSitemapReviewsMovie = cache(
 	async (id: number, perPage: number = 10000) => {
 		const start = id * perPage;
 		const end = start + perPage - 1;
 		const supabase = await createClient(routing.defaultLocale);
 		const { data, error } = await supabase
-			.from('user_review')
-			.select('id, updated_at')
+			.from('user_reviews_movie')
+			.select('id, updated_at, activity:user_activities_movie(movie_id)')
+			.range(start, end);
+		if (error) throw error;
+		return data || [];
+	},
+	{ revalidate: REVIEW_REVALIDATE_TIME },
+);
+export const getSitemapReviewsTvSeries = cache(
+	async (id: number, perPage: number = 10000) => {
+		const start = id * perPage;
+		const end = start + perPage - 1;
+		const supabase = await createClient(routing.defaultLocale);
+		const { data, error } = await supabase
+			.from('user_reviews_tv_series')
+			.select('id, updated_at, activity:user_activities_tv_series(tv_series_id)')
 			.range(start, end);
 		if (error) throw error;
 		return data || [];

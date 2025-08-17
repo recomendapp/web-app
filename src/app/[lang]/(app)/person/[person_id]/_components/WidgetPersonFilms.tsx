@@ -1,10 +1,10 @@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { upperFirst } from 'lodash';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { getTranslations } from 'next-intl/server';
 import { MediaMovieAggregateCredits } from '@/types/type.db';
 import { Link } from "@/lib/i18n/routing";
 import { Button } from '@/components/ui/button';
+import { CardMovie } from '@/components/Card/CardMovie';
 
 interface WidgetPersonFilmsProps extends React.HTMLAttributes<HTMLDivElement> {
 	personSlug: string;
@@ -29,10 +29,10 @@ export async function WidgetPersonFilms({
       <ScrollArea className="rounded-md">
         <div className="flex space-x-4 pb-4">
           {credits?.map((credit, i) => (
-            <CardMedia
+            <CardMovie
             key={i}
             variant='poster'
-            media={credit.media!}
+            movie={credit.movie}
             className='w-24 lg:w-32'
             />
           ))}

@@ -41,7 +41,7 @@ export default async function Search(
   const params = await props.params;
   const searchParams = await props.searchParams;
   if (searchParams?.q) {
-    const { results, total_results } = await getSearchMulti(
+    const results = await getSearchMulti(
       params.lang,
       {
         query: searchParams.q,
@@ -49,7 +49,7 @@ export default async function Search(
       }
     );
     if (
-      (!results || total_results === 0 || results.length === 0)
+      (!results || results.total_results === 0 || results.total_results === 0)
     ) {
       return (
         <div>
@@ -59,11 +59,11 @@ export default async function Search(
     }
     return (
       <div className='grid grid-cols-1 @xl/search:grid-cols-3 gap-4'>
-        <SearchBestResult media={results[0]} locale={params.lang} className='@xl/search:col-span-1' />
-        <SearchFilmsSmall medias={results.filter((r) => r.media_type === 'movie')} query={searchParams.q} locale={params.lang} className='@xl/search:col-span-2' />
-        <SearchTvSeriesSmall  medias={results.filter((r) => r.media_type === 'tv_series')} query={searchParams.q} locale={params.lang} className='@xl/search:col-span-3' />
+        <SearchBestResult result={results.best_result} className='@xl/search:col-span-1' />
+        <SearchFilmsSmall movies={results.movies} query={searchParams.q} locale={params.lang} className='@xl/search:col-span-2' />
+        <SearchTvSeriesSmall  tvSeries={results.tv_series} query={searchParams.q} locale={params.lang} className='@xl/search:col-span-3' />
         <SearchPlaylistsSmall query={searchParams.q} className='@xl/search:col-span-3' />
-        <SearchCrewCastSmall medias={results.filter((r) => r.media_type === 'person')} query={searchParams.q} locale={params.lang} className='@xl/search:col-span-3' />
+        <SearchCrewCastSmall persons={results.persons} query={searchParams.q} locale={params.lang} className='@xl/search:col-span-3' />
         <SearchUsersSmall query={searchParams.q} className='@xl/search:col-span-3' />
       </div>
     );

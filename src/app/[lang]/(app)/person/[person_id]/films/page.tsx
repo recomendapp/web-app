@@ -2,7 +2,6 @@ import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getPerson, getPersonFilms } from '@/features/server/media/mediaQueries';
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { Pagination } from './_components/Pagination';
 import { Icons } from '@/config/icons';
 import { Link } from "@/lib/i18n/routing";
@@ -14,6 +13,7 @@ import { seoLocales } from '@/lib/i18n/routing';
 import { notFound, redirect } from 'next/navigation';
 import { ActiveFilters } from './_components/ActiveFilters';
 import { getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage, getValidatePerPage } from './_components/constants';
+import { CardMovie } from '@/components/Card/CardMovie';
 
 export async function generateMetadata(
   props: {
@@ -30,16 +30,16 @@ export async function generateMetadata(
   const person = await getPerson(params.lang, id);
   if (!person) return { title: upperFirst(common('messages.person_not_found')) };
   return {
-	title: t('metadata.title', { name: person.title! }),
-	description: truncate(t('metadata.description', { name: person.title! }), { length: siteConfig.seo.description.limit }),
+	title: t('metadata.title', { name: person.name }),
+	description: truncate(t('metadata.description', { name: person.name }), { length: siteConfig.seo.description.limit }),
 	alternates: seoLocales(params.lang, `/person/${person.slug}/films`),
 	openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { name: person.title! })} • ${siteConfig.name}`,
-      description: truncate(t('metadata.description', { name: person.title! }), { length: siteConfig.seo.description.limit }),
+      title: `${t('metadata.title', { name: person.name })} • ${siteConfig.name}`,
+      description: truncate(t('metadata.description', { name: person.name }), { length: siteConfig.seo.description.limit }),
       url: `${siteConfig.url}/${params.lang}/person/${person.slug}/films`,
-      images: person.avatar_url ? [
-        { url: person.avatar_url },
+      images: person.profile_url ? [
+        { url: person.profile_url },
       ] : undefined,
       type: 'profile',
       locale: params.lang,
@@ -117,7 +117,7 @@ export default async function FilmsPage(
 			<div>
 				<div className='flex flex-col @md/person-films:flex-row @md/person-films:justify-between items-center gap-2'>
 					<Filters
-					knownForDepartment={person.extra_data.known_for_department}
+					knownForDepartment={person.known_for_department!}
 					jobs={person.jobs}
 					sortBy={sortBy}
 					sortOrder={sortOrder}
@@ -148,10 +148,10 @@ export default async function FilmsPage(
 			`}
 			>
 				{movies.map((credits, index) => (
-					<CardMedia
+					<CardMovie
 					key={index}
 					variant={display === 'grid' ? 'poster' : 'row'}
-					media={credits.media!}
+					movie={credits.movie!}
 					className='w-full'
 					/>
 				))}

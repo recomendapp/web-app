@@ -25,42 +25,42 @@ export async function generateMetadata(
   const movie = await getMovie(params.lang, movieId);
   if (!movie) return { title: upperFirst(common('messages.film_not_found')) };
   return {
-    title: t('metadata.title', { title: movie.title!, year: new Date(String(movie.extra_data.release_date)).getFullYear() }),
+    title: t('metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() }),
     description: truncate(
-      movie.main_credit
+      movie.directors
         ? t('metadata.description', {
           title: movie.title!,
-          directors: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(movie.main_credit.map((director) => director.title ?? '')),
-          year: new Date(String(movie.extra_data.release_date)).getFullYear(),
-          overview: movie.extra_data.overview,
+          directors: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(movie.directors.map((director) => director.name ?? '')),
+          year: new Date(String(movie.release_date)).getFullYear(),
+          overview: movie.overview,
         }) : t('metadata.description_no_director', {
           title: movie.title!,
-          year: new Date(String(movie.extra_data.release_date)).getFullYear(),
-          overview: movie.extra_data.overview
+          year: new Date(String(movie.release_date)).getFullYear(),
+          overview: movie.overview
         }),
       { length: siteConfig.seo.description.limit }
     ),
     alternates: seoLocales(params.lang, `/film/${movie.slug}`),
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: movie.title!, year: new Date(String(movie.extra_data.release_date)).getFullYear() })} • ${siteConfig.name}`,
+      title: `${t('metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
-        movie.main_credit
+        movie.directors
           ? t('metadata.description', {
             title: movie.title!,
-            directors: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(movie.main_credit.map((director) => director.title ?? '')),
-            year: new Date(String(movie.extra_data.release_date)).getFullYear(),
-            overview: movie.extra_data.overview,
+            directors: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(movie.directors.map((director) => director.name ?? '')),
+            year: new Date(String(movie.release_date)).getFullYear(),
+            overview: movie.overview,
           }) : t('metadata.description_no_director', {
             title: movie.title!,
-            year: new Date(String(movie.extra_data.release_date)).getFullYear(),
-            overview: movie.extra_data.overview
+            year: new Date(String(movie.release_date)).getFullYear(),
+            overview: movie.overview
           }),
         { length: siteConfig.seo.description.limit }
       ),
       url: `${siteConfig.url}/${params.lang}/film/${movie.slug}`,
-      images: movie.avatar_url ? [
-        { url: movie.avatar_url },
+      images: movie.poster_url ? [
+        { url: movie.poster_url },
       ] : undefined,
       type: 'video.movie',
       locale: params.lang,
@@ -84,28 +84,28 @@ export default async function MoviePage(
     '@context': 'https://schema.org',
     '@type': 'Movie',
     name: movie.title ?? undefined,
-    image: movie.avatar_url ?? undefined,
-    description: movie.extra_data.overview ?? undefined,
-    datePublished: movie.date ?? undefined,
+    image: movie.poster_url ?? undefined,
+    description: movie.overview ?? undefined,
+    datePublished: movie.release_date ?? undefined,
     dateModified: new Date().toISOString(),
-    duration: movie.extra_data.runtime ? toISO8601Duration(movie.extra_data.runtime) : undefined,
-    director: movie.main_credit
+    duration: movie.runtime ? toISO8601Duration(movie.runtime) : undefined,
+    director: movie.directors
       ?.map(director => ({
         '@type': 'Person',
-        name: director.title ?? undefined,
-        image: director.avatar_url ?? undefined,
+        name: director.name ?? undefined,
+        image: director.profile_url ?? undefined,
       })),
     actor: movie.cast
       ?.map((actor) => ({
         '@type': 'Person',
-        name: actor.person?.title ?? undefined,
-        image: actor.person?.avatar_url ?? undefined,
+        name: actor.person?.name ?? undefined,
+        image: actor.person?.profile_url ?? undefined,
       })),
     genre: movie.genres?.map((genre) => genre.name),
-    aggregateRating: (movie.vote_average || movie.tmdb_vote_average) ? {
+    aggregateRating: movie.vote_average ? {
       '@type': 'AggregateRating',
-      ratingValue: movie.vote_average ?? movie.tmdb_vote_average ?? undefined,
-      ratingCount: movie.vote_count ?? movie.tmdb_vote_count ?? 0,
+      ratingValue: movie.vote_average,
+      ratingCount: movie.vote_count ?? 0,
       bestRating: 10,
       worstRating: 1,
     } : undefined,

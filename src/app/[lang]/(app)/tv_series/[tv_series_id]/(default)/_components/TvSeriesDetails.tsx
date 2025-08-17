@@ -26,12 +26,12 @@ export default function TvSerieDetails({
         <div className="@4xl/movie-details:col-span-2">
           <h2 className="text-lg font-medium">{upperFirst(common('messages.overview'))}</h2>
           <div className="text-justify text-muted-foreground">
-            {serie.extra_data.overview ?? upperFirst(common('messages.no_overview'))}
+            {serie.overview ?? upperFirst(common('messages.no_overview'))}
           </div>
         </div>
         <JustWatchWidget
           id={serie.id}
-          title={serie.title ?? ''}
+          title={serie.name ?? ''}
           type="show"
           className="@4xl/movie-details:col-span-1"
         />
@@ -49,7 +49,7 @@ export default function TvSerieDetails({
                   <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
                     <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
                       <ImageWithFallback
-                        src={season.avatar_url ?? ''}
+                        src={season.poster_url ?? ''}
                         alt={upperFirst(common('messages.tv_season_value', { number: season.season_number! }))}
                         fill
                         className="object-cover"
@@ -61,8 +61,8 @@ export default function TvSerieDetails({
                         `}
                       />
                       <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                        {(season.tmdb_vote_average) ? <IconMediaRating
-                          rating={season.tmdb_vote_average}
+                        {season.vote_count ? <IconMediaRating
+                          rating={season.vote_average}
                           variant="general"
                           className="w-full"
                         /> : null}
@@ -92,7 +92,7 @@ export default function TvSerieDetails({
                     <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
                       <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
                         <ImageWithFallback
-                          src={special.avatar_url ?? ''}
+                          src={special.poster_url ?? ''}
                           alt={upperFirst(common('messages.tv_season_value', { number: special.season_number! }))}
                           fill
                           className="object-cover"
@@ -104,8 +104,8 @@ export default function TvSerieDetails({
                           `}
                         />
                         <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                          {(special.tmdb_vote_average) ? <IconMediaRating
-                            rating={special.tmdb_vote_average}
+                          {special.vote_average ? <IconMediaRating
+                            rating={special.vote_average}
                             variant="general"
                             className="w-full"
                           /> : null}
@@ -168,8 +168,8 @@ function CastPoster({
       <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
         <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
           <ImageWithFallback
-            src={person.avatar_url ?? ''}
-            alt={person.title ?? ''}
+            src={person.profile_url ?? ''}
+            alt={person.name ?? ''}
             fill
             className="object-cover"
             type="person"
@@ -181,7 +181,7 @@ function CastPoster({
           />
         </div>
         <div className="text-center">
-          <p className="line-clamp-2 break-words">{person.title}</p>
+          <p className="line-clamp-2 break-words">{person.name}</p>
           {character ? <p className="line-clamp-2 text-accent-yellow italic text-sm">{character}</p> : null}
         </div>
       </Card>

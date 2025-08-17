@@ -3,7 +3,7 @@ import { getTvSeries } from '@/features/server/media/mediaQueries';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ShowPlaylists } from './_components/ShowPlaylists';
+import { TvSeriesPlaylists } from './_components/TvSeriesPlaylists';
 import { truncate, upperFirst } from 'lodash';
 import { seoLocales } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
@@ -23,26 +23,26 @@ export async function generateMetadata(
   const serie = await getTvSeries(params.lang, serieId);
   if (!serie) return { title: upperFirst(common('messages.tv_series_not_found')) };
   return {
-    title: t('metadata.title', { title: serie.title!, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() }),
+    title: t('metadata.title', { title: serie.name, year: new Date(String(serie.first_air_date)).getFullYear() }),
     description: truncate(
       t('metadata.description', {
-        title: serie.title!,
+        title: serie.name,
       }),
       { length: siteConfig.seo.description.limit }
     ),
     alternates: seoLocales(params.lang, `/tv_series/${serie.slug}/playlists`),
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: serie.title!, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
+      title: `${t('metadata.title', { title: serie.name, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
         t('metadata.description', {
-          title: serie.title!,
+          title: serie.name,
         }),
         { length: siteConfig.seo.description.limit }
       ),
       url: `${siteConfig.url}/${params.lang}/tv_series/${serie.slug}/playlists`,
-      images: serie.avatar_url ? [
-        { url: serie.avatar_url }
+      images: serie.poster_url ? [
+        { url: serie.poster_url }
       ] : undefined,
       type: 'video.tv_show',
       locale: params.lang,
@@ -62,5 +62,5 @@ export default async function Reviews(
   const { id: seriesId } = getIdFromSlug(params.tv_series_id);
   const serie = await getTvSeries(params.lang, seriesId);
   if (!serie) notFound();
-  return <ShowPlaylists mediaId={serie.media_id!} />;
+  return <TvSeriesPlaylists tvSeriesId={seriesId} />;
 }

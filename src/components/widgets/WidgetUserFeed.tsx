@@ -12,15 +12,15 @@ const WIDGET_USER_FEED_LIMIT = 4;
 export const WidgetUserFeed = ({
 	className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
-	const { user } = useAuth();
+	const { session } = useAuth();
 	const t = useTranslations('common');
 	const {
 		data: feed,
 		isLoading,
 	} = useUserFeedInfiniteQuery({
-		userId: user?.id,
+		userId: session?.user.id,
 	})
-	if (!user || !feed || !feed.pages[0]?.length) return null;
+	if (!session || !feed || !feed.pages[0]?.length) return null;
 
 	return (
 		<div className={cn('@container/widget-user-feed space-y-4', className)}>

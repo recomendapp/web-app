@@ -1,45 +1,53 @@
+'use client'
 import { Link } from "@/lib/i18n/routing";
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
-import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Card } from '@/components/ui/card';
-import { getMediaDetails } from '@/utils/get-media-details';
 import { BadgeMedia } from '@/components/Badge/BadgeMedia';
-import { Media, MediaPerson } from '@/types/type.db';
+import { MediaPerson } from '@/types/type.db';
 import { upperFirst } from 'lodash';
-import { getTranslations } from 'next-intl/server';
-import { ContextMenuMedia } from "@/components/ContextMenu/ContextMenuMedia";
+import { MultiResult } from "@/lib/tmdb/tmdbQueries";
+import { getMediaDetails } from "@/utils/get-media-details";
+import { useTranslations } from "next-intl";
 
-export default async function SearchBestResult({
-  media,
-  locale,
+export default function SearchBestResult({
+  result,
   className,
 }: {
-  media: Media;
-  locale: string;
+  result: MultiResult | null;
   className?: string;
 }) {
-  const common = await getTranslations({ locale: locale, namespace: 'common' });
-
+  const t = useTranslations();
+  const details = useMemo(() => {
+		switch (result?.type) {
+			case 'movie':
+				return getMediaDetails({ type: 'movie', media: result.media });
+			case 'tv_series':
+				return getMediaDetails({ type: 'tv_series', media: result.media });
+			default:
+				return null;
+		}
+	}, [result]);
+  if (!result) return null;
   return (
     <div className={cn('flex flex-col gap-2', className)}>
       <h2 className="text-2xl font-bold">
-      {upperFirst(common('messages.top_result'))}
+      {upperFirst(t('common.messages.top_result'))}
       </h2>
-      <ContextMenuMedia media={media}>
-        <Link href={media.url ?? ''}>
+      <>
+        <Link href={result.media.url ?? ''}>
           <Card className='flex flex-col gap-2 relative p-2 hover:bg-muted-hover'>
-            <BadgeMedia type={media.media_type} variant={"accent-yellow"} className='absolute top-2 right-2' />
+            <BadgeMedia type={result.type} variant={"accent-yellow"} className='absolute top-2 right-2' />
             <div
             className={`relative w-[100px] shrink-0 overflow-hidden
-              ${getMediaDetails(media).posterClassName}
+              ${result.type === 'person' ? 'aspect-square rounded-full' : 'aspect-[2/3]'}
             `}
             >
               <ImageWithFallback
-                src={media.avatar_url ?? ''}
-                alt={media.title ?? ''}
+                src={details?.imageUrl ?? ''}
+                alt={details?.title ?? ''}
                 layout="fill"
                 objectFit="cover"
                 className="object-cover"
@@ -47,27 +55,24 @@ export default async function SearchBestResult({
             </div>
             <div>
               <p className="text-2xl font-bold line-clamp-2 break-all overflow-hidden">
-                {media.title}
+                {details?.title}
               </p>
-              {media.media_type === 'person' ? (
+              {result.type === 'person' && result.media.known_for_department ? (
                 <p className="line-clamp-2 text-muted-foreground">
-                  {"known_for_department" in media.extra_data && media.extra_data.known_for_department}
+                 {result.media.known_for_department}
                 </p>
               ) : null}
-              {media.main_credit ? (
-                <Credits
-                  credits={media.main_credit ?? []}
-                />
-              ) : null}
-              {(media.media_type === 'movie' || media.media_type === 'tv_series') ? (
+              {result.type === 'movie' && <Credits credits={result.media.directors ?? []} />}
+              {result.type === 'tv_series' && <Credits credits={result.media.created_by ?? []} />}
+              {details?.date ? (
                   <p className="text-muted-foreground">
-                    {new Date(media.date ?? '').getFullYear()}
+                    {new Date(details.date).getFullYear()}
                   </p>
               ) : null}
             </div>
           </Card>
         </Link>
-      </ContextMenuMedia>
+      </>
     </div>
   )
 }
@@ -90,7 +95,7 @@ const Credits = ({
             asChild
           >
             <Link href={credit.url ?? ''}>
-              {credit.title}
+              {credit.name}
             </Link>
           </Button>
           {index !== credits.length - 1 && (

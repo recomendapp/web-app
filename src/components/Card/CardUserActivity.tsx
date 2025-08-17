@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
-import { UserActivity } from "@/types/type.db";
+import { MediaMovie, MediaTvSeries, UserActivity } from "@/types/type.db";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { Link } from "@/lib/i18n/routing";
 import { DateOnlyYearTooltip } from "../utils/Date";
@@ -9,7 +9,7 @@ import { UserAvatar } from "../User/UserAvatar";
 import { FeedActivity } from "@/app/[lang]/(app)/(privateroutes)/feed/_components/FeedActivity";
 import { useFormatter, useNow, useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { ContextMenuUserActivity } from "../ContextMenu/ContextMenuUserActivity";
+import { getMediaDetails } from "@/utils/get-media-details";
 
 interface CardUserActivityProps
 	extends React.ComponentProps<typeof Card> {
@@ -24,6 +24,16 @@ const CardUserActivityDefault = React.forwardRef<
 	const format = useFormatter();
 	const now = useNow({ updateInterval: 1000 * 10 });
 	const common = useTranslations('common');
+	const details = React.useMemo(() => {
+		switch (activity.type) {
+			case 'movie':
+				return getMediaDetails({ type: 'movie', media: activity.media as MediaMovie });
+			case 'tv_series':
+				return getMediaDetails({ type: 'tv_series', media: activity.media as MediaTvSeries });
+			default:
+				return null;
+		}
+	}, [activity]);
 	return (
 		<Card
 			ref={ref}
@@ -35,8 +45,8 @@ const CardUserActivityDefault = React.forwardRef<
 		>
 			<div className='w-20 relative h-full shrink-0 rounded-md overflow-hidden' style={{ aspectRatio: '2 / 3' }}>
 				<ImageWithFallback
-					src={activity?.media?.avatar_url ?? ''}
-					alt={activity?.media?.title ?? ''}
+					src={details?.imageUrl ?? ''}
+					alt={details?.title ?? ''}
 					fill
 					className="object-cover"
 					type="movie"
@@ -60,20 +70,20 @@ const CardUserActivityDefault = React.forwardRef<
 				{activity.media && <Link href={activity.media?.url ?? ''} className="space-y-2">
 					{/* TITLE */}
 					<div className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
-						<span className='font-bold'>{activity.media?.title}</span>
+						<span className='font-bold'>{details?.title}</span>
 						{/* DATE */}
-						<sup>
-							<DateOnlyYearTooltip date={activity.media?.date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
-						</sup>
+						{details?.date && <sup>
+							<DateOnlyYearTooltip date={details?.date ?? ''} className='text-xs @md/feed-item:text-sm font-medium'/>
+						</sup>}
 					</div>
 					{/* DESCRIPTION */}
 					<p
 					className={`
 						text-xs line-clamp-2 text-justify
-						${"overview" in activity.media.extra_data && activity.media?.extra_data.overview?.length ? '' : 'text-muted-foreground'}
+						${details?.description && details?.description.length ? '' : 'text-muted-foreground'}
 					`}
 					>
-						{"overview" in activity.media.extra_data && activity.media?.extra_data.overview?.length ? activity.media.extra_data.overview : upperFirst(common('messages.no_overview'))}
+						{details?.description && details?.description.length ? details.description : upperFirst(common('messages.no_overview'))}
 					</p>
 				</Link>}
 			</div>
@@ -88,11 +98,9 @@ const CardUserActivity = React.forwardRef<
 >(({ className, activity, variant = "default", ...props }, ref) => {
 	const t = useTranslations('common');
 	return (
-		<ContextMenuUserActivity activity={activity}>
-			{variant === "default" ? (
-				<CardUserActivityDefault ref={ref} className={className} activity={activity} {...props} />
-			) : null}
-		</ContextMenuUserActivity>
+		variant === "default" ? (
+			<CardUserActivityDefault ref={ref} className={className} activity={activity} {...props} />
+		) : null
 	)
 });
 CardUserActivity.displayName = "CardUserActivity";

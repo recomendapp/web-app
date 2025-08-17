@@ -13,7 +13,7 @@ export function UserPlaylistsSaved({
   sidebarExpanded: boolean;
   grid?: boolean;
 }) {
-  const { user } = useAuth();
+  const { session } = useAuth();
 	const { ref, inView } = useInView();
 
   const {
@@ -23,7 +23,7 @@ export function UserPlaylistsSaved({
     isFetchingNextPage,
     hasNextPage,
   } = useUserPlaylistsSavedInfiniteQuery({
-    userId: user?.id,
+    userId: session?.user.id,
   })
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export function UserPlaylistsSaved({
 
   if (isLoading) return <Loader />;
 
-  if (!user) return null;
+  if (!session) return null;
 
   if (!isLoading && !playlists?.pages[0]?.length) return null;
 
