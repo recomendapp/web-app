@@ -151,17 +151,18 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
     if (!userLoading) setLoading(false);
   }, [userLoading]);
 
-  useEffect(() => {
-    if (user && user.language !== locale) {
-      router.replace(
-        // @ts-expect-error -- TypeScript will validate that only known `params`
-        // are used in combination with a given `pathname`. Since the two will
-        // always match for the current route, we can skip runtime checks.
-        { pathname, params },
-        { locale: user.language }
-      )
-    }
-  }, [user, locale]);
+  // see : https://github.com/recomendapp/web-app/issues/4
+  // useEffect(() => {
+  //   if (user && user.language !== locale) {
+  //     router.replace(
+  //       // @ts-expect-error -- TypeScript will validate that only known `params`
+  //       // are used in combination with a given `pathname`. Since the two will
+  //       // always match for the current route, we can skip runtime checks.
+  //       { pathname, params },
+  //       { locale: user.language }
+  //     )
+  //   }
+  // }, [user, locale]);
 
   return (
     <AuthContext.Provider
