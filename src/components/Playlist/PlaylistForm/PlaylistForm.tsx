@@ -177,6 +177,7 @@ export function PlaylistForm({
       if (!playlist?.id) throw Error('Missing activity id');
       await deletePlaylistMutation.mutateAsync({
         playlistId: playlist.id,
+        userId: session?.user.id
       }, {
         onSuccess: () => {
           if (pathname.startsWith(`/playlist/${playlist.id}`)) router.push('/');
