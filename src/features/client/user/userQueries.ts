@@ -147,7 +147,6 @@ export const useUserActivitiesInfiniteQuery = ({
 			}
 			const { data, error } = await request
 				.overrideTypes<UserActivity[], { merge: false }>();
-			console.log('error', error)
 			if (error) throw error;
 			return data;
 		},
