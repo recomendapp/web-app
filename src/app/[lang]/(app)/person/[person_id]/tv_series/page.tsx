@@ -30,16 +30,16 @@ export async function generateMetadata(
   const person = await getPerson(params.lang, id);
   if (!person) return { title: upperFirst(common('messages.person_not_found')) };
   return {
-	title: t('metadata.title', { name: person.title! }),
-	description: truncate(t('metadata.description', { name: person.title! }), { length: siteConfig.seo.description.limit }),
+	title: t('metadata.title', { name: person.name }),
+	description: truncate(t('metadata.description', { name: person.name }), { length: siteConfig.seo.description.limit }),
 	alternates: seoLocales(params.lang, `/person/${person.slug}/tv_series`),
 	openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { name: person.title! })} • ${siteConfig.name}`,
-      description: truncate(t('metadata.description', { name: person.title! }), { length: siteConfig.seo.description.limit }),
+      title: `${t('metadata.title', { name: person.name })} • ${siteConfig.name}`,
+      description: truncate(t('metadata.description', { name: person.name }), { length: siteConfig.seo.description.limit }),
       url: `${siteConfig.url}/${params.lang}/person/${person.slug}/tv_series`,
-      images: person.avatar_url ? [
-        { url: person.avatar_url },
+      images: person.profile_url ? [
+        { url: person.profile_url },
       ] : undefined,
       type: 'profile',
       locale: params.lang,
@@ -117,7 +117,7 @@ export default async function TvSeriesPage(
 			<div>
 				<div className='flex flex-col @md/person-tv_series:flex-row @md/person-tv_series:justify-between items-center gap-2'>
 					<Filters
-					knownForDepartment={person.extra_data.known_for_department}
+					knownForDepartment={person.known_for_department!}
 					jobs={person.jobs}
 					sortBy={sortBy}
 					sortOrder={sortOrder}

@@ -24,7 +24,7 @@ export default function TvSeasonDetails({
           <Card key={i} className="@container/episode-card flex flex-row items-center gap-2 p-2 hover:bg-muted-hover hover:cursor-pointer">
             <div className="shrink-0 relative w-32 @sm/episode-card:w-40 @md/episode-card:w-48 aspect-video rounded-md overflow-hidden">
               <ImageWithFallback
-                src={episode.avatar_url ?? ''}
+                src={episode.still_url ?? ''}
                 alt={upperFirst(common('messages.tv_episode_value', { number: episode.episode_number! }))}
                 fill
                 className="object-cover"
@@ -36,8 +36,8 @@ export default function TvSeasonDetails({
                 `}
               />
               <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                {(episode.tmdb_vote_average) ? <IconMediaRating
-                  rating={episode.tmdb_vote_average}
+                {(episode.vote_average) ? <IconMediaRating
+                  rating={episode.vote_average}
                   variant="general"
                   className="w-full"
                 /> : null}
@@ -47,7 +47,7 @@ export default function TvSeasonDetails({
               <h3 className="line-clamp-2 break-words font-bold">
                 <span className='text-accent-yellow font-normal'>{upperFirst(common('messages.tv_episode_short', { seasonNumber: season.season_number!, episodeNumber: episode.episode_number! }))}</span>
                 {" • "}
-                {episode.title ?? upperFirst(common('messages.tv_episode_value', { number: episode.episode_number! }))}
+                {episode.name ?? upperFirst(common('messages.tv_episode_value', { number: episode.episode_number! }))}
               </h3>
               <p className="line-clamp-2 break-words">{episode.overview ?? upperFirst(common('messages.no_overview'))}</p>
               <h4 className='text-sm text-muted-foreground'>{`${upperFirst(common('messages.first_air_date'))} : ${episode.air_date ? format.dateTime(new Date(episode.air_date), { year: 'numeric', month: 'long', day: 'numeric' }) : upperFirst(common('messages.unknown'))}`}</h4>

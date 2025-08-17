@@ -7,7 +7,6 @@ import { UserAvatar } from '@/components/User/UserAvatar';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { upperFirst } from "lodash";
 import { MediaMovie, MediaTvSeries, UserRecosAggregated } from "@/types/type.db";
 import { CardMovie } from "../Card/CardMovie";
@@ -22,11 +21,10 @@ export const WidgetUserRecos = ({
   const { data: recos, error } = useUserRecosQuery({
     userId: session?.user.id,
     filters: {
-      // sortBy: 'random',
+      sortBy: 'random',
       limit: 6,
     }
   })
-  console.log('error', error)
 
   const sendersShow = 3;
 

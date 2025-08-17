@@ -1,5 +1,5 @@
 import { Playlist, PlaylistItemMovie } from "@/types/type.db";
-import { PlaylistMovieHeader } from "./PlaylistHeaderHeader";
+import { PlaylistMovieHeader } from "./PlaylistMovieHeader";
 import { usePlaylistIsAllowedToEditQuery, usePlaylistItemsMovieQuery } from "@/features/client/playlist/playlistQueries";
 import { useEffect, useMemo, useState } from "react";
 import PlaylistMovieTable from "./PlaylistMovieTable/PlaylistMovieTable";

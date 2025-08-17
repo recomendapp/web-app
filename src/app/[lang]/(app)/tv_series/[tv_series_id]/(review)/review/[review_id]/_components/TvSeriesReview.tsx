@@ -11,6 +11,7 @@ import ButtonUserActivityMovieRating from "@/components/buttons/ButtonUserActivi
 import { useUserReviewTvSeriesUpsertMutation } from "@/features/client/user/userMutations";
 import { useAuth } from "@/context/auth-context";
 import ButtonUserReviewTvSeriesLike from "@/components/buttons/ButtonUserReviewTvSeriesLike";
+import { ReviewTvSeriesSettings } from "@/components/Review/ReviewTvSeriesSettings";
 
 export const TvSeriesReview = ({
 	reviewServer,
@@ -24,6 +25,7 @@ export const TvSeriesReview = ({
 		reviewId: reviewServer.id,
 		initialData: reviewServer,
 	});
+	console.log('review:', review);
 	const upsertReview = useUserReviewTvSeriesUpsertMutation({
 		userId: session?.user.id,
 		tvSeriesId: review?.activity?.tv_series_id!,
@@ -57,11 +59,11 @@ export const TvSeriesReview = ({
 					className={cn('relative h-full shrink-0 rounded-md overflow-hidden @3xl/review:w-56 aspect-[2/3]')}
 					>
 						<ImageWithFallback
-						src={review?.activity?.tv_series?.avatar_url ?? ''}
-						alt={review?.activity?.tv_series?.title ?? ''}
+						src={review?.activity?.tv_series?.poster_url ?? ''}
+						alt={review?.activity?.tv_series?.name ?? ''}
 						fill
 						className="object-cover"
-						type={review?.activity?.tv_series?.media_type}
+						type={'tv_series'}
 						sizes={`
 						(max-width: 640px) 96px,
 						(max-width: 1024px) 120px,
@@ -70,8 +72,8 @@ export const TvSeriesReview = ({
 						/>
 					</div>
 					<div className='px-2 py-1 space-y-1'>
-						<h3 className='text-xl font-semibold line-clamp-2 break-words'>{review?.activity?.tv_series?.title}</h3>
-						{review?.activity?.tv_series?.main_credit ? <Credits credits={review?.activity?.tv_series.main_credit ?? []} /> : null}
+						<h3 className='text-xl font-semibold line-clamp-2 break-words'>{review?.activity?.tv_series?.name}</h3>
+						{review?.activity?.tv_series?.created_by ? <Credits credits={review?.activity?.tv_series.created_by ?? []} /> : null}
 					</div>
 				</Card>
 			</Link>
@@ -82,6 +84,14 @@ export const TvSeriesReview = ({
 			rating={review?.activity?.rating || undefined}
 			author={review.activity?.user}
 			onUpdate={handleSubmit}
+			reviewSettings={(review.activity && review.activity.user && review.activity.tv_series) ? (
+				<ReviewTvSeriesSettings
+				tvSeriesId={review.activity?.tv_series_id}
+				tvSeries={review?.activity?.tv_series}
+				review={review}
+				author={review.activity?.user}
+				/>
+			) : null}
 			/>
 		</div>
 	</div>
@@ -106,7 +116,7 @@ const Credits = ({
 			  asChild
 			>
 			  <Link href={credit.url ?? ''}>
-				{credit.title}
+				{credit.name}
 			  </Link>
 			</Button>
 			{index !== credits.length - 1 && (

@@ -13,7 +13,7 @@ export const Columns = (): ColumnDef<UserWatchlistTvSeries>[] => {
   return [
     {
       id: 'item',
-      accessorFn: (row) => row?.tv_series?.title,
+      accessorFn: (row) => row?.tv_series?.name,
       meta: {
         displayName: upperFirst(t('common.messages.tv_series', { count: 1 })),
       },

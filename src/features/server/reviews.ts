@@ -18,7 +18,7 @@ export const getReviewTvSeries = cache(async (id: number, lang: string) => {
 	const supabase = await createServerClient();
 	const { data: review, error } = await supabase
 	  .from('user_reviews_tv_series')
-	  .select('*, activity:user_activities_tv_series(*, tvSeries:media_tv_series(*), user(*))')
+	  .select('*, activity:user_activities_tv_series(*, tv_series:media_tv_series(*), user(*))')
 	  .eq('id', id)
 	  .maybeSingle()
 	  .overrideTypes<UserReviewTvSeries, { merge: false }>();

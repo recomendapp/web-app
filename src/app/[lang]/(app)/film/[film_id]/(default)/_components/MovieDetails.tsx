@@ -23,7 +23,7 @@ export default function MovieDetails({
         <div>
           <h2 className="text-lg font-medium">{upperFirst(common('messages.overview'))}</h2>
           <div className="text-justify text-muted-foreground">
-            {movie.extra_data.overview ?? upperFirst(common('messages.no_overview'))}
+            {movie.overview ?? upperFirst(common('messages.no_overview'))}
           </div>
         </div>
         <JustWatchWidget
@@ -78,8 +78,8 @@ function CastPoster({
       <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
         <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
           <ImageWithFallback
-            src={person.avatar_url ?? ''}
-            alt={person.title ?? ''}
+            src={person.profile_url ?? ''}
+            alt={person.name ?? ''}
             fill
             className="object-cover"
             type="person"
@@ -91,7 +91,7 @@ function CastPoster({
           />
         </div>
         <div className="text-center">
-          <p className="line-clamp-2 break-words">{person.title}</p>
+          <p className="line-clamp-2 break-words">{person.name}</p>
           {character ? <p className="line-clamp-2 text-accent-yellow italic text-sm">{character}</p> : null}
         </div>
       </Card>

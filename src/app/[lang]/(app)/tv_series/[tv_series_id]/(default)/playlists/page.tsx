@@ -23,26 +23,26 @@ export async function generateMetadata(
   const serie = await getTvSeries(params.lang, serieId);
   if (!serie) return { title: upperFirst(common('messages.tv_series_not_found')) };
   return {
-    title: t('metadata.title', { title: serie.title!, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() }),
+    title: t('metadata.title', { title: serie.name, year: new Date(String(serie.first_air_date)).getFullYear() }),
     description: truncate(
       t('metadata.description', {
-        title: serie.title!,
+        title: serie.name,
       }),
       { length: siteConfig.seo.description.limit }
     ),
     alternates: seoLocales(params.lang, `/tv_series/${serie.slug}/playlists`),
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: serie.title!, year: new Date(String(serie.extra_data.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
+      title: `${t('metadata.title', { title: serie.name, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
         t('metadata.description', {
-          title: serie.title!,
+          title: serie.name,
         }),
         { length: siteConfig.seo.description.limit }
       ),
       url: `${siteConfig.url}/${params.lang}/tv_series/${serie.slug}/playlists`,
-      images: serie.avatar_url ? [
-        { url: serie.avatar_url }
+      images: serie.poster_url ? [
+        { url: serie.poster_url }
       ] : undefined,
       type: 'video.tv_show',
       locale: params.lang,

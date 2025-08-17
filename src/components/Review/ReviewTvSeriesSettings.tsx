@@ -8,34 +8,33 @@ DropdownMenuTrigger,
 import { useAuth } from '@/context/auth-context';
 import { MoreHorizontal } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { Media, User, UserReview } from '@/types/type.db';
+import { MediaTvSeries, User, UserReviewTvSeries } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
-import { useUserReviewDeleteMutation } from '@/features/client/user/userMutations';
-import { getMediaUrl } from '@/utils/get-media-details';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
+import { useUserReviewTvSeriesDeleteMutation } from '@/features/client/user/userMutations';
 
-export function ReviewSettings({
-	mediaId,
-	media,
+export function ReviewTvSeriesSettings({
+	tvSeriesId,
+	tvSeries,
 	review,
 	author,
 } : {
-	mediaId: number;
-	media: Media;
-	review: UserReview;
+	tvSeriesId: number;
+	tvSeries: MediaTvSeries;
+	review: UserReviewTvSeries;
 	author: User;
 }) {
 	const { session } = useAuth();
-	const t = useTranslations('common');
+	const t = useTranslations();
 	const { createConfirmModal } = useModal();
 	const pathname = usePathname();
 	const router = useRouter();
-	const deleteReview = useUserReviewDeleteMutation({
+	const deleteReview = useUserReviewTvSeriesDeleteMutation({
 		userId: session?.user.id,
-		mediaId,
+		tvSeriesId,
 	});
 
 	const handleDeleteReview = async () => {
@@ -43,14 +42,13 @@ export function ReviewSettings({
 			id: review.id,
 		}, {
 			onSuccess: () => {
-				const mediaUrl = getMediaUrl({ id: media.id, type: media.media_type! });
-				toast.success(upperFirst(t('messages.deleted')));
-				if (pathname.startsWith(`/review/${review.id}`)) {
-					router.replace(mediaUrl);
+				toast.success(upperFirst(t('common.messages.deleted')));
+				if (pathname.startsWith(`/tv_series/${tvSeries.slug || tvSeriesId}/review/${review.id}`)) {
+					router.replace(`/tv_series/${tvSeries.slug || tvSeriesId}`);
 				}
 			},
 			onError: () => {
-				toast.error(upperFirst(t('messages.an_error_occurred')));
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
 	};
@@ -61,7 +59,7 @@ export function ReviewSettings({
 	<DropdownMenu>
 		<DropdownMenuTrigger asChild>
 		<Button variant="ghost" size={'icon'} className="rounded-full">
-			<span className="sr-only">{upperFirst(t('messages.open_menu'))}</span>
+			<span className="sr-only">{upperFirst(t('common.messages.open_menu'))}</span>
 			<MoreHorizontal />
 		</Button>
 		</DropdownMenuTrigger>
@@ -69,13 +67,13 @@ export function ReviewSettings({
 		{session?.user.id && session?.user.id == author?.id ? (
 			<DropdownMenuItem
 			onSelect={() => createConfirmModal({
-				title: 'Supprimer la critique',
-				description: 'Voulez-vous vraiment supprimer cette critique ?',
+				title: upperFirst(t('common.messages.delete_review')),
+				description: upperFirst(t('common.messages.do_you_really_want_to_delete_this_review')),
 				onConfirm: () => handleDeleteReview(),
 			})}
 			>
 			<Icons.delete />
-			{upperFirst(t('messages.delete'))}
+			{upperFirst(t('common.messages.delete'))}
 			</DropdownMenuItem>
 		) : null}
 		</DropdownMenuContent>

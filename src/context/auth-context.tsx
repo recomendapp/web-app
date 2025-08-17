@@ -4,7 +4,9 @@ import { Provider, Session } from '@supabase/supabase-js';
 import { User } from '@/types/type.db';
 import { useUserQuery } from '@/features/client/user/userQueries';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { useRouter } from '@/lib/i18n/routing';
+import { redirect, usePathname, useRouter } from '@/lib/i18n/routing';
+import { useLocale } from 'next-intl';
+import { useParams } from 'next/navigation';
 
 export interface UserState {
   user: User | null | undefined;
@@ -42,7 +44,10 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ session: initialSession, children }: AuthProviderProps) => {
   const router = useRouter();
+  const locale = useLocale();
+  const pathname = usePathname();
   const supabase = useSupabaseClient();
+  const params = useParams();
   const [session, setSession] = useState<Session | null>(initialSession);
   const [loading, setLoading] = useState(true);
   const [pushToken, setPushToken] = useState<string | null>(null);
@@ -146,15 +151,17 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
     if (!userLoading) setLoading(false);
   }, [userLoading]);
 
-  // Handle locale sync <= Previously, this was done in the middleware but cause performance issues
-  // useEffect(() => {
-  //   if (user && user.language !== locale) {
-  //     redirect({
-  //       href: `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`,
-  //       locale: user.language,
-  //     })
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (user && user.language !== locale) {
+      router.replace(
+        // @ts-expect-error -- TypeScript will validate that only known `params`
+        // are used in combination with a given `pathname`. Since the two will
+        // always match for the current route, we can skip runtime checks.
+        { pathname, params },
+        { locale: user.language }
+      )
+    }
+  }, [user, locale]);
 
   return (
     <AuthContext.Provider

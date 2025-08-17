@@ -6,22 +6,7 @@ import { MediaMovie, MediaTvSeries, MediaTvSeriesSeason } from "@/types/type.db"
 
 export const MEDIA_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 
-export const getMediaFollowersAverageRating = async ({
-	media_id,
-} : {
-	media_id: number;
-}) => {
-	const supabase = await createServerClient();
-	const { data, error } = await supabase
-		.from('user_followers_average_rating')
-		.select(`*`)
-		.match({
-			media_id: media_id,
-		})
-		.maybeSingle();
-	if (error) throw error;
-	return data;
-};
+
 
 /* -------------------------------------------------------------------------- */
 
@@ -60,6 +45,22 @@ export const getMovie = cache(
 	},
 	mediaKeys.specify('movie'),
 );
+export const getMovieUserActivitiesFollowerAverageRating = async ({
+	movieId,
+} : {
+	movieId: number;
+}) => {
+	const supabase = await createServerClient();
+	const { data, error } = await supabase
+		.from('user_activities_movie_follower_average_rating')
+		.select(`*`)
+		.match({
+			movie_id: movieId,
+		})
+		.maybeSingle();
+	if (error) throw error;
+	return data;
+};
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
@@ -106,6 +107,22 @@ export const getTvSeries = cache(
 	},
 	mediaKeys.specify('tv_series'),
 );
+export const getTvSeriesUserActivitiesFollowerAverageRating = async ({
+	tvSeriesId,
+} : {
+	tvSeriesId: number;
+}) => {
+	const supabase = await createServerClient();
+	const { data, error } = await supabase
+		.from('user_activities_tv_series_follower_average_rating')
+		.select(`*`)
+		.match({
+			tv_series_id: tvSeriesId,
+		})
+		.maybeSingle();
+	if (error) throw error;
+	return data;
+};
 
 export const getTvSeason = cache(
 	async (locale: string, serieId: number, seasonNumber: number) => {
@@ -119,7 +136,7 @@ export const getTvSeason = cache(
 				),
 				serie:media_tv_series(
 					id,
-					title
+					name
 				)
 			`)
 			.match({
@@ -159,9 +176,9 @@ export const getPerson = cache(
 			.match({
 				'id': id,
 			})
-			.filter('movies.movie.date', 'not.is', null)
+			.filter('movies.movie.release_date', 'not.is', null)
 			.filter('tv_series.last_appearance_date', 'not.is', null)
-			.order('movie(date)', { referencedTable: 'movies', ascending: false })
+			.order('movie(release_date)', { referencedTable: 'movies', ascending: false })
 			.order('last_appearance_date', { referencedTable: 'tv_series', ascending: false })
 			.limit(10, { foreignTable: 'movies' })
 			.limit(10, { foreignTable: 'tv_series' })
@@ -175,36 +192,6 @@ export const getPerson = cache(
 	},
 	mediaKeys.specify('person'),
 );
-
-// export const getPersonCombinedCredits = async ({
-// 	id,
-// 	locale,
-// } : {
-// 	id: number;
-// 	locale: string;
-// }) => {
-// 	return await unstable_cache(
-// 		async () => {
-// 			const supabase = await createClient(locale);
-// 			const { data: credits, error } = await supabase
-// 				.from('media_person_combined_credits')
-// 				.select(`*`)
-// 				.match({
-// 					'person_id': id,
-// 				})
-// 				.order('popularity', { ascending: false, nullsFirst: false })
-// 				.order('tmdb_popularity', { ascending: false, nullsFirst: false })
-// 				.limit(10)
-// 			if (error) throw error;
-// 			return credits;
-// 		},
-// 		mediaKeys.personCombinedCredits({
-// 			locale: locale,
-// 			id: id,
-// 		}),
-// 		{ revalidate: 6 * 60 * 60 * 1000 }
-// 	)();
-// }
 
 export const getPersonFilms = cache(
 	async (
@@ -250,16 +237,10 @@ export const getPersonFilms = cache(
 			if (filters.sortBy && filters.sortOrder) {
 				switch (filters.sortBy) {
 					case 'release_date':
-						request = request.order(`movie(date)`, { ascending: filters.sortOrder === 'asc' });
+						request = request.order(`movie(release_date)`, { ascending: filters.sortOrder === 'asc' });
 						break;
 					case 'vote_average':
-						if (filters.sortOrder === 'asc') {
-							request = request.order(`movie(tmdb_vote_average)`, { ascending: true, nullsFirst: true });
-							request = request.order(`movie(vote_average)`, { ascending: true, nullsFirst: true });
-						} else {
-							request = request.order(`movie(vote_average)`, { ascending: false, nullsFirst: false });
-							request = request.order(`movie(tmdb_vote_average)`, { ascending: false, nullsFirst: false });
-						}
+						request = request.order(`movie(vote_average)`, { ascending: false });
 						break;
 					default:
 						break;
@@ -273,7 +254,7 @@ export const getPersonFilms = cache(
 			}
 		}
 		return await request
-			.filter('movie.date', 'not.is', null)
+			.filter('movie.release_date', 'not.is', null)
 			.overrideTypes<Array<{
 				movie: MediaMovie;
 			}>, { merge: true }>()
@@ -326,16 +307,10 @@ export const getPersonTvSeries = cache(
 			if (filters.sortBy && filters.sortOrder) {
 				switch (filters.sortBy) {
 					case 'release_date':
-						request = request.order(`tv_series(date)`, { ascending: filters.sortOrder === 'asc' });
+						request = request.order(`tv_series(first_air_date)`, { ascending: filters.sortOrder === 'asc' });
 						break;
 					case 'vote_average':
-						if (filters.sortOrder === 'asc') {
-							request = request.order(`tv_series(tmdb_vote_average)`, { ascending: true, nullsFirst: true });
-							request = request.order(`tv_series(vote_average)`, { ascending: true, nullsFirst: true });
-						} else {
-							request = request.order(`tv_series(vote_average)`, { ascending: false, nullsFirst: false });
-							request = request.order(`tv_series(tmdb_vote_average)`, { ascending: false, nullsFirst: false });
-						}
+						request = request.order(`tv_series(vote_average)`, { ascending: false });
 						break;
 					default:
 						request = request.order(`last_appearance_date`, { ascending: filters.sortOrder === 'asc' });

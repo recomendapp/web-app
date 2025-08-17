@@ -62,8 +62,8 @@ export const TvSeriesCreateReview = ({
 				className={'relative h-full shrink-0 rounded-md overflow-hidden @3xl/review:w-56 aspect-[2/3]'}
 				>
 				<ImageWithFallback
-				src={tvSeries.avatar_url ?? ''}
-				alt={tvSeries.title ?? ''}
+				src={tvSeries.poster_url ?? ''}
+				alt={tvSeries.name ?? ''}
 				fill
 				className="object-cover"
 				type="tv_series"
@@ -75,8 +75,8 @@ export const TvSeriesCreateReview = ({
 				/>
 				</div>
 				<div className='px-2 py-1 space-y-1'>
-				<h3 className='text-xl font-semibold line-clamp-2 break-words'>{tvSeries?.title}</h3>
-				{tvSeries.main_credit ? <Credits credits={tvSeries.main_credit ?? []} /> : null}
+				<h3 className='text-xl font-semibold line-clamp-2 break-words'>{tvSeries?.name}</h3>
+				{tvSeries.created_by ? <Credits credits={tvSeries.created_by ?? []} /> : null}
 				</div>
 			</Card>
 			</Link>
@@ -108,7 +108,7 @@ const Credits = ({
             asChild
           >
             <Link href={credit.url ?? ''}>
-              {credit.title}
+              {credit.name}
             </Link>
           </Button>
           {index !== credits.length - 1 && (

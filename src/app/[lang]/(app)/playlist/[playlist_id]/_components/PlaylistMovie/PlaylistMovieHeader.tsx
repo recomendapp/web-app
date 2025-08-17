@@ -36,18 +36,7 @@ export function PlaylistMovieHeader({
   const backdrop = useRandomImage(
     backdrops?.map(src => ({ src, alt: playlist.title })) || []
   );
-
-  const renderItemsCount = () => {
-    switch (playlist.type) {
-      case 'movie':
-        return `${numberItems} ${t('common.messages.film', { count: numberItems })}`;
-      case 'tv_series':
-        return `${numberItems} ${t('common.messages.tv_series', { count: numberItems })}`;
-      default:
-        return `${numberItems} ${t('common.messages.item', { count: numberItems })}`;
-    }
-  };
-
+  
   const openPlaylistModal = () => {
     if (playlist?.user_id !== session?.user.id) return;
     openModal(PlaylistModal, {
@@ -106,7 +95,7 @@ export function PlaylistMovieHeader({
             <div className="flex gap-1 font-light">
               {playlist.user ? <CardUser user={playlist?.user} variant='inline' /> : null}
               <span className=" before:content-['_•_']" >
-                {renderItemsCount()}
+                {`${numberItems} ${t('common.messages.film', { count: numberItems })}`}
               </span>
               {totalRuntime && <span className=" before:content-['_•_']" >
                 {ConvertHoursMinutes(totalRuntime)}

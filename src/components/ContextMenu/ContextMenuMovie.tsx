@@ -63,7 +63,7 @@ export const ContextMenuMovie = ({
 				icon: Icons.share,
 				onClick: () => openModal(ModalShare, {
 					title: movie.title,
-					type: movie.media_type,
+					type: 'movie',
 					path: movie.url ?? '',
 					shareController: createShareController(ShareControllerMovie, {
 						movie: movie,

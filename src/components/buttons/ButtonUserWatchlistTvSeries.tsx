@@ -12,6 +12,7 @@ import { useUserWatchlistTvSeriesDeleteMutation, useUserWatchlistTvSeriesInsertM
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { ContextMenuWatchlistTvSeries } from "../ContextMenu/ContextMenuWatchlistTvSeries";
 
 interface ButtonUserWatchlistTvSeriesProps
 	extends React.ComponentProps<typeof Button> {
@@ -97,7 +98,7 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 	}
 
 	return (
-		// <ContextMenuWatchlistAction watchlistItem={watchlist}>
+		<ContextMenuWatchlistTvSeries watchlistItem={watchlist}>
 			<TooltipBox tooltip={watchlist ? upperFirst(t('common.messages.remove_from_watchlist')) : upperFirst(t('common.messages.add_to_watchlist'))}>
 				<Button
 					ref={ref}
@@ -117,7 +118,7 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 					)}
 				</Button>
 			</TooltipBox>
-		// </ContextMenuWatchlistAction>
+		</ContextMenuWatchlistTvSeries>
 	);
 });
 ButtonUserWatchlistTvSeries.displayName = 'ButtonUserWatchlistTvSeries';

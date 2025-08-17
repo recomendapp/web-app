@@ -22,7 +22,7 @@ export default function MyRecos() {
   const backdrops = (
     tab === 'movie'
     ? recosMovie?.map(item => ({ src: item.movie?.backdrop_url, alt: item.movie?.title }))
-    : recosTvSeries?.map(item => ({ src: item.tv_series?.backdrop_url, alt: item.tv_series?.title }))
+    : recosTvSeries?.map(item => ({ src: item.tv_series?.backdrop_url, alt: item.tv_series?.name }))
   )?.filter(item => item.src !== null && item.src !== undefined) as ImageObject[];
 
   return (

@@ -31,8 +31,8 @@ export async function generateMetadata(
       title: t('title', { title: review.activity?.movie?.title!, username: review.activity?.user?.username! }),
       description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
       url: `${siteConfig.url}/${params.lang}/review/${params.review_id}`,
-      images: review.activity?.movie?.avatar_url ? [
-        { url: review.activity?.movie?.avatar_url },
+      images: review.activity?.movie?.poster_url ? [
+        { url: review.activity?.movie?.poster_url },
       ] : undefined,
       type: 'article',
       locale: params.lang,
@@ -63,25 +63,25 @@ export default async function ReviewPage(
     itemReviewed: movie ? {
       '@type': 'Movie',
       name: movie.title ?? undefined,
-      image: movie.avatar_url ?? undefined,
-      description: ("overview" in movie.extra_data && movie.extra_data.overview?.length) ? movie.extra_data.overview : undefined,
-      director: movie.main_credit
+      image: movie.poster_url ?? undefined,
+      description: movie.overview ?? undefined,
+      director: movie.directors
         ?.map(director => ({
           '@type': 'Person',
-          name: director.title ?? undefined,
-          image: director.avatar_url ?? undefined,
+          name: director.name ?? undefined,
+          image: director.profile_url ?? undefined,
         })),
       actor: "cast" in movie ? movie.cast
         ?.map((actor) => ({
           '@type': 'Person',
-          name: actor.person?.title ?? undefined,
-          image: actor.person?.avatar_url ?? undefined,
+          name: actor.person?.name ?? undefined,
+          image: actor.person?.profile_url ?? undefined,
         })) : undefined,
       genre: movie.genres?.map((genre) => genre.name),
-      aggregateRating: (movie.vote_average || movie.tmdb_vote_average) ? {
+      aggregateRating: movie.vote_average ? {
         '@type': 'AggregateRating',
-        ratingValue: movie.vote_average ?? movie.tmdb_vote_average ?? undefined,
-        ratingCount: movie.vote_count ?? movie.tmdb_vote_count ?? 0,
+        ratingValue: movie.vote_average,
+        ratingCount: movie.vote_count ?? 0,
         bestRating: 10,
         worstRating: 1,
       } : undefined,
@@ -96,7 +96,7 @@ export default async function ReviewPage(
   return (
   <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-    <MovieReview reviewServer={review} />;
+    <MovieReview reviewServer={review} />
   </>
   );
 }

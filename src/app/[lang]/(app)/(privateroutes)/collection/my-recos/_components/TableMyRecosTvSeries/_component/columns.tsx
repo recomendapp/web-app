@@ -13,7 +13,7 @@ export const Columns = (): ColumnDef<UserRecosTvSeriesAggregated>[] => {
   return [
     {
       id: 'item',
-      accessorFn: (row) => row?.tv_series?.title,
+      accessorFn: (row) => row?.tv_series?.name,
       meta: {
         displayName: upperFirst(t('common.messages.film', { count: 1 })),
       },

@@ -22,13 +22,13 @@ export const ShareControllerTvSeries: React.FC<ShareControllerTvSeriesProps> = (
 	const fetchImage = useCallback(async () => {
 		try {
 			setIsLoading(true);
-			if (!tvSeries || !tvSeries.title || !tvSeries.avatar_url) return;
+			if (!tvSeries || !tvSeries.name || !tvSeries.poster_url) return;
 			const body = {
-				title: tvSeries.title,
-				poster: tvSeries.avatar_url,
-				credits: tvSeries.main_credit?.map(c => c.title).join(', '),
+				title: tvSeries.name,
+				poster: tvSeries.poster_url,
+				credits: tvSeries.created_by?.map(c => c.name).join(', '),
 				background: tvSeries.backdrop_url,
-				voteAverage: showVoteAverage ? (tvSeries.vote_average ?? tvSeries.tmdb_vote_average) : undefined,
+				voteAverage: showVoteAverage && tvSeries.vote_average ? tvSeries.vote_average : undefined,
 			};
 	
 			const { buffer, contentType } = await getSocialCanvas({
@@ -39,7 +39,7 @@ export const ShareControllerTvSeries: React.FC<ShareControllerTvSeriesProps> = (
 				throw new Error('Invalid response from Social Canvas');
 			}
 			const extension = contentType.split('/')[1];
-			const file = new File([buffer], `${tvSeries.title}.${extension}`, { type: contentType });
+			const file = new File([buffer], `${tvSeries.name}.${extension}`, { type: contentType });
 			setImage(file);
 			onFileReady?.(file);
 		} catch (error) {
@@ -66,7 +66,7 @@ export const ShareControllerTvSeries: React.FC<ShareControllerTvSeriesProps> = (
 					<Skeleton className="aspect-[2/3] h-full rounded-md" />
 				) : image ? (
 					<img
-						alt={tvSeries.title ?? 'tvSeries Image'}
+						alt={tvSeries.name ?? 'tvSeries Image'}
 						src={URL.createObjectURL(image)}
 						className="object-cover h-full rounded-md"
 					/>

@@ -23,8 +23,8 @@ export async function generateMetadata(
   const serie = await getTvSeries(params.lang, serieId);
   if (!serie) return { title: upperFirst(common('messages.tv_series_not_found')) };
   return {
-    title: t('title', { title: serie.title! }),
-    description: t('description', { title: serie.title! }),
+    title: t('title', { title: serie.name }),
+    description: t('description', { title: serie.name }),
   };
 }
 

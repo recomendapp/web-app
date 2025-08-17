@@ -12,6 +12,7 @@ import { useUserWatchlistMovieDeleteMutation, useUserWatchlistMovieInsertMutatio
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { ContextMenuWatchlistMovie } from "../ContextMenu/ContextMenuWatchlistMovie";
 
 interface ButtonUserWatchlistMovieProps
 	extends React.ComponentProps<typeof Button> {
@@ -98,7 +99,7 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 	}
 
 	return (
-		// <ContextMenuWatchlistAction watchlistItem={watchlist}>
+		<ContextMenuWatchlistMovie watchlistItem={watchlist}>
 			<TooltipBox tooltip={watchlist ? upperFirst(t('common.messages.remove_from_watchlist')) : upperFirst(t('common.messages.add_to_watchlist'))}>
 				<Button
 					ref={ref}
@@ -118,7 +119,7 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 					)}
 				</Button>
 			</TooltipBox>
-		// </ContextMenuWatchlistAction>
+		</ContextMenuWatchlistMovie>
 	);
 });
 ButtonUserWatchlistMovie.displayName = 'ButtonUserWatchlistMovie';

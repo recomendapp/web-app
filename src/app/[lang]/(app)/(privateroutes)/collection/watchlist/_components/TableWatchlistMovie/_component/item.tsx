@@ -25,7 +25,7 @@ export const Item = React.forwardRef<
 				)}
 			>
 				<ImageWithFallback
-				src={movie.avatar_url ?? ''}
+				src={movie.poster_url ?? ''}
 				alt={movie.title ?? ''}
 				className={cn("object-cover")}
 				width={60}
@@ -38,9 +38,9 @@ export const Item = React.forwardRef<
 				<Link href={movie.url ?? ''} className="font-medium line-clamp-2">
 				{movie.title}
 				</Link>
-				<Credits credits={movie.main_credit ?? []} className="line-clamp-1" />
-				{movie.date ? <p className="lg:hidden">
-					<DateOnlyYearTooltip date={movie.date} />
+				<Credits credits={movie.directors ?? []} className="line-clamp-1" />
+				{movie.release_date ? <p className="lg:hidden">
+					<DateOnlyYearTooltip date={movie.release_date} />
 				</p> : null}
 			</div>
 		</div>
@@ -67,7 +67,7 @@ const Credits = ({
 			  asChild
 			>
 			  <Link href={credit?.url ?? ''}>
-				{credit?.title}
+				{credit.name}
 			  </Link>
 			</Button>
 			{index !== credits.length - 1 && (

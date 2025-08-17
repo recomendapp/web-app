@@ -5,7 +5,6 @@ import { Card } from "../ui/card";
 import { MediaPerson, MediaTvSeries, UserActivityTvSeries } from "@/types/type.db";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Link, useRouter } from "@/lib/i18n/routing";
-import { getMediaUrlPrefix } from "@/utils/get-media-details";
 import { TooltipBox } from "../Box/TooltipBox";
 import { Button } from "../ui/button";
 import { BadgeMedia } from "../Badge/BadgeMedia";
@@ -49,11 +48,11 @@ const CardTvSeriesDefault = React.forwardRef<
 			className={cn('relative h-full shrink-0 rounded-md overflow-hidden aspect-[2/3]', posterClassName)}
 			>
 				<ImageWithFallback
-					src={tvSeries.avatar_url ?? ''}
-					alt={tvSeries.title ?? ''}
+					src={tvSeries.poster_url ?? ''}
+					alt={tvSeries.name ?? ''}
 					fill
 					className="object-cover"
-					type="playlist"
+					type='tv_series'
 					sizes={`
 					(max-width: 640px) 96px,
 					(max-width: 1024px) 120px,
@@ -62,7 +61,7 @@ const CardTvSeriesDefault = React.forwardRef<
 				/>
 			</div>
 			<div className='px-2 py-1 space-y-1'>
-				<p className='line-clamp-2 break-words'>{tvSeries.title}</p>
+				<p className='line-clamp-2 break-words'>{tvSeries.name}</p>
 				{children}
 			</div>
 		</Card>
@@ -78,7 +77,7 @@ const CardTvSeriesPoster = React.forwardRef<
 	const { device } = useUI();
 	const [isHovered, setIsHovered] = React.useState(false);
 	return (
-		<TooltipBox tooltip={`${tvSeries.title}${tvSeries.date ? ` (${(new Date(tvSeries.date)).getFullYear()})` : ''}`} side='top'>
+		<TooltipBox tooltip={`${tvSeries.name}${tvSeries.first_air_date ? ` (${(new Date(tvSeries.first_air_date)).getFullYear()})` : ''}`} side='top'>
 			<Card
 				ref={ref}
 				className={cn(
@@ -92,11 +91,11 @@ const CardTvSeriesPoster = React.forwardRef<
 				{...props}
 			>
 				<ImageWithFallback
-					src={tvSeries.avatar_url ?? ''}
-					alt={tvSeries.title ?? ''}
+					src={tvSeries.poster_url ?? ''}
+					alt={tvSeries.name ?? ''}
 					fill
 					className="object-cover"
-					type={tvSeries.media_type}
+					type='tv_series'
 					sizes={`
 					(max-width: 640px) 96px,
 					(max-width: 1024px) 120px,
@@ -104,16 +103,15 @@ const CardTvSeriesPoster = React.forwardRef<
 					`}
 				/>
 				{(tvSeries.vote_average
-				|| tvSeries.tmdb_vote_average
 				|| profileActivity?.rating
 				|| profileActivity?.is_liked
 				|| profileActivity?.review
 				) ? (
 					<div className='absolute top-1 right-1 flex flex-col gap-1'>
-						{(tvSeries.vote_average || tvSeries.tmdb_vote_average) ?
+						{tvSeries.vote_average ?
 						<IconMediaRating
 						disableTooltip
-						rating={tvSeries.vote_average ?? tvSeries.tmdb_vote_average}
+						rating={tvSeries.vote_average}
 						/> : null}
 						{(profileActivity?.is_liked
 						|| profileActivity?.rating
@@ -145,7 +143,7 @@ const CardTvSeriesRow = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardTvSeriesProps, "variant">
 >(({ className, posterClassName, tvSeries, activity, profileActivity, hideMediaType, linked, showRating, children, ...props }, ref) => {
-	const mediaUrlPrefix = getMediaUrlPrefix(tvSeries.media_type!);
+	// const mediaUrlPrefix = getMediaUrlPrefix(tvSeries.media_type!);
 	return (
 		<Card
 			ref={ref}
@@ -158,11 +156,11 @@ const CardTvSeriesRow = React.forwardRef<
 		>
 			<div className={cn("relative w-24 aspect-[2/3] rounded-md overflow-hidden", posterClassName)}>
 				<ImageWithFallback
-					src={tvSeries.avatar_url ?? ''}
-					alt={tvSeries.title ?? ''}
+					src={tvSeries.poster_url ?? ''}
+					alt={tvSeries.name ?? ''}
 					fill
 					className="object-cover"
-					type={tvSeries.media_type}
+					type={'tv_series'}
 					sizes={`
 					(max-width: 640px) 96px,
 					(max-width: 1024px) 120px,
@@ -178,11 +176,11 @@ const CardTvSeriesRow = React.forwardRef<
 						className='line-clamp-2 break-words'
 						onClick={linked ? (e) => e.stopPropagation() : undefined}
 						>
-							{tvSeries.title}
+							{tvSeries.name}
 						</WithLink>
 						{profileActivity?.rating && (
 							<WithLink
-							href={linked ? `/@${profileActivity?.user?.username}${mediaUrlPrefix}/${tvSeries.slug ?? tvSeries.id}` : undefined}
+							href={linked ? `/@${profileActivity?.user?.username}/tv_series/${tvSeries.slug ?? tvSeries.id}` : undefined}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>
@@ -194,7 +192,7 @@ const CardTvSeriesRow = React.forwardRef<
 						)}
 						{profileActivity?.is_liked && (
 							<Link
-							href={`/@${profileActivity?.user?.username}${mediaUrlPrefix}/${tvSeries.slug ?? tvSeries.id}`}
+							href={`/@${profileActivity?.user?.username}/tv_series/${tvSeries.slug ?? tvSeries.id}`}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>
@@ -217,11 +215,11 @@ const CardTvSeriesRow = React.forwardRef<
 							</Link>
 						)}
 					</div>
-					{tvSeries.main_credit && <Credits credits={tvSeries.main_credit} linked={linked} className="line-clamp-2"/>}
-					{!hideMediaType && <BadgeMedia type={tvSeries.media_type} />}
+					{tvSeries.created_by && <Credits credits={tvSeries.created_by} linked={linked} className="line-clamp-2"/>}
+					{!hideMediaType && <BadgeMedia type='tv_series' />}
 				</div>
-				{tvSeries.date ? (
-					<DateOnlyYearTooltip date={tvSeries.date} className="text-xs text-muted-foreground"/>
+				{tvSeries.first_air_date ? (
+					<DateOnlyYearTooltip date={tvSeries.first_air_date} className="text-xs text-muted-foreground"/>
 				) : null}
 			</div>
 		</Card>
@@ -289,7 +287,7 @@ const Credits = ({
 			  href={linked ? (credit.url ?? '') : undefined}
 			  onClick={linked ? (e) => e.stopPropagation() : undefined}
 			  >
-				{credit.title}
+				{credit.name}
 			  </WithLink>
 			</Button>
 			{index !== credits.length - 1 && (

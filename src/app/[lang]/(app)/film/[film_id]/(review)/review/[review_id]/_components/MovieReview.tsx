@@ -11,6 +11,7 @@ import ButtonUserActivityMovieRating from "@/components/buttons/ButtonUserActivi
 import { useUserReviewMovieUpsertMutation } from "@/features/client/user/userMutations";
 import { useAuth } from "@/context/auth-context";
 import ButtonUserReviewMovieLike from "@/components/buttons/ButtonUserReviewMovieLike";
+import { ReviewMovieSettings } from "@/components/Review/ReviewMovieSettings";
 
 export const MovieReview = ({
 	reviewServer,
@@ -57,11 +58,11 @@ export const MovieReview = ({
 					className={cn('relative h-full shrink-0 rounded-md overflow-hidden @3xl/review:w-56 aspect-[2/3]')}
 					>
 						<ImageWithFallback
-						src={review?.activity?.movie?.avatar_url ?? ''}
+						src={review?.activity?.movie?.poster_url ?? ''}
 						alt={review?.activity?.movie?.title ?? ''}
 						fill
 						className="object-cover"
-						type={review?.activity?.movie?.media_type}
+						type={'movie'}
 						sizes={`
 						(max-width: 640px) 96px,
 						(max-width: 1024px) 120px,
@@ -71,7 +72,7 @@ export const MovieReview = ({
 					</div>
 					<div className='px-2 py-1 space-y-1'>
 						<h3 className='text-xl font-semibold line-clamp-2 break-words'>{review?.activity?.movie?.title}</h3>
-						{review?.activity?.movie?.main_credit ? <Credits credits={review?.activity?.movie.main_credit ?? []} /> : null}
+						{review?.activity?.movie?.directors ? <Credits credits={review?.activity?.movie.directors ?? []} /> : null}
 					</div>
 				</Card>
 			</Link>
@@ -79,9 +80,17 @@ export const MovieReview = ({
 			mediaAction={<ButtonUserActivityMovieRating movieId={review?.activity?.movie_id!} />}
 			reviewActions={<ButtonUserReviewMovieLike reviewId={review?.id} reviewLikesCount={review.likes_count} />}
 			review={review}
-			rating={review?.activity?.rating || undefined}
+			rating={review.activity?.rating || undefined}
 			author={review.activity?.user}
 			onUpdate={handleSubmit}
+			reviewSettings={(review.activity && review.activity.user && review.activity.movie) ? (
+				<ReviewMovieSettings
+				movieId={review.activity?.movie_id}
+				movie={review?.activity?.movie}
+				review={review}
+				author={review.activity?.user}
+				/>
+			) : null}
 			/>
 		</div>
 	</div>
@@ -106,7 +115,7 @@ const Credits = ({
 			  asChild
 			>
 			  <Link href={credit.url ?? ''}>
-				{credit.title}
+				{credit.name}
 			  </Link>
 			</Button>
 			{index !== credits.length - 1 && (

@@ -62,7 +62,7 @@ export const MovieCreateReview = ({
 				className={'relative h-full shrink-0 rounded-md overflow-hidden @3xl/review:w-56 aspect-[2/3]'}
 				>
 				<ImageWithFallback
-				src={movie.avatar_url ?? ''}
+				src={movie.poster_url ?? ''}
 				alt={movie.title ?? ''}
 				fill
 				className="object-cover"
@@ -76,7 +76,7 @@ export const MovieCreateReview = ({
 				</div>
 				<div className='px-2 py-1 space-y-1'>
 				<h3 className='text-xl font-semibold line-clamp-2 break-words'>{movie?.title}</h3>
-				{movie.main_credit ? <Credits credits={movie.main_credit ?? []} /> : null}
+				{movie.directors ? <Credits credits={movie.directors ?? []} /> : null}
 				</div>
 			</Card>
 			</Link>
@@ -108,7 +108,7 @@ const Credits = ({
             asChild
           >
             <Link href={credit.url ?? ''}>
-              {credit.title}
+              {credit.name}
             </Link>
           </Button>
           {index !== credits.length - 1 && (

@@ -1244,6 +1244,7 @@ export const useUserWatchlistMovieUpdateMutation = () => {
 			// All
 			queryClient.setQueryData(userKeys.watchlist({
 				userId: data.user_id,
+				type: 'all',
 			}), (oldData: UserWatchlist[]) => {
 				if (!oldData) return oldData;
 				return oldData.map((item) => {
@@ -1397,6 +1398,7 @@ export const useUserWatchlistTvSeriesUpdateMutation = () => {
 			// All
 			queryClient.setQueryData(userKeys.watchlist({
 				userId: data.user_id,
+				type: 'all',
 			}), (oldData: UserWatchlist[]) => {
 				if (!oldData) return oldData;
 				return oldData.map((item) => {

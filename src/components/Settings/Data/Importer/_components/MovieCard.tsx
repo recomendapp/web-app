@@ -44,7 +44,7 @@ export default function MovieCard({
 			  <>
 				{index > 0 && <span className='text-muted-foreground'>, </span>}
 				<span key={person?.id} className="italic text-muted-foreground">
-					{person?.title}
+					{person?.name}
 				</span>
 			  </>
 			)) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}

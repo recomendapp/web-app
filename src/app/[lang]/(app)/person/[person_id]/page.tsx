@@ -24,16 +24,16 @@ export async function generateMetadata(
   const person = await getPerson(params.lang, id);
   if (!person) return { title: upperFirst(common('messages.person_not_found')) };
   return {
-    title: t('metadata.title', { name: person.title!, department: person.extra_data.known_for_department }),
-    description: truncate(person.extra_data.biography, { length: siteConfig.seo.description.limit }),
+    title: t('metadata.title', { name: person.name, department: person.known_for_department }),
+    description: person.biography ? truncate(person.biography, { length: siteConfig.seo.description.limit }) : undefined,
     alternates: seoLocales(params.lang, `/person/${person.slug}`),
     openGraph: {
       siteName: siteConfig.name,
-      title: `${person.title} • ${person.extra_data.known_for_department} • ${siteConfig.name}`,
-      description: truncate(person.extra_data.biography, { length: siteConfig.seo.description.limit }),
+      title: `${person.name} • ${person.known_for_department} • ${siteConfig.name}`,
+      description: person.biography ? truncate(person.biography, { length: siteConfig.seo.description.limit }) : undefined,
       url: `${siteConfig.url}/${params.lang}/person/${person.slug}`,
-      images: person.avatar_url ? [
-        { url: person.avatar_url },
+      images: person.profile_url ? [
+        { url: person.profile_url },
       ] : undefined,
       type: 'profile',
       locale: params.lang,

@@ -1148,7 +1148,7 @@ export const useUserFeedCastCrewInfiniteQuery = ({
 					movie:media_movie!inner(title,avatar_url,extra_data,url,date, media_type),
 					person:media_person(title,avatar_url,url)
 				`)
-				.not('movie.date', 'is', null)
+				.not('movie.release_date', 'is', null)
 				.range(from, to);
 			
 			if (mergedFilters) {

@@ -61,7 +61,7 @@ export default function MovieHeader({
             {/* MOVIE POSTER */}
             <MediaPoster
               className="w-[200px]"
-              src={movie.avatar_url ?? ''}
+              src={movie.poster_url ?? ''}
               alt={movie.title ?? ''}
               fill
               sizes={`
@@ -71,8 +71,8 @@ export default function MovieHeader({
               `}
             >
               <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                {(movie.vote_average || movie.tmdb_vote_average) ? <IconMediaRating
-                  rating={movie.vote_average ?? movie.tmdb_vote_average}
+                {movie.vote_average ? <IconMediaRating
+                  rating={movie.vote_average}
                   variant="general"
                   className="w-full"
                 /> : null}
@@ -102,13 +102,13 @@ export default function MovieHeader({
                 <span className='font-bold select-text'>{movie.title}</span>
                 {/* DATE */}
                 <sup>
-                  <DateOnlyYearTooltip date={movie.extra_data.release_date ?? ''} className=' text-base font-medium'/>
+                  <DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-base font-medium'/>
                 </sup>
-                {movie.extra_data.original_title !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.extra_data.original_title}</div> : null}
+                {movie.original_title !== movie.title ? <div className='text-base font-semibold text-muted-foreground'>{movie.original_title}</div> : null}
               </h1>
               <div className=" space-y-2">
                 <div>
-                  {movie.main_credit?.map((director, index: number) => (
+                  {movie.directors?.map((director, index: number) => (
                     <Fragment key={index}>
                       {index > 0 && <span>, </span>}
                       <span key={index}>
@@ -117,13 +117,13 @@ export default function MovieHeader({
                           className="w-fit p-0 h-full"
                           asChild
                         >
-                          <Link href={`/person/${director?.slug ?? director?.id}`}>{director?.title}</Link>
+                          <Link href={`/person/${director?.slug ?? director?.id}`}>{director.name}</Link>
                         </Button>
                       </span>
                     </Fragment>
                   )) ?? <span className="text-muted-foreground italic">{upperFirst(common('messages.unknown'))}</span>}
                   {/* RUNTIME */}
-                  <RuntimeTooltip runtime={movie.extra_data.runtime ?? 0} className=" before:content-['_•_']" />
+                  <RuntimeTooltip runtime={movie.runtime ?? 0} className=" before:content-['_•_']" />
                 </div>
               </div>
             </div>

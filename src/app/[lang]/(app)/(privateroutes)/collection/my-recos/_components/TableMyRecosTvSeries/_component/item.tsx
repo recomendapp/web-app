@@ -25,8 +25,8 @@ export const Item = React.forwardRef<
 				)}
 			>
 				<ImageWithFallback
-				src={tvSeries.avatar_url ?? ''}
-				alt={tvSeries.title ?? ''}
+				src={tvSeries.poster_url ?? ''}
+				alt={tvSeries.name ?? ''}
 				className={cn("object-cover")}
 				width={60}
           		height={90}
@@ -36,11 +36,11 @@ export const Item = React.forwardRef<
 			</div>
 			<div className="flex-1">
 				<Link href={tvSeries.url ?? ''} className="font-medium line-clamp-2">
-				{tvSeries.title}
+				{tvSeries.name}
 				</Link>
-				<Credits credits={tvSeries.main_credit ?? []} className="line-clamp-1" />
-				{tvSeries.date ? <p className="lg:hidden">
-					<DateOnlyYearTooltip date={tvSeries.date} />
+				<Credits credits={tvSeries.created_by ?? []} className="line-clamp-1" />
+				{tvSeries.first_air_date ? <p className="lg:hidden">
+					<DateOnlyYearTooltip date={tvSeries.first_air_date} />
 				</p> : null}
 			</div>
 		</div>
@@ -67,7 +67,7 @@ const Credits = ({
 			  asChild
 			>
 			  <Link href={credit?.url ?? ''}>
-				{credit?.title}
+				{credit.name}
 			  </Link>
 			</Button>
 			{index !== credits.length - 1 && (

@@ -48,12 +48,12 @@ export const ContextMenuTvSeries = ({
 			...(session ? [
 				{
 					icon: Icons.addPlaylist,
-					onClick: () => openModal(ModalPlaylistTvSeriesAdd, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.title }),
+					onClick: () => openModal(ModalPlaylistTvSeriesAdd, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.name }),
 					label: upperFirst(t('common.messages.add_to_playlist')),
 				},
 				{
 					icon: Icons.send,
-					onClick: () => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.title }),
+					onClick: () => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.name }),
 					label: upperFirst(t('common.messages.send_to_friend')),
 				}
 			] : []),
@@ -62,8 +62,8 @@ export const ContextMenuTvSeries = ({
 			{
 				icon: Icons.share,
 				onClick: () => openModal(ModalShare, {
-					title: tvSeries.title,
-					type: tvSeries.media_type,
+					title: tvSeries.name,
+					type: 'tv_series',
 					path: tvSeries.url ?? '',
 					shareController: createShareController(ShareControllerTvSeries, {
 						tvSeries: tvSeries,

@@ -22,7 +22,6 @@ import { TooltipBox } from '@/components/Box/TooltipBox';
 import Tiptap from '@/components/tiptap/Tiptap';
 import { upperFirst } from 'lodash';
 import { useModal } from '@/context/modal-context';
-import { ReviewSettings } from './ReviewSettings';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 
 const MAX_TITLE_LENGTH = 50;
@@ -32,8 +31,9 @@ interface ReviewFormProps extends React.HTMLAttributes<HTMLDivElement> {
 	review?: UserReview;
 	author?: User;
 	rating?: number;
-	mediaAction: React.ReactNode;
-	reviewActions?: React.ReactNode;
+	mediaAction: React.ReactNode | (() => React.ReactNode);
+	reviewActions?: React.ReactNode | (() => React.ReactNode);
+	reviewSettings?: React.ReactNode | (() => React.ReactNode);
 	onUpdate?: (data: { title?: string; body: JSONContent }) => void;
 	onCreate?: (data: { title?: string; body: JSONContent }) => void;
 }
@@ -45,6 +45,7 @@ export default function ReviewForm({
 	className,
 	mediaAction,
 	reviewActions,
+	reviewSettings,
 	onUpdate,
 	onCreate,
 } : ReviewFormProps) {
@@ -129,7 +130,9 @@ export default function ReviewForm({
 		<div className="flex flex-col items-center gap-1">
 			{review
 				? <IconMediaRating rating={rating} className="h-fit"/>
-				: mediaAction}
+				: (
+					typeof mediaAction === 'function' ? mediaAction() : mediaAction
+				)}
 			<div className="bg-muted-hover h-full w-0.5 rounded-full"></div>
 		</div>
 		<div className="w-full flex flex-col gap-2">
@@ -178,14 +181,9 @@ export default function ReviewForm({
 								</TooltipBox>
 								</>
 							)}
-							{/* {review ? (
-								author ? <ReviewSettings
-								mediaId={mediaId}
-								media={media}
-								review={review}
-								author={author}
-								/> : null
-							) : null} */}
+							{reviewSettings && (
+								typeof reviewSettings === 'function' ? reviewSettings() : reviewSettings
+							)}
 						</>
 					) : !review ? (
 						<TooltipBox tooltip={upperFirst(t('messages.save'))}>
@@ -213,7 +211,7 @@ export default function ReviewForm({
 			onCharacterCountChange={(count) => setBodyLength(count)}
 			/>
 			{reviewActions ? <div className="flex items-center justify-end m-1">
-				{reviewActions}
+				{typeof reviewActions === 'function' ? reviewActions() : reviewActions}
 			</div> : null}
 		</div>
 	</Card>

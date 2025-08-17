@@ -7,7 +7,6 @@ import { useAuth } from '@/context/auth-context';
 import { Playlist } from '@/types/type.db';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
-import { ModalPlaylistQuickAdd } from '@/components/Modals/playlists/ModalPlaylistQuickAdd';
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
@@ -15,6 +14,7 @@ import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import PlaylistActionSave from '@/components/Playlist/actions/PlaylistActionSave';
 import { TableViewOptions } from '@/components/tables/TableViewOptions';
 import { TableSortOptions } from '@/components/tables/TableSortOptions';
+import { ModalPlaylistMovieQuickAdd } from '@/components/Modals/playlists/ModalPlaylistMovieQuickAdd';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -84,7 +84,7 @@ export function DataTableToolbar<TData>({
           variant="outline"
           size="sm"
           className='ml-auto h-8 group overflow-hidden gap-0'
-          onClick={() => openModal(ModalPlaylistQuickAdd, { playlist: playlist })}
+          onClick={() => openModal(ModalPlaylistMovieQuickAdd, { playlist: playlist })}
           >
             <Icons.add className='h-4 w-4 mr-0 group-hover:mr-2 transition-all duration-300' />
             <span className='group-hover:w-20 w-0 group-hover:opacity-100 opacity-0 transition-all duration-500'>

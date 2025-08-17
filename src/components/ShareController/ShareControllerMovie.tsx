@@ -21,13 +21,13 @@ export const ShareControllerMovie: React.FC<ShareControllerMovieProps> = ({ movi
 	const fetchImage = useCallback(async () => {
 		try {
 			setIsLoading(true);
-			if (!movie || !movie.title || !movie.avatar_url) return;
+			if (!movie || !movie.title || !movie.poster_url) return;
 			const body = {
 				title: movie.title,
-				poster: movie.avatar_url,
-				credits: movie.main_credit?.map(c => c.title).join(', '),
+				poster: movie.poster_url,
+				credits: movie.directors?.map(c => c.name).join(', '),
 				background: movie.backdrop_url,
-				voteAverage: showVoteAverage ? (movie.vote_average ?? movie.tmdb_vote_average) : undefined,
+				voteAverage: showVoteAverage && movie.vote_average ? movie.vote_average : undefined,
 			};
 	
 			const { buffer, contentType } = await getSocialCanvas({

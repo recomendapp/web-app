@@ -5,7 +5,6 @@ import { Card } from "../ui/card";
 import { MediaMovie, MediaPerson, UserActivityMovie } from "@/types/type.db";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Link, useRouter } from "@/lib/i18n/routing";
-import { getMediaUrlPrefix } from "@/utils/get-media-details";
 import { TooltipBox } from "../Box/TooltipBox";
 import { Button } from "../ui/button";
 import { BadgeMedia } from "../Badge/BadgeMedia";
@@ -49,11 +48,11 @@ const CardMovieDefault = React.forwardRef<
 			className={cn('relative h-full shrink-0 rounded-md overflow-hidden aspect-[2/3]', posterClassName)}
 			>
 				<ImageWithFallback
-					src={movie.avatar_url ?? ''}
+					src={movie.poster_url ?? ''}
 					alt={movie.title ?? ''}
 					fill
 					className="object-cover"
-					type="playlist"
+					type='movie'
 					sizes={`
 					(max-width: 640px) 96px,
 					(max-width: 1024px) 120px,
@@ -78,7 +77,7 @@ const CardMoviePoster = React.forwardRef<
 	const { device } = useUI();
 	const [isHovered, setIsHovered] = React.useState(false);
 	return (
-		<TooltipBox tooltip={`${movie.title}${movie.date ? ` (${(new Date(movie.date)).getFullYear()})` : ''}`} side='top'>
+		<TooltipBox tooltip={`${movie.title}${movie.release_date ? ` (${(new Date(movie.release_date)).getFullYear()})` : ''}`} side='top'>
 			<Card
 				ref={ref}
 				className={cn(
@@ -92,11 +91,11 @@ const CardMoviePoster = React.forwardRef<
 				{...props}
 			>
 				<ImageWithFallback
-					src={movie.avatar_url ?? ''}
+					src={movie.poster_url ?? ''}
 					alt={movie.title ?? ''}
 					fill
 					className="object-cover"
-					type={movie.media_type}
+					type={'movie'}
 					sizes={`
 					(max-width: 640px) 96px,
 					(max-width: 1024px) 120px,
@@ -104,16 +103,15 @@ const CardMoviePoster = React.forwardRef<
 					`}
 				/>
 				{(movie.vote_average
-				|| movie.tmdb_vote_average
 				|| profileActivity?.rating
 				|| profileActivity?.is_liked
 				|| profileActivity?.review
 				) ? (
 					<div className='absolute top-1 right-1 flex flex-col gap-1'>
-						{(movie.vote_average || movie.tmdb_vote_average) ?
+						{movie.vote_average ?
 						<IconMediaRating
 						disableTooltip
-						rating={movie.vote_average ?? movie.tmdb_vote_average}
+						rating={movie.vote_average}
 						/> : null}
 						{(profileActivity?.is_liked
 						|| profileActivity?.rating
@@ -145,7 +143,6 @@ const CardMovieRow = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardMovieProps, "variant">
 >(({ className, posterClassName, movie, activity, profileActivity, hideMediaType, linked, showRating, children, ...props }, ref) => {
-	const mediaUrlPrefix = getMediaUrlPrefix(movie.media_type!);
 	return (
 		<Card
 			ref={ref}
@@ -158,11 +155,11 @@ const CardMovieRow = React.forwardRef<
 		>
 			<div className={cn("relative w-24 aspect-[2/3] rounded-md overflow-hidden", posterClassName)}>
 				<ImageWithFallback
-					src={movie.avatar_url ?? ''}
+					src={movie.poster_url ?? ''}
 					alt={movie.title ?? ''}
 					fill
 					className="object-cover"
-					type={movie.media_type}
+					type={'movie'}
 					sizes={`
 					(max-width: 640px) 96px,
 					(max-width: 1024px) 120px,
@@ -182,7 +179,7 @@ const CardMovieRow = React.forwardRef<
 						</WithLink>
 						{profileActivity?.rating && (
 							<WithLink
-							href={linked ? `/@${profileActivity?.user?.username}${mediaUrlPrefix}/${movie.slug ?? movie.id}` : undefined}
+							href={linked ? `/@${profileActivity?.user?.username}/film/${movie.slug ?? movie.id}` : undefined}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>
@@ -194,7 +191,7 @@ const CardMovieRow = React.forwardRef<
 						)}
 						{profileActivity?.is_liked && (
 							<Link
-							href={`/@${profileActivity?.user?.username}${mediaUrlPrefix}/${movie.slug ?? movie.id}`}
+							href={`/@${profileActivity?.user?.username}/film/${movie.slug ?? movie.id}`}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>
@@ -217,11 +214,11 @@ const CardMovieRow = React.forwardRef<
 							</Link>
 						)}
 					</div>
-					{movie.main_credit && <Credits credits={movie.main_credit} linked={linked} className="line-clamp-2"/>}
-					{!hideMediaType && <BadgeMedia type={movie.media_type} />}
+					{movie.directors && <Credits credits={movie.directors} linked={linked} className="line-clamp-2"/>}
+					{!hideMediaType && <BadgeMedia type={'movie'} />}
 				</div>
-				{movie.date ? (
-					<DateOnlyYearTooltip date={movie.date} className="text-xs text-muted-foreground"/>
+				{movie.release_date ? (
+					<DateOnlyYearTooltip date={movie.release_date} className="text-xs text-muted-foreground"/>
 				) : null}
 			</div>
 		</Card>
@@ -289,7 +286,7 @@ const Credits = ({
 			  href={linked ? (credit.url ?? '') : undefined}
 			  onClick={linked ? (e) => e.stopPropagation() : undefined}
 			  >
-				{credit.title}
+				{credit.name}
 			  </WithLink>
 			</Button>
 			{index !== credits.length - 1 && (

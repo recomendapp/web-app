@@ -20,7 +20,7 @@ const searchSeriesSchema = z
 			.optional(),
 	})
 
-export const tmdbSearchSeries = async (query: string, language = routing.defaultLocale, page = 1) => {
+export const tmdbSearchTvSeries = async (query: string, language = routing.defaultLocale, page = 1): Promise<MediaTvSeries[]> => {
 	const supabase = await createServerClient(language);
 	const verifiedField = searchSeriesSchema.safeParse({ query, language, page });
 	if (!verifiedField.success) {
@@ -36,7 +36,8 @@ export const tmdbSearchSeries = async (query: string, language = routing.default
 		.limit(20);
 	
 	if (error) throw error;
-	return tmdbResults.results.map(tmdbSerie =>
-		data.find(serie => serie.id === tmdbSerie.id)
-	).filter(serie => serie);
+
+	return tmdbResults.results
+			.map(tmdbSerie => data.find(m => m.id === tmdbSerie.id))
+			.filter((tvSeries): tvSeries is MediaTvSeries => Boolean(tvSeries));
 }

@@ -4,9 +4,8 @@ import { DataTableRowActions } from './data-table-row-actions';
 import { PlaylistItemMovie } from '@/types/type.db';
 import { useTranslations } from 'next-intl';
 import { Item } from './item';
-import { capitalize, upperFirst } from 'lodash';
+import { upperFirst } from 'lodash';
 import { TableColumnHeader } from '@/components/tables/TableColumnHeader';
-import Senders from './senders';
 import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import { Icons } from '@/config/icons';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
@@ -47,7 +46,7 @@ export const Columns = (): ColumnDef<PlaylistItemMovie>[] => {
     },
     {
       id: 'release_date',
-      accessorFn: (row) => row?.movie?.extra_data.release_date,
+      accessorFn: (row) => row?.movie?.release_date,
       meta: {
         displayName: upperFirst(t('common.messages.date')),
       },
@@ -55,12 +54,12 @@ export const Columns = (): ColumnDef<PlaylistItemMovie>[] => {
         <TableColumnHeader column={column} title={upperFirst(t('common.messages.date'))} />
       ),
       cell: ({ row }) => (
-        <DateOnlyYearTooltip date={row.original?.movie?.extra_data.release_date} className='text-muted-foreground'/>
+        <DateOnlyYearTooltip date={row.original?.movie?.release_date} className='text-muted-foreground'/>
       ),
     },
     {
       id: 'runtime',
-      accessorFn: (row) => row?.movie?.extra_data.runtime,
+      accessorFn: (row) => row?.movie?.runtime,
       meta: {
         displayName: upperFirst(t('common.messages.duration')),
       },
@@ -68,7 +67,7 @@ export const Columns = (): ColumnDef<PlaylistItemMovie>[] => {
         <TableColumnHeader column={column} Icon={Icons.clock} />
       ),
       cell: ({ row }) => (
-        <RuntimeTooltip runtime={row.original?.movie?.extra_data.runtime ?? 0} className='text-muted-foreground'/>
+        <RuntimeTooltip runtime={row.original?.movie?.runtime ?? 0} className='text-muted-foreground'/>
       ),
     },
     {

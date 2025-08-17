@@ -70,7 +70,7 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: data.tv_series_id!, tvSeriesTitle: data.tv_series?.title })}
+          onClick={() => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: data.tv_series_id!, tvSeriesTitle: data.tv_series?.name })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}
@@ -91,7 +91,7 @@ export function DataTableRowActions({
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => openModal(ModalShare, {
-              title: data?.tv_series?.title,
+              title: data?.tv_series?.name,
               type: 'tv_series',
               path: data?.tv_series?.url ?? '',
               shareController: createShareController(ShareControllerTvSeries, { tvSeries: data?.tv_series! }),
@@ -104,7 +104,7 @@ export function DataTableRowActions({
             onClick={async () => createConfirmModal({
               title: upperFirst(t('pages.collection.watchlist.modal.delete_confirm.title')),
               description: t.rich('pages.collection.watchlist.modal.delete_confirm.description', {
-                title: data?.tv_series?.title!,
+                title: data?.tv_series?.name!,
                 important: (chunk) => <b>{chunk}</b>,
               }),
               onConfirm: handleUnwatchlist,

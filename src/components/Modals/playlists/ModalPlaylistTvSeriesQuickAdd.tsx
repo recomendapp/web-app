@@ -7,56 +7,55 @@ import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Media, Playlist } from '@/types/type.db';
+import { MediaTvSeries, Playlist } from '@/types/type.db';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { Icons } from '@/config/icons';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
-import { useTmdbSearchMultiInfiniteQuery } from '@/features/client/tmdb/tmdbQueries';
+import { useTmdbSearchTvSeriesInfiniteQuery } from '@/features/client/tmdb/tmdbQueries';
 import { useLocale, useTranslations } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
-import { usePlaylistAddMediasMutation } from '@/features/client/playlist/playlistMutations';
+import { usePlaylistTvSeriesMultiInsertMutation } from '@/features/client/playlist/playlistMutations';
 import { upperFirst } from 'lodash';
-import { CardMedia } from '@/components/Card/CardMedia';
 import { SupportedLocale } from '@/translations/locales';
+import { CardTvSeries } from '@/components/Card/CardTvSeries';
 
 const COMMENT_MAX_LENGTH = 180;
 
-interface ModalPlaylistQuickAddProps extends ModalType {
+interface ModalPlaylistTvSeriesQuickAddProps extends ModalType {
 	playlist: Playlist;
 }
 
-export function ModalPlaylistQuickAdd({
+export function ModalPlaylistTvSeriesQuickAdd({
 	playlist,
 	...props
-} : ModalPlaylistQuickAddProps) {
-	const { user } = useAuth();
+} : ModalPlaylistTvSeriesQuickAddProps) {
+	const { session } = useAuth();
 	const t = useTranslations();
 	const locale = useLocale();
 	const { closeModal } = useModal();
-	const [selectedMedias, setSelectedMedias] = useState<Media[]>([]);
+	const [selectedTvSeries, setSelectedTvSeries] = useState<MediaTvSeries[]>([]);
 	const [comment, setComment] = useState<string>('');
 	const [search, setSearch] = useState<string>('');
 	const searchQuery = useDebounce(search, 500);
 	const { ref, inView } = useInView();
 
 	const {
-		data: medias,
+		data: tvSeries,
 		isLoading,
 		isError,
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useTmdbSearchMultiInfiniteQuery({
+	} = useTmdbSearchTvSeriesInfiniteQuery({
 		query: searchQuery,
 		locale: locale as SupportedLocale,
 	})
 
-	const addMediasToPlaylist = usePlaylistAddMediasMutation({
-		userId: user?.id,
-		playlist: playlist,
+	const insertTvSeriesMultiple = usePlaylistTvSeriesMultiInsertMutation({
+		playlistId: playlist.id,
 	});
 
 	useEffect(() => {
@@ -66,12 +65,16 @@ export function ModalPlaylistQuickAdd({
 	}, [inView, hasNextPage, fetchNextPage]);
 
 	function submit() {
-		addMediasToPlaylist.mutate({
-			medias: selectedMedias,
+		if (!session?.user.id) return;
+		const ids = selectedTvSeries.map((tvSeries) => tvSeries.id);
+		if (ids.length === 0) return;
+		insertTvSeriesMultiple.mutate({
+			userId: session.user.id,
+			tvSeriesIds: ids,
 			comment: comment,
 		}, {
 			onSuccess: () => {
-				toast.success(upperFirst(t('common.messages.added', { gender: 'male', count: selectedMedias.length })));
+				toast.success(upperFirst(t('common.messages.added', { gender: 'male', count: selectedTvSeries.length })));
 				closeModal(props.id);
 			},
 			onError: () => {
@@ -89,8 +92,8 @@ export function ModalPlaylistQuickAdd({
 			<ModalHeader className='px-4 pb-4 pt-5'>
 				<ModalTitle>{upperFirst(t('common.messages.add_to_playlist'))}</ModalTitle>
 				<ModalDescription>
-					{t.rich('common.messages.add_one_or_more_items_to', {
-						title: playlist?.title,
+					{t.rich('common.messages.add_one_or_more_tv_series_to', {
+						title: playlist.title,
 						important: (chunks) => <strong>{chunks}</strong>,
 					})}
 				</ModalDescription>
@@ -99,33 +102,32 @@ export function ModalPlaylistQuickAdd({
 				<InputSearch
 				value={search}
 				onChange={(e) => setSearch(e.target.value)}
-				placeholder={upperFirst(t('common.messages.search_media'))}
+				placeholder={upperFirst(t('common.messages.search_tv_series', { count: 1 }))}
 				/>
 				<ScrollArea className={`h-[40vh]`}>
 					<div className='p-2 flex flex-col gap-1'>
-					{(medias?.pages && medias?.pages[0].results.length > 0) ? (
-						medias?.pages.map((page, i) => (
-							page.results.map((media, index) => (
-								<CardMedia
+					{(tvSeries?.pages && tvSeries.pages[0].length > 0) ? (
+						tvSeries.pages.map((page, i) => (
+							page.map((tvSeriesItem, index) => (
+								<CardTvSeries
 								key={index}
 								variant='row'
-								media={media}
+								tvSeries={tvSeriesItem}
 								className={`
 									border-none bg-transparent hover:cursor-pointer
-									${selectedMedias.some((selectedMedia) => selectedMedia?.id === media?.id) ? 'bg-muted-hover' : ''}
+									${selectedTvSeries.some((item) => item.id === tvSeriesItem.id) ? 'bg-muted-hover' : ''}
 								`}
 								posterClassName='h-full'
-								hideMediaType={false}
 								linked={false}
 								onClick={() => {
-									if (selectedMedias.some((selectedMedia) => selectedMedia?.id === media?.id)) {
-										return setSelectedMedias((prev) => prev.filter(
-											(selectedMedia) => selectedMedia?.id !== media?.id
+									if (selectedTvSeries.some((item) => item.id === tvSeriesItem.id)) {
+										return setSelectedTvSeries((prev) => prev.filter(
+											(selectedTvSeries) => selectedTvSeries.id !== tvSeriesItem.id
 										))
 									}
-									return setSelectedMedias((prev) => [...prev, media]);
+									return setSelectedTvSeries((prev) => [...prev, tvSeriesItem]);
 								}}
-								{...(i === medias.pages.length - 1 && index === page.results.length - 1
+								{...(i === tvSeries.pages.length - 1 && index === page.length - 1
 										? { ref: ref }
 										: {})}
 								/>
@@ -137,11 +139,11 @@ export function ModalPlaylistQuickAdd({
 						</div>
 					) : (searchQuery && !isLoading) ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						{upperFirst(t('common.messages.no_media_found'))}
+						{upperFirst(t('common.messages.no_tv_series_found'))}
 						</div>
 					) : !isLoading ? (
 						<div className='p-4 text-center text-muted-foreground'>
-						{upperFirst(t('common.messages.search_media'))}
+						{upperFirst(t('common.messages.search_tv_series', { count: 1 }))}
 						</div>
 					) : null}
 					 {(isLoading || isFetchingNextPage) ? <Icons.loader className='w-full'/> : null}
@@ -158,20 +160,20 @@ export function ModalPlaylistQuickAdd({
 				/>
 			</div>
 			<ModalFooter className="flex items-center p-4 sm:justify-between">
-				{selectedMedias.length > 0 ? (
+				{selectedTvSeries.length > 0 ? (
 				<div className="flex -space-x-2 overflow-hidden">
-					{selectedMedias.map((media) => (
+					{selectedTvSeries.map((tvSeriesItem) => (
 						<div
-						key={media?.id}
+						key={tvSeriesItem.id}
 						className={`w-[40px] shadow-2xl cursor-not-allowed`}
-						onClick={() => setSelectedMedias((prev) => prev.filter(
-							(selectedMedia) => selectedMedia?.id !== media?.id
+						onClick={() => setSelectedTvSeries((prev) => prev.filter(
+							(selectedTvSeries) => selectedTvSeries.id !== tvSeriesItem.id
 						))}
 						>
 							<AspectRatio ratio={1 / 1}>
 								<ImageWithFallback
-									src={media.avatar_url ?? ''}
-									alt={media?.title ?? ''}
+									src={tvSeriesItem.poster_url ?? ''}
+									alt={tvSeriesItem.name ?? ''}
 									fill
 									className="rounded-md object-cover"
 									type="playlist"
@@ -187,14 +189,14 @@ export function ModalPlaylistQuickAdd({
 				</div>
 				) : (
 					<p className="text-sm text-muted-foreground">
-						{upperFirst(t('common.messages.select_an_item_to_add_to_playlist'))}
+						{upperFirst(t('common.messages.select_a_tv_series_to_add_to_playlist'))}
 					</p>
 				)}
 				<Button
-				disabled={!selectedMedias.length || addMediasToPlaylist.isPending}
+				disabled={!selectedTvSeries.length || insertTvSeriesMultiple.isPending}
 				onClick={submit}
 				>
-				{addMediasToPlaylist.isPending && <Icons.loader className="mr-2" />}
+				{insertTvSeriesMultiple.isPending && <Icons.loader className="mr-2" />}
 				{upperFirst(t('common.messages.add'))}
 				</Button>
 			</ModalFooter>

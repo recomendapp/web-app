@@ -1,10 +1,10 @@
 import { useSupabaseClient } from '@/context/supabase-context';
-import { Media, Playlist, PlaylistGuest, PlaylistItemMovie, PlaylistItemTvSeries, PlaylistType } from '@/types/type.db';
+import { Playlist, PlaylistGuest, PlaylistItemMovie, PlaylistItemTvSeries, PlaylistType } from '@/types/type.db';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { playlistKeys } from './playlistKeys';
 import { userKeys } from '../user/userKeys';
-import toast from 'react-hot-toast';
 import { mediaKeys } from '../media/mediaKeys';
+import queryClient from '@/lib/react-query/queryClient';
 
 
 /**
@@ -142,11 +142,11 @@ export const usePlaylistItemsMovieRealtimeMutation = ({
 		} : {
 			event: string;
 			payload: {
-				old: PlaylistItemMovie | PlaylistItemTvSeries;
-				new: PlaylistItemMovie | PlaylistItemTvSeries;
+				old: PlaylistItemMovie;
+				new: PlaylistItemMovie;
 			}
 		}) => {
-			const newPlaylistItems = [...queryClient.getQueryData<PlaylistItemMovie[] | PlaylistItemTvSeries[]>(playlistKeys.items(playlistId)) || []];
+			const newPlaylistItems = [...queryClient.getQueryData<PlaylistItemMovie[]>(playlistKeys.items(playlistId)) || []];
 			if (!newPlaylistItems.length) throw new Error('playlist items is undefined');
 			switch (event) {
 				case 'INSERT':
@@ -220,7 +220,100 @@ export const usePlaylistItemsMovieRealtimeMutation = ({
 			});
 		}
 	});
-}
+};
+export const usePlaylistItemsTvSeriesRealtimeMutation = ({
+	playlistId
+} : {
+	playlistId: number;
+}) => {
+	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({
+			event,
+			payload,
+		} : {
+			event: string;
+			payload: {
+				old: PlaylistItemTvSeries;
+				new: PlaylistItemTvSeries;
+			}
+		}) => {
+			const newPlaylistItems = [...queryClient.getQueryData<PlaylistItemTvSeries[]>(playlistKeys.items(playlistId)) || []];
+			if (!newPlaylistItems.length) throw new Error('playlist items is undefined');
+			switch (event) {
+				case 'INSERT':
+					if (payload.new.playlist_id !== playlistId) throw new Error('Invalid playlist id');
+					const { error: insertError, data: insertData } = await supabase
+						.from('playlist_items_tv_series')
+						.select(`*, tv_series:media_tv_series(*)`)
+						.eq('id', payload.new.id)
+						.single();
+					if (insertError) throw insertError;
+					newPlaylistItems.forEach(item => {
+						if (item.rank >= payload.new.rank) {
+							item.rank++;
+						}
+					});
+					newPlaylistItems.push({
+						...payload.new,
+						tv_series: insertData.tv_series
+					});
+					break;
+				case 'UPDATE':
+					if (!payload.new.playlist_id) throw new Error('Invalid playlist id');
+					const itemIndex = newPlaylistItems.findIndex((item) => item.id === payload.new.id);
+					if (itemIndex === -1) throw new Error('Missing item');
+
+					if (payload.old.rank !== payload.new.rank) {
+						if (payload.old.rank < payload.new.rank) {
+							newPlaylistItems.forEach(item => {
+							if (item.rank > payload.old.rank && item.rank <= payload.new.rank) {
+								item.rank--;
+							}
+							});
+						}
+						if (payload.old.rank > payload.new.rank) {
+							newPlaylistItems.forEach(item => {
+							if (item.rank < payload.old.rank && item.rank >= payload.new.rank) {
+								item.rank++;
+							}
+							});
+						}
+					}
+					newPlaylistItems[itemIndex] = {
+						...newPlaylistItems[itemIndex],
+						...payload.new
+					};
+					break;
+				case 'DELETE':
+					if (!payload.old.playlist_id) throw new Error('Invalid playlist id');
+					const deleteIndex = newPlaylistItems.findIndex((item) => item.id === payload.old.id);
+					if (deleteIndex === -1) throw new Error('Missing item');
+					newPlaylistItems.splice(deleteIndex, 1);
+
+					newPlaylistItems.forEach(item => {
+						if (item.rank > payload.old.rank) {
+							item.rank--;
+						}
+					});
+					break;
+				default:
+					break;
+			};
+			newPlaylistItems.sort((a, b) => a.rank - b.rank);
+			return newPlaylistItems;
+		},
+		onSuccess: (newPlaylistItems) => {
+			newPlaylistItems && queryClient.setQueryData(playlistKeys.items(playlistId), newPlaylistItems);
+		},
+		onError: (error) => {
+			queryClient.invalidateQueries({
+				queryKey: playlistKeys.items(playlistId),
+			});
+		}
+	});
+};
 
 /* ---------------------------------- ITEMS --------------------------------- */
 // Movie
@@ -467,181 +560,93 @@ export const usePlaylistTvSeriesUpdateMutation = () => {
 };
 
 /* -------------------------------------------------------------------------- */
-
-/**
- * Adds movies to a playlist
- * @param userId The user id
- * @param playlist The playlist
- * @returns The mutation
- */
-export const usePlaylistAddMediasMutation = ({
-	userId,
-	playlist,
+export const usePlaylistMovieMultiInsertMutation = ({
+	playlistId,
 } : {
-	userId?: string;
-	playlist: Playlist;
+	playlistId: number;
 }) => {
 	const supabase = useSupabaseClient();
 	return useMutation({
 		mutationFn: async ({
-			medias,
+			userId,
+			movieIds,
 			comment,
 		} : {
-			medias: Media[];
+			userId: string;
+			movieIds: number[];
 			comment?: string;
 		}) => {
-			if (!userId) throw Error('Vous devez être connecté pour effectuer cette action');
-			if (!playlist?.id) throw Error('Missing playlist id');
-			if (!medias || medias.length === 0) throw Error('Missing media ids');
-			const { error } = await supabase
-				.from('playlist_items')
+			if (movieIds.length === 0) throw Error('Missing media ids');
+			const { data, error } = await supabase
+				.from('playlist_items_movie')
 				.insert(
-					medias
-						.map((media) => ({
-							playlist_id: playlist.id,
-							media_id: media?.media_id!,
-							user_id: userId,
-							comment: comment,
-							rank: 0,
-						}))
-				);
+					movieIds.map((movieId) => ({
+						playlist_id: playlistId,
+						movie_id: movieId,
+						user_id: userId,
+						comment: comment,
+						rank: 0,
+					}))
+				)
+				.select('id');
 			if (error) throw error;
+			return data;
 		},
-		// onSuccess: () => {
-		// 	queryClient.invalidateQueries(playlistKeys.detail(playlistId));
-		// }
-		meta: {
-			invalidates: [
-				// TODO: Add the playlist key
-			]
+		onSuccess: (data) => {
+			queryClient.setQueryData(playlistKeys.detail(playlistId), (oldData: Playlist) => {
+				if (!oldData) return null;
+				return {
+					...oldData,
+					items_count: oldData.items_count + data.length,
+				};
+			});
 		}
 	});
-}
-
-// export const usePlaylistItemDeleteMutation = () => {
-// 	const supabase = useSupabaseClient();
-// 	const queryClient = useQueryClient();
-// 	return useMutation({
-// 		mutationFn: async ({
-// 			playlistId,
-// 			playlistItemId,
-// 			mediaId,
-// 		} : {
-// 			playlistId: number;
-// 			playlistItemId: number;
-// 			mediaId: number;
-// 		}) => {
-// 			const { error } = await supabase
-// 				.from('playlist_items')
-// 				.delete()
-// 				.eq('id', playlistItemId)
-// 			if (error) throw error;
-// 			return { playlistId, playlistItemId, mediaId };
-// 		},
-// 		onSuccess: ({ playlistId, playlistItemId, mediaId }) => {
-// 			queryClient.invalidateQueries({
-// 				queryKey: playlistKeys.addTo({ mediaId }),
-// 			});
-// 			queryClient.invalidateQueries({
-// 				queryKey: mediaKeys.playlists({
-// 					id: mediaId,
-// 				}),
-// 			});
-// 			queryClient.setQueryData(playlistKeys.detail(playlistId), (data: Playlist) => {
-// 				if (!data) return null;
-// 				return {
-// 					...data,
-// 					items_count: data.items_count - 1,
-// 				};
-// 			});
-// 		},
-// 		onError: (error) => {
-// 			toast.error('Une erreur s\'est produite');
-// 		}
-// 	});
-// }
-
-// export const usePlaylistItemsMutation = ({
-// 	playlistId
-// } : {
-// 	playlistId: number;
-// }) => {
-// 	const queryClient = useQueryClient();
-// 	return useMutation({
-// 		mutationFn: async ({
-// 			event,
-// 			payload,
-// 		} : {
-// 			event: string;
-// 			payload: {
-// 				old: PlaylistItem;
-// 				new: PlaylistItem;
-// 			}
-// 		}) => {
-// 			const newPlaylistItems = [...queryClient.getQueryData<PlaylistItem[]>(playlistKeys.items(playlistId)) || []];
-// 			if (!newPlaylistItems.length) throw new Error('playlist items is undefined');
-// 			switch (event) {
-// 			case 'INSERT':
-// 				if (payload.new.playlist_id !== playlistId) throw new Error('Invalid playlist id');
-// 				newPlaylistItems.forEach(item => {
-// 					if (item.rank >= payload.new.rank) {
-// 						item.rank++;
-// 					}
-// 				});
-// 				newPlaylistItems.push(payload.new);
-// 				break;
-// 			case 'UPDATE':
-// 				if (!payload.new.playlist_id) throw new Error('Invalid playlist id');
-// 				const itemIndex = newPlaylistItems.findIndex((item) => item.id === payload.new.id);
-// 				if (itemIndex === -1) throw new Error('Missing item');
-
-// 				if (payload.old.rank !== payload.new.rank) {
-// 				if (payload.old.rank < payload.new.rank) {
-// 					newPlaylistItems.forEach(item => {
-// 					if (item.rank > payload.old.rank && item.rank <= payload.new.rank) {
-// 						item.rank--;
-// 					}
-// 					});
-// 				}
-// 				if (payload.old.rank > payload.new.rank) {
-// 					newPlaylistItems.forEach(item => {
-// 					if (item.rank < payload.old.rank && item.rank >= payload.new.rank) {
-// 						item.rank++;
-// 					}
-// 					});
-// 				}
-// 				}
-// 				newPlaylistItems[itemIndex] = payload.new;
-// 				break;
-// 			case 'DELETE':
-// 				if (!payload.old.playlist_id) throw new Error('Invalid playlist id');
-// 				const deleteIndex = newPlaylistItems.findIndex((item) => item.id === payload.old.id);
-// 				if (deleteIndex === -1) throw new Error('Missing item');
-// 				newPlaylistItems.splice(deleteIndex, 1);
-
-// 				newPlaylistItems.forEach(item => {
-// 					if (item.rank > payload.old.rank) {
-// 						item.rank--;
-// 					}
-// 				});
-// 				break;
-// 			default:
-// 				break;
-// 			};
-// 			newPlaylistItems.sort((a, b) => a.rank - b.rank);
-// 			return newPlaylistItems;
-// 		},
-// 		onSuccess: (newPlaylistItems) => {
-// 			newPlaylistItems && queryClient.setQueryData(playlistKeys.items(playlistId), [...newPlaylistItems]);
-// 		},
-// 		onError: (error) => {
-// 			queryClient.invalidateQueries({
-// 				queryKey: playlistKeys.items(playlistId),
-// 			});
-// 		}
-// 	});
-// }
-
+};
+export const usePlaylistTvSeriesMultiInsertMutation = ({
+	playlistId,
+} : {
+	playlistId: number;
+}) => {
+	const supabase = useSupabaseClient();
+	return useMutation({
+		mutationFn: async ({
+			userId,
+			tvSeriesIds,
+			comment,
+		} : {
+			userId: string;
+			tvSeriesIds: number[];
+			comment?: string;
+		}) => {
+			if (tvSeriesIds.length === 0) throw Error('Missing media ids');
+			const { data, error } = await supabase
+				.from('playlist_items_tv_series')
+				.insert(
+					tvSeriesIds.map((tvSeriesId) => ({
+						playlist_id: playlistId,
+						tv_series_id: tvSeriesId,
+						user_id: userId,
+						comment: comment,
+						rank: 0,
+					}))
+				)
+				.select('id');
+			if (error) throw error;
+			return data;
+		},
+		onSuccess: (data) => {
+			queryClient.setQueryData(playlistKeys.detail(playlistId), (oldData: Playlist) => {
+				if (!oldData) return null;
+				return {
+					...oldData,
+					items_count: oldData.items_count + data.length,
+				};
+			});
+		}
+	});
+};
+/* --------------------------------- GUESTS --------------------------------- */
 export const usePlaylistGuestUpdateMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
@@ -679,7 +684,7 @@ export const usePlaylistGuestUpdateMutation = () => {
 			});
 		}
 	});
-}
+};
 
 export const usePlaylistGuestsDeleteMutation = () => {
 	const supabase = useSupabaseClient();
@@ -706,7 +711,7 @@ export const usePlaylistGuestsDeleteMutation = () => {
 			});
 		}
 	});
-}
+};
 
 export const usePlaylistGuestsInsertMutation = () => {
 	const supabase = useSupabaseClient();
@@ -743,4 +748,5 @@ export const usePlaylistGuestsInsertMutation = () => {
 			// });
 		}
 	});
-}
+};
+/* -------------------------------------------------------------------------- */

@@ -61,7 +61,7 @@ export const MovieWidget = () => {
 					<div className="w-full h-full flex gap-2 items-center">
 						<MediaPoster
 							className="h-full w-fit"
-							src={movie.avatar_url ?? ''}
+							src={movie.poster_url ?? ''}
 							alt={movie.title ?? ''}
 							width={96}
 							height={144}
@@ -120,15 +120,15 @@ export const MovieWidget = () => {
 								</Link>
 								{/* DATE */}
 								<sup>
-									<DateOnlyYearTooltip date={movie.date ?? ''} className=' text-xs font-medium'/>
+									<DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-xs font-medium'/>
 								</sup>
-								{movie.extra_data.original_title !== movie.title && (
-									<div className='text-xs !ml-0 font-semibold text-muted-foreground line-clamp-1'>{movie.extra_data.original_title}</div>
+								{movie.original_title !== movie.title && (
+									<div className='text-xs !ml-0 font-semibold text-muted-foreground line-clamp-1'>{movie.original_title}</div>
 								)}
 							</div>
 							<div className=" space-y-2">
 							<div className="line-clamp-1">
-								{movie.main_credit?.map((person, index) => (
+								{movie.directors?.map((person, index) => (
 								<>
 									{index > 0 && <span>, </span>}
 									<span key={index}>
@@ -138,14 +138,14 @@ export const MovieWidget = () => {
 											asChild
 										>
 											<Link href={person.url ?? ''}>
-											{person?.title}
+											{person.name}
 											</Link>
 										</Button>
 									</span>
 								</>
 								)) ?? <span className="w-fit p-0 h-full font-bold">Unknown</span>}
 								{/* RUNTIME */}
-								<RuntimeTooltip runtime={movie.extra_data.runtime ?? 0} className=" before:content-['_•_']" />
+								<RuntimeTooltip runtime={movie.runtime ?? 0} className=" before:content-['_•_']" />
 							</div>
 							{/* <div>
 								{movie?.videos?.length > 0 && (

@@ -21,7 +21,7 @@ export default function HeartPicks() {
   const backdrops = (
     tab === 'movie'
     ? heartPicksMovie?.map(item => ({ src: item.movie?.backdrop_url, alt: item.movie?.title }))
-    : heartPicksTvSeries?.map(item => ({ src: item.tv_series?.backdrop_url, alt: item.tv_series?.title }))
+    : heartPicksTvSeries?.map(item => ({ src: item.tv_series?.backdrop_url, alt: item.tv_series?.name }))
   )?.filter(item => item.src !== null && item.src !== undefined) as ImageObject[];
 
   return (
