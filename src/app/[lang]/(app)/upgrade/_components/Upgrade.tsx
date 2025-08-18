@@ -81,9 +81,14 @@ export const Upgrade = ({
 				{
 					name: upperFirst(t('pages.upgrade.subscription.features.playlists.shared_playlists.label')),
 					description: upperFirst(t('pages.upgrade.subscription.features.playlists.shared_playlists.description')),
+					free: true,
+					premium: true,
+				},
+				{
+					name: upperFirst(t('pages.upgrade.subscription.features.playlists.collaborative_playlists.label')),
+					description: upperFirst(t('pages.upgrade.subscription.features.playlists.collaborative_playlists.description')),
 					free: false,
 					premium: true,
-
 				}
 			]
 		},
@@ -101,7 +106,7 @@ export const Upgrade = ({
 					description: upperFirst(t('pages.upgrade.subscription.features.feed.cast_and_crew.description')),
 					free: false,
 					premium: true,
-					soon: true,
+
 				}
 			]
 		},

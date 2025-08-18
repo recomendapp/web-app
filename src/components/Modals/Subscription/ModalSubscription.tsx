@@ -30,7 +30,7 @@ export function ModalSubscription({
 	...props
 } : ModalSubscriptionProps) {
 	const { user } = useAuth();
-	const common = useTranslations('common');
+	const t = useTranslations();
 	const pathname = usePathname();
 	const router = useRouter();
 	const locale = useLocale();
@@ -41,11 +41,11 @@ export function ModalSubscription({
 	const handleCheckout = async (price: Prices) => {
 		setIsLoading(true);
 		if (!user) {
-			toast.error(upperFirst(common('messages.not_logged_in')));
+			toast.error(upperFirst(t('common.messages.not_logged_in')));
 		  return router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
 		}
 		if (user?.premium) {
-			toast.error(upperFirst(common('messages.already_premium')));
+			toast.error(upperFirst(t('common.messages.already_premium')));
 		  return router.push('/settings/subscription');
 		}
 	
@@ -70,11 +70,11 @@ export function ModalSubscription({
 			className='outline-none'
 		>
 			<ModalHeader>
-				<ModalTitle>{upperFirst(common('messages.upgrade_to_plan', {
+				<ModalTitle>{upperFirst(t('common.messages.upgrade_to_plan', {
 					plan: product?.name!,
 				}))}</ModalTitle>
 				<ModalDescription>
-				{upperFirst(common('messages.choose_subscription_recurrence'))}
+				{upperFirst(t('common.messages.choose_subscription_recurrence'))}
 				</ModalDescription>
 			</ModalHeader>
 			<ModalBody className='flex flex-col gap-2'>
@@ -93,11 +93,11 @@ export function ModalSubscription({
 						`}
 						>
 							<span className='text-2xl font-bold'>{formatPrice(price, locale)}</span>
-							<span className="pl-2 text-base font-medium">/ {common(`word.${price?.interval}`)}</span>
+							<span className="pl-2 text-base font-medium">/ {t(`common.messages.${price?.interval}`)}</span>
 						</div>
 						{index > 0 ? (
 							<Badge variant='accent-yellow'>
-							{upperFirst(common('messages.save_up_to_percent', {
+							{upperFirst(t('common.messages.save_up_to_percent', {
 								percent: calculateSave(price, product?.prices?.at(index - 1) ?? price),
 							}))}
 							</Badge>
@@ -118,7 +118,7 @@ export function ModalSubscription({
 					onClick={() => selectedProductPrice && handleCheckout(selectedProductPrice)}
 				>
 				{isLoading ? <Icons.loader className='w-6 h-6' /> : null}
-				{upperFirst(common('messages.upgrade_to_plan', {
+				{upperFirst(t('common.messages.upgrade_to_plan', {
 					plan: product?.name!,
 				}))}
 				</Button>

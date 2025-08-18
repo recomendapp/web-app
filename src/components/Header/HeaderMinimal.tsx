@@ -10,7 +10,7 @@ interface HeaderMinimalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export async function HeaderMinimal({ className }: HeaderMinimalProps) {
   const supabase = await createServerClient();
-  const word = await getTranslations('common.word');
+  const t = await getTranslations();
 
   const {
     data: { session },
@@ -32,7 +32,7 @@ export async function HeaderMinimal({ className }: HeaderMinimalProps) {
       ) : (
         <Button asChild>
           <Link href={'/auth/login'} className="whitespace-nowrap">
-            {word('login')}
+            {t('common.messages.login')}
           </Link>
         </Button>
       )}
