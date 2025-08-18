@@ -1144,8 +1144,8 @@ export const useUserFeedCastCrewInfiniteQuery = ({
 				.from('user_feed_cast_crew')
 				.select(`
 					*,
-					movie:media_movie!inner(title,avatar_url,extra_data,url,date, media_type),
-					person:media_person(title,avatar_url,url)
+					movie:media_movie!inner(*),
+					person:media_person(name,profile_url,url)
 				`)
 				.not('movie.release_date', 'is', null)
 				.range(from, to);
@@ -1156,7 +1156,7 @@ export const useUserFeedCastCrewInfiniteQuery = ({
 					switch (column) {
 						case 'release_date':
 							request = request
-								.order('movie(date)', { ascending: direction === 'asc' });
+								.order('movie(release_date)', { ascending: direction === 'asc' });
 							break;
 					}
 				}
