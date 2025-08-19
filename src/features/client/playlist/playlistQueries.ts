@@ -1,73 +1,7 @@
 import { useSupabaseClient } from "@/context/supabase-context";
-import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { playlistKeys } from "./playlistKeys";
-import { Playlist, PlaylistGuest, PlaylistItemMovie, PlaylistItemTvSeries, PlaylistSource } from "@/types/type.db";
-import { useAuth } from "@/context/auth-context";
-
-// export const usePlaylistFullQuery = (playlistId: number) => {
-// 	const queryClient = useQueryClient();
-// 	const supabase = useSupabaseClient();
-// 	const { user } = useAuth();
-// 	return useQuery({
-// 		queryKey: playlistKeys.detail(playlistId),
-// 		queryFn: async () => {
-// 			if (!playlistId) throw Error('Missing playlist id');
-// 			const { data, error } = await supabase
-// 				.from('playlists')
-// 				.select(`
-// 					*,
-// 					user(*),
-// 					items:playlist_items(*, media(*)),
-// 					guests:playlist_guests(
-// 						*,
-// 						user:user(*)
-// 					)
-// 				`)
-// 				.eq('id', playlistId)
-// 				.order('rank', { ascending: true, referencedTable: 'playlist_items' })
-// 				.returns<Playlist[]>()
-// 				.single();
-// 			if (error || !data) throw error;
-			
-// 			// Set the playlist items and guests in the queryClient
-// 			queryClient.setQueryData(playlistKeys.items(playlistId), data.items);
-// 			queryClient.setQueryData(playlistKeys.guests(playlistId), data.guests);
-// 			// queryClient.setQueryData(playlistKeys.allowedToEdit(playlistId), Boolean(
-// 			// 	user?.id === data.user_id ||
-// 			// 	(
-// 			// 		data.guests?.some(
-// 			// 			(guest) => guest?.user_id === user?.id && guest?.edit
-// 			// 		) &&
-// 			// 		data.user?.premium
-// 			// 	)
-// 			// ));
-// 			const { items, guests, ...playlistData } = data;
-// 			return playlistData;	
-// 			// return data;
-// 		},
-// 		enabled: !!playlistId,
-// 	});
-// }
-
-// export const usePlaylistItemsQuery = (playlistId?: number) => {
-// 	const supabase = useSupabaseClient();
-// 	return useQuery({
-// 		queryKey: playlistKeys.items(playlistId as number),
-// 		queryFn: async () => {
-// 			if (!playlistId) throw Error('Missing playlist id');
-// 			const { data, error } = await supabase
-// 				.from('playlist_items')
-// 				.select(`*, media(*)`)
-// 				.eq('playlist_id', playlistId)
-// 				.order('rank', { ascending: true })
-// 				.returns<PlaylistItem[]>()
-// 			if (error) throw error;
-// 			return data;
-// 		},
-// 		enabled: !!playlistId,
-// 		structuralSharing: false,
-// 	});
-// }
+import { Playlist, PlaylistItemMovie, PlaylistItemTvSeries, PlaylistSource } from "@/types/type.db";
 
 export const usePlaylistQuery = ({
 	playlistId,
@@ -442,6 +376,5 @@ export const usePlaylistTvSeriesAddToQuery = ({
 		enabled: !!userId && !!tvSeriesId,
 	});
 };
-
 /* -------------------------------------------------------------------------- */
 

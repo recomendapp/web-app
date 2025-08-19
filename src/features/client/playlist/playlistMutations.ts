@@ -4,7 +4,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { playlistKeys } from './playlistKeys';
 import { userKeys } from '../user/userKeys';
 import { mediaKeys } from '../media/mediaKeys';
-import queryClient from '@/lib/react-query/queryClient';
 
 
 /**
@@ -566,6 +565,7 @@ export const usePlaylistMovieMultiInsertMutation = ({
 	playlistId: number;
 }) => {
 	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async ({
 			userId,
@@ -609,6 +609,7 @@ export const usePlaylistTvSeriesMultiInsertMutation = ({
 	playlistId: number;
 }) => {
 	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async ({
 			userId,
