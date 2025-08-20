@@ -103,13 +103,16 @@ export const useUserFollowProfileInsertMutation = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.setQueryData(userKeys.followProfile(data.user_id, data.followee_id), data);
-			!data.is_pending && queryClient.setQueryData(userKeys.followees(data.user_id), (oldData: { pages: UserFollower[][] } | undefined) => {
-				if (!oldData) return oldData;
-				return {
-					...oldData,
-					pages: oldData.pages.map((page) => [...page, data]),
-				}
-			});
+			// !data.is_pending && queryClient.setQueryData(userKeys.followees(data.user_id), (oldData: { pages: UserFollower[][] } | undefined) => {
+			// 	if (!oldData) return oldData;
+			// 	return {
+			// 		...oldData,
+			// 		pages: oldData.pages.map((page) => [...page, data]),
+			// 	}
+			// });
+			queryClient.invalidateQueries({
+				queryKey: userKeys.followees(data.user_id)
+			})
 			queryClient.invalidateQueries({
 				queryKey: userKeys.feed({ userId: data.user_id })
 			});
@@ -141,14 +144,17 @@ export const useUserUnfollowProfileDeleteMutation = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.setQueryData(userKeys.followProfile(data.user_id, data.followee_id), null);
-			!data.is_pending && queryClient.setQueryData(userKeys.followees(data.user_id), (oldData: { pages: UserFollower[][] } | undefined) => {
-				if (!oldData) return oldData;
-				return {
-				...oldData,
-				pages: oldData.pages.map((page) =>
-					page.filter((item) => item.id !== data.id)
-				),
-				};
+			// !data.is_pending && queryClient.setQueryData(userKeys.followees(data.user_id), (oldData: { pages: UserFollower[][] } | undefined) => {
+			// 	if (!oldData) return oldData;
+			// 	return {
+			// 	...oldData,
+			// 	pages: oldData.pages.map((page) =>
+			// 		page.filter((item) => item.id !== data.id)
+			// 	),
+			// 	};
+			// });
+			queryClient.invalidateQueries({
+				queryKey: userKeys.followees(data.user_id)
 			});
 			queryClient.invalidateQueries({
 				queryKey: userKeys.feed({ userId: data.user_id })
