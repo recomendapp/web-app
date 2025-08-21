@@ -13,7 +13,7 @@ export async function GET() {
         return `${siteConfig.url}/sitemaps/medias/films/${index}`;
       }),
       ...Array.from({ length: count.series }, (_, index) => {
-        return `${siteConfig.url}/sitemaps/medias/tv_series/${index}`;
+        return `${siteConfig.url}/sitemaps/medias/tv-series/${index}`;
       }),
     ];
 

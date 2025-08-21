@@ -22,7 +22,7 @@ export async function WidgetPersonTvSeries({
   return (
     <div className="flex flex-col gap-2">
       <Button variant={'link'} size={'fit'} className='font-semibold text-xl p-0' asChild>
-        <Link href={`/person/${personSlug}/tv_series`}>
+        <Link href={`/person/${personSlug}/tv-series`}>
         {upperFirst(common('messages.tv_series', { count: 2 }))}
         </Link>
       </Button>

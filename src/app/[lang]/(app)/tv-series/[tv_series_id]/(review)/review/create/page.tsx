@@ -45,7 +45,7 @@ export default async function CreateReview(
   } = await supabase.auth.getSession();
 
   if (!session) return redirect({
-    href: `/auth/login?redirect=${encodeURIComponent(`/tv_series/${params.tv_series_id}/review/create`)}`,
+    href: `/auth/login?redirect=${encodeURIComponent(`/tv-series/${params.tv_series_id}/review/create`)}`,
     locale: params.lang,
   });
 
@@ -60,7 +60,7 @@ export default async function CreateReview(
     .maybeSingle();
   if (error) throw error;
   if (review) redirect({
-    href: `/tv_series/${params.tv_series_id}/review/${review.review.id}`,
+    href: `/tv-series/${params.tv_series_id}/review/${review.review.id}`,
     locale: params.lang,
   });
 

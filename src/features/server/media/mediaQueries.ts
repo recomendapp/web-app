@@ -313,7 +313,9 @@ export const getPersonTvSeries = cache(
 						request = request.order(`tv_series(vote_average)`, { ascending: false });
 						break;
 					default:
-						request = request.order(`last_appearance_date`, { ascending: filters.sortOrder === 'asc' });
+						if (!filters.department && !filters.job) {
+							request = request.order(`last_appearance_date`, { ascending: filters.sortOrder === 'asc' });
+						}
 						break;
 				}
 			}
@@ -324,8 +326,10 @@ export const getPersonTvSeries = cache(
 				request = request.eq('job', filters.job);
 			}
 		}
+		if (!filters.department && !filters.job) {
+			request = request.filter('last_appearance_date', 'not.is', null);
+		}
 		return await request
-			.filter('last_appearance_date', 'not.is', null)
 			.overrideTypes<Array<{
 			tv_series: MediaTvSeries;
 			}>, { merge: true }>()

@@ -34,7 +34,7 @@ export async function generateMetadata(
       }),
       { length: siteConfig.seo.description.limit }
     ),
-    alternates: seoLocales(params.lang, `/tv_series/${params.tv_series_id}/${params.season_number}`),
+    alternates: seoLocales(params.lang, `/tv-series/${params.tv_series_id}/${params.season_number}`),
     openGraph: {
       siteName: siteConfig.name,
       title: `${t('metadata.title', { title: season.serie?.name, number: season.season_number! })} • ${siteConfig.name}`,
@@ -45,7 +45,7 @@ export async function generateMetadata(
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      url: `${siteConfig.url}/${params.lang}/tv_series/${params.tv_series_id}/${params.season_number}`,
+      url: `${siteConfig.url}/${params.lang}/tv-series/${params.tv_series_id}/${params.season_number}`,
       images: season.poster_url ? [
         { url: season.poster_url }
       ] : undefined,
@@ -68,10 +68,10 @@ export default async function TvSeriesSeason(
   const { id: seriesId } = getIdFromSlug(params.tv_series_id);
   const seasonNumber = Number(params.season_number);
   if (isNaN(seasonNumber)) {
-    return redirect(`/${params.lang}/tv_series/${params.tv_series_id}`);
+    return redirect(`/${params.lang}/tv-series/${params.tv_series_id}`);
   }
   const season = await getTvSeason(params.lang, seriesId, seasonNumber);
-  if (!season) return redirect(`/${params.lang}/tv_series/${params.tv_series_id}`);
+  if (!season) return redirect(`/${params.lang}/tv-series/${params.tv_series_id}`);
   const jsonLd: WithContext<TVSeason> = {
     '@context': 'https://schema.org',
     '@type': 'TVSeason',
@@ -105,7 +105,7 @@ export default async function TvSeriesSeason(
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <TvSeasonHeader season={season} urlSerie={`/tv_series/${params.tv_series_id}`} />
+      <TvSeasonHeader season={season} urlSerie={`/tv-series/${params.tv_series_id}`} />
       <div className="px-4 pb-4">
         <TvSeasonDetails season={season} />
       </div>

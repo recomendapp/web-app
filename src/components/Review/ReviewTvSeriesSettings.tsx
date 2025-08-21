@@ -43,8 +43,8 @@ export function ReviewTvSeriesSettings({
 		}, {
 			onSuccess: () => {
 				toast.success(upperFirst(t('common.messages.deleted')));
-				if (pathname.startsWith(`/tv_series/${tvSeries.slug || tvSeriesId}/review/${review.id}`)) {
-					router.replace(`/tv_series/${tvSeries.slug || tvSeriesId}`);
+				if (pathname.startsWith(`/tv-series/${tvSeries.slug || tvSeriesId}/review/${review.id}`)) {
+					router.replace(`/tv-series/${tvSeries.slug || tvSeriesId}`);
 				}
 			},
 			onError: () => {

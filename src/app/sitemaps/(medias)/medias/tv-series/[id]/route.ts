@@ -22,7 +22,7 @@ export async function GET(
         ])
       );
       return {
-        url: `${siteConfig.url}/tv_series/${serie.id}${serie.original_name ? `-${kebabCase(serie.original_name)}` : ''}`,
+        url: `${siteConfig.url}/tv-series/${serie.id}${serie.original_name ? `-${kebabCase(serie.original_name)}` : ''}`,
         priority: 0.8,
         alternates: {
           languages: Object.fromEntries(
@@ -31,7 +31,7 @@ export async function GET(
               const slug = `${serie.id}${title ? `-${kebabCase(title)}` : ''}`;
               return [
                 locale,
-                `${siteConfig.url}/${locale}/tv_series/${slug}`,
+                `${siteConfig.url}/${locale}/tv-series/${slug}`,
               ];
             })
           ),

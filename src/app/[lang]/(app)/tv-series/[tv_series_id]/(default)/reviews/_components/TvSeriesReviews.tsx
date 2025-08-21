@@ -121,7 +121,7 @@ export const TvSeriesReviews = ({
 					review={review}
 					activity={review?.activity}
 					author={review?.activity?.user}
-					url={`/tv_series/${tvSeries.slug}/review/${review?.id}`}
+					url={`/tv-series/${tvSeries.slug}/review/${review?.id}`}
 					/>
 				)
 				})
@@ -158,7 +158,7 @@ const MyReviewButton = ({
 	if (!activity?.review) {
 		return (
 			<Link
-			href={`/tv_series/${tvSeries.slug}/review/create`}
+			href={`/tv-series/${tvSeries.slug}/review/create`}
 			className="bg-accent-blue rounded-full px-4 py-1 flex gap-2 items-center"
 			>
 				<Icons.edit />
