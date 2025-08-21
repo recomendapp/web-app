@@ -45,7 +45,7 @@ export default function TvSerieDetails({
           <ScrollArea className="w-full">
             <div className="flex space-x-4 pb-4">
               {serie.seasons?.map((season, i) => (
-                <Link key={i} href={`/tv_series/${slug}/${season.season_number}`}>
+                <Link key={i} href={`/tv-series/${slug}/${season.season_number}`}>
                   <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
                     <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
                       <ImageWithFallback
@@ -88,7 +88,7 @@ export default function TvSerieDetails({
             <ScrollArea className="w-full">
               <div className="flex space-x-4 pb-4">
                 {serie.specials?.map((special, i) => (
-                  <Link key={i} href={`/tv_series/${slug}/${special.season_number}`}>
+                  <Link key={i} href={`/tv-series/${slug}/${special.season_number}`}>
                     <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
                       <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
                         <ImageWithFallback

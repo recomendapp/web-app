@@ -180,7 +180,7 @@ const CardTvSeriesRow = React.forwardRef<
 						</WithLink>
 						{profileActivity?.rating && (
 							<WithLink
-							href={linked ? `/@${profileActivity?.user?.username}/tv_series/${tvSeries.slug ?? tvSeries.id}` : undefined}
+							href={linked ? `/@${profileActivity?.user?.username}/tv-series/${tvSeries.slug ?? tvSeries.id}` : undefined}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>
@@ -192,7 +192,7 @@ const CardTvSeriesRow = React.forwardRef<
 						)}
 						{profileActivity?.is_liked && (
 							<Link
-							href={`/@${profileActivity?.user?.username}/tv_series/${tvSeries.slug ?? tvSeries.id}`}
+							href={`/@${profileActivity?.user?.username}/tv-series/${tvSeries.slug ?? tvSeries.id}`}
 							className="pointer-events-auto"
 							onClick={linked ? (e) => e.stopPropagation() : undefined}
 							>

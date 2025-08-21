@@ -13,7 +13,7 @@ export async function GET(
     const reviews = await getSitemapReviewsTvSeries(id);
 
     const sitemapXML = buildSitemap(reviews.map((review) => ({
-      url: `${siteConfig.url}/tv_series/${review.activity.tv_series_id}/review/${review.id}`,
+      url: `${siteConfig.url}/tv-series/${review.activity.tv_series_id}/review/${review.id}`,
       lastModified: review.updated_at
         ? new Date(review.updated_at)
         : new Date(),

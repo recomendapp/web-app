@@ -14,7 +14,7 @@ export async function GET() {
     });
 
     const sitemapTvSeriesIndexes = Array.from({ length: reviewTvSeriesCount }, (_, index) => {
-      return `${siteConfig.url}/sitemaps/reviews/tv_series/${index}`;
+      return `${siteConfig.url}/sitemaps/reviews/tv-series/${index}`;
     });
 
     const sitemapIndexXML = buildSitemapIndex([...sitemapMovieIndexes, ...sitemapTvSeriesIndexes]);

@@ -32,12 +32,12 @@ export async function generateMetadata(
   return {
 	title: t('metadata.title', { name: person.name }),
 	description: truncate(t('metadata.description', { name: person.name }), { length: siteConfig.seo.description.limit }),
-	alternates: seoLocales(params.lang, `/person/${person.slug}/tv_series`),
+	alternates: seoLocales(params.lang, `/person/${person.slug}/tv-series`),
 	openGraph: {
       siteName: siteConfig.name,
       title: `${t('metadata.title', { name: person.name })} • ${siteConfig.name}`,
       description: truncate(t('metadata.description', { name: person.name }), { length: siteConfig.seo.description.limit }),
-      url: `${siteConfig.url}/${params.lang}/person/${person.slug}/tv_series`,
+      url: `${siteConfig.url}/${params.lang}/person/${person.slug}/tv-series`,
       images: person.profile_url ? [
         { url: person.profile_url },
       ] : undefined,
@@ -98,7 +98,7 @@ export default async function TvSeriesPage(
 					{upperFirst(common('messages.wrong_arguments'))}
 				</div>
 				<Button variant='accent-yellow'>
-					<Link href={`/person/${params.person_id}/tv_series`}>
+					<Link href={`/person/${params.person_id}/tv-series`}>
 						Reset
 					</Link>
 				</Button>
@@ -108,14 +108,14 @@ export default async function TvSeriesPage(
 
 	if (!series.length) {
 		if (department || job) {
-			return redirect(`/person/${params.person_id}/tv_series`);
+			return redirect(`/person/${params.person_id}/tv-series`);
 		}
 	}
 
 	return (
-		<div className='@container/person-tv_series flex flex-col gap-4'>
+		<div className='@container/person-tv-series flex flex-col gap-4'>
 			<div>
-				<div className='flex flex-col @md/person-tv_series:flex-row @md/person-tv_series:justify-between items-center gap-2'>
+				<div className='flex flex-col @md/person-tv-series:flex-row @md/person-tv-series:justify-between items-center gap-2'>
 					<Filters
 					knownForDepartment={person.known_for_department!}
 					jobs={person.jobs}
@@ -130,7 +130,7 @@ export default async function TvSeriesPage(
 					perPage={perPage}
 					total={count ?? 0}
 					searchParams={new URLSearchParams(searchParams as Record<string, string>)}
-					className='@md/person-tv_series:mx-0 @md/person-tv_series:w-fit'
+					className='@md/person-tv-series:mx-0 @md/person-tv-series:w-fit'
 					/>
 				</div>
 				<ActiveFilters

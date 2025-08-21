@@ -11,6 +11,8 @@ import { useUserActivityTvSeriesQuery } from '@/features/client/user/userQueries
 import { useUserReviewTvSeriesUpsertMutation } from '@/features/client/user/userMutations';
 import ReviewForm from '@/components/Review/ReviewForm';
 import ButtonUserActivityTvSeriesRating from '@/components/buttons/ButtonUserActivityTvSeriesRating';
+import { useQueryClient } from '@tanstack/react-query';
+import { userKeys } from '@/features/client/user/userKeys';
 
 export const TvSeriesCreateReview = ({
 	tvSeries,
@@ -21,6 +23,7 @@ export const TvSeriesCreateReview = ({
 }) => {
 	const { session } = useAuth();
 	const router = useRouter();
+	const queryClient = useQueryClient();
 
 	const {
 		data: activity,
@@ -34,12 +37,19 @@ export const TvSeriesCreateReview = ({
 	});
 
 	const handleSubmit = async (data: { title?: string; body: JSONContent }) => {
+		if (!activity) return;
 		await upsertReview.mutateAsync({
-			activityId: activity?.id,
+			activityId: activity.id,
 			...data
 		}, {
 			onSuccess: (review) => {
-				router.replace(`/film/${slug}/review/${review.id}`);
+				queryClient.invalidateQueries({
+					queryKey: userKeys.review({
+						id: activity.id,
+						type: 'tv_series',
+					})
+				});
+				router.replace(`/tv-series/${slug}/review/${review.id}`);
 			},
 			onError: (error) => {
 				throw error;

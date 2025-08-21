@@ -25,8 +25,8 @@ export default function PersonNavbar({
     },
     {
       label: 'Séries',
-      active: pathname.match(new RegExp(regex + '/tv_series')),
-      href: `/${type}/${personId}/tv_series`,
+      active: pathname.match(new RegExp(regex + '/tv-series')),
+      href: `/${type}/${personId}/tv-series`,
     },
   ];
 

@@ -11,6 +11,8 @@ import { useUserActivityMovieQuery } from '@/features/client/user/userQueries';
 import ReviewForm from '@/components/Review/ReviewForm';
 import { useUserReviewMovieUpsertMutation } from '@/features/client/user/userMutations';
 import ButtonUserActivityMovieRating from '@/components/buttons/ButtonUserActivityMovieRating';
+import { userKeys } from '@/features/client/user/userKeys';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const MovieCreateReview = ({
 	movie,
@@ -21,6 +23,7 @@ export const MovieCreateReview = ({
 }) => {
 	const { session } = useAuth();
 	const router = useRouter();
+	const queryClient = useQueryClient();
 
 	const {
 		data: activity,
@@ -34,11 +37,18 @@ export const MovieCreateReview = ({
 	});
 
 	const handleSubmit = async (data: { title?: string; body: JSONContent }) => {
+		if (!activity) return;
 		await upsertReview.mutateAsync({
 			activityId: activity?.id,
 			...data
 		}, {
 			onSuccess: (review) => {
+				queryClient.invalidateQueries({
+					queryKey: userKeys.review({
+						id: activity.id,
+						type: 'movie',
+					})
+				});
 				router.replace(`/film/${slug}/review/${review.id}`);
 			},
 			onError: (error) => {
