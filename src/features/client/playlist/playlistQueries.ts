@@ -122,6 +122,7 @@ export const usePlaylistIsAllowedToEditQuery = ({
 				.from('playlists')
 				.select(`
 					user_id,
+					user(premium),
 					playlist_guests(user_id, edit)
 				`)
 				.eq('id', playlistId)
@@ -130,7 +131,7 @@ export const usePlaylistIsAllowedToEditQuery = ({
 				.maybeSingle();
 			if (error) throw error;
 			return Boolean(
-				data?.user_id === userId || data?.playlist_guests.length
+				data?.user_id === userId || (data?.playlist_guests.length && data.user.premium)
 			)
 		},
 		enabled: !!playlistId && !!userId,
