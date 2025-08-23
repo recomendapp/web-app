@@ -986,7 +986,7 @@ export const useUserFeedInfiniteQuery = ({
 	const supabase = useSupabaseClient();
 	return useInfiniteQuery({
 		queryKey: userKeys.feed({
-			userId: userId as string,
+			userId: userId!,
 			filters: filters,
 		}),
 		queryFn: async ({ pageParam = 1 }) => {
@@ -997,9 +997,6 @@ export const useUserFeedInfiniteQuery = ({
 					page_offset: from
 				})
 			if (error) throw error;
-			if (data[0].activity_type === 'playlist_like') {
-				data[0].content;
-			}
 			return data;
 		},
 		initialPageParam: 1,
