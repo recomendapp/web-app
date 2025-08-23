@@ -130,17 +130,17 @@ CardUserInline.displayName = "CardUserInline";
 const CardUser = React.forwardRef<
 	HTMLDivElement,
 	CardUserProps
->(({ className, user, variant = "default", linked = true, ...props }, ref) => {
+>(({ variant = "default", linked = true, ...props }, ref) => {
 	return variant === "default" ? (
-		<CardUserDefault ref={ref} className={className} user={user} linked={linked} {...props} />
+		<CardUserDefault ref={ref} linked={linked} {...props} />
 	) : variant === "vertical" ? (
-		<CardUserVertical ref={ref} className={className} user={user} linked={linked} {...props} />
+		<CardUserVertical ref={ref} linked={linked} {...props} />
 	) : variant === "icon" ? (
-		<CardUserIcon ref={ref} className={className} user={user} linked={linked} {...props} />
+		<CardUserIcon ref={ref} linked={linked} {...props} />
 	) : variant === "username" ? (
-		<CardUserUsername ref={ref} className={className} user={user} linked={linked} {...props} />
+		<CardUserUsername ref={ref} linked={linked} {...props} />
 	) : variant === "inline" ? (
-		<CardUserInline ref={ref} className={className} user={user} linked={linked} {...props} />
+		<CardUserInline ref={ref} linked={linked} {...props} />
 	) : null;
 });
 CardUser.displayName = "CardUser";

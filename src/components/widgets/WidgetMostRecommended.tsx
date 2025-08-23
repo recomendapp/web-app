@@ -27,8 +27,8 @@ import Image from "next/image";
 import { upperFirst } from "lodash";
 import { ModalUserRecosMovieSend } from "../Modals/recos/ModalUserRecosMovieSend";
 import { ModalUserRecosTvSeriesSend } from "../Modals/recos/ModalUserRecosTvSeriesSend";
-import { MediaMovie, MediaTvSeries, MediaType, UserRecosType } from "@/types/type.db";
-import { getMediaDetails, MediaDetailsProps } from "@/utils/get-media-details";
+import { getMediaDetails } from "@/utils/get-media-details";
+import { Database } from "@/types";
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -63,7 +63,7 @@ export const WidgetMostRecommended = ({
 	onMouseLeave={() => isPlaying && autoplay.current.play()}
 	>
 		<CarouselContent>
-			{data.map((item, index) => <Item key={`${item.type}:${item.media_id}`} {...item} index={index} />)}
+			{data.map((item, index) => <Item key={`${item.type}:${item.media_id}`} item={item} index={index} />)}
 		</CarouselContent>
 		<div className="absolute bottom-6 right-2 flex gap-2">
 			<CarouselPlayPause
@@ -81,41 +81,35 @@ export const WidgetMostRecommended = ({
 
 type ItemProps =
   {
-    media_id: number | null;
-    recommendation_count: number | null;
-    type: UserRecosType;
-    media: MediaMovie | MediaTvSeries;
+    item: Database['public']['Views']['widget_most_recommended']['Row'];
 	index: number;
   } & React.ComponentProps<typeof CarouselItem>;
 
 const Item = ({
-  type,
-  media,
-  media_id,
-  recommendation_count,
-  index,
-  ...props
+	item,
+	index,
+	...props
 }: ItemProps) => {
 	const { session } = useAuth();
 	const { openModal } = useModal();
 	const t = useTranslations('common');
 	const details = useMemo(() => {
-		switch (type) {
+		switch (item.type) {
 			case 'movie':
-				return getMediaDetails({ type: 'movie', media: media as MediaMovie });
+				return getMediaDetails({ type: 'movie', media: item.media });
 			case 'tv_series':
-				return getMediaDetails({ type: 'tv_series', media: media as MediaTvSeries });
+				return getMediaDetails({ type: 'tv_series', media: item.media });
 			default:
 				return null;
 		}
-	}, [type, media]);
+	}, [item]);
 	if (!details) return null;
 	return (
 		<CarouselItem {...props}>
 			<Card className="relative bg-black/40 flex flex-col h-full justify-between gap-2">
-				{media?.backdrop_url && (
+				{item.media?.backdrop_url && (
 					<Image
-						src={media.backdrop_url}
+						src={item.media.backdrop_url}
 						alt={details.title ?? ''}
 						fill
 						className="object-cover -z-10"
@@ -132,18 +126,18 @@ const Item = ({
 					</h3>
 					<div className="flex flex-col items-end gap-2">
 						<div># {index + 1}</div>
-						<BadgeMedia type={type} />
+						<BadgeMedia type={item.type} />
 					</div>
 				</CardHeader>
 				<CardContent>
-					<Link href={media.url ?? ''} className="w-fit text-clamp-title line-clamp-2 font-semibold">
+					<Link href={item.media.url ?? ''} className="w-fit text-clamp-title line-clamp-2 font-semibold">
 						{details.title}
 						{details.date && <sup className="ml-2">
 							<DateOnlyYearTooltip date={details.date} className="text-base font-medium" />
 						</sup>}
 					</Link>
-					{media.genres ? <div>
-						{media?.genres?.map((genre, index: number) => (
+					{item.media.genres ? <div>
+						{item.media?.genres?.map((genre, index: number) => (
 						<span key={genre.id}>
 							<Button
 							variant="link"
@@ -154,7 +148,7 @@ const Item = ({
 								{genre.name}
 							</Link>
 							</Button>
-							{index !== media.genres?.length! - 1 && (
+							{index !== item.media.genres?.length! - 1 && (
 							<span>, </span>
 							)}
 						</span>
@@ -173,13 +167,13 @@ const Item = ({
 						variant={"muted"}
 						className="bg-muted/60"
 						onClick={() => {
-							if (media) {
-								switch (type) {
+							if (item.media) {
+								switch (item.type) {
 									case 'movie':
-										openModal(ModalUserRecosMovieSend, { movieId: media_id!, movieTitle: details.title })
+										openModal(ModalUserRecosMovieSend, { movieId: item.media_id!, movieTitle: details.title })
 										break;
 									case 'tv_series':
-										openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: media_id!, tvSeriesTitle: details.title })
+										openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: item.media_id!, tvSeriesTitle: details.title })
 										break;
 								}
 							}
@@ -187,7 +181,7 @@ const Item = ({
 							<SendIcon className="w-4 h-4 fill-primary" />
 						</Button>
 					</TooltipBox>}
-					{recommendation_count} reco{Number(recommendation_count) > 1 ? 's' : ''}
+					{item.recommendation_count} reco{Number(item.recommendation_count) > 1 ? 's' : ''}
 				</CardFooter>
 			</Card>
 		</CarouselItem>

@@ -680,49 +680,6 @@ export const useUserRecosTvSeriesSendQuery = ({
 		enabled: !!userId && !!tvSeriesId,
 	});
 };
-// 		queryKey: userKeys.recosSend({
-// 			mediaId: mediaId,
-// 		}),
-// 		queryFn: async () => {
-// 			if (!userId) throw Error('Missing user id');
-// 			const { data, error } = await supabase
-// 				.from('user_friend')
-// 				.select(`
-// 					id,
-// 					friend:friend_id!inner(
-// 						*,
-// 						user_activity(count),
-// 						user_recos!user_recos_user_id_fkey(count)
-// 					)
-// 				`)
-// 				.match({
-// 					'user_id': userId,
-// 					'friend.user_activity.media_id': mediaId,
-// 					'friend.user_recos.media_id': mediaId,
-// 					'friend.user_recos.sender_id': userId,
-// 					'friend.user_recos.status': 'active',
-// 				})
-// 				.returns<(UserFriend & {
-// 					friend: {
-// 						user_activity: {
-// 							count: number;
-// 						}[];
-// 						user_recos: {
-// 							count: number;
-// 						}[];
-// 					};
-// 				})[]>();
-// 			if (error) throw error;
-// 			const output = data?.map((userFriend) => ({
-// 				friend: userFriend.friend,
-// 				as_watched: userFriend.friend.user_activity[0]?.count > 0,
-// 				already_sent: userFriend.friend.user_recos[0]?.count > 0,
-// 			}));
-// 			return output;
-// 		},
-// 		enabled: !!userId && !!mediaId,
-// 	});
-// };
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- WATCHLIST ------------------------------- */
@@ -898,59 +855,6 @@ export const useUserWatchlistTvSeriesItemQuery = ({
 /* -------------------------------------------------------------------------- */
 
 /* ------------------------------- HEART PICKS ------------------------------ */
-// export const useUserLikesQuery = ({
-// 	userId,
-// 	filters,
-// } : {
-// 	userId?: string;
-// 	filters?: {
-// 		sortBy?: 'created_at' | 'random';
-// 		sortOrder?: 'asc' | 'desc';
-// 		limit?: number;
-// 	};
-// }) => {
-// 	const supabase = useSupabaseClient();
-// 	return useQuery({
-// 		queryKey: userKeys.likes({
-// 			userId: userId!,
-// 			filters: filters,
-// 		}),
-// 		queryFn: async () => {
-// 			if (!userId) throw Error('Missing user id');
-// 			let request = supabase
-// 				.from('user_activities')
-// 				.select(`*`)
-// 				.match({
-// 					'user_id': userId,
-// 					'is_liked': true,
-// 				})
-
-// 			const mergedFilters = {
-// 				sortBy: 'created_at',
-// 				sortOrder: 'asc',
-// 				...filters
-// 			} as typeof filters;
-			
-// 			if (mergedFilters) {
-// 				if (mergedFilters?.sortBy !== 'random') {
-// 					switch (mergedFilters.sortBy) {
-// 						default: request = request.order('created_at', { ascending: mergedFilters.sortOrder === 'asc' });
-// 					}
-// 				}
-// 				if (mergedFilters.limit) {
-// 					request = request.limit(mergedFilters.limit);
-// 				}
-// 			}
-	
-// 			const { data, error } = await request
-// 				.overrideTypes<UserActivity[], { merge: false }>();
-// 			if (error) throw error;
-// 			return data;
-// 		},
-// 		enabled: !!userId,
-// 	});
-// };
-
 // Movies
 export const useUserHeartPicksMovieQuery = ({
 	userId,
@@ -1069,13 +973,13 @@ export const useUserFeedInfiniteQuery = ({
 	userId?: string;
 	filters?: {
 		perPage?: number;
-		sortBy?: 'created_at' | 'watched_date' | 'updated_at';
+		sortBy?: 'created_at';
 		sortOrder?: 'asc' | 'desc';
 	};
 }) => {
 	const mergedFilters = {
 		perPage: 20,
-		sortBy: 'updated_at',
+		sortBy: 'created_at',
 		sortOrder: 'desc',
 		...filters,
 	};
@@ -1087,28 +991,15 @@ export const useUserFeedInfiniteQuery = ({
 		}),
 		queryFn: async ({ pageParam = 1 }) => {
 			let from = (pageParam - 1) * mergedFilters.perPage;
-	  		let to = from - 1 + mergedFilters.perPage;
-			let request = supabase
-				.from('user_feed')
-				.select('*')
-				.range(from, to)
-			
-			
-			if (mergedFilters) {
-				switch (mergedFilters.sortBy) {
-					case 'watched_date':
-						request = request.order('watched_date', { ascending: mergedFilters.sortOrder === 'asc' });
-						break;
-					case 'updated_at':
-						request = request.order('updated_at', { ascending: mergedFilters.sortOrder === 'asc' });
-						break;
-					default:
-						request = request.order('created_at', { ascending: mergedFilters.sortOrder === 'asc' });
-				}
-			}
-			const { data, error } = await request
-				.overrideTypes<UserActivity[]>();
+			const { data, error } = await  supabase
+				.rpc('get_feed', {
+					page_limit: mergedFilters.perPage,
+					page_offset: from
+				})
 			if (error) throw error;
+			if (data[0].activity_type === 'playlist_like') {
+				data[0].content;
+			}
 			return data;
 		},
 		initialPageParam: 1,

@@ -4,8 +4,12 @@ import { cn } from "@/lib/utils";
 import { Link } from "@/lib/i18n/routing";
 import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
-import { CardUserActivity } from "../Card/CardUserActivity";
 import { upperFirst } from "lodash";
+import { FeedItemActivityMovie } from "@/app/[lang]/(app)/(privateroutes)/feed/_components/FeedItemActivityMovie";
+import { FeedItemActivityTvSeries } from "@/app/[lang]/(app)/(privateroutes)/feed/_components/FeedItemActivityTvSeries";
+import { FeedItemPlaylistLike } from "@/app/[lang]/(app)/(privateroutes)/feed/_components/FeedItemPlaylistLike";
+import { FeedItemReviewMovieLike } from "@/app/[lang]/(app)/(privateroutes)/feed/_components/FeedItemReviewMovieLike";
+import { FeedItemRevieTvSeriesLike } from "@/app/[lang]/(app)/(privateroutes)/feed/_components/FeedItemRevieTvSeriesLike";
 
 const WIDGET_USER_FEED_LIMIT = 4;
 
@@ -31,7 +35,17 @@ export const WidgetUserFeed = ({
 			</Button>
 			<div className="grid gap-2 grid-cols-1 @5xl/widget-user-feed:grid-cols-2">
 				{feed.pages[0].slice(0, WIDGET_USER_FEED_LIMIT).map((item, index) => (
-				<CardUserActivity key={index} activity={item} />
+					item.activity_type === 'activity_movie' ? (
+						<FeedItemActivityMovie key={index} author={item.author} activity={item.content} />
+					) : item.activity_type === 'activity_tv_series' ? (
+						<FeedItemActivityTvSeries key={index} author={item.author} activity={item.content} />
+					) : item.activity_type === 'playlist_like' ? (
+						<FeedItemPlaylistLike key={index} author={item.author} playlistLike={item.content} />
+					) : item.activity_type === 'review_movie_like' ? (
+						<FeedItemReviewMovieLike key={index} author={item.author} reviewLike={item.content} />
+					) : item.activity_type === 'review_tv_series_like' ? (
+						<FeedItemRevieTvSeriesLike key={index} author={item.author} reviewLike={item.content} />
+					) : null
 				))}
 			</div>
 		</div>
