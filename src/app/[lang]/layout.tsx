@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     default: `${siteConfig.name} • ${siteConfig.tagline}`,
     template: `%s • ${siteConfig.name}`,
   },
+  metadataBase: new URL(siteConfig.url),
   description: siteConfig.description,
   alternates: seoLocales(routing.defaultLocale, ''),
   manifest: '/manifest.webmanifest',
