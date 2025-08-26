@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getInitiales } from '@/lib/utils';
-import { User } from '@/types/type.db';
+import { User } from '@recomendapp/types/dist';
 import { Loader2 } from 'lucide-react';
 import { Dispatch } from 'react';
 

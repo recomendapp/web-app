@@ -2,7 +2,7 @@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { MediaMovie, MediaTvSeries, Profile, UserActivityMovie, UserActivityTvSeries } from '@/types/type.db';
+import { MediaMovie, MediaTvSeries, Profile, UserActivityMovie, UserActivityTvSeries } from '@recomendapp/types/dist';
 import { useUserActivitiesInfiniteQuery } from '@/features/client/user/userQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';

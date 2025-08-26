@@ -22,7 +22,7 @@ import { Badge } from '@/components/ui/badge';
 import { useSearchParams } from 'next/navigation';
 import { z } from "zod";
 import { CardMovie } from '@/components/Card/CardMovie';
-import { MediaMovie, MediaTvSeries, UserActivityMovie, UserActivityTvSeries } from '@/types/type.db';
+import { MediaMovie, MediaTvSeries, UserActivityMovie, UserActivityTvSeries } from '@recomendapp/types/dist';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
 
 const DISPLAY = ["grid", "row"] as const;

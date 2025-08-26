@@ -1,4 +1,4 @@
-import { Database } from '@/types';
+import { Database } from '@recomendapp/types/dist';
 import { createClient as createClientSupabase } from '@supabase/supabase-js';
 
 export const createClient = async (locale?: string) => {

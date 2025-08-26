@@ -17,7 +17,7 @@ import { calculateSave } from "@/utils/calculate-save";
 import { title } from "@/utils/custom-lodash";
 import { useRandomImage } from "@/hooks/use-random-image";
 import { cn } from "@/lib/utils";
-import { Products } from "@/types/type.db";
+import { Products } from "@recomendapp/types/dist";
 import { Session } from "@supabase/supabase-js";
 import { upperFirst } from "lodash";
 import { useLocale, useTranslations } from "next-intl";

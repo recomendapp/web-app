@@ -20,7 +20,7 @@ import { useAuth } from '@/context/auth-context';
 import { useUserActivityMovieQuery } from '@/features/client/user/userQueries';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Link } from '@/lib/i18n/routing';
-import { MediaMovie } from '@/types/type.db';
+import { MediaMovie } from '@recomendapp/types/dist';
 import { CardReviewMovie } from '@/components/Card/CardReviewMovie';
 
 const SORT_BY = ["updated_at"] as const;

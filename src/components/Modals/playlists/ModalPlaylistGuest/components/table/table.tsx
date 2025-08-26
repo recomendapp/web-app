@@ -1,4 +1,4 @@
-import { PlaylistGuest } from "@/types/type.db"
+import { PlaylistGuest } from "@recomendapp/types/dist"
 import { ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table"
 import { useState } from "react"
 import { Columns } from "./columns"

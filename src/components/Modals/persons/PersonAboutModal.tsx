@@ -6,7 +6,7 @@ import { useModal } from "@/context/modal-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { useFormatter, useTranslations } from "next-intl";
 import { TbGrave } from "react-icons/tb";
-import { MediaPerson } from "@/types/type.db";
+import { MediaPerson } from "@recomendapp/types/dist";
 import { upperFirst } from "lodash";
 
 interface PersonAboutModalProps extends ModalType {

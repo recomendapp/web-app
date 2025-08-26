@@ -1,4 +1,5 @@
-import { Prices } from "@/types/type.db";
+import { Prices } from "@recomendapp/types/dist";
+
 
 const calculateSave = (currentPrice: Prices, previousPrice: Prices) => {
 	const currentPricePerMonth = 

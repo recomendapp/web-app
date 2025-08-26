@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
-import { PlaylistGuest, User } from '@/types/type.db';
+import { PlaylistGuest, User } from '@recomendapp/types/dist';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
 import { usePlaylistGuestsQuery, usePlaylistGuestsSearchInfiniteQuery } from '@/features/client/playlist/playlistQueries';
 import { useEffect, useState } from 'react';

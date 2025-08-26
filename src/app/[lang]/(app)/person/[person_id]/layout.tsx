@@ -3,7 +3,7 @@ import PersonHeader from './_components/PersonHeader';
 import PersonNavbar from './_components/PersonNavbar';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getPerson } from '@/features/server/media/mediaQueries';
-import { MediaMovie } from '@/types/type.db';
+import { MediaMovie } from '@recomendapp/types/dist';
 import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 
 export default async function PersonLayout(

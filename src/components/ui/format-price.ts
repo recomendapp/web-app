@@ -1,4 +1,4 @@
-import { Prices } from "@/types/type.db";
+import { Prices } from "@recomendapp/types/dist";
 
 const formatPrice = (price: Prices | { currency?: string | null, unit_amount: number }, language: string) => {
   if (!price?.currency) return '';

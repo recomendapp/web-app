@@ -42,7 +42,7 @@ import {
 } from '@dnd-kit/core';
 import { MouseSensor, TouchSensor } from '@/lib/dnd-kit/CustomSensor';
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import { Playlist, PlaylistItemTvSeries } from '@/types/type.db';
+import { Playlist, PlaylistItemTvSeries } from '@recomendapp/types/dist';
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';

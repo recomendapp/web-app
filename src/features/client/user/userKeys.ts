@@ -1,4 +1,4 @@
-import { UserActivityType, UserRecosType, UserReviewType, UserWatchlistType } from "@/types/type.db"
+import { UserActivityType, UserRecosType, UserReviewType, UserWatchlistType } from "@recomendapp/types/dist"
 
 export const userKeys = {
 	all: ['user'] as const,

@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
-import {  Prices, Products } from '@/types/type.db';
+import {  Prices, Products } from '@recomendapp/types/dist';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { Card } from '@/components/ui/card';
 import { useState } from 'react';

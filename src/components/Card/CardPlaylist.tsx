@@ -4,7 +4,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
 import { Link } from "@/lib/i18n/routing";
-import { Playlist } from '@/types/type.db';
+import { Playlist } from '@recomendapp/types/dist';
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { ContextMenuPlaylist } from '../ContextMenu/ContextMenuPlaylist';

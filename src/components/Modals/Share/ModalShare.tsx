@@ -4,7 +4,7 @@ import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { Input } from "@/components/ui/input";
 import { siteConfig } from "@/config/site";
 import { FacebookIcon, FacebookShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
-import { MediaType } from "@/types/type.db";
+import { MediaType } from "@recomendapp/types/dist";
 import { ButtonCopy } from "@/components/utils/ButtonCopy";
 import { useLocale, useTranslations } from "next-intl";
 import { findKey, upperFirst } from "lodash";

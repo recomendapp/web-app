@@ -13,7 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import toast from 'react-hot-toast';
 import { Icons } from '@/config/icons';
 import { useAuth } from '@/context/auth-context';
-import { User, UserReview } from '@/types/type.db';
+import { User, UserReview } from '@recomendapp/types/dist';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { CardUser } from '@/components/Card/CardUser';

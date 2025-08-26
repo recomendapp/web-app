@@ -5,7 +5,7 @@ import { Fragment, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ModalUserWatchlistMovieComment } from "../Modals/watchlist/ModalUserWatchlistMovieComment";
-import { UserWatchlistMovie } from "@/types/type.db";
+import { UserWatchlistMovie } from "@recomendapp/types/dist";
 
 export const ContextMenuWatchlistMovie = ({
 	children,

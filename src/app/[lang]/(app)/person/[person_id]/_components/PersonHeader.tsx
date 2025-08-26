@@ -3,7 +3,7 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 import PersonPoster from './PersonPoster';
 import { PersonFollowButton } from './PersonFollowButton';
 import { PersonAbout } from './PersonAbout';
-import { MediaPerson } from '@/types/type.db';
+import { MediaPerson } from '@recomendapp/types/dist';
 
 export default function PersonHeader({
   person,

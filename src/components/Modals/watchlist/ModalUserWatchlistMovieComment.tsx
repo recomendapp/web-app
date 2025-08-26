@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useModal } from "@/context/modal-context";
-import { UserWatchlistMovie } from "@/types/type.db";
+import { UserWatchlistMovie } from "@recomendapp/types/dist";
 import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useUserWatchlistMovieUpdateMutation } from "@/features/client/user/userMutations";
 import { useTranslations } from "next-intl";

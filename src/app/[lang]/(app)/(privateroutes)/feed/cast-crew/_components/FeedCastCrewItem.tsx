@@ -6,7 +6,7 @@ import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { useFormatter, useTranslations } from "next-intl";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { UserAvatar } from "@/components/User/UserAvatar";
-import { UserFeedCastCrew } from "@/types/type.db";
+import { UserFeedCastCrew } from "@recomendapp/types/dist";
 import { upperFirst } from "lodash";
 import { ContextMenuMovie } from "@/components/ContextMenu/ContextMenuMovie";
 import { getMediaDetails } from "@/utils/get-media-details";

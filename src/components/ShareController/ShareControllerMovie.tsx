@@ -1,6 +1,6 @@
 "use client";
 import { ShareControllerProps } from "./ShareController";
-import { MediaMovie } from "@/types/type.db";
+import { MediaMovie } from "@recomendapp/types/dist";
 import { useCallback, useEffect, useState } from "react";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";

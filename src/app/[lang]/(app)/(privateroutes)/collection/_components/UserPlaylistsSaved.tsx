@@ -2,9 +2,9 @@ import { useAuth } from '@/context/auth-context';
 import { Fragment, useEffect } from 'react';
 import Loader from '@/components/Loader';
 import { useInView } from 'react-intersection-observer';
-import { Playlist } from '@/types/type.db';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { useUserPlaylistsSavedInfiniteQuery } from '@/features/client/user/userQueries';
+import { Playlist } from '@recomendapp/types/dist'
 
 export function UserPlaylistsSaved({
   sidebarExpanded,

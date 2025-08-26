@@ -1,4 +1,4 @@
-import { Playlist, PlaylistItemMovie } from "@/types/type.db";
+import { Playlist, PlaylistItemMovie } from "@recomendapp/types/dist";
 import { PlaylistMovieHeader } from "./PlaylistMovieHeader";
 import { usePlaylistIsAllowedToEditQuery, usePlaylistItemsMovieQuery } from "@/features/client/playlist/playlistQueries";
 import { useEffect, useMemo, useState } from "react";

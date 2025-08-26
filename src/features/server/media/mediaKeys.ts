@@ -1,4 +1,4 @@
-import { MediaType } from "@/types/type.db";
+import { MediaType } from "@recomendapp/types/dist";
 import { createTag } from "../create-tag";
 
 export const mediaKeys = {

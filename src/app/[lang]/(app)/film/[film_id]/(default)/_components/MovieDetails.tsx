@@ -4,7 +4,7 @@ import { JustWatchWidget } from "@/components/JustWatch/JustWatchWidgetScript";
 import { Card } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import { MediaMovie, MediaMoviePerson, MediaPerson } from "@/types/type.db";
+import { MediaMovie, MediaMoviePerson, MediaPerson } from "@recomendapp/types/dist";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/routing";

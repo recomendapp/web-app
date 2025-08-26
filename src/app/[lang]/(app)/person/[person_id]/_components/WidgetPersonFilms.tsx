@@ -1,7 +1,7 @@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
-import { MediaMovieAggregateCredits } from '@/types/type.db';
+import { MediaMovieAggregateCredits } from '@recomendapp/types/dist';
 import { Link } from "@/lib/i18n/routing";
 import { Button } from '@/components/ui/button';
 import { CardMovie } from '@/components/Card/CardMovie';

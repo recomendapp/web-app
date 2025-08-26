@@ -4,7 +4,7 @@ import { useModal } from "@/context/modal-context";
 import { Fragment, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { UserWatchlistTvSeries } from "@/types/type.db";
+import { UserWatchlistTvSeries } from "@recomendapp/types/dist";
 import { ModalUserWatchlistTvSeriesComment } from "../Modals/watchlist/ModalUserWatchlistTvSeriesComment";
 
 export const ContextMenuWatchlistTvSeries = ({

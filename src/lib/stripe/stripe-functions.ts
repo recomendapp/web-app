@@ -6,7 +6,7 @@ import { stripe } from '@/lib/stripe/stripe';
 import { toDateTime } from '@/lib/stripe/stripe-helpers';
 import { supabaseAdmin } from '../supabase/supabase-admin';
 import { siteConfig } from '@/config/site';
-import { Database } from '@/types';
+import { Database } from '@recomendapp/types/dist';
 
 const upsertProductRecord = async (product: Stripe.Product) => {
   const productData: Database['public']['Tables']['products']['Row'] = {

@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { Profile, User } from "@/types/type.db";
+import { Profile, User } from "@recomendapp/types/dist";
 import { UserAvatar } from "../User/UserAvatar";
 import { WithLink } from "../utils/WithLink";
 import { Icons } from "@/config/icons";

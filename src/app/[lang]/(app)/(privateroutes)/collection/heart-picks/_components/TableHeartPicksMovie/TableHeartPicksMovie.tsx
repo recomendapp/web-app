@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/table';
 import { Columns } from './_component/columns';
 import { useMediaQuery } from 'react-responsive';
-import { UserActivityMovie } from '@/types/type.db';
+import { UserActivityMovie } from '@recomendapp/types/dist';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { cn } from '@/lib/utils';

@@ -28,7 +28,8 @@ import { upperFirst } from "lodash";
 import { ModalUserRecosMovieSend } from "../Modals/recos/ModalUserRecosMovieSend";
 import { ModalUserRecosTvSeriesSend } from "../Modals/recos/ModalUserRecosTvSeriesSend";
 import { getMediaDetails } from "@/utils/get-media-details";
-import { Database } from "@/types";
+import { Database } from "@recomendapp/types/dist";
+
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
 

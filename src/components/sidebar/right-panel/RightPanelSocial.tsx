@@ -11,7 +11,7 @@ import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { createRightPanel } from "./RightPanelUtils";
 import Fuse from "fuse.js";
-import { UserFollower } from "@/types/type.db";
+import { UserFollower } from "@recomendapp/types/dist";
 import { Input } from "@/components/ui/input";
 
 export const RightPanelSocial = () => createRightPanel({

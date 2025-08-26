@@ -1,5 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
-import { UserReviewMovie, UserReviewTvSeries } from "@/types/type.db";
+import { UserReviewMovie, UserReviewTvSeries } from "@recomendapp/types/dist";
 import { cache } from "react";
 
 export const getReviewMovie = cache(async (id: number, lang: string) => {

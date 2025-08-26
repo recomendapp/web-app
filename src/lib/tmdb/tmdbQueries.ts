@@ -1,6 +1,6 @@
 "use server"
 
-import { MediaMovie, MediaPerson, MediaTvSeries } from "@/types/type.db";
+import { MediaMovie, MediaPerson, MediaTvSeries } from "@recomendapp/types/dist";
 import { createClient } from "../supabase/server-no-cookie";
 
 export type MultiResult =

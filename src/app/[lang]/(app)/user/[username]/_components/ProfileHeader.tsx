@@ -7,7 +7,7 @@ import { createServerClient } from '@/lib/supabase/server';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 
 // ICONS
-import { Profile } from '@/types/type.db';
+import { Profile } from '@recomendapp/types/dist';
 import { ProfileFollowersButton } from './ProfileFollowersButton';
 import { ProfileFolloweesButton } from './ProfileFolloweesButton';
 import { Icons } from '@/config/icons';

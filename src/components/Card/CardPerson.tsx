@@ -2,7 +2,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { MediaPerson } from "@/types/type.db";
+import { MediaPerson } from "@recomendapp/types/dist";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { useRouter } from "@/lib/i18n/routing";
 import { Button } from "../ui/button";

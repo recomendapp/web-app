@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { MediaMovie, Playlist } from '@/types/type.db';
+import { MediaMovie, Playlist } from '@recomendapp/types/dist';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { Icons } from '@/config/icons';
 import { Label } from '@/components/ui/label';

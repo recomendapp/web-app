@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
-import { MediaTvSeries } from '@/types/type.db';
+import { MediaTvSeries } from '@recomendapp/types/dist';
 import { getTranslations } from 'next-intl/server';
 import { CardTvSeries } from "@/components/Card/CardTvSeries";
 

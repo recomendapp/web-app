@@ -1,7 +1,7 @@
 'use client';
 import { createContext, useState, useEffect, use } from 'react';
 import { Provider, Session } from '@supabase/supabase-js';
-import { User } from '@/types/type.db';
+import { User } from '@recomendapp/types/dist';
 import { useUserQuery } from '@/features/client/user/userQueries';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { redirect, usePathname, useRouter } from '@/lib/i18n/routing';

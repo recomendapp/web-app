@@ -1,4 +1,5 @@
-import { Database } from '@/types';
+
+import { Database } from '@recomendapp/types/dist';
 import { createBrowserClient } from '@supabase/ssr';
 
 export const supabase = createBrowserClient<Database>(

@@ -4,7 +4,7 @@ import { Table } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/context/auth-context';
-import { Playlist } from '@/types/type.db';
+import { Playlist } from '@recomendapp/types/dist';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';

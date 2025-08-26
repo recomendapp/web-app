@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { User, UserActivityMovie, UserReviewMovie,  } from "@/types/type.db";
+import { User, UserActivityMovie, UserReviewMovie,  } from "@recomendapp/types/dist";
 import { WithLink } from "../utils/WithLink";
 import { CardUser } from "./CardUser";
 import { useFormatter, useNow } from "next-intl";

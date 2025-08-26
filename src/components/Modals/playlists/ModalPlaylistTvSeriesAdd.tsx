@@ -9,7 +9,7 @@ import { Check } from 'lucide-react';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Playlist, PlaylistSource } from '@/types/type.db';
+import { Playlist, PlaylistSource } from '@recomendapp/types/dist';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { usePlaylistInsertMutation, usePlaylistTvSeriesInsertMutation } from '@/features/client/playlist/playlistMutations';

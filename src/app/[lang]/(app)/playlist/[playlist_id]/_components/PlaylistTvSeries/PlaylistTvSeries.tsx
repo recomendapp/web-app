@@ -1,4 +1,4 @@
-import { Playlist, PlaylistItemTvSeries } from "@/types/type.db";
+import { Playlist, PlaylistItemTvSeries } from "@recomendapp/types/dist";
 import { PlaylistTvSeriesHeader } from "./PlaylistTvSeriesHeader";
 import { usePlaylistIsAllowedToEditQuery, usePlaylistItemsTvSeriesQuery } from "@/features/client/playlist/playlistQueries";
 import { useEffect, useMemo, useState } from "react";

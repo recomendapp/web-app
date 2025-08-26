@@ -2,7 +2,7 @@ import { createBrowserClient } from "@supabase/ssr";
 import { useLocale } from "next-intl"
 import { routing } from "../i18n/routing";
 import { useMemo } from "react";
-import { Database } from "@/types";
+import { Database } from "@recomendapp/types/dist";
 
 export const useSupabaseClient = () => {
 	const locale = useLocale();
