@@ -1,5 +1,5 @@
 'use client';
-import { JSONContent, MediaPerson, UserReviewMovie, UserReviewTvSeries } from "@recomendapp/types/dist";
+import { JSONContent, MediaPerson, UserReviewMovie, UserReviewTvSeries } from "@recomendapp/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link } from "@/lib/i18n/routing";

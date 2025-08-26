@@ -1,5 +1,5 @@
 import { useModal } from '@/context/modal-context';
-import { UserWatchlistMovie } from '@recomendapp/types/dist';
+import { UserWatchlistMovie } from '@recomendapp/types';
 import { MessageSquarePlusIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { ModalUserWatchlistMovieComment } from '@/components/Modals/watchlist/ModalUserWatchlistMovieComment';

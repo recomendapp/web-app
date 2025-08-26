@@ -3,7 +3,7 @@ import {
   createServerClient as createServerClientSupabase,
 } from '@supabase/ssr';
 import { routing } from '../i18n/routing';
-import { Database } from '@recomendapp/types/dist';
+import { Database } from '@recomendapp/types';
 
 export const createServerClient = async (localeParam?: string) => {
   const cookieStore = await cookies();

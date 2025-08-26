@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/table';
 import { Columns } from './_component/columns';
 import { useMediaQuery } from 'react-responsive';
-import { UserRecosTvSeriesAggregated } from '@recomendapp/types/dist';
+import { UserRecosTvSeriesAggregated } from '@recomendapp/types';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { cn } from '@/lib/utils';

@@ -1,7 +1,7 @@
 'use client';
 import MediaPoster from '@/components/Media/MediaPoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';
-import { MediaTvSeriesSeason } from '@recomendapp/types/dist';
+import { MediaTvSeriesSeason } from '@recomendapp/types';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';

@@ -1,4 +1,4 @@
-import { MediaMovie, MediaPerson, MediaTvSeries, MediaTvSeriesEpisode, MediaTvSeriesSeason, MediaType } from "@recomendapp/types/dist";
+import { MediaMovie, MediaPerson, MediaTvSeries, MediaTvSeriesEpisode, MediaTvSeriesSeason, MediaType } from "@recomendapp/types";
 
 
 interface MediaBaseProps {

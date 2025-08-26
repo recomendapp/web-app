@@ -1,5 +1,5 @@
 import { useSupabaseClient } from '@/context/supabase-context';
-import { Playlist, PlaylistGuest, PlaylistItemMovie, PlaylistItemTvSeries, PlaylistType } from '@recomendapp/types/dist';
+import { Playlist, PlaylistGuest, PlaylistItemMovie, PlaylistItemTvSeries, PlaylistType } from '@recomendapp/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { playlistKeys } from './playlistKeys';
 import { userKeys } from '../user/userKeys';

@@ -24,7 +24,7 @@ import MediaPoster from '@/components/Media/MediaPoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { Database, MediaTvSeries } from '@recomendapp/types/dist';
+import { Database, MediaTvSeries } from '@recomendapp/types';
 import { useModal } from '@/context/modal-context';
 import { upperFirst } from 'lodash';
 import { useLocale, useTranslations } from 'next-intl';

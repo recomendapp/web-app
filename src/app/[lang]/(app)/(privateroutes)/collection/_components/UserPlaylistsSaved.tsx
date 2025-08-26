@@ -4,7 +4,7 @@ import Loader from '@/components/Loader';
 import { useInView } from 'react-intersection-observer';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { useUserPlaylistsSavedInfiniteQuery } from '@/features/client/user/userQueries';
-import { Playlist } from '@recomendapp/types/dist'
+import { Playlist } from '@recomendapp/types'
 
 export function UserPlaylistsSaved({
   sidebarExpanded,

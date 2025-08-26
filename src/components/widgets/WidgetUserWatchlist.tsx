@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from "lodash";
 import { CardMovie } from "../Card/CardMovie";
-import { MediaMovie, MediaTvSeries } from "@recomendapp/types/dist";
+import { MediaMovie, MediaTvSeries } from "@recomendapp/types";
 import { CardTvSeries } from "../Card/CardTvSeries";
 
 export const WidgetUserWatchlist = ({

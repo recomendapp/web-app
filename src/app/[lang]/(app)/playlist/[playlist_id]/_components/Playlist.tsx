@@ -1,6 +1,6 @@
 'use client';
 import { usePlaylistQuery } from "@/features/client/playlist/playlistQueries";
-import { Playlist as TPlaylist } from "@recomendapp/types/dist";
+import { Playlist as TPlaylist } from "@recomendapp/types";
 import { PlaylistMovie } from "./PlaylistMovie/PlaylistMovie";
 import { PlaylistTvSeries } from "./PlaylistTvSeries/PlaylistTvSeries";
 

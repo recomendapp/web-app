@@ -20,7 +20,7 @@ import { useAuth } from '@/context/auth-context';
 import { useUserActivityTvSeriesQuery } from '@/features/client/user/userQueries';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Link, usePathname } from '@/lib/i18n/routing';
-import { MediaTvSeries } from '@recomendapp/types/dist';
+import { MediaTvSeries } from '@recomendapp/types';
 import { CardReviewTvSeries } from '@/components/Card/CardReviewTvSeries';
 
 const SORT_BY = ["updated_at"] as const;

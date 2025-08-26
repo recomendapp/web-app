@@ -1,4 +1,4 @@
-import { MediaType } from "@recomendapp/types/dist";
+import { MediaType } from "@recomendapp/types";
 import * as React from "react"
 import { Badge } from "../ui/badge";
 import { useTranslations } from "next-intl";

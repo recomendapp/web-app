@@ -1,4 +1,4 @@
-import { MediaType, PlaylistType, UserReviewType } from "@recomendapp/types/dist"
+import { MediaType, PlaylistType, UserReviewType } from "@recomendapp/types"
 
 export const mediaKeys = {
 	all: ['media'] as const,

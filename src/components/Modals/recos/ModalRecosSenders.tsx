@@ -1,7 +1,7 @@
 'use client'
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { UserRecosAggregated } from "@recomendapp/types/dist";
+import { UserRecosAggregated } from "@recomendapp/types";
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useModal } from "@/context/modal-context";
 import { CardUser } from "@/components/Card/CardUser";

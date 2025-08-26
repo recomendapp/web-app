@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from "lodash";
-import { MediaMovie, MediaTvSeries, UserRecosAggregated } from "@recomendapp/types/dist";
+import { MediaMovie, MediaTvSeries, UserRecosAggregated } from "@recomendapp/types";
 import { CardMovie } from "../Card/CardMovie";
 import { CardTvSeries } from "../Card/CardTvSeries";
 

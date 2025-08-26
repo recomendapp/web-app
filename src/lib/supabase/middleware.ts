@@ -1,4 +1,4 @@
-import { Database } from '@recomendapp/types/dist';
+import { Database } from '@recomendapp/types';
 import { createServerClient } from '@supabase/ssr';
 import { NextRequest, NextResponse } from 'next/server';
 

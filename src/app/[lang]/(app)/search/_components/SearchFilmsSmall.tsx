@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
-import { MediaMovie } from '@recomendapp/types/dist';
+import { MediaMovie } from '@recomendapp/types';
 import { getTranslations } from 'next-intl/server';
 import { CardMovie } from "@/components/Card/CardMovie";
 

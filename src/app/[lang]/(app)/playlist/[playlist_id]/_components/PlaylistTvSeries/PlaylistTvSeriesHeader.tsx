@@ -9,7 +9,7 @@ import { useAuth } from "@/context/auth-context";
 import { useModal } from "@/context/modal-context";
 import { useRandomImage } from "@/hooks/use-random-image";
 import { TMDB_IMAGE_BASE_URL } from "@/lib/tmdb/tmdb";
-import { Playlist } from "@recomendapp/types/dist";
+import { Playlist } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 

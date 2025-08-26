@@ -1,5 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
-import { Profile } from "@recomendapp/types/dist";
+import { Profile } from "@recomendapp/types";
 import { cache } from "react";
 
 export const getProfile = cache(async (username: string) => {

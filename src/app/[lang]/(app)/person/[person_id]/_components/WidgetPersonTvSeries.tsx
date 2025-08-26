@@ -3,7 +3,7 @@ import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
 import { Link } from "@/lib/i18n/routing";
 import { Button } from '@/components/ui/button';
-import { MediaTvSeriesAggregateCredits } from '@recomendapp/types/dist';
+import { MediaTvSeriesAggregateCredits } from '@recomendapp/types';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
 
 interface WidgetPersonTvSeriesProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Icons } from "@/config/icons";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DISPLAY, SORT_BY, SORT_ORDER } from "./constants";
-import { Database } from "@recomendapp/types/dist";
+import { Database } from "@recomendapp/types";
 
 export const Filters = ({
 	knownForDepartment,

@@ -3,7 +3,7 @@ import { cache as RCache } from "react";
 import { playlistKeys } from "./playlistKeys";
 import { createClient } from "@/lib/supabase/server-no-cookie";
 import { createServerClient } from "@/lib/supabase/server";
-import { Playlist } from "@recomendapp/types/dist";
+import { Playlist } from "@recomendapp/types";
 
 const PLAYLISTS_FEATURED_REVALIDATE_TIME = 60;
 

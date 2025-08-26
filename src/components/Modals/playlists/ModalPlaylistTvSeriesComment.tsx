@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useModal } from "@/context/modal-context";
-import { PlaylistItemTvSeries } from "@recomendapp/types/dist";
+import { PlaylistItemTvSeries } from "@recomendapp/types";
 import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { usePlaylistIsAllowedToEditQuery } from "@/features/client/playlist/playlistQueries";
 import { useTranslations } from "next-intl";

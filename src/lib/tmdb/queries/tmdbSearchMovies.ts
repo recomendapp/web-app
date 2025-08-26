@@ -2,7 +2,7 @@
 
 import { routing } from "@/lib/i18n/routing";
 import { createServerClient } from "@/lib/supabase/server";
-import { MediaMovie } from "@recomendapp/types/dist";
+import { MediaMovie } from "@recomendapp/types";
 import { z } from "zod";
 
 const searchMovieSchema = z

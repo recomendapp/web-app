@@ -32,7 +32,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Playlist } from '@recomendapp/types/dist';
+import { Playlist } from '@recomendapp/types';
 import { useAuth } from '@/context/auth-context';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { usePlaylistDeleteMutation, usePlaylistInsertMutation, usePlaylistUpdateMutation } from '@/features/client/playlist/playlistMutations';

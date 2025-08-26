@@ -1,4 +1,4 @@
-import { Database } from '@recomendapp/types/dist';
+import { Database } from '@recomendapp/types';
 import { createClient } from '@supabase/supabase-js';
 
 export const supabaseAdmin = createClient<Database>(

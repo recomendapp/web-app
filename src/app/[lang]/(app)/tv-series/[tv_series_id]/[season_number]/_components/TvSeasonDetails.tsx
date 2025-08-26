@@ -2,7 +2,7 @@
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import { Card } from '@/components/ui/card';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
-import { MediaTvSeriesSeason } from '@recomendapp/types/dist';
+import { MediaTvSeriesSeason } from '@recomendapp/types';
 import { upperFirst } from 'lodash';
 import { useFormatter, useTranslations } from 'next-intl';
 

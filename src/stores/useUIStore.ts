@@ -1,5 +1,5 @@
 
-import { UserActivityType, UserRecosType, UserWatchlistType } from '@recomendapp/types/dist';
+import { UserActivityType, UserRecosType, UserWatchlistType } from '@recomendapp/types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 

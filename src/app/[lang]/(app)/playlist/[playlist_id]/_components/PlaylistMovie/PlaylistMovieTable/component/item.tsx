@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { cn } from "@/lib/utils";
-import { MediaPerson, MediaMovie } from "@recomendapp/types/dist";
+import { MediaPerson, MediaMovie } from "@recomendapp/types";
 import { Link } from "@/lib/i18n/routing";
 
 interface ItemProps

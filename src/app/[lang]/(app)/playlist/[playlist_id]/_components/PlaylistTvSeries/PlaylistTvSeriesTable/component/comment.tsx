@@ -1,5 +1,5 @@
 import { useModal } from '@/context/modal-context';
-import { PlaylistItemTvSeries } from '@recomendapp/types/dist';
+import { PlaylistItemTvSeries } from '@recomendapp/types';
 import { MessageSquarePlusIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';

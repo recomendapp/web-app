@@ -1,7 +1,7 @@
 import { ModalRecosSenders } from "@/components/Modals/recos/ModalRecosSenders";
 import { UserAvatar } from "@/components/User/UserAvatar";
 import { useModal } from "@/context/modal-context";
-import { UserRecosTvSeriesAggregated } from "@recomendapp/types/dist";
+import { UserRecosTvSeriesAggregated } from "@recomendapp/types";
 import { Row } from "@tanstack/react-table";
 import { Text } from "lucide-react";
 

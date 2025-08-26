@@ -1,7 +1,7 @@
 import { HeaderBox } from "@/components/Box/HeaderBox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ImageObject, useRandomImage } from "@/hooks/use-random-image";
-import { UserWatchlistType } from "@recomendapp/types/dist";
+import { UserWatchlistType } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"

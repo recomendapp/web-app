@@ -2,7 +2,7 @@ import { Link } from "@/lib/i18n/routing";
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { MediaPerson } from '@recomendapp/types/dist';
+import { MediaPerson } from '@recomendapp/types';
 import { getTranslations } from 'next-intl/server';
 import { title } from '@/utils/custom-lodash';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';

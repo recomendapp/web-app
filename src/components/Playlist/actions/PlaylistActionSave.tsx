@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { MediaType } from "@recomendapp/types/dist";
+import { MediaType } from "@recomendapp/types";
 import { useUserPlaylistSavedQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";

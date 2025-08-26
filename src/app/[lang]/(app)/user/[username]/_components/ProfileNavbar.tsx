@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@/lib/utils';
-import { Profile } from '@recomendapp/types/dist';
+import { Profile } from '@recomendapp/types';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { Link } from "@/lib/i18n/routing";

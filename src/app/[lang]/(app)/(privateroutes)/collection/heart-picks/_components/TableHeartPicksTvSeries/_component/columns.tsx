@@ -1,7 +1,7 @@
 'use client';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTableRowActions } from './data-table-row-actions';
-import { UserActivityTvSeries } from '@recomendapp/types/dist';
+import { UserActivityTvSeries } from '@recomendapp/types';
 import { useTranslations } from 'next-intl';
 import { Item } from './item';
 import { upperFirst } from 'lodash';

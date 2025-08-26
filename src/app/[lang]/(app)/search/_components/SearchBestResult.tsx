@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { Card } from '@/components/ui/card';
 import { BadgeMedia } from '@/components/Badge/BadgeMedia';
-import { MediaPerson } from '@recomendapp/types/dist';
+import { MediaPerson } from '@recomendapp/types';
 import { upperFirst } from 'lodash';
 import { MultiResult } from "@/lib/tmdb/tmdbQueries";
 import { getMediaDetails } from "@/utils/get-media-details";

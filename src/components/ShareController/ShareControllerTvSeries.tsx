@@ -1,6 +1,6 @@
 "use client";
 import { ShareControllerProps } from "./ShareController";
-import { MediaTvSeries } from "@recomendapp/types/dist";
+import { MediaTvSeries } from "@recomendapp/types";
 import { useCallback, useEffect, useState } from "react";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";

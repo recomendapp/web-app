@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
-import { Playlist } from '@recomendapp/types/dist';
+import { Playlist } from '@recomendapp/types';
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { Button } from '@/components/ui/button';
 import { UserCogIcon } from 'lucide-react';

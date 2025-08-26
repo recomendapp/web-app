@@ -2,7 +2,7 @@ import { mediaKeys } from "@/features/server/media/mediaKeys";
 import { createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@/lib/supabase/server-no-cookie";
 import { cache } from "@/lib/utils/cache";
-import { MediaMovie, MediaTvSeries, MediaTvSeriesSeason } from "@recomendapp/types/dist";
+import { MediaMovie, MediaTvSeries, MediaTvSeriesSeason } from "@recomendapp/types";
 
 export const MEDIA_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 

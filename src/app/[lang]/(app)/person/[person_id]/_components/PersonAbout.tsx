@@ -1,5 +1,5 @@
 'use client'
-import { MediaPerson } from "@recomendapp/types/dist";
+import { MediaPerson } from "@recomendapp/types";
 import { useModal } from "@/context/modal-context";
 import { PersonAboutModal } from "@/components/Modals/persons/PersonAboutModal";
 

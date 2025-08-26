@@ -10,7 +10,7 @@ import { useModal } from "@/context/modal-context";
 import { ImageObject, useRandomImage } from "@/hooks/use-random-image";
 import { TMDB_IMAGE_BASE_URL } from "@/lib/tmdb/tmdb";
 import { ConvertHoursMinutes } from "@/lib/utils";
-import { Playlist } from "@recomendapp/types/dist";
+import { Playlist } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 

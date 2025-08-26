@@ -8,7 +8,7 @@ DropdownMenuTrigger,
 import { useAuth } from '@/context/auth-context';
 import { MoreHorizontal } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { MediaMovie, User, UserReviewMovie } from '@recomendapp/types/dist';
+import { MediaMovie, User, UserReviewMovie } from '@recomendapp/types';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';

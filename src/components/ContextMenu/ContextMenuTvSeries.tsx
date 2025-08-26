@@ -1,5 +1,5 @@
 "use client";
-import { MediaTvSeries } from "@recomendapp/types/dist"
+import { MediaTvSeries } from "@recomendapp/types"
 import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
 import { WithLink } from "../utils/WithLink";

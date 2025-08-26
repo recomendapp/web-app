@@ -38,7 +38,7 @@
 //   AccordionItem,
 //   AccordionTrigger,
 // } from "@/components/ui/accordion"
-// import { Movie } from '@recomendapp/types/dist';
+// import { Movie } from '@recomendapp/types';
 // import Loader from '@/components/Loader/Loader';
 // import { useLocale } from 'next-intl';
 // import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

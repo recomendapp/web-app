@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { JSONContent, MediaPerson, MediaTvSeries } from '@recomendapp/types/dist';
+import { JSONContent, MediaPerson, MediaTvSeries } from '@recomendapp/types';
 import { useAuth } from '@/context/auth-context';
 import { Link, useRouter } from "@/lib/i18n/routing";
 import { cn } from '@/lib/utils';

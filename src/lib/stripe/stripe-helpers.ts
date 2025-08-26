@@ -1,4 +1,4 @@
-import { Prices } from '@recomendapp/types/dist';
+import { Prices } from '@recomendapp/types';
 
 export const getURL = () => {
   let url =

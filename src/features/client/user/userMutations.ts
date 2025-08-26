@@ -1,5 +1,5 @@
 import { useSupabaseClient } from '@/context/supabase-context';
-import { User, UserActivityMovie, UserActivityTvSeries, UserFollower, UserRecosMovieAggregated, UserRecosTvSeriesAggregated, UserWatchlist, UserWatchlistMovie, UserWatchlistTvSeries } from '@recomendapp/types/dist';
+import { User, UserActivityMovie, UserActivityTvSeries, UserFollower, UserRecosMovieAggregated, UserRecosTvSeriesAggregated, UserWatchlist, UserWatchlistMovie, UserWatchlistTvSeries } from '@recomendapp/types';
 import { JSONContent } from '@tiptap/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { userKeys } from './userKeys';

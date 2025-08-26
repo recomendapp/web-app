@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import toast from 'react-hot-toast';
-import { UserActivityTvSeries } from '@recomendapp/types/dist';
+import { UserActivityTvSeries } from '@recomendapp/types';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';

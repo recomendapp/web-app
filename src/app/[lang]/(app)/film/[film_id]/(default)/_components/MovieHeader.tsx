@@ -26,7 +26,7 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { Database, MediaMovie } from '@recomendapp/types/dist';
+import { Database, MediaMovie } from '@recomendapp/types';
 import { useModal } from '@/context/modal-context';
 import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';

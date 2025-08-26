@@ -27,7 +27,7 @@ import {
 import LetterboxdParser from "./services/LetterboxdParser";
 import { ScrollArea } from "@/components/ui/scroll-area";
 // import ImporterResults from "./services/ImporterResults";
-import { MediaMovie } from "@recomendapp/types/dist";
+import { MediaMovie } from "@recomendapp/types";
 
 export type ImportResults = {
 	watchlist: {
