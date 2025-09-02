@@ -12,7 +12,6 @@ import { cookies } from 'next/headers';
 import { getMessages } from 'next-intl/server';
 import { getFallbackLanguage } from '@/lib/i18n/fallback';
 import { createServerClient } from '@/lib/supabase/server';
-import { getNovuSubscriberHash } from '@/lib/novu/novu';
 import { Icons } from '@/config/icons';
 
 export default async function Provider({

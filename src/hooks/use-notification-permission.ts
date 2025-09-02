@@ -116,8 +116,9 @@ const useNotificationPermission = () => {
 				onConflict: "user_id, provider, token"
 			});
 		};
-
-		saveToken();
+		if (process.env.NODE_ENV !== 'development') {
+			saveToken();
+		}
 	}, [token, session?.user?.id]);
 
 

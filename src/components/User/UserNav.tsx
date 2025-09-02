@@ -76,7 +76,7 @@ export function UserNav({
       label: upperFirst(t('common.messages.setting', { count: 0 })),
       href: '/settings/profile',
     },
-  ], [user]);
+  ], [user, t]);
 
   if (!user) {
     return <Skeleton className="h-8 w-8 rounded-full" />;

@@ -32,13 +32,14 @@ export const NotificationsProvider = ({
 
 	useEffect(() => {
 		const fetchHash = async () => {
-			if (session) {
+			if (session && subscriberHash === null) {
 				const hash = await getNovuSubscriberHash(session.user.id);
 				setSubscriberHash(hash);
 			}
 		};
-
-		fetchHash();
+		if (session && subscriberHash === null) {
+			fetchHash();
+		}
 	}, [session]);
 
 	const content = (

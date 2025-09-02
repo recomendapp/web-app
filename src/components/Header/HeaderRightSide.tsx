@@ -18,7 +18,7 @@ export default function HeaderRightSide({
 }) {
   const { session } = useAuth();
   const { state } = useNotifications();
-  const common = useTranslations('common');
+  const t = useTranslations();
   return (
     <div className={cn('flex items-center gap-4', className)}>
       {session ? (
@@ -30,7 +30,7 @@ export default function HeaderRightSide({
       ) : (
         <Button asChild>
           <Link href={'/auth/login'} className="whitespace-nowrap">
-            {upperFirst(common('messages.login'))}
+            {upperFirst(t('common.messages.login'))}
           </Link>
         </Button>
       )}

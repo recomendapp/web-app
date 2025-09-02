@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from "@/lib/i18n/routing";
 import { usePathname } from '@/lib/i18n/routing';
 
-const type = 'tv_series';
+const type = 'tv-series';
 
 export default function TvSerieNavbar({
   serieId,

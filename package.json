@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_OPTIONS=--no-deprecation next dev",
-    "build": "next build",
+    "dev": "NODE_OPTIONS=--no-deprecation next dev --turbopack",
+    "build": "next build --turbopack",
     "start": "NODE_OPTIONS=--no-deprecation next start",
     "lint": "next lint",
     "prettier": "prettier --write .",
@@ -47,7 +47,7 @@
     "@radix-ui/react-toggle": "^1.1.1",
     "@radix-ui/react-toggle-group": "^1.1.10",
     "@radix-ui/react-tooltip": "^1.2.7",
-    "@recomendapp/types": "^1.0.0",
+    "@recomendapp/types": "^1.0.5",
     "@stripe/stripe-js": "^7.3.1",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.8",
@@ -130,7 +130,6 @@
     "@types/lodash": "^4.17.17",
     "@types/rtl-detect": "^1.0.3",
     "depcheck": "^1.4.7",
-    "supabase": "^2.23.4",
     "typescript": "^5.8.3",
     "webpack": "^5.99.9"
   },
