@@ -1,5 +1,5 @@
 import { Notification as NotificationType } from '@novu/react';
-import React from 'react';
+import { forwardRef, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '../utils/ImageWithFallback';
 import { ReactMarkdown } from '../utils/ReactMarkdown';
@@ -13,6 +13,7 @@ import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { NotificationPayload } from '@recomendapp/types';
 
 interface NotificationProps extends React.HTMLAttributes<HTMLDivElement | HTMLAnchorElement> {
 	notification: NotificationType;
@@ -28,24 +29,44 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 		userId: session?.user.id,
 	});
 
-	const handleAction = async (action: 'primary' | 'secondary', key: string, id: number) => {
-		switch (key) {
-			case 'follower_request_accept':
-				acceptRequest.mutate({ requestId: id }, { onSuccess: () => { toast.success(upperFirst(t('messages.request_accepted', { count: 1 }))) }, onError: () => { toast.error(upperFirst(t('messages.an_error_occurred'))) } });
-				break;
-			case 'follower_request_decline':
-				declineRequest.mutate({ requestId: id }, { onSuccess: () => { toast.success(upperFirst(t('messages.request_declined', { count: 1 }))) }, onError: () => { toast.error(upperFirst(t('messages.an_error_occurred'))) } });
+	const handleAction = useCallback(async ({
+		action,
+		data,
+	} : {
+		action: 'primary' | 'secondary';
+		data: NotificationPayload | undefined;
+	}) => {
+		if (!data) return toast.error(upperFirst(t('messages.an_error_occurred')));
+		switch (data.type) {
+			case 'follower_request':
+				if (action === 'primary') {
+					await acceptRequest.mutateAsync({
+						requestId: data.id
+					}, {
+						onSuccess: () => {
+							toast.success(upperFirst(t('messages.request_accepted', { count: 1 })));
+							notification.completePrimary();
+						}, onError: () => {
+							toast.error(upperFirst(t('messages.an_error_occurred')))
+						}
+					});
+				} else {
+					await declineRequest.mutateAsync({
+						requestId: data.id
+					}, {
+						onSuccess: () => {
+							toast.success(upperFirst(t('messages.request_declined', { count: 1 })));
+							notification.completeSecondary();
+						}, onError: () => {
+							toast.error(upperFirst(t('messages.an_error_occurred')));
+						}
+					});
+				}
 				break;
 			default:
-				toast.error(upperFirst(t('messages.unknown_action')));
-				return;
+				break;
 		}
-		if (action === 'primary') {
-			await notification.completePrimary();
-		} else {
-			await notification.completeSecondary();
-		}
-	}
+	}, [acceptRequest, declineRequest, notification, t]);
 	return (
 		<div className='flex gap-2'>
 			<div className='h-10 relative shrink-0 rounded-md overflow-hidden aspect-square'>
@@ -73,11 +94,10 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 							<Button
 							variant='accent-yellow'
 							onClick={async () => {
-								const primaryAction = notification.data?.primaryAction as {
-									key: string;
-									id: number;
-								};
-								await handleAction('primary', primaryAction.key, primaryAction.id);
+								await handleAction({
+									action: 'primary',
+									data: notification.data as NotificationPayload | undefined,
+								});
 							}}
 							>
 								{notification.primaryAction.label}
@@ -87,11 +107,10 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 							<Button
 							variant='outline'
 							onClick={async () => {
-								const secondaryAction = notification.data?.secondaryAction as {
-									key: string;
-									id: number;
-								};
-								await handleAction('secondary', secondaryAction.key, secondaryAction.id);
+								await handleAction({
+									action: 'secondary',
+									data: notification.data as NotificationPayload | undefined,
+								});
 							}}
 							>
 								{notification.secondaryAction.label}
@@ -119,7 +138,7 @@ export const NotificationSkeleton = () => {
 	);
 }
 
-export const Notification = React.forwardRef<
+export const Notification = forwardRef<
 	HTMLDivElement,
 	NotificationProps
 >(({ className, onClick, notification, ...props }, ref) => {

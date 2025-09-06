@@ -39,6 +39,8 @@ export const NotificationsProvider = ({
 		};
 		if (session && subscriberHash === null) {
 			fetchHash();
+		} else {
+			setSubscriberHash(null);
 		}
 	}, [session]);
 
