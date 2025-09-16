@@ -31,10 +31,11 @@ export const getSitemapUsers = cache(
 		const supabase = await createClient(routing.defaultLocale);
 		const { data, error } = await supabase
 			.from('profile')
-			.select('id, username')
+			.select('id, username, created_at')
 			.eq('private', false)
 			.range(start, end)
-			.order('followers_count', { ascending: false });
+			.order('followers_count', { ascending: false })
+			.order('created_at', { ascending: false });
 		if (error) throw error;
 		return data || [];
 	},
