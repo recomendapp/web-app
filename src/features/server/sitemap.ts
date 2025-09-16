@@ -12,7 +12,7 @@ export const getSitemapUserCount = cache(
 	async (perPage: number = 10000): Promise<number> => {
 		const supabase = await createClient(routing.defaultLocale);
 		const { count, error } = await supabase
-			.from('user')
+			.from('profile')
 			.select('*', { count: 'exact', head: true })
 			.eq('private', false);
 		if (error) throw error;
@@ -30,10 +30,11 @@ export const getSitemapUsers = cache(
 		const end = start + perPage - 1;
 		const supabase = await createClient(routing.defaultLocale);
 		const { data, error } = await supabase
-			.from('user')
-			.select('id, username, created_at')
+			.from('profile')
+			.select('id, username')
 			.eq('private', false)
 			.range(start, end)
+			.order('followers_count', { ascending: false });
 		if (error) throw error;
 		return data || [];
 	},

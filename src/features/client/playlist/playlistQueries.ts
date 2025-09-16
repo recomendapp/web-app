@@ -19,7 +19,7 @@ export const usePlaylistQuery = ({
 				.from('playlists')
 				.select(`
 					*,
-					user(*)
+					user:profile(*)
 				`)
 				.eq('id', playlistId)
 				.maybeSingle()
@@ -91,7 +91,7 @@ export const usePlaylistGuestsQuery = (playlistId?: number) => {
 				.from('playlist_guests')
 				.select(`
 					*,
-					user:user(*)
+					user:profile(*)
 				`)
 				.eq('playlist_id', playlistId)
 			if (error) throw error;
@@ -122,7 +122,7 @@ export const usePlaylistIsAllowedToEditQuery = ({
 				.from('playlists')
 				.select(`
 					user_id,
-					user(premium),
+					user:profile(premium),
 					playlist_guests(user_id, edit)
 				`)
 				.eq('id', playlistId)
@@ -161,7 +161,7 @@ export const usePlaylistGuestsSearchInfiniteQuery = ({
 			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
 			let to = from - 1 + mergedFilters.resultsPerPage;
 			let query = supabase
-				.from('user')
+				.from('profile')
 				.select('*')
 				.range(from, to)
 			

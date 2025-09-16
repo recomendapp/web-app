@@ -14,9 +14,7 @@ export async function GET(
 
     const sitemapXML = buildSitemap(users.map((user) => ({
       url: `${siteConfig.url}/@${user.username}`,
-      lastModified: user.created_at
-        ? new Date(user.created_at)
-        : new Date(),
+      lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.5,
     })));

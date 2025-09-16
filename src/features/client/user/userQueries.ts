@@ -240,7 +240,7 @@ export const useUserActivityMovieFollowersRatingQuery = ({
 			if (!userId) throw Error('Missing user id');
 			const { data, error } = await supabase
 				.from('user_activities_movie_follower')
-				.select('*, user(*)')
+				.select('*, user:profile(*)')
 				.eq('movie_id', movieId)
 				.not('rating', 'is', null)
 				.order('created_at', { ascending: false });
@@ -268,7 +268,7 @@ export const useUserActivityTvSeriesFollowersRatingQuery = ({
 			if (!userId) throw Error('Missing user id');
 			const { data, error } = await supabase
 				.from('user_activities_tv_series_follower')
-				.select('*, user(*)')
+				.select('*, user:profile(*)')
 				.eq('tv_series_id', tvSeriesId)
 				.not('rating', 'is', null)
 				.order('created_at', { ascending: false });
@@ -299,7 +299,7 @@ export const useUserReviewMovieQuery = ({
 			if (!reviewId) throw Error('Missing review id');
 			const { data, error } = await supabase
 				.from('user_reviews_movie')
-				.select('*, activity:user_activities_movie(*, media_movie(*), user(*))')
+				.select('*, activity:user_activities_movie(*, media_movie(*), user:profile(*))')
 				.eq('id', reviewId)
 				.maybeSingle()
 				.overrideTypes<UserReviewMovie, { merge: false }>();
@@ -359,7 +359,7 @@ export const useUserReviewTvSeriesQuery = ({
 			if (!reviewId) throw Error('Missing review id');
 			const { data, error } = await supabase
 				.from('user_reviews_tv_series')
-				.select('*, activity:user_activities_tv_series(*, media_tv_series(*), user(*))')
+				.select('*, activity:user_activities_tv_series(*, media_tv_series(*), user:profile(*))')
 				.eq('id', reviewId)
 				.maybeSingle()
 				.overrideTypes<UserReviewTvSeries, { merge: false }>();
@@ -1142,7 +1142,7 @@ export const useUserPlaylistsSavedInfiniteQuery = ({
 	  		let to = from - 1 + mergedFilters.resultsPerPage;
 			let request = supabase
 				.from('playlists_saved')
-				.select(`*, playlist:playlists(*, user(*))`)
+				.select(`*, playlist:playlists(*, user:profile(*))`)
 				.eq('user_id', userId)
 				.range(from, to)
 
@@ -1284,7 +1284,7 @@ export const useUserPlaylistsFriendsInfiniteQuery = ({
 				.from('playlists_friends')
 				.select(`
 					*,
-					user(*)
+					user:profile(*)
 				`)
 				.range(from, to)
 				.returns<Playlist[]>();
@@ -1592,7 +1592,7 @@ export const useUserDiscoveryInfiniteQuery = ({
 			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
 	  		let to = from - 1 + mergedFilters.resultsPerPage;
 			let request = supabase
-				.from('user')
+				.from('profile')
 				.select(`*`)
 				.range(from, to);
 

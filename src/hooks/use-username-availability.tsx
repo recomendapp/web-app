@@ -16,7 +16,7 @@ export const useUsernameAvailability = () => {
 			setIsAvailable(undefined);
 			setIsLoading(true);
 			const { data, error } = await supabase
-				.from('user')
+				.from('profile')
 				.select('username')
 				.ilike('username', username)
 				.maybeSingle();

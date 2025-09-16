@@ -25,7 +25,7 @@ export const useSearchPlaylistsInfiniteQuery = ({
 
 			let request = supabase
 				.from("playlists")
-				.select("*, user(*)")
+				.select("*, user:profile(*)")
 				.ilike("title", `${query}%`)
 				.range(from, to)
 				.order("updated_at", { ascending: false });
@@ -65,7 +65,7 @@ export const useSearchUsersInfiniteQuery = ({
 			let to = from - 1 + mergedFilters.resultsPerPage;
 
 			const { data } = await supabase
-				.from("user")
+				.from("profile")
 				.select("*")
 				.range(from, to)
 				.ilike("username", `${query}%`);

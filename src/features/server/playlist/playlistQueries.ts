@@ -21,7 +21,7 @@ export const getPlaylistsFeatured = cache(
 		let to = from + filters.perPage - 1;
 		let request = supabase
 			.from('playlists_featured')
-			.select('*, playlist:playlists(*, user(*))', { count: 'exact' })
+			.select('*, playlist:playlists(*, user:profile(*))', { count: 'exact' })
 			.range(from, to)
 
 		if (filters) {
@@ -50,7 +50,7 @@ export const getPlaylist = RCache(async (id: number) => {
 	const supabase = await createServerClient();
 	const { data: playlist, error } = await supabase
 		.from('playlists')
-		.select('*, user(*)')
+		.select('*, user:profile(*)')
 		.eq('id', id)
 		.maybeSingle()
 		.overrideTypes<Playlist>();
