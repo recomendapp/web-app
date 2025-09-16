@@ -3,13 +3,13 @@ import { Link } from "@/lib/i18n/routing";
 import MediaPoster from "@/components/Media/MediaPoster";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useFormatter, useTranslations } from "next-intl";
-import { User, UserReviewTvSeriesLike } from "@recomendapp/types";
+import { Profile, UserReviewTvSeriesLike } from "@recomendapp/types";
 import { CardUser } from "@/components/Card/CardUser";
 import { forwardRef } from "react";
 import { CardReviewTvSeries } from "@/components/Card/CardReviewTvSeries";
 
 interface FeedItemRevieTvSeriesLikeProps extends React.HTMLAttributes<HTMLDivElement> {
-	author: User;
+	author: Profile;
 	reviewLike: UserReviewTvSeriesLike;
 }
 

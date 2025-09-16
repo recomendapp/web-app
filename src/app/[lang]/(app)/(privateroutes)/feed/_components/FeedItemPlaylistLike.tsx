@@ -2,14 +2,14 @@
 import { Link } from "@/lib/i18n/routing";
 import MediaPoster from "@/components/Media/MediaPoster";
 import { useFormatter, useTranslations } from "next-intl";
-import { PlaylistLike, User } from "@recomendapp/types";
+import { PlaylistLike, Profile } from "@recomendapp/types";
 import { cn } from "@/lib/utils";
 import { CardUser } from "@/components/Card/CardUser";
 import { upperFirst } from "lodash";
 import { forwardRef } from "react";
 
 interface FeedItemPlaylistLikeProps extends React.HTMLAttributes<HTMLDivElement> {
-	author: User;
+	author: Profile;
 	playlistLike: PlaylistLike;
 }
 

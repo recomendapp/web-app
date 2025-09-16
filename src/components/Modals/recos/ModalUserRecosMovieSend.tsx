@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { User } from '@recomendapp/types';
+import { Profile } from '@recomendapp/types';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '@/components/Modals/Modal';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Icons } from '@/config/icons';
@@ -34,7 +34,7 @@ export function ModalUserRecosMovieSend({
 	const t = useTranslations();
 	const { session } = useAuth();
 	const { closeModal } = useModal();
-	const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+	const [selectedUsers, setSelectedUsers] = useState<Profile[]>([]);
 	const [comment, setComment] = useState<string>('');
 	const {
 		data: friends,
@@ -112,7 +112,7 @@ export function ModalUserRecosMovieSend({
 									}}
 								>
 									<div className="flex items-center">
-										<UserAvatar avatarUrl={friend.avatar_url} username={friend.username} />
+										<UserAvatar avatarUrl={friend.avatar_url} username={friend.username!} />
 										<div className="ml-2">
 										<p className="text-sm font-medium leading-none line-clamp-1">
 											{friend.full_name}
@@ -157,7 +157,7 @@ export function ModalUserRecosMovieSend({
 					<UserAvatar
 						key={friend?.id}
 						avatarUrl={friend?.avatar_url}
-						username={friend?.username}
+						username={friend?.username!}
 						className='cursor-not-allowed'
 						onClick={() => setSelectedUsers((prev) => prev.filter(
 							(selectedUser) => selectedUser?.id !== friend?.id

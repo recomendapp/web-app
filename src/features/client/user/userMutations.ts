@@ -1,5 +1,5 @@
 import { useSupabaseClient } from '@/context/supabase-context';
-import { User, UserActivityMovie, UserActivityTvSeries, UserFollower, UserRecosMovieAggregated, UserRecosTvSeriesAggregated, UserWatchlist, UserWatchlistMovie, UserWatchlistTvSeries } from '@recomendapp/types';
+import { Profile, UserActivityMovie, UserActivityTvSeries, UserFollower, UserRecosMovieAggregated, UserRecosTvSeriesAggregated, UserWatchlist, UserWatchlistMovie, UserWatchlistTvSeries } from '@recomendapp/types';
 import { JSONContent } from '@tiptap/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { userKeys } from './userKeys';
@@ -861,7 +861,7 @@ export const useUserRecosMovieInsertMutation = () => {
 		} : {
 			senderId: string;
 			movieId: number;
-			receivers: User[];
+			receivers: Profile[];
 			comment: string;
 		}) => {
 			if (receivers.length === 0) throw Error('Missing receivers');
@@ -1000,7 +1000,7 @@ export const useUserRecosTvSeriesInsertMutation = () => {
 		} : {
 			senderId: string;
 			tvSeriesId: number;
-			receivers: User[];
+			receivers: Profile[];
 			comment: string;
 		}) => {
 			if (receivers.length === 0) throw Error('Missing receivers');

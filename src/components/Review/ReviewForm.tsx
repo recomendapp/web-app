@@ -13,7 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import toast from 'react-hot-toast';
 import { Icons } from '@/config/icons';
 import { useAuth } from '@/context/auth-context';
-import { User, UserReview } from '@recomendapp/types';
+import { Profile, UserReview } from '@recomendapp/types';
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { CardUser } from '@/components/Card/CardUser';
@@ -29,7 +29,7 @@ const MAX_BODY_LENGTH = 5000;
 
 interface ReviewFormProps extends React.HTMLAttributes<HTMLDivElement> {
 	review?: UserReview;
-	author?: User;
+	author?: Profile;
 	rating?: number;
 	mediaAction: React.ReactNode | (() => React.ReactNode);
 	reviewActions?: React.ReactNode | (() => React.ReactNode);

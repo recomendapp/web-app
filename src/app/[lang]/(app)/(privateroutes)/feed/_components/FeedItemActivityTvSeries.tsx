@@ -3,7 +3,7 @@ import { Link } from "@/lib/i18n/routing";
 import MediaPoster from "@/components/Media/MediaPoster";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useFormatter, useTranslations } from "next-intl";
-import { User, UserActivityTvSeries } from "@recomendapp/types";
+import { Profile, UserActivityTvSeries } from "@recomendapp/types";
 import { cn } from "@/lib/utils";
 import { CardUser } from "@/components/Card/CardUser";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
@@ -17,7 +17,7 @@ const FeedActivity = ({
 	activity,
 	className,
 }: {
-	author: User;
+	author: Profile;
 	activity: UserActivityTvSeries;
 	className?: string;
 }) => {
@@ -102,7 +102,7 @@ const FeedActivity = ({
 };
 
 interface FeedItemActivityTvSeriesProps extends React.HTMLAttributes<HTMLDivElement> {
-	author: User;
+	author: Profile;
 	activity: UserActivityTvSeries;
 }
 

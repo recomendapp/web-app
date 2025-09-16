@@ -1,7 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
-import { User, UserActivityMovie, UserReviewMovie,  } from "@recomendapp/types";
+import { Profile, UserActivityMovie, UserReviewMovie,  } from "@recomendapp/types";
 import { WithLink } from "../utils/WithLink";
 import { CardUser } from "./CardUser";
 import { useFormatter, useNow } from "next-intl";
@@ -14,7 +14,7 @@ interface CardReviewMovieProps
 		variant?: "default";
 		review: UserReviewMovie;
 		activity: UserActivityMovie;
-		author: User;
+		author: Profile;
 		linked?: boolean;
 		url: string;
 	}

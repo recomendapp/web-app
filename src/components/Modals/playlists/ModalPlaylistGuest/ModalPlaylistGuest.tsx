@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
-import { PlaylistGuest, User } from '@recomendapp/types';
+import { PlaylistGuest, Profile } from '@recomendapp/types';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
 import { usePlaylistGuestsQuery, usePlaylistGuestsSearchInfiniteQuery } from '@/features/client/playlist/playlistQueries';
 import { useEffect, useState } from 'react';
@@ -61,7 +61,7 @@ export const PlaylistGuestAddView = ({
 }) => {
   const t = useTranslations();
   const { user: authUser } = useAuth();
-  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<Profile[]>([]);
   const [search, setSearch] = useState<string>('');
   const searchQuery = useDebounce(search, 500);
   const { ref, inView } = useInView();
@@ -150,7 +150,7 @@ export const PlaylistGuestAddView = ({
 									: {})}
 								>
 									<div className="flex items-center">
-										<UserAvatar avatarUrl={user.avatar_url} username={user.username} />
+										<UserAvatar avatarUrl={user.avatar_url} username={user.username!} />
 										<div className="ml-2">
 										<p className="text-sm font-medium leading-none line-clamp-1">
 											{user.full_name}
@@ -188,7 +188,7 @@ export const PlaylistGuestAddView = ({
 					<UserAvatar
 						key={friend?.id}
 						avatarUrl={friend?.avatar_url}
-            username={friend?.username}
+            username={friend?.username!}
 						className='cursor-not-allowed'
 						onClick={() => setSelectedUsers((prev) => prev.filter(
 							(selectedUser) => selectedUser?.id !== friend?.id
