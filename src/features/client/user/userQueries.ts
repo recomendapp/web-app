@@ -1339,7 +1339,7 @@ export const useUserFollowersInfiniteQuery = ({
 
 			let query = supabase
 				.from('user_follower')
-				.select('id, follower:user!user_follower_user_id_fkey!inner(*)')
+				.select('id, follower:profile!user_follower_user_id_fkey!inner(*)')
 				.eq('followee_id', userId)
 				.eq('is_pending', false)
 				.range(from, to);
@@ -1418,7 +1418,7 @@ export const useUserFolloweesInfiniteQuery = ({
 
 			let query = supabase
 				.from('user_follower')
-				.select('id, followee:user!user_follower_followee_id_fkey!inner(*)')
+				.select('id, followee:profile!user_follower_followee_id_fkey!inner(*)')
 				.eq('user_id', userId)
 				.eq('is_pending', false)
 				.range(from, to)
@@ -1457,7 +1457,7 @@ export const useUserFolloweesQuery = ({
 			if (!userId) throw Error('Missing user id');
 			let query = supabase
 				.from('user_follower')
-				.select('id, followee:user!user_follower_followee_id_fkey!inner(*)')
+				.select('id, followee:profile!user_follower_followee_id_fkey!inner(*)')
 				.eq('user_id', userId)
 				.eq('is_pending', false);
 			

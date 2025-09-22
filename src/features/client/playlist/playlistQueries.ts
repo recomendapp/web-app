@@ -284,7 +284,7 @@ export const usePlaylistMovieAddToQuery = ({
 						playlist:playlists!inner(
 							*,
 							playlist_guests!inner(*),
-							user!inner(*),
+							user:profile!inner(*),
 							playlist_items_movie(count)
 						)
 					`)
@@ -350,7 +350,7 @@ export const usePlaylistTvSeriesAddToQuery = ({
 						playlist:playlists!inner(
 							*,
 							playlist_guests!inner(*),
-							user!inner(*),
+							user:profile!inner(*),
 							playlist_items_tv_series(count)
 						)
 					`)
