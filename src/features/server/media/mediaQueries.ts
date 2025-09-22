@@ -1,8 +1,7 @@
-import { mediaKeys } from "@/features/server/media/mediaKeys";
 import { createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@/lib/supabase/server-no-cookie";
-import { cache } from "@/lib/utils/cache";
 import { MediaMovie, MediaTvSeries, MediaTvSeriesSeason } from "@recomendapp/types";
+import { cache } from "react";
 
 export const MEDIA_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 
@@ -38,14 +37,9 @@ export const getMovie = cache(
 			.maybeSingle();
 		if (error) throw error;
 		return film;
-	},
-	{
-		revalidate: MEDIA_REVALIDATE_TIME,
-		tags: ['tmdb']
-	},
-	mediaKeys.specify('movie'),
+	}
 );
-export const getMovieUserActivitiesFollowerAverageRating = async ({
+export const getMovieUserActivitiesFollowerAverageRating = cache(async ({
 	movieId,
 } : {
 	movieId: number;
@@ -60,7 +54,7 @@ export const getMovieUserActivitiesFollowerAverageRating = async ({
 		.maybeSingle();
 	if (error) throw error;
 	return data;
-};
+});
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
@@ -100,14 +94,9 @@ export const getTvSeries = cache(
 			specials: specials,
 		};
 		return tvSeries;
-	},
-	{
-		revalidate: MEDIA_REVALIDATE_TIME,
-		tags: ['tmdb']
-	},
-	mediaKeys.specify('tv_series'),
+	}
 );
-export const getTvSeriesUserActivitiesFollowerAverageRating = async ({
+export const getTvSeriesUserActivitiesFollowerAverageRating = cache(async ({
 	tvSeriesId,
 } : {
 	tvSeriesId: number;
@@ -122,7 +111,7 @@ export const getTvSeriesUserActivitiesFollowerAverageRating = async ({
 		.maybeSingle();
 	if (error) throw error;
 	return data;
-};
+});
 
 export const getTvSeason = cache(
 	async (locale: string, serieId: number, seasonNumber: number) => {
@@ -148,12 +137,7 @@ export const getTvSeason = cache(
 			.overrideTypes<MediaTvSeriesSeason, { merge: false }>();
 		if (error) throw error;
 		return data;
-	},
-	{
-		revalidate: MEDIA_REVALIDATE_TIME,
-		tags: ['tmdb']
-	},
-	mediaKeys.specify('tv_season')
+	}
 );
 
 /* -------------------------------------------------------------------------- */
@@ -185,12 +169,7 @@ export const getPerson = cache(
 			.maybeSingle();
 		if (error) throw error;
 		return person;
-	},
-	{
-		revalidate: MEDIA_REVALIDATE_TIME,
-		tags: ['tmdb']
-	},
-	mediaKeys.specify('person'),
+	}
 );
 
 export const getPersonFilms = cache(
@@ -258,9 +237,7 @@ export const getPersonFilms = cache(
 			.overrideTypes<Array<{
 				movie: MediaMovie;
 			}>, { merge: true }>()
-	},
-	{ revalidate: MEDIA_REVALIDATE_TIME },
-	mediaKeys.personFilms(),
+	}
 );
 
 export const getPersonTvSeries = cache(
@@ -333,9 +310,7 @@ export const getPersonTvSeries = cache(
 			.overrideTypes<Array<{
 			tv_series: MediaTvSeries;
 			}>, { merge: true }>()
-	},
-	{ revalidate: MEDIA_REVALIDATE_TIME },
-	mediaKeys.personFilms(),
+	}
 );
 
 /* -------------------------------------------------------------------------- */

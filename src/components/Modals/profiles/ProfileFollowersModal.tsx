@@ -70,7 +70,7 @@ export function ProfileFollowersModal({
 							<Avatar className="h-[40px] w-[40px] shadow-2xl">
 								<AvatarImage
 									src={follower?.avatar_url ?? ''}
-									alt={follower?.username}
+									alt={follower?.username!}
 								/>
 								<AvatarFallback className="text-primary-foreground bg-muted text-[20px]">
 									{getInitiales(follower?.username ?? '')}
