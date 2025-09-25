@@ -56,7 +56,7 @@ export const useUserFriendsQuery = ({
 			if (!userId) throw Error('Missing user id');
 			let query = supabase
 				.from('user_friend')
-				.select('id, friend:friend_id!inner(*)')
+				.select('id, friend:profile!user_friend_friend_id_fkey!inner(*)')
 				.eq('user_id', userId)
 			if (filters) {
 				if (filters.search) {
@@ -591,7 +591,7 @@ export const useUserRecosMovieSendQuery = ({
 				.from('user_friend')
 				.select(`
 					id,
-					friend:friend_id!inner(
+					friend:profile!user_friend_friend_id_fkey!inner(
 						*,
 						user_activities_movie(count),
 						user_recos_movie!user_recos_movie_user_id_fkey(count)
@@ -646,7 +646,7 @@ export const useUserRecosTvSeriesSendQuery = ({
 				.from('user_friend')
 				.select(`
 					id,
-					friend:friend_id!inner(
+					friend:profile!user_friend_friend_id_fkey!inner(
 						*,
 						user_activities_tv_series(count),
 						user_recos_tv_series!user_recos_tv_series_user_id_fkey(count)
