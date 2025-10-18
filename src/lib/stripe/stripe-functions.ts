@@ -1,11 +1,9 @@
 "use server"
 
 import Stripe from 'stripe';
-import { Session } from '@supabase/supabase-js';
 import { stripe } from '@/lib/stripe/stripe';
 import { toDateTime } from '@/lib/stripe/stripe-helpers';
 import { supabaseAdmin } from '../supabase/supabase-admin';
-import { siteConfig } from '@/config/site';
 import { Database } from '@recomendapp/types';
 
 const upsertProductRecord = async (product: Stripe.Product) => {
@@ -187,19 +185,6 @@ const manageSubscriptionStatusChange = async (
 	);
 };
 
-const getUrlCustomerPortal = async (session: Session, returnDomain: string = siteConfig.url) => {
-  const customer = await createOrRetrieveCustomer({
-	uuid: session.user.id || '',
-	email: session.user.email || '',
-  });
-  if (!customer) throw Error('Could not get customer');
-  const { url } = await stripe.billingPortal.sessions.create({
-	customer,
-	return_url: `${returnDomain}/settings/subscription`,
-  });
-  return url;
-};
-
 export {
   upsertProductRecord,
   upsertPriceRecord,
@@ -207,5 +192,4 @@ export {
   deletePriceRecord,
   createOrRetrieveCustomer,
   manageSubscriptionStatusChange,
-  getUrlCustomerPortal,
 };

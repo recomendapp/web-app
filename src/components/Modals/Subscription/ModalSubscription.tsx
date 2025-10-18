@@ -11,12 +11,12 @@ import { formatPrice } from '@/components/ui/format-price';
 import { useLocale, useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
-import { postData } from '@/lib/stripe/stripe-helpers';
 import { getStripe } from '@/lib/stripe/stripeClient';
 import { upperFirst } from 'lodash';
 import { Badge } from '@/components/ui/badge';
 import { calculateSave } from '@/utils/calculate-save';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 
 interface ModalSubscriptionProps extends ModalType {
@@ -29,7 +29,8 @@ export function ModalSubscription({
 	preselectedPrice,
 	...props
 } : ModalSubscriptionProps) {
-	const { user } = useAuth();
+	const supabase = useSupabaseClient();
+	const { session, user } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
 	const router = useRouter();
@@ -40,26 +41,33 @@ export function ModalSubscription({
 
 	const handleCheckout = async (price: Prices) => {
 		setIsLoading(true);
-		if (!user) {
+		if (!session) {
 			toast.error(upperFirst(t('common.messages.not_logged_in')));
-		  return router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
+		  	return router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
 		}
 		if (user?.premium) {
 			toast.error(upperFirst(t('common.messages.already_premium')));
-		  return router.push('/settings/subscription');
+		  	return router.push('/settings/subscription');
 		}
 	
 		try {
-		  const { sessionId } = await postData({
-			url: '/api/stripe/create-checkout-session',
-			data: { price },
-		  });
-		  const stripe = await getStripe();
-		  stripe?.redirectToCheckout({ sessionId });
+			const { data, error } = await supabase.functions.invoke('stripe/create-checkout-session', {
+				method: 'POST',
+				body: JSON.stringify({
+					price,
+					success_url: `${location.origin}/settings/subscription`,
+					cancel_url: `${location.origin}${pathname}`,
+				}),
+			});
+			if (error || !data?.sessionId) {
+				throw new Error('No session ID returned');
+			}
+			const stripe = await getStripe();
+			stripe?.redirectToCheckout({ sessionId: data.sessionId });
 		} catch (error) {
-		  return alert((error as Error)?.message);
+			return alert((error as Error)?.message);
 		} finally {
-		  setIsLoading(false);
+			setIsLoading(false);
 		}
 	};
 

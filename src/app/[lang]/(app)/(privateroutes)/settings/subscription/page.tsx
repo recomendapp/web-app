@@ -7,10 +7,11 @@ import { useAuth } from '@/context/auth-context';
 import { Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link, useRouter } from "@/lib/i18n/routing";
-import { getUrlCustomerPortal } from '@/lib/stripe/stripe-functions';
 import { useUserSubscriptionsQuery } from '@/features/client/user/userQueries';
+import { useSupabaseClient } from '@/context/supabase-context';
 
 export default function SettingsAccountPage() {
+  const supabase = useSupabaseClient();
   const { session } = useAuth();
   const t = useTranslations('pages.settings');
   const router = useRouter();
@@ -24,8 +25,14 @@ export default function SettingsAccountPage() {
   const redirectToCustomerPortal = async () => {
     try {
       if (!session) throw Error('Could not get user');
-      const url = await getUrlCustomerPortal(session, location.origin);
-      router.push(url);
+      const { data, error } = await supabase.functions.invoke('stripe/create-customer-portal', {
+        method: 'POST',
+        body: JSON.stringify({
+          return_url: `${location.origin}/settings/subscription`,
+        }),
+      });
+      if (error || !data?.url) throw new Error('No URL returned');
+      router.push(data.url);
     } catch (error) {
       console.error(error);
     }
