@@ -106,14 +106,12 @@ const useNotificationPermission = () => {
 		if (!token || !session) return;
 
 		const saveToken = async () => {
-			await supabase.from('user_notification_tokens').upsert({
+			await supabase.from('user_notification_tokens').insert({
 				user_id: session.user.id,
-				token: token,
+				token,
 				device_type: 'web',
 				provider: 'fcm',
 				updated_at: new Date().toISOString(),
-			}, {
-				onConflict: "user_id, provider, token"
 			});
 		};
 		if (process.env.NODE_ENV !== 'development') {
