@@ -15,7 +15,7 @@ Web interface of the **Recomend** app, dev by [@lxup](https://github.com/lxup).
 
 - ⚡️ [Next.js](https://nextjs.org/) – React Framework
 - 🧬 [Supabase](https://supabase.com/) – Auth & Database
-- 💳 [Stripe](https://stripe.com/) – Payments
+- 💳 [RevenueCat](https://www.revenuecat.com/) – Subscriptions
 - 🔔 [Novu](https://novu.co/) – In-app Notifications
 - 📲 [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) – Push Notifications
 - ☁️ [Cloudflare R2](https://www.cloudflare.com/products/r2/) – Media Storage

@@ -5,78 +5,92 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/auth-context';
 import { Sparkles } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 import { Link, useRouter } from "@/lib/i18n/routing";
-import { useUserSubscriptionsQuery } from '@/features/client/user/userQueries';
 import { useSupabaseClient } from '@/context/supabase-context';
+import { useMemo } from 'react';
+import { upperFirst } from 'lodash';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Icons } from '@/config/icons';
 
 export default function SettingsAccountPage() {
   const supabase = useSupabaseClient();
-  const { session } = useAuth();
-  const t = useTranslations('pages.settings');
+  const { customerInfo } = useAuth();
+  const t = useTranslations();
+  const formatter = useFormatter();
   const router = useRouter();
 
-  const {
-    data: subscription,
-  } = useUserSubscriptionsQuery({
-    userId: session?.user.id,
-  })
-
-  const redirectToCustomerPortal = async () => {
-    try {
-      if (!session) throw Error('Could not get user');
-      const { data, error } = await supabase.functions.invoke('stripe/create-customer-portal', {
-        method: 'POST',
-        body: JSON.stringify({
-          return_url: `${location.origin}/settings/subscription`,
-        }),
-      });
-      if (error || !data?.url) throw new Error('No URL returned');
-      router.push(data.url);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const activeSubscriptions = useMemo(() => {
+    return Object.values(customerInfo?.entitlements.active || {});
+  }, [customerInfo]);
 
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">{t('subscription.label')}</h3>
-        {/* <p className="text-sm text-muted-foreground">
-          This is how others will see you on the site.
-        </p> */}
+        <h3 className="text-lg font-medium">{t('pages.settings.subscription.label')}</h3>
       </div>
       <Separator />
-      {!session ? (
+      {!customerInfo ? (
         <Loader />
       ) : (
-        <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
-          {subscription ? (
+        <div className="flex flex-col gap-2">
+          {activeSubscriptions.length > 0 ? (
             <>
-              <p className="pb-4 sm:pb-0">
-                You are currently on the{' '}
-                <b>
-                  {subscription.price?.product?.name}
-                </b>{' '}
-                plan
-              </p>
+              {activeSubscriptions.map((subscription) => (
+                <Card className='w-full'>
+                  <CardHeader>
+                    <CardTitle>
+                      {upperFirst(subscription.identifier)}
+                    </CardTitle>
+                    <CardDescription>
+
+                    </CardDescription>
+                    
+                  </CardHeader>
+                  <CardContent className='text-muted-foreground'>
+                    <p>
+                      {
+                        subscription.store === 'rc_billing'
+                          ? 'Web'
+                          : subscription.store === 'app_store'
+                          ? 'iOS'
+                          : subscription.store === 'play_store'
+                          ? 'Android'
+                          : subscription.store
+                      }
+                    </p>
+                    <p>
+                      {upperFirst(t('common.messages.started_on_date', { date: formatter.dateTime(new Date(subscription.originalPurchaseDate), { dateStyle: 'long' }) }))}
+                    </p>
+                    <p>
+                      {upperFirst(t('common.messages.last_renewed_on_date', { date: formatter.dateTime(new Date(subscription.latestPurchaseDate), { dateStyle: 'long' }) }))}
+                    </p>
+                  </CardContent>
+                </Card>  
+              ))}
               <Button
-                variant={'accent-yellow-enabled'}
-                disabled={!session}
-                onClick={redirectToCustomerPortal}
+              variant={'accent-yellow-enabled'}
+              disabled={!customerInfo.managementURL}
+              asChild
               >
-                Open customer portal
+                {customerInfo.managementURL ? (
+                  <Link href={customerInfo.managementURL}>
+                    {upperFirst(t('common.messages.manage_subscription'))}
+                  </Link>
+                ) : (
+                  <Icons.loader />
+                )}
               </Button>
             </>
           ) : (
             <>
-              <p className="pb-4 sm:pb-0">
-                You are currently on the <b>Free</b> plan
+              <p className="text-muted-foreground pb-4 sm:pb-0">
+                {upperFirst(t('common.messages.no_active_subscription'))}
               </p>
               <Button variant={'accent-yellow-enabled'} asChild>
                 <Link href={'/upgrade'}>
                   <Sparkles className="mr-2 h-4 w-4" />
-                  <span>Upgrade to Premium</span>
+                  <span>{upperFirst(t('common.messages.upgrade'))}</span>
                 </Link>
               </Button>
             </>

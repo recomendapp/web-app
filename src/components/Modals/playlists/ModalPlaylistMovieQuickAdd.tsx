@@ -134,17 +134,20 @@ export function ModalPlaylistMovieQuickAdd({
 							))
 						))
 					) : isError ? (
-						<div className='p-4 text-center text-muted-foreground'>
+						<p className='p-4 text-center text-muted-foreground'>
 						{upperFirst(t('common.messages.an_error_occurred'))}
-						</div>
+						</p>
 					) : (searchQuery && !isLoading) ? (
-						<div className='p-4 text-center text-muted-foreground'>
-						{upperFirst(t('common.messages.no_film_found'))}
-						</div>
+						<p className='p-4 text-center text-muted-foreground'>
+							{t.rich('common.messages.no_results_for', {
+								query: searchQuery,
+								strong: (chunks) => <strong>{chunks}</strong>,
+							})}
+						</p>
 					) : !isLoading ? (
-						<div className='p-4 text-center text-muted-foreground'>
+						<p className='p-4 text-center text-muted-foreground'>
 						{upperFirst(t('common.messages.search_film', { count: 1 }))}
-						</div>
+						</p>
 					) : null}
 					 {(isLoading || isFetchingNextPage) ? <Icons.loader className='w-full'/> : null}
 					</div>

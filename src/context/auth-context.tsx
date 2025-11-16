@@ -1,16 +1,21 @@
 'use client';
+
 import { createContext, useState, useEffect, use } from 'react';
 import { Provider, Session } from '@supabase/supabase-js';
 import { User } from '@recomendapp/types';
 import { useUserQuery } from '@/features/client/user/userQueries';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { redirect, usePathname, useRouter } from '@/lib/i18n/routing';
+import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useLocale } from 'next-intl';
 import { useParams } from 'next/navigation';
+import { CustomerInfo } from '@revenuecat/purchases-js';
+import { useRevenueCat } from '@/lib/revenuecat/useRevenueCat';
+import { useAuthCustomerInfo } from '@/features/client/auth/authQueries';
 
 export interface UserState {
   user: User | null | undefined;
   session: Session | null;
+  customerInfo: CustomerInfo | undefined;
   loading: boolean;
   login: (email: string, password: string, redirect?: string | null) => Promise<void>;
   logout: () => Promise<void>;
@@ -58,6 +63,13 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
     userId: session?.user?.id,
     enabled: session !== undefined,
   });
+  const { customerInfo: initCustomerInfo } = useRevenueCat(session);
+  const {
+    data: customerInfo,
+	} = useAuthCustomerInfo({
+    enabled: !!initCustomerInfo,
+    initialData: initCustomerInfo,
+	});
 
   const login = async (email: string, password: string, redirect?: string | null) => {
     const { error } = await supabase.auth.signInWithPassword({
@@ -169,6 +181,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
       value={{
         user,
         session,
+        customerInfo,
         loading,
         login,
         logout,

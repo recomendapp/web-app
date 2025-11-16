@@ -18,7 +18,7 @@ import { WidgetUserWatchlist } from "@/components/widgets/WidgetUserWatchlist";
 import { useMemo } from "react";
 
 export default function Home() {
-	const { session, user } = useAuth();
+	const { session, user, customerInfo } = useAuth();
 	const { device } = useUI();
 	const t = useTranslations();
 	const now = useNow({ updateInterval: 1000 * 60 });
@@ -29,6 +29,8 @@ export default function Home() {
 		if (hour < 18) return 'afternoon';
 		return 'evening';
 	}, [now]);
+
+	console.log('Customer Info:', customerInfo);
 	return (
 		<div className="p-4 gap-4 gap-x-8 grid grid-cols-1 @4xl/main:grid-cols-2">
 			<div className="flex justify-between items-center w-full">

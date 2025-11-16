@@ -2,10 +2,11 @@
 
 import { RightPanelSocial } from '@/components/sidebar/right-panel/RightPanelSocial';
 import { RightPanel } from '@/components/sidebar/right-panel/RightPanelUtils';
-import { Device, useDevice } from '@/hooks/use-device';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useAuth } from './auth-context';
 import { createContext, use, useCallback, useState } from 'react';
+import { Device } from '@/utils/get-device';
+import { useDevice } from '@/hooks/use-device';
 
 export const SIDEBAR_COOKIE_NAME = "ui-sidebar:open";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 year
@@ -50,11 +51,13 @@ export const UIProvider = ({
   defaultLayout = [265, 440, 0],
 	cookieSidebarOpen = true,
   cookieRightPanelOpen = true,
+  device: deviceProps,
 } : {
   children: React.ReactNode;
   defaultLayout: number[] | undefined
 	cookieSidebarOpen?: boolean
   cookieRightPanelOpen?: boolean
+  device: Device;
 }) => {
   const { session } = useAuth();
   const isMobile = useIsMobile();
@@ -127,11 +130,7 @@ export const UIProvider = ({
   
   // *========== END RIGHTPANEL ==========*
 
-  // *========== IS MOBILE ==========*
-
-  const device = useDevice();
-
-  // *========== END IS MOBILE ==========*
+  const device = useDevice({ device: deviceProps });
 
   return (
     <UIContext.Provider

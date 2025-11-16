@@ -30,25 +30,6 @@ export const metadata: Metadata = {
   icons: {
     apple: '/assets/icons/ios/512.png',
   },
-  // itunes: {
-  //   appId: '333903271',
-  //   appArgument: 'myAppArgument',
-  // },
-  // appLinks: {
-  //   ios: {
-  //     app_name: siteConfig.name,
-  //     app_store_id: '333903271',
-  //     url: 'https://recomend.app/ios',
-  //   },
-  //   android: {
-  //     package: 'com.example.android/package',
-  //     app_name: 'app_name_android',
-  //   },
-  //   web: {
-  //     url: 'https://recomend.app/',
-  //     should_fallback: true,
-  //   },
-  // },
   appleWebApp: {
     title: siteConfig.name,
     statusBarStyle: 'default',

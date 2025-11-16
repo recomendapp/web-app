@@ -6,12 +6,13 @@ import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/routing";
 import { usePathname } from '@/lib/i18n/routing';
+import { useMemo } from "react";
 
 export const FeedNavbar = () => {
-	const { user } = useAuth();
+	const { customerInfo } = useAuth();
 	const common = useTranslations('common');
 	const pathname = usePathname();
-	const routes = [
+	const routes = useMemo(() => [
 		{
 			label: upperFirst(common('messages.community')),
 			active: pathname === '/feed',
@@ -21,10 +22,10 @@ export const FeedNavbar = () => {
 		{
 			label: title(common('messages.cast_and_crew')),
 			active: pathname === '/feed/cast-crew',
-			href: user?.premium ? `/feed/cast-crew` : '/upgrade',
-			disabled: !user?.premium,
+			href: customerInfo?.entitlements.active['premium'] ? `/feed/cast-crew` : '/upgrade',
+			disabled: !customerInfo?.entitlements.active['premium'],
 		},
-	];
+	], [pathname, common, customerInfo]);
 
 	return (
 		<div className="inline-flex h-10 items-center justify-center bg-muted p-1 text-muted-foreground w-full max-w-xl rounded-md mb-4">
