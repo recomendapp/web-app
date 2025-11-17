@@ -66,12 +66,17 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
     initialData: initCustomerInfo,
 	});
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, redirectTo?: string | null) => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (error) throw error;
+    if (redirectTo) {
+      router.push(redirectTo);
+    } else {
+      router.push('/');
+    }
   };
 
   const logout = async () => {
@@ -81,6 +86,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
     }
     const { error } = await supabase.auth.signOut({ scope: 'local' });
     if (error) throw error;
+    router.refresh();
   };
 
   const signup = async ({
