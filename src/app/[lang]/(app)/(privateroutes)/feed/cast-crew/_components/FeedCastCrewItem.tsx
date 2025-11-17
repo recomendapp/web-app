@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { useFormatter, useTranslations } from "next-intl";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";

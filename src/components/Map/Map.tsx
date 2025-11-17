@@ -23,9 +23,9 @@ export function Map() {
   } = useMap();
 
   const [cursor, setCursor] = useState<string>('auto');
-  const mapSettings = useRef({
+  const mapSettings = {
     baseZoom: 8,
-  }).current;
+  };
 
   const filtersRendered = useMemo(() => {
     const startDate = new Date(`${filters.date.value[0]}`);
@@ -102,7 +102,7 @@ export function Map() {
         onLoad={() => {
           setMapInitialized(true);
         }}
-        locale={locale}
+        locale={{ language: locale }}
       >
           <Source id="movies" type="geojson" data={data.moviesDataset}>
             <Layer

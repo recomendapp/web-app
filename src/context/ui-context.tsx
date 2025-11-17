@@ -115,7 +115,7 @@ export const UIProvider = ({
     } else {
       rightPanelOpenChange(newState);
     }
-  }, [isMobile, rightPanelOpen, rightPanelOpenChange]);
+  }, [isMobile, rightPanelOpen, rightPanelOpenChange, rightPanelOpenMobile]);
 
   const toggleRightPanelContent = <P,>(content: RightPanel) => {
     if (content.onlyAuth && !session) return;

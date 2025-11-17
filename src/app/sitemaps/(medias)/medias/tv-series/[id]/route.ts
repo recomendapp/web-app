@@ -8,12 +8,11 @@ import { gzipSync } from "zlib";
 
 export async function GET(
   _: Request,
-  { params }: { params: Promise<{ id: number }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const series = await getSitemapMediaTvSeries(id);
-
+    const series = await getSitemapMediaTvSeries(Number(id));
     const sitemapXML = buildSitemap(series.map((serie) => {
       const translations = Object.fromEntries(
         serie.tmdb_tv_series_translations.map((t) => [

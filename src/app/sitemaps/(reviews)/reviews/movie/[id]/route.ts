@@ -6,11 +6,11 @@ import { gzipSync } from "zlib";
 
 export async function GET(
   _: Request,
-  { params }: { params: Promise<{ id: number }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const reviews = await getSitemapReviewsMovie(id);
+    const reviews = await getSitemapReviewsMovie(Number(id));
 
     const sitemapXML = buildSitemap(reviews.map((review) => ({
       url: `${siteConfig.url}/film/${review.activity.movie_id}/review/${review.id}`,

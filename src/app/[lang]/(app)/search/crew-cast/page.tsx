@@ -13,9 +13,10 @@ import {
 import { cn } from '@/lib/utils';
 import { generatePaginationNumbers } from '@/utils/generate-pagination-numbers';
 import { title } from '@/utils/custom-lodash';
-import { redirect } from '@/lib/i18n/routing';
+import { redirect } from '@/lib/i18n/navigation';
 import { Metadata } from 'next';
 import { CardPerson } from '@/components/Card/CardPerson';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -29,9 +30,9 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   return {
-    title: `${searchParams.q} - ${title(common('messages.cast_and_crew'))}`,
+    title: `${searchParams.q} - ${title(t('common.messages.cast_and_crew'))}`,
   };
 }
 
@@ -54,8 +55,8 @@ export default async function SearchCrewCast(
 ) {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  if (!searchParams?.q) redirect({ href: '/search', locale: params.lang });
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+  if (!searchParams?.q) redirect({ href: '/search', locale: params.lang as SupportedLocale });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const page = getValidatePage(Number(searchParams.page));
 
   const { results, total_results } = await getSearchPersons(
@@ -69,7 +70,7 @@ export default async function SearchCrewCast(
   if (!results || total_results === 0 || results.length === 0) {
     return (
       <p className='text-muted-foreground'>
-        {common.rich('messages.no_results_for', {
+        {t.rich('common.messages.no_results_for', {
           query: searchParams.q,
           strong: (chunks) => <strong>{chunks}</strong>,
         })}

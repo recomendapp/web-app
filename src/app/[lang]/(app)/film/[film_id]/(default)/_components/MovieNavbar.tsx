@@ -2,8 +2,8 @@
 
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
-import { Link } from "@/lib/i18n/routing";
-import { usePathname } from '@/lib/i18n/routing';
+import { Link } from "@/lib/i18n/navigation";
+import { usePathname } from '@/lib/i18n/navigation';
 
 const type = 'film';
 

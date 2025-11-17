@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 import { seoLocales } from '@/lib/i18n/routing';
 import { getPlaylist } from '@/features/server/playlist/playlistQueries';
 import { Playlist } from './_components/Playlist';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
     props: {
@@ -13,20 +14,19 @@ export async function generateMetadata(
     }
 ): Promise<Metadata> {
     const params = await props.params;
-    const common = await getTranslations({ locale: params.lang, namespace: 'common' });
-    const t = await getTranslations({ locale: params.lang, namespace: 'pages' });
+    const t = await getTranslations({ locale: params.lang as SupportedLocale });
     const playlist = await getPlaylist(params.playlist_id);
     if (!playlist) return {
-		title: upperFirst(common('messages.playlist_not_found')),
+		title: upperFirst(t('common.messages.playlist_not_found')),
 	};
     return {
-		title: t('playlist.metadata.title', { title: playlist.title, username: playlist.user?.username }),
-		description: truncate(t('playlist.metadata.description', { username: playlist.user?.username, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
+		title: t('pages.playlist.metadata.title', { title: playlist.title, username: playlist.user?.username! }),
+		description: truncate(t('pages.playlist.metadata.description', { username: playlist.user?.username!, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
         alternates: seoLocales(params.lang, `/playlist/${playlist.id}`),
         openGraph: {
             siteName: siteConfig.name,
-            title: `${t('playlist.metadata.title', { title: playlist.title, username: playlist.user?.username })} • ${siteConfig.name}`,
-            description: truncate(t('playlist.metadata.description', { username: playlist.user?.username, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
+            title: `${t('pages.playlist.metadata.title', { title: playlist.title, username: playlist.user?.username! })} • ${siteConfig.name}`,
+            description: truncate(t('pages.playlist.metadata.description', { username: playlist.user?.username!, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
             url: `${siteConfig.url}/${params.lang}/playlist/${playlist.id}`,
             images: playlist.poster_url ? [
                 { url: playlist.poster_url },

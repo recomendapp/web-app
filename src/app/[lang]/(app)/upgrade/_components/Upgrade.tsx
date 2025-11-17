@@ -19,7 +19,7 @@ import { useRandomImage } from "@/hooks/use-random-image";
 import { cn } from "@/lib/utils";
 import { upperFirst } from "lodash";
 import { useLocale, useTranslations } from "next-intl";
-import { Link, usePathname, useRouter } from "@/lib/i18n/routing";
+import { Link, usePathname, useRouter } from "@/lib/i18n/navigation";
 import { Fragment, useCallback, useMemo, useState } from "react";
 import { useOffering } from "@/lib/revenuecat";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -225,11 +225,10 @@ export const Upgrade = () => {
 		  	return router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
 		}
 		if (customerInfo?.entitlements.active[plan.identifier]) {
-			toast.error(upperFirst(t('common.messages.already_premium')));
 		  	return router.push('/settings/subscription');
 		}
 		await purchasePackage(plan);
-	}, [offering, billingInterval, purchasePackage]);
+	}, [purchasePackage, session, customerInfo, router, pathname, t]);
 
 	const handleSelectPlan = useCallback(() => {
 		if (!offering) return;

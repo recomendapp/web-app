@@ -6,19 +6,16 @@ import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/auth-context';
 import { Sparkles } from 'lucide-react';
 import { useFormatter, useTranslations } from 'next-intl';
-import { Link, useRouter } from "@/lib/i18n/routing";
-import { useSupabaseClient } from '@/context/supabase-context';
+import { Link } from "@/lib/i18n/navigation";
 import { useMemo } from 'react';
 import { upperFirst } from 'lodash';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Icons } from '@/config/icons';
 
 export default function SettingsAccountPage() {
-  const supabase = useSupabaseClient();
   const { customerInfo } = useAuth();
   const t = useTranslations();
   const formatter = useFormatter();
-  const router = useRouter();
 
   const activeSubscriptions = useMemo(() => {
     return Object.values(customerInfo?.entitlements.active || {});
@@ -37,7 +34,7 @@ export default function SettingsAccountPage() {
           {activeSubscriptions.length > 0 ? (
             <>
               {activeSubscriptions.map((subscription) => (
-                <Card className='w-full'>
+                <Card key={subscription.identifier} className='w-full'>
                   <CardHeader>
                     <CardTitle>
                       {upperFirst(subscription.identifier)}

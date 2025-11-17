@@ -2,7 +2,7 @@
 import { JSONContent, MediaPerson, UserReviewMovie } from "@recomendapp/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { Card } from "@/components/ui/card";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import ReviewForm from "@/components/Review/ReviewForm";

@@ -7,9 +7,9 @@ import { FacebookIcon, FacebookShareButton, RedditIcon, RedditShareButton, Teleg
 import { MediaType } from "@recomendapp/types";
 import { ButtonCopy } from "@/components/utils/ButtonCopy";
 import { useLocale, useTranslations } from "next-intl";
-import { findKey, upperFirst } from "lodash";
+import { upperFirst } from "lodash";
 import { useUI } from "@/context/ui-context";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Icons } from "@/config/icons";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
@@ -30,18 +30,24 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 	const common = useTranslations('common');
 	const url = useMemo(() => (
 		`${location.origin}/${locale}${path}`
-	), [path]);
+	), [path, locale]);
 	const sharedData: ShareData = useMemo(() => ({
 		title: title ?? '',
 		url,
 	}), [title, url]);
 
-	const [canShare, setCanShare] = useState<boolean | undefined>(undefined);
+	const canShare = useMemo(() => {
+		return navigator.canShare?.(sharedData) || false;
+	}, [sharedData]);
 	const [fileToShare, setFileToShare] = useState<File | null>(null);
-	const [canShareController, setCanShareController] = useState<boolean | undefined>(undefined);
 	const sharedControllerData: ShareData = useMemo(() => ({
 		files: fileToShare ? [fileToShare] : [],
 	}), [fileToShare]);
+	const canShareController = useMemo(() => {
+		if (!shareController) return false;
+		return navigator.canShare?.(sharedControllerData) ?? false;
+	}, [shareController, sharedControllerData]);
+
 	const onShare = async (data: ShareData) => {
 		try {
 			await navigator.share(data);
@@ -61,30 +67,12 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 		}
 	};
 
-	useEffect(() => {
-		if (navigator.canShare?.(sharedData)) {
-			setCanShare(true);
-		} else {
-			setCanShare(false);
-		}
-	}, [device, sharedData]);
-
-	useEffect(() => {
-		if (shareController) {
-			if (navigator.canShare?.(sharedControllerData)) {
-				setCanShareController(true);
-			} else {
-				setCanShareController(false);
-			}
-		}
-	}, [shareController, sharedControllerData]);
-
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
 			<ModalHeader>
 				<ModalTitle className="line-clamp-2">
 					{common.rich('messages.share_title', {
-						title: title ?? upperFirst(common('messages.share_default_title')),
+						title: title ?? '',
 						strong: (chunks) => <strong>{chunks}</strong>,
 					})}
 				</ModalTitle>

@@ -2,7 +2,7 @@
 
 import { Icons } from '@/config/icons';
 import { Images } from '@/config/images';
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { useSearchParams } from 'next/navigation';
 import {
   Card,
@@ -19,10 +19,9 @@ import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 
 export default function Login() {
-  const t = useTranslations('pages.auth.login');
-  const common = useTranslations('common');
+  const t = useTranslations();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get('redirect');
+  const redirectTo = searchParams.get('pages.auth.login.redirect');
   const bgImage = useRandomImage(Images.auth.login.background);
 
   return (
@@ -39,16 +38,16 @@ export default function Login() {
         <CardHeader className='gap-2'>
           <CardTitle className='inline-flex gap-2 items-center justify-center'>
             <Icons.site.icon className='fill-accent-yellow w-8' />
-            {t('label')}
+            {t('pages.auth.login.label')}
           </CardTitle>
-          <CardDescription className='text-center'>{t('description')}</CardDescription>
+          <CardDescription className='text-center'>{t('pages.auth.login.description')}</CardDescription>
         </CardHeader>
         <CardContent className='grid gap-4'>
           <LoginOtpForm redirectTo={redirectTo} />
         </CardContent>
         <CardFooter>
           <p className="px-8 text-center text-sm text-muted-foreground">
-            {t('otp.password_login')}{' '}
+            {t('pages.auth.login.otp.password_login')}{' '}
             <Button
               variant={'link-accent-yellow'}
               className='inline p-0' 
@@ -60,7 +59,7 @@ export default function Login() {
                   query: redirectTo ? { redirect: redirectTo } : undefined,
                 }}
               >
-                {upperFirst(common('click_here'))}
+                {upperFirst(t('common.messages.click_here'))}
               </Link>
             </Button>
           </p>

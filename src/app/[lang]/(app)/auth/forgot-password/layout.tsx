@@ -1,3 +1,4 @@
+import { SupportedLocale } from '@/translations/locales';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
@@ -9,7 +10,7 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.auth.forgot_password' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'pages.auth.forgot_password' });
   return {
     title: t('metadata.title'),
     description: t('metadata.description'),

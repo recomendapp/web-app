@@ -6,12 +6,11 @@ import { gzipSync } from "zlib";
 
 export async function GET(
   _: Request,
-  { params }: { params: Promise<{ id: number }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const playlists = await getSitemapPlaylists(id);
-
+    const playlists = await getSitemapPlaylists(Number(id));
     const sitemapXML = buildSitemap(playlists.map((playlist) => ({
       url: `${siteConfig.url}/playlist/${playlist.id}`,
       lastModified: playlist.updated_at

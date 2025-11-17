@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
 import { MediaPerson } from "@recomendapp/types";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
-import { useRouter } from "@/lib/i18n/routing";
+import { useRouter } from "@/lib/i18n/navigation";
 import { Button } from "../ui/button";
 import { BadgeMedia } from "../Badge/BadgeMedia";
 import { DateOnlyYearTooltip } from "../utils/Date";

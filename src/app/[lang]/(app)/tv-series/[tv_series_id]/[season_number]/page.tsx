@@ -9,6 +9,7 @@ import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 import { TVSeason, WithContext } from "schema-dts";
 import { seoLocales } from "@/lib/i18n/routing";
+import { SupportedLocale } from "@/translations/locales";
 
 export async function generateMetadata(
   props: {
@@ -20,16 +21,15 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.tv_series.seasons.season' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
   const season = await getTvSeason(params.lang, serieId, Number(params.season_number));
-  if (!season) return { title: upperFirst(common('messages.tv_season_not_found')) };
+  if (!season) return { title: upperFirst(t('common.messages.tv_season_not_found')) };
   return {
-    title: t('metadata.title', { title: season.serie?.name, number: season.season_number! }),
+    title: t('pages.tv_series.seasons.season.metadata.title', { title: season.serie?.name!, number: season.season_number! }),
     description: truncate(
-      t('metadata.description', {
-        title: season.serie?.name,
+      t('pages.tv_series.seasons.season.metadata.description', {
+        title: season.serie?.name!,
         number: season.season_number!,
       }),
       { length: siteConfig.seo.description.limit }
@@ -37,10 +37,10 @@ export async function generateMetadata(
     alternates: seoLocales(params.lang, `/tv-series/${params.tv_series_id}/${params.season_number}`),
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: season.serie?.name, number: season.season_number! })} • ${siteConfig.name}`,
+      title: `${t('pages.tv_series.seasons.season.metadata.title', { title: season.serie?.name!, number: season.season_number! })} • ${siteConfig.name}`,
       description: truncate(
-        t('metadata.description', {
-          title: season.serie?.name,
+        t('pages.tv_series.seasons.season.metadata.description', {
+          title: season.serie?.name!,
           number: season.season_number!,
         }),
         { length: siteConfig.seo.description.limit }

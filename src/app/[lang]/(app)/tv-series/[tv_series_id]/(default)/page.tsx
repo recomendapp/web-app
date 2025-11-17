@@ -8,6 +8,7 @@ import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
 import { seoLocales } from '@/lib/i18n/routing';
 import { TVSeries, WithContext } from 'schema-dts';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -18,42 +19,41 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.tv_series' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
   const serie = await getTvSeries(params.lang, serieId);
-  if (!serie) return { title: upperFirst(common('messages.tv_series_not_found')) };
+  if (!serie) return { title: upperFirst(t('common.messages.tv_series_not_found')) };
   return {
-    title: t('metadata.title', { title: serie.name, year: new Date(String(serie.first_air_date)).getFullYear() }),
+    title: t('pages.tv_series.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() }),
     description: truncate(
       serie.created_by
-        ? t('metadata.description', {
-          title: serie.name,
+        ? t('pages.tv_series.metadata.description', {
+          title: serie.name!,
           creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.created_by.map((creator) => creator.name ?? '')),
           year: new Date(String(serie.first_air_date)).getFullYear(),
-          overview: serie.overview,
-        }) : t('metadata.description_no_creator', {
-          title: serie.name,
+          overview: serie.overview!,
+        }) : t('pages.tv_series.metadata.description_no_creator', {
+          title: serie.name!,
           year: new Date(String(serie.first_air_date)).getFullYear(),
-          overview: serie.overview,
+          overview: serie.overview!,
         }),
       { length: siteConfig.seo.description.limit }
     ),
     alternates: seoLocales(params.lang, `/tv-series/${serie.slug}`),
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: serie.name, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
+      title: `${t('pages.tv_series.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
         serie.created_by
-          ? t('metadata.description', {
-            title: serie.name,
+          ? t('pages.tv_series.metadata.description', {
+            title: serie.name!,
             creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.created_by.map((creator) => creator.name ?? '')),
             year: new Date(String(serie.first_air_date)).getFullYear(),
-            overview: serie.overview,
-          }) : t('metadata.description_no_creator', {
-            title: serie.name,
+            overview: serie.overview!,
+          }) : t('pages.tv_series.metadata.description_no_creator', {
+            title: serie.name!,
             year: new Date(String(serie.first_air_date)).getFullYear(),
-            overview: serie.overview,
+            overview: serie.overview!,
           }),
         { length: siteConfig.seo.description.limit }
       ),

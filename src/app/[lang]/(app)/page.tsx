@@ -10,7 +10,7 @@ import { WidgetUserFriendsPlaylists } from "@/components/widgets/WIdgetUserFrien
 import { WidgetUserFeed } from "@/components/widgets/WidgetUserFeed";
 import { WidgetUserDiscovery } from "@/components/widgets/WidgetUserDiscovery";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { upperFirst } from "lodash";
 import { WidgetMostRecommended } from "@/components/widgets/WidgetMostRecommended";
 import { WidgetUserRecos } from "@/components/widgets/WidgetUserRecos";
@@ -30,7 +30,6 @@ export default function Home() {
 		return 'evening';
 	}, [now]);
 
-	console.log('Customer Info:', customerInfo);
 	return (
 		<div className="p-4 gap-4 gap-x-8 grid grid-cols-1 @4xl/main:grid-cols-2">
 			<div className="flex justify-between items-center w-full">

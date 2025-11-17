@@ -19,7 +19,7 @@ import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { useRandomImage } from '@/hooks/use-random-image';
-import { Link, useRouter } from "@/lib/i18n/routing";
+import { Link, useRouter } from "@/lib/i18n/navigation";
 import { useSearchParams } from 'next/navigation';
 import {
   InputOTP,

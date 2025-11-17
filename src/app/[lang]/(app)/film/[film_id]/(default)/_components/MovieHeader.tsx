@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment, useState } from 'react';
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import YoutubeEmbed from '@/components/utils/Youtube';
 import { Button } from '@/components/ui/button';
 import {

@@ -2,9 +2,9 @@ import * as React from "react"
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { Icons } from "@/config/icons";
-import { usePathname } from '@/lib/i18n/routing';
+import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from "@/lib/utils";
 import { useModal } from "@/context/modal-context";
 import { useTranslations } from "next-intl";
@@ -56,7 +56,7 @@ const ButtonUserRecosMovieSend = React.forwardRef<
 				stopPropagation && e.stopPropagation();
 				openModal(ModalUserRecosMovieSend, {
 					movieId,
-					movieTitle,
+					movieTitle: movieTitle!,
 				})
 			}}
 			{...props}

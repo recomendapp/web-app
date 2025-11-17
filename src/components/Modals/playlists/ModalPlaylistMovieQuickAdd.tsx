@@ -19,7 +19,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
 import { usePlaylistMovieMultiInsertMutation } from '@/features/client/playlist/playlistMutations';
 import { upperFirst } from 'lodash';
-import { SupportedLocale } from '@/translations/locales';
 import { CardMovie } from '@/components/Card/CardMovie';
 
 const COMMENT_MAX_LENGTH = 180;
@@ -51,7 +50,7 @@ export function ModalPlaylistMovieQuickAdd({
 		hasNextPage,
 	} = useTmdbSearchMoviesInfiniteQuery({
 		query: searchQuery,
-		locale: locale as SupportedLocale,
+		locale: locale,
 	})
 
 	const insertMovieMultiple = usePlaylistMovieMultiInsertMutation({

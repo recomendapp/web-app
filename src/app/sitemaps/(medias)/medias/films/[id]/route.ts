@@ -8,12 +8,11 @@ import { gzipSync } from 'zlib';
 
 export async function GET(
   _: Request,
-  { params }: { params: Promise<{ id: number }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const films = await getSitemapMediaMovies(id);
-
+    const films = await getSitemapMediaMovies(Number(id));
     const sitemapXML = buildSitemap(films.map((film) => {
       const translations = Object.fromEntries(
         film.tmdb_movie_translations.map((t) => [

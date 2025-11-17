@@ -1,13 +1,11 @@
 'use client';
 
-import { createContext, useState, useEffect, use } from 'react';
+import { createContext, useState, useEffect, use, useMemo } from 'react';
 import { Provider, Session } from '@supabase/supabase-js';
 import { User } from '@recomendapp/types';
 import { useUserQuery } from '@/features/client/user/userQueries';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { usePathname, useRouter } from '@/lib/i18n/routing';
-import { useLocale } from 'next-intl';
-import { useParams } from 'next/navigation';
+import { useRouter } from '@/lib/i18n/navigation';
 import { CustomerInfo } from '@revenuecat/purchases-js';
 import { useRevenueCat } from '@/lib/revenuecat/useRevenueCat';
 import { useAuthCustomerInfo } from '@/features/client/auth/authQueries';
@@ -49,12 +47,8 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ session: initialSession, children }: AuthProviderProps) => {
   const router = useRouter();
-  const locale = useLocale();
-  const pathname = usePathname();
   const supabase = useSupabaseClient();
-  const params = useParams();
   const [session, setSession] = useState<Session | null>(initialSession);
-  const [loading, setLoading] = useState(true);
   const [pushToken, setPushToken] = useState<string | null>(null);
   const {
     data: user,
@@ -63,6 +57,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
     userId: session?.user?.id,
     enabled: session !== undefined,
   });
+  const loading = useMemo(() => userLoading, [userLoading]);
   const { customerInfo: initCustomerInfo } = useRevenueCat(session);
   const {
     data: customerInfo,
@@ -71,14 +66,12 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
     initialData: initCustomerInfo,
 	});
 
-  const login = async (email: string, password: string, redirect?: string | null) => {
+  const login = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (error) throw error;
-    if (redirect) router.push(redirect);
-    router.refresh();
   };
 
   const logout = async () => {
@@ -88,8 +81,6 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
     }
     const { error } = await supabase.auth.signOut({ scope: 'local' });
     if (error) throw error;
-    setSession(null);
-    router.refresh();
   };
 
   const signup = async ({
@@ -151,17 +142,12 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, updatedSession) => {
       setSession(updatedSession);
-      if (!updatedSession) router.refresh();
     });
 
     return () => {
       listener?.subscription.unsubscribe();
     };
   }, [supabase, router]);
-
-  useEffect(() => {
-    if (!userLoading) setLoading(false);
-  }, [userLoading]);
 
   // see : https://github.com/recomendapp/web-app/issues/4
   // useEffect(() => {

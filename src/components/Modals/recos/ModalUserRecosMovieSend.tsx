@@ -23,7 +23,7 @@ const COMMENT_MAX_LENGTH = 180;
 
 interface ModalUserRecosMovieSendProps extends ModalType {
 	movieId: number;
-	movieTitle?: string | null;
+	movieTitle: string;
 }
 
 export function ModalUserRecosMovieSend({

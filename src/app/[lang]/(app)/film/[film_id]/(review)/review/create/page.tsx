@@ -6,8 +6,9 @@ import { upperFirst } from 'lodash';
 import { getMovie } from '@/features/server/media/mediaQueries';
 import { Metadata } from 'next';
 import { MovieCreateReview } from './_components/MovieCreateReview';
-import { redirect } from '@/lib/i18n/routing';
+import { redirect } from '@/lib/i18n/navigation';
 import { notFound } from 'next/navigation';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -18,14 +19,13 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.create.metadata' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id: movieId } = getIdFromSlug(params.film_id);
   const movie = await getMovie(params.lang, movieId);
-  if (!movie) return { title: upperFirst(common('messages.film_not_found')) };
+  if (!movie) return { title: upperFirst(t('common.messages.film_not_found')) };
   return {
-    title: t('title', { title: movie.title! }),
-    description: t('description', { title: movie.title! }),
+    title: t('pages.review.create.metadata.title', { title: movie.title! }),
+    description: t('pages.review.create.metadata.description', { title: movie.title! }),
   };
 }
 
@@ -45,7 +45,7 @@ export default async function CreateReview(
   } = await supabase.auth.getSession();
   if (!session) return redirect({
     href: `/auth/login?redirect=${encodeURIComponent(`/film/${params.film_id}/review/create`)}`,
-    locale: params.lang,
+    locale: params.lang as SupportedLocale,
   });
   const { data: review, error } = await supabase
     .from('user_activities_movie')
@@ -59,7 +59,7 @@ export default async function CreateReview(
   if (error) throw error;
   if (review) return redirect({
     href: `/film/${params.film_id}/review/${review.review.id}`,
-    locale: params.lang,
+    locale: params.lang as SupportedLocale,
   });
   const movie = await getMovie(params.lang, movieId);
   if (!movie) notFound();

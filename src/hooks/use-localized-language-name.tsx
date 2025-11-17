@@ -1,9 +1,9 @@
 import { useLocale } from "next-intl";
-import { countries } from 'country-flag-icons'
 import getUnicodeFlagIcon from 'country-flag-icons/unicode'
 import { capitalize } from "lodash";
+import { SupportedLocale } from "@/translations/locales";
 
-export const useLocalizedLanguageName = (locales: string[]) => {
+export const useLocalizedLanguageName = (locales: SupportedLocale[]) => {
 	const currentLocale = useLocale();
 	
 	const iso6391 = new Intl.DisplayNames([currentLocale], { type: 'language' });

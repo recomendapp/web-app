@@ -7,6 +7,7 @@ import { TvSeriesPlaylists } from './_components/TvSeriesPlaylists';
 import { truncate, upperFirst } from 'lodash';
 import { seoLocales } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -17,26 +18,25 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.tv_series.playlists' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
   const serie = await getTvSeries(params.lang, serieId);
-  if (!serie) return { title: upperFirst(common('messages.tv_series_not_found')) };
+  if (!serie) return { title: upperFirst(t('common.messages.tv_series_not_found')) };
   return {
-    title: t('metadata.title', { title: serie.name, year: new Date(String(serie.first_air_date)).getFullYear() }),
+    title: t('pages.tv_series.playlists.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() }),
     description: truncate(
-      t('metadata.description', {
-        title: serie.name,
+      t('pages.tv_series.playlists.metadata.description', {
+        title: serie.name!,
       }),
       { length: siteConfig.seo.description.limit }
     ),
     alternates: seoLocales(params.lang, `/tv-series/${serie.slug}/playlists`),
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: serie.name, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
+      title: `${t('pages.tv_series.playlists.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
-        t('metadata.description', {
-          title: serie.name,
+        t('pages.tv_series.playlists.metadata.description', {
+          title: serie.name!,
         }),
         { length: siteConfig.seo.description.limit }
       ),

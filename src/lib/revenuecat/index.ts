@@ -30,14 +30,14 @@ export const useOffering = () => {
 			});
 			return customerInfo;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			if (error === ErrorCode.UserCancelledError) {
 				return null;
 			}
 		} finally {
 			webReset();
 		}
-	}, []);
+	}, [session]);
 
 	const fetchOffering = useCallback(async () => {
 		try {
@@ -55,7 +55,7 @@ export const useOffering = () => {
 		if (!isConfigured) return;
 
 		fetchOffering();
-	}, [isConfigured]);
+	}, [isConfigured, fetchOffering]);
 
 	return { offering, isLoading, purchasePackage };
 };

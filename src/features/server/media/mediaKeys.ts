@@ -20,6 +20,7 @@ export const mediaKeys = {
 	/*                                   PERSON                                   */
 	/* -------------------------------------------------------------------------- */
 	personFilms: () => [...mediaKeys.specify('person'), 'films'],
+	personTvSeries: () => [...mediaKeys.specify('person'), 'tv_series'],
 
 	/* -------------------------------------------------------------------------- */
 }

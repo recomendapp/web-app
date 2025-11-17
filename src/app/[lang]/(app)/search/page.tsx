@@ -6,6 +6,7 @@ import SearchUsersSmall from './_components/SearchUsersSmall';
 import SearchTvSeriesSmall from './_components/SearchTvSeriesSmall';
 import FeaturedPlaylists from './_components/FeaturedPlaylists';
 import { getSearchMulti } from '@/features/server/search/searchQueries';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -60,10 +61,10 @@ export default async function Search(
     return (
       <div className='grid grid-cols-1 @xl/search:grid-cols-3 gap-4'>
         <SearchBestResult result={results.best_result} className='@xl/search:col-span-1' />
-        <SearchFilmsSmall movies={results.movies} query={searchParams.q} locale={params.lang} className='@xl/search:col-span-2' />
-        <SearchTvSeriesSmall  tvSeries={results.tv_series} query={searchParams.q} locale={params.lang} className='@xl/search:col-span-3' />
+        <SearchFilmsSmall movies={results.movies} query={searchParams.q} locale={params.lang as SupportedLocale} className='@xl/search:col-span-2' />
+        <SearchTvSeriesSmall  tvSeries={results.tv_series} query={searchParams.q} locale={params.lang as SupportedLocale} className='@xl/search:col-span-3' />
         <SearchPlaylistsSmall query={searchParams.q} className='@xl/search:col-span-3' />
-        <SearchCrewCastSmall persons={results.persons} query={searchParams.q} locale={params.lang} className='@xl/search:col-span-3' />
+        <SearchCrewCastSmall persons={results.persons} query={searchParams.q} locale={params.lang as SupportedLocale} className='@xl/search:col-span-3' />
         <SearchUsersSmall query={searchParams.q} className='@xl/search:col-span-3' />
       </div>
     );

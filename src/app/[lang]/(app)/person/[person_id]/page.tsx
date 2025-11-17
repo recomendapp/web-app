@@ -8,6 +8,7 @@ import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { seoLocales } from '@/lib/i18n/routing';
 import { WidgetPersonTvSeries } from './_components/WidgetPersonTvSeries';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -18,13 +19,12 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.person' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id } = getIdFromSlug(params.person_id);
   const person = await getPerson(params.lang, id);
-  if (!person) return { title: upperFirst(common('messages.person_not_found')) };
+  if (!person) return { title: upperFirst(t('common.messages.person_not_found')) };
   return {
-    title: t('metadata.title', { name: person.name, department: person.known_for_department }),
+    title: t('pages.person.metadata.title', { name: person.name!, department: person.known_for_department! }),
     description: person.biography ? truncate(person.biography, { length: siteConfig.seo.description.limit }) : undefined,
     alternates: seoLocales(params.lang, `/person/${person.slug}`),
     openGraph: {
@@ -56,8 +56,8 @@ export default async function Person(
   return (
     <>
         {/* <WidgetPersonMostRated personId={id} lang={params.lang} /> */}
-        <WidgetPersonFilms personSlug={params.person_id} credits={person.movies} lang={params.lang} />
-        <WidgetPersonTvSeries personSlug={params.person_id} credits={person.tv_series} lang={params.lang} />
+        <WidgetPersonFilms personSlug={params.person_id} credits={person.movies} lang={params.lang as SupportedLocale} />
+        <WidgetPersonTvSeries personSlug={params.person_id} credits={person.tv_series} lang={params.lang as SupportedLocale} />
     </>
   );
 }

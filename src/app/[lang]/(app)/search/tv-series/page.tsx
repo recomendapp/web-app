@@ -13,9 +13,10 @@ import {
 } from "@/components/ui/pagination"
 import { cn } from '@/lib/utils';
 import { generatePaginationNumbers } from '@/utils/generate-pagination-numbers';
-import { redirect } from '@/lib/i18n/routing';
+import { redirect } from '@/lib/i18n/navigation';
 import { Metadata } from 'next';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -29,9 +30,9 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   return {
-    title: `${searchParams.q} - ${upperFirst(common('messages.tv_series', { count: 2 }))}`,
+    title: `${searchParams.q} - ${upperFirst(t('common.messages.tv_series', { count: 2 }))}`,
   };
 }
 
@@ -54,8 +55,8 @@ export default async function SearchTvSeries(
 ) {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  if (!searchParams?.q) redirect({ href: '/search', locale: params.lang });
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+  if (!searchParams?.q) redirect({ href: '/search', locale: params.lang as SupportedLocale });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const page = getValidatePage(Number(searchParams.page));
 
   const { results, total_results } = await getSearchTvSeries(
@@ -69,8 +70,8 @@ export default async function SearchTvSeries(
   if (!results || total_results === 0 || results.length === 0) {
     return (
       <p className='text-muted-foreground'>
-        {common.rich('messages.no_results_for', {
-          query: searchParams.q,
+        {t.rich('common.messages.no_results_for', {
+          query: searchParams.q || '',
           strong: (chunks) => <strong>{chunks}</strong>,
         })}
       </p>

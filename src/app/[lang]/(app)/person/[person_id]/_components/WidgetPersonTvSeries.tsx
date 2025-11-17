@@ -1,15 +1,16 @@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { Button } from '@/components/ui/button';
 import { MediaTvSeriesAggregateCredits } from '@recomendapp/types';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
+import { SupportedLocale } from '@/translations/locales';
 
 interface WidgetPersonTvSeriesProps extends React.HTMLAttributes<HTMLDivElement> {
   personSlug: string;
   credits: MediaTvSeriesAggregateCredits[];
-  lang: string;
+  lang: SupportedLocale;
 }
 
 export async function WidgetPersonTvSeries({
@@ -17,13 +18,13 @@ export async function WidgetPersonTvSeries({
 	credits,
   lang,
 } : WidgetPersonTvSeriesProps) {
-  const common = await getTranslations({ locale: lang, namespace: 'common' });
+  const t = await getTranslations({ locale: lang });
   if (!credits || credits.length === 0) return null;
   return (
     <div className="flex flex-col gap-2">
       <Button variant={'link'} size={'fit'} className='font-semibold text-xl p-0' asChild>
         <Link href={`/person/${personSlug}/tv-series`}>
-        {upperFirst(common('messages.tv_series', { count: 2 }))}
+        {upperFirst(t('common.messages.tv_series', { count: 2 }))}
         </Link>
       </Button>
       <ScrollArea className="rounded-md">

@@ -48,12 +48,12 @@ export const ContextMenuTvSeries = ({
 			...(session ? [
 				{
 					icon: Icons.addPlaylist,
-					onClick: () => openModal(ModalPlaylistTvSeriesAdd, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.name }),
+					onClick: () => openModal(ModalPlaylistTvSeriesAdd, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.name! }),
 					label: upperFirst(t('common.messages.add_to_playlist')),
 				},
 				{
 					icon: Icons.send,
-					onClick: () => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.name }),
+					onClick: () => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: tvSeries.id, tvSeriesTitle: tvSeries.name! }),
 					label: upperFirst(t('common.messages.send_to_friend')),
 				}
 			] : []),
@@ -73,7 +73,7 @@ export const ContextMenuTvSeries = ({
 			},
 			...additionalItemsBottom
 		],
-	]}, [tvSeries, session, t]);
+	]}, [tvSeries, session, t, openModal, additionalItemsTop, additionalItemsBottom]);
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger>

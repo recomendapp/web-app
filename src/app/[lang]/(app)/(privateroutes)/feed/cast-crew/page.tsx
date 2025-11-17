@@ -8,10 +8,10 @@ import { useUserFeedCastCrewInfiniteQuery } from "@/features/client/user/userQue
 import { FeedCastCrewItem } from "./_components/FeedCastCrewItem";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
-import { useRouter } from "@/lib/i18n/routing";
+import { useRouter } from "@/lib/i18n/navigation";
 
 export default function FeedPersons() {
-	const { user } = useAuth();
+	const { session, customerInfo } = useAuth();
 	const router = useRouter();
 	const t = useTranslations();
 
@@ -21,10 +21,9 @@ export default function FeedPersons() {
 		data: feed,
 		isLoading,
 		fetchNextPage,
-		isFetchingNextPage,
 		hasNextPage,
 	} = useUserFeedCastCrewInfiniteQuery({
-		userId: user?.premium ? user.id : undefined,
+		userId: customerInfo?.entitlements.active['premium'] ? session?.user.id : undefined,
 	});
 
 	useEffect(() => {
@@ -33,13 +32,12 @@ export default function FeedPersons() {
 	}, [inView, hasNextPage, feed, fetchNextPage]);
 
 	useEffect(() => {
-		if (user && !user.premium) {
+		if (!customerInfo?.entitlements.active['premium']) {
 			router.replace('/upgrade');
 		}
-	}, [user]);
+	}, [customerInfo]);
 
-	
-	if (isLoading || !user?.premium) {
+	if (isLoading || !customerInfo?.entitlements.active['premium']) {
 		return (
 			<div className="flex items-center h-full">
 				<Loader />

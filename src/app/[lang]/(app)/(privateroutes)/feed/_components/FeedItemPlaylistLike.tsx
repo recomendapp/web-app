@@ -1,5 +1,5 @@
 "use client";
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import MediaPoster from "@/components/Media/MediaPoster";
 import { useFormatter, useTranslations } from "next-intl";
 import { PlaylistLike, Profile } from "@recomendapp/types";

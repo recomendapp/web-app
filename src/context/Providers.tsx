@@ -1,6 +1,3 @@
-import deepmerge from 'deepmerge';
-
-// PROVIDERS
 import { ReactQueryProvider } from '@/context/react-query-context';
 import { AuthProvider } from '@/context/auth-context';
 import { MapContext } from '@/context/map-context';
@@ -8,8 +5,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import { SupabaseProvider } from '@/context/supabase-context';
 import { NotificationsProvider } from '@/context/notifications-context';
 import { cookies } from 'next/headers';
-import { getMessages } from 'next-intl/server';
-import { getFallbackLanguage } from '@/lib/i18n/fallback';
 import { createServerClient } from '@/lib/supabase/server';
 import { Icons } from '@/config/icons';
 import { getServerDevice } from '@/utils/get-device';
@@ -19,32 +14,31 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { ModalProvider } from './modal-context';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
+import { SupportedLocale } from '@/translations/locales';
 
 export default async function Provider({
   children,
   locale,
 }: {
   children: React.ReactNode;
-  locale: string;
+  locale: SupportedLocale;
 }) {
   const supabase = await createServerClient();
   const { data: { session } } = await supabase.auth.getSession();
   const { data: is_maintenance } = await supabase.rpc('is_maintenance').single();
   const isMaintenanceMode = is_maintenance // && process.env.NODE_ENV !== 'development';
-  // NEXT-INTL
-  const userMessages = await getMessages({ locale });
-  const fallbackMessages = await getMessages({ locale: getFallbackLanguage({ locale }) });
-  const messages = deepmerge(fallbackMessages, userMessages);
   // UI
   const cookiesStore = await cookies();
   const layout = cookiesStore.get("ui:layout");
-  const sidebarOpen = (await cookies()).get("ui-sidebar:open");
+  const sidebarOpen = cookiesStore.get("ui-sidebar:open");
   const rightPanelOpen = cookiesStore.get("ui-right-panel:open");
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
   const device = await getServerDevice();
+
+
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <SupabaseProvider locale={locale}>
+    <NextIntlClientProvider>
+      <SupabaseProvider>
         <ReactQueryProvider>
           <AuthProvider session={session}>
             <NotificationsProvider>

@@ -1,10 +1,8 @@
 import { upperFirst } from 'lodash';
-import { getLocale, getTranslations } from 'next-intl/server';
-import React from 'react';
+import { getTranslations } from 'next-intl/server';
 
 export default async function NotFound() {
-  const locale = await getLocale();
-  const t = await getTranslations({ locale: locale, namespace: 'pages' });
+  const t = await getTranslations();
   return (
     <div
       className="bg-white w-full h-full flex justify-center items-center"
@@ -15,7 +13,7 @@ export default async function NotFound() {
       }}
     >
       <div className="text-4xl font-bold">
-      {upperFirst(t('errors.404.description'))}
+      {upperFirst(t('pages.errors.404.description'))}
       </div>
     </div>
   );

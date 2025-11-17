@@ -27,7 +27,7 @@ const COMMENT_MAX_LENGTH = 180;
 
 interface ModalPlaylistMovieAddProps extends ModalType {
 	movieId: number;
-	movieTitle?: string | null;
+	movieTitle: string;
 }
 
 export function ModalPlaylistMovieAdd({

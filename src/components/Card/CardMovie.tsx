@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
 import { MediaMovie, MediaPerson, UserActivityMovie } from "@recomendapp/types";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
-import { Link, useRouter } from "@/lib/i18n/routing";
+import { Link, useRouter } from "@/lib/i18n/navigation";
 import { TooltipBox } from "../Box/TooltipBox";
 import { Button } from "../ui/button";
 import { BadgeMedia } from "../Badge/BadgeMedia";

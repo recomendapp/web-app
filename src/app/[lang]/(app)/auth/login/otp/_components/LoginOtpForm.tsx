@@ -14,7 +14,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp
 import { ArrowLeftIcon } from 'lucide-react';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslations } from 'next-intl';
-import { useRouter } from '@/lib/i18n/routing';
+import { useRouter } from '@/lib/i18n/navigation';
 import { upperFirst } from 'lodash';
 
 export function LoginOtpForm({

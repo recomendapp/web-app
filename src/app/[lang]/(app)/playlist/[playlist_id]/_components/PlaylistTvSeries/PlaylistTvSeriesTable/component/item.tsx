@@ -4,7 +4,7 @@ import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { cn } from "@/lib/utils";
 import { MediaPerson, MediaTvSeries } from "@recomendapp/types";
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 
 interface ItemProps
 	extends React.ComponentProps<'div'> {

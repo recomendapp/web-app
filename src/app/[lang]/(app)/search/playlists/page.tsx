@@ -1,6 +1,7 @@
-import { redirect } from '@/lib/i18n/routing';
+import { redirect } from '@/lib/i18n/navigation';
 import SearchPlaylistsFull from './_components/SearchPlaylistsFull';
 import { Metadata } from 'next';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -27,6 +28,6 @@ export default async function SearchFilms(
 ) {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  if (!searchParams?.q) redirect({ href: '/search', locale: params.lang });
+  if (!searchParams?.q) redirect({ href: '/search', locale: params.lang as SupportedLocale });
   return <SearchPlaylistsFull query={searchParams?.q} />;
 }

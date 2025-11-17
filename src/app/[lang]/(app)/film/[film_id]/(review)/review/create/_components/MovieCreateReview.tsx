@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { JSONContent, MediaMovie, MediaPerson } from '@recomendapp/types';
 import { useAuth } from '@/context/auth-context';
-import { Link, useRouter } from "@/lib/i18n/routing";
+import { Link, useRouter } from "@/lib/i18n/navigation";
 import { cn } from '@/lib/utils';
 import { Card } from '@/components/ui/card';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';

@@ -1,3 +1,4 @@
+import { SupportedLocale } from "@/translations/locales";
 import { upperFirst } from "lodash";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
@@ -11,7 +12,7 @@ export async function generateMetadata(
     }
 ): Promise<Metadata> {
     const params = await props.params;
-    const t = await getTranslations({ locale: params.lang, namespace: 'common' });
+    const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'common' });
     return {
 	  title: upperFirst(t('messages.my_recos')),
 	};

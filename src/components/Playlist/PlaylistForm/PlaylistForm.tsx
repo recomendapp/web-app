@@ -36,7 +36,7 @@ import { Playlist } from '@recomendapp/types';
 import { useAuth } from '@/context/auth-context';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { usePlaylistDeleteMutation, usePlaylistInsertMutation, usePlaylistUpdateMutation } from '@/features/client/playlist/playlistMutations';
-import { usePathname, useRouter } from '@/lib/i18n/routing';
+import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { v4 as uuidv4 } from "uuid";

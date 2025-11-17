@@ -1,7 +1,7 @@
 import { useAuth } from "@/context/auth-context"
 import { useUserFeedInfiniteQuery } from "@/features/client/user/userQueries";
 import { cn } from "@/lib/utils";
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
