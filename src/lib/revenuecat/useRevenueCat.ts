@@ -11,7 +11,7 @@ export const useRevenueCat = (session: Session | null | undefined) => {
   const queryClient = useQueryClient();
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | undefined>(undefined);
   
-  const init = useCallback(async (userId: string) => {
+  const init = useCallback(async (session: Session) => {
     if (process.env.NODE_ENV === 'development') {
       Purchases.setLogLevel(LogLevel.Verbose);
     }
@@ -20,15 +20,18 @@ export const useRevenueCat = (session: Session | null | undefined) => {
     }
     const purchases = Purchases.configure({
       apiKey: REVENUECAT_API_KEY,
-      appUserId: userId,
+      appUserId: session.user.id,
     });
     const customerInfo = await purchases.getCustomerInfo();
+    await purchases.setAttributes({
+      $email: session.user.email || null,
+    })
     setCustomerInfo(customerInfo);
   }, []);
 
   useEffect(() => {
     if (session?.user.id) {
-      init(session?.user.id).catch(console.error);
+      init(session).catch(console.error);
     } else {
       queryClient.setQueryData(authKeys.customerInfo(), null);
       setCustomerInfo(undefined);
