@@ -7,7 +7,6 @@ import { getSupabaseClaims } from './lib/supabase/jwt';
 const intlMiddleware = createIntlMiddleware(routing);
 
 export async function proxy(request: NextRequest) {
-  const startTime = performance.now();
   const response = intlMiddleware(request);
 
   const [, locale, ...rest] = new URL(
@@ -48,7 +47,6 @@ export async function proxy(request: NextRequest) {
     );
   }
   
-  console.log(`🕰️ [MIDDLEWARE] ${request.nextUrl.pathname} - ${Math.round(performance.now() - startTime)}ms`);
   return (response);
 }
 
