@@ -14,6 +14,7 @@ import { ActiveFilters } from './_components/ActiveFilters';
 import { Filters } from './_components/Filters';
 import { getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage, getValidatePerPage } from './_components/constants';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -24,19 +25,18 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.person.tv_series' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id } = getIdFromSlug(params.person_id);
   const person = await getPerson(params.lang, id);
-  if (!person) return { title: upperFirst(common('messages.person_not_found')) };
+  if (!person) return { title: upperFirst(t('common.messages.person_not_found')) };
   return {
-	title: t('metadata.title', { name: person.name }),
-	description: truncate(t('metadata.description', { name: person.name }), { length: siteConfig.seo.description.limit }),
+	title: t('pages.person.tv_series.metadata.title', { name: person.name! }),
+	description: truncate(t('pages.person.tv_series.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
 	alternates: seoLocales(params.lang, `/person/${person.slug}/tv-series`),
 	openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { name: person.name })} • ${siteConfig.name}`,
-      description: truncate(t('metadata.description', { name: person.name }), { length: siteConfig.seo.description.limit }),
+      title: `${t('pages.person.tv_series.metadata.title', { name: person.name! })} • ${siteConfig.name}`,
+      description: truncate(t('pages.person.tv_series.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
       url: `${siteConfig.url}/${params.lang}/person/${person.slug}/tv-series`,
       images: person.profile_url ? [
         { url: person.profile_url },
@@ -73,7 +73,7 @@ export default async function TvSeriesPage(
 	const display = getValidatedDisplay(searchParams.display);
 	const department = getValidateDepartment(searchParams.department);
 	const job = getValidateJob(searchParams.job);
-	const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+	const t = await getTranslations({ locale: params.lang as SupportedLocale });
 	const { id } = getIdFromSlug(params.person_id);
 	const person = await getPerson(params.lang, id);
 	if (!person) return notFound();
@@ -95,7 +95,7 @@ export default async function TvSeriesPage(
 			<div className='flex flex-col items-center justify-center h-full gap-2'>
 				<div className='flex items-center'>
 					<Icons.error className='mr-1'/>
-					{upperFirst(common('messages.wrong_arguments'))}
+					{upperFirst(t('common.messages.wrong_arguments'))}
 				</div>
 				<Button variant='accent-yellow'>
 					<Link href={`/person/${params.person_id}/tv-series`}>

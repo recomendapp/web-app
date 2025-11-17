@@ -7,6 +7,7 @@ import Providers from '@/context/Providers';
 import Script from 'next/script';
 import { getLangDir } from 'rtl-detect';
 import { routing, seoLocales } from '@/lib/i18n/routing';
+import { SupportedLocale } from '@/translations/locales';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -30,25 +31,6 @@ export const metadata: Metadata = {
   icons: {
     apple: '/assets/icons/ios/512.png',
   },
-  // itunes: {
-  //   appId: '333903271',
-  //   appArgument: 'myAppArgument',
-  // },
-  // appLinks: {
-  //   ios: {
-  //     app_name: siteConfig.name,
-  //     app_store_id: '333903271',
-  //     url: 'https://recomend.app/ios',
-  //   },
-  //   android: {
-  //     package: 'com.example.android/package',
-  //     app_name: 'app_name_android',
-  //   },
-  //   web: {
-  //     url: 'https://recomend.app/',
-  //     should_fallback: true,
-  //   },
-  // },
   appleWebApp: {
     title: siteConfig.name,
     statusBarStyle: 'default',
@@ -96,7 +78,7 @@ export default async function LangLayout({
         data-website-id={process.env.ANALYTICS_ID}
       />) : null}
       <body className={cn('font-sans antialiased', fontSans.variable)}>
-        <Providers locale={lang}>{children}</Providers>
+        <Providers locale={lang as SupportedLocale}>{children}</Providers>
       </body>
     </html>
   );

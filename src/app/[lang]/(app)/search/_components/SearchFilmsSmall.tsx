@@ -1,4 +1,4 @@
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -6,6 +6,7 @@ import { upperFirst } from 'lodash';
 import { MediaMovie } from '@recomendapp/types';
 import { getTranslations } from 'next-intl/server';
 import { CardMovie } from "@/components/Card/CardMovie";
+import { SupportedLocale } from "@/translations/locales";
 
 export default async function SearchFilmsSmall({
   movies,
@@ -15,10 +16,10 @@ export default async function SearchFilmsSmall({
 }: {
   movies?: MediaMovie[];
   query: string;
-  locale: string;
+  locale: SupportedLocale;
   className?: string;
 }) {
-  const common = await getTranslations({ locale: locale, namespace: 'common' });
+  const t = await getTranslations({ locale: locale });
   if (!movies || movies.length === 0) return null;
   return (
     <div className={cn('flex flex-col gap-2', className)}>
@@ -27,7 +28,7 @@ export default async function SearchFilmsSmall({
       className="text-2xl font-bold justify-start p-0"
       asChild
       >
-        <Link href={`/search/films?q=${query}`}>{upperFirst(common('messages.film', { count: 2}))}</Link>
+        <Link href={`/search/films?q=${query}`}>{upperFirst(t('common.messages.film', { count: 2}))}</Link>
       </Button>
       <div className="flex flex-col gap-2">
       {movies.slice(0, 4).map((movie, i) => (

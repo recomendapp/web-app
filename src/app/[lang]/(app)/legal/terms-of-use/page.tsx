@@ -1,4 +1,5 @@
 import { siteConfig } from "@/config/site";
+import { SupportedLocale } from "@/translations/locales";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
@@ -10,10 +11,10 @@ export async function generateMetadata(
     }
 ): Promise<Metadata> {
 	const params = await props.params;
-	const t = await getTranslations({ locale: params.lang, namespace: 'pages.legal.terms_of_use.metadata' });
+	const t = await getTranslations({ locale: params.lang as SupportedLocale });
 	return {
-		title: t('title'),
-		description: t('description', { app: siteConfig.name }),
+		title: t('pages.legal.terms_of_use.metadata.title'),
+		description: t('pages.legal.terms_of_use.metadata.description', { app: siteConfig.name }),
 	};
 };
 

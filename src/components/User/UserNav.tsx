@@ -11,7 +11,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/auth-context';
 import { UserAvatar } from './UserAvatar';
@@ -36,7 +36,7 @@ export function UserNav({
 } : {
   className?: string;
 }) {
-  const { user, loading, logout } = useAuth();
+  const { user, customerInfo, logout } = useAuth();
   const t = useTranslations();
 
   const routes = useMemo((): Route[] => [
@@ -68,7 +68,7 @@ export function UserNav({
       icon: Icons.premium,
       label: upperFirst(t('common.messages.upgrade_to_plan', { plan: 'Premium' })),
       href: '/upgrade',
-      visible: !user?.premium,
+      visible: !customerInfo?.entitlements.active['premium'],
       className: 'fill-accent-blue !text-accent-blue',
     },
     {
@@ -76,7 +76,7 @@ export function UserNav({
       label: upperFirst(t('common.messages.setting', { count: 0 })),
       href: '/settings/profile',
     },
-  ], [user, t]);
+  ], [customerInfo, t]);
 
   if (!user) {
     return <Skeleton className="h-8 w-8 rounded-full" />;

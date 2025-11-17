@@ -2,9 +2,14 @@ import * as React from "react"
 
 export type Device = "mobile" | "tablet" | "desktop"
 
+export function useDevice({
+	device: deviceProps,
+} : {
+	device: Device;
+}) {
+	const [device, setDevice] = React.useState(deviceProps);
 
-export function useDevice() {
-	const getDevice: () => Device = () => {
+	const getDevice = React.useCallback((): Device => {
 		const userAgent = navigator.userAgent.toLowerCase();
 		const isMobile = /iphone|ipad|ipod|android|blackberry|windows phone/g.test(userAgent);
 		const isTablet = /(ipad|tablet|playbook|silk)|(android(?!.*mobile))/g.test(userAgent);
@@ -16,18 +21,17 @@ export function useDevice() {
 		} else {
 		  return "desktop";
 		}
-	}
-	
-	const [device, setDevice] = React.useState(getDevice());
+	}, []);
 
-	  React.useEffect(() => {
+	React.useEffect(() => {
 		const handleResize = () => {
-		  setDevice(getDevice());
+			setDevice(getDevice());
 		}
 		handleResize();
+
 		window.addEventListener('resize', handleResize);
 		return () => window.removeEventListener('resize', handleResize);
-	  }, []);
+	}, []);
 
-	  return device;
+	return device;
 }

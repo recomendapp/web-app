@@ -78,7 +78,7 @@ const ButtonUserActivityMovieWatchedDate = React.forwardRef<
       </TooltipBox>
       <PopoverContent className="w-auto p-0 flex flex-col justify-center">
         <Calendar
-          locale={locale == 'fr' ? fr : enUS}
+          locale={locale == 'fr-FR' ? fr : enUS}
           mode="single"
           selected={new Date(activity.watched_date ?? '')}
           onSelect={async (date) => date && await handleUpdateDate(date)}

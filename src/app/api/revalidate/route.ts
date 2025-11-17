@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
   const parsedCacheTags = cacheTags.split(',');
   parsedCacheTags.forEach((cacheTag: string) => {
-    revalidateTag(cacheTag);
+    // revalidateTag(cacheTag, 'manual');
   });
 
   return NextResponse.json({ revalidated: true, now: Date.now() });

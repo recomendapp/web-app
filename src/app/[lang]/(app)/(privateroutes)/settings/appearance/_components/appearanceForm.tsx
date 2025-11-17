@@ -31,21 +31,20 @@ import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { useEffect, useMemo, useState } from 'react';
 import { Icons } from '@/config/icons';
-import { useRouter } from 'next/navigation';
 import Loader from '@/components/Loader';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { routing } from '@/lib/i18n/routing';
 import { useLocalizedLanguageName } from '@/hooks/use-localized-language-name';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ChevronsUpDown } from 'lucide-react';
 import { upperFirst } from 'lodash';
-import { SupportedLocale } from '@/translations/locales';
+import { supportedLocales } from '@/translations/locales';
+import { usePathname, useRouter } from '@/lib/i18n/navigation';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
     required_error: 'Please select a theme.',
   }),
-  language: z.enum([...routing.locales], {
+  language: z.enum([...supportedLocales], {
     invalid_type_error: 'Select a language',
     required_error: 'Please select a language.',
   }),
@@ -63,8 +62,9 @@ export function AppearanceForm() {
   const [loading, setLoading] = useState(false);
   const { setTheme, theme } = useTheme();
   const router = useRouter();
+  const pathname = usePathname();
   const { user, loading: userLoading } = useAuth();
-  const locales = useLocalizedLanguageName([...routing.locales]);
+  const locales = useLocalizedLanguageName([...supportedLocales]);
 
   const { mutateAsync: updateProfile } = useMutation({
     mutationFn: async (payload: any) => {
@@ -83,7 +83,7 @@ export function AppearanceForm() {
   });
 
   const defaultValues = useMemo(() => ({
-    language: locale as SupportedLocale,
+    language: locale,
     theme: theme as 'light' | 'dark' | undefined,
   }), [locale, theme]);
 
@@ -107,7 +107,14 @@ export function AppearanceForm() {
       if (locale != data.language)
       {
         await updateProfile({ language: data.language });
-        router.refresh();
+        router.replace(
+          {
+            pathname: pathname,
+          },
+          {
+            locale: data.language
+          }
+        );
       }
       toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
     } catch (error) {
@@ -161,7 +168,7 @@ export function AppearanceForm() {
                           <CommandItem
                           key={i}
                           value={`${locale.iso_639_1} ${locale.iso_3166_1}`}
-                          onSelect={() => form.setValue('language', locale.language as SupportedLocale)}
+                          onSelect={() => form.setValue('language', locale.language)}
                           >
                             <Icons.check
                               className={cn(

@@ -1,7 +1,7 @@
 'use client';
 
-import { Link } from "@/lib/i18n/routing";
-import { usePathname } from '@/lib/i18n/routing';
+import { Link } from "@/lib/i18n/navigation";
+import { usePathname } from '@/lib/i18n/navigation';
 
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';

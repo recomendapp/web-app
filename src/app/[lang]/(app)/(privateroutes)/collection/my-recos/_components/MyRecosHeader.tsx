@@ -11,7 +11,7 @@ interface MyRecosHeaderProps
   extends React.HTMLAttributes<HTMLDivElement> {
     skeleton?: boolean;
     type: UserRecosType;
-    numberItems?: number;
+    numberItems: number;
     backdrops?: ImageObject[];
 }
 

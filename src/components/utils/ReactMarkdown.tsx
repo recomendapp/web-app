@@ -1,4 +1,4 @@
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import React from 'react';
 import ReactMarkdownPrimitive from 'react-markdown';
 import { buttonVariants } from '../ui/button';

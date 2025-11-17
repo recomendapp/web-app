@@ -1,8 +1,8 @@
 import { siteConfig } from '@/config/site';
+import { SupportedLocale } from '@/translations/locales';
 import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { noSSR } from 'next/dynamic';
 
 export async function generateMetadata(
   props: {
@@ -12,11 +12,10 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.auth.login' });
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   return {
-    title: upperFirst(common('messages.login')),
-    description: t('metadata.description', { app: siteConfig.name }),
+    title: upperFirst(t('common.messages.login')),
+    description: t('pages.auth.login.metadata.description', { app: siteConfig.name }),
   };
 }
 

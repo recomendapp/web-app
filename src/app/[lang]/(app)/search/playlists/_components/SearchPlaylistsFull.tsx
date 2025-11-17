@@ -33,7 +33,7 @@ export default function SearchPlaylistsFull({
     return (
       <p className='text-muted-foreground'>
         {t.rich('messages.no_results_for', {
-          query: query,
+          query: query || '',
           strong: (chunks) => <strong>{chunks}</strong>,
         })}
       </p>

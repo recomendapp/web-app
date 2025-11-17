@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useRouter } from "@/lib/i18n/routing";
+import { useRouter } from "@/lib/i18n/navigation";
 import { upperFirst } from "lodash";
 import { LayoutGridIcon, ListIcon } from "lucide-react";
 import { useTranslations } from "next-intl";

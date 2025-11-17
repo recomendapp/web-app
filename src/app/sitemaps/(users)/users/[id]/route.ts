@@ -6,11 +6,11 @@ import { gzipSync } from "zlib";
 
 export async function GET(
   _: Request,
-  { params }: { params: Promise<{ id: number }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
-    const users = await getSitemapUsers(id);
+    const users = await getSitemapUsers(Number(id));
 
     const sitemapXML = buildSitemap(users.map((user) => ({
       url: `${siteConfig.url}/@${user.username}`,

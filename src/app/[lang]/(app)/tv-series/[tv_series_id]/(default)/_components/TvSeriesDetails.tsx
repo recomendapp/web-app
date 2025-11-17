@@ -7,7 +7,7 @@ import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { MediaTvSeries, MediaPerson, MediaTvSeriesPerson } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { Separator } from "@/components/ui/separator";
 

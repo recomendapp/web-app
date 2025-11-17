@@ -23,7 +23,7 @@ const COMMENT_MAX_LENGTH = 180;
 
 interface ModalUserRecosTvSeriesSendProps extends ModalType {
 	tvSeriesId: number;
-	tvSeriesTitle?: string | null;
+	tvSeriesTitle: string;
 }
 
 export function ModalUserRecosTvSeriesSend({

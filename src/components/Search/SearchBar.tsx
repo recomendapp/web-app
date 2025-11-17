@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { BiSearch } from 'react-icons/bi';
 import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
-import { usePathname, useRouter } from '@/lib/i18n/routing';
+import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 

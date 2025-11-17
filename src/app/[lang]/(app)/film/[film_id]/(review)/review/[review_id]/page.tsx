@@ -8,6 +8,7 @@ import { Review, WithContext } from 'schema-dts';
 import { getRawReviewText } from '@/lib/utils';
 import { siteConfig } from '@/config/site';
 import { seoLocales } from '@/lib/i18n/routing';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -18,17 +19,16 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.metadata' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const review = await getReviewMovie(params.review_id, params.lang);
-  if (!review) return { title: upperFirst(common('messages.review_not_found')) };
+  if (!review) return { title: upperFirst(t('common.messages.review_not_found')) };
   return {
-    title: t('title', { title: review.activity?.movie?.title!, username: review.activity?.user?.username! }),
+    title: t('pages.review.metadata.title', { title: review.activity?.movie?.title!, username: review.activity?.user?.username! }),
     description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
     alternates: seoLocales(params.lang, `/review/${review.id}`),
     openGraph: {
       siteName: siteConfig.name,
-      title: t('title', { title: review.activity?.movie?.title!, username: review.activity?.user?.username! }),
+      title: t('pages.review.metadata.title', { title: review.activity?.movie?.title!, username: review.activity?.user?.username! }),
       description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
       url: `${siteConfig.url}/${params.lang}/review/${params.review_id}`,
       images: review.activity?.movie?.poster_url ? [
@@ -51,12 +51,12 @@ export default async function ReviewPage(
   const params = await props.params;
   const review = await getReviewMovie(params.review_id, params.lang);
   if (!review) notFound();
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.review.metadata' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { movie } = review.activity || {};
   const jsonLd: WithContext<Review> = {
     '@context': 'https://schema.org',
     '@type': 'Review',
-    name: t('title', { title: movie?.title!, username: review.activity?.user?.username! }),
+    name: t('pages.review.metadata.title', { title: movie?.title!, username: review.activity?.user?.username! }),
     description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
     datePublished: review.created_at,
     dateModified: review.updated_at,

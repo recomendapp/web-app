@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { UserNav } from '@/components/User/UserNav';
 import { createServerClient } from '@/lib/supabase/server';
 import { Icons } from '@/config/icons';

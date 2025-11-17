@@ -1,6 +1,6 @@
 'use client';
 import { Fragment, useState } from 'react';
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import YoutubeEmbed from '@/components/utils/Youtube';
 import { Button } from '@/components/ui/button';
 import {
@@ -124,7 +124,7 @@ export default function TvSerieHeader({
                   )) ?? <span className="text-muted-foreground italic">{upperFirst(common('messages.unknown'))}</span>}
                   {/* NUMBER OF SEASONS */}
                   <span className="before:content-['_•_']">
-                    {common('messages.tv_season_count', { count: serie.number_of_seasons })}
+                    {common('messages.tv_season_count', { count: serie.number_of_seasons! })}
                   </span>
                 </div>
               </div>

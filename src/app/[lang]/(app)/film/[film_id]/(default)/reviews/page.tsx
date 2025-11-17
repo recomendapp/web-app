@@ -7,6 +7,7 @@ import { truncate, upperFirst } from 'lodash';
 import { seoLocales } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { MovieReviews } from './_components/MovieReviews';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -17,15 +18,14 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.film.reviews' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id: movieId} = getIdFromSlug(params.film_id);
   const movie = await getMovie(params.lang, movieId);
-  if (!movie) return { title: upperFirst(common('messages.film_not_found')) };
+  if (!movie) return { title: upperFirst(t('common.messages.film_not_found')) };
   return {
-    title: t('metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() }),
+    title: t('pages.film.reviews.metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() }),
     description: truncate(
-      t('metadata.description', {
+      t('pages.film.reviews.metadata.description', {
         title: movie.title!,
       }),
       { length: siteConfig.seo.description.limit }
@@ -33,9 +33,9 @@ export async function generateMetadata(
     alternates: seoLocales(params.lang, `/film/${movie.slug}/reviews`),
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() })} • ${siteConfig.name}`,
+      title: `${t('pages.film.reviews.metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
-        t('metadata.description', {
+        t('pages.film.reviews.metadata.description', {
           title: movie.title!,
         }),
         { length: siteConfig.seo.description.limit }

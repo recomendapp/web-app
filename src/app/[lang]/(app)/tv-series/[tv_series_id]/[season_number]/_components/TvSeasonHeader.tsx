@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { Button } from '@/components/ui/button';
-import { Link } from '@/lib/i18n/routing';
+import { Link } from '@/lib/i18n/navigation';
 import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 
 export default function TvSeasonHeader({

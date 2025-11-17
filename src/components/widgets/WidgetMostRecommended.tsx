@@ -10,7 +10,7 @@ import {
   } from "@/components/ui/carousel"
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { DateOnlyYearTooltip } from "../utils/Date";
 import { SendIcon } from "lucide-react";
 import { useModal } from "@/context/modal-context";
@@ -171,10 +171,10 @@ const Item = ({
 							if (item.media) {
 								switch (item.type) {
 									case 'movie':
-										openModal(ModalUserRecosMovieSend, { movieId: item.media_id!, movieTitle: details.title })
+										openModal(ModalUserRecosMovieSend, { movieId: item.media_id!, movieTitle: details.title! })
 										break;
 									case 'tv_series':
-										openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: item.media_id!, tvSeriesTitle: details.title })
+										openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: item.media_id!, tvSeriesTitle: details.title! })
 										break;
 								}
 							}

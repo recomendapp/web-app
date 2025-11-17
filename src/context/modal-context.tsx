@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, ReactNode, useState, useEffect, use } from 'react';
-import { usePathname } from '@/lib/i18n/routing';
+import { usePathname } from '@/lib/i18n/navigation';
 import { ModalTemplate, ModalTemplateProps } from '@/components/Modals/templates/ModalTemplate';
 import { ConfirmModalTemplate, ConfirmModalTemplateProps } from '@/components/Modals/templates/ConfirmModalTemplate';
 

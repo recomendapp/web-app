@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 // UI
 import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
-import { usePathname, useRouter } from '@/lib/i18n/routing';
+import { usePathname, useRouter } from '@/lib/i18n/navigation';
 
 export default function SearchFilters() {
   const router = useRouter();

@@ -1,6 +1,6 @@
 'use client';
 
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { Column, Row, Table } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import {
@@ -98,7 +98,7 @@ export function DataTableRowActions({
             onClick={() => createConfirmModal({
               title: upperFirst(t('pages.collection.my_recos.modal.complete_confirm.title')),
               description: t.rich('pages.collection.my_recos.modal.complete_confirm.description', {
-                title: data.tv_series?.name,
+                title: data.tv_series?.name!,
                 important: (chunk) => <b>{chunk}</b>,
               }),
               onConfirm: handleCompleteReco,
@@ -108,7 +108,7 @@ export function DataTableRowActions({
             {upperFirst(t('common.messages.complete'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: data.tv_series_id!, tvSeriesTitle: data.tv_series?.name })}
+          onClick={() => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: data.tv_series_id!, tvSeriesTitle: data.tv_series?.name! })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}

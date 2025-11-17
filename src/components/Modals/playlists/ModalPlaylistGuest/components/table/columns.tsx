@@ -5,7 +5,7 @@ import { UserAvatar } from "@/components/User/UserAvatar"
 import { useAuth } from "@/context/auth-context"
 import { usePlaylistGuestUpdateMutation } from "@/features/client/playlist/playlistMutations"
 import { PlaylistGuest } from "@recomendapp/types"
-import { CaretSortIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
+import { CaretSortIcon } from "@radix-ui/react-icons"
 import { ColumnDef } from "@tanstack/react-table"
 import { upperFirst } from "lodash"
 import { useTranslations } from "next-intl"
@@ -88,7 +88,7 @@ const EditSwitch = ({
 	editSate?: boolean;
 }) => {
 	const t = useTranslations()
-	const { user } = useAuth()
+	const { customerInfo } = useAuth()
 	const updatePlaylistGuest = usePlaylistGuestUpdateMutation()
 	const [edit, setEdit] = useState(editSate);
 
@@ -112,7 +112,7 @@ const EditSwitch = ({
 	<Switch
 		checked={edit}
 		onCheckedChange={handleEdit}
-		disabled={!user?.premium && !edit}
+		disabled={!customerInfo?.entitlements.active['premium'] && !edit}
 	/>
 	)
 }

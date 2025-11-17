@@ -1,18 +1,18 @@
 import { SettingsNav } from '@/app/[lang]/(app)/(privateroutes)/settings/_components/SettingsNav';
-import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
+import { SupportedLocale } from '@/translations/locales';
 
-export async function generateMetadata(
+export const generateMetadata = async (
   props: {
       params: Promise<{
         lang: string;
       }>;
     }
-): Promise<Metadata> {
+): Promise<Metadata> => {
   const params = await props.params;
-  const common = await getTranslations({ locale: params.lang, namespace: 'pages' });
+  const common = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'pages' });
   return {
     title: upperFirst(common('settings.label')),
     robots: {
@@ -26,8 +26,8 @@ interface SettingsLayoutProps {
   children: React.ReactNode;
 }
 
-export default function SettingsLayout({ children }: SettingsLayoutProps) {
-  const t = useTranslations('pages.settings');
+const SettingsLayout = async ({ children }: SettingsLayoutProps) => {
+  const t = await getTranslations('pages.settings');
   return (
     <div className="p-4 flex flex-col gap-4">
       <div className="">
@@ -43,3 +43,5 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
     </div>
   );
 }
+
+export default SettingsLayout;

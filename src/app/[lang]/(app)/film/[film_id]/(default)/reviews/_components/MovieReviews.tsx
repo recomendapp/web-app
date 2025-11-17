@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
 import { useUserActivityMovieQuery } from '@/features/client/user/userQueries';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Link } from '@/lib/i18n/routing';
+import { Link } from '@/lib/i18n/navigation';
 import { MediaMovie } from '@recomendapp/types';
 import { CardReviewMovie } from '@/components/Card/CardReviewMovie';
 

@@ -28,7 +28,7 @@ export const PersonAboutModal = ({
 			className=""
 		>
 			<ModalHeader>
-				<ModalTitle>{upperFirst(t('common.messages.about_title', { title: person.name }))}</ModalTitle>
+				<ModalTitle>{upperFirst(t('common.messages.about_title', { title: person.name! }))}</ModalTitle>
 			</ModalHeader>
 			<ModalBody className="flex flex-col gap-4">
 				{/* Détails */}

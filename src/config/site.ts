@@ -65,4 +65,4 @@ export const siteConfig = {
       '/feed/cast-crew',
     ]
   }
-};
+} as const;

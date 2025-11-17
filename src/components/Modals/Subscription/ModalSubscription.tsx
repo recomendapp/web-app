@@ -1,75 +1,61 @@
 'use client';
 
-import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
-import {  Prices, Products } from '@recomendapp/types';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { Card } from '@/components/ui/card';
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Icons } from '@/config/icons';
 import { formatPrice } from '@/components/ui/format-price';
 import { useLocale, useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
-import { getStripe } from '@/lib/stripe/stripeClient';
 import { upperFirst } from 'lodash';
 import { Badge } from '@/components/ui/badge';
 import { calculateSave } from '@/utils/calculate-save';
-import { usePathname, useRouter } from '@/lib/i18n/routing';
-import { useSupabaseClient } from '@/context/supabase-context';
+import { Offering, Package } from '@revenuecat/purchases-js';
 
 
 interface ModalSubscriptionProps extends ModalType {
-	product: Products;
-	preselectedPrice?: Prices;
+	offering: Offering;
+	preselectedPlan?: Package;
+	onPurchase: (plan: Package) => Promise<void>;
 }
 
 export function ModalSubscription({
-	product,
-	preselectedPrice,
+	offering,
+	preselectedPlan,
+	onPurchase,
 	...props
 } : ModalSubscriptionProps) {
-	const supabase = useSupabaseClient();
-	const { session, user } = useAuth();
 	const t = useTranslations();
-	const pathname = usePathname();
-	const router = useRouter();
 	const locale = useLocale();
 	const { closeModal } = useModal();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [selectedProductPrice, setSelectedProductPrice] = useState<Prices | undefined>(preselectedPrice || product?.prices?.at(0));
+	const [selectedPlan, setSelectedPlan] = useState<Package | undefined>(preselectedPlan || undefined);
 
-	const handleCheckout = async (price: Prices) => {
+	const plans = useMemo((): { plan: Package, interval: 'yearly' | 'monthly' }[] => {
+		return [
+			...(offering.monthly ? [{ plan: offering.monthly, interval: 'monthly' as const }] : []),
+			...(offering.annual ? [{ plan: offering.annual, interval: 'yearly' as const }] : []),
+		]
+	}, [offering]);
+
+	const purchasePackage = useCallback(async (plan: Package) => {
 		setIsLoading(true);
-		if (!session) {
-			toast.error(upperFirst(t('common.messages.not_logged_in')));
-		  	return router.push(`/auth/login?redirect=${encodeURIComponent(pathname)}`);
-		}
-		if (user?.premium) {
-			toast.error(upperFirst(t('common.messages.already_premium')));
-		  	return router.push('/settings/subscription');
-		}
-	
 		try {
-			const { data, error } = await supabase.functions.invoke('stripe/create-checkout-session', {
-				method: 'POST',
-				body: JSON.stringify({
-					price,
-					success_url: `${location.origin}/settings/subscription`,
-					cancel_url: `${location.origin}${pathname}`,
-				}),
-			});
-			if (error || !data?.sessionId) {
-				throw new Error('No session ID returned');
-			}
-			const stripe = await getStripe();
-			stripe?.redirectToCheckout({ sessionId: data.sessionId });
+			await onPurchase(plan);
 		} catch (error) {
-			return alert((error as Error)?.message);
-		} finally {
+			toast.error('Purchase failed');
+	 	} finally {
 			setIsLoading(false);
 		}
-	};
+	}, [onPurchase]);
+
+	useEffect(() => {
+		if (preselectedPlan) {
+			setSelectedPlan(preselectedPlan);
+		}
+	}, [preselectedPlan]);
 
 	return (
 		<Modal
@@ -79,41 +65,50 @@ export function ModalSubscription({
 		>
 			<ModalHeader>
 				<ModalTitle>{upperFirst(t('common.messages.upgrade_to_plan', {
-					plan: product?.name!,
+					plan: offering.serverDescription,
 				}))}</ModalTitle>
 				<ModalDescription>
 				{upperFirst(t('common.messages.choose_subscription_recurrence'))}
 				</ModalDescription>
 			</ModalHeader>
 			<ModalBody className='flex flex-col gap-2'>
-				{product?.prices?.map((price, index) => (
+				{plans.map(({ plan, interval }, index) => (
 					<Card
-					key={price?.id}
+					key={plan.identifier}
 					className={`
 						flex items-center justify-between p-4 cursor-pointer hover:bg-muted-hover
 					`}
-					onClick={() => !isLoading && setSelectedProductPrice(price)}
+					onClick={() => !isLoading && setSelectedPlan(plan)}
 					>
 						<div
 						className={`
 							transition-colors
-							${selectedProductPrice?.id === price?.id ? 'text-foreground' : 'text-muted-foreground'}
+							${selectedPlan?.identifier === plan.identifier ? 'text-foreground' : 'text-muted-foreground'}
 						`}
 						>
-							<span className='text-2xl font-bold'>{formatPrice(price, locale)}</span>
-							<span className="pl-2 text-base font-medium">/ {t(`common.messages.${price?.interval}`)}</span>
+							<span className='text-2xl font-bold'>{formatPrice({ unit_amount: plan.webBillingProduct.price.amountMicros! / 10_000, currency: plan.webBillingProduct.price.currency }, locale)}</span>
+							<span className="pl-2 text-base font-medium">/ {t(`common.messages.${interval}`)}</span>
 						</div>
 						{index > 0 ? (
 							<Badge variant='accent-yellow'>
 							{upperFirst(t('common.messages.save_up_to_percent', {
-								percent: calculateSave(price, product?.prices?.at(index - 1) ?? price),
+								percent: calculateSave(
+									{
+										unit_amount: plan.webBillingProduct.price.amountMicros! / 10_000,
+										interval: interval,
+									},
+									{
+										unit_amount: plans[index - 1].plan.webBillingProduct.price.amountMicros! / 10_000,
+										interval: plans[index - 1].interval,
+									}
+								),
 							}))}
 							</Badge>
 						) : null}
 						<Icons.check
 						className={`
 							text-accent-yellow transition-opacity
-							${selectedProductPrice?.id === price?.id ? 'opacity-100' : 'opacity-0'}
+							${selectedPlan?.identifier === plan.identifier ? 'opacity-100' : 'opacity-0'}
 						`}
 						/>
 					</Card>
@@ -121,13 +116,13 @@ export function ModalSubscription({
 			</ModalBody>
 			<ModalFooter>
 				<Button
-					variant='accent-yellow'
-					disabled={isLoading}
-					onClick={() => selectedProductPrice && handleCheckout(selectedProductPrice)}
+				variant='accent-yellow'
+				disabled={isLoading}
+				onClick={() => selectedPlan && purchasePackage(selectedPlan)}
 				>
 				{isLoading ? <Icons.loader className='w-6 h-6' /> : null}
 				{upperFirst(t('common.messages.upgrade_to_plan', {
-					plan: product?.name!,
+					plan: offering.serverDescription,
 				}))}
 				</Button>
 			</ModalFooter>

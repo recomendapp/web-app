@@ -11,7 +11,7 @@ interface WatchlistHeaderProps
   extends React.HTMLAttributes<HTMLDivElement> {
     skeleton?: boolean;
     type: UserWatchlistType;
-    numberItems?: number;
+    numberItems: number;
     backdrops?: ImageObject[];
 }
 

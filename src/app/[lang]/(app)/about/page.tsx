@@ -1,40 +1,33 @@
 import Marquee from "react-fast-marquee";
-import {
-  getActiveProductsWithPrices,
-  getSession,
-} from '@/lib/supabase/server';
 import { getTranslations } from 'next-intl/server';
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
+import { SupportedLocale } from "@/translations/locales";
 
-export async function generateMetadata(
+export const generateMetadata = async (
   props: {
     params: Promise<{
       lang: string;
     }>;
     }
-): Promise<Metadata> {
+): Promise<Metadata> => {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang, namespace: 'common' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'common' });
   return {
     title: upperFirst(t('messages.about')),
   };
 }
 
-export default async function About(
+const About = async (
   props: {
     params: Promise<{
       lang: string;
     }>;
   }
-) {
+) => {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.about' });
-  const [session, products] = await Promise.all([
-    getSession(),
-    getActiveProductsWithPrices(),
-  ]);
+  const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'pages.about' });
 
   const resources = [
     {
@@ -356,3 +349,5 @@ export default async function About(
     </div>
   );
 }
+
+export default About;

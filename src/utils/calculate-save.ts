@@ -1,14 +1,17 @@
-import { Prices } from "@recomendapp/types";
 
+interface Price {
+	unit_amount: number;
+	interval: 'monthly' | 'yearly';
+}
 
-const calculateSave = (currentPrice: Prices, previousPrice: Prices) => {
+const calculateSave = (currentPrice: Price, previousPrice: Price) => {
 	const currentPricePerMonth = 
-		currentPrice?.interval === 'year' 
+		currentPrice?.interval === 'yearly' 
 			? (currentPrice?.unit_amount ?? 0) / 12 
 			: currentPrice?.unit_amount ?? 0;
 
 	const previousPricePerMonth = 
-		previousPrice?.interval === 'year'
+		previousPrice?.interval === 'yearly'
 			? (previousPrice?.unit_amount ?? 0) / 12
 			: previousPrice?.unit_amount ?? 0;
 

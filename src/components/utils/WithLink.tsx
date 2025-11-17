@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, useRouter } from "@/lib/i18n/routing"
+import { Link, useRouter } from "@/lib/i18n/navigation"
 import { cn } from "@/lib/utils";
 
 interface WithLinkProps extends React.HTMLAttributes<HTMLDivElement | HTMLAnchorElement> {

@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname, useRouter } from '@/lib/i18n/routing';
+import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import SearchBar from '@/components/Search/SearchBar';
 import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
 import { cn } from '@/lib/utils';

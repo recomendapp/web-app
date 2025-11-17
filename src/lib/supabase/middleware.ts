@@ -1,6 +1,7 @@
 import { Database } from '@recomendapp/types';
 import { createServerClient } from '@supabase/ssr';
 import { NextRequest, NextResponse } from 'next/server';
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from '../env';
 
 export const createMiddlewareClient = ({
   request,
@@ -10,8 +11,8 @@ export const createMiddlewareClient = ({
   response: NextResponse;
 }) => {
   return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll() {
@@ -27,3 +28,5 @@ export const createMiddlewareClient = ({
     }
   );
 };
+
+

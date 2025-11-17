@@ -19,7 +19,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
 import { usePlaylistTvSeriesMultiInsertMutation } from '@/features/client/playlist/playlistMutations';
 import { upperFirst } from 'lodash';
-import { SupportedLocale } from '@/translations/locales';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
 
 const COMMENT_MAX_LENGTH = 180;
@@ -51,7 +50,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
 		hasNextPage,
 	} = useTmdbSearchTvSeriesInfiniteQuery({
 		query: searchQuery,
-		locale: locale as SupportedLocale,
+		locale: locale,
 	})
 
 	const insertTvSeriesMultiple = usePlaylistTvSeriesMultiInsertMutation({
@@ -134,17 +133,20 @@ export function ModalPlaylistTvSeriesQuickAdd({
 							))
 						))
 					) : isError ? (
-						<div className='p-4 text-center text-muted-foreground'>
+						<p className='p-4 text-center text-muted-foreground'>
 						{upperFirst(t('common.messages.an_error_occurred'))}
-						</div>
+						</p>
 					) : (searchQuery && !isLoading) ? (
-						<div className='p-4 text-center text-muted-foreground'>
-						{upperFirst(t('common.messages.no_tv_series_found'))}
-						</div>
+						<p className='p-4 text-center text-muted-foreground'>
+							{t.rich('common.messages.no_results_for', {
+								query: searchQuery,
+								strong: (chunks) => <strong>{chunks}</strong>,
+							})}
+						</p>
 					) : !isLoading ? (
-						<div className='p-4 text-center text-muted-foreground'>
+						<p className='p-4 text-center text-muted-foreground'>
 						{upperFirst(t('common.messages.search_tv_series', { count: 1 }))}
-						</div>
+						</p>
 					) : null}
 					 {(isLoading || isFetchingNextPage) ? <Icons.loader className='w-full'/> : null}
 					</div>

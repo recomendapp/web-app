@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { useRouter } from "@/lib/i18n/routing";
+import { useRouter } from "@/lib/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";

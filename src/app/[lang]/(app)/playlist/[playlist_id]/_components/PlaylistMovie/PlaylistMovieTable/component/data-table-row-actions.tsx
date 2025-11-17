@@ -1,6 +1,6 @@
 'use client';
 
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import { Column, Row, Table } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import {
@@ -84,13 +84,13 @@ export function DataTableRowActions({
 
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem
-            onClick={() => openModal(ModalPlaylistMovieAdd, { movieId: data.movie_id, movieTitle: data.movie?.title })}
+            onClick={() => openModal(ModalPlaylistMovieAdd, { movieId: data.movie_id, movieTitle: data.movie?.title! })}
           >
             <Icons.addPlaylist className='w-4' />
             {upperFirst(t('common.messages.add_to_playlist'))}
           </DropdownMenuItem>
           <DropdownMenuItem
-          onClick={() => openModal(ModalUserRecosMovieSend, { movieId: data.movie_id, movieTitle: data.movie?.title })}
+          onClick={() => openModal(ModalUserRecosMovieSend, { movieId: data.movie_id, movieTitle: data.movie?.title! })}
           >
             <Icons.send className='w-4' />
             {upperFirst(t('common.messages.send_to_friend'))}

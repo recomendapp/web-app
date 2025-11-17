@@ -1,9 +1,9 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { usePathname } from '@/lib/i18n/routing';
+import { usePathname } from '@/lib/i18n/navigation';
 import { useMemo } from 'react';
-import { Link } from "@/lib/i18n/routing";
+import { Link } from "@/lib/i18n/navigation";
 import {
   Search,
   Home,

@@ -12,7 +12,7 @@ import { PlaylistModal } from "../Modals/playlists/PlaylistModal";
 import { ModalPlaylistGuest } from "../Modals/playlists/ModalPlaylistGuest/ModalPlaylistGuest";
 import { usePlaylistDeleteMutation } from "@/features/client/playlist/playlistMutations";
 import toast from "react-hot-toast";
-import { usePathname, useRouter } from "@/lib/i18n/routing";
+import { usePathname, useRouter } from "@/lib/i18n/navigation";
 
 interface Item {
 	icon: React.ElementType;
@@ -109,7 +109,7 @@ export const ContextMenuPlaylist = ({
 				}
 			] : []),
 		],
-	]}, [playlist, session, t]);
+	]}, [playlist, session, t, openModal, createConfirmModal, playlistDeleteMutation, pathname, router]);
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger>

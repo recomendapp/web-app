@@ -17,7 +17,7 @@ import { useTranslations } from "next-intl";
 interface PlaylistMovieHeaderProps
   extends React.HTMLAttributes<HTMLDivElement> {
     playlist: Playlist;
-    numberItems?: number;
+    numberItems: number;
     totalRuntime?: number;
     backdrops?: string[];
     skeleton?: boolean;

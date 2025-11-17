@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
 import { useUserActivityTvSeriesQuery } from '@/features/client/user/userQueries';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Link, usePathname } from '@/lib/i18n/routing';
+import { Link, usePathname } from '@/lib/i18n/navigation';
 import { MediaTvSeries } from '@recomendapp/types';
 import { CardReviewTvSeries } from '@/components/Card/CardReviewTvSeries';
 

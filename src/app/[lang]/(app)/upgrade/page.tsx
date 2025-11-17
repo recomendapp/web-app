@@ -1,12 +1,9 @@
-import {
-  getActiveProductsWithPrices,
-  getSession,
-} from '@/lib/supabase/server';
 import { Upgrade } from './_components/Upgrade';
 import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -16,19 +13,13 @@ export async function generateMetadata(
     }
 ): Promise<Metadata> {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   return {
-    title: upperFirst(t('upgrade.metadata.title')),
-  description: upperFirst(t('upgrade.metadata.description', { app: siteConfig.name })),
+    title: upperFirst(t('pages.upgrade.metadata.title')),
+    description: upperFirst(t('pages.upgrade.metadata.description', { app: siteConfig.name })),
   };
 }
 
 export default async function UpgradePage() {
-  const [session, products] = await Promise.all([
-    getSession(),
-    getActiveProductsWithPrices(),
-  ]);
-  const product = products.find((product) => product.name?.toLowerCase() === 'premium');
-  if (!product) throw new Error('Product not found');
-  return <Upgrade session={session} product={product} />;
+  return <Upgrade />;
 }

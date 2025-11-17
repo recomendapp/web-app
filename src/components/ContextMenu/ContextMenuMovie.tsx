@@ -48,12 +48,12 @@ export const ContextMenuMovie = ({
 			...(session ? [
 				{
 					icon: Icons.addPlaylist,
-					onClick: () => openModal(ModalPlaylistMovieAdd, { movieId: movie.id, movieTitle: movie.title }),
+					onClick: () => openModal(ModalPlaylistMovieAdd, { movieId: movie.id, movieTitle: movie.title! }),
 					label: upperFirst(t('common.messages.add_to_playlist')),
 				},
 				{
 					icon: Icons.send,
-					onClick: () => openModal(ModalUserRecosMovieSend, { movieId: movie.id, movieTitle: movie.title }),
+					onClick: () => openModal(ModalUserRecosMovieSend, { movieId: movie.id, movieTitle: movie.title! }),
 					label: upperFirst(t('common.messages.send_to_friend')),
 				}
 			] : []),
@@ -73,7 +73,7 @@ export const ContextMenuMovie = ({
 			},
 			...additionalItemsBottom
 		],
-	]}, [movie, session, t]);
+	]}, [movie, session, t, openModal, additionalItemsTop, additionalItemsBottom]);
 	return (
 		<ContextMenu>
 			<ContextMenuTrigger>

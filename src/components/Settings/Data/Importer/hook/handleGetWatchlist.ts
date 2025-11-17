@@ -1,6 +1,5 @@
 "use server"
 
-// import { supabase } from "@/lib/supabase/client";
 import { createServerClient } from "@/lib/supabase/server";
 
 export const handleGetWatchlist = async (

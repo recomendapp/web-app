@@ -9,6 +9,7 @@ import { seoLocales } from '@/lib/i18n/routing';
 import MovieDetails from './_components/MovieDetails';
 import { Movie, WithContext } from 'schema-dts';
 import { toISO8601Duration } from '@/lib/utils';
+import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
   props: {
@@ -19,42 +20,41 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const common = await getTranslations({ locale: params.lang, namespace: 'common' });
-  const t = await getTranslations({ locale: params.lang, namespace: 'pages.film' });
+  const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id: movieId} = getIdFromSlug(params.film_id);
   const movie = await getMovie(params.lang, movieId);
-  if (!movie) return { title: upperFirst(common('messages.film_not_found')) };
+  if (!movie) return { title: upperFirst(t('common.messages.film_not_found')) };
   return {
-    title: t('metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() }),
+    title: t('pages.film.metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() }),
     description: truncate(
       movie.directors
-        ? t('metadata.description', {
+        ? t('pages.film.metadata.description', {
           title: movie.title!,
           directors: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(movie.directors.map((director) => director.name ?? '')),
           year: new Date(String(movie.release_date)).getFullYear(),
-          overview: movie.overview,
-        }) : t('metadata.description_no_director', {
+          overview: movie.overview || '',
+        }) : t('pages.film.metadata.description_no_director', {
           title: movie.title!,
           year: new Date(String(movie.release_date)).getFullYear(),
-          overview: movie.overview
+          overview: movie.overview || ''
         }),
       { length: siteConfig.seo.description.limit }
     ),
     alternates: seoLocales(params.lang, `/film/${movie.slug}`),
     openGraph: {
       siteName: siteConfig.name,
-      title: `${t('metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() })} • ${siteConfig.name}`,
+      title: `${t('pages.film.metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() })} • ${siteConfig.name}`,
       description: truncate(
         movie.directors
-          ? t('metadata.description', {
+          ? t('pages.film.metadata.description', {
             title: movie.title!,
             directors: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(movie.directors.map((director) => director.name ?? '')),
             year: new Date(String(movie.release_date)).getFullYear(),
-            overview: movie.overview,
-          }) : t('metadata.description_no_director', {
+            overview: movie.overview || '',
+          }) : t('pages.film.metadata.description_no_director', {
             title: movie.title!,
             year: new Date(String(movie.release_date)).getFullYear(),
-            overview: movie.overview
+            overview: movie.overview || ''
           }),
         { length: siteConfig.seo.description.limit }
       ),

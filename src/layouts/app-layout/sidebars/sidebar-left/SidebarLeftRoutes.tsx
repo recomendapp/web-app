@@ -5,17 +5,15 @@ import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { Icons } from "@/config/icons";
 import { useAuth } from "@/context/auth-context";
 import { useUserPlaylistsInfiniteQuery } from "@/features/client/user/userQueries";
-import { Link } from "@/lib/i18n/routing";
+import { Link, usePathname } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { upperFirst } from "lodash";
 import { BookmarkIcon, HeartIcon, LibraryIcon, SendIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { usePathname } from '@/lib/i18n/routing';
 import { useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 import { useUI } from "@/context/ui-context";
 import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylist";
-import { count } from "console";
 
 const SidebarCollectionContainerIcon = ({
 	className,
