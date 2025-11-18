@@ -277,36 +277,36 @@ const About = async (
         </p>
         <p>
           {t.rich('contact-support.technical-support', {
-            link: (chunks) => (
+            email: (chunks) => (
               <Link
                 href="mailto:help@recomend.app"
                 className="underline underline-offset-2 hover:text-accent-pink"
               >
-                {chunks}
+                help@recomend.app
               </Link>
             ),
           })}
         </p>
         <p>
           {t.rich('contact-support.suggest-a-feature', {
-            link: (chunks) => (
+            email: (chunks) => (
               <Link
                 href="mailto:ideas@recomend.app"
                 className="underline underline-offset-2 hover:text-accent-pink"
               >
-                {chunks}
+                ideas@recomend.app
               </Link>
             ),
           })}
         </p>
         <p>
           {t.rich('contact-support.contact-us', {
-            link: (chunks) => (
+            email: (chunks) => (
               <Link
-                href="mailto:contact@recomend.app"
+                href="mailto:hello@recomend.app"
                 className="underline underline-offset-2 hover:text-accent-pink"
               >
-                {chunks}
+                hello@recomend.app
               </Link>
             ),
           })}
