@@ -17,36 +17,11 @@ const nextConfig: NextConfig = {
   images: {
     // unoptimized: true, // Issue: https://github.com/vercel/next.js/issues/54482
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'api.recomend.app',
-        port: '',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'image.tmdb.org',
-        port: '',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.justwatch.com',
-        port: '',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 's.ltrbxd.com',
-        port: '',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'media.giphy.com',
-        port: '',
-        pathname: '**',
-      },
+      new URL('https://api.recomend.app/**'),
+      new URL('https://image.tmdb.org/**'),
+      new URL('https://images.justwatch.com/**'),
+      new URL('https://s.ltrbxd.com/**'),
+      new URL('https://media.giphy.com/**'),
     ]
   },
   async redirects() {
