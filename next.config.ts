@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
   images: {
     // unoptimized: true, // Issue: https://github.com/vercel/next.js/issues/54482
     remotePatterns: [
-      new URL('https://api.recomend.app/**'),
+      new URL('https://supabase.recomend.app/**'),
       new URL('https://image.tmdb.org/**'),
       new URL('https://images.justwatch.com/**'),
       new URL('https://s.ltrbxd.com/**'),
