@@ -11,7 +11,7 @@ export const getSupabaseClaims = async (
   try {
     const chunks = request.cookies
       .getAll()
-      .filter((c) => c.name.startsWith("sb-api-auth-token"))
+      .filter((c) => c.name.startsWith("sb-supabase-auth-token"))
       .sort(
         (a, b) =>
           Number(a.name.split(".")[1] || 0) -
