@@ -167,7 +167,7 @@ export const getPerson = cache(
 				*,
 				movies:media_movie_aggregate_credits(*, movie:media_movie!inner(*)),
 				tv_series:media_tv_series_aggregate_credits(*, tv_series:media_tv_series!inner(*)),
-				jobs:person_jobs(*)
+				jobs:media_person_jobs(*)
 			`)
 			.match({
 				'id': id,

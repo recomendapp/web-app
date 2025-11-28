@@ -29,7 +29,7 @@ export const Filters = ({
 	job,
 } : {
 	knownForDepartment: String;
-	jobs: Database['public']['Views']['person_jobs']['Row'][];
+	jobs: Database['public']['Views']['media_person_jobs']['Row'][];
 	sortBy: typeof SORT_BY[number];
 	sortOrder: 'asc' | 'desc';
 	display: typeof DISPLAY[number];

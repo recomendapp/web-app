@@ -1,6 +1,4 @@
-import { Prices } from "@recomendapp/types";
-
-const formatPrice = (price: Prices | { currency?: string | null, unit_amount: number }, language: string) => {
+const formatPrice = (price: { currency?: string | null, unit_amount: number }, language: string) => {
   if (!price?.currency) return '';
   const priceString = new Intl.NumberFormat(language, {
 	style: 'currency',
