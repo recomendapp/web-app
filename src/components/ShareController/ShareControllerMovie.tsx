@@ -1,76 +1,86 @@
 "use client";
 import { ShareControllerProps } from "./ShareController";
 import { MediaMovie } from "@recomendapp/types";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
-import { Switch } from "../ui/switch";
-import { Label } from "../ui/label";
-import { Skeleton } from "../ui/skeleton";
-import { getSocialCanvas } from "@/lib/social-canvas";
+import Image from "next/image";
+import { ImageWithFallback } from "../utils/ImageWithFallback";
+import { Icons } from "@/config/icons";
+import toast from "react-hot-toast";
+import { domToBlob } from "modern-screenshot";
 
 interface ShareControllerMovieProps extends ShareControllerProps {
 	movie: MediaMovie;
 }
 
 export const ShareControllerMovie: React.FC<ShareControllerMovieProps> = ({ movie, onFileReady }) => {
-	const common = useTranslations('common');
-	const [isLoading, setIsLoading] = useState(true);
-	const [image, setImage] = useState<File | null | undefined>(undefined);
-	const [showVoteAverage, setShowVoteAverage] = useState(true);
-	const fetchImage = useCallback(async () => {
+	const t = useTranslations();
+
+	const captureRef = useRef<HTMLDivElement>(null);
+	const directorsText = useMemo(() => movie.directors?.map(d => d.name!).join(', '), [movie.directors]);
+
+	const [isLoading, setIsLoading] = useState(false);
+	const [isBackdropLoaded, setIsBackdropLoaded] = useState(false);
+	const [isPosterLoaded, setIsPosterLoaded] = useState(false);
+
+	const captureImage = useCallback(async () => {
+		if (!captureRef.current) return;
+		setIsLoading(true);
 		try {
-			setIsLoading(true);
-			if (!movie || !movie.title || !movie.poster_url) return;
-			const body = {
-				title: movie.title,
-				poster: movie.poster_url,
-				credits: movie.directors?.map(c => c.name).join(', '),
-				background: movie.backdrop_url,
-				voteAverage: showVoteAverage && movie.vote_average ? movie.vote_average : undefined,
-			};
-	
-			const { buffer, contentType } = await getSocialCanvas({
-				endpoint: '/media/card',
-				body: JSON.stringify(body),
+			const blob = await domToBlob(captureRef.current, {
+				quality: 1,
+				scale: 5,
 			});
-			if (!buffer || !contentType) {
-				throw new Error('Invalid response from Social Canvas');
+			if (!blob) {
+				throw new Error('Failed to capture image');
 			}
-			const extension = contentType.split('/')[1];
-			const file = new File([buffer], `${movie.title}.${extension}`, { type: contentType });
-			setImage(file);
+			const extension = blob.type.split('/')[1];
+			const file = new File([blob], `${movie.title}.${extension}`, { type: blob.type });
 			onFileReady?.(file);
 		} catch (error) {
-			setImage(null);
+        	toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		} finally {
 			setIsLoading(false);
 		}
-	}, [movie, showVoteAverage, onFileReady]);
+	}, [movie.title, onFileReady, t]);
 
 	useEffect(() => {
-		fetchImage();
-	}, [fetchImage]);
+		// if (!isBackdropLoaded || !isPosterLoaded) return;
+		captureImage();
+	}, [isBackdropLoaded, isPosterLoaded, captureImage]);
 
 	return (
 		<div className="w-full flex flex-col items-center gap-2">
-			<div className="w-full p-2 bg-muted rounded-md grid grid-cols-2 gap-2">
-				<div className="flex items-center gap-2">
-					<Switch id="vote-average" checked={showVoteAverage} onCheckedChange={setShowVoteAverage} />
-					<Label htmlFor="vote-average">{upperFirst(common('messages.vote_average'))}</Label>
-				</div>
-			</div>
-			<div className="relative w-full h-64 flex items-center justify-center">
-				{isLoading ? (
-					<Skeleton className="aspect-[2/3] h-full rounded-md" />
-				) : image ? (
-					<img
-						alt={movie.title ?? 'movie Image'}
-						src={URL.createObjectURL(image)}
-						className="object-cover h-full rounded-md"
+			<div className="relative w-[300px] rounded-md overflow-hidden">
+				<div
+				ref={captureRef}
+				className="relative w-full aspect-[9/16] flex flex-col justify-center items-center bg-muted p-4 overflow-hidden"
+				>
+					{movie.backdrop_url && <Image src={movie.backdrop_url} alt={movie.title ?? 'movie poster'} className="absolute inset-0 object-cover" fill onLoad={() => setIsBackdropLoaded(true)} />}
+					<div className="absolute inset-0 bg-black/50" />
+					<div className="flex flex-col justify-center items-center w-full z-10 gap-4">
+						{/* POSTER */}
+						<div className="relative overflow-hidden w-2/3 h-auto aspect-[2/3] rounded-md">
+							<ImageWithFallback type={'movie'} src={movie.poster_url} alt={movie.title ?? 'movie poster'} className="object-cover" fill onLoad={() => setIsPosterLoaded(true)} />
+						</div>
+						{/* TITLE & DIRECTORS */}
+						<div className="flex flex-col items-center">
+							<h1 className="text-center font-bold line-clamp-3">{movie.title}</h1>
+							{directorsText?.length && <p className="text-center text-xs line-clamp-2">{directorsText}</p>}
+						</div>
+					</div>
+					<Icons.site.logo
+					style={{
+						bottom: 24,
+					}}
+					className="fill-accent-yellow absolute w-1/4"
 					/>
-				) : (
-					<p className="text-muted-foreground">{upperFirst(common('messages.an_error_occurred'))}</p>
+				</div>
+				{isLoading && (
+					<div className="z-10 absolute inset-0 flex justify-center items-center bg-black/50">
+						<Icons.loader />
+					</div>
 				)}
 			</div>
 		</div>

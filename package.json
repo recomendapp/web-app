@@ -91,6 +91,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.513.0",
     "maplibre-gl": "^5.5.0",
+    "modern-screenshot": "^4.6.7",
     "negotiator": "^1.0.0",
     "next": "16.0.3",
     "next-intl": "^4.5.3",
