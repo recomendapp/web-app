@@ -71,12 +71,13 @@ export default async function LangLayout({
       <head>
         <link rel="search" type="application/opensearchdescription+xml" title="Recomend" href="/opensearch.xml" />
       </head>
-      {process.env.NODE_ENV === 'production' ? (
+      {process.env.NODE_ENV === 'production' && (
         <Script
         defer
-        src={process.env.ANAYLTICS_URL}
+        src={process.env.ANALYTICS_URL}
         data-website-id={process.env.ANALYTICS_ID}
-      />) : null}
+        />
+      )}
       <body className={cn('font-sans antialiased', fontSans.variable)}>
         <Providers locale={lang as SupportedLocale}>{children}</Providers>
       </body>
