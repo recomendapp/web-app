@@ -29,6 +29,22 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           docker build \
             --build-arg NPM_TOKEN=${{ secrets.NPM_TOKEN }} \
+            --build-arg NEXT_PUBLIC_SITE_URL=${{ secrets.INFISICAL_WEB_APP_URL }} \
+            --build-arg NEXT_PUBLIC_SUPABASE_URL=${{ secrets.INFISICAL_SUPABASE_URL }} \
+            --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.INFISICAL_SUPABASE_ANON_KEY }} \
+            --build-arg NEXT_PUBLIC_REVENUECAT_API_KEY=${{ secrets.INFISICAL_REVENUECAT_API_KEY }} \
+            --build-arg NEXT_PUBLIC_NOVU_APP_IDENTIFIER=${{ secrets.INFISICAL_NOVU_APP_IDENTIFIER }} \
+            --build-arg NEXT_PUBLIC_FIREBASE_API_KEY=${{ secrets.INFISICAL_FIREBASE_API_KEY }} \
+            --build-arg NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.INFISICAL_FIREBASE_AUTH_DOMAIN }} \
+            --build-arg NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.INFISICAL_FIREBASE_PROJECT_ID }} \
+            --build-arg NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ secrets.INFISICAL_FIREBASE_STORAGE_BUCKET }} \
+            --build-arg NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.INFISICAL_FIREBASE_MESSAGING_SENDER_ID }} \
+            --build-arg NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.INFISICAL_FIREBASE_APP_ID }} \
+            --build-arg NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=${{ secrets.INFISICAL_FIREBASE_MEASUREMENT_ID }} \
+            --build-arg NEXT_PUBLIC_FIREBASE_FCM_VAPID_KEY=${{ secrets.INFISICAL_FIREBASE_FCM_VAPID_KEY }} \
+            --build-arg NEXT_PUBLIC_TMDB_IMAGE_BASE_URL=${{ secrets.INFISICAL_TMDB_IMAGE_BASE_URL }} \
+            --build-arg NEXT_PUBLIC_JUSTWATCH_API_KEY=${{ secrets.INFISICAL_JUSTWATCH_API_KEY }} \
+            --build-arg NEXT_PUBLIC_TURNSTILE_SITE_KEY=${{ secrets.INFISICAL_CLOUDFLARE_TURNSTILE_SITE_KEY }} \
             -t ghcr.io/${{ github.repository_owner }}/web-app:$VERSION .
           docker tag ghcr.io/${{ github.repository_owner }}/web-app:$VERSION ghcr.io/${{ github.repository_owner }}/web-app:latest
 
