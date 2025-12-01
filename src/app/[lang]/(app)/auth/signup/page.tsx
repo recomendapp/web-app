@@ -285,7 +285,7 @@ export default function Signup() {
 							<FormItem>
 							<FormLabel className='w-full flex justify-between gap-2'>
 							{common('form.username.label')}
-							<span className='text-xs text-destructive'>{field?.value?.length > USERNAME_MAX_LENGTH ? `${field.value.length} / ${USERNAME_MAX_LENGTH}` : ''}</span>
+							<span className='text-xs text-destructive'>{(field?.value && field?.value?.length > USERNAME_MAX_LENGTH) ? `${field.value.length} / ${USERNAME_MAX_LENGTH}` : ''}</span>
 							</FormLabel>
 								<FormControl>
 									<div className='relative'>
@@ -315,7 +315,7 @@ export default function Signup() {
 							<FormItem>
 							<FormLabel className="w-full flex justify-between gap-2">
 							{common('form.full_name.label')}
-							<span className='text-xs text-destructive'>{field?.value?.length > FULL_NAME_MAX_LENGTH ? `${field.value.length} / ${FULL_NAME_MAX_LENGTH}` : ''}</span>
+							<span className='text-xs text-destructive'>{(field?.value && field?.value?.length > FULL_NAME_MAX_LENGTH) ? `${field.value.length} / ${FULL_NAME_MAX_LENGTH}` : ''}</span>
 							</FormLabel>
 							<FormControl>
 								<Input

@@ -129,6 +129,7 @@
   "devDependencies": {
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/typography": "^0.5.9",
+    "@types/geojson": "^7946.0.16",
     "@types/lodash": "^4.17.17",
     "@types/negotiator": "^0.6.4",
     "@types/rtl-detect": "^1.0.3",
