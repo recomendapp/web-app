@@ -56,7 +56,7 @@ export default async function CreateReview(
       user_id: session.user.id,
       tv_series_id: serieId,
     })
-    .not('pages.review.create.metadata.review', 'is', null)
+    .not('review', 'is', null)
     .maybeSingle();
   if (error) throw error;
   if (review) redirect({
