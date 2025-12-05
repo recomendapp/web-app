@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { JSONContent, MediaPerson, MediaTvSeries } from '@recomendapp/types';
+import { MediaPerson, MediaTvSeries } from '@recomendapp/types';
 import { useAuth } from '@/context/auth-context';
 import { Link, useRouter } from "@/lib/i18n/navigation";
 import { cn } from '@/lib/utils';
@@ -36,7 +36,7 @@ export const TvSeriesCreateReview = ({
 		tvSeriesId: tvSeries.id,
 	});
 
-	const handleSubmit = async (data: { title?: string; body: JSONContent }) => {
+	const handleSubmit = async (data: { title?: string; body: string }) => {
 		if (!activity) return;
 		await upsertReview.mutateAsync({
 			activityId: activity.id,

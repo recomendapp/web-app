@@ -125,25 +125,25 @@ export default function TvSerieDetails({
         )}
       </div>
       {/* CASTING */}
-      <SerieCast cast={serie.cast} />
+      <SerieCast tvSeries={serie} />
     </div>
   );
 }
 
 const SerieCast = ({
-	cast,
+	tvSeries,
 } : {
-	cast?: MediaTvSeriesPerson[]
+	tvSeries: MediaTvSeries
 }) => {
   const common = useTranslations('common');
 	return (
 		<div>
 			<h2 className="text-lg font-medium">{upperFirst(common('messages.cast'))}</h2>
-      {(cast && cast?.length > 0) ? (
+      {(tvSeries.cast && tvSeries.cast?.length > 0) ? (
         <ScrollArea>
           <div className="flex space-x-4 pb-4">
-            {cast?.map(({ person, character }, i) => (
-              <CastPoster key={i} person={person} character={character} />
+            {tvSeries.cast?.map(({ person }, i) => (
+              <CastPoster key={i} person={person} />
             ))}
           </div>
           <ScrollBar orientation="horizontal" />
@@ -157,10 +157,10 @@ const SerieCast = ({
 
 function CastPoster({
   person,
-  character,
+  characters,
 } : {
   person?: MediaPerson,
-  character?: string | null,
+  characters?: string[] | null,
 }) {
   if (!person) return null;
   return (
@@ -182,7 +182,7 @@ function CastPoster({
         </div>
         <div className="text-center">
           <p className="line-clamp-2 break-words">{person.name}</p>
-          {character ? <p className="line-clamp-2 text-accent-yellow italic text-sm">{character}</p> : null}
+          {characters ? <p className="line-clamp-2 text-accent-yellow italic text-sm">{characters.join(', ')}</p> : null}
         </div>
       </Card>
     </Link>

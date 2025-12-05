@@ -26,7 +26,7 @@ export default async function Provider({
   const supabase = await createServerClient();
   const { data: { session } } = await supabase.auth.getSession();
   const { data: is_maintenance } = await supabase.rpc('is_maintenance').single();
-  const isMaintenanceMode = is_maintenance // && process.env.NODE_ENV !== 'development';
+  const isMaintenanceMode = is_maintenance && process.env.NODE_ENV !== 'development';
   // UI
   const cookiesStore = await cookies();
   const layout = cookiesStore.get("ui:layout");

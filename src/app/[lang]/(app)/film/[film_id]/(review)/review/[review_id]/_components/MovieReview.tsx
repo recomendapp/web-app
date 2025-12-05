@@ -1,5 +1,5 @@
 'use client';
-import { JSONContent, MediaPerson, UserReviewMovie } from "@recomendapp/types";
+import { MediaPerson, UserReviewMovie } from "@recomendapp/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link } from "@/lib/i18n/navigation";
@@ -30,7 +30,7 @@ export const MovieReview = ({
 		movieId: review?.activity?.movie_id!,
 	});
 
-	const handleSubmit = async (data: { title?: string; body: JSONContent }) => {
+	const handleSubmit = async (data: { title?: string; body: string }) => {
 		await upsertReview.mutateAsync({
 			activityId: review?.id,
 			...data

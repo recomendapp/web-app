@@ -5,10 +5,12 @@ import { Metadata } from 'next';
 import { getReviewTvSeries } from '@/features/server/reviews';
 import { TvSeriesReview } from './_components/TvSeriesReview';
 import { Review, WithContext } from 'schema-dts';
-import { getRawReviewText } from '@/lib/utils';
 import { siteConfig } from '@/config/site';
 import { seoLocales } from '@/lib/i18n/routing';
 import { SupportedLocale } from '@/translations/locales';
+import { generateJSON } from '@tiptap/html';
+import { EDITOR_EXTENSIONS } from '@/components/tiptap/TiptapExtensions';
+import { generateText } from '@tiptap/core';
 
 export async function generateMetadata(
   props: {
@@ -22,14 +24,16 @@ export async function generateMetadata(
   const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const review = await getReviewTvSeries(params.review_id, params.lang);
   if (!review) return { title: upperFirst(t('common.messages.review_not_found')) };
+  const tiptapJson = generateJSON(review.body, EDITOR_EXTENSIONS);
+  const rawText = generateText(tiptapJson, EDITOR_EXTENSIONS);
   return {
     title: t('pages.review.metadata.title', { title: review.activity?.tv_series?.name!, username: review.activity?.user?.username! }),
-    description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
+    description: truncate(rawText, { length: siteConfig.seo.description.limit }),
     alternates: seoLocales(params.lang, `/review/${review.id}`),
     openGraph: {
       siteName: siteConfig.name,
       title: t('pages.review.metadata.title', { title: review.activity?.tv_series?.name!, username: review.activity?.user?.username! }),
-      description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
+      description: truncate(rawText, { length: siteConfig.seo.description.limit }),
       url: `${siteConfig.url}/${params.lang}/review/${params.review_id}`,
       images: review.activity?.tv_series?.poster_url ? [
         { url: review.activity?.tv_series.poster_url },
@@ -51,13 +55,15 @@ export default async function ReviewPage(
   const params = await props.params;
   const review = await getReviewTvSeries(params.review_id, params.lang);
   if (!review) notFound();
+  const tiptapJson = generateJSON(review.body, EDITOR_EXTENSIONS);
+  const rawText = generateText(tiptapJson, EDITOR_EXTENSIONS);
   const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { tv_series } = review.activity || {};
   const jsonLd: WithContext<Review> = {
     '@context': 'https://schema.org',
     '@type': 'Review',
     name: t('pages.review.metadata.title', { title: tv_series?.name!, username: review.activity?.user?.username! }),
-    description: truncate(getRawReviewText({ data: review.body }), { length: siteConfig.seo.description.limit }),
+    description: truncate(rawText, { length: siteConfig.seo.description.limit }),
     datePublished: review.created_at,
     dateModified: review.updated_at,
     itemReviewed: tv_series ? {

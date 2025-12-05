@@ -4,7 +4,7 @@ import { JustWatchWidget } from "@/components/JustWatch/JustWatchWidgetScript";
 import { Card } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import { MediaMovie, MediaMoviePerson, MediaPerson } from "@recomendapp/types";
+import { MediaMovie, MediaPerson } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/navigation";
@@ -34,25 +34,25 @@ export default function MovieDetails({
         />
       </div>
       {/* CASTING */}
-      <MovieCast cast={movie.cast} />
+      <MovieCast movie={movie} />
     </div>
   );
 }
 
 const MovieCast = ({
-	cast,
+	movie,
 } : {
-	cast?: MediaMoviePerson[]
+	movie: MediaMovie
 }) => {
   const common = useTranslations('common');
 	return (
 		<div>
 			<h2 className="text-lg font-medium">{upperFirst(common('messages.cast'))}</h2>
-      {(cast && cast?.length > 0) ? (
+      {(movie.cast && movie.cast?.length > 0) ? (
         <ScrollArea>
           <div className="flex space-x-4 pb-4">
-            {cast?.map(({ person, role }, i) => (
-              <CastPoster key={i} person={person} character={role?.character} />
+            {movie.cast?.map(({ person }, i) => (
+              <CastPoster key={i} person={person} />
             ))}
           </div>
           <ScrollBar orientation="horizontal" />
@@ -60,17 +60,16 @@ const MovieCast = ({
       ) : (
         <div className="text-justify text-muted-foreground">{upperFirst(common('messages.no_cast'))}</div>
       )}
-			{/* <CrewModal crew={movie.credits.crew} /> */}
 		</div>
 	)
 }
 
 function CastPoster({
   person,
-  character,
+  characters,
 } : {
   person?: MediaPerson,
-  character?: string | null,
+  characters?: string[] | null,
 }) {
   if (!person) return null;
   return (
@@ -92,7 +91,7 @@ function CastPoster({
         </div>
         <div className="text-center">
           <p className="line-clamp-2 break-words">{person.name}</p>
-          {character ? <p className="line-clamp-2 text-accent-yellow italic text-sm">{character}</p> : null}
+          {characters ? <p className="line-clamp-2 text-accent-yellow italic text-sm">{characters.join(', ')}</p> : null}
         </div>
       </Card>
     </Link>

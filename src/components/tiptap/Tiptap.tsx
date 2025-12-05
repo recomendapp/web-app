@@ -1,11 +1,9 @@
 'use client';
 
-import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
+import { DependencyList, FormEvent, useState } from 'react';
 
 // TIPTAP
-import { useEditor, EditorContent, JSONContent, Editor } from '@tiptap/react';
-import CharacterCount from '@tiptap/extension-character-count';
-import Placeholder from '@tiptap/extension-placeholder';
+import { useEditor as useEditorBase, Editor, UseEditorOptions } from '@tiptap/react';
 
 // CUSTOM CSS
 import './Tiptap.css';
@@ -22,80 +20,25 @@ import { EDITOR_EXTENSIONS } from './TiptapExtensions';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 
-interface TiptapProps {
-  onUpdate?: (data: JSONContent) => void;
-  onCharacterCountChange?: (count: number) => void;
-  editable?: boolean;
-  content?: JSONContent;
-  limit?: number;
-  placeholder?: string;
-}
-
-const Tiptap = ({
-  onUpdate,
-  onCharacterCountChange,
-  editable = true,
-  content,
-  limit = 5000,
-  placeholder,
-}: TiptapProps) => {
-  const [initBodyLength, setInitBodyLength] = useState(false);
-  const editor = useEditor(
+export const useEditor = (options?: UseEditorOptions | undefined, deps?: DependencyList) => {
+  return useEditorBase(
     {
-      editable: editable,
+      ...options,
+      immediatelyRender: options?.immediatelyRender ?? false,
       editorProps: {
         attributes: {
           class: 'prose prose-sm sm:prose lg:prose-lg focus:outline-none',
         },
+        ...options?.editorProps,
       },
       extensions: [
         ...EDITOR_EXTENSIONS,
-        // Code,
-        CharacterCount.configure({
-          limit: limit,
-        }),
-        Placeholder.configure({
-          placeholder: placeholder,
-        }),
+        ...(options?.extensions || []),
       ],
-      content: content,
-      onUpdate({ editor }) {
-        onUpdate && onUpdate(editor.getJSON());
-        onCharacterCountChange && onCharacterCountChange(editor.storage.characterCount.characters());
-      },
     },
-    [editable]
-  );
-
-  useEffect(() => {
-    if (!initBodyLength && editor && onCharacterCountChange) {
-      onCharacterCountChange(editor.storage.characterCount.characters());
-      setInitBodyLength(true);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editor, onCharacterCountChange]);
-
-  return (
-    <div
-      className={`
-        rounded-md
-        ${editable ? 'bg-background border border-muted-foreground' : ''}
-      `}
-    >
-      {editable && <Toolbar editor={editor} />}
-        <div className={editable ? 'p-4' : ''}>
-          <EditorContent editor={editor} />
-          {editable && (
-            <p className="text-xs text-right text-muted-foreground">
-              {editor?.storage.characterCount.characters()} / {limit}
-            </p>
-          )}
-        </div>
-    </div>
+    deps
   );
 };
-
-export default Tiptap;
 
 export function Toolbar({ editor }: { editor: Editor | null }) {
   return (
@@ -145,13 +88,6 @@ export function Toolbar({ editor }: { editor: Editor | null }) {
       >
         <Icons.Strikethrough size={15} />
       </Button>
-      {/* <Button
-          variant={editor?.isActive("code") ? 'accent-yellow-enabled' : 'ghost'}
-          size={'icon'}
-          onClick={() => editor?.chain().focus().toggleCode().run()}
-        >
-          <Icons.Code />
-        </Button> */}
     </div>
   );
 }

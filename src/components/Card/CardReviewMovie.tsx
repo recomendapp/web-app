@@ -5,9 +5,11 @@ import { Profile, UserActivityMovie, UserReviewMovie,  } from "@recomendapp/type
 import { WithLink } from "../utils/WithLink";
 import { CardUser } from "./CardUser";
 import { useFormatter, useNow } from "next-intl";
-import { JSONContent } from "@tiptap/react";
+import { generateText } from "@tiptap/react";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import ButtonUserReviewMovieLike from "../buttons/ButtonUserReviewMovieLike";
+import { generateJSON } from "@tiptap/html";
+import { EDITOR_EXTENSIONS } from "../tiptap/TiptapExtensions";
 
 interface CardReviewMovieProps
 	extends React.ComponentProps<typeof Card> {
@@ -84,17 +86,13 @@ export {
 	CardReviewMovieDefault,
 }
 
-export function Overview({ data }: { data: JSONContent }) {
-  const text = data?.content
-	?.filter((paragraph) => paragraph?.content)
-	?.flatMap(
-	  (paragraph) => paragraph?.content?.map((item) => item.text).join('')
-	)
-	.join('\n');
+export function Overview({ data }: { data: string }) {
+  const tiptapJson = generateJSON(data, EDITOR_EXTENSIONS);
+  const rawText = generateText(tiptapJson, EDITOR_EXTENSIONS);
 
   return (
 	<div className=" whitespace-pre-line text-justify">
-	  <p className="line-clamp-3">{text}</p>
+	  <p className="line-clamp-3">{rawText}</p>
 	</div>
   );
 }

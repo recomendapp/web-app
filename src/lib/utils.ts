@@ -1,6 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { JSONContent } from "@tiptap/react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -56,12 +55,3 @@ export const getURL = () => {
 	return url
 }
 
-export const getRawReviewText = ({ data } : { data: JSONContent }) => {
-  const text = data?.content
-    ?.filter((paragraph) => paragraph?.content)
-    ?.flatMap(
-      (paragraph) => paragraph?.content?.map((item) => item.text).join('')
-    )
-    .join('\n');
-  return text;
-}
