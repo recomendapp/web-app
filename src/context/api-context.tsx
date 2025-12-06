@@ -16,7 +16,6 @@ export const ApiProvider = ({
 	const { session } = useAuth();
 	const api = useMemo(() => {
 		return createClient({
-			baseUrl: 'http://localhost:8000/',
 			token: session?.access_token,
 			language: locale,
 		});
