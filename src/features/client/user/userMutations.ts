@@ -3,6 +3,8 @@ import { Profile, UserActivityMovie, UserActivityTvSeries, UserFollower, UserRec
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { userKeys } from './userKeys';
 import { mediaKeys } from '../media/mediaKeys';
+import { useApiClient } from '@/context/api-context';
+import { useAuth } from '@/context/auth-context';
 
 
 /**
@@ -575,34 +577,30 @@ export const useUserActivityTvSeriesUpdateMutation = () => {
 /* --------------------------------- REVIEW --------------------------------- */
 // Movies
 export const useUserReviewMovieUpsertMutation = ({
-	userId,
-	movieId
-}: {
-	userId?: string;
+	movieId,
+} : {
 	movieId: number;
 }) => {
-	const supabase = useSupabaseClient();
+	const { session } = useAuth();
+	const api = useApiClient();
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async ({
-			activityId,
 			title,
 			body,
 		} : {
-			activityId?: number;
 			title?: string | null;
 			body: string;
 		}) => {
-			const { data, error } = await supabase
-				.from('user_reviews_movie')
-				.upsert({
-					id: activityId,
+			if (!movieId) throw new Error('Missing movieId');
+			const { data, error } = await api.movies.review.upsert(
+				movieId,
+				{
 					title: title,
 					body: body,
-				}, { onConflict: 'id'})
-				.select('*')
-				.single()
-			if (error) throw error;
+				}
+			);
+			if (error || !data) throw error;
 			return data;
 		},
 		onSuccess: (data) => {
@@ -612,8 +610,8 @@ export const useUserReviewMovieUpsertMutation = ({
 			});
 
 			// Invalidate the review activity
-			userId && queryClient.invalidateQueries({
-				queryKey: userKeys.activity({ id: movieId, type: 'movie', userId: userId }),
+			session && queryClient.invalidateQueries({
+				queryKey: userKeys.activity({ id: movieId, type: 'movie', userId: session.user.id }),
 			});
 		}
 	});
@@ -711,34 +709,30 @@ export const useUserReviewMovieLikeDeleteMutation = () => {
 
 // Tv Series
 export const useUserReviewTvSeriesUpsertMutation = ({
-	userId,
 	tvSeriesId
 }: {
-	userId?: string;
 	tvSeriesId: number;
 }) => {
-	const supabase = useSupabaseClient();
+	const { session } = useAuth();
+	const api = useApiClient();
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async ({
-			activityId,
 			title,
 			body,
 		} : {
-			activityId?: number;
 			title?: string | null;
 			body: string;
 		}) => {
-			const { data, error } = await supabase
-				.from('user_reviews_tv_series')
-				.upsert({
-					id: activityId,
+			if (!tvSeriesId) throw new Error('Missing tvSeriesId');
+			const { data, error } = await api.tvSeries.review.upsert(
+				tvSeriesId,
+				{
 					title: title,
 					body: body,
-				}, { onConflict: 'id'})
-				.select('*')
-				.single()
-			if (error) throw error;
+				}
+			);
+			if (error || !data) throw error;
 			return data;
 		},
 		onSuccess: (data) => {
@@ -748,8 +742,8 @@ export const useUserReviewTvSeriesUpsertMutation = ({
 			});
 
 			// Invalidate the review activity
-			userId && queryClient.invalidateQueries({
-				queryKey: userKeys.activity({ id: tvSeriesId, type: 'tv_series', userId: userId }),
+			session && queryClient.invalidateQueries({
+				queryKey: userKeys.activity({ id: tvSeriesId, type: 'tv_series', userId: session.user.id }),
 			});
 		}
 	});

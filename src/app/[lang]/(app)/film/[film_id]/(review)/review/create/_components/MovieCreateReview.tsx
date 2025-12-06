@@ -32,16 +32,12 @@ export const MovieCreateReview = ({
 		userId: session?.user.id,
 	});
 	const upsertReview = useUserReviewMovieUpsertMutation({
-		userId: session?.user.id,
 		movieId: movie.id,
 	});
 
 	const handleSubmit = async (data: { title?: string; body: string }) => {
 		if (!activity) return;
-		await upsertReview.mutateAsync({
-			activityId: activity?.id,
-			...data
-		}, {
+		await upsertReview.mutateAsync(data, {
 			onSuccess: (review) => {
 				queryClient.invalidateQueries({
 					queryKey: userKeys.review({

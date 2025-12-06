@@ -27,15 +27,12 @@ export const TvSeriesReview = ({
 	});
 	
 	const upsertReview = useUserReviewTvSeriesUpsertMutation({
-		userId: session?.user.id,
 		tvSeriesId: review?.activity?.tv_series_id!,
 	});
 
 	const handleSubmit = async (data: { title?: string; body: string }) => {
-		await upsertReview.mutateAsync({
-			activityId: review?.id,
-			...data
-		}, {
+		if (!review?.activity) return;
+		await upsertReview.mutateAsync(data, {
 			onError: (error) => {
 				throw error;
 			}

@@ -47,6 +47,7 @@
     "@radix-ui/react-toggle": "^1.1.1",
     "@radix-ui/react-toggle-group": "^1.1.10",
     "@radix-ui/react-tooltip": "^1.2.7",
+    "@recomendapp/api-js": "^1.0.2",
     "@recomendapp/types": "^1.0.29",
     "@revenuecat/purchases-js": "^1.16.1",
     "@supabase/ssr": "^0.7.0",

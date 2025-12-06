@@ -26,15 +26,12 @@ export const MovieReview = ({
 		initialData: reviewServer,
 	});
 	const upsertReview = useUserReviewMovieUpsertMutation({
-		userId: session?.user.id,
 		movieId: review?.activity?.movie_id!,
 	});
 
 	const handleSubmit = async (data: { title?: string; body: string }) => {
-		await upsertReview.mutateAsync({
-			activityId: review?.id,
-			...data
-		}, {
+		if (!review?.activity) return;
+		await upsertReview.mutateAsync(data, {
 			onError: (error) => {
 				throw error;
 			}

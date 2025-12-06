@@ -15,6 +15,7 @@ import { ModalProvider } from './modal-context';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 import { SupportedLocale } from '@/translations/locales';
+import { ApiProvider } from './api-context';
 
 export default async function Provider({
   children,
@@ -41,40 +42,42 @@ export default async function Provider({
       <SupabaseProvider>
         <ReactQueryProvider>
           <AuthProvider session={session}>
-            <NotificationsProvider>
-              <MapContext>
-                <ThemeProvider attribute={'class'} defaultTheme='dark' enableSystem>
-                  <UIProvider
-                  defaultLayout={defaultLayout}
-                  cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
-                  cookieRightPanelOpen={rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined}
-                  device={device}
-                  >
-                    <TooltipProvider delayDuration={100}>
-                      <ModalProvider>
-                        <NextTopLoader
-                          showSpinner={false}
-                          easing="ease"
-                          color="#FFE974"
-                          height={2}
-                        />
-                        <Toaster
-                          position="top-center"
-                          toastOptions={{
-                            style: {
-                              borderRadius: '10px',
-                              background: '#333',
-                              color: '#fff',
-                            },
-                          }}
-                        />
-                        {isMaintenanceMode ? <MaintenancePage /> : children}
-                      </ModalProvider>
-                    </TooltipProvider>
-                  </UIProvider>
-                </ThemeProvider>
-              </MapContext> 
-            </NotificationsProvider>
+            <ApiProvider>
+              <NotificationsProvider>
+                <MapContext>
+                  <ThemeProvider attribute={'class'} defaultTheme='dark' enableSystem>
+                    <UIProvider
+                    defaultLayout={defaultLayout}
+                    cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
+                    cookieRightPanelOpen={rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined}
+                    device={device}
+                    >
+                      <TooltipProvider delayDuration={100}>
+                        <ModalProvider>
+                          <NextTopLoader
+                            showSpinner={false}
+                            easing="ease"
+                            color="#FFE974"
+                            height={2}
+                          />
+                          <Toaster
+                            position="top-center"
+                            toastOptions={{
+                              style: {
+                                borderRadius: '10px',
+                                background: '#333',
+                                color: '#fff',
+                              },
+                            }}
+                          />
+                          {isMaintenanceMode ? <MaintenancePage /> : children}
+                        </ModalProvider>
+                      </TooltipProvider>
+                    </UIProvider>
+                  </ThemeProvider>
+                </MapContext> 
+              </NotificationsProvider>
+            </ApiProvider>
           </AuthProvider>
         </ReactQueryProvider>
       </SupabaseProvider>
