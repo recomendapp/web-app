@@ -48,7 +48,7 @@ const getMediaDetails = ({
 				return null;
 		}
 	};
-	const getImage = () => {
+	const getImageUrl = () => {
 		switch (type) {
 			case 'movie':
 				return media.poster_url;
@@ -56,6 +56,18 @@ const getMediaDetails = ({
 				return media.poster_url;
 			case 'person':
 				return media.profile_url;
+			default:
+				return null;
+		}
+	};
+	const getImagePath = () => {
+		switch (type) {
+			case 'movie':
+				return media.poster_path;
+			case 'tv_series':
+				return media.poster_path;
+			case 'person':
+				return media.profile_path;
 			default:
 				return null;
 		}
@@ -86,7 +98,8 @@ const getMediaDetails = ({
 	};
 	return {
 		title: getTitle(),
-		imageUrl: getImage(),
+		imageUrl: getImageUrl(),
+		imagePath: getImagePath(),
 		date: getDate(),
 		description: getDescription(),
 		posterClassName: type === 'movie'

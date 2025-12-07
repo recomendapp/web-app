@@ -16,6 +16,7 @@ import { WithLink } from "../utils/WithLink";
 import ButtonUserActivityMovieWatch from "../buttons/ButtonUserActivityMovieWatch";
 import ButtonUserWatchlistMovie from "../buttons/ButtonUserWatchlistMovie";
 import { ContextMenuMovie } from "../ContextMenu/ContextMenuMovie";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 interface CardMovieProps
 	extends React.ComponentProps<typeof Card> {
@@ -48,16 +49,12 @@ const CardMovieDefault = React.forwardRef<
 			className={cn('relative h-full shrink-0 rounded-md overflow-hidden aspect-[2/3]', posterClassName)}
 			>
 				<ImageWithFallback
-					src={movie.poster_url ?? ''}
-					alt={movie.title ?? ''}
-					fill
-					className="object-cover"
-					type='movie'
-					sizes={`
-					(max-width: 640px) 96px,
-					(max-width: 1024px) 120px,
-					150px
-					`}
+				src={getTmdbImage({ path: movie.poster_path, size: 'w342' })}
+				alt={movie.title ?? ''}
+				fill
+				className="object-cover"
+				type='movie'
+				unoptimized
 				/>
 			</div>
 			<div className='px-2 py-1 space-y-1'>
@@ -91,16 +88,12 @@ const CardMoviePoster = React.forwardRef<
 				{...props}
 			>
 				<ImageWithFallback
-					src={movie.poster_url ?? ''}
-					alt={movie.title ?? ''}
-					fill
-					className="object-cover"
-					type={'movie'}
-					sizes={`
-					(max-width: 640px) 96px,
-					(max-width: 1024px) 120px,
-					150px
-					`}
+				src={getTmdbImage({ path: movie.poster_path, size: 'w342' })}
+				alt={movie.title ?? ''}
+				fill
+				className="object-cover"
+				type={'movie'}
+				unoptimized
 				/>
 				{(movie.vote_average
 				|| profileActivity?.rating
@@ -155,16 +148,12 @@ const CardMovieRow = React.forwardRef<
 		>
 			<div className={cn("relative w-24 aspect-[2/3] rounded-md overflow-hidden", posterClassName)}>
 				<ImageWithFallback
-					src={movie.poster_url ?? ''}
-					alt={movie.title ?? ''}
-					fill
-					className="object-cover"
-					type={'movie'}
-					sizes={`
-					(max-width: 640px) 96px,
-					(max-width: 1024px) 120px,
-					150px
-					`}
+				src={getTmdbImage({ path: movie.poster_path, size: 'w342' })}
+				alt={movie.title ?? ''}
+				fill
+				className="object-cover"
+				type={'movie'}
+				unoptimized
 				/>
 			</div>
 			<div className="flex items-center gap-4 justify-between w-full">

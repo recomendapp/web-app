@@ -178,7 +178,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
 									alt={tvSeriesItem.name ?? ''}
 									fill
 									className="rounded-md object-cover"
-									type="playlist"
+									type='tv_series'
 									sizes={`
 									(max-width: 640px) 96px,
 									(max-width: 1024px) 120px,

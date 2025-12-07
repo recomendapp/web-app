@@ -12,6 +12,7 @@ import { useUserReviewMovieUpsertMutation } from "@/features/client/user/userMut
 import { useAuth } from "@/context/auth-context";
 import ButtonUserReviewMovieLike from "@/components/buttons/ButtonUserReviewMovieLike";
 import { ReviewMovieSettings } from "@/components/Review/ReviewMovieSettings";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 export const MovieReview = ({
 	reviewServer,
@@ -55,16 +56,12 @@ export const MovieReview = ({
 					className={cn('relative h-full shrink-0 rounded-md overflow-hidden @3xl/review:w-56 aspect-[2/3]')}
 					>
 						<ImageWithFallback
-						src={review?.activity?.movie?.poster_url ?? ''}
+						src={getTmdbImage({ path: review?.activity?.movie?.poster_path ?? '', size: 'w342' })}
 						alt={review?.activity?.movie?.title ?? ''}
 						fill
 						className="object-cover"
 						type={'movie'}
-						sizes={`
-						(max-width: 640px) 96px,
-						(max-width: 1024px) 120px,
-						150px
-						`}
+						unoptimized
 						/>
 					</div>
 					<div className='px-2 py-1 space-y-1'>

@@ -10,6 +10,7 @@ import { UserFeedCastCrew } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { ContextMenuMovie } from "@/components/ContextMenu/ContextMenuMovie";
 import { getMediaDetails } from "@/utils/get-media-details";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 interface FeedCastCrewItemProps
 	extends React.ComponentProps<typeof Card> {
@@ -37,16 +38,12 @@ const FeedCastCrewItemDefault = React.forwardRef<
 			className="w-20 @md/feed-item:w-24 relative h-full shrink-0 rounded-md overflow-hidden aspect-[2/3]"
 			>
 				<ImageWithFallback
-					src={activity?.movie?.poster_url ??''}
-					alt={activity?.movie?.title ?? ''}
-					fill
-					className="object-cover"
-					type="movie"
-					sizes={`
-					(max-width: 640px) 96px,
-					(max-width: 1024px) 120px,
-					150px
-					`}
+				src={getTmdbImage({ path: activity?.movie?.poster_path ?? '', size: 'w342' })}
+				alt={activity?.movie?.title ?? ''}
+				fill
+				className="object-cover"
+				type="movie"
+				unoptimized
 				/>
 			</Link>
 			<div className="flex flex-col gap-4 w-full">

@@ -5,6 +5,7 @@ import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { cn } from "@/lib/utils";
 import { MediaPerson, MediaMovie } from "@recomendapp/types";
 import { Link } from "@/lib/i18n/navigation";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 interface ItemProps
 	extends React.ComponentProps<'div'> {
@@ -25,11 +26,12 @@ export const Item = React.forwardRef<
 				)}
 			>
 				<ImageWithFallback
-				src={movie.poster_url ?? ''}
+				src={getTmdbImage({ path: movie.poster_path, size: 'w342' })}
 				alt={movie.title ?? ''}
 				className={cn("object-cover")}
 				width={60}
           		height={90}
+				unoptimized
 				type={'movie'}
 				{...props}
 				/>

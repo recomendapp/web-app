@@ -7,6 +7,7 @@ import { getTranslations } from 'next-intl/server';
 import { title } from '@/utils/custom-lodash';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { SupportedLocale } from "@/translations/locales";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 export default async function SearchCrewCastSmall({
   persons,
@@ -39,15 +40,11 @@ export default async function SearchCrewCastSmall({
         >
           <div className="w-full shrink-0 relative aspect-square rounded-full overflow-hidden">
             <ImageWithFallback
-              src={media?.profile_url ?? ''}
-              alt={media?.name ?? ''}
-              fill
-              sizes={`
-                (max-width: 640px) 96px,
-                (max-width: 1024px) 120,
-                150px
-              `}
-              className="rounded-md object-cover"
+            src={getTmdbImage({ path: media.profile_path, size: 'w342' })}
+            alt={media?.name ?? ''}
+            fill
+            unoptimized
+            className="rounded-md object-cover"
             />
           </div>
           <div className='text-left w-full'>

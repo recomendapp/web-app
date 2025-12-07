@@ -13,6 +13,7 @@ import { useUserReviewMovieUpsertMutation } from '@/features/client/user/userMut
 import ButtonUserActivityMovieRating from '@/components/buttons/ButtonUserActivityMovieRating';
 import { userKeys } from '@/features/client/user/userKeys';
 import { useQueryClient } from '@tanstack/react-query';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 
 export const MovieCreateReview = ({
 	movie,
@@ -68,16 +69,12 @@ export const MovieCreateReview = ({
 				className={'relative h-full shrink-0 rounded-md overflow-hidden @3xl/review:w-56 aspect-[2/3]'}
 				>
 				<ImageWithFallback
-				src={movie.poster_url ?? ''}
+				src={getTmdbImage({ path: movie.poster_path, size: 'w342' })}
 				alt={movie.title ?? ''}
 				fill
 				className="object-cover"
 				type="movie"
-				sizes={`
-				(max-width: 640px) 96px,
-				(max-width: 1024px) 120px,
-				150px
-				`}
+				unoptimized
 				/>
 				</div>
 				<div className='px-2 py-1 space-y-1'>

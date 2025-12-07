@@ -51,11 +51,11 @@ export function PlaylistTvSeriesHeader({
         >
           <AspectRatio ratio={1 / 1}>
             <ImageWithFallback
-              src={playlist?.poster_url ?? ''}
-              alt={playlist?.title ?? ''}
-              fill
-              className="rounded-md object-cover"
-              type="playlist"
+            src={playlist?.poster_url ?? ''}
+            alt={playlist?.title ?? ''}
+            fill
+            className="rounded-md object-cover"
+            type="playlist"
             />
           </AspectRatio>
         </div>

@@ -16,6 +16,7 @@ import { WithLink } from "../utils/WithLink";
 import ButtonUserActivityTvSeriesWatch from "../buttons/ButtonUserActivityTvSeriesWatch";
 import ButtonUserWatchlistTvSeries from "../buttons/ButtonUserWatchlistTvSeries";
 import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 interface CardTvSeriesProps
 	extends React.ComponentProps<typeof Card> {
@@ -48,16 +49,12 @@ const CardTvSeriesDefault = React.forwardRef<
 			className={cn('relative h-full shrink-0 rounded-md overflow-hidden aspect-[2/3]', posterClassName)}
 			>
 				<ImageWithFallback
-					src={tvSeries.poster_url ?? ''}
-					alt={tvSeries.name ?? ''}
-					fill
-					className="object-cover"
-					type='tv_series'
-					sizes={`
-					(max-width: 640px) 96px,
-					(max-width: 1024px) 120px,
-					150px
-					`}
+				src={getTmdbImage({ path: tvSeries.poster_path, size: 'w342' })}
+				alt={tvSeries.name ?? ''}
+				fill
+				className="object-cover"
+				type='tv_series'
+				unoptimized
 				/>
 			</div>
 			<div className='px-2 py-1 space-y-1'>
@@ -91,16 +88,12 @@ const CardTvSeriesPoster = React.forwardRef<
 				{...props}
 			>
 				<ImageWithFallback
-					src={tvSeries.poster_url ?? ''}
-					alt={tvSeries.name ?? ''}
-					fill
-					className="object-cover"
-					type='tv_series'
-					sizes={`
-					(max-width: 640px) 96px,
-					(max-width: 1024px) 120px,
-					150px
-					`}
+				src={getTmdbImage({ path: tvSeries.poster_path, size: 'w342' })}
+				alt={tvSeries.name ?? ''}
+				fill
+				className="object-cover"
+				type='tv_series'
+				unoptimized
 				/>
 				{(tvSeries.vote_average
 				|| profileActivity?.rating
@@ -156,16 +149,12 @@ const CardTvSeriesRow = React.forwardRef<
 		>
 			<div className={cn("relative w-24 aspect-[2/3] rounded-md overflow-hidden", posterClassName)}>
 				<ImageWithFallback
-					src={tvSeries.poster_url ?? ''}
-					alt={tvSeries.name ?? ''}
-					fill
-					className="object-cover"
-					type={'tv_series'}
-					sizes={`
-					(max-width: 640px) 96px,
-					(max-width: 1024px) 120px,
-					150px
-					`}
+				src={getTmdbImage({ path: tvSeries.poster_path, size: 'w342' })}
+				alt={tvSeries.name ?? ''}
+				fill
+				className="object-cover"
+				type={'tv_series'}
+				unoptimized
 				/>
 			</div>
 			<div className="flex items-center gap-4 justify-between w-full">

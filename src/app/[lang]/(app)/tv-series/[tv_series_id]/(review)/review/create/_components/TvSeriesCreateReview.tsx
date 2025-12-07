@@ -13,6 +13,7 @@ import ReviewForm from '@/components/Review/ReviewForm';
 import ButtonUserActivityTvSeriesRating from '@/components/buttons/ButtonUserActivityTvSeriesRating';
 import { useQueryClient } from '@tanstack/react-query';
 import { userKeys } from '@/features/client/user/userKeys';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 
 export const TvSeriesCreateReview = ({
 	tvSeries,
@@ -68,16 +69,12 @@ export const TvSeriesCreateReview = ({
 				className={'relative h-full shrink-0 rounded-md overflow-hidden @3xl/review:w-56 aspect-[2/3]'}
 				>
 				<ImageWithFallback
-				src={tvSeries.poster_url ?? ''}
+				src={getTmdbImage({ path: tvSeries.poster_path, size: 'w342' })}
 				alt={tvSeries.name ?? ''}
 				fill
 				className="object-cover"
 				type="tv_series"
-				sizes={`
-				(max-width: 640px) 96px,
-				(max-width: 1024px) 120px,
-				150px
-				`}
+				unoptimized
 				/>
 				</div>
 				<div className='px-2 py-1 space-y-1'>

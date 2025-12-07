@@ -12,6 +12,7 @@ import { useUserReviewTvSeriesUpsertMutation } from "@/features/client/user/user
 import { useAuth } from "@/context/auth-context";
 import ButtonUserReviewTvSeriesLike from "@/components/buttons/ButtonUserReviewTvSeriesLike";
 import { ReviewTvSeriesSettings } from "@/components/Review/ReviewTvSeriesSettings";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 export const TvSeriesReview = ({
 	reviewServer,
@@ -56,16 +57,12 @@ export const TvSeriesReview = ({
 					className={cn('relative h-full shrink-0 rounded-md overflow-hidden @3xl/review:w-56 aspect-[2/3]')}
 					>
 						<ImageWithFallback
-						src={review?.activity?.tv_series?.poster_url ?? ''}
+						src={getTmdbImage({ path: review?.activity?.tv_series?.poster_path, size: 'w342' })}
 						alt={review?.activity?.tv_series?.name ?? ''}
 						fill
 						className="object-cover"
 						type={'tv_series'}
-						sizes={`
-						(max-width: 640px) 96px,
-						(max-width: 1024px) 120px,
-						150px
-						`}
+						unoptimized
 						/>
 					</div>
 					<div className='px-2 py-1 space-y-1'>

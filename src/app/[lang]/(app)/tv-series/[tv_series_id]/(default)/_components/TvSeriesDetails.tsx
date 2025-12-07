@@ -10,6 +10,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/navigation";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { Separator } from "@/components/ui/separator";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 export default function TvSerieDetails({
   slug,
@@ -49,16 +50,12 @@ export default function TvSerieDetails({
                   <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
                     <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
                       <ImageWithFallback
-                        src={season.poster_url ?? ''}
-                        alt={upperFirst(common('messages.tv_season_value', { number: season.season_number! }))}
-                        fill
-                        className="object-cover"
-                        type="tv_season"
-                        sizes={`
-                          (max-width: 640px) 96px,
-                          (max-width: 1024px) 120px,
-                          150px
-                        `}
+                      src={getTmdbImage({ path: season.poster_path, size: 'w342' })}
+                      alt={upperFirst(common('messages.tv_season_value', { number: season.season_number! }))}
+                      fill
+                      className="object-cover"
+                      type="tv_season"
+                      unoptimized
                       />
                       <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
                         {season.vote_count ? <IconMediaRating
@@ -92,16 +89,12 @@ export default function TvSerieDetails({
                     <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
                       <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
                         <ImageWithFallback
-                          src={special.poster_url ?? ''}
-                          alt={upperFirst(common('messages.tv_season_value', { number: special.season_number! }))}
-                          fill
-                          className="object-cover"
-                          type="tv_season"
-                          sizes={`
-                            (max-width: 640px) 96px,
-                            (max-width: 1024px) 120px,
-                            150px
-                          `}
+                        src={getTmdbImage({ path: special.poster_path, size: 'w342' })}
+                        alt={upperFirst(common('messages.tv_season_value', { number: special.season_number! }))}
+                        fill
+                        className="object-cover"
+                        type="tv_season"
+                        unoptimized
                         />
                         <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
                           {special.vote_average ? <IconMediaRating
@@ -168,16 +161,12 @@ function CastPoster({
       <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
         <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
           <ImageWithFallback
-            src={person.profile_url ?? ''}
-            alt={person.name ?? ''}
-            fill
-            className="object-cover"
-            type="person"
-            sizes={`
-            (max-width: 640px) 96px,
-            (max-width: 1024px) 120px,
-            150px
-            `}
+          src={getTmdbImage({ path: person.profile_path, size: 'w342' })}
+          alt={person.name ?? ''}
+          fill
+          className="object-cover"
+          type="person"
+          unoptimized
           />
         </div>
         <div className="text-center">

@@ -8,6 +8,7 @@ import { MediaMovie, MediaPerson } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/navigation";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 export default function MovieDetails({
   movie,
@@ -77,16 +78,12 @@ function CastPoster({
       <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
         <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
           <ImageWithFallback
-            src={person.profile_url ?? ''}
-            alt={person.name ?? ''}
-            fill
-            className="object-cover"
-            type="person"
-            sizes={`
-            (max-width: 640px) 96px,
-            (max-width: 1024px) 120px,
-            150px
-            `}
+          src={getTmdbImage({ path: person.profile_path, size: 'w342' })}
+          alt={person.name ?? ''}
+          fill
+          className="object-cover"
+          type="person"
+          unoptimized
           />
         </div>
         <div className="text-center">

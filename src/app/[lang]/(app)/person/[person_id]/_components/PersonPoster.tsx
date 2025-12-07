@@ -1,6 +1,7 @@
 'use client';
 
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 import { cn } from '@/lib/utils';
 
 export default function PersonPoster({
@@ -20,15 +21,11 @@ export default function PersonPoster({
       )}
     >
       <ImageWithFallback
-        src={poster_path}
-        alt={alt}
-        fill
-        sizes={`
-          (max-width: 640px) 150px,
-          (max-width: 1024px) 175px,
-          200px
-        `}
-        className="rounded-md object-cover z-0"
+      src={getTmdbImage({ path: poster_path, size: 'w780' })}
+      alt={alt}
+      fill
+      unoptimized
+      className="rounded-md object-cover z-0"
       />
     </div>
   );

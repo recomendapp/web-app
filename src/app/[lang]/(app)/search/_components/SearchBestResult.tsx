@@ -11,6 +11,7 @@ import { upperFirst } from 'lodash';
 import { MultiResult } from "@/lib/tmdb/tmdbQueries";
 import { getMediaDetails } from "@/utils/get-media-details";
 import { useTranslations } from "next-intl";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 export default function SearchBestResult({
   result,
@@ -46,11 +47,11 @@ export default function SearchBestResult({
             `}
             >
               <ImageWithFallback
-                src={details?.imageUrl ?? ''}
-                alt={details?.title ?? ''}
-                layout="fill"
-                objectFit="cover"
-                className="object-cover"
+              src={getTmdbImage({ path: details?.imagePath, size: 'w342' })}
+              alt={details?.title ?? ''}
+              layout="fill"
+              objectFit="cover"
+              className="object-cover"
               />
             </div>
             <div>

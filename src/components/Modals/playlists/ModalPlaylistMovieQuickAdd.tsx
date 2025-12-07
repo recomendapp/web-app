@@ -178,7 +178,7 @@ export function ModalPlaylistMovieQuickAdd({
 									alt={movie.title ?? ''}
 									fill
 									className="rounded-md object-cover"
-									type="playlist"
+									type="movie"
 									sizes={`
 									(max-width: 640px) 96px,
 									(max-width: 1024px) 120px,

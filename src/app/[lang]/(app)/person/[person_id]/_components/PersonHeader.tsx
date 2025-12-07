@@ -18,7 +18,7 @@ export default function PersonHeader({
         {/* MOVIE POSTER */}
         <PersonPoster
           className="w-[280px]"
-          poster_path={person.profile_url ?? ''}
+          poster_path={person.profile_path ?? ''}
           alt={person.name ?? ''}
         />
         {/* MOVIE MAIN DATA */}
