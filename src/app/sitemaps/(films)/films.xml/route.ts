@@ -1,21 +1,16 @@
 import { siteConfig } from "@/config/site";
-import { getSitemapMediaCount } from "@/features/server/sitemap";
+import { getSitemapMediaMovieCount } from "@/features/server/sitemap";
 import { buildSitemapIndex } from "@/lib/sitemap";
 import { NextResponse } from "next/server";
 import { gzipSync } from "zlib";
 
 export async function GET() {
   try {
-    const count = await getSitemapMediaCount();
+    const count = await getSitemapMediaMovieCount();
 
-    const sitemapIndexes = [
-      ...Array.from({ length: count.films }, (_, index) => {
-        return `${siteConfig.url}/sitemaps/medias/films/${index}`;
-      }),
-      ...Array.from({ length: count.series }, (_, index) => {
-        return `${siteConfig.url}/sitemaps/medias/tv-series/${index}`;
-      }),
-    ];
+    const sitemapIndexes = Array.from({ length: count }, (_, index) => {
+      return `${siteConfig.url}/sitemaps/films/${index}`;
+    });
 
     const sitemapIndexXML = buildSitemapIndex(sitemapIndexes);
     const gzipped = gzipSync(sitemapIndexXML);

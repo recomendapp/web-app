@@ -8,8 +8,9 @@ const PLAYLIST_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 const REVIEW_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 
 /* ---------------------------------- USERS --------------------------------- */
+const USER_PER_PAGE = 10000;
 export const getSitemapUserCount = cache(
-	async (perPage: number = 10000): Promise<number> => {
+	async (perPage: number = USER_PER_PAGE): Promise<number> => {
 		const supabase = await createClient(routing.defaultLocale);
 		const { count, error } = await supabase
 			.from('profile')
@@ -23,9 +24,8 @@ export const getSitemapUserCount = cache(
 	},
 	{ revalidate: USER_REVALIDATE_TIME },
 );
-
 export const getSitemapUsers = cache(
-	async (id: number, perPage: number = 10000) => {
+	async (id: number, perPage: number = USER_PER_PAGE) => {
 		const start = id * perPage;
 		const end = start + perPage - 1;
 		const supabase = await createClient(routing.defaultLocale);
@@ -34,8 +34,7 @@ export const getSitemapUsers = cache(
 			.select('id, username, created_at')
 			.eq('private', false)
 			.range(start, end)
-			.order('followers_count', { ascending: false })
-			.order('created_at', { ascending: false });
+			.order('created_at', { ascending: true });
 		if (error) throw error;
 		return data || [];
 	},
@@ -45,8 +44,9 @@ export const getSitemapUsers = cache(
 
 /* --------------------------------- MEDIAS --------------------------------- */
 // Movies
+const MEDIA_MOVIE_PER_PAGE = 500;
 export const getSitemapMediaMovieCount = cache(
-	async (perPage: number = 500) => {
+	async (perPage: number = MEDIA_MOVIE_PER_PAGE) => {
 		const supabase = await createClient(routing.defaultLocale);
 		const { count, error } = await supabase
 			.from('tmdb_movie')
@@ -60,7 +60,7 @@ export const getSitemapMediaMovieCount = cache(
 	{ revalidate: MEDIA_REVALIDATE_TIME },
 );
 export const getSitemapMediaMovies = cache(
-	async (id: number, perPage: number = 500) => {
+	async (id: number, perPage: number = MEDIA_MOVIE_PER_PAGE) => {
 		const start = id * perPage;
 		const end = start + perPage - 1;
 		const supabase = await createClient(routing.defaultLocale);
@@ -76,7 +76,7 @@ export const getSitemapMediaMovies = cache(
 				)
 			`)
 			.range(start, end)
-			.order('popularity', { ascending: false });
+			.order('id', { ascending: true });
 		if (error) throw error;
 		return data || [];
 	},
@@ -84,8 +84,9 @@ export const getSitemapMediaMovies = cache(
 );
 
 // TV Series
+const MEDIA_TV_SERIES_PER_PAGE = 500;
 export const getSitemapMediaTvSeriesCount = cache(
-	async (perPage: number = 500) => {
+	async (perPage: number = MEDIA_TV_SERIES_PER_PAGE) => {
 		const supabase = await createClient(routing.defaultLocale);
 		const { count, error } = await supabase
 			.from('tmdb_tv_series')
@@ -98,9 +99,8 @@ export const getSitemapMediaTvSeriesCount = cache(
 	},
 	{ revalidate: MEDIA_REVALIDATE_TIME },
 );
-
 export const getSitemapMediaTvSeries = cache(
-	async (id: number, perPage: number = 500) => {
+	async (id: number, perPage: number = MEDIA_TV_SERIES_PER_PAGE) => {
 		const start = id * perPage;
 		const end = start + perPage - 1;
 		const supabase = await createClient(routing.defaultLocale);
@@ -116,39 +116,18 @@ export const getSitemapMediaTvSeries = cache(
 				)
 			`)
 			.range(start, end)
-			.order('popularity', { ascending: false });
+			.order('id', { ascending: true });
 		if (error) throw error;
 		return data || [];
 	},
 	{ revalidate: MEDIA_REVALIDATE_TIME },
 );
-
-
-export const getSitemapMediaCount = cache(
-	async (perPage: number = 500) => {
-		const supabase = await createClient(routing.defaultLocale);
-		const { count: filmCount, error: filmError } = await supabase
-			.from('tmdb_movie')
-			.select('*', { count: 'exact', head: true });
-		if (filmError) throw filmError;
-		const { count: seriesCount, error: seriesError } = await supabase
-			.from('tmdb_tv_series')
-			.select('*', { count: 'exact', head: true });
-		if (seriesError) throw seriesError;
-
-		return {
-			films: filmCount ? Math.ceil(filmCount / perPage) : 0,
-			series: seriesCount ? Math.ceil(seriesCount / perPage) : 0,
-		}
-	},
-	{ revalidate: MEDIA_REVALIDATE_TIME },
-);
-
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- PLAYLISTS ------------------------------- */
+const PLAYLIST_PER_PAGE = 10000;
 export const getSitemapPlaylistCount = cache(
-	async (perPage: number = 10000): Promise<number> => {
+	async (perPage: number = PLAYLIST_PER_PAGE): Promise<number> => {
 		const supabase = await createClient(routing.defaultLocale);
 		const { count, error } = await supabase
 			.from('playlists')
@@ -163,15 +142,15 @@ export const getSitemapPlaylistCount = cache(
 	{ revalidate: PLAYLIST_REVALIDATE_TIME }
 );
 export const getSitemapPlaylists = cache(
-	async (id: number, perPage: number = 10000) => {
+	async (id: number, perPage: number = PLAYLIST_PER_PAGE) => {
 		const start = id * perPage;
 		const end = start + perPage - 1;
 		const supabase = await createClient(routing.defaultLocale);
 		const { data, error } = await supabase
 			.from('playlists')
 			.select('id, title, updated_at')
-			// .eq('private', false) // RLS already handles this
-			.range(start, end);
+			.range(start, end)
+			.order('id', { ascending: true });
 		if (error) throw error;
 		return data || [];
 	},
@@ -180,8 +159,9 @@ export const getSitemapPlaylists = cache(
 /* -------------------------------------------------------------------------- */
 
 /* --------------------------------- REVIEWS -------------------------------- */
+const REVIEW_PER_PAGE = 10000;
 export const getSitemapReviewMovieCount = cache(
-	async (perPage: number = 10000): Promise<number> => {
+	async (perPage: number = REVIEW_PER_PAGE): Promise<number> => {
 		const supabase = await createClient(routing.defaultLocale);
 		const { count, error } = await supabase
 			.from('user_reviews_movie')
@@ -195,7 +175,7 @@ export const getSitemapReviewMovieCount = cache(
 	{ revalidate: REVIEW_REVALIDATE_TIME },
 );
 export const getSitemapReviewTvSeriesCount = cache(
-	async (perPage: number = 10000): Promise<number> => {
+	async (perPage: number = REVIEW_PER_PAGE): Promise<number> => {
 		const supabase = await createClient(routing.defaultLocale);
 		const { count, error } = await supabase
 			.from('user_reviews_tv_series')
@@ -210,28 +190,30 @@ export const getSitemapReviewTvSeriesCount = cache(
 );
 
 export const getSitemapReviewsMovie = cache(
-	async (id: number, perPage: number = 10000) => {
+	async (id: number, perPage: number = REVIEW_PER_PAGE) => {
 		const start = id * perPage;
 		const end = start + perPage - 1;
 		const supabase = await createClient(routing.defaultLocale);
 		const { data, error } = await supabase
 			.from('user_reviews_movie')
 			.select('id, updated_at, activity:user_activities_movie(movie_id)')
-			.range(start, end);
+			.range(start, end)
+			.order('created_at', { ascending: true });
 		if (error) throw error;
 		return data || [];
 	},
 	{ revalidate: REVIEW_REVALIDATE_TIME },
 );
 export const getSitemapReviewsTvSeries = cache(
-	async (id: number, perPage: number = 10000) => {
+	async (id: number, perPage: number = REVIEW_PER_PAGE) => {
 		const start = id * perPage;
 		const end = start + perPage - 1;
 		const supabase = await createClient(routing.defaultLocale);
 		const { data, error } = await supabase
 			.from('user_reviews_tv_series')
 			.select('id, updated_at, activity:user_activities_tv_series(tv_series_id)')
-			.range(start, end);
+			.range(start, end)
+			.order('created_at', { ascending: true });
 		if (error) throw error;
 		return data || [];
 	},

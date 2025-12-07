@@ -14,6 +14,12 @@ export async function proxy(request: NextRequest) {
   ).pathname.split('/');
   const pathname = '/' + rest.join('/');
 
+  const isBrowser =
+    request.headers.get("accept")?.includes("text/html") &&
+    /Mozilla|Chrome|Safari|Firefox|Edge/i.test(
+      request.headers.get("user-agent") || ""
+    );
+
   // IMPORTANT: Avoid writing any logic between createServerClient and
   // supabase.auth.getClaims(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
@@ -24,6 +30,9 @@ export async function proxy(request: NextRequest) {
    * Redirect user if not logged in
    */
   if (user && siteConfig.routes.anonRoutes.some((path) => pathname.startsWith(path))) {
+    if (!isBrowser) {
+      return new NextResponse('Unauthorized', { status: 401 });
+    }
     const redirect = request.nextUrl.searchParams.get('redirect');
 
     if (redirect) {
@@ -41,6 +50,9 @@ export async function proxy(request: NextRequest) {
    * Redirect user if logged in
    */
   if (!user && siteConfig.routes.authRoutes.some((path) => pathname.startsWith(path))) {
+    if (!isBrowser) {
+      return new NextResponse('Unauthorized', { status: 401 });
+    }
     const redirectTo = encodeURIComponent(pathname);
     return NextResponse.redirect(
       new URL(`/${locale}/auth/login?redirect=${redirectTo}`, request.url)

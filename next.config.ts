@@ -46,12 +46,6 @@ const nextConfig: NextConfig = {
         destination: '/@:username/:path*',
         permanent: true,
       },
-      // TV Series
-      {
-        source: '/tv_series/:path*',
-        destination: '/tv-series/:path*',
-        permanent: true,
-      }
     ];
   },
   async rewrites() {

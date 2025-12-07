@@ -65,9 +65,10 @@ export default async function LangLayout({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
-  const direction = getLangDir(lang);
+  // Disable for RTL languages for now
+  // const direction = getLangDir(lang);
   return (
-    <html lang={lang} dir={direction} suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <head>
         <link rel="search" type="application/opensearchdescription+xml" title="Recomend" href="/opensearch.xml" />
       </head>
