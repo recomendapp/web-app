@@ -41,6 +41,7 @@ import { ContextMenuMovie } from '@/components/ContextMenu/ContextMenuMovie';
 import ButtonUserRecosMovieSend from '@/components/buttons/ButtonUserRecosMovieSend';
 import ButtonPlaylistMovieAdd from '@/components/buttons/ButtonPlaylistMovieAdd';
 import { ModalUserActivityMovieFollowersRating } from '@/components/Modals/activities/ModalUserActivityMovieFollowersRating';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 
 export default function MovieHeader({
   movie,
@@ -60,14 +61,10 @@ export default function MovieHeader({
             {/* MOVIE POSTER */}
             <MediaPoster
               className="w-[200px]"
-              src={movie.poster_url ?? ''}
+              src={getTmdbImage({ path: movie?.poster_path, size: 'w1280' })}
               alt={movie.title ?? ''}
               fill
-              sizes={`
-                (max-width: 640px) 96px,
-                (max-width: 1024px) 120px,
-                150px
-              `}
+              unoptimized
             >
               <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
                 {movie.vote_average ? <IconMediaRating

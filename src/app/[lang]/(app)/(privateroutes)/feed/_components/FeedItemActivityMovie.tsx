@@ -11,6 +11,7 @@ import { Icons } from "@/config/icons";
 import { CardReviewMovie } from "@/components/Card/CardReviewMovie";
 import { upperFirst } from "lodash";
 import { forwardRef } from "react";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 const FeedActivity = ({
 	author,
@@ -116,10 +117,11 @@ export const FeedItemActivityMovie = forwardRef<
 	  <div ref={ref} className="@container/feed-item flex gap-4 bg-muted rounded-xl p-2 group" {...props}>
 		<MediaPoster
 		className="w-20 @md/feed-item:w-24"
-		src={activity.movie?.poster_url ?? ''}
+		src={getTmdbImage({ path: activity.movie?.poster_path, size: 'w342' })}
 		alt={activity.movie?.title ?? ''}
 		width={96}
 		height={144}
+		unoptimized
 		classNameFallback="h-full"
 		/>
 		<div className="flex flex-col gap-4 w-full">

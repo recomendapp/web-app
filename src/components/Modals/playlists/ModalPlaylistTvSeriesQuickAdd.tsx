@@ -20,6 +20,7 @@ import { useInView } from 'react-intersection-observer';
 import { usePlaylistTvSeriesMultiInsertMutation } from '@/features/client/playlist/playlistMutations';
 import { upperFirst } from 'lodash';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -174,16 +175,12 @@ export function ModalPlaylistTvSeriesQuickAdd({
 						>
 							<AspectRatio ratio={1 / 1}>
 								<ImageWithFallback
-									src={tvSeriesItem.poster_url ?? ''}
-									alt={tvSeriesItem.name ?? ''}
-									fill
-									className="rounded-md object-cover"
-									type='tv_series'
-									sizes={`
-									(max-width: 640px) 96px,
-									(max-width: 1024px) 120px,
-									150px
-									`}
+								src={getTmdbImage({ path: tvSeriesItem?.poster_path, size: 'w342' })}
+								alt={tvSeriesItem.name ?? ''}
+								fill
+								className="rounded-md object-cover"
+								type='tv_series'
+								unoptimized
 								/>
 							</AspectRatio>
 						</div>

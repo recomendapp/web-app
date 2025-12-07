@@ -7,6 +7,7 @@ import { Profile, UserReviewMovieLike } from "@recomendapp/types";
 import { CardUser } from "@/components/Card/CardUser";
 import { CardReviewMovie } from "@/components/Card/CardReviewMovie";
 import { forwardRef } from "react";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 interface FeedItemReviewMovieLikeProps extends React.HTMLAttributes<HTMLDivElement> {
 	author: Profile;
@@ -24,10 +25,11 @@ export const FeedItemReviewMovieLike = forwardRef<
 	  <div ref={ref} className="@container/feed-item flex gap-4 bg-muted rounded-xl p-2 group" {...props}>
 		<MediaPoster
 		className="w-20 @md/feed-item:w-24"
-		src={movie?.poster_url ?? ''}
+		src={getTmdbImage({ path: movie?.poster_path, size: 'w342' })}
 		alt={movie?.title ?? ''}
 		width={96}
 		height={144}
+		unoptimized
 		classNameFallback="h-full"
 		/>
 		<div className="flex flex-col gap-4 w-full">

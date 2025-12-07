@@ -20,6 +20,7 @@ import { useInView } from 'react-intersection-observer';
 import { usePlaylistMovieMultiInsertMutation } from '@/features/client/playlist/playlistMutations';
 import { upperFirst } from 'lodash';
 import { CardMovie } from '@/components/Card/CardMovie';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -174,16 +175,12 @@ export function ModalPlaylistMovieQuickAdd({
 						>
 							<AspectRatio ratio={1 / 1}>
 								<ImageWithFallback
-									src={movie.poster_url ?? ''}
-									alt={movie.title ?? ''}
-									fill
-									className="rounded-md object-cover"
-									type="movie"
-									sizes={`
-									(max-width: 640px) 96px,
-									(max-width: 1024px) 120px,
-									150px
-									`}
+								src={getTmdbImage({ path: movie?.poster_path, size: 'w342' })}
+								alt={movie.title ?? ''}
+								fill
+								className="rounded-md object-cover"
+								type="movie"
+								unoptimized
 								/>
 							</AspectRatio>
 						</div>

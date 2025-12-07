@@ -9,6 +9,7 @@ import { useRandomImage } from '@/hooks/use-random-image';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/lib/i18n/navigation';
 import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 
 export default function TvSeasonHeader({
 	urlSerie,
@@ -30,14 +31,10 @@ export default function TvSeasonHeader({
 			{/* SERIE POSTER */}
 			<MediaPoster
 			className="w-[80px] @md/header-box:w-[100px] @lg/header-box:w-[120px] @xl/header-box:w-[150px]"
-			src={season.poster_url ?? ''}
+			src={getTmdbImage({ path: season.poster_path, size: 'w1280' })}
 			alt={title}
 			fill
-			sizes={`
-				(max-width: 640px) 96px,
-				(max-width: 1024px) 120px,
-				150px
-			`}
+			unoptimized
 			>
 			<div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
 				{season.vote_average ? <IconMediaRating

@@ -17,6 +17,7 @@ import ButtonUserActivityMovieWatch from "@/components/buttons/ButtonUserActivit
 import ButtonUserActivityMovieWatchedDate from "@/components/buttons/ButtonUserActivityMovieWatchedDate";
 import ButtonUserRecosMovieSend from "@/components/buttons/ButtonUserRecosMovieSend";
 import ButtonPlaylistMovieAdd from "@/components/buttons/ButtonPlaylistMovieAdd";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 export const MovieWidget = () => {
 	const {
@@ -60,11 +61,12 @@ export const MovieWidget = () => {
 				<div className="w-full h-full flex flex-col gap-2">
 					<div className="w-full h-full flex gap-2 items-center">
 						<MediaPoster
-							className="h-full w-fit"
-							src={movie.poster_url ?? ''}
-							alt={movie.title ?? ''}
-							width={96}
-							height={144}
+						className="h-full w-fit"
+						src={getTmdbImage({ path: movie.poster_path, size: 'w342' })}
+						alt={movie.title ?? ''}
+						width={96}
+						height={144}
+						unoptimized
 						>
 							{movie.vote_count && (
 							<div className='absolute flex flex-col gap-2 top-1 right-1 w-10'>

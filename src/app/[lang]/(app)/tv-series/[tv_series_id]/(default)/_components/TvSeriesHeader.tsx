@@ -39,6 +39,7 @@ import { ContextMenuTvSeries } from '@/components/ContextMenu/ContextMenuTvSerie
 import ButtonUserRecosTvSeriesSend from '@/components/buttons/ButtonUserRecosTvSeriesSend';
 import ButtonPlaylistTvSeriesAdd from '@/components/buttons/ButtonPlaylistTvSeriesAdd';
 import { ModalUserActivityTvSeriesFollowersRating } from '@/components/Modals/activities/ModalUserActivityTvSeriesFollowersRating';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 
 export default function TvSerieHeader({
   serie,
@@ -58,14 +59,10 @@ export default function TvSerieHeader({
             {/* SERIE POSTER */}
             <MediaPoster
               className="w-[200px]"
-              src={serie.poster_url ?? ''}
+              src={getTmdbImage({ path: serie?.poster_path, size: 'w1280' })}
               alt={serie.name ?? ''}
               fill
-              sizes={`
-                (max-width: 640px) 96px,
-                (max-width: 1024px) 120px,
-                150px
-              `}
+              unoptimized
             >
                 <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
                   {serie.vote_average ? <IconMediaRating

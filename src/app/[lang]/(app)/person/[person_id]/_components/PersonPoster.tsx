@@ -21,7 +21,7 @@ export default function PersonPoster({
       )}
     >
       <ImageWithFallback
-      src={getTmdbImage({ path: poster_path, size: 'w780' })}
+      src={getTmdbImage({ path: poster_path, size: 'w1280' })}
       alt={alt}
       fill
       unoptimized

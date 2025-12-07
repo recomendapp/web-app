@@ -29,6 +29,7 @@ import { ModalUserRecosMovieSend } from "../Modals/recos/ModalUserRecosMovieSend
 import { ModalUserRecosTvSeriesSend } from "../Modals/recos/ModalUserRecosTvSeriesSend";
 import { getMediaDetails } from "@/utils/get-media-details";
 import { Database } from "@recomendapp/types";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -110,15 +111,11 @@ const Item = ({
 			<Card className="relative bg-black/40 flex flex-col h-full justify-between gap-2">
 				{item.media?.backdrop_url && (
 					<Image
-						src={item.media.backdrop_url}
-						alt={details.title ?? ''}
-						fill
-						className="object-cover -z-10"
-						sizes={`
-						(max-width: 640px) 640px,
-						(max-width: 1024px) 800px,
-						1280px
-						`}
+					src={getTmdbImage({ path: item.media?.backdrop_path, size: 'w1280' })}
+					alt={details.title ?? ''}
+					fill
+					className="object-cover -z-10"
+					unoptimized
 					/>
 				)}
 				<CardHeader className="flex-row justify-between items-center gap-2 text-xl font-semibold leading-none tracking-tight ">
