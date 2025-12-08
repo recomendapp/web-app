@@ -232,13 +232,6 @@ export default function ReviewForm({
 			{(review?.title || editable) ? (
 				<ReviewTitle title={title} setTitle={setTitle} editable={editable} />
 			) : null}
-			{/* <Tiptap
-			content={body}
-			limit={MAX_BODY_LENGTH}
-			editable={editable}
-			onUpdate={(content) => setBody(content)}
-			onCharacterCountChange={(count) => setBodyLength(count)}
-			/> */}
 			<div
 				className={`
 				rounded-md

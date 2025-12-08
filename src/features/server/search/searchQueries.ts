@@ -91,7 +91,7 @@ export const getSearchPlaylists = async (
 	// We cannot use cache here because results on users (cookies)
 	// return await (
 	// 	async () => {
-			const supabase = await createServerClient(props.locale);
+			const supabase = await createServerClient();
 			let from = (props.filters.page - 1) * props.filters.perPage;
 			let to = from + props.filters.perPage - 1;
 			let request = supabase

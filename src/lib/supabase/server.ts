@@ -2,13 +2,13 @@ import { cookies } from 'next/headers';
 import {
   createServerClient as createServerClientSupabase,
 } from '@supabase/ssr';
-import { routing } from '../i18n/routing';
 import { Database } from '@recomendapp/types';
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from '../env';
+import { getLocale } from 'next-intl/server';
 
-export const createServerClient = async (localeParam?: string) => {
+export const createServerClient = async () => {
   const cookieStore = await cookies();
-  const locale = localeParam ?? routing.defaultLocale;
+  const locale = await getLocale();
   return createServerClientSupabase<Database>(
     SUPABASE_URL,
     SUPABASE_ANON_KEY,

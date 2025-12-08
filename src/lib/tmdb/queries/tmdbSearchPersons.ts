@@ -20,7 +20,7 @@ const searchPersonsSchema = z
 	})
 
 export const tmdbSearchPersons = async (query: string, language = routing.defaultLocale, page = 1) => {
-	const supabase = await createServerClient(language);
+	const supabase = await createServerClient();
 	const verifiedField = searchPersonsSchema.safeParse({ query, language, page });
 	if (!verifiedField.success) {
 		throw new Error(verifiedField.error.errors.join('; '));
