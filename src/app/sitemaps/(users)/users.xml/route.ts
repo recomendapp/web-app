@@ -1,8 +1,9 @@
-import { supabaseAdmin } from "@/lib/supabase/supabase-admin";
+import { createClient } from "@/lib/supabase/server-no-cookie";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const { data, error } = await supabaseAdmin.storage
+  const supabase = await createClient();
+  const { data, error } = await supabase.storage
     .from("sitemaps")
     .download("users/index.xml.gz");
 
