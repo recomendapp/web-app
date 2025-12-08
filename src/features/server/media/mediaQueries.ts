@@ -1,5 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
-import { createClient } from "@/lib/supabase/server-no-cookie";
+import { createAnonClient } from "@/lib/supabase/anon";
 import { cache } from "@/lib/utils/cache";
 import { MediaMovie, MediaTvSeries, MediaTvSeriesSeason } from "@recomendapp/types";
 import { mediaKeys } from "./mediaKeys";
@@ -14,7 +14,7 @@ export const MEDIA_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 /* -------------------------------------------------------------------------- */
 export const getMovie = cache(
 	async (locale: string, id: number) => {
-		const supabase = await createClient(locale);
+		const supabase = createAnonClient(locale);
 		const { data: film, error } = await supabase
 			.from('media_movie')
 			.select(`
@@ -66,7 +66,7 @@ export const getMovieUserActivitiesFollowerAverageRating = reactCache(async ({
 /* -------------------------------------------------------------------------- */
 export const getTvSeries = cache(
 	async (locale: string, id: number) => {
-		const supabase = await createClient(locale);
+		const supabase = createAnonClient(locale);
 		const { data: rawTvSeries, error } = await supabase
 			.from('media_tv_series')
 			.select(`
@@ -123,7 +123,7 @@ export const getTvSeriesUserActivitiesFollowerAverageRating = reactCache(async (
 
 export const getTvSeason = cache(
 	async (locale: string, serieId: number, seasonNumber: number) => {
-		const supabase = await createClient(locale);
+		const supabase = createAnonClient(locale);
 		const { data, error } = await supabase
 			.from('media_tv_series_seasons')
 			.select(`
@@ -160,7 +160,7 @@ export const getTvSeason = cache(
 
 export const getPerson = cache(
 	async (locale: string, id: number) => {
-		const supabase = await createClient(locale);
+		const supabase = createAnonClient(locale);
 		const { data: person, error } = await supabase
 			.from('media_person')
 			.select(`
@@ -201,7 +201,7 @@ export const getPersonFilms = cache(
 			job?: string;
 		}
 	) => {
-		const supabase = await createClient(locale);
+		const supabase = createAnonClient(locale);
 		let from = (filters.page - 1) * filters.perPage;
 		let to = from + filters.perPage - 1;
 		let request;
@@ -273,7 +273,7 @@ export const getPersonTvSeries = cache(
 			job?: string;
 		}
 	) => {
-		const supabase = await createClient(locale);
+		const supabase = createAnonClient(locale);
 		let from = (filters.page - 1) * filters.perPage;
 		let to = from + filters.perPage - 1;
 		let request;
