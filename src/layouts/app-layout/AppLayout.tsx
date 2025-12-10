@@ -27,8 +27,8 @@ export function AppLayout({
 		<SidebarProvider
 		open={sidebarOpen}
 		onOpenChange={sidebarOpenChange}
-		// openMobile={sidebarOpenMobile}
-		// setOpenMobile={setSidebarOpenMobile}
+		openMobile={sidebarOpenMobile}
+		setOpenMobile={setSidebarOpenMobile}
 		className="min-h-screen"
 		>
 			<SidebarLeft />
@@ -39,12 +39,10 @@ export function AppLayout({
 			<SidebarProvider
 			open={rightPanelOpen}
 			onOpenChange={rightPanelOpenChange}
-			// noLayout
 			className='w-auto'
 			shortcut='p'
-			// openMobile={rightPanelOpenMobile}
-			// setOpenMobile={setRightPanelOpenMobile}
-			// noLayout
+			openMobile={rightPanelOpenMobile}
+			setOpenMobile={setRightPanelOpenMobile}
 			>
 				<SidebarRight />
 			</SidebarProvider>
