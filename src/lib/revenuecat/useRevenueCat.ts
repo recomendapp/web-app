@@ -26,17 +26,35 @@ export const useRevenueCat = (session: Session | null | undefined) => {
     await purchases.setAttributes({
       $email: session.user.email || null,
     })
-    setCustomerInfo(customerInfo);
+    return customerInfo;
   }, []);
 
   useEffect(() => {
-    if (session?.user.id) {
-      init(session).catch(console.error);
-    } else {
-      queryClient.setQueryData(authKeys.customerInfo(), null);
-      setCustomerInfo(undefined);
-    }
-  }, [session]);
+    let cancelled = false;
+
+    const run = async () => {
+      try {
+        if (!session) {
+          queryClient.setQueryData(authKeys.customerInfo(), null);
+          setCustomerInfo(undefined);
+          return;
+        }
+        const info = await init(session);
+        if (!cancelled) {
+          queryClient.setQueryData(authKeys.customerInfo(), info);
+          setCustomerInfo(info);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [session, init, queryClient]);
 
   return { customerInfo };
 };

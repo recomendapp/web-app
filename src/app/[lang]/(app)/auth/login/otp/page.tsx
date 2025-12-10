@@ -48,17 +48,8 @@ export default function Login() {
         <CardFooter>
           <p className="px-8 text-center text-sm text-muted-foreground">
             {t('pages.auth.login.otp.password_login')}{' '}
-            <Button
-              variant={'link-accent-yellow'}
-              className='inline p-0' 
-              asChild
-            >
-              <Link
-                href={{
-                  pathname: '/auth/login',
-                  query: redirectTo ? { redirect: redirectTo } : undefined,
-                }}
-              >
+            <Button variant={'link'} className='inline p-0 text-accent-yellow' asChild>
+              <Link href={{ pathname: '/auth/login', query: redirectTo ? { redirect: redirectTo } : undefined }}>
                 {upperFirst(t('common.messages.click_here'))}
               </Link>
             </Button>

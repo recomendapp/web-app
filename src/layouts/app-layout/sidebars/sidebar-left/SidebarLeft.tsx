@@ -12,15 +12,11 @@ export const SidebarLeft = ({ ...props }: React.ComponentProps<typeof Sidebar>) 
 			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem>
-						<SidebarMenuButton
-						size="lg"
-						className={`data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex items-center ${open ? "justify-start" : "justify-center"}`}
-						onClick={toggleSidebar}
-						>
+						<SidebarMenuButton onClick={toggleSidebar} className="fill-accent-yellow" asChild>
 							{open ? (
-								<Icons.site.logo className={`fill-accent-yellow ${open ? "w-3/4" : "w-0"}`} />
+								<Icons.site.logo className={`${open ? "w-full" : "w-0"}`} />
 							) : (
-								<Icons.site.icon className={`fill-accent-yellow ${open ? "w-8" : "w-4"}`} />
+								<Icons.site.icon className={`${open ? "w-8" : "w-4"}`} />
 							)}
 						</SidebarMenuButton>
 					</SidebarMenuItem>

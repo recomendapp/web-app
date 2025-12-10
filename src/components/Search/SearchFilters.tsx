@@ -1,8 +1,7 @@
-'use client';
+'use client'
+
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-
-// UI
 import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
@@ -54,35 +53,35 @@ export default function SearchFilters() {
     <ScrollArea>
       <div className="flex gap-4 pb-2">
         <Button
-          variant={!searchFilter ? 'accent-yellow' : 'secondary'}
+          variant={!searchFilter ? 'default' : 'outline'}
           className={`rounded-md shrink-0`}
           onClick={() => selectSearchFilter('')}
         >
           Tout
         </Button>
         <Button
-          variant={searchFilter == 'films' ? 'accent-yellow' : 'secondary'}
+          variant={searchFilter == 'films' ? 'default' : 'outline'}
           className={`rounded-md shrink-0`}
           onClick={() => selectSearchFilter('films')}
         >
           Films
         </Button>
         <Button
-          variant={searchFilter == 'playlists' ? 'accent-yellow' : 'secondary'}
+          variant={searchFilter == 'playlists' ? 'default' : 'outline'}
           className={`rounded-md shrink-0`}
           onClick={() => selectSearchFilter('playlists')}
         >
           Playlists
         </Button>
         <Button
-          variant={searchFilter == 'users' ? 'accent-yellow' : 'secondary'}
+          variant={searchFilter == 'users' ? 'default' : 'outline'}
           className={`rounded-md shrink-0`}
           onClick={() => selectSearchFilter('users')}
         >
           Utilisateurs
         </Button>
         <Button
-          variant={searchFilter == 'crew-cast' ? 'accent-yellow' : 'secondary'}
+          variant={searchFilter == 'crew-cast' ? 'default' : 'outline'}
           className={`rounded-md shrink-0`}
           onClick={() => selectSearchFilter('crew-cast')}
         >

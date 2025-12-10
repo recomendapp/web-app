@@ -44,12 +44,12 @@ export default function TvSeasonDetails({
               </div>
             </div>
             <div className='space-y-2'>
-              <h3 className="line-clamp-2 break-words font-bold">
+              <h3 className="line-clamp-2 wrap-break-word font-bold">
                 <span className='text-accent-yellow font-normal'>{upperFirst(common('messages.tv_episode_short', { seasonNumber: season.season_number!, episodeNumber: episode.episode_number! }))}</span>
                 {" • "}
                 {episode.name ?? upperFirst(common('messages.tv_episode_value', { number: episode.episode_number! }))}
               </h3>
-              <p className="line-clamp-2 break-words">{episode.overview ?? upperFirst(common('messages.no_overview'))}</p>
+              <p className="line-clamp-2 wrap-break-word">{episode.overview ?? upperFirst(common('messages.no_overview'))}</p>
               <h4 className='text-sm text-muted-foreground'>{`${upperFirst(common('messages.first_air_date'))} : ${episode.air_date ? format.dateTime(new Date(episode.air_date), { year: 'numeric', month: 'long', day: 'numeric' }) : upperFirst(common('messages.unknown'))}`}</h4>
             </div>
           </Card>

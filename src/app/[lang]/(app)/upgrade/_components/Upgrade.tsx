@@ -49,22 +49,14 @@ const GetStarted = ({
 	const t = useTranslations();
 	if (!offering) {
 		return (
-			<Button
-			variant={"accent-yellow"}
-			className='w-full'
-			disabled
-			>
+			<Button className='w-full' disabled>
 				<Icons.spinner />
 			</Button>
 		)
 	}
 	if (!session) {
 		return (
-			<Button
-			variant={"accent-yellow"}
-			className='w-full'
-			asChild
-			>
+			<Button className='w-full' asChild>
 				<Link href={`/auth/login?redirect=${encodeURIComponent('/upgrade')}`}>
 				{upperFirst(t('common.messages.get_started'))}
 				</Link>
@@ -73,11 +65,7 @@ const GetStarted = ({
 	} else {
 		if (customerInfo?.entitlements.active['premium']) {
 			return (
-				<Button
-				variant={"accent-yellow"}
-				className='w-full'
-				asChild
-				>
+				<Button className='w-full' asChild>
 					<Link href={`/settings/subscription`}>
 					{upperFirst(t('common.messages.manage'))}
 					</Link>
@@ -85,12 +73,7 @@ const GetStarted = ({
 			)
 		} else {
 			return (
-				<Button
-				variant={"accent-yellow"}
-				className='w-full'
-				onClick={onPurchase}
-				// onClick={() => openModal(ModalSubscription, { product: product, preselectedPrice: product?.prices?.find((price) => price?.interval === billingInterval) })}
-				>
+				<Button className='w-full' onClick={onPurchase}>
 				{upperFirst(t('common.messages.upgrade_to_plan', {
 					plan: offering.serverDescription,
 				}))}
@@ -255,11 +238,7 @@ export const Upgrade = () => {
 				) : <Skeleton className="h-6 w-3/4" />}
 				<div className='flex gap-4 max-w-xs'>
 					<GetStarted offering={offering} onPurchase={handleSelectPlan} />
-					<Button
-					variant={"muted"}
-					className='w-full'
-					asChild
-					>
+					<Button variant={'outline'} className='w-full' asChild>
 						<Link href='#features'>
 						{upperFirst(t('common.messages.compare_plans'))}
 						</Link>
@@ -271,7 +250,7 @@ export const Upgrade = () => {
 			<Table id="features" className="max-w-xl mx-auto mt-10 mb-10">
 				<TableHeader>
 				<TableRow className="">
-					<TableHead className=" text-primary flex items-center">
+					<TableHead className="text-foreground flex items-center">
 						<Label htmlFor="payment-schedule" className="me-3">
 						{upperFirst(t('common.messages.monthly'))}
 						</Label>
@@ -299,10 +278,10 @@ export const Upgrade = () => {
 							</span>
 						</Label>
 					</TableHead>
-					<TableHead className="w-2/12 text-primary text-lg font-medium text-center">
+					<TableHead className="w-2/12 text-foreground text-lg font-medium text-center">
 					{upperFirst(t('common.messages.free'))}
 					</TableHead>
-					<TableHead className="w-2/12 text-primary text-lg font-medium text-center">
+					<TableHead className="w-2/12 text-foreground text-lg font-medium text-center">
 					{upperFirst(offering?.serverDescription ?? '')}
 					</TableHead>
 				</TableRow>

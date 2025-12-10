@@ -1,4 +1,3 @@
-
 import { matchQuery, MutationCache, QueryClient, QueryKey } from '@tanstack/react-query'
 
 const queryClient = new QueryClient({

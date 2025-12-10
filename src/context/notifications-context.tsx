@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useAuth } from '@/context/auth-context';
 import useNotificationPermission, { NotificationPermissionProps } from '@/hooks/use-notification-permission';

@@ -35,7 +35,7 @@ const FeedCastCrewItemDefault = React.forwardRef<
 		>
 			<Link
 			href={activity?.movie?.url ?? ''}
-			className="w-20 @md/feed-item:w-24 relative h-full shrink-0 rounded-md overflow-hidden aspect-[2/3]"
+			className="w-20 @md/feed-item:w-24 relative h-full shrink-0 rounded-md overflow-hidden aspect-2/3"
 			>
 				<ImageWithFallback
 				src={getTmdbImage({ path: activity?.movie?.poster_path ?? '', size: 'w342' })}

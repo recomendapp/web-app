@@ -5,6 +5,7 @@ import { userKeys } from './userKeys';
 import { mediaKeys } from '../media/mediaKeys';
 import { useApiClient } from '@/context/api-context';
 import { useAuth } from '@/context/auth-context';
+import { useUserMyFeedInfiniteOptions } from '@/api/client/options/userOptions';
 
 
 /**
@@ -82,6 +83,7 @@ export const useUserDeclineFollowerRequestMutation = ({
 export const useUserFollowProfileInsertMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
 	return useMutation({
 		mutationFn: async ({
 			userId,
@@ -115,7 +117,7 @@ export const useUserFollowProfileInsertMutation = () => {
 				queryKey: userKeys.followees(data.user_id)
 			})
 			queryClient.invalidateQueries({
-				queryKey: userKeys.feed({ userId: data.user_id })
+				queryKey: userMyFeedOptions.queryKey,
 			});
 		},
 	});
@@ -124,6 +126,7 @@ export const useUserFollowProfileInsertMutation = () => {
 export const useUserUnfollowProfileDeleteMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
 	return useMutation({
 		mutationFn: async ({
 			userId,
@@ -158,7 +161,7 @@ export const useUserUnfollowProfileDeleteMutation = () => {
 				queryKey: userKeys.followees(data.user_id)
 			});
 			queryClient.invalidateQueries({
-				queryKey: userKeys.feed({ userId: data.user_id })
+				queryKey: userMyFeedOptions.queryKey,
 			});
 		},
 	});
@@ -232,6 +235,7 @@ export const useUserUnfollowPersonDeleteMutation = () => {
 export const useUserActivityMovieInsertMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
 	return useMutation({
 		mutationFn: async ({
 			userId,
@@ -288,7 +292,7 @@ export const useUserActivityMovieInsertMutation = () => {
 			// });
 
 			queryClient.invalidateQueries({
-				queryKey: userKeys.feed({ userId: data.user_id })
+				queryKey: userMyFeedOptions.queryKey,
 			})
 		}
 	});
@@ -296,6 +300,7 @@ export const useUserActivityMovieInsertMutation = () => {
 export const useUserActivityMovieDeleteMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
 	return useMutation({
 		mutationFn: async ({
 			activityId,
@@ -330,7 +335,7 @@ export const useUserActivityMovieDeleteMutation = () => {
 			}
 
 			queryClient.invalidateQueries({
-				queryKey: userKeys.feed({ userId: data.user_id })
+				queryKey: userMyFeedOptions.queryKey,
 			})
 		}
 	});
@@ -338,6 +343,7 @@ export const useUserActivityMovieDeleteMutation = () => {
 export const useUserActivityMovieUpdateMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
 	return useMutation({
 		mutationFn: async ({
 			activityId,
@@ -395,7 +401,7 @@ export const useUserActivityMovieUpdateMutation = () => {
 			}
 
 			queryClient.invalidateQueries({
-				queryKey: userKeys.feed({ userId: data.user_id })
+				queryKey: userMyFeedOptions.queryKey,
 			})
 		}
 	});
@@ -405,6 +411,7 @@ export const useUserActivityMovieUpdateMutation = () => {
 export const useUserActivityTvSeriesInsertMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
 	return useMutation({
 		mutationFn: async ({
 			userId,
@@ -461,7 +468,7 @@ export const useUserActivityTvSeriesInsertMutation = () => {
 			// });
 
 			queryClient.invalidateQueries({
-				queryKey: userKeys.feed({ userId: data.user_id })
+				queryKey: userMyFeedOptions.queryKey,
 			})
 		}
 	});
@@ -469,6 +476,7 @@ export const useUserActivityTvSeriesInsertMutation = () => {
 export const useUserActivityTvSeriesDeleteMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
 	return useMutation({
 		mutationFn: async ({
 			activityId,
@@ -503,7 +511,7 @@ export const useUserActivityTvSeriesDeleteMutation = () => {
 			}
 
 			queryClient.invalidateQueries({
-				queryKey: userKeys.feed({ userId: data.user_id })
+				queryKey: userMyFeedOptions.queryKey,
 			})
 		}
 	});
@@ -511,6 +519,7 @@ export const useUserActivityTvSeriesDeleteMutation = () => {
 export const useUserActivityTvSeriesUpdateMutation = () => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const userMyFeedOptions = useUserMyFeedInfiniteOptions();
 	return useMutation({
 		mutationFn: async ({
 			activityId,
@@ -567,7 +576,7 @@ export const useUserActivityTvSeriesUpdateMutation = () => {
 			}
 
 			queryClient.invalidateQueries({
-				queryKey: userKeys.feed({ userId: data.user_id })
+				queryKey: userMyFeedOptions.queryKey,
 			})
 		}
 	});

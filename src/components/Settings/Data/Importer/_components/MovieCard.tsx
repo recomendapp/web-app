@@ -62,7 +62,7 @@ export default function MovieCard({
 			/>
 		)}
 		{liked && (
-			<HeartIcon size={45} className="shadow-sm text-background fill-accent-pink" />
+			<HeartIcon size={45} className="shadow-xs text-background fill-accent-pink" />
 		)}
 	  </div>
 	);

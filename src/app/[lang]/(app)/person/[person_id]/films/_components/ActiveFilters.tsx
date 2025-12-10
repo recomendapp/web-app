@@ -33,46 +33,52 @@ export const ActiveFilters = ({
 	if (!canReset) return null;
 	return (
 	<ScrollArea>
-		<div className="flex items-center gap-2 p-2">
+		<div className="flex items-center gap-2">
 			{/* DEPARTMENT */}
 			{department && (
 				<Button
-					variant={'accent-yellow'}
-					size={'sm'}
-					className="group overflow-hidden gap-0 rounded-full"
-					onClick={() => handleChange({ department: null, job: null })}
+				variant={'outline'}
+				size={'sm'}
+				className="group overflow-hidden rounded-full"
+				onClick={() => handleChange({ department: null, job: null })}
 				>
-					{upperFirst(department)}
+					<Icons.X />
+					<span>
+						{upperFirst(department)}
+					</span>
 					<span className="text-muted-foreground max-w-0 group-hover:max-w-[100px] ml-0 group-hover:ml-2 overflow-hidden group-hover:opacity-100 opacity-0 transition-all duration-500">
 						{upperFirst(common('messages.department', { count: 1 }))}
 					</span>
-					<Icons.X className="ml-2" />
 				</Button>
 			)}
 			{/* JOB */}
 			{job && (
 				<Button
-					variant={'accent-yellow'}
-					size={'sm'}
-					className="group overflow-hidden gap-0 rounded-full"
-					onClick={() => handleChange({ job: null })}
+				variant={'outline'}
+				size={'sm'}
+				className="group rounded-full"
+				onClick={() => handleChange({ job: null })}
 				>
-					{upperFirst(job)}
+					<Icons.X />
+					<span>
+						{upperFirst(job)}
+					</span>
 					<span className="text-muted-foreground max-w-0 group-hover:max-w-[100px] ml-0 group-hover:ml-2 overflow-hidden group-hover:opacity-100 opacity-0 transition-all duration-500">
 						{upperFirst(common('messages.job', { count: 1 }))}
 					</span>
-					<Icons.X className="ml-2" />
 				</Button>
 			)}
 			{/* RESET */}
 			<Button
-			variant={'outline'}
+			variant={'destructive'}
 			size={'sm'}
 			className="rounded-full"
 			onClick={() => handleChange({ sort_by: null, sort_order: null, department: null, job: null })}
 			>
-				{upperFirst(common('messages.reset'))}
-				<Icons.X className="ml-2" />
+				<Icons.X />
+				<span>
+					{upperFirst(common('messages.reset'))}
+				</span>
 			</Button>
 		</div>
 		<ScrollBar orientation="horizontal" />

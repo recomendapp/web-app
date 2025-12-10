@@ -1,11 +1,10 @@
-'use client';
+'use client'
 
-import { createContext, useState, useEffect, use, useMemo } from 'react';
+import { createContext, useState, useEffect, use, useMemo, useCallback } from 'react';
 import { Provider, Session } from '@supabase/supabase-js';
 import { User } from '@recomendapp/types';
 import { useUserQuery } from '@/features/client/user/userQueries';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { useRouter } from '@/lib/i18n/navigation';
 import { CustomerInfo } from '@revenuecat/purchases-js';
 import { useRevenueCat } from '@/lib/revenuecat/useRevenueCat';
 import { useAuthCustomerInfo } from '@/features/client/auth/authQueries';
@@ -46,7 +45,6 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ session: initialSession, children }: AuthProviderProps) => {
-  const router = useRouter();
   const supabase = useSupabaseClient();
   const [session, setSession] = useState<Session | null>(initialSession);
   const [pushToken, setPushToken] = useState<string | null>(null);
@@ -66,30 +64,24 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
     initialData: initCustomerInfo,
 	});
 
-  const login = async (email: string, password: string, redirectTo?: string | null) => {
+  const login = useCallback(async (email: string, password: string, redirectTo?: string | null) => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (error) throw error;
-    if (redirectTo) {
-      router.push(redirectTo);
-    } else {
-      router.push('/');
-    }
-  };
+  }, [supabase]);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     if (!session) return;
     if (pushToken) {
         await supabase.from('user_notification_tokens').delete().match({ token: pushToken, provider: 'fcm' });
     }
     const { error } = await supabase.auth.signOut({ scope: 'local' });
     if (error) throw error;
-    router.refresh();
-  };
+  }, [supabase, session, pushToken]);
 
-  const signup = async ({
+  const signup = useCallback(async ({
     email,
     name,
     username,
@@ -117,9 +109,9 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
       },
     });
     if (error) throw error;
-  };
+  }, [supabase]);
 
-  const loginOAuth2 = async (provider: Provider, redirectTo?: string | null) => {
+  const loginOAuth2 = useCallback(async (provider: Provider, redirectTo?: string | null) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
@@ -127,9 +119,9 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
       },
     });
     if (error) throw error;
-  };
+  }, [supabase]);
 
-  const loginWithOtp = async (email: string, redirectTo?: string | null) => {
+  const loginWithOtp = useCallback(async (email: string, redirectTo?: string | null) => {
     const { error } = await supabase.auth.signInWithOtp({
       email: email,
       options: {
@@ -137,13 +129,13 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
       } 
     });
     if (error) throw error;
-  }
+  }, [supabase]);
 
-  const userRefresh = async () => {
+  const userRefresh = useCallback(async () => {
     const { data: { session }, error } = await supabase.auth.getSession();
     if (error) throw error;
     setSession(session);
-  };
+  }, [supabase]);
 
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, updatedSession) => {
@@ -153,7 +145,7 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
     return () => {
       listener?.subscription.unsubscribe();
     };
-  }, [supabase, router]);
+  }, [supabase]);
 
   // see : https://github.com/recomendapp/web-app/issues/4
   // useEffect(() => {

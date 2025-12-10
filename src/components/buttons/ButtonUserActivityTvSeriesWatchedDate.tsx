@@ -35,11 +35,11 @@ const ButtonUserActivityTvSeriesWatchedDate = React.forwardRef<
 		userId: session?.user.id,
 		tvSeriesId: tvSeriesId,
 	});
-	const updateDate = useUserActivityTvSeriesUpdateMutation();
+	const { mutateAsync: updateDate, isPending: isUpdatePending } = useUserActivityTvSeriesUpdateMutation();
 
-	const handleUpdateDate = async (date: Date) => {
+	const handleUpdateDate = React.useCallback(async (date: Date) => {
 		if (!activity) return;
-		await updateDate.mutateAsync({
+		await updateDate({
 		activityId: activity.id,
 		watchedDate: date,
 		}), {
@@ -47,7 +47,7 @@ const ButtonUserActivityTvSeriesWatchedDate = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		};
-	};
+	}, [activity, updateDate, t]);
 
 	if (!activity) return null;
 
@@ -56,8 +56,8 @@ const ButtonUserActivityTvSeriesWatchedDate = React.forwardRef<
       <TooltipBox tooltip={'Changer la date de visionnage'}>
         <PopoverTrigger asChild>
           <Button
-            disabled={isLoading || isError || activity === undefined || updateDate.isPending}
-            variant="action"
+            disabled={isLoading || isError || activity === undefined || isUpdatePending}
+            variant="outline"
             className={cn('rounded-full flex gap-4', className)}
             {...props}
           >

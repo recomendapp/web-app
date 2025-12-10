@@ -19,15 +19,15 @@ export default function TvSerieDetails({
   slug: string;
   serie: MediaTvSeries;
 }) {
-  const common = useTranslations('common');
+  const t = useTranslations();
   if (!serie) return null;
   return (
     <div className="@container/movie-details flex flex-col gap-4">
       <div className="flex flex-col @4xl/movie-details:grid @4xl/movie-details:grid-cols-3 gap-4">
         <div className="@4xl/movie-details:col-span-2">
-          <h2 className="text-lg font-medium">{upperFirst(common('messages.overview'))}</h2>
+          <h2 className="text-lg font-medium">{upperFirst(t('common.messages.overview'))}</h2>
           <div className="text-justify text-muted-foreground">
-            {serie.overview ?? upperFirst(common('messages.no_overview'))}
+            {serie.overview ?? upperFirst(t('common.messages.no_overview'))}
           </div>
         </div>
         <JustWatchWidget
@@ -40,7 +40,7 @@ export default function TvSerieDetails({
       <div className="flex flex-col @4xl/movie-details:grid @4xl/movie-details:grid-cols-3 gap-4">
          <div className={`@4xl/movie-details:col-span-${serie.specials && serie.specials.length > 0 ? '2' : '3'}`}>
           <h2 className="text-lg font-medium">
-            {upperFirst(common('messages.tv_season', { count: serie.seasons?.length! }))}
+            {upperFirst(t('common.messages.tv_season', { count: serie.seasons?.length! }))}
             <span className="text-muted-foreground">{` ${serie.seasons?.length}`}</span>
           </h2>
           <ScrollArea className="w-full">
@@ -48,10 +48,10 @@ export default function TvSerieDetails({
               {serie.seasons?.map((season, i) => (
                 <Link key={i} href={`/tv-series/${slug}/${season.season_number}`}>
                   <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
-                    <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
+                    <div className="relative w-full aspect-3/4 rounded-md overflow-hidden">
                       <ImageWithFallback
                       src={getTmdbImage({ path: season.poster_path, size: 'w342' })}
-                      alt={upperFirst(common('messages.tv_season_value', { number: season.season_number! }))}
+                      alt={upperFirst(t('common.messages.tv_season_value', { number: season.season_number! }))}
                       fill
                       className="object-cover"
                       type="tv_season"
@@ -66,8 +66,8 @@ export default function TvSerieDetails({
                       </div>
                     </div>
                     <div className="text-center">
-                      <p className="line-clamp-2 break-words">{upperFirst(common('messages.tv_season_value', { number: season.season_number! }))}</p>
-                      <p className="text-sm text-muted-foreground">{upperFirst(common('messages.tv_episode_count', { count: season.episode_count! }))}</p>
+                      <p className="line-clamp-2 wrap-break-word">{upperFirst(t('common.messages.tv_season_value', { number: season.season_number! }))}</p>
+                      <p className="text-sm text-muted-foreground">{upperFirst(t('common.messages.tv_episode_count', { count: season.episode_count! }))}</p>
                     </div>
                   </Card>
                 </Link>
@@ -79,7 +79,7 @@ export default function TvSerieDetails({
         {(serie.specials && serie.specials.length > 0) && (
           <div className="@4xl/movie-details:col-span-1">
             <h2 className="text-lg font-medium">
-              {upperFirst(common('messages.tv_special_episode', { count: serie.specials?.reduce((acc, s) => acc + (s.episode_count ?? 0), 0) }))}
+              {upperFirst(t('common.messages.tv_special_episode', { count: serie.specials?.reduce((acc, s) => acc + (s.episode_count ?? 0), 0) }))}
               <span className="text-muted-foreground">{` ${serie.specials?.length}`}</span>
             </h2>
             <ScrollArea className="w-full">
@@ -87,10 +87,10 @@ export default function TvSerieDetails({
                 {serie.specials?.map((special, i) => (
                   <Link key={i} href={`/tv-series/${slug}/${special.season_number}`}>
                     <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
-                      <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
+                      <div className="relative w-full aspect-3/4 rounded-md overflow-hidden">
                         <ImageWithFallback
                         src={getTmdbImage({ path: special.poster_path, size: 'w342' })}
-                        alt={upperFirst(common('messages.tv_season_value', { number: special.season_number! }))}
+                        alt={upperFirst(t('common.messages.tv_season_value', { number: special.season_number! }))}
                         fill
                         className="object-cover"
                         type="tv_season"
@@ -105,8 +105,8 @@ export default function TvSerieDetails({
                         </div>
                       </div>
                       <div className="text-center">
-                        <p className="line-clamp-2 break-words">{upperFirst(common('messages.tv_season_value', { number: special.season_number! }))}</p>
-                        <p className="text-sm text-muted-foreground">{upperFirst(common('messages.tv_episode_count', { count: special.episode_count! }))}</p>
+                        <p className="line-clamp-2 wrap-break-word">{upperFirst(t('common.messages.tv_season_value', { number: special.season_number! }))}</p>
+                        <p className="text-sm text-muted-foreground">{upperFirst(t('common.messages.tv_episode_count', { count: special.episode_count! }))}</p>
                       </div>
                     </Card>
                   </Link>
@@ -128,10 +128,10 @@ const SerieCast = ({
 } : {
 	tvSeries: MediaTvSeries
 }) => {
-  const common = useTranslations('common');
+  const t = useTranslations();
 	return (
 		<div>
-			<h2 className="text-lg font-medium">{upperFirst(common('messages.cast'))}</h2>
+			<h2 className="text-lg font-medium">{upperFirst(t('common.messages.cast'))}</h2>
       {(tvSeries.cast && tvSeries.cast?.length > 0) ? (
         <ScrollArea>
           <div className="flex space-x-4 pb-4">
@@ -142,7 +142,7 @@ const SerieCast = ({
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       ) : (
-        <div className="text-justify text-muted-foreground">{upperFirst(common('messages.no_cast'))}</div>
+        <div className="text-justify text-muted-foreground">{upperFirst(t('common.messages.no_cast'))}</div>
       )}
 		</div>
 	)
@@ -159,7 +159,7 @@ function CastPoster({
   return (
     <Link href={person.url ?? ''}>
       <Card className="flex flex-col gap-2 h-full w-32 p-2 hover:bg-muted-hover">
-        <div className="relative w-full aspect-[3/4] rounded-md overflow-hidden">
+        <div className="relative w-full aspect-3/4 rounded-md overflow-hidden">
           <ImageWithFallback
           src={getTmdbImage({ path: person.profile_path, size: 'w342' })}
           alt={person.name ?? ''}
@@ -170,7 +170,7 @@ function CastPoster({
           />
         </div>
         <div className="text-center">
-          <p className="line-clamp-2 break-words">{person.name}</p>
+          <p className="line-clamp-2 wrap-break-word">{person.name}</p>
           {characters ? <p className="line-clamp-2 text-accent-yellow italic text-sm">{characters.join(', ')}</p> : null}
         </div>
       </Card>

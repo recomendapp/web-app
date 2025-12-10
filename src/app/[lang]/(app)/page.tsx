@@ -42,7 +42,7 @@ export default function Home() {
 			{!session ? (
 				// Only non-logged users
 				<>
-				<Button variant="accent-yellow" className="col-span-full m-auto max-w-lg" asChild>
+				<Button className="col-span-full m-auto max-w-lg" asChild>
 					<Link href="/auth/login">{upperFirst(t('common.messages.get_started_its_free'))}</Link>
 				</Button>
 				<WidgetRecomendShowcase className='col-span-full'/>

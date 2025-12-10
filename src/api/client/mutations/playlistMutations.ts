@@ -1,19 +1,18 @@
 import { useSupabaseClient } from '@/context/supabase-context';
 import { Playlist, PlaylistGuest, PlaylistItemMovie, PlaylistItemTvSeries, PlaylistType } from '@recomendapp/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { playlistKeys } from './playlistKeys';
-import { userKeys } from '../user/userKeys';
-import { mediaKeys } from '../media/mediaKeys';
+import { playlistKeys } from '../../../features/client/playlist/playlistKeys';
+import { mediaKeys } from '../../../features/client/media/mediaKeys';
+import { useUserPlaylistsInfiniteOptions } from '../options/userOptions';
+import { useAuth } from '@/context/auth-context';
 
-
-/**
- * Creates a new playlist
- * @param userId The user id
- * @returns The mutation
- */
 export const usePlaylistInsertMutation = () => {
+	const { session } = useAuth();
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const userPlaylistsOptions = useUserPlaylistsInfiniteOptions({
+		userId: session?.user.id,
+	});
 	return useMutation({
 		mutationFn: async ({
 			title,
@@ -47,15 +46,12 @@ export const usePlaylistInsertMutation = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({
-				queryKey: userKeys.playlists({
-					userId: data.user_id,
-				}),
+				queryKey: userPlaylistsOptions.queryKey
 			});
 			// Maybe update cache manually to avoid a new query
 		}
 	});
 };
-
 export const usePlaylistUpdateMutation = () => {
 	const supabase = useSupabaseClient();
 	return useMutation({
@@ -88,15 +84,13 @@ export const usePlaylistUpdateMutation = () => {
 		},
 	});
 };
-
-/**
- * Deletes a playlist
- * @param userId The user id
- * @returns The mutation
- */
 export const usePlaylistDeleteMutation = () => {
+	const { session } = useAuth();
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const userPlaylistsOptions = useUserPlaylistsInfiniteOptions({
+		userId: session?.user.id,
+	});
 	return useMutation({
 		mutationFn: async ({
 			playlistId,
@@ -118,9 +112,7 @@ export const usePlaylistDeleteMutation = () => {
 		},
 		onSuccess: ({ userId }) => {
 			queryClient.invalidateQueries({
-				queryKey: userKeys.playlists({
-					userId: userId,
-				}),
+				queryKey: userPlaylistsOptions.queryKey
 			});
 		}
 	});

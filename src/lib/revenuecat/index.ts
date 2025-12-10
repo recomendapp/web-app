@@ -15,7 +15,7 @@ export const webReset = () => {
 
 export const useOffering = () => {
 	const { session, customerInfo } = useAuth();
-	const isConfigured = useMemo(() => !!customerInfo, [customerInfo]);
+	const isConfigured = useMemo(() => customerInfo !== undefined, [customerInfo]);
 	const [offering, setOffering] = useState<Offering | null | undefined>(undefined);
 	const [isLoading, setIsLoading] = useState(true);
 

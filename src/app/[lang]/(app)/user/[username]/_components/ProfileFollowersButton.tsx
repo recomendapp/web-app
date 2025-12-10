@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -7,6 +7,7 @@ import { useModal } from '@/context/modal-context';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { useCallback } from 'react';
 
 interface ProfileFollowersButtonProps {
   userId: string;
@@ -14,28 +15,32 @@ interface ProfileFollowersButtonProps {
   disabled?: boolean;
 }
 
-export function ProfileFollowersButton({
+export const ProfileFollowersButton = ({
 	userId,
 	className,
   disabled = false,
-} : ProfileFollowersButtonProps) {
-  const common = useTranslations('common');
+} : ProfileFollowersButtonProps) => {
+  const t = useTranslations();
   const { createModal } = useModal();
 
+  const handleOpenFollowersModal = useCallback(() => {
+    createModal({
+      header: {
+        title: upperFirst(t('common.messages.follower', { count: 2 })),
+      },
+      content: <ProfileFollowersModal userId={userId} />,
+    });
+  }, [createModal, t, userId]);
+
   return (
-      <TooltipBox tooltip={upperFirst(common('messages.see_followers'))}>
+      <TooltipBox tooltip={upperFirst(t('common.messages.see_followers'))}>
         <Button
-          variant={'action'}
-          onClick={() => createModal({
-            header: {
-              title: upperFirst(common('messages.follower', { count: 2 })),
-            },
-            content: <ProfileFollowersModal userId={userId} />,
-          })}
-          className={cn(className)}
-          disabled={disabled}
+        variant={'outline'}
+        onClick={handleOpenFollowersModal}
+        className={cn(className)}
+        disabled={disabled}
         >
-        {common('messages.follower', { count: 2 })}
+        {t('common.messages.follower', { count: 2 })}
         </Button>
       </TooltipBox>
   );

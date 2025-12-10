@@ -68,7 +68,7 @@ export function DataTableToolbar<TData>({
           ) : null}
           <Button
           size={'icon'}
-          variant={'action'}
+          variant={'outline'}
           onClick={() => openModal(ModalShare, {
             title: playlist?.title,
             type: 'playlist',

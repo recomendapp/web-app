@@ -7,8 +7,9 @@ import { usePathname } from '@/lib/i18n/navigation';
 import { Fragment, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
-import { useUserPlaylistsInfiniteQuery } from '@/features/client/user/userQueries';
 import Loader from '@/components/Loader';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useUserPlaylistsInfiniteOptions } from '@/api/client/options/userOptions';
 
 export function UserPlaylists({
   grid = false,
@@ -24,9 +25,9 @@ export function UserPlaylists({
     isLoading,
     fetchNextPage,
     hasNextPage,
-  } = useUserPlaylistsInfiniteQuery({
+  } = useInfiniteQuery(useUserPlaylistsInfiniteOptions({
     userId: session?.user.id,
-  });
+  }));
   const loading = playlists === undefined || isLoading;
 
   useEffect(() => {

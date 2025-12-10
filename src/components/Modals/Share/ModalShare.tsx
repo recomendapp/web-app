@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import { useModal } from "@/context/modal-context";
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { Input } from "@/components/ui/input";
@@ -143,7 +144,7 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 							<RedditIcon size={32} round />
 						</RedditShareButton>
 						{canShare === true && (
-							<Button onClick={() => onShare(sharedData)} variant={'accent-yellow'} size={'icon'} className="rounded-full">
+							<Button onClick={() => onShare(sharedData)} size={'icon'} className="rounded-full">
 								<Icons.add className="h-4 w-4" />
 							</Button>
 						)}
@@ -153,7 +154,7 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 					<h3 className="text-lg font-semibold mb-2">{upperFirst(common('messages.link'))}</h3>
 					<div className="flex space-x-2">
 						<Input value={url} readOnly />
-						<ButtonCopy text={url} variant={'accent-yellow'} />
+						<ButtonCopy text={url} />
 					</div>
 				</div>
 			</ModalBody>

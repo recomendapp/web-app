@@ -22,9 +22,11 @@ export default async function PersonLayout(
   return (
     <>
       <PersonHeader person={person} background={randomBackdrop(person.movies.map((movie) => movie.movie))} />
-      <div className="px-4 pb-4">
-        <PersonNavbar personId={params.person_id} />
-        {props.children}
+      <div className="px-4 pb-4 flex flex-col items-center">
+        <div className='max-w-7xl w-full'>
+          <PersonNavbar personId={params.person_id} />
+          {props.children}
+        </div>
       </div>
     </>
   );

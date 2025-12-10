@@ -43,7 +43,7 @@ export default function SearchBestResult({
             <BadgeMedia type={result.type} variant={"accent-yellow"} className='absolute top-2 right-2' />
             <div
             className={`relative w-[100px] shrink-0 overflow-hidden
-              ${result.type === 'person' ? 'aspect-square rounded-full' : 'aspect-[2/3]'}
+              ${result.type === 'person' ? 'aspect-square rounded-full' : 'aspect-2/3'}
             `}
             >
               <ImageWithFallback

@@ -68,7 +68,7 @@ export function Navbar({ className }: NavbarProps) {
   return (
     <div
       className={cn(
-        `h-navbar bg-navbar border-t w-full grid grid-cols-5 rounded-t-lg`,
+        `h-(--navbar-height) bg-navbar border-t w-full grid grid-cols-5 rounded-t-lg`,
         className
       )}
     >

@@ -1,15 +1,16 @@
-"use client";
+"use client"
+
 import { Link } from "@/lib/i18n/navigation";
 import MediaPoster from "@/components/Media/MediaPoster";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useFormatter, useTranslations } from "next-intl";
-import { Profile, UserActivityMovie } from "@recomendapp/types";
+import { Profile, UserActivityTvSeries } from "@recomendapp/types";
 import { cn } from "@/lib/utils";
 import { CardUser } from "@/components/Card/CardUser";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import { Icons } from "@/config/icons";
-import { CardReviewMovie } from "@/components/Card/CardReviewMovie";
 import { upperFirst } from "lodash";
+import { CardReviewTvSeries } from "@/components/Card/CardReviewTvSeries";
 import { forwardRef } from "react";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
@@ -19,7 +20,7 @@ const FeedActivity = ({
 	className,
 }: {
 	author: Profile;
-	activity: UserActivityMovie;
+	activity: UserActivityTvSeries;
 	className?: string;
 }) => {
 	const t = useTranslations('pages.feed.actions');
@@ -102,23 +103,24 @@ const FeedActivity = ({
 	);
 };
 
-interface FeedItemActivityMovieProps extends React.HTMLAttributes<HTMLDivElement> {
+interface CardFeedActivityTvSeriesProps extends React.HTMLAttributes<HTMLDivElement> {
 	author: Profile;
-	activity: UserActivityMovie;
+	activity: UserActivityTvSeries;
 }
 
-export const FeedItemActivityMovie = forwardRef<
+export const CardFeedActivityTvSeries = forwardRef<
 	HTMLDivElement,
-	FeedItemActivityMovieProps
+	CardFeedActivityTvSeriesProps
 >(({ author, activity, ...props }, ref) => {
 	const format = useFormatter();
-	const common = useTranslations('common');
+	const t = useTranslations();
+
 	return (
 	  <div ref={ref} className="@container/feed-item flex gap-4 bg-muted rounded-xl p-2 group" {...props}>
 		<MediaPoster
 		className="w-20 @md/feed-item:w-24"
-		src={getTmdbImage({ path: activity.movie?.poster_path, size: 'w342' })}
-		alt={activity.movie?.title ?? ''}
+		src={getTmdbImage({ path: activity.tv_series?.poster_path, size: 'w342' })}
+		alt={activity.tv_series?.name ?? ''}
 		width={96}
 		height={144}
 		unoptimized
@@ -135,28 +137,28 @@ export const FeedItemActivityMovie = forwardRef<
 					{format.relativeTime(new Date(activity.watched_date), new Date())}
 				</div>}
 			</div>
-			<Link href={activity.movie?.url ?? ''} className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
-				<span className='font-bold'>{activity.movie?.title}</span>
+			<Link href={activity.tv_series?.url ?? ''} className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
+				<span className='font-bold'>{activity.tv_series?.name}</span>
 				{/* DATE */}
-				{activity.movie?.release_date && <sup>
-					<DateOnlyYearTooltip date={activity.movie.release_date} className='text-xs @md/feed-item:text-sm font-medium'/>
+				{activity.tv_series?.first_air_date && <sup>
+					<DateOnlyYearTooltip date={activity.tv_series.first_air_date} className='text-xs @md/feed-item:text-sm font-medium'/>
 				</sup>}
 			</Link>
 			{activity.review ? (
-				<CardReviewMovie
+				<CardReviewTvSeries
 				className="bg-background"
 				review={activity.review}
 				activity={activity}
 				author={author}
-				url={`${activity.movie?.url}/review/${activity.review.id}`}
+				url={`${activity.tv_series?.url}/review/${activity.review.id}`}
 				/>
-			) : activity.movie?.overview && (
-				<p className={cn("text-xs @md/feed-item:text-sm line-clamp-3 text-justify", !activity.movie.overview.length && 'text-muted-foreground')}>
-					{activity.movie.overview.length ? activity.movie.overview : upperFirst(common('messages.no_overview'))}
+			) : activity.tv_series?.overview && (
+				<p className={cn("text-xs @md/feed-item:text-sm line-clamp-3 text-justify", !activity.tv_series.overview.length && 'text-muted-foreground')}>
+					{activity.tv_series.overview.length ? activity.tv_series.overview : upperFirst(t('common.messages.no_overview'))}
 				</p>
 			)}
 		</div>
 	  </div>
 	);
 });
-FeedItemActivityMovie.displayName = 'FeedItemActivityMovie';
+CardFeedActivityTvSeries.displayName = 'CardFeedActivityTvSeries';

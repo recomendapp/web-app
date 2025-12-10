@@ -97,7 +97,7 @@ export default async function FilmsPage(
 					<Icons.error className='mr-1'/>
 					{upperFirst(t('common.messages.wrong_arguments'))}
 				</div>
-				<Button variant='accent-yellow'>
+				<Button asChild>
 					<Link href={`/person/${params.person_id}/films`}>
 						Reset
 					</Link>
@@ -113,55 +113,57 @@ export default async function FilmsPage(
 	}
 
 	return (
-		<div className='@container/person-films flex flex-col gap-4'>
-			<div>
-				<div className='flex flex-col @md/person-films:flex-row @md/person-films:justify-between items-center gap-2'>
-					<Filters
-					knownForDepartment={person.known_for_department!}
-					jobs={person.jobs}
-					sortBy={sortBy}
-					sortOrder={sortOrder}
-					display={display}
+		<div className='flex flex-col items-center'>
+			<div className='@container/person-films flex flex-col gap-4 max-w-7xl w-full'>
+				<div className='space-y-2'>
+					<div className='flex flex-col @3xl/person-films:flex-row @3xl/person-films:justify-between items-center gap-2'>
+						<Filters
+						knownForDepartment={person.known_for_department!}
+						jobs={person.jobs}
+						sortBy={sortBy}
+						sortOrder={sortOrder}
+						display={display}
+						department={department}
+						job={job}
+						/>
+						<Pagination
+						page={page}
+						perPage={perPage}
+						total={count ?? 0}
+						searchParams={new URLSearchParams(searchParams as Record<string, string>)}
+						className='@md/person-films:mx-0 @md/person-films:w-fit'
+						/>
+					</div>
+					<ActiveFilters
 					department={department}
 					job={job}
 					/>
-					<Pagination
-					page={page}
-					perPage={perPage}
-					total={count ?? 0}
-					searchParams={new URLSearchParams(searchParams as Record<string, string>)}
-					className='@md/person-films:mx-0 @md/person-films:w-fit'
-					/>
 				</div>
-				<ActiveFilters
-				department={department}
-				job={job}
+				<div
+				className={` gap-2
+					${
+						display == 'row'
+						? 'flex flex-col'
+						: 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 2xl:grid-cols-10'
+					}
+				`}
+				>
+					{movies.map((credits, index) => (
+						<CardMovie
+						key={index}
+						variant={display === 'grid' ? 'poster' : 'row'}
+						movie={credits.movie!}
+						className='w-full'
+						/>
+					))}
+				</div>
+				<Pagination
+				page={page}
+				perPage={perPage}
+				total={count ?? 0}
+				searchParams={new URLSearchParams(searchParams as Record<string, string>)}
 				/>
 			</div>
-			<div
-			className={` gap-2
-				${
-					display == 'row'
-					? 'flex flex-col'
-					: 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 2xl:grid-cols-10'
-				}
-			`}
-			>
-				{movies.map((credits, index) => (
-					<CardMovie
-					key={index}
-					variant={display === 'grid' ? 'poster' : 'row'}
-					movie={credits.movie!}
-					className='w-full'
-					/>
-				))}
-			</div>
-			<Pagination
-			page={page}
-			perPage={perPage}
-			total={count ?? 0}
-			searchParams={new URLSearchParams(searchParams as Record<string, string>)}
-			/>
 		</div>
 	)
 }

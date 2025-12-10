@@ -44,7 +44,7 @@ const RightPanelNotificationsContent = () => {
 
 	return (
 		<>
-			<div className="sticky z-[1] top-0 px-2 pt-2 space-y-2 bg-background">
+			<div className="sticky z-1 top-0 px-2 pt-2 space-y-2 bg-background">
 				<div className="flex justify-between items-center">
 					<Select value={show} onValueChange={(value) => setShow(value as any)}>
 						<SelectTrigger className="w-fit border-0 gap-2">

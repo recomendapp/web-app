@@ -32,7 +32,7 @@ const CardUserDefault = React.forwardRef<
 		>
 			<UserAvatar username={user?.username ?? ''} avatarUrl={user?.avatar_url} />
 			<div className='px-2 py-1 space-y-1'>
-				<p className='line-clamp-2 break-words'>{user?.full_name}</p>
+				<p className='line-clamp-2 wrap-break-word'>{user?.full_name}</p>
 				<p className="text-muted-foreground">@{user?.username}</p>
 				{children}
 			</div>
@@ -51,14 +51,14 @@ const CardUserVertical = React.forwardRef<
 			href={linked ? `/@${user?.username}` : undefined}
 			as={Card}
 			className={cn(
-				"flex flex-col items-center justify-center w-32 rounded-xl bg-muted hover:bg-muted-hover p-2",
+				"items-center justify-center w-32 rounded-xl bg-muted hover:bg-muted-hover p-2",
 				className
 			)}
 			{...props}
 		>
 			<UserAvatar username={user?.username ?? ''} avatarUrl={user?.avatar_url} className="w-full h-fit aspect-square" />
 			<div className='flex flex-col items-center px-2 py-1 space-y-1'>
-				<p className='line-clamp-2 break-words text-center'>{user?.full_name}</p>
+				<p className='line-clamp-2 wrap-break-word text-center'>{user?.full_name}</p>
 				<p className="text-muted-foreground text-center">@{user?.username}</p>
 				{children}
 			</div>
@@ -100,7 +100,7 @@ const CardUserUsername = React.forwardRef<
 			ref={ref}
 			href={linked ? `/@${user?.username}` : undefined}
 			className={cn(
-				"flex items-center gap-1 text-foreground font-bold hover:underline",
+				"flex-row items-center gap-1 text-foreground font-bold hover:underline",
 				className
 			)}
 			{...props}

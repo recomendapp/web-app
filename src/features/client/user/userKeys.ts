@@ -212,20 +212,6 @@ export const userKeys = {
 	/* -------------------------------------------------------------------------- */
 
 	/* ---------------------------------- FEED ---------------------------------- */
-	/**
-	 * Fetches the user's feed
-	 * @param userId The user id
-	 * @param filters The filters (optional)
-	 * @returns The user's feed
-	 */
-	feed: ({
-		userId,
-		filters,
-	} : {
-		userId: string;
-		filters?: any;
-	}) => filters ? [...userKeys.detail(userId), 'feed', filters] as const : [...userKeys.detail(userId), 'feed'] as const,
-
 	feedCastCrew: (
 		userId: string,
 		filters?: any
@@ -233,20 +219,6 @@ export const userKeys = {
 	/* -------------------------------------------------------------------------- */
 
 	/* -------------------------------- PLAYLIST -------------------------------- */
-	/**
-	 * Fetches the user's playlists
-	 * @param userId The user id
-	 * @param filters The filters (optional)
-	 * @returns The user's playlists
-	 */
-	playlists: ({
-		userId,
-		filters,
-	} : {
-		userId: string;
-		filters?: any;
-	}) => filters ? [...userKeys.detail(userId), 'playlists', filters] as const : [...userKeys.detail(userId), 'playlists'] as const,
-
 	playlistSaved: ({
 		userId,
 		playlistId,

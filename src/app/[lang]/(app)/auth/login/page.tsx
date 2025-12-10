@@ -105,17 +105,8 @@ export default function Login() {
           </div>
           <p className="px-8 text-center text-sm text-muted-foreground">
             {t('no_account_yet')}{' '}
-            <Button
-              variant={'link-accent-yellow'}
-              className='inline p-0' 
-              asChild
-            >
-              <Link
-                href={{
-                  pathname: '/auth/signup',
-                  query: redirectTo ? { redirect: redirectTo } : undefined,
-                }}
-              >
+            <Button variant={'link'} className='inline p-0 text-accent-yellow' asChild>
+              <Link href={{ pathname: '/auth/signup', query: redirectTo ? { redirect: redirectTo } : undefined }}>
               {upperFirst(common('messages.signup'))}
               </Link>
             </Button>

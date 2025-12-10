@@ -13,7 +13,7 @@ const InputSearch = React.forwardRef<
       ref={ref}
       className={cn(
         "flex h-11 bg-transparent py-3  placeholder:text-muted-foreground",
-        "!border-none px-0 !ring-0 !ring-offset-0",
+        "border-none! px-0 ring-0! ring-offset-0!",
         className
       )}
       {...props}

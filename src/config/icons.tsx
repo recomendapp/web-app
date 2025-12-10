@@ -31,6 +31,7 @@ import {
   Image,
   InfoIcon,
   Laptop,
+  LibraryIcon,
   Link,
   ListPlus,
   ListVideoIcon,
@@ -273,6 +274,7 @@ export const Icons = {
   orderAsc: ArrowUpNarrowWideIcon,
   orderDesc: ArrowDownNarrowWideIcon,
   clock: ClockIcon,
+  Library: LibraryIcon,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path

@@ -21,7 +21,7 @@ export const Item = React.forwardRef<
 			<div
 				className={cn(
 				'shadow-md relative shrink-0 overflow-hidden rounded-md',
-				'aspect-[2/3]',
+				'aspect-2/3',
 				className
 				)}
 			>

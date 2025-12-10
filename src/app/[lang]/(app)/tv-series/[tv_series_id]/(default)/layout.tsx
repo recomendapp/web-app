@@ -28,9 +28,11 @@ export default async function TvSeriesLayout(
   return (
   <>
     <TvSeriesHeader serie={serie} followersAvgRating={followersAvgRating?.follower_avg_rating} />
-    <div className="px-4 pb-4">
-      <TvSeriesNavbar serieId={params.tv_series_id} />
-      {children}
+    <div className="px-4 pb-4 flex flex-col items-center">
+        <div className='max-w-7xl w-full'>
+          <TvSeriesNavbar serieId={params.tv_series_id} />
+          {children}
+        </div>
     </div>
   </>
 	);

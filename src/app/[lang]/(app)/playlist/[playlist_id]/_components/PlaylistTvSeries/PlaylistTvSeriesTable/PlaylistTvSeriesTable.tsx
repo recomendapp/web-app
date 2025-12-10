@@ -48,7 +48,7 @@ import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { DataTableToolbar } from './component/data-table-toolbar';
 import { useAuth } from '@/context/auth-context';
-import { usePlaylistTvSeriesUpdateMutation } from '@/features/client/playlist/playlistMutations';
+import { usePlaylistTvSeriesUpdateMutation } from '@/api/client/mutations/playlistMutations';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {

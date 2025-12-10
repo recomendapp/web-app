@@ -23,7 +23,7 @@ import { useAuth } from "@/context/auth-context";
 import { usePlaylistIsAllowedToEditQuery } from "@/features/client/playlist/playlistQueries";
 import { ModalPlaylistTvSeriesAdd } from "@/components/Modals/playlists/ModalPlaylistTvSeriesAdd";
 import { ModalUserRecosTvSeriesSend } from "@/components/Modals/recos/ModalUserRecosTvSeriesSend";
-import { usePlaylistTvSeriesDeleteMutation } from "@/features/client/playlist/playlistMutations";
+import { usePlaylistTvSeriesDeleteMutation } from "@/api/client/mutations/playlistMutations";
 import ModalPlaylistTvSeriesComment from "@/components/Modals/playlists/ModalPlaylistTvSeriesComment";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
 

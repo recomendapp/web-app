@@ -46,15 +46,15 @@ const ButtonUserActivityTvSeriesRating = React.forwardRef<
 		tvSeriesId: tvSeriesId,
 	});
 
-	const insertActivity = useUserActivityTvSeriesInsertMutation();
-	const updateActivity = useUserActivityTvSeriesUpdateMutation();
+	const { mutateAsync: insertActivity, isPending: isInsertPending } = useUserActivityTvSeriesInsertMutation();
+	const { mutateAsync: updateActivity, isPending: isUpdatePending } = useUserActivityTvSeriesUpdateMutation();
 
 
-	const handleRate = async (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleRate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
 		if (!session?.user.id) return;
 		if (activity) {
-			await updateActivity.mutateAsync({
+			await updateActivity({
 				activityId: activity.id,
 				rating: ratingValue,
 			}, {
@@ -63,7 +63,7 @@ const ButtonUserActivityTvSeriesRating = React.forwardRef<
 				}
 			});
 		} else {
-			await insertActivity.mutateAsync({
+			await insertActivity({
 				userId: session?.user.id,
 				tvSeriesId: tvSeriesId,
 				rating: ratingValue,
@@ -73,13 +73,14 @@ const ButtonUserActivityTvSeriesRating = React.forwardRef<
 				}
 			});
 		}
-	  };
-	const handleUnrate = async (e: React.MouseEvent<HTMLButtonElement>) => {
+	}, [activity, insertActivity, tvSeriesId, ratingValue, session, stopPropagation, t, updateActivity]);
+
+	const handleUnrate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
 		if (activity?.review) {
 			return toast.error(t('components.media.actions.rating.remove_rating.has_review'));
 		}
-		await updateActivity.mutateAsync({
+		await updateActivity({
 		  activityId: activity!.id!,
 		  rating: null,
 		}, {
@@ -87,7 +88,7 @@ const ButtonUserActivityTvSeriesRating = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	  };
+	}, [activity, updateActivity, stopPropagation, t]);
 
 	React.useEffect(() => {
 		activity?.rating && setRatingValue(activity?.rating);
@@ -98,8 +99,9 @@ const ButtonUserActivityTvSeriesRating = React.forwardRef<
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
 			ref={ref}
-			variant={'rating'}
-			className={cn('', className)}
+			size={'icon'}
+			variant={'outline'}
+			className={cn('rounded-full', className)}
 			asChild
 			{...props}
 			>
@@ -117,8 +119,13 @@ const ButtonUserActivityTvSeriesRating = React.forwardRef<
 			<DialogTrigger asChild>
 				<Button
 				ref={ref}
-				disabled={isLoading || isError || activity === undefined || insertActivity.isPending || updateActivity.isPending}
-				variant={activity?.rating ? 'rating-enabled' : 'rating'}
+				disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
+				variant={'outline'}
+				size={activity?.rating ? 'default' : 'icon'}
+				className={cn(
+					activity?.rating ? 'bg-background! border-accent-yellow! text-accent-yellow! border-2' : 'rounded-full',
+					className
+				)}
 				{...props}
 				>
 					{(isLoading || activity === undefined) ? (

@@ -1,32 +1,31 @@
-'use client';
+'use client'
 
 import { Button } from '@/components/ui/button';
-import { useEffect } from 'react';
-import { ArrowDownNarrowWideIcon, ArrowUpNarrowWideIcon, LayoutGrid, List } from 'lucide-react';
+import { useCallback, useEffect, useMemo } from 'react';
 import Loader from '@/components/Loader';
 import { useInView } from 'react-intersection-observer';
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useUserActivitiesInfiniteQuery } from '@/features/client/user/userQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { Badge } from '@/components/ui/badge';
 import { useSearchParams } from 'next/navigation';
 import { z } from "zod";
 import { CardMovie } from '@/components/Card/CardMovie';
-import { MediaMovie, MediaTvSeries, UserActivityMovie, UserActivityTvSeries } from '@recomendapp/types';
-import { CardTvSeries } from '@/components/Card/CardTvSeries';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useUserActivitiesMovieInfiniteOptions } from '@/api/client/options/userOptions';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { TooltipBox } from '@/components/Box/TooltipBox';
+import { Icons } from '@/config/icons';
+import { Spinner } from '@/components/ui/spinner';
+import { LayoutGridIcon, ListIcon } from 'lucide-react';
 
 const DISPLAY = ["grid", "row"] as const;
-const SORT_BY = ["watched_date", "rating"] as const;
+type SortBy = "watched_date" | "rating";
 const DEFAULT_DISPLAY = "grid";
 const DEFAULT_SORT_BY = "watched_date";
 const DEFAULT_SORT_ORDER = "desc";
@@ -38,7 +37,7 @@ const getValidatedDisplay = (display: string | null): z.infer<typeof displaySche
 };
 
 // SORT BY
-const sortBySchema = z.enum(SORT_BY);
+const sortBySchema = z.enum(["watched_date", "rating"]);
 const getValidatedSortBy = (order?: string | null): z.infer<typeof sortBySchema> => {
   return sortBySchema.safeParse(order).success ? order! as z.infer<typeof sortBySchema> : DEFAULT_SORT_BY;
 };
@@ -49,7 +48,7 @@ const getValidatedSortOrder = (order?: string | null): z.infer<typeof sortOrderS
   return sortOrderSchema.safeParse(order).success ? order! as z.infer<typeof sortOrderSchema> : DEFAULT_SORT_ORDER;
 }
 
-export default function ProfileCollection({
+export default function ProfileFilms({
   userId
 } : {
   userId: string,
@@ -60,25 +59,31 @@ export default function ProfileCollection({
   const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
   const sortOrder = getValidatedSortOrder(searchParams.get('sort_order'));
   const { ref, inView } = useInView();
+
   const {
     data: activities,
     isLoading,
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useUserActivitiesInfiniteQuery({
+  } = useInfiniteQuery(useUserActivitiesMovieInfiniteOptions({
     userId: userId,
     filters: {
       sortBy: sortBy,
       sortOrder: sortOrder,
     }
-  })
+  }))
 
-  const handleChange = ({ name, value }: { name: string, value: string }) => {
+  const sortOptions = useMemo((): { value: SortBy, label: string }[] => [
+    { value: "watched_date", label: upperFirst(t('common.messages.watched_date')) },
+    { value: "rating", label: upperFirst(t('common.messages.rating')) },
+  ], [t]);
+
+  const handleChange = useCallback(({ name, value }: { name: string, value: string }) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set(name, value);
     window.history.pushState(null, '', `?${params.toString()}`)
-  };
+  }, [searchParams]);
 
   useEffect(() => {
     if (inView && hasNextPage)
@@ -87,37 +92,38 @@ export default function ProfileCollection({
 
   return (
     <div className="@container/profile-collection flex flex-col gap-2">
-      <div className="flex justify-between gap-4 items-center">
-        <div className='flex items-center gap-2'>
-          <p className='text-muted-foreground'>Filters</p>
-          <Badge variant={'accent-yellow'}>{upperFirst(t('common.messages.soon'))}</Badge>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant={'ghost'} size={'sm'} onClick={(e) => {
-            e.preventDefault();
-            handleChange({ name: 'sort_order', value: sortOrder === 'desc' ? 'asc' : 'desc' });
-          }}>
-            {sortOrder === 'desc' ? <ArrowDownNarrowWideIcon size={20} /> : <ArrowUpNarrowWideIcon size={20} />}
-          </Button>
-          <Select onValueChange={(e) => handleChange({ name: 'sort_by', value: e })} defaultValue={sortBy}>
-            <SelectTrigger className="w-fit">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent align="end">
-              <SelectItem value={'watched_date'}>{upperFirst(t('common.messages.watched_date'))}</SelectItem>
-              <SelectItem value={'rating'}>{upperFirst(t('common.messages.rating'))}</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button variant={'ghost'} onClick={(e) => handleChange({ name: 'display', value: display === 'grid' ? 'row' : 'grid' })}>
-            {display == 'grid' ? <LayoutGrid /> : <List />}
-          </Button>
-        </div>
+      <div className="flex justify-end items-center">
+        <ButtonGroup className='justify-end'>
+          <ButtonGroup>
+            <TooltipBox tooltip={upperFirst(sortOrder === 'asc' ? t('common.messages.order_asc') : t('common.messages.order_desc'))}>
+              <Button variant={'outline'} onClick={() => handleChange({ name: 'sort_order', value: sortOrder === 'desc' ? 'asc' : 'desc' })}>
+                {sortOrder === 'desc' ? <Icons.orderDesc /> : <Icons.orderAsc />}
+              </Button>
+            </TooltipBox>
+            <Select defaultValue={sortBy} onValueChange={(e) => handleChange({ name: 'sort_by', value: e })}>
+              <SelectTrigger className="w-fit">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent align="end">
+                {sortOptions.map((sort) => (
+                  <SelectItem key={sort.value} value={sort.value}>{sort.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </ButtonGroup>
+          <ButtonGroup>
+            <Button variant={'outline'} onClick={(e) => handleChange({ name: 'display', value: display === 'grid' ? 'row' : 'grid' })}>
+              {display === 'grid' ? <LayoutGridIcon /> : <ListIcon />}
+              <span>{display === 'grid' ? upperFirst(t('common.messages.grid', { count: 1 })) : upperFirst(t('common.messages.list', { count: 1 }))}</span>
+            </Button>
+          </ButtonGroup>
+        </ButtonGroup>
       </div>
       {isLoading || activities == undefined ? (
-        <div className="flex items-center h-full">
-          <Loader />
+        <div className="flex justify-center h-full">
+          <Spinner />
         </div>
-      ) : !isLoading && activities?.pages[0].length ? (
+      ) : !isLoading && activities?.pages[0]?.length ? (
         <div
           className={` gap-2
               ${
@@ -129,31 +135,14 @@ export default function ProfileCollection({
         >
           {activities.pages.map((page, i) => (
             page?.map((activity, index) => (
-              activity.type === 'movie' ? (
                 <CardMovie
                 ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
                 key={index}
                 variant={display === 'grid' ? 'poster' : 'row'}
-                movie={activity.media as MediaMovie}
-                profileActivity={{
-                  ...activity,
-                  movie_id: activity.media_id!
-                } as UserActivityMovie}
+                movie={activity.movie}
+                profileActivity={activity}
                 className='w-full'
                 />
-              ) : (
-                <CardTvSeries
-                ref={(i === activities.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
-                key={index}
-                variant={display === 'grid' ? 'poster' : 'row'}
-                tvSeries={activity.media as MediaTvSeries}
-                profileActivity={{
-                  ...activity,
-                  tv_series_id: activity.media_id!
-                } as UserActivityTvSeries}
-                className='w-full'
-                />
-              )
             ))
           ))}
           {isFetchingNextPage && (

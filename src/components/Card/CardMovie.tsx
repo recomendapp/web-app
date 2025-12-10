@@ -36,17 +36,18 @@ const CardMovieDefault = React.forwardRef<
 	Omit<CardMovieProps, "variant">
 >(({ className, movie, activity, profileActivity, children, linked, showRating, posterClassName, ...props }, ref) => {
 	return (
-	<WithLink href={movie.url ?? undefined}>
+	// <WithLink href={movie.url ?? undefined}>
 		<Card
 			ref={ref}
 			className={cn(
-				"flex items-center rounded-xl h-20 bg-muted hover:bg-muted-hover p-1",
+				"flex-row gap-2 items-center rounded-xl h-20 bg-muted p-1",
+				linked ? 'hover:bg-muted-hover': '',
 				className
 			)}
 			{...props}
 		>
 			<div
-			className={cn('relative h-full shrink-0 rounded-md overflow-hidden aspect-[2/3]', posterClassName)}
+			className={cn('relative h-full shrink-0 rounded-md overflow-hidden aspect-2/3', posterClassName)}
 			>
 				<ImageWithFallback
 				src={getTmdbImage({ path: movie.poster_path, size: 'w342' })}
@@ -58,11 +59,11 @@ const CardMovieDefault = React.forwardRef<
 				/>
 			</div>
 			<div className='px-2 py-1 space-y-1'>
-				<p className='line-clamp-2 break-words'>{movie.title}</p>
+				<p className='line-clamp-2 wrap-break-word'>{movie.title}</p>
 				{children}
 			</div>
 		</Card>
-	</WithLink>
+	// </WithLink>
 	);
 });
 CardMovieDefault.displayName = "CardMovieDefault";
@@ -80,7 +81,7 @@ const CardMoviePoster = React.forwardRef<
 				className={cn(
 					"group relative transition flex gap-4 items-center w-32 shrink-0 rounded-md",
 					"border-transparent hover:border-accent-yellow",
-					"aspect-[2/3] overflow-hidden",
+					"aspect-2/3 overflow-hidden",
 					className
 				)}
 				onMouseEnter={() => setIsHovered(true)}
@@ -119,7 +120,7 @@ const CardMoviePoster = React.forwardRef<
 				{(device === 'desktop' && !disableActions) ? (
 					<div className="hidden absolute bottom-2 group-hover:flex w-full justify-center pointer-events-none">
 					{isHovered ? (
-						<div className="bg-background rounded-md w-fit pointer-events-auto">
+						<div className="space-x-2 pointer-events-auto">
 							<ButtonUserActivityMovieWatch movieId={movie.id} />
 							<ButtonUserWatchlistMovie movieId={movie.id} />
 						</div>
@@ -140,13 +141,13 @@ const CardMovieRow = React.forwardRef<
 		<Card
 			ref={ref}
 			className={cn(
-				"group flex gap-4 items-center p-1",
+				"group flex-row gap-4 items-center p-1",
 				linked ? "hover:bg-muted-hover" : "",
 				className
 			)}
 			{...props}
 		>
-			<div className={cn("relative w-24 aspect-[2/3] rounded-md overflow-hidden", posterClassName)}>
+			<div className={cn("relative w-24 aspect-2/3 rounded-md overflow-hidden", posterClassName)}>
 				<ImageWithFallback
 				src={getTmdbImage({ path: movie.poster_path, size: 'w342' })}
 				alt={movie.title ?? ''}
@@ -161,7 +162,7 @@ const CardMovieRow = React.forwardRef<
 					<div className="flex items-center gap-2">
 						<WithLink
 						href={linked ? (movie.url ?? '') : undefined}
-						className='line-clamp-2 break-words'
+						className='line-clamp-2 wrap-break-word'
 						onClick={linked ? (e) => e.stopPropagation() : undefined}
 						>
 							{movie.title}

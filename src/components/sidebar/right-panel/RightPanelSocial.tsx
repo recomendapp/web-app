@@ -141,12 +141,12 @@ const RightPanelSocialRequests = () => {
 							<div className="flex items-center p-1">
 								<UserAvatar username={user?.username!} avatarUrl={user?.avatar_url} />
 								<div className='px-2 py-1 space-y-1'>
-									<p className='line-clamp-2 break-words'>{user?.username}</p>
+									<p className='line-clamp-2 wrap-break-word'>{user?.username}</p>
 									<p className="text-muted-foreground">@{user?.username}</p>
 								</div>
 							</div>
 							<div className="grid grid-cols-2 gap-2">
-								<Button variant="accent-yellow" onClick={() => handleAcceptRequest(id)}>Accepter</Button>
+								<Button onClick={() => handleAcceptRequest(id)}>Accepter</Button>
 								<Button variant="outline" onClick={() => handleDeclineRequest(id)}>Refuser</Button>
 							</div>
 						</Card>

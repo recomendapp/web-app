@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
@@ -36,9 +36,9 @@ export function PlaylistModal({
           {playlist && (
             <TooltipBox tooltip={upperFirst(t('common.messages.guest', { count: 2, gender: 'male' }))}>
               <Button
-                variant={'muted'}
-                size={'icon'}
-                onClick={() => openModal(ModalPlaylistGuest, { playlistId: playlist.id })}
+              variant={'outline'}
+              size={'icon'}
+              onClick={() => openModal(ModalPlaylistGuest, { playlistId: playlist.id })}
               >
                 <UserCogIcon size={20}/>
               </Button>

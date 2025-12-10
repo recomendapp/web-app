@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
@@ -9,6 +9,8 @@ import { useUserFollowPersonQuery } from '@/features/client/user/userQueries';
 import { useUserFollowPersonInsertMutation, useUserUnfollowPersonDeleteMutation } from '@/features/client/user/userMutations';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
+import { useCallback } from 'react';
+import { useModal } from '@/context/modal-context';
 
 interface PersonFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   personId: number;
@@ -19,54 +21,57 @@ export function PersonFollowButton({
   personId,
 }: PersonFollowButtonProps) {
   const { session } = useAuth();
-  const common = useTranslations('common');
+  const t = useTranslations();
+  const { createConfirmModal } = useModal();
 
   const {
     data: isFollow,
-    isLoading: loading
+    isLoading,
   } = useUserFollowPersonQuery({
     personId: personId,
     userId: session?.user.id,
   });
-  const insertFollow = useUserFollowPersonInsertMutation();
-  const deleteFollow = useUserUnfollowPersonDeleteMutation();
+  const { mutateAsync: insertFollow} = useUserFollowPersonInsertMutation();
+  const { mutateAsync: deleteFollow } = useUserUnfollowPersonDeleteMutation();
 
-  const followPerson = async () => {
-    session?.user.id &&
-      (await insertFollow.mutateAsync({
-        userId: session?.user.id,
-        personId: personId,
-      }, {
-        onError: (error) => {
-          toast.error(upperFirst(common('messages.an_error_occurred')));
-        }
-      }));
-  };
+  const followPerson = useCallback(async () => {
+    if (!session?.user.id) return;
+    await insertFollow({
+      userId: session?.user.id,
+      personId: personId,
+    }, {
+      onError: (error) => {
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
+      }
+    });
+  }, [insertFollow, personId, session, t]);
 
-  const unfollowUser = async () => {
-    session?.user.id &&
-      (await deleteFollow.mutateAsync({
-        userId: session?.user.id,
-        personId: personId,
-      }, {
-        onError: (error) => {
-          toast.error(upperFirst(common('messages.an_error_occurred')));
-        }
-      }));
-  };
+  const unfollowUser = useCallback(async () => {
+    if (!session?.user.id) return;
+    createConfirmModal({
+      title: upperFirst(t('common.messages.are_u_sure')),
+      confirmLabel: upperFirst(t('common.messages.unfollow')),
+      onConfirm: async () => {
+        await deleteFollow({
+          userId: session?.user.id,
+          personId: personId,
+        }, {
+          onError: (error) => {
+            toast.error(upperFirst(t('common.messages.an_error_occurred')));
+          }
+        });
+      },
+    });
+  }, [deleteFollow, personId, session, t, createConfirmModal]);
 
   if (!session) return (null);
 
   return (
     <div className={cn('flex items-center', className)}>
-      {(loading) ? (
-        <Skeleton className="h-10 w-16 rounded-full" />
+      {(isLoading) ? (
+        <Skeleton className="h-10 w-20 rounded-full" />
       ) : (
-        <Button
-          variant={'accent-yellow'}
-          onClick={isFollow ? unfollowUser : followPerson}
-          className="rounded-full py-0"
-        >
+        <Button onClick={isFollow ? unfollowUser : followPerson} variant={isFollow ? 'outline' : 'default'} className="rounded-full">
           {isFollow ? 'Suivi(e)' : 'Suivre'}
         </Button>
       )}

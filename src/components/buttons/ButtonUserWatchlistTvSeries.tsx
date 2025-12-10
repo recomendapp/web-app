@@ -43,17 +43,17 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 		tvSeriesId: tvSeriesId,
 		userId: session?.user.id,
 	});
-	const insertWatchlist = useUserWatchlistTvSeriesInsertMutation();
-	const deleteWatchlist = useUserWatchlistTvSeriesDeleteMutation();
+	const { mutateAsync: insertWatchlist, isPending: isInsertPending } = useUserWatchlistTvSeriesInsertMutation();
+	const { mutateAsync: deleteWatchlist, isPending: isDeletePending } = useUserWatchlistTvSeriesDeleteMutation();
 
-	const handleWatchlist = async (e: React.MouseEvent) => {
+	const handleWatchlist = React.useCallback(async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (watchlist) return;
 		if (!session || !tvSeriesId) {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
-		await insertWatchlist.mutateAsync({
+		await insertWatchlist({
 			tvSeriesId: tvSeriesId,
 		  	userId: session.user.id,
 		}, {
@@ -61,22 +61,23 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		});
-	}
-	const handleUnwatchlist = async (e: React.MouseEvent) => {
+	}, [insertWatchlist, tvSeriesId, session, stopPropagation, t, watchlist]);
+
+	const handleUnwatchlist = React.useCallback(async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (!watchlist) return;
 		if (!watchlist.id) {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
-		await deleteWatchlist.mutateAsync({
+		await deleteWatchlist({
 		  watchlistId: watchlist.id,
 		}, {
 		  onError: () => {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		});
-	  }
+	}, [deleteWatchlist, stopPropagation, t, watchlist]);
 
 	if (session == null) {
 		return (
@@ -84,7 +85,7 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 			<Button
 			ref={ref}
 			size={'icon'}
-			variant={'action'}
+			variant={'outline'}
 			className={cn("rounded-full", className)}
 			asChild
 			{...props}
@@ -102,11 +103,11 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 			<TooltipBox tooltip={watchlist ? upperFirst(t('common.messages.remove_from_watchlist')) : upperFirst(t('common.messages.add_to_watchlist'))}>
 				<Button
 					ref={ref}
-					onClick={async (e) => watchlist ? await handleUnwatchlist(e) : await handleWatchlist(e)}
-					disabled={isLoading || isError || watchlist === undefined || insertWatchlist.isPending || deleteWatchlist.isPending}
+					onClick={watchlist ? handleUnwatchlist : handleWatchlist}
+					disabled={isLoading || isError || watchlist === undefined || isInsertPending || isDeletePending}
 					size="icon"
-					variant={'action'}
-					className={`rounded-full`}
+					variant={'outline'}
+					className={cn(`rounded-full`, className)}
 					{...props}
 				>
 					{(isLoading || watchlist === undefined)  ? (

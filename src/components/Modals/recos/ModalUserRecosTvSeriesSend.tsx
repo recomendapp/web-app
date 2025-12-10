@@ -75,7 +75,7 @@ export function ModalUserRecosTvSeriesSend({
 		<Modal
 			open={props.open}
 			onOpenChange={(open) => !open && closeModal(props.id)}
-			className='gap-0 p-0 outline-none'
+			className='gap-0 p-0 outline-hidden'
 		>
 			<ModalHeader className='px-4 pb-4 pt-5'>
 				<ModalTitle>{upperFirst(t('common.messages.send_to_friend'))}</ModalTitle>
@@ -86,7 +86,7 @@ export function ModalUserRecosTvSeriesSend({
 					})}
 				</ModalDescription>
 			</ModalHeader>
-			<ModalBody className='!p-0 overflow-hidden'>
+			<ModalBody className='p-0! overflow-hidden'>
 				<Command className="overflow-hidden rounded-t-none border-t">
 					<CommandInput placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))} />
 					<CommandList>

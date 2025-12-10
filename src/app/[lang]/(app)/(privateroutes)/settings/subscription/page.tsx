@@ -66,7 +66,7 @@ export default function SettingsAccountPage() {
                 </Card>  
               ))}
               <Button
-              variant={'accent-yellow-enabled'}
+              variant={'outline'}
               disabled={!customerInfo.managementURL}
               asChild
               >
@@ -84,7 +84,7 @@ export default function SettingsAccountPage() {
               <p className="text-muted-foreground pb-4 sm:pb-0">
                 {upperFirst(t('common.messages.no_active_subscription'))}
               </p>
-              <Button variant={'accent-yellow-enabled'} asChild>
+              <Button asChild>
                 <Link href={'/upgrade'}>
                   <Sparkles className="mr-2 h-4 w-4" />
                   <span>{upperFirst(t('common.messages.upgrade'))}</span>

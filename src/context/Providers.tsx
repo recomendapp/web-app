@@ -35,8 +35,6 @@ export default async function Provider({
   const rightPanelOpen = cookiesStore.get("ui-right-panel:open");
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
   const device = await getServerDevice();
-
-
   return (
     <NextIntlClientProvider>
       <SupabaseProvider>
@@ -94,4 +92,9 @@ const MaintenancePage: React.FC = () => {
       </div>
     </div>
   );
+};
+
+const Fake: React.FC = () => {
+  console.log('FAKE RENDER');
+  return null;
 };

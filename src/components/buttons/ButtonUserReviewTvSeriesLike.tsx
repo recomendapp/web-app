@@ -35,16 +35,16 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
 		userId: session?.user.id,
 	});
 	const [likeCount, setLikeCount] = React.useState(reviewLikesCount ?? undefined);
-	const insertLike = useUserReviewTvSeriesLikeInsertMutation();
-	const deleteLike = useUserReviewTvSeriesLikeDeleteMutation();
+	const { mutateAsync: insertLike, isPending: isInsertPending } = useUserReviewTvSeriesLikeInsertMutation();
+	const { mutateAsync: deleteLike, isPending: isDeletePending } = useUserReviewTvSeriesLikeDeleteMutation();
 
-	const handleLike = async (e: React.MouseEvent) => {
+	const handleLike = React.useCallback(async (e: React.MouseEvent) => {
 		e.stopPropagation();
 		if (!session) {
 			toast.error(upperFirst(t('common.messages.not_logged_in')));
 			return;
 		}
-		await insertLike.mutateAsync({
+		await insertLike({
 			userId: session.user.id,
 			reviewId: reviewId,
 		}, {
@@ -55,14 +55,15 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	};
-	const handleUnlike = async (e: React.MouseEvent) => {
+	}, [insertLike, reviewId, session, t]);
+
+	const handleUnlike = React.useCallback(async (e: React.MouseEvent) => {
 		e.stopPropagation();
 		if (!like) {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
-		await deleteLike.mutateAsync({
+		await deleteLike({
 			likeId: like.id
 		}, {
 			onSuccess: () => {
@@ -72,7 +73,7 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	};
+	}, [deleteLike, like, t]);
 
 	if (session == null) {
 		return (
@@ -80,7 +81,7 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
 			<Button
 			ref={ref}
 			size={'icon'}
-			variant={'action'}
+			variant={'outline'}
 			className={cn(
 				"rounded-full text-muted-foreground hover:text-accent-pink",
 				className
@@ -102,9 +103,9 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
 			<Button
 			ref={ref}
 			onClick={like ? handleUnlike : handleLike}
-			disabled={isLoading || isError || like === undefined || insertLike.isPending || deleteLike.isPending}
-			size="fit"
-			variant={'action'}
+			disabled={isLoading || isError || like === undefined || isInsertPending || isDeletePending}
+			size="sm"
+			variant={'outline'}
 			className={cn(
 				"rounded-full",
 				like ? 'text-accent-pink hover:text-accent-pink/50' : 'text-muted-foreground hover:text-accent-pink',

@@ -55,13 +55,13 @@ export const ShareControllerMovie: React.FC<ShareControllerMovieProps> = ({ movi
 			<div className="relative w-[300px] rounded-md overflow-hidden">
 				<div
 				ref={captureRef}
-				className="relative w-full aspect-[9/16] flex flex-col justify-center items-center bg-muted p-4 overflow-hidden"
+				className="relative w-full aspect-9/16 flex flex-col justify-center items-center bg-muted p-4 overflow-hidden"
 				>
 					{movie.backdrop_url && <Image src={movie.backdrop_url} alt={movie.title ?? 'movie poster'} className="absolute inset-0 object-cover" fill onLoad={() => setIsBackdropLoaded(true)} />}
 					<div className="absolute inset-0 bg-black/50" />
 					<div className="flex flex-col justify-center items-center w-full z-10 gap-4">
 						{/* POSTER */}
-						<div className="relative overflow-hidden w-2/3 h-auto aspect-[2/3] rounded-md">
+						<div className="relative overflow-hidden w-2/3 h-auto aspect-2/3 rounded-md">
 							<ImageWithFallback type={'movie'} src={movie.poster_url} alt={movie.title ?? 'movie poster'} className="object-cover" fill onLoad={() => setIsPosterLoaded(true)} />
 						</div>
 						{/* TITLE & DIRECTORS */}

@@ -29,7 +29,7 @@ const CardPersonDefault = React.forwardRef<
 		<Card
 			ref={ref}
 			className={cn(
-				"flex items-center rounded-xl h-20 bg-muted hover:bg-muted-hover p-1",
+				"flex-row gap-2 items-center rounded-xl h-20 bg-muted hover:bg-muted-hover p-1",
 				className
 			)}
 			{...props}
@@ -51,7 +51,7 @@ const CardPersonDefault = React.forwardRef<
 				/>
 			</div>
 			<div className='px-2 py-1 space-y-1'>
-				<p className='line-clamp-2 break-words'>{person.name}</p>
+				<p className='line-clamp-2 wrap-break-word'>{person.name}</p>
 				{children}
 			</div>
 		</Card>
@@ -68,13 +68,13 @@ const CardPersonRow = React.forwardRef<
 		<Card
 			ref={ref}
 			className={cn(
-				"group flex gap-4 items-center p-1",
+				"group flex-row gap-4 items-center p-1",
 				linked ? "hover:bg-muted-hover" : "",
 				className
 			)}
 			{...props}
 		>
-			<div className={cn("relative w-24 aspect-[2/3] rounded-md overflow-hidden", posterClassName)}>
+			<div className={cn("relative w-24 aspect-2/3 rounded-md overflow-hidden", posterClassName)}>
 				<ImageWithFallback
 					src={person.profile_url ?? ''}
 					alt={person.name ?? ''}
@@ -93,7 +93,7 @@ const CardPersonRow = React.forwardRef<
 					<div className="flex items-center gap-2">
 						<WithLink
 						href={linked ? (person.url ?? '') : undefined}
-						className='line-clamp-2 break-words'
+						className='line-clamp-2 wrap-break-word'
 						onClick={linked ? (e) => e.stopPropagation() : undefined}
 						>
 							{person.name}

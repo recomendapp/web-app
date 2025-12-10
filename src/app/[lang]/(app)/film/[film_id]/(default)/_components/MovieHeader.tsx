@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Fragment, useState } from 'react';
 import { Link } from "@/lib/i18n/navigation";
@@ -51,13 +51,12 @@ export default function MovieHeader({
   followersAvgRating?: number | null;
 }) {
   const { openModal } = useModal();
-  const common = useTranslations('common');
-  if (!movie) return null;
+  const t = useTranslations();
   return (
     <div>
       <ContextMenuMovie movie={movie}>
         <HeaderBox background={movie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${movie.backdrop_path}`, alt: movie.title ?? '', unoptimized: true } : undefined}>
-          <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
+          <div className="max-w-7xl flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* MOVIE POSTER */}
             <MediaPoster
               className="w-[200px]"
@@ -79,9 +78,9 @@ export default function MovieHeader({
                   onClick={() => openModal(ModalUserActivityMovieFollowersRating, { movieId: movie.id })}
                 /> : null}
               </div>
-              {(movie?.videos && movie.videos.length > 0) ? (
+              {(movie?.trailers && movie.trailers.length > 0) ? (
                 <MovieTrailerButton
-                  videos={movie.videos}
+                  videos={movie.trailers}
                   className="absolute bottom-2 right-2"
                 />
               ) : null}
@@ -90,7 +89,7 @@ export default function MovieHeader({
             <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
               {/* TYPE & GENRES */}
               <div>
-                <span className='text-accent-yellow'>{upperFirst(common('messages.film', { count: 1 }))}</span>
+                <span className='text-accent-yellow'>{upperFirst(t('common.messages.film', { count: 1 }))}</span>
                 {movie.genres ? <Genres genres={movie.genres} className="before:content-['_|_']" /> : null}
               </div>
               {/* TITLE */}
@@ -117,7 +116,7 @@ export default function MovieHeader({
                         </Button>
                       </span>
                     </Fragment>
-                  )) ?? <span className="text-muted-foreground italic">{upperFirst(common('messages.unknown'))}</span>}
+                  )) ?? <span className="text-muted-foreground italic">{upperFirst(t('common.messages.unknown'))}</span>}
                   {/* RUNTIME */}
                   <RuntimeTooltip runtime={movie.runtime ?? 0} className=" before:content-['_•_']" />
                 </div>
@@ -126,17 +125,19 @@ export default function MovieHeader({
           </div>
         </HeaderBox>
       </ContextMenuMovie>
-      <div className="flex justify-between gap-2 px-4 pb-4">
-        <div className="flex gap-2 overflow-x-auto items-center">
-          <ButtonUserActivityMovieRating movieId={movie.id} />
-          <ButtonUserActivityMovieLike movieId={movie.id} />
-          <ButtonUserActivityMovieWatch movieId={movie.id} />
-          <ButtonUserWatchlistMovie movieId={movie.id} />
-          <ButtonUserActivityMovieWatchedDate movieId={movie.id} />
-        </div>
-        <div className="flex gap-2 items-center">
-          <ButtonPlaylistMovieAdd movieId={movie.id} movieTitle={movie.title} />
-          <ButtonUserRecosMovieSend movieId={movie.id} movieTitle={movie.title} />
+      <div className='flex flex-col items-center'>
+        <div className="max-w-7xl w-full flex justify-between gap-2 px-4 pb-4">
+          <div className="flex gap-2 overflow-x-auto items-center">
+            <ButtonUserActivityMovieRating movieId={movie.id} />
+            <ButtonUserActivityMovieLike movieId={movie.id} />
+            <ButtonUserActivityMovieWatch movieId={movie.id} />
+            <ButtonUserWatchlistMovie movieId={movie.id} />
+            <ButtonUserActivityMovieWatchedDate movieId={movie.id} />
+          </div>
+          <div className="flex gap-2 items-center">
+            <ButtonPlaylistMovieAdd movieId={movie.id} movieTitle={movie.title} />
+            <ButtonUserRecosMovieSend movieId={movie.id} movieTitle={movie.title} />
+          </div>
         </div>
       </div>
     </div>

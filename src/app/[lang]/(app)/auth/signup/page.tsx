@@ -411,17 +411,8 @@ export default function Signup() {
 						</Button>
 						<p className="px-8 text-center text-sm text-muted-foreground">
 							{t('return_to_login')}{' '}
-							<Button
-								variant={'link-accent-yellow'}
-								className='inline p-0' 
-								asChild
-							>
-								<Link
-									href={{
-										pathname: '/auth/login',
-										query: redirectTo ? { redirect: redirectTo } : undefined,
-									}}
-								>
+							<Button variant={'link'} className='text-accent-yellow inline p-0' asChild>
+								<Link href={{ pathname: '/auth/login', query: redirectTo ? { redirect: redirectTo } : undefined }}>
 								{upperFirst(common('messages.login'))}
 								</Link>
 							</Button>
@@ -451,12 +442,7 @@ export default function Signup() {
 			<CardFooter>
 				<p className="px-8 text-center text-sm text-muted-foreground">
 					{common('form.error.not_received_code')}{' '}
-					<Button
-					variant={"link-accent-yellow"}
-					className='p-0'
-					disabled={isLoading}
-					onClick={resendOtp}
-					>
+					<Button variant='link' className='text-accent-yellow p-0' disabled={isLoading} onClick={resendOtp}>
 					{common('form.resend_code')}
 					</Button>
 				</p>

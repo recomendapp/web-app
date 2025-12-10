@@ -17,7 +17,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
-import { usePlaylistTvSeriesMultiInsertMutation } from '@/features/client/playlist/playlistMutations';
+import { usePlaylistTvSeriesMultiInsertMutation } from '@/api/client/mutations/playlistMutations';
 import { upperFirst } from 'lodash';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
@@ -87,7 +87,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
 		<Modal
 			open={props.open}
 			onOpenChange={(open) => !open && closeModal(props.id)}
-			className='gap-0 p-0 outline-none'
+			className='gap-0 p-0 outline-hidden'
 		>
 			<ModalHeader className='px-4 pb-4 pt-5'>
 				<ModalTitle>{upperFirst(t('common.messages.add_to_playlist'))}</ModalTitle>
@@ -98,7 +98,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
 					})}
 				</ModalDescription>
 			</ModalHeader>
-			<ModalBody className='!p-0 border-t bg-popover text-popover-foreground'>
+			<ModalBody className='p-0! border-t bg-popover text-popover-foreground'>
 				<InputSearch
 				value={search}
 				onChange={(e) => setSearch(e.target.value)}

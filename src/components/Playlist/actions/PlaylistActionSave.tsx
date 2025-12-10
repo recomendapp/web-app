@@ -23,7 +23,7 @@ interface PlaylistActionSaveProps
 const PlaylistActionSave = React.forwardRef<
 	HTMLDivElement,
 	PlaylistActionSaveProps
->(({ playlistId, stopPropagation = true, className, ...props }, ref) => {
+>(({ playlistId, stopPropagation = true, ...props }, ref) => {
 	const { session } = useAuth();
 	const t = useTranslations();
 	const pathname = usePathname();
@@ -76,8 +76,7 @@ const PlaylistActionSave = React.forwardRef<
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
 			size={'icon'}
-			variant={'action'}
-			className={cn("rounded-full", className)}
+			variant={'outline'}
 			asChild
 			{...props}
 			>
@@ -92,11 +91,11 @@ const PlaylistActionSave = React.forwardRef<
 	return (
 		<TooltipBox tooltip={saved ? upperFirst(t('common.messages.delete')) : upperFirst(t('common.messages.save'))}>
 			<Button
-				onClick={async (e) => saved ? await handleUnwatchlist(e) : await handleWatchlist(e)}
-				disabled={isLoading || isError || saved === undefined || insertPlaylistSaved.isPending || deletePlaylistSaved.isPending}
-				size="icon"
-				variant={'action'}
-				className={`rounded-full`}
+			onClick={async (e) => saved ? await handleUnwatchlist(e) : await handleWatchlist(e)}
+			disabled={isLoading || isError || saved === undefined || insertPlaylistSaved.isPending || deletePlaylistSaved.isPending}
+			size="icon"
+			variant={'outline'}
+			{...props}
 			>
 				{(isLoading || saved === undefined)  ? (
 				<Icons.spinner className="animate-spin" />

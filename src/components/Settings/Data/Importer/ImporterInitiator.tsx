@@ -157,7 +157,7 @@ export const ImporterInitiator = ({
 				)}
 			</div>
 			{step === 1 || step === 2 || step === 4 ? (
-				<div className="flex flex-col text-center justify-center h-32 px-4 transition bg-background border-2 border-muted border-dashed rounded-md appearance-none cursor-pointer hover:border-muted-hover focus:outline-none">
+				<div className="flex flex-col text-center justify-center h-32 px-4 transition bg-background border-2 border-muted border-dashed rounded-md appearance-none cursor-pointer hover:border-muted-hover focus:outline-hidden">
 					{step === 1 && (
 						<label>
 							<span className="font-medium text-muted-foreground">

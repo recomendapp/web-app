@@ -83,7 +83,7 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 				/>
 			</div>
 			<div className='space-y-2'>
-				<div className='line-clamp-6 break-words'>
+				<div className='line-clamp-6 wrap-break-word'>
 					<ReactMarkdown>
 					{notification.body}
 					</ReactMarkdown>
@@ -92,7 +92,6 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 					<div className='flex gap-2'>
 						{(notification.primaryAction && !notification.primaryAction.isCompleted) ? (
 							<Button
-							variant='accent-yellow'
 							onClick={async () => {
 								await handleAction({
 									action: 'primary',

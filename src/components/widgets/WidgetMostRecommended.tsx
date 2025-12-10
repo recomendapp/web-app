@@ -15,7 +15,7 @@ import { DateOnlyYearTooltip } from "../utils/Date";
 import { SendIcon } from "lucide-react";
 import { useModal } from "@/context/modal-context";
 import Autoplay from "embla-carousel-autoplay"
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { TooltipBox } from "../Box/TooltipBox";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
@@ -30,6 +30,8 @@ import { ModalUserRecosTvSeriesSend } from "../Modals/recos/ModalUserRecosTvSeri
 import { getMediaDetails } from "@/utils/get-media-details";
 import { Database } from "@recomendapp/types";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { ContextMenuMovie } from "../ContextMenu/ContextMenuMovie";
+import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
 
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -105,83 +107,110 @@ const Item = ({
 				return null;
 		}
 	}, [item]);
+	const handleReco = useCallback(() => {
+		if (item.media) {
+			switch (item.type) {
+				case 'movie':
+					openModal(ModalUserRecosMovieSend, { movieId: item.media_id!, movieTitle: details?.title! })
+					break;
+				case 'tv_series':
+					openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: item.media_id!, tvSeriesTitle: details?.title! })
+					break;
+			}
+		}
+	}, [item, details, openModal]);
+
 	if (!details) return null;
 	return (
-		<CarouselItem {...props}>
-			<Card className="relative bg-black/40 flex flex-col h-full justify-between gap-2">
-				{item.media?.backdrop_url && (
-					<Image
-					src={getTmdbImage({ path: item.media?.backdrop_path, size: 'w1280' })}
-					alt={details.title ?? ''}
-					fill
-					className="object-cover -z-10"
-					unoptimized
-					/>
-				)}
-				<CardHeader className="flex-row justify-between items-center gap-2 text-xl font-semibold leading-none tracking-tight ">
-					<h3 className="text-xl">
-						{upperFirst(t('messages.most_recommended', { count: 0 }))}
-					</h3>
-					<div className="flex flex-col items-end gap-2">
-						<div># {index + 1}</div>
-						<BadgeMedia type={item.type} />
-					</div>
-				</CardHeader>
-				<CardContent>
-					<Link href={item.media.url ?? ''} className="w-fit text-clamp-title line-clamp-2 font-semibold">
-						{details.title}
-						{details.date && <sup className="ml-2">
-							<DateOnlyYearTooltip date={details.date} className="text-base font-medium" />
-						</sup>}
-					</Link>
-					{item.media.genres ? <div>
-						{item.media?.genres?.map((genre, index: number) => (
-						<span key={genre.id}>
-							<Button
-							variant="link"
-							className="w-fit p-0 h-full font-normal"
-							asChild
-							>
-							<Link href={`/genre/${genre.id}`}>
-								{genre.name}
-							</Link>
-							</Button>
-							{index !== item.media.genres?.length! - 1 && (
-							<span>, </span>
-							)}
-						</span>
-						))}
-					</div> : null}
-					{details.description && (
-						<div className="max-w-xl line-clamp-2 pt-2">
-							{details.description}
-						</div>
+		<CarouselItem className="" {...props}>
+			<ItemContextMenu item={item}>
+				<Card className="overflow-hidden relative bg-black/40 flex flex-col h-full justify-between gap-2">
+					{item.media?.backdrop_url && (
+						<Image
+						src={getTmdbImage({ path: item.media?.backdrop_path, size: 'w1280' })}
+						alt={details.title ?? ''}
+						fill
+						className="object-cover -z-10"
+						unoptimized
+						/>
 					)}
-				</CardContent>
-				<CardFooter className="flex items-center gap-2">
-					{session && <TooltipBox tooltip={session ? 'Envoyer à un(e) ami(e)' : undefined}>
-						<Button
-						size={"icon"}
-						variant={"muted"}
-						className="bg-muted/60"
-						onClick={() => {
-							if (item.media) {
-								switch (item.type) {
-									case 'movie':
-										openModal(ModalUserRecosMovieSend, { movieId: item.media_id!, movieTitle: details.title! })
-										break;
-									case 'tv_series':
-										openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: item.media_id!, tvSeriesTitle: details.title! })
-										break;
-								}
-							}
-						}}>
-							<SendIcon className="w-4 h-4 fill-primary" />
-						</Button>
-					</TooltipBox>}
-					{item.recommendation_count} reco{Number(item.recommendation_count) > 1 ? 's' : ''}
-				</CardFooter>
-			</Card>
+					<CardHeader className="flex flex-row justify-between items-center gap-2 text-xl font-semibold leading-none tracking-tight ">
+						<h3 className="text-xl">
+							{upperFirst(t('messages.most_recommended', { count: 0 }))}
+						</h3>
+						<div className="flex flex-col items-end gap-2">
+							<div># {index + 1}</div>
+							<BadgeMedia type={item.type} />
+						</div>
+					</CardHeader>
+					<CardContent>
+						<Link href={item.media.url ?? ''} className="w-fit text-clamp-title line-clamp-2 font-semibold">
+							{details.title}
+							{details.date && <sup className="ml-2">
+								<DateOnlyYearTooltip date={details.date} className="text-base font-medium" />
+							</sup>}
+						</Link>
+						{item.media.genres ? <div>
+							{item.media?.genres?.map((genre, index: number) => (
+							<span key={genre.id}>
+								<Button
+								variant="link"
+								className="w-fit p-0 h-full font-normal"
+								asChild
+								>
+								<Link href={`/genre/${genre.id}`}>
+									{genre.name}
+								</Link>
+								</Button>
+								{index !== item.media.genres?.length! - 1 && (
+								<span>, </span>
+								)}
+							</span>
+							))}
+						</div> : null}
+						{details.description && (
+							<div className="max-w-xl line-clamp-2 pt-2">
+								{details.description}
+							</div>
+						)}
+					</CardContent>
+					<CardFooter className="flex items-center gap-2">
+						{session && (
+							<TooltipBox tooltip={session ? 'Envoyer à un(e) ami(e)' : undefined}>
+								<Button size={"icon"} variant={'outline'} className="bg-red-500" onClick={handleReco}>
+									<SendIcon className="w-4 h-4 fill-foreground" />
+								</Button>
+							</TooltipBox>
+						)}
+						{item.recommendation_count} reco{Number(item.recommendation_count) > 1 ? 's' : ''}
+					</CardFooter>
+				</Card>
+			</ItemContextMenu>
 		</CarouselItem>
 	)
 };
+
+const ItemContextMenu = ({
+	item,
+	children
+}: {
+	item: Database['public']['Views']['widget_most_recommended']['Row'];
+	children: React.ReactNode;
+}) => {
+	switch (item.type) {
+		case 'movie':
+			return (
+				<ContextMenuMovie movie={item.media}>
+					{children}
+				</ContextMenuMovie>
+			);
+		case 'tv_series':
+			return (
+				<ContextMenuTvSeries tvSeries={item.media}>
+					{children}
+				</ContextMenuTvSeries>
+			);
+		default:
+			return <>{children}</>;
+	}
+}

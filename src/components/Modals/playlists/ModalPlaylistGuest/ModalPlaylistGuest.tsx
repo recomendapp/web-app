@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, Check } from 'lucide-react';
 import { UserAvatar } from '@/components/User/UserAvatar';
 import { Icons } from '@/config/icons';
-import { usePlaylistGuestsInsertMutation } from '@/features/client/playlist/playlistMutations';
+import { usePlaylistGuestsInsertMutation } from '@/api/client/mutations/playlistMutations';
 import { InputSearch } from '@/components/ui/input-search';
 import useDebounce from '@/hooks/use-debounce';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -122,7 +122,7 @@ export const PlaylistGuestAddView = ({
           {upperFirst(t('common.messages.add_guests_to_your_playlist'))}
         </ModalDescription>
       </ModalHeader>
-      <ModalBody className='!p-0 border-t bg-popover text-popover-foreground'>
+      <ModalBody className='p-0! border-t bg-popover text-popover-foreground'>
         <InputSearch
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -233,7 +233,7 @@ export function ModalPlaylistGuest({
     open={props.open}
     onOpenChange={(open) => !open && closeModal(props.id)}
     className={`
-      gap-0 p-0 outline-none
+      gap-0 p-0 outline-hidden
     `}
     >
       {playlistGuest ? (
