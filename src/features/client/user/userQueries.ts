@@ -299,7 +299,7 @@ export const useUserReviewMovieQuery = ({
 			if (!reviewId) throw Error('Missing review id');
 			const { data, error } = await supabase
 				.from('user_reviews_movie')
-				.select('*, activity:user_activities_movie(*, media_movie(*), user:profile(*))')
+				.select('*, activity:user_activities_movie(*, movie:media_movie(*), user:profile(*))')
 				.eq('id', reviewId)
 				.maybeSingle()
 				.overrideTypes<UserReviewMovie, { merge: false }>();
@@ -359,7 +359,7 @@ export const useUserReviewTvSeriesQuery = ({
 			if (!reviewId) throw Error('Missing review id');
 			const { data, error } = await supabase
 				.from('user_reviews_tv_series')
-				.select('*, activity:user_activities_tv_series(*, media_tv_series(*), user:profile(*))')
+				.select('*, activity:user_activities_tv_series(*, tv_series:media_tv_series(*), user:profile(*))')
 				.eq('id', reviewId)
 				.maybeSingle()
 				.overrideTypes<UserReviewTvSeries, { merge: false }>();
@@ -966,46 +966,6 @@ export const useUserHeartPicksTvSeriesQuery = ({
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------------- FEED ---------------------------------- */
-export const useUserFeedInfiniteQuery = ({
-	userId,
-	filters,
-} : {
-	userId?: string;
-	filters?: {
-		perPage?: number;
-		sortBy?: 'created_at';
-		sortOrder?: 'asc' | 'desc';
-	};
-}) => {
-	const mergedFilters = {
-		perPage: 20,
-		sortBy: 'created_at',
-		sortOrder: 'desc',
-		...filters,
-	};
-	const supabase = useSupabaseClient();
-	return useInfiniteQuery({
-		queryKey: userKeys.feed({
-			userId: userId!,
-			filters: filters,
-		}),
-		queryFn: async ({ pageParam = 1 }) => {
-			let from = (pageParam - 1) * mergedFilters.perPage;
-			const { data, error } = await  supabase
-				.rpc('get_feed', {
-					page_limit: mergedFilters.perPage,
-					page_offset: from
-				})
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == mergedFilters.perPage ? pages.length + 1 : undefined;
-		},
-		enabled: !!userId,
-	});
-};
 
 export const useUserFeedCastCrewInfiniteQuery = ({
 	userId,
@@ -1064,54 +1024,6 @@ export const useUserFeedCastCrewInfiniteQuery = ({
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- PLAYLIST -------------------------------- */
-export const useUserPlaylistsInfiniteQuery = ({
-	userId,
-	filters,
-} : {
-	userId?: string;
-	filters?: {
-		resultsPerPage?: number;
-		order?: 'updated_at-desc' | 'updated_at-asc';
-	};
-}) => {
-	const mergedFilters = {
-		resultsPerPage: 20,
-		order: 'updated_at-desc',
-		...filters,
-	};
-	const supabase = useSupabaseClient();
-	return useInfiniteQuery({
-		queryKey: userKeys.playlists({
-			userId: userId as string,
-			filters: mergedFilters,
-		}),
-		queryFn: async ({ pageParam = 1 }) => {
-			if (!userId) throw Error('Missing user id');
-			let from = (pageParam - 1) * mergedFilters.resultsPerPage;
-	  		let to = from - 1 + mergedFilters.resultsPerPage;
-			let request = supabase
-				.from('playlists')
-				.select(`*`)
-				.eq('user_id', userId)
-				.range(from, to)
-
-			if (mergedFilters) {
-				if (mergedFilters.order) {
-					const [ column, direction ] = mergedFilters.order.split('-');
-					request = request.order(column, { ascending: direction === 'asc' });
-				}
-			}
-			const { data, error } = await request;
-			if (error) throw error;
-			return data;
-		},
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, pages) => {
-			return lastPage?.length == mergedFilters.resultsPerPage ? pages.length + 1 : undefined;
-		},
-		enabled: !!userId,
-	});
-};
 
 export const useUserPlaylistsSavedInfiniteQuery = ({
 	userId,
@@ -1198,54 +1110,6 @@ export const useUserPlaylistSavedQuery = ({
 			return data;
 		},
 		enabled: !!userId && !!playlistId,
-	});
-};
-
-/**
- * Fetches the user playlists
- * @param userId The user id
- * @param filters The filters
- * @returns The user playlists
-*/
-export const useUserPlaylistsQuery = ({
-	userId,
-	filters,
-} : {
-	userId?: string;
-	filters?: {
-		order?: "updated_at-desc" | "updated_at-asc";
-	};
-}) => {
-	const supabase = useSupabaseClient();
-	return useQuery({
-		queryKey: userKeys.playlists({
-			userId: userId as string,
-			filters: filters,
-		}),
-		queryFn: async () => {
-			if (!userId) throw Error('Missing user id');
-			let request = supabase
-				.from('playlists')
-				.select('*')
-				.eq('user_id', userId)
-			
-			if (filters) {
-				if (filters.order) {
-					switch (filters.order) {
-						case 'updated_at-desc':
-							request = request.order('updated_at', { ascending: false });
-							break;
-						case 'updated_at-asc':
-							request = request.order('updated_at', { ascending: true });
-							break;
-					}
-				}
-			}
-			const { data, error } = await request;
-			if (error) throw error;
-			return data;
-		},
-		enabled: !!userId,
 	});
 };
 

@@ -23,16 +23,24 @@ const ButtonUserRecosTvSeriesSend = React.forwardRef<
 	ButtonUserRecosTvSeriesSendProps
 >(({ tvSeriesId, stopPropagation = true, tvSeriesTitle, className, ...props }, ref) => {
 	const { user } = useAuth();
-	const t = useTranslations('common');
+	const t = useTranslations();
 	const pathname = usePathname();
 	const { openModal } = useModal();
 
+	const handleClick = React.useCallback((e: React.MouseEvent) => {
+		stopPropagation && e.stopPropagation();
+		openModal(ModalUserRecosTvSeriesSend, {
+			tvSeriesId,
+			tvSeriesTitle: tvSeriesTitle!,
+		})
+	}, [stopPropagation, openModal, tvSeriesId, tvSeriesTitle]);
+
 	if (user === null) {
 		return (
-		  <TooltipBox tooltip={upperFirst(t('messages.please_login'))}>
+		  <TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
 			  size="icon"
-			  variant={'action'}
+			  variant={'outline'}
 			  className={cn("rounded-full", className)}
 			  asChild
 			  {...props}
@@ -46,19 +54,13 @@ const ButtonUserRecosTvSeriesSend = React.forwardRef<
 	  }
 
 	  return (
-		<TooltipBox tooltip={upperFirst(t('messages.send_to_friend'))}>
+		<TooltipBox tooltip={upperFirst(t('common.messages.send_to_friend'))}>
 		  <Button
 			disabled={user === undefined}
 			size="icon"
-			variant={'action'}
+			variant={'outline'}
 			className={cn("rounded-full", className)}
-			onClick={(e) => {
-				stopPropagation && e.stopPropagation();
-				openModal(ModalUserRecosTvSeriesSend, {
-					tvSeriesId,
-					tvSeriesTitle: tvSeriesTitle!,
-				})
-			}}
+			onClick={handleClick}
 			{...props}
 		  >
 			{user === undefined ? <Icons.spinner className="animate-spin" /> : <Icons.send />}

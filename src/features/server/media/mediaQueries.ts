@@ -1,5 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
-import { createClient } from "@/lib/supabase/server-no-cookie";
+import { createAnonClient } from "@/lib/supabase/anon";
 import { cache } from "@/lib/utils/cache";
 import { MediaMovie, MediaTvSeries, MediaTvSeriesSeason } from "@recomendapp/types";
 import { mediaKeys } from "./mediaKeys";
@@ -14,27 +14,19 @@ export const MEDIA_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 /* -------------------------------------------------------------------------- */
 export const getMovie = cache(
 	async (locale: string, id: number) => {
-		const supabase = await createClient(locale);
+		const supabase = createAnonClient(locale);
 		const { data: film, error } = await supabase
-			.from('media_movie')
+			.from('media_movie_full')
 			.select(`
 				*,
-				cast:tmdb_movie_credits(
-					id,
-					person:media_person(*),
-					role:tmdb_movie_roles(*)
-				),
-				videos:tmdb_movie_videos(*)
+				cast:media_movie_casting(
+					*,
+					person:media_person(*)
+				)
 			`)
-			.match({
-				'id': id,
-				'cast.job': 'Actor',
-				'videos.iso_639_1': locale.split('-')[0],
-				'videos.type': 'Trailer',
-			})
-			.order('published_at', { referencedTable: 'videos', ascending: true })
-			.returns<MediaMovie[]>()
-			.maybeSingle();
+			.eq('id', id)
+			.maybeSingle()
+			.overrideTypes<MediaMovie, { merge: true }>();
 		if (error) throw error;
 		return film;
 	}, {
@@ -66,36 +58,28 @@ export const getMovieUserActivitiesFollowerAverageRating = reactCache(async ({
 /* -------------------------------------------------------------------------- */
 export const getTvSeries = cache(
 	async (locale: string, id: number) => {
-		const supabase = await createClient(locale);
-		const { data: rawTvSeries, error } = await supabase
-			.from('media_tv_series')
+		const supabase = createAnonClient(locale);
+		const { data, error } = await supabase
+			.from('media_tv_series_full')
 			.select(`
 				*,
-				cast:tmdb_tv_series_credits(
+				cast:media_tv_series_casting(
 					*,
 					person:media_person(*)
 				),
-				videos:tmdb_tv_series_videos(*),
 				seasons:media_tv_series_seasons(*)
 			`)
-			.match({
-				'id': id,
-				'cast.job': 'Actor',
-				'videos.iso_639_1': locale.split('-')[0],
-				'videos.type': 'Trailer',
-			})
-			// .filter('seasons.season_number', 'neq', 0)
-			.order('published_at', { referencedTable: 'videos', ascending: true })
+			.eq('id', id)
 			.maybeSingle()
-			.overrideTypes<MediaTvSeries, { merge: false }>();
+			.overrideTypes<MediaTvSeries, { merge: true }>();
 		if (error) throw error;
-		if (!rawTvSeries) return rawTvSeries;
-		const specials = rawTvSeries?.seasons?.filter(season => season.season_number === 0) || [];
-		const regularSeasons = rawTvSeries?.seasons?.filter(season => season.season_number !== 0) || [];
+		if (!data) return data;
+		const specials = data?.seasons?.filter(season => season.season_number === 0) || [];
+		const regularSeasons = data?.seasons?.filter(season => season.season_number !== 0) || [];
 		const tvSeries: MediaTvSeries = {
-			...rawTvSeries!,
-			seasons: regularSeasons,
-			specials: specials,
+			...data!,
+			seasons: regularSeasons.sort((a, b) => a.season_number! - b.season_number!),
+			specials: specials.sort((a, b) => a.season_number! - b.season_number!)
 		};
 		return tvSeries;
 	}, {
@@ -123,7 +107,7 @@ export const getTvSeriesUserActivitiesFollowerAverageRating = reactCache(async (
 
 export const getTvSeason = cache(
 	async (locale: string, serieId: number, seasonNumber: number) => {
-		const supabase = await createClient(locale);
+		const supabase = createAnonClient(locale);
 		const { data, error } = await supabase
 			.from('media_tv_series_seasons')
 			.select(`
@@ -160,7 +144,7 @@ export const getTvSeason = cache(
 
 export const getPerson = cache(
 	async (locale: string, id: number) => {
-		const supabase = await createClient(locale);
+		const supabase = createAnonClient(locale);
 		const { data: person, error } = await supabase
 			.from('media_person')
 			.select(`
@@ -201,7 +185,7 @@ export const getPersonFilms = cache(
 			job?: string;
 		}
 	) => {
-		const supabase = await createClient(locale);
+		const supabase = createAnonClient(locale);
 		let from = (filters.page - 1) * filters.perPage;
 		let to = from + filters.perPage - 1;
 		let request;
@@ -273,7 +257,7 @@ export const getPersonTvSeries = cache(
 			job?: string;
 		}
 	) => {
-		const supabase = await createClient(locale);
+		const supabase = createAnonClient(locale);
 		let from = (filters.page - 1) * filters.perPage;
 		let to = from + filters.perPage - 1;
 		let request;

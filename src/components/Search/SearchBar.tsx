@@ -9,6 +9,11 @@ import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 
+import { Button } from "@/components/ui/button"
+import { ButtonGroup } from "@/components/ui/button-group"
+import { Input } from "@/components/ui/input"
+import { Icons } from '@/config/icons';
+
 interface SearchBarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function SearchBar({ className }: SearchBarProps) {
@@ -47,6 +52,25 @@ export default function SearchBar({ className }: SearchBarProps) {
   }, [debouncedSearchTerm]);
 
   return (
+    <ButtonGroup className='w-full lg:max-w-lg'>
+      <Input
+      type="search"
+      placeholder={t('pages.search.placeholder')}
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      onFocus={handleOnFocus}
+      onBlur={handleOutFocus}
+      className={cn("w-full", className)}
+      autoFocus={pathname.startsWith('/search')}
+      />
+      <Button variant="outline" aria-label="Search">
+        <Icons.search />
+        <span className="sr-only">{upperFirst(t('common.messages.search'))}</span>
+      </Button>
+    </ButtonGroup>
+  )
+
+  return (
     <div
       ref={searchbarRef}
       className={cn('pointer-events-auto w-full h-full lg:max-w-lg', className)}
@@ -65,7 +89,7 @@ export default function SearchBar({ className }: SearchBarProps) {
           name="searchTerm"
           type="search"
           placeholder={t('pages.search.placeholder')}
-          className="w-full bg-transparent pr-4 focus:outline-none focus:outline-offset-2"
+          className="w-full bg-transparent pr-4 focus:outline-hidden focus:outline-offset-2"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={handleOnFocus}

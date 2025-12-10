@@ -39,14 +39,14 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 		movieId: movieId,
 	});
 
-	const insertActivity = useUserActivityMovieInsertMutation();
-	const updateActivity = useUserActivityMovieUpdateMutation();
+	const { mutateAsync: insertActivity, isPending: isInsertPending } = useUserActivityMovieInsertMutation();
+	const { mutateAsync: updateActivity, isPending: isUpdatePending } = useUserActivityMovieUpdateMutation();
 
-	const handleLike = async (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleLike = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
 		if (!session?.user.id) return;
 		if (activity) {
-			await updateActivity.mutateAsync({
+			await updateActivity({
 				activityId: activity.id,
 				isLiked: true,
 			}, {
@@ -60,7 +60,7 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 				}
 			});
 		} else {
-			await insertActivity.mutateAsync({
+			await insertActivity({
 				userId: session?.user.id,
 				movieId: movieId,
 				isLiked: true,
@@ -75,12 +75,12 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 				}
 			});
 		}
-	};
-	const handleUnlike = async (e: React.MouseEvent<HTMLButtonElement>) => {
+	}, [activity, insertActivity, movieId, queryClient, session, stopPropagation, t, updateActivity]);
+	const handleUnlike = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
 		if (!session?.user.id) return;
 		if (!activity) return;
-		await updateActivity.mutateAsync({
+		await updateActivity({
 			activityId: activity.id,
 			isLiked: false,
 		}, {
@@ -93,7 +93,7 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	};
+	}, [activity, queryClient, session, stopPropagation, t, updateActivity]);
 
 	if (session == null) {
 		return (
@@ -101,7 +101,7 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 			<Button
 			ref={ref}
 			size={'icon'}
-			variant={'action'}
+			variant={'outline'}
 			className={cn("rounded-full", className)}
 			asChild
 			{...props}
@@ -119,10 +119,14 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 			<Button
 			ref={ref}
 			onClick={(e) => activity?.is_liked ? handleUnlike(e) : handleLike(e)}
-			disabled={isLoading || isError || activity === undefined || insertActivity.isPending || updateActivity.isPending}
+			disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
 			size="icon"
-			variant={'action'}
-			className={cn("rounded-full", className)}
+			variant={'outline'}
+			className={cn(
+				'rounded-full',
+				activity?.is_liked ? 'bg-accent-pink!' : '',
+				className
+			)}
 			{...props}
 			>
 				{(isLoading || activity === undefined) ? (
@@ -131,10 +135,7 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 				<AlertCircleIcon />
 				) : (
 				<Icons.like
-				className={`
-				transition hover:text-accent-pink
-				${activity?.is_liked && 'text-accent-pink fill-accent-pink'}
-				`}
+				className={`${activity?.is_liked ? 'fill-foreground' : ''}`}
 				/>
 				)}
 			</Button>

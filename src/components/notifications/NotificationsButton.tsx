@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { Icons } from "@/config/icons"
 import { useUI } from "@/context/ui-context";
@@ -7,32 +6,31 @@ import { useCounts } from "@novu/react";
 import { CircleIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useCallback } from "react";
+import { cn } from "@/lib/utils";
 
 export const NotificationsButton = ({
+	variant = 'outline',
+	size = 'icon',
 	onClick,
 	className,
 	...props
 } : React.ComponentProps<typeof Button>) => {
-	const common = useTranslations('common');
+	const t = useTranslations();
 	const { counts } = useCounts({ filters: [{ read: false }] });
 	const {
 		toggleRightPanelContent,
 	} = useUI();
-	const defaultOnClick = () => {
-		toggleRightPanelContent(RightPanelNotifications())
-	}
+	const handleOnClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+		toggleRightPanelContent(RightPanelNotifications());
+		onClick?.(e);
+	}, [toggleRightPanelContent, onClick]);
 	return (
-		<Button
-		variant="ghost"
-		size={'icon'}
-		className={cn("relative rounded-full w-8 h-8", className)}
-		onClick={onClick || defaultOnClick}
-		{...props}
-		>
+		<Button variant={variant} size={size} className={cn("relative", className)} onClick={handleOnClick} {...props}>
 			<Icons.bell className='w-4 h-4'/>
-			<span className="sr-only">{upperFirst(common('messages.see_notifications'))}</span>
+			<span className="sr-only">{upperFirst(t('common.messages.see_notifications'))}</span>
 			{counts && counts[0].count > 0 && (
-				<CircleIcon size={8} className='absolute top-0 left-2/3 text-accent-yellow fill-accent-yellow'/>
+				<div className='absolute w-2 aspect-square rounded-full top-1 right-1 bg-accent-yellow fill-accent-yellow'/>
 			)}
 		</Button>
 	)

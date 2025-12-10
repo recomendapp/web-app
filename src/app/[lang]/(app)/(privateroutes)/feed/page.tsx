@@ -1,21 +1,20 @@
 'use client'
 
-import { useAuth } from "@/context/auth-context";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import Loader from "@/components/Loader";
-import { useUserFeedInfiniteQuery } from "@/features/client/user/userQueries";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
-import { FeedItemActivityMovie } from "./_components/FeedItemActivityMovie";
-import { FeedItemActivityTvSeries } from "./_components/FeedItemActivityTvSeries";
-import { FeedItemPlaylistLike } from "./_components/FeedItemPlaylistLike";
-import { FeedItemReviewMovieLike } from "./_components/FeedItemReviewMovieLike";
-import { FeedItemRevieTvSeriesLike } from "./_components/FeedItemRevieTvSeriesLike";
+import { CardFeedActivityMovie } from "@/components/Card/feed/CardFeedActivityMovie";
+import { CardFeedActivityTvSeries } from "@/components/Card/feed/CardFeedActivityTvSeries";
+import { CardFeedPlaylistLike } from "@/components/Card/feed/CardFeedPlaylistLike";
+import { CardFeedReviewMovieLike } from "@/components/Card/feed/CardFeedReviewMovieLike";
+import { CardFeedReviewTvSeriesLike } from "@/components/Card/feed/CardFeedReviewTvSeriesLike";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useUserMyFeedInfiniteOptions } from "@/api/client/options/userOptions";
 
 export default function Feed() {
-  const { session } = useAuth();
-  const common = useTranslations('common');
+  const t = useTranslations();
 
   const { ref, inView } = useInView();
 
@@ -25,9 +24,7 @@ export default function Feed() {
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useUserFeedInfiniteQuery({
-    userId: session?.user.id,
-  });
+  } = useInfiniteQuery(useUserMyFeedInfiniteOptions());
 
   useEffect(() => {
     if (inView && hasNextPage)
@@ -47,15 +44,15 @@ export default function Feed() {
               const scrollRef = (i === feed.pages.length - 1) && (index === page.length - 1) ? ref : undefined;
               return (
                 activity.activity_type === 'activity_movie' ? (
-                  <FeedItemActivityMovie ref={scrollRef} key={index} author={activity.author} activity={activity.content} />
+                  <CardFeedActivityMovie ref={scrollRef} key={index} author={activity.author} activity={activity.content} />
                 ) : activity.activity_type === 'activity_tv_series' ? (
-                  <FeedItemActivityTvSeries ref={scrollRef} key={index} author={activity.author} activity={activity.content} />
+                  <CardFeedActivityTvSeries ref={scrollRef} key={index} author={activity.author} activity={activity.content} />
                 ) : activity.activity_type === 'playlist_like' ? (
-                  <FeedItemPlaylistLike ref={scrollRef} key={index} author={activity.author} playlistLike={activity.content} />
+                  <CardFeedPlaylistLike ref={scrollRef} key={index} author={activity.author} playlistLike={activity.content} />
                 ) : activity.activity_type === 'review_movie_like' ? (
-                  <FeedItemReviewMovieLike ref={scrollRef} key={index} author={activity.author} reviewLike={activity.content} />
+                  <CardFeedReviewMovieLike ref={scrollRef} key={index} author={activity.author} reviewLike={activity.content} />
                 ) : activity.activity_type === 'review_tv_series_like' ? (
-                  <FeedItemRevieTvSeriesLike ref={scrollRef} key={index} author={activity.author} reviewLike={activity.content} />
+                  <CardFeedReviewTvSeriesLike ref={scrollRef} key={index} author={activity.author} reviewLike={activity.content} />
                 ) : null
               )
             })
@@ -63,7 +60,7 @@ export default function Feed() {
         </div>
       ) : (
         <div className="text-center text-muted-foreground">
-        {upperFirst(common('messages.is_empty'))}
+        {upperFirst(t('common.messages.is_empty'))}
         </div>
       )}
     </div>

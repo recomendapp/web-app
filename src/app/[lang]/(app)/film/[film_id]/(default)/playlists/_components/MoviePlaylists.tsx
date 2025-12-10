@@ -1,5 +1,6 @@
-'use client';
-import { useEffect } from 'react';
+'use client'
+
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   Select,
   SelectContent,
@@ -7,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
 import { useInView } from 'react-intersection-observer';
 import { z } from "zod";
 import { useTranslations } from 'next-intl';
@@ -15,16 +15,18 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useMediaPlaylistsMovieInfiniteQuery } from '@/features/client/media/mediaQueries';
 import { upperFirst } from 'lodash';
 import { Button } from '@/components/ui/button';
-import { ArrowDownNarrowWideIcon, ArrowUpNarrowWideIcon } from 'lucide-react';
 import { Icons } from '@/config/icons';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { TooltipBox } from '@/components/Box/TooltipBox';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const SORT_BY = ["created_at", "likes_count"] as const;
+type SortBy = "created_at" | "updated_at" | "likes_count";
 const DEFAULT_PER_PAGE = 20;
-const DEFAULT_SORT_BY = SORT_BY[0];
+const DEFAULT_SORT_BY: SortBy = "updated_at";
 const DEFAULT_SORT_ORDER = "desc";
 
-const sortBySchema = z.enum(SORT_BY);
+const sortBySchema = z.enum([ "updated_at", "created_at", "likes_count" ]);
 const getValidatedSortBy = (order?: string | null): z.infer<typeof sortBySchema> => {
   return sortBySchema.safeParse(order).success ? order! as z.infer<typeof sortBySchema> : DEFAULT_SORT_BY;
 };
@@ -44,7 +46,7 @@ interface MoviePlaylistsProps {
 export function MoviePlaylists({
   movieId,
 } : MoviePlaylistsProps) {
-  const common = useTranslations('common');
+  const t = useTranslations();
   const searchParams = useSearchParams();
   const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
   const sortOrder = getValidatedSortOrder(searchParams.get('sort_order'));
@@ -67,11 +69,17 @@ export function MoviePlaylists({
     }
   })
 
-  const handleChange = ({ name, value }: { name: string, value: string }) => {
+  const sortOptions = useMemo((): { value: SortBy, label: string }[] => [
+    { value: "updated_at", label: upperFirst(t('common.messages.date_updated')) },
+    { value: "created_at", label: upperFirst(t('common.messages.date_created')) },
+    { value: "likes_count", label: upperFirst(t('common.messages.likes_count')) },
+  ], [t]);
+
+  const handleChange = useCallback(({ name, value }: { name: string, value: string }) => {
 		const params = new URLSearchParams(searchParams.toString());
 		params.set(name, value);
 		router.push(`?${params.toString()}`);
-	};
+	}, [searchParams, router]);
 
   useEffect(() => {
     if (inView && hasNextPage) fetchNextPage();
@@ -80,45 +88,48 @@ export function MoviePlaylists({
   return (
     <div className="@container/movie-playlists w-full h-full flex flex-col items-center gap-4">
       <div className="w-full flex flex-col gap-4 justify-end @md/movie-playlists:flex-row">
-        <div className="flex justify-end gap-2 items-center">
-          <Button variant={'ghost'} size={'sm'} onClick={(e) => {
-            e.preventDefault();
-            handleChange({ name: 'sort_order', value: sortOrder === 'desc' ? 'asc' : 'desc' });
-          }}>
-            {sortOrder === 'desc' ? <ArrowDownNarrowWideIcon size={20} /> : <ArrowUpNarrowWideIcon size={20} />}
-          </Button>
+        <ButtonGroup className="justify-end">
+          <TooltipBox tooltip={upperFirst(sortOrder === 'asc' ? t('common.messages.order_asc') : t('common.messages.order_desc'))}>
+            <Button variant={'outline'} onClick={() => handleChange({ name: 'sort_order', value: sortOrder === 'desc' ? 'asc' : 'desc' })}>
+              {sortOrder === 'desc' ? <Icons.orderDesc /> : <Icons.orderAsc />}
+            </Button>
+          </TooltipBox>
           <Select defaultValue={sortBy} onValueChange={(e) => handleChange({ name: 'sort_by', value: e })}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {SORT_BY.map((sort) => (
-                <SelectItem key={sort} value={sort}>{upperFirst(common(`messages.${sort}`))}</SelectItem>
+              {sortOptions.map((sort) => (
+                <SelectItem key={sort.value} value={sort.value}>{sort.label}</SelectItem>
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </ButtonGroup>
       </div>
       {/* PLAYLISTS */}
-      {(isLoading || playlists === undefined) ? (
-        <Icons.loader />
-      ) : playlists?.pages[0]?.length ? (
+      {(isLoading || playlists === undefined || playlists?.pages[0]?.length) ? (
         <div className="w-full grid gap-2 grid-cols-2 @xs/movie-playlists:grid-cols-3 @md/movie-playlists:grid-cols-4 @lg/movie-playlists:grid-cols-5 @2xl/movie-playlists:grid-cols-6 @4xl/movie-playlists:grid-cols-7 @5xl/movie-playlists:grid-cols-8 @7xl/movie-playlists:grid-cols-10">
-          {playlists?.pages.map((page, i) => (
-            page?.map((playlist, index) => (
-              <CardPlaylist
-              key={index}
-              playlist={playlist}
-              {...(i === playlists.pages.length - 1 &&
-                index === page.length - 1
-                  ? { ref: ref }
-                  : {})}
-              />
+          {isLoading || playlists === undefined ? (
+            Array.from({ length: 40 }).map((_, i) => (
+              <Skeleton key={i} className=" w-full aspect-square" style={{ animationDelay: `${i * 0.12}s`}}/>
             ))
-          ))}
+          ) : (
+            playlists?.pages.map((page, i) => (
+              page?.map((playlist, index) => (
+                <CardPlaylist
+                key={index}
+                playlist={playlist}
+                {...(i === playlists.pages.length - 1 &&
+                  index === page.length - 1
+                    ? { ref: ref }
+                    : {})}
+                />
+              ))
+            ))
+          )}
         </div>
       ) : (
-        <p className="text-muted-foreground text-center font-semibold">{upperFirst(common('messages.no_playlists'))}</p>
+        <p className="text-muted-foreground text-center font-semibold">{upperFirst(t('common.messages.no_playlists'))}</p>
       )}
       {isFetchingNextPage ? <Icons.loader /> : null}
     </div>

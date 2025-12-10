@@ -39,10 +39,10 @@ export function AppLayout({
 			<SidebarProvider
 			open={rightPanelOpen}
 			onOpenChange={rightPanelOpenChange}
+			className='w-auto'
+			shortcut='p'
 			openMobile={rightPanelOpenMobile}
 			setOpenMobile={setRightPanelOpenMobile}
-			shortcut='p'
-			noLayout
 			>
 				<SidebarRight />
 			</SidebarProvider>

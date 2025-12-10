@@ -54,10 +54,12 @@ export default async function Person(
   const person = await getPerson(params.lang, id);
   if (!person) notFound();
   return (
-    <>
+    <div className='flex flex-col items-center'>
+      <div className='max-w-7xl w-full'>
         {/* <WidgetPersonMostRated personId={id} lang={params.lang} /> */}
         <WidgetPersonFilms personSlug={params.person_id} credits={person.movies} lang={params.lang as SupportedLocale} />
         <WidgetPersonTvSeries personSlug={params.person_id} credits={person.tv_series} lang={params.lang as SupportedLocale} />
-    </>
+      </div>
+    </div>
   );
 }

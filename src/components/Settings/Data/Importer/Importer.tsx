@@ -133,7 +133,7 @@ const SelectSource = ({
 		<div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
 			{sources.sort((a, b) => a.enabled === b.enabled ? 0 : a.enabled ? -1 : 1).map(source => (
 				<Button
-					variant={'muted'}
+					variant={'outline'}
 					key={source.source}
 					disabled={!source.enabled}
 					onClick={() => setSelectedSource(source)}

@@ -1,25 +1,20 @@
-'use client';
-import { MediaPerson, UserReviewTvSeries } from "@recomendapp/types";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Link } from "@/lib/i18n/navigation";
-import { Card } from "@/components/ui/card";
-import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import ReviewForm from "@/components/Review/ReviewForm";
+'use client'
+
+import { UserReviewTvSeries } from "@recomendapp/types";
 import { useUserReviewTvSeriesQuery } from "@/features/client/user/userQueries";
-import ButtonUserActivityMovieRating from "@/components/buttons/ButtonUserActivityMovieRating";
-import { useUserReviewTvSeriesUpsertMutation } from "@/features/client/user/userMutations";
-import { useAuth } from "@/context/auth-context";
-import ButtonUserReviewTvSeriesLike from "@/components/buttons/ButtonUserReviewTvSeriesLike";
-import { ReviewTvSeriesSettings } from "@/components/Review/ReviewTvSeriesSettings";
-import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import ReviewViewer from "@/components/Review/ReviewViewer";
+import { HeaderBox } from "@/components/Box/HeaderBox";
+import { CardTvSeries } from "@/components/Card/CardTvSeries";
+import { TMDB_IMAGE_BASE_URL } from "@/lib/tmdb/tmdb";
+import { useTranslations } from "next-intl";
+import { upperFirst } from "lodash";
 
 export const TvSeriesReview = ({
 	reviewServer,
 } : {
 	reviewServer: UserReviewTvSeries;
 }) => {
-	const { session } = useAuth();
+	const t = useTranslations();
 	const {
 		data: review
 	} = useUserReviewTvSeriesQuery({
@@ -27,98 +22,23 @@ export const TvSeriesReview = ({
 		initialData: reviewServer,
 	});
 	
-	const upsertReview = useUserReviewTvSeriesUpsertMutation({
-		tvSeriesId: review?.activity?.tv_series_id!,
-	});
-
-	const handleSubmit = async (data: { title?: string; body: string }) => {
-		if (!review?.activity) return;
-		await upsertReview.mutateAsync(data, {
-			onError: (error) => {
-				throw error;
-			}
-		});
-	};
-
 	if (!review) return null;
 	
 	return (
-	<div className="@container/review">
-		<div className="flex flex-col @3xl/review:flex-row gap-4 p-2">
-			{/* MEDIA */}
-			<Link href={review?.activity?.tv_series?.url ?? ''} className="shrink-0">
-				<Card
-				className={`
-					flex items-center rounded-xl bg-muted hover:bg-muted-hover p-1 h-20
-					@3xl/review:flex-col @3xl/review:items-start @3xl/review:h-fit
-				`}
-				>
-					<div
-					className={cn('relative h-full shrink-0 rounded-md overflow-hidden @3xl/review:w-56 aspect-[2/3]')}
-					>
-						<ImageWithFallback
-						src={getTmdbImage({ path: review?.activity?.tv_series?.poster_path, size: 'w342' })}
-						alt={review?.activity?.tv_series?.name ?? ''}
-						fill
-						className="object-cover"
-						type={'tv_series'}
-						unoptimized
-						/>
-					</div>
-					<div className='px-2 py-1 space-y-1'>
-						<h3 className='text-xl font-semibold line-clamp-2 break-words'>{review?.activity?.tv_series?.name}</h3>
-						{review?.activity?.tv_series?.created_by ? <Credits credits={review?.activity?.tv_series.created_by ?? []} /> : null}
-					</div>
-				</Card>
-			</Link>
-			<ReviewForm
-			mediaAction={<ButtonUserActivityMovieRating movieId={review?.activity?.tv_series_id!} />}
-			reviewActions={<ButtonUserReviewTvSeriesLike reviewId={review?.id} reviewLikesCount={review.likes_count} />}
+	<>
+		<HeaderBox className="flex-col items-center justify-center gap-4 pb-20" background={review.activity?.tv_series!.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${review.activity?.tv_series.backdrop_path}`, alt: review.activity?.tv_series.name ?? '', unoptimized: true } : undefined}>
+				<h1 className="text-5xl font-bold text-primary text-center">
+					{review.title || `${upperFirst(t('common.messages.review_by', { name: review.activity?.user?.full_name! }))}`}
+				</h1>
+				<CardTvSeries tvSeries={review.activity?.tv_series!} className="h-12" />
+		</HeaderBox>
+		<div className='@container/review p-4 flex flex-col items-center -mt-20 z-1'>
+			<ReviewViewer
 			review={review}
-			rating={review?.activity?.rating || undefined}
-			author={review.activity?.user}
-			onUpdate={handleSubmit}
-			reviewSettings={(review.activity && review.activity.user && review.activity.tv_series) ? (
-				<ReviewTvSeriesSettings
-				tvSeriesId={review.activity?.tv_series_id}
-				tvSeries={review?.activity?.tv_series}
-				review={review}
-				author={review.activity?.user}
-				/>
-			) : null}
+			type='tv_series'
+			tvSeries={review.activity?.tv_series!}
 			/>
 		</div>
-	</div>
-	)
+	</>
+	);
 }
-
-const Credits = ({
-	credits,
-	className,
-  }: {
-	credits: MediaPerson[];
-	className?: string;
-  }) => {
-	if (!credits || credits.length === 0) return null;
-	return (
-	  <p className={cn('line-clamp-2', className)}>
-		{credits?.map((credit, index: number) => (
-		  <span key={index}>
-			<Button
-			  variant={'link'}
-			  className="w-fit p-0 h-full italic text-muted-foreground hover:text-accent-yellow transition"
-			  asChild
-			>
-			  <Link href={credit.url ?? ''}>
-				{credit.name}
-			  </Link>
-			</Button>
-			{index !== credits.length - 1 && (
-			  <span className='text-muted-foreground'>, </span>
-			)}
-		  </span>
-		))}
-	  </p>
-	)
-}
-  

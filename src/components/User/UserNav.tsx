@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Button } from '@/components/ui/button';
 import {
@@ -10,16 +10,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Link } from "@/lib/i18n/navigation";
-import { Skeleton } from '@/components/ui/skeleton';
+} from "@/components/ui/dropdown-menu";
+import { Link, useRouter } from "@/lib/i18n/navigation";
 import { useAuth } from '@/context/auth-context';
 import { UserAvatar } from './UserAvatar';
 import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Icons } from '@/config/icons';
 import { upperFirst } from 'lodash';
 import { cn } from '@/lib/utils';
+import { Spinner } from '../ui/spinner';
+import toast from 'react-hot-toast';
 
 type Route = {
   icon: React.ElementType;
@@ -36,6 +37,7 @@ export function UserNav({
 } : {
   className?: string;
 }) {
+  const router = useRouter();
   const { user, customerInfo, logout } = useAuth();
   const t = useTranslations();
 
@@ -69,7 +71,7 @@ export function UserNav({
       label: upperFirst(t('common.messages.upgrade_to_plan', { plan: 'Premium' })),
       href: '/upgrade',
       visible: !customerInfo?.entitlements.active['premium'],
-      className: 'fill-accent-blue !text-accent-blue',
+      className: 'fill-accent-blue text-accent-blue!',
     },
     {
       icon: Icons.settings,
@@ -78,15 +80,28 @@ export function UserNav({
     },
   ], [customerInfo, t]);
 
+  const handleLogout = useCallback(async () => {
+    try {
+      await logout();
+      router.refresh();
+    } catch (error) {
+      toast.error(upperFirst(t('common.messages.an_error_occurred')));
+    }
+  }, [logout, router, t]);
+
   if (!user) {
-    return <Skeleton className="h-8 w-8 rounded-full" />;
+    return (
+      <Button variant={'outline'}>
+        <Spinner />
+      </Button>
+    );  
   }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className={cn("relative h-8 w-8 rounded-full", className)}>
-          <UserAvatar avatarUrl={user.avatar_url} username={user.username} />
+        <Button variant="outline" className={cn("relative", className)}>
+          <UserAvatar className='h-6 w-6' avatarUrl={user.avatar_url} username={user.username} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -94,7 +109,7 @@ export function UserNav({
           <DropdownMenuItem asChild>
             <Link href={'/@' + user?.username} className="flex gap-2">
               <UserAvatar avatarUrl={user.avatar_url} username={user.username} />
-              <div className="flex flex-col space-y-1 !items-start">
+              <div className="flex flex-col space-y-1 items-start!">
                 <p className="text-sm font-medium leading-none line-clamp-1">
                   {user?.full_name}
                 </p>
@@ -108,7 +123,7 @@ export function UserNav({
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           {routes.filter((route) => route.visible !== false).map((route, i) => (
-            <DropdownMenuItem key={i} asChild className={route.className}>
+            <DropdownMenuItem key={i} className={route.className} asChild>
               <Link href={route.href} target={route.target}>
                 <route.icon className={"w-4"} />
                 <span>{route.label}</span>
@@ -118,10 +133,10 @@ export function UserNav({
           ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logout}>
+        <DropdownMenuItem onClick={handleLogout} variant="destructive">
           <Icons.logout className="w-4" />
-          <span>{upperFirst(t('common.messages.logout'))}</span>
-        </DropdownMenuItem>
+          {upperFirst(t('common.messages.logout'))}
+          </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -10,7 +10,7 @@ import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
 import { PlaylistModal } from "../Modals/playlists/PlaylistModal";
 import { ModalPlaylistGuest } from "../Modals/playlists/ModalPlaylistGuest/ModalPlaylistGuest";
-import { usePlaylistDeleteMutation } from "@/features/client/playlist/playlistMutations";
+import { usePlaylistDeleteMutation } from "@/api/client/mutations/playlistMutations";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "@/lib/i18n/navigation";
 
@@ -19,6 +19,7 @@ interface Item {
 	href?: string;
 	label: string;
 	submenu?: Item[];
+	variant?: 'destructive';
 	onClick?: () => void;
 }
 
@@ -35,7 +36,7 @@ export const ContextMenuPlaylist = ({
 	const { openModal, createConfirmModal } = useModal();
 	const playlistDeleteMutation = usePlaylistDeleteMutation()
 	const t = useTranslations();
-	const items: Item[][] = useMemo(() => {
+	const items = useMemo((): Item[][] => {
 		return [
 		[
 			{
@@ -106,6 +107,7 @@ export const ContextMenuPlaylist = ({
 						});
 					},
 					label: upperFirst(t('common.messages.delete')),
+					variant: 'destructive' as const,
 				}
 			] : []),
 		],
@@ -128,9 +130,10 @@ export const ContextMenuPlaylist = ({
 									<ContextMenuSubContent>
 										{item.submenu.map((subItem, subIndex) => (
 											<ContextMenuItem
-												key={subIndex}
-												className="gap-2"
-												asChild
+											key={subIndex}
+											className="gap-2"
+											variant={subItem.variant}
+											asChild
 											>
 												<WithLink href={subItem.href}>
 													{subItem.label}
@@ -141,10 +144,11 @@ export const ContextMenuPlaylist = ({
 								</ContextMenuSub>
 							) : (
 								<ContextMenuItem
-									key={index}
-									className="gap-2"
-									onClick={item.onClick}
-									asChild
+								key={index}
+								className="gap-2"
+								onClick={item.onClick}
+								variant={item.variant}
+								asChild
 								>
 									<WithLink href={item.href}>
 										<item.icon className="h-4 w-4"/>

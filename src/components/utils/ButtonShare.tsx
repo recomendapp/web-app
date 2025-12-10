@@ -1,10 +1,6 @@
-// UI
 import { Button } from '@/components/ui/button';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
-import { cn } from '@/lib/utils';
 import { capitalize } from 'lodash';
-
-// ICONS
 import { Share2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -21,7 +17,7 @@ export default function ButtonShare({
   const copyToClipboard = useCopyToClipboard();
   if (icon) {
     return (
-      <Button className={cn('', className)} variant={'action'} onClick={() => copyToClipboard(url)}>
+      <Button className={className} variant={'outline'} onClick={() => copyToClipboard(url)}>
         <Share2 />
       </Button>
     );

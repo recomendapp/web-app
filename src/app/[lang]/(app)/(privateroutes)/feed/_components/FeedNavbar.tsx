@@ -34,9 +34,9 @@ export const FeedNavbar = () => {
 			key={item.label}
 			href={item.href}
 			className={`w-full rounded-md inline-flex items-center justify-center px-3 py-1.5 text-sm font-medium ring-offset-background transition-all 
-				focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
+				focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
 				disabled:pointer-events-none disabled:opacity-50 
-				${item.active && 'bg-background text-accent-yellow shadow-sm'}
+				${item.active && 'bg-background text-accent-yellow shadow-xs'}
 			`}
 			>
 			{item.label}

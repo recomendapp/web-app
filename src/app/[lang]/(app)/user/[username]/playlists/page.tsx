@@ -9,6 +9,6 @@ export default async function Playlists(
 ) {
   const params = await props.params;
   const user = await getProfile(params.username);
-  if (!user?.id) notFound();
+  if (!user?.id) return notFound();
   return <ProfilePlaylists userId={user?.id} />;
 }

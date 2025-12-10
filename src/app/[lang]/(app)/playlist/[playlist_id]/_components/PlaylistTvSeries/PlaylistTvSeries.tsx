@@ -7,7 +7,7 @@ import useDebounce from "@/hooks/use-debounce";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { useAuth } from "@/context/auth-context";
 import { useSupabaseClient } from "@/context/supabase-context";
-import { usePlaylistItemsTvSeriesRealtimeMutation } from "@/features/client/playlist/playlistMutations";
+import { usePlaylistItemsTvSeriesRealtimeMutation } from "@/api/client/mutations/playlistMutations";
 
 interface PlaylistTvSeriesProps extends React.ComponentProps<'div'> {
 	playlist: Playlist;

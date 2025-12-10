@@ -3,7 +3,7 @@ import { TooltipBox } from "@/components/Box/TooltipBox";
 import { cva, VariantProps } from "class-variance-authority";
 
 const iconMediaRatingVariants = cva(
-	"relative flex shadow-sm w-8 aspect-[3/2] rounded-sm bg-background border-2 justify-center items-center shrink-0 font-bold text-sm",
+	"relative flex shadow-xs w-8 aspect-3/2 rounded-sm bg-background border-2 justify-center items-center shrink-0 font-bold text-sm",
 	{
 		variants: {
 			variant: {

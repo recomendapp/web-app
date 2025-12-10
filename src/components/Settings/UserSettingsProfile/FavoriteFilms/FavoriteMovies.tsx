@@ -245,7 +245,7 @@
 //       <Button
 //         variant={'muted'}
 //         size={'icon'}
-//         className="absolute top-2 right-2 z-[1] rounded-full p-0"
+//         className="absolute top-2 right-2 z-1 rounded-full p-0"
 //         onClick={() => onDelete(movie.id)}
 //         data-no-dnd="true"
 //       >

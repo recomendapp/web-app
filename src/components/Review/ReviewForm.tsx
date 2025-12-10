@@ -1,72 +1,112 @@
-'use client';
+'use client'
 
-import { EditorContent } from '@tiptap/react';
+import { Editor, EditorContent } from '@tiptap/react';
 import { generateJSON } from '@tiptap/html'
 import {
   Dispatch,
+  FormEvent,
   SetStateAction,
+  useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import toast from 'react-hot-toast';
-import { Icons } from '@/config/icons';
-import { useAuth } from '@/context/auth-context';
-import { Profile, UserReview } from '@recomendapp/types';
+import { MediaMovie, MediaTvSeries, UserReview } from '@recomendapp/types';
 import { cn } from '@/lib/utils';
-import { Card } from '@/components/ui/card';
-import { CardUser } from '@/components/Card/CardUser';
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useFormatter, useNow, useTranslations } from 'next-intl';
-import { TooltipBox } from '@/components/Box/TooltipBox';
-import { Toolbar, useEditor } from '@/components/tiptap/Tiptap';
+import { useEditor } from '@/components/tiptap/Tiptap';
 import { upperFirst } from 'lodash';
 import { useModal } from '@/context/modal-context';
-import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import CharacterCount from '@tiptap/extension-character-count';
 import Placeholder from '@tiptap/extension-placeholder';
 import { EDITOR_EXTENSIONS } from '../tiptap/TiptapExtensions';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupText,
+  InputGroupTextarea,
+} from "@/components/ui/input-group"
+import { BoldIcon, ItalicIcon, LinkIcon, RedoIcon, StrikethroughIcon, UnderlineIcon, UndoIcon } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
+import { ScrollArea, ScrollBar } from '../ui/scroll-area';
+import { CardMovie } from '../Card/CardMovie';
+import { CardTvSeries } from '../Card/CardTvSeries';
+import ButtonUserActivityMovieRating from '../buttons/ButtonUserActivityMovieRating';
+import ButtonUserActivityTvSeriesRating from '../buttons/ButtonUserActivityTvSeriesRating';
+import { Spinner } from '../ui/spinner';
 
 const MAX_TITLE_LENGTH = 50;
 const MAX_BODY_LENGTH = 5000;
 
-interface ReviewFormProps extends React.HTMLAttributes<HTMLDivElement> {
+type EditorState = {
+  canRedo: boolean;
+  canUndo: boolean;
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+  strike: boolean;
+};
+
+interface ReviewFormBase extends React.HTMLAttributes<HTMLDivElement> {
 	review?: UserReview;
-	author?: Profile;
 	rating?: number;
-	mediaAction: React.ReactNode | (() => React.ReactNode);
-	reviewActions?: React.ReactNode | (() => React.ReactNode);
-	reviewSettings?: React.ReactNode | (() => React.ReactNode);
-	onUpdate?: (data: { title?: string; body: string }) => void;
-	onCreate?: (data: { title?: string; body: string }) => void;
+	onUpdate?: (data: { title?: string; body: string }) => Promise<void>;
+	onCreate?: (data: { title?: string; body: string }) => Promise<void>;
+	onCancel?: () => void;
 }
+
+type ReviewMovie = {
+	type: 'movie';
+	movie: MediaMovie;
+	tvSeries?: never;
+}
+
+type ReviewTvSeries = {
+	type: 'tv_series';
+	tvSeries: MediaTvSeries;
+	movie?: never;
+}
+
+type ReviewFormProps = ReviewFormBase & (ReviewMovie | ReviewTvSeries);
 
 export default function ReviewForm({
 	review,
-	author,
 	rating,
 	className,
-	mediaAction,
-	reviewActions,
-	reviewSettings,
 	onUpdate,
 	onCreate,
+	onCancel,
+	type,
+	movie,
+	tvSeries,
 } : ReviewFormProps) {
-	const { session } = useAuth();
-	const t = useTranslations('common');
+	const t = useTranslations();
 	const { createConfirmModal } = useModal();
 
 	// Editor
 	const [title, setTitle] = useState(review?.title);
 	const [bodyLength, setBodyLength] = useState(0);
-	const [editable, setEditable] = useState(review ? false : true);
+	const [editorState, setEditorState] = useState<EditorState | null>(null);
+	const computeState = useCallback((editor: Editor): EditorState => ({
+		canRedo: editor.can().redo(),
+		canUndo: editor.can().undo(),
+		bold: editor.isActive('bold'),
+		italic: editor.isActive('italic'),
+		underline: editor.isActive('underline'),
+		strike: editor.isActive('strike'),
+	}), []);
 	const editor = useEditor(
 		{
-			editable: editable,
 			editorProps: {
 				attributes: {
-				class: 'prose prose-sm sm:prose lg:prose-lg focus:outline-none',
+				class: 'prose prose-sm sm:prose lg:prose-lg focus:outline-hidden',
 				},
 			},
 			extensions: [
@@ -76,23 +116,28 @@ export default function ReviewForm({
 			content: review ? generateJSON(review?.body, EDITOR_EXTENSIONS) : undefined,
 			onUpdate({ editor }) {
 				setBodyLength(editor.storage.characterCount.characters());
+				setEditorState(computeState(editor));
+			},
+			onCreate({ editor }) {
+				setBodyLength(editor.storage.characterCount.characters());
+				setEditorState(computeState(editor));
 			},
 		},
 		[
-			editable,
-			review?.body
+			review?.body,
+			computeState
 		]
 	);
 	const now = useNow({ updateInterval: 1000 * 10 });
 	const format = useFormatter();
 	const [isLoading, setIsLoading] = useState(false);
 
-	const handleUpdateReview = async () => {
+	const handleUpdateReview = useCallback(async () => {
 		try{
 			setIsLoading(true);
 			const body = editor?.getHTML();
 			if (title == review?.title && body == review?.body) {
-				setEditable(false);
+				// setEditable(false);
 				return;
 			}
 			if (!body || bodyLength == 0) {
@@ -104,25 +149,24 @@ export default function ReviewForm({
 				title: title?.trim(),
 				body: body,
 			});
-			setEditable(false);
-			toast.success(upperFirst(t('messages.saved', { gender: 'male', count: 1 })));
+			toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
 		} catch (error) {
-			toast.error(upperFirst(t('messages.an_error_occurred')));
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, [bodyLength, editor, onUpdate, review?.body, review?.title, t, title]);
 
-	const handleCreateReview = async () => {
+	const handleCreateReview = useCallback(async () => {
 		try {
 			setIsLoading(true);
 			const body = editor?.getHTML();
 			if (!rating) {
-				toast.error('Vous devez noter ce film pour ajouter une critique');
+				toast.error(upperFirst(t('common.messages.a_rating_is_required_to_add_a_review')))
 				return;
 			}
 			if (!body || bodyLength == 0) {
-				toast.error('Le contenu est obligatoire');
+				toast.error(upperFirst(t('common.messages.review_cannot_be_empty')));
 				return;
 			}
 	
@@ -130,141 +174,82 @@ export default function ReviewForm({
 				title: title?.trim(),
 				body: body,
 			});
-			toast.success(upperFirst(t('messages.saved', { gender: 'male', count: 1 })));
+			toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, [bodyLength, editor, onCreate, rating, t, title]);
 
-	const handleCancel = () => {
+	const handleCancel = useCallback(() => {
 		const body = editor?.getHTML();
-		if (title == review?.title && body == review?.body) {
-			setEditable(false);
-			return;
+		if (title !== review?.title || body !== review?.body) {
+			createConfirmModal({
+				title: upperFirst(t('common.messages.cancel_change', { count: 2 })),
+				description: upperFirst(t('common.messages.do_you_really_want_to_cancel_change', { count: 2 })),
+				onConfirm: () => {
+					onCancel?.();
+				}
+			})
+		} else {
+			onCancel?.();
 		}
-		createConfirmModal({
-			title: upperFirst(t('messages.cancel_change', { count: 2 })),
-			description: upperFirst(t('messages.do_you_really_want_to_cancel_change', { count: 2 })),
-			onConfirm: () => {
-				setTitle(review?.title);
-				setEditable(false);
-			}
-		})
-	};
+	}, [title, review, editor, onCancel, createConfirmModal, t]);
 
 	return (
-	<Card
-	className={cn("w-full flex gap-2 p-1 h-fit", className)}
-	>
-		<div className="flex flex-col items-center gap-1">
-			{review
-				? <IconMediaRating rating={rating} className="h-fit"/>
-				: (
-					typeof mediaAction === 'function' ? mediaAction() : mediaAction
-				)}
-			<div className="bg-muted-hover h-full w-0.5 rounded-full"></div>
-		</div>
-		<div className="w-full flex flex-col gap-2">
-			<div className="w-full flex justify-between items-center gap-2">
-				{author ? (review ? <CardUser variant="inline" user={author} /> : <CardUser variant="inline" user={author} />) : null}
-				<div className='flex items-center gap-1 text-sm text-muted-foreground'>
-					{review ? format.relativeTime(new Date(review?.created_at ?? ''), now) : null}
-					{author?.id == session?.user.id ? (
-						<>
-							{!editable ? (
-								<TooltipBox tooltip={upperFirst(t('messages.edit'))}>							
-									<Button
-									variant={'ghost'}
-									size={'sm'}
-									className='hover:text-foreground'
-									onClick={() => setEditable(true)}
-									disabled={isLoading}
-									>
-										<span className="sr-only">{upperFirst(t('messages.edit'))}</span>
-										<Icons.edit />
-									</Button>
-								</TooltipBox>
-							) : (
-								<>
-								<TooltipBox tooltip={upperFirst(t('messages.save'))}>
-									<Button
-									variant={'accent-yellow'}
-									size={'sm'}
-									onClick={handleUpdateReview}
-									disabled={isLoading}
-									>
-										<span className="sr-only">{upperFirst(t('messages.save'))}</span>
-										<Icons.check />
-									</Button>
-								</TooltipBox>
-								<TooltipBox tooltip={upperFirst(t('messages.cancel'))}>
-									<Button
-									variant={'accent-yellow-enabled'}
-									size={'sm'}
-									onClick={handleCancel}
-									disabled={isLoading}
-									>
-										<span className="sr-only">{upperFirst(t('messages.cancel'))}</span>
-										<Icons.close />
-									</Button>
-								</TooltipBox>
-								</>
-							)}
-							{reviewSettings && (
-								typeof reviewSettings === 'function' ? reviewSettings() : reviewSettings
-							)}
-						</>
-					) : !review ? (
-						<TooltipBox tooltip={upperFirst(t('messages.save'))}>
-							<Button
-							variant={'accent-yellow'}
-							size={'sm'}
-							onClick={handleCreateReview}
-							disabled={isLoading}
-							>
-								<span className="sr-only">{upperFirst(t('messages.save'))}</span>
-								<Icons.check />
-							</Button>
-						</TooltipBox>
-					) : null}
-				</div>
-			</div>
-			{(review?.title || editable) ? (
-				<ReviewTitle title={title} setTitle={setTitle} editable={editable} />
-			) : null}
-			<div
-				className={`
-				rounded-md
-				${editable ? 'bg-background border border-muted-foreground' : ''}
-				`}
-			>
-				{editable && <Toolbar editor={editor} />}
-				<div className={editable ? 'p-4' : ''}>
-					<EditorContent editor={editor} />
-					{editable && (
-					<p className="text-xs text-right text-muted-foreground">
-						{editor?.storage.characterCount.characters()} / {MAX_BODY_LENGTH}
-					</p>
+		<Card className={cn("w-full max-w-4xl gap-4", className)}>
+			<CardHeader>
+				<CardTitle>
+					{review ? upperFirst(t('common.messages.edit_review')) : upperFirst(t('common.messages.new_review'))}
+				</CardTitle>
+				<CardAction className='space-x-2'>
+					{review && (
+						<Button disabled={isLoading} variant="outline" onClick={handleCancel}>{upperFirst(t('common.messages.cancel'))}</Button>
 					)}
-				</div>
+					<Button disabled={isLoading} onClick={review ? handleUpdateReview : handleCreateReview}>
+						{isLoading && <Spinner />}
+						<span>
+							{upperFirst(t('common.messages.save', { gender: 'male', count: 1 }))}
+						</span>
+					</Button>
+				</CardAction>
+			</CardHeader>
+			<div className='flex flex-col items-center justify-center px-6 gap-2'>
+				{type === 'movie' ? (
+				<>
+					<CardMovie movie={movie} linked={false} />
+					<ButtonUserActivityMovieRating movieId={movie.id} />
+				</>
+				) : type === 'tv_series' && (
+				<>
+					<CardTvSeries tvSeries={tvSeries} linked={false} />
+					<ButtonUserActivityTvSeriesRating tvSeriesId={tvSeries.id} />
+				</>
+				)}
+
 			</div>
-			{reviewActions ? <div className="flex items-center justify-end m-1">
-				{typeof reviewActions === 'function' ? reviewActions() : reviewActions}
-			</div> : null}
-		</div>
-	</Card>
+			<CardContent className='space-y-4'>
+				<ReviewTitle title={title} setTitle={setTitle} />
+				<InputGroup>
+					<Toolbar editor={editor} editorState={editorState} />
+					<EditorContent editor={editor} className='w-full px-4'/>
+					<InputGroupAddon align={'block-end'} className='justify-end'>
+						<InputGroupText className='text-muted-foreground text-xs'>
+							{bodyLength} / {MAX_BODY_LENGTH}
+						</InputGroupText>
+					</InputGroupAddon>
+				</InputGroup>
+			</CardContent>
+	 	</Card>
 	);
 }
 
-export function ReviewTitle({
+const ReviewTitle = ({
   title,
   setTitle,
-  editable,
 }: {
   title: string | null | undefined;
   setTitle: Dispatch<SetStateAction<string | null | undefined>>;
-  editable: boolean;
-}) {
+}) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -276,19 +261,129 @@ export function ReviewTitle({
   }, [textAreaRef, title]);
 
   return (
-    <Textarea
-	ref={textAreaRef}
-	onChange={(e) =>
-		setTitle(e.target.value.replace(/\s+/g, ' ').trimStart())
-	}
-	value={title ?? ''}
-	readOnly={!editable}
-	placeholder="Titre"
-	maxLength={MAX_TITLE_LENGTH}
-	className={`
-		w-full h-fit  outline-none focus-visible:ring-0 overflow-hidden resize-none text-5xl font-semibold text-center text-accent-yellow
-		${editable ? 'bg-background border-dashed' : 'bg-muted border-transparent'}
-	`}
-    />
+	<InputGroup>
+		<InputGroupTextarea
+		ref={textAreaRef}
+		onChange={(e) =>
+			setTitle(e.target.value.replace(/\s+/g, ' ').trimStart())
+		}
+		value={title ?? ''}
+		placeholder="Titre"
+		maxLength={MAX_TITLE_LENGTH}
+		className={`w-full h-fit  outline-hidden focus-visible:ring-0 overflow-hidden text-5xl! font-semibold text-center text-accent-yellow`}
+		/>
+		<InputGroupAddon align={'block-end'} className='justify-end'>
+			<InputGroupText className='text-muted-foreground text-xs'>
+				{(title ? title.length : 0)} / {MAX_TITLE_LENGTH}
+			</InputGroupText>
+		</InputGroupAddon>
+	</InputGroup>
   );
+};
+
+const Toolbar = ({ editor, editorState }: { editor: Editor | null, editorState: EditorState | null }) => {
+	const canRedo = useMemo(() => editorState?.canRedo ?? false, [editorState]);
+	const canUndo = useMemo(() => editorState?.canUndo ?? false, [editorState]);
+	return (
+	<ScrollArea className='w-full'>
+		<InputGroupAddon align={'block-start'}>
+			<InputGroupButton
+			variant={'outline'}
+			size={'icon-sm'}
+			onClick={() => editor?.chain().focus().undo().run()}
+			disabled={!canUndo}
+			>
+				<UndoIcon size={15} />
+			</InputGroupButton>
+			<InputGroupButton
+			variant={'outline'}
+			size={'icon-sm'}
+			onClick={() => editor?.chain().focus().redo().run()}
+			disabled={!canRedo}
+			>
+				<RedoIcon size={15} />
+			</InputGroupButton>
+			<LinkAction editor={editor} />
+			<InputGroupButton
+			variant={editorState?.bold ? 'default' : 'outline'}
+			size={'icon-sm'}
+			onClick={() => editor?.chain().focus().toggleBold().run()}
+			>
+				<BoldIcon size={15} />
+			</InputGroupButton>
+			<InputGroupButton
+			variant={editorState?.underline ? 'default' : 'outline'}
+			size={'icon-sm'}
+			onClick={() => editor?.chain().focus().toggleUnderline().run()}
+			>
+				<UnderlineIcon size={15} />
+			</InputGroupButton>
+			<InputGroupButton
+			variant={editorState?.italic ? 'default' : 'outline'}
+			size={'icon-sm'}
+			onClick={() => editor?.chain().focus().toggleItalic().run()}
+			>
+				<ItalicIcon size={15} />
+			</InputGroupButton>
+			<InputGroupButton
+			variant={editorState?.strike ? 'default' : 'outline'}
+			size={'icon-sm'}
+			onClick={() => editor?.chain().focus().toggleStrike().run()}
+			>
+				<StrikethroughIcon size={15} />
+			</InputGroupButton>
+		</InputGroupAddon>
+		<ScrollBar orientation="horizontal" />
+	</ScrollArea>
+	);
+};
+
+const LinkAction = ({ editor }: { editor: Editor | null }) => {
+	const t = useTranslations()
+	const [open, setOpen] = useState(false);
+
+	const saveLink = useCallback((e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		const formData = new FormData(e.currentTarget);
+		if (formData.get('link')) {
+		editor
+			?.chain()
+			.focus()
+			.extendMarkRange('link')
+			.setLink({ href: String(formData.get('link')), target: '_blank' })
+			.run();
+		} else {
+		editor?.chain().focus().extendMarkRange('link').unsetLink().run();
+		}
+	}, [editor]);
+
+	return (
+		<Popover open={open} onOpenChange={setOpen}>
+			<PopoverTrigger asChild>
+				<InputGroupButton variant={'outline'} size={'icon-sm'}>
+					<LinkIcon size={15} />
+				</InputGroupButton>
+			</PopoverTrigger>
+			<PopoverContent align="center">
+				<form onSubmit={saveLink} className="flex items-center gap-2">
+				<div className="flex flex-1 flex-col gap-2">
+					<Label htmlFor="link" className="sr-only">
+						{upperFirst(t('common.messages.link'))}
+					</Label>
+					<Input
+					name="link"
+					defaultValue={editor?.getAttributes('link').href}
+					placeholder="https://..."
+					className="max-w-[200px]"
+					/>
+				</div>
+				<Button type="submit" size="sm">
+					<span className="sr-only">{upperFirst(t('common.messages.save'))}</span>
+					{/* <Icons. className="h-4 w-4" /> */}
+				</Button>
+				</form>
+			</PopoverContent>
+		</Popover>
+	);
 }
+

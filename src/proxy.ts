@@ -29,7 +29,7 @@ export async function proxy(request: NextRequest) {
   /**
    * Redirect user if not logged in
    */
-  if (user && siteConfig.routes.anonRoutes.some((path) => pathname.startsWith(path))) {
+  if (user && isAnonOnly(pathname)) {
     if (!isBrowser) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
@@ -49,7 +49,7 @@ export async function proxy(request: NextRequest) {
   /**
    * Redirect user if logged in
    */
-  if (!user && siteConfig.routes.authRoutes.some((path) => pathname.startsWith(path))) {
+  if (!user && isProtected(pathname)) {
     if (!isBrowser) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
@@ -67,3 +67,17 @@ export const config = {
     "/((?!\\.well-known|api|_next|favicon\\.ico|robots\\.txt|manifest\\.webmanifest|sitemaps|opensearch\\.xml|assets|.*\\.(?:json|xml|js|css|png|jpg|jpeg|gif|svg)$).*)",
   ],
 };
+
+// Utils
+const isProtected = (pathname: string) => {
+  return (
+    /^\/film\/[^/]+\/review\/create$/.test(pathname) ||
+    /^\/film\/[^/]+\/review\/[^/]+\/edit$/.test(pathname) ||
+    /^\/tv-series\/[^/]+\/review\/create$/.test(pathname) ||
+    /^\/tv-series\/[^/]+\/review\/[^/]+\/edit$/.test(pathname) ||
+    siteConfig.routes.authRoutes.some((path) => pathname.startsWith(path))
+  );
+};
+const isAnonOnly = (pathname: string) => {
+  return siteConfig.routes.anonRoutes.some((path) => pathname.startsWith(path));
+}

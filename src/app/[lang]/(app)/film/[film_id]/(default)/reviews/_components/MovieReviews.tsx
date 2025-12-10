@@ -1,5 +1,6 @@
-'use client';
-import { useEffect } from 'react';
+'use client'
+
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   Select,
   SelectContent,
@@ -14,7 +15,6 @@ import { z } from "zod";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMediaReviewsMovieInfiniteQuery } from '@/features/client/media/mediaQueries';
 import { Icons } from '@/config/icons';
-import { ArrowDownNarrowWideIcon, ArrowUpNarrowWideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
 import { useUserActivityMovieQuery } from '@/features/client/user/userQueries';
@@ -22,13 +22,15 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Link } from '@/lib/i18n/navigation';
 import { MediaMovie } from '@recomendapp/types';
 import { CardReviewMovie } from '@/components/Card/CardReviewMovie';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { TooltipBox } from '@/components/Box/TooltipBox';
 
-const SORT_BY = ["updated_at"] as const;
+type SortBy =  "updated_at" | "created_at";
 const DEFAULT_PER_PAGE = 20;
-const DEFAULT_SORT_BY = SORT_BY[0];
+const DEFAULT_SORT_BY: SortBy = "updated_at";
 const DEFAULT_SORT_ORDER = "desc";
 
-const sortBySchema = z.enum(SORT_BY);
+const sortBySchema = z.enum([ "updated_at", "created_at" ]);
 const getValidatedSortBy = (order?: string | null): z.infer<typeof sortBySchema> => {
   return sortBySchema.safeParse(order).success ? order! as z.infer<typeof sortBySchema> : DEFAULT_SORT_BY;
 };
@@ -48,7 +50,7 @@ interface MovieReviewsProps {
 export const MovieReviews = ({
 	movie,
 } : MovieReviewsProps) => {
-	const t = useTranslations('common');
+	const t = useTranslations();
 	const searchParams = useSearchParams();
 	const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
 	const sortOrder = getValidatedSortOrder(searchParams.get('sort_order'));
@@ -70,11 +72,16 @@ export const MovieReviews = ({
 		},
 	});
 
-	const handleChange = ({ name, value }: { name: string, value: string }) => {
+	const sortOptions = useMemo((): { value: SortBy, label: string }[] => [
+		{ value: "updated_at", label: upperFirst(t('common.messages.date_updated')) },
+		{ value: "created_at", label: upperFirst(t('common.messages.date_created')) },
+	  ], [t]);
+
+	const handleChange = useCallback(({ name, value }: { name: string, value: string }) => {
 		const params = new URLSearchParams(searchParams.toString());
 		params.set(name, value);
 		router.push(`?${params.toString()}`);
-	};
+	}, [searchParams, router]);
 
 	useEffect(() => {
 		if (inView && hasNextPage) fetchNextPage();
@@ -83,33 +90,35 @@ export const MovieReviews = ({
 	return (
 	<div className="w-full h-full flex flex-col items-center gap-4">
 		<div className="w-full flex flex-col gap-4 justify-between lg:flex-row">
-		<MyReviewButton movie={movie} />
-		<div className="flex justify-end gap-2 items-center">
-			<Button
-			variant={'ghost'}
-			size={'sm'}
-			onClick={(e) => {
-				e.preventDefault();
-				handleChange({ name: 'sort_order', value: sortOrder === 'desc' ? 'asc' : 'desc' });
-			}}>
-			{sortOrder === 'desc' ? <ArrowDownNarrowWideIcon size={20} /> : <ArrowUpNarrowWideIcon size={20} />}
-			</Button>
-			<Select defaultValue={sortBy} onValueChange={(e) => handleChange({ name: 'sort_by', value: e })}>
-			<SelectTrigger>
-				<SelectValue />
-			</SelectTrigger>
-			<SelectContent>
-				{SORT_BY.map((sort) => (
-				<SelectItem key={sort} value={sort}>{upperFirst(t(`messages.${sort}`))}</SelectItem>
-				))}
-			</SelectContent>
-			</Select>
-		</div>
+			<div>
+				<MyReviewButton movie={movie} />
+			</div>
+			<ButtonGroup className="justify-end">
+				<TooltipBox tooltip={upperFirst(sortOrder === 'asc' ? t('common.messages.order_asc') : t('common.messages.order_desc'))}>
+					<Button variant={'outline'} onClick={() => handleChange({ name: 'sort_order', value: sortOrder === 'desc' ? 'asc' : 'desc' })}>
+						{sortOrder === 'desc' ? <Icons.orderDesc /> : <Icons.orderAsc />}
+					</Button>
+				</TooltipBox>
+				<Select defaultValue={sortBy} onValueChange={(e) => handleChange({ name: 'sort_by', value: e })}>
+				<SelectTrigger>
+					<SelectValue />
+				</SelectTrigger>
+				<SelectContent>
+					{sortOptions.map((sort) => (
+					<SelectItem key={sort.value} value={sort.value}>{sort.label}</SelectItem>
+					))}
+				</SelectContent>
+				</Select>
+			</ButtonGroup>
 		</div>
 		<div className='flex flex-col gap-2 w-full max-w-xl'>
 		{/* ALL */}
 		{(isLoading || reviews === undefined) ? (
-			<Icons.loader />
+			<div className="w-full overflow-hidden">
+				{Array.from({ length: 5 }).map((_, i) => (
+					<Skeleton key={i} className="h-24 w-full mb-2 rounded-md" style={{ animationDelay: `${i * 0.12}s`}}/>
+				))}
+			</div>
 		) : reviews?.pages[0]?.length ? (
 			reviews?.pages.map((page, i) => (
 				page?.map((review, index) => {
@@ -127,7 +136,7 @@ export const MovieReviews = ({
 				})
 			))
 		) : (
-			<p className="text-muted-foreground text-center font-semibold">{upperFirst(t('messages.no_reviews'))}</p>
+			<p className="text-muted-foreground text-center font-semibold">{upperFirst(t('common.messages.no_reviews'))}</p>
 		)}
 		{isFetchingNextPage ? <Icons.loader /> : null}
 		</div>
@@ -140,7 +149,7 @@ const MyReviewButton = ({
  } : {
 	movie: MediaMovie;
 }) => {
-	const common = useTranslations('common');
+	const t = useTranslations();
 	const { session } = useAuth();
 	const {
 	  data: activity,
@@ -153,26 +162,16 @@ const MyReviewButton = ({
 	if (!session) return;
 
 	if (isLoading || activity === undefined) return <Skeleton className="w-36 h-10 rounded-full"/>;
-  
-	if (!activity?.review) {
-		return (
-			<Link
-			href={`/film/${movie.slug}/review/create`}
-			className="bg-accent-blue rounded-full px-4 py-1 flex gap-2 items-center"
-			>
-				<Icons.edit />
-				{upperFirst(common('messages.write_review'))}
-			</Link>
-		);
-	}
-  
+
 	return (
-		<Link
-		href={`${movie.url}/review/${activity.review.id}`}
-		className="bg-accent-blue rounded-full px-4 py-1 flex gap-2 items-center"
+		<Button
+		variant={'outline'}
+		asChild
 		>
-			<Icons.edit />
-			{upperFirst(common('messages.my_review', { count: 1 }))}
-		</Link>
+			<Link href={activity?.review ? `/film/${movie.slug || movie.id}/review/${activity.review.id}` : `/film/${movie.slug || movie.id}/review/create`}>
+				{activity?.review ? <Icons.eye /> : <Icons.edit />}
+				{upperFirst(activity?.review ? t('common.messages.my_review', { count: 1 }) : t('common.messages.write_review'))}	
+			</Link>
+		</Button>
 	);
 };

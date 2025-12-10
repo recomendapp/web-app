@@ -40,13 +40,13 @@ const CardTvSeriesDefault = React.forwardRef<
 		<Card
 			ref={ref}
 			className={cn(
-				"flex items-center rounded-xl h-20 bg-muted hover:bg-muted-hover p-1",
+				"flex-row gap-2 items-center rounded-xl h-20 bg-muted hover:bg-muted-hover p-1",
 				className
 			)}
 			{...props}
 		>
 			<div
-			className={cn('relative h-full shrink-0 rounded-md overflow-hidden aspect-[2/3]', posterClassName)}
+			className={cn('relative h-full shrink-0 rounded-md overflow-hidden aspect-2/3', posterClassName)}
 			>
 				<ImageWithFallback
 				src={getTmdbImage({ path: tvSeries.poster_path, size: 'w342' })}
@@ -58,7 +58,7 @@ const CardTvSeriesDefault = React.forwardRef<
 				/>
 			</div>
 			<div className='px-2 py-1 space-y-1'>
-				<p className='line-clamp-2 break-words'>{tvSeries.name}</p>
+				<p className='line-clamp-2 wrap-break-word'>{tvSeries.name}</p>
 				{children}
 			</div>
 		</Card>
@@ -78,9 +78,9 @@ const CardTvSeriesPoster = React.forwardRef<
 			<Card
 				ref={ref}
 				className={cn(
-					"group relative transition flex gap-4 items-center w-32 shrink-0 rounded-md",
+					"group relative transition flex-row gap-4 items-center w-32 shrink-0 rounded-md",
 					"border-transparent hover:border-accent-yellow",
-					"aspect-[2/3] overflow-hidden",
+					"aspect-2/3 overflow-hidden",
 					className
 				)}
 				onMouseEnter={() => setIsHovered(true)}
@@ -119,9 +119,9 @@ const CardTvSeriesPoster = React.forwardRef<
 				{(device === 'desktop' && !disableActions) ? (
 					<div className="hidden absolute bottom-2 group-hover:flex w-full justify-center pointer-events-none">
 					{isHovered ? (
-						<div className="bg-background rounded-md w-fit pointer-events-auto">
-							<ButtonUserActivityTvSeriesWatch tvSeriesId={tvSeries.id} />
-							<ButtonUserWatchlistTvSeries tvSeriesId={tvSeries.id} />
+						<div className="space-x-2 w-fit pointer-events-auto">
+							<ButtonUserActivityTvSeriesWatch tvSeriesId={tvSeries.id} className="bg-background!" />
+							<ButtonUserWatchlistTvSeries tvSeriesId={tvSeries.id} className="bg-background!" />
 						</div>
 					) : null}
 					</div>
@@ -141,13 +141,13 @@ const CardTvSeriesRow = React.forwardRef<
 		<Card
 			ref={ref}
 			className={cn(
-				"group flex gap-4 items-center p-1",
+				"group flex-row gap-4 items-center p-1",
 				linked ? "hover:bg-muted-hover" : "",
 				className
 			)}
 			{...props}
 		>
-			<div className={cn("relative w-24 aspect-[2/3] rounded-md overflow-hidden", posterClassName)}>
+			<div className={cn("relative w-24 aspect-2/3 rounded-md overflow-hidden", posterClassName)}>
 				<ImageWithFallback
 				src={getTmdbImage({ path: tvSeries.poster_path, size: 'w342' })}
 				alt={tvSeries.name ?? ''}
@@ -162,7 +162,7 @@ const CardTvSeriesRow = React.forwardRef<
 					<div className="flex items-center gap-2">
 						<WithLink
 						href={linked ? (tvSeries.url ?? '') : undefined}
-						className='line-clamp-2 break-words'
+						className='line-clamp-2 wrap-break-word'
 						onClick={linked ? (e) => e.stopPropagation() : undefined}
 						>
 							{tvSeries.name}

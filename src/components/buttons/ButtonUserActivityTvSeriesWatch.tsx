@@ -36,13 +36,13 @@ const ButtonUserActivityTvSeriesWatch = React.forwardRef<
 		userId: session?.user.id,
 		tvSeriesId: tvSeriesId,
 	});
-	const insertActivity = useUserActivityTvSeriesInsertMutation();
-	const deleteActivity = useUserActivityTvSeriesDeleteMutation();
+	const { mutateAsync: insertActivity, isPending: isInsertPending } = useUserActivityTvSeriesInsertMutation();
+	const { mutateAsync: deleteActivity, isPending: isDeletePending } = useUserActivityTvSeriesDeleteMutation();
 
-	const handleInsertActivity = async (e?: React.MouseEvent<HTMLButtonElement>) => {
+	const handleInsertActivity = React.useCallback(async (e?: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e?.stopPropagation();
 		if (activity || !session?.user.id) return;
-		await insertActivity.mutateAsync({
+		await insertActivity({
 		userId: session?.user.id,
 		tvSeriesId: tvSeriesId,
 		}), {
@@ -50,19 +50,25 @@ const ButtonUserActivityTvSeriesWatch = React.forwardRef<
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		}
 		};
-	};
+	}, [activity, insertActivity, session, stopPropagation, t, tvSeriesId]);
 
-	const handleDeleteActivity = async (e?: React.MouseEvent<HTMLButtonElement>) => {
+	const handleDeleteActivity = React.useCallback(async (e?: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e?.stopPropagation();
 		if (!activity) return;
-		await deleteActivity.mutateAsync({
-			activityId: activity.id,
-		}), {
-			onError: () => {
-			toast.error(upperFirst(t('common.messages.an_error_occurred')));
+		createConfirmModal({
+			title: upperFirst(t('common.messages.remove_from_watched')),
+			description: t('components.media.actions.watch.remove_from_watched.description'),
+			onConfirm: async () => {
+				await deleteActivity({
+					activityId: activity.id,
+				}), {
+					onError: () => {
+					toast.error(upperFirst(t('common.messages.an_error_occurred')));
+					}
+				};
 			}
-		};
-	};
+		});
+	}, [activity, deleteActivity, stopPropagation, t, createConfirmModal]);
 
 	if (session === null) {
 		return (
@@ -70,18 +76,14 @@ const ButtonUserActivityTvSeriesWatch = React.forwardRef<
 			<Button
 			ref={ref}
 			size="icon"
-			variant={'action'}
-			className={cn(`rounded-full hover:text-foreground`, className)}
+			variant={'outline'}
+			className={cn(`rounded-full`, className)}
 			asChild
 			{...props}
 			>
-			<Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
-				<div
-				className={`transition border-2 rounded-full p-[0.5px] border-foreground hover:border-accent-blue hover:text-accent-blue`}
-				>
-				<Icons.check />
-				</div>
-			</Link>
+				<Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
+					<Icons.check />
+				</Link>
 			</Button>
 		</TooltipBox>
 		);
@@ -91,35 +93,23 @@ const ButtonUserActivityTvSeriesWatch = React.forwardRef<
 		<TooltipBox tooltip={activity ? upperFirst(t('common.messages.remove_from_watched')) : upperFirst(t('common.messages.mark_as_watched'))}>
 			<Button
 			ref={ref}
-			onClick={(e) => {
-				e.stopPropagation();
-				activity
-				? createConfirmModal({
-				title: upperFirst(t('common.messages.remove_from_watched')),
-				description: t('components.media.actions.watch.remove_from_watched.description'),
-				onConfirm: () => handleDeleteActivity(),
-				})
-				: handleInsertActivity()
-			}}
-			disabled={isLoading || isError || activity === undefined || insertActivity.isPending || deleteActivity.isPending}
+			onClick={activity ? handleDeleteActivity : handleInsertActivity}
+			disabled={isLoading || isError || activity === undefined || isInsertPending || isDeletePending}
 			size="icon"
-			variant={'action'}
-			className={cn('rounded-full', className)}
+			variant={'outline'}
+			className={cn(
+				'rounded-full',
+				activity ? 'bg-accent-blue!' : '',
+				className
+			)}
 			{...props}
 			>
-				{(isLoading || activity === undefined) ? (
+				{(isLoading || activity === undefined)  ? (
 				<Icons.spinner className="animate-spin" />
 				) : isError ? (
 				<AlertCircleIcon />
 				) : (
-				<div
-				className={`
-					transition border-2 rounded-full p-[0.5px] hover:border-accent-blue
-					${activity ? 'bg-accent-blue border-accent-blue' : 'text-foreground border-foreground hover:text-accent-blue'}
-				`}
-				>
-					<Icons.check />
-				</div>
+				<Icons.check />
 				)}
 			</Button>
 		</TooltipBox>

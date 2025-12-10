@@ -52,7 +52,7 @@ export function Exporter() {
 			<div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
 				{destinations.sort((a, b) => a.enabled === b.enabled ? 0 : a.enabled ? -1 : 1).map(destination => (
 					<Button
-						variant={'muted'}
+						variant={'outline'}
 						key={destination.destination}
 						disabled={!destination.enabled}
 						onClick={() => setSelectedDestination(destination)}

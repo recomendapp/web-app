@@ -21,7 +21,7 @@ const PlaylistFormPictureUpload = ({
       <div className="w-full shadow-2xl">
         <AspectRatio ratio={1 / 1}>
           {loading && (
-            <div className="absolute z-[1] w-full h-full flex items-center justify-center bg-black/80">
+            <div className="absolute z-1 w-full h-full flex items-center justify-center bg-black/80">
               <div className=" object-cover">
                 <Loader2 className="animate-spin" />
               </div>

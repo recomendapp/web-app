@@ -61,7 +61,7 @@ export const WidgetUserDiscovery = ({
 					))}
 				</Fragment>
 				))}
-				{hasNextPage ? <Button variant={'muted'} onClick={() => fetchNextPage()} disabled={isLoading || isFetchingNextPage}>
+				{hasNextPage ? <Button variant={'outline'} onClick={() => fetchNextPage()} disabled={isLoading || isFetchingNextPage}>
 					Afficher plus
 				</Button> : null}
 			</div>

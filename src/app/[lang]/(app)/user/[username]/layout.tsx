@@ -1,39 +1,8 @@
-import { truncate, upperFirst } from 'lodash';
-import { siteConfig } from '@/config/site';
 import { getProfile } from '@/features/server/users';
-import { Metadata } from 'next';
-import { seoLocales } from '@/lib/i18n/routing';
-import { getTranslations } from 'next-intl/server';
-import { SupportedLocale } from '@/translations/locales';
-
-export async function generateMetadata(
-  props: {
-    params: Promise<{ lang: string, username: string }>;
-  }
-): Promise<Metadata> {
-  const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
-  const user = await getProfile(params.username);
-  if (!user) return {
-      title: upperFirst(t('common.messages.user_not_found')),
-  };
-  return {
-    title: upperFirst(t('pages.user.metadata.title', { full_name: user.full_name!, username: user.username! })),
-    description: truncate(upperFirst(t('pages.user.metadata.description', { username: user.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
-    alternates: seoLocales(params.lang, `/@${user.username}`),
-    openGraph: {
-      siteName: siteConfig.name,
-      title: `${upperFirst(t('pages.user.metadata.title', { full_name: user.full_name!, username: user.username! }))} • ${siteConfig.name}`,
-      description: truncate(upperFirst(t('pages.user.metadata.description', { username: user.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
-      url: `${siteConfig.url}/${params.lang}/@${user.username}`,
-      images: user.avatar_url ? [
-        { url: user.avatar_url },
-      ] : undefined,
-      type: 'profile',
-      locale: params.lang,
-    },
-  };
-}
+import { notFound } from 'next/navigation';
+import { ProfileHeader } from './_components/ProfileHeader';
+import { ProfileNavbar } from './_components/ProfileNavbar';
+import { ProfilePrivateAccountCard } from './_components/ProfilePrivateAccountCard';
 
 export default async function UserLayout(
   props: {
@@ -44,6 +13,22 @@ export default async function UserLayout(
     children: React.ReactNode;
   }
 ) {
-
-  return props.children;
+  const params = await props.params;
+  const user = await getProfile(params.username);
+  if (!user) notFound();
+  return (
+    <>
+      <ProfileHeader profile={user} />
+      {user.visible ? (
+        <div className="flex flex-col items-center p-4 gap-2">
+          <ProfileNavbar profile={user} className='max-w-7xl'/>
+          <div className="w-full max-w-7xl">
+            {props.children}
+          </div>
+        </div>
+      ) : (
+        <ProfilePrivateAccountCard />
+      )}
+    </>
+  );
 }

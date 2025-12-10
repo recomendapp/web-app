@@ -27,16 +27,16 @@ export const Pagination = ({
 	const getPageNumbers = () => {
 		const pages: (number | string)[] = [];
 	
-		// Ajouter toujours la première page
+		// Add first page
 		if (page > 2) pages.push(1);
 		if (page > 3) pages.push("...");
 	
-		// Pages autour de la page active
+		// Add surrounding pages
 		for (let i = Math.max(1, page - 1); i <= Math.min(totalPages, page + 1); i++) {
 		  pages.push(i);
 		}
 	
-		// Ajouter toujours la dernière page
+		// Add last page
 		if (page < totalPages - 2) pages.push("...");
 		if (page < totalPages - 1) pages.push(totalPages);
 	
@@ -55,10 +55,7 @@ export const Pagination = ({
 		<PaginationComponent className={cn('', className)}>
 			<PaginationContent>
 				<PaginationItem>
-					<PaginationPrevious
-						href={generatePageLink(page - 1)}
-						disabled={page <= 1}
-					/>
+					<PaginationPrevious href={generatePageLink(page - 1)} disabled={page <= 1} />
 				</PaginationItem>
 				
 				{pageNumbers.map((pageNumber, index) =>
@@ -69,8 +66,8 @@ export const Pagination = ({
 				) : (
 						<PaginationItem key={pageNumber}>
 						<PaginationLink
-							href={generatePageLink(Number(pageNumber))}
-							isActive={pageNumber === page}
+						href={generatePageLink(Number(pageNumber))}
+						isActive={pageNumber === page}
 						>
 							{pageNumber}
 						</PaginationLink>
@@ -79,10 +76,7 @@ export const Pagination = ({
 				)}
 
 				<PaginationItem>
-					<PaginationNext
-					href={generatePageLink(page + 1)}
-					disabled={page >= totalPages}
-					/>
+					<PaginationNext href={generatePageLink(page + 1)} disabled={page >= totalPages} />
 				</PaginationItem>
 			</PaginationContent>
 		</PaginationComponent>

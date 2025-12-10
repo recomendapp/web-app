@@ -24,7 +24,7 @@ import { usePlaylistIsAllowedToEditQuery } from "@/features/client/playlist/play
 import { ShareControllerMovie } from "@/components/ShareController/ShareControllerMovie";
 import { ModalPlaylistMovieAdd } from "@/components/Modals/playlists/ModalPlaylistMovieAdd";
 import { ModalUserRecosMovieSend } from "@/components/Modals/recos/ModalUserRecosMovieSend";
-import { usePlaylistMovieDeleteMutation } from "@/features/client/playlist/playlistMutations";
+import { usePlaylistMovieDeleteMutation } from "@/api/client/mutations/playlistMutations";
 import ModaPlaylistMovieComment from "@/components/Modals/playlists/ModalPlaylistMovieComment";
 
 interface DataTableRowActionsProps {

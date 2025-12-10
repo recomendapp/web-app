@@ -87,11 +87,11 @@ export const MapSearchbar = () => {
 					onChange={(e) => setSearch(e.target.value)}
 					onFocus={handleFocus}
 					placeholder="Chercher un film sur la carte..."
-					className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+					className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
 				/>
 			</div>
 			{/* RESULTS */}
-			{onFocus && <div className=" z-[1] absolute bg-background w-full max-h-80 overflow-hidden overflow-y-auto p-1 rounded-b-lg">
+			{onFocus && <div className=" z-1 absolute bg-background w-full max-h-80 overflow-hidden overflow-y-auto p-1 rounded-b-lg">
 				{(results && results?.length > 0) ? results?.slice(0, displayedCount).map((movie, i) => (
 					<div
 						key={i}

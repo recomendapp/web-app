@@ -13,6 +13,7 @@ import { upperFirst } from 'lodash';
 import { Badge } from '@/components/ui/badge';
 import { calculateSave } from '@/utils/calculate-save';
 import { Offering, Package } from '@revenuecat/purchases-js';
+import { Spinner } from '@/components/ui/spinner';
 
 
 interface ModalSubscriptionProps extends ModalType {
@@ -61,7 +62,7 @@ export function ModalSubscription({
 		<Modal
 			open={props.open}
 			onOpenChange={(open) => !open && closeModal(props.id)}
-			className='outline-none'
+			className='outline-hidden'
 		>
 			<ModalHeader>
 				<ModalTitle>{upperFirst(t('common.messages.upgrade_to_plan', {
@@ -76,7 +77,7 @@ export function ModalSubscription({
 					<Card
 					key={plan.identifier}
 					className={`
-						flex items-center justify-between p-4 cursor-pointer hover:bg-muted-hover
+						flex-row items-center justify-between p-4 cursor-pointer hover:bg-muted-hover
 					`}
 					onClick={() => !isLoading && setSelectedPlan(plan)}
 					>
@@ -115,12 +116,8 @@ export function ModalSubscription({
 				))}
 			</ModalBody>
 			<ModalFooter>
-				<Button
-				variant='accent-yellow'
-				disabled={isLoading}
-				onClick={() => selectedPlan && purchasePackage(selectedPlan)}
-				>
-				{isLoading ? <Icons.loader className='w-6 h-6' /> : null}
+				<Button disabled={isLoading} onClick={() => selectedPlan && purchasePackage(selectedPlan)}>
+				{isLoading ? <Spinner /> : null}
 				{upperFirst(t('common.messages.upgrade_to_plan', {
 					plan: offering.serverDescription,
 				}))}

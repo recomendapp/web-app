@@ -9,12 +9,12 @@ import { notFound, redirect } from 'next/navigation';
 import { Icons } from '@/config/icons';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Pagination } from './_components/Pagination';
-import { ActiveFilters } from './_components/ActiveFilters';
-import { Filters } from './_components/Filters';
 import { getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage, getValidatePerPage } from './_components/constants';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
 import { SupportedLocale } from '@/translations/locales';
+import { Filters } from './_components/Filters';
+import { Pagination } from './_components/Pagination';
+import { ActiveFilters } from './_components/ActiveFilters';
 
 export async function generateMetadata(
   props: {
@@ -97,7 +97,7 @@ export default async function TvSeriesPage(
 					<Icons.error className='mr-1'/>
 					{upperFirst(t('common.messages.wrong_arguments'))}
 				</div>
-				<Button variant='accent-yellow'>
+				<Button asChild>
 					<Link href={`/person/${params.person_id}/tv-series`}>
 						Reset
 					</Link>
@@ -113,9 +113,10 @@ export default async function TvSeriesPage(
 	}
 
 	return (
-		<div className='@container/person-tv-series flex flex-col gap-4'>
-			<div>
-				<div className='flex flex-col @md/person-tv-series:flex-row @md/person-tv-series:justify-between items-center gap-2'>
+	<div className='flex flex-col items-center'>
+		<div className='@container/person-films flex flex-col gap-4 max-w-7xl w-full'>
+			<div className='space-y-2'>
+				<div className='flex flex-col @3xl/person-films:flex-row @3xl/person-films:justify-between items-center gap-2'>
 					<Filters
 					knownForDepartment={person.known_for_department!}
 					jobs={person.jobs}
@@ -163,5 +164,6 @@ export default async function TvSeriesPage(
 			searchParams={new URLSearchParams(searchParams as Record<string, string>)}
 			/>
 		</div>
+	</div>
 	)
 }

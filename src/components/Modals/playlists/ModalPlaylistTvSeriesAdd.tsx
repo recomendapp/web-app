@@ -12,7 +12,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Playlist, PlaylistSource } from '@recomendapp/types';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
-import { usePlaylistInsertMutation, usePlaylistTvSeriesInsertMutation } from '@/features/client/playlist/playlistMutations';
+import { usePlaylistInsertMutation, usePlaylistTvSeriesInsertMutation } from '@/api/client/mutations/playlistMutations';
 import { Icons } from '@/config/icons';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Label } from '@/components/ui/label';
@@ -112,7 +112,7 @@ export function ModalPlaylistTvSeriesAdd({
 		<Modal
 			open={props.open}
 			onOpenChange={(open) => !open && closeModal(props.id)}
-			className='gap-0 p-0 outline-none'
+			className='gap-0 p-0 outline-hidden'
 		>
 			<ModalHeader className='px-4 pb-4 pt-5'>
 				<ModalTitle>{upperFirst(t('common.messages.add_to_playlist'))}</ModalTitle>
@@ -123,7 +123,7 @@ export function ModalPlaylistTvSeriesAdd({
 					})}
 				</ModalDescription>
 			</ModalHeader>
-			<ModalBody className='!p-0 overflow-hidden'>
+			<ModalBody className='p-0! overflow-hidden'>
 				<Command className="overflow-hidden rounded-t-none border-t">
 					<CommandInput placeholder={upperFirst(t('common.messages.search_playlist'))} />
 					<Tabs onValueChange={setSource as Dispatch<SetStateAction<string>>} defaultValue={source} className="w-full">

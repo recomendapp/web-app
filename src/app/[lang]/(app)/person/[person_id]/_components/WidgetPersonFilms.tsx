@@ -3,9 +3,10 @@ import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
 import { MediaMovieAggregateCredits } from '@recomendapp/types';
 import { Link } from "@/lib/i18n/navigation";
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { CardMovie } from '@/components/Card/CardMovie';
 import { SupportedLocale } from '@/translations/locales';
+import { cn } from '@/lib/utils';
 
 interface WidgetPersonFilmsProps extends React.HTMLAttributes<HTMLDivElement> {
 	personSlug: string;
@@ -22,11 +23,9 @@ export async function WidgetPersonFilms({
   if (!credits || credits.length === 0) return null;
   return (
     <div className="flex flex-col gap-2">
-      <Button variant={'link'} size={'fit'} className='font-semibold text-xl p-0' asChild>
-        <Link href={`/person/${personSlug}/films`}>
-        {upperFirst(t('common.messages.film', { count: 2 }))}
-        </Link>
-      </Button>
+      <Link href={`/person/${personSlug}/films`} className={cn(buttonVariants({ variant: 'link' }), 'font-semibold text-xl p-0 w-fit')}>
+      {upperFirst(t('common.messages.film', { count: 2 }))}
+      </Link>
       <ScrollArea className="rounded-md">
         <div className="flex space-x-4 pb-4">
           {credits?.map((credit, i) => (

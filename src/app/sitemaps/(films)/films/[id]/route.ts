@@ -1,11 +1,11 @@
-import { createClient } from "@/lib/supabase/server-no-cookie";
+import { createAnonClient } from "@/lib/supabase/anon";
 import { NextResponse } from "next/server";
 
 export async function GET(
   _: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const supabase = await createClient();
+  const supabase = createAnonClient();
   const { id } = await params;
   const { data, error } = await supabase.storage
     .from("sitemaps")

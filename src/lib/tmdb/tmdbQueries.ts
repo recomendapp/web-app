@@ -1,7 +1,7 @@
 "use server"
 
 import { MediaMovie, MediaPerson, MediaTvSeries } from "@recomendapp/types";
-import { createClient } from "../supabase/server-no-cookie";
+import { createAnonClient } from "../supabase/anon";
 
 export type MultiResult =
   | { type: "movie"; media: MediaMovie }
@@ -17,7 +17,7 @@ export const getTmdbSearchMulti = async ({
   language: string;
   page: number;
 }) => {
-  const supabase = await createClient(language);
+  const supabase = createAnonClient(language);
   const tmdbResults = await (
     await fetch(
       `${process.env.TMDB_API_URL}/search/multi?query=${query}&include_adult=false&api_key=${process.env.TMDB_API_KEY}&language=${language}&page=${page}`
@@ -84,7 +84,7 @@ export const getTmdbSearchMovies = async ({
   language: string;
   page: number;
 }) => {
-  const supabase = await createClient(language);
+  const supabase = createAnonClient(language);
   const tmdbResults = await (
     await fetch(
       `${process.env.TMDB_API_URL}/search/movie?query=${query}&include_adult=false&api_key=${process.env.TMDB_API_KEY}&language=${language}&page=${page}`
@@ -123,7 +123,7 @@ export const getTmdbSearchTvSeries = async ({
   language: string;
   page: number;
 }) => {
-  const supabase = await createClient(language);
+  const supabase = createAnonClient(language);
   const tmdbResults = await (
     await fetch(
       `${process.env.TMDB_API_URL}/search/tv?query=${query}&include_adult=false&api_key=${process.env.TMDB_API_KEY}&language=${language}&page=${page}`
@@ -161,7 +161,7 @@ export const getTmdbSearchPersons = async ({
   language: string;
   page: number;
 }) => {
-  const supabase = await createClient(language);
+  const supabase = createAnonClient(language);
   const tmdbResults = await (
     await fetch(
       `${process.env.TMDB_API_URL}/search/person?query=${query}&include_adult=false&api_key=${process.env.TMDB_API_KEY}&language=${language}&page=${page}`

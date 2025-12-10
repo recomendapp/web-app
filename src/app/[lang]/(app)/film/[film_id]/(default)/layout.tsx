@@ -27,9 +27,11 @@ export default async function MovieLayout(
   return (
   <>
     <MovieHeader movie={movie} followersAvgRating={followersAvgRating?.follower_avg_rating} />
-    <div className="px-4 pb-4">
-      <MovieNavbar movieSlug={params.film_id} />
-      {children}
+    <div className="px-4 pb-4 flex flex-col items-center">
+        <div className='max-w-7xl w-full'>
+          <MovieNavbar movieSlug={params.film_id} />
+          {children}
+        </div>
     </div>
   </>
 	);

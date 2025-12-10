@@ -5,6 +5,7 @@ import { Icons } from '@/config/icons';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
+import { useCallback } from 'react';
 
 /**
  * Social button
@@ -13,22 +14,23 @@ import { useTranslations } from 'next-intl';
  * @param {React.ComponentProps<typeof Button>} props - The props of the element
  */
 export const SocialButton = ({
-	className,
+	variant = "outline",
+	size = "icon",
+	onClick,
 	...props
 } : React.ComponentProps<typeof Button>) => {
 	const common = useTranslations('common');
 	const {
 		toggleRightPanelContent,
 	} = useUI();
+
+	const handleOnClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+		toggleRightPanelContent(RightPanelSocial());
+		onClick?.(e);
+	}, [onClick, toggleRightPanelContent]);
 	return (
-		<Button
-		variant="ghost"
-		size={'icon'}
-		className={cn("rounded-full w-8 h-8", className)}
-		onClick={() => toggleRightPanelContent(RightPanelSocial())}
-		{...props}
-		>
-			<Icons.users className='w-4 h-4'/>
+		<Button variant={variant} size={size} onClick={handleOnClick} {...props}>
+			<Icons.users />
 			<span className="sr-only">{upperFirst(common('messages.open_social_panel'))}</span>
 		</Button>
 	);

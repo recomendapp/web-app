@@ -1,8 +1,8 @@
-import { createClient } from "@/lib/supabase/server-no-cookie";
+import { createAnonClient } from "@/lib/supabase/anon";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const supabase = await createClient();
+  const supabase = createAnonClient();
   const { data, error } = await supabase.storage
     .from("sitemaps")
     .download("movies/index.xml.gz");

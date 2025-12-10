@@ -103,12 +103,12 @@ const getMediaDetails = ({
 		date: getDate(),
 		description: getDescription(),
 		posterClassName: type === 'movie'
-			? 'aspect-[2/3] rounded-md'
+			? 'aspect-2/3 rounded-md'
 			: type === 'tv_series'
-			? 'aspect-[2/3] rounded-md'
+			? 'aspect-2/3 rounded-md'
 			: type === 'person'
-			? 'aspect-[1/1] rounded-full'
-			: 'aspect-[2/3] rounded-md',
+			? 'aspect-square rounded-full'
+			: 'aspect-2/3 rounded-md',
 	}
 
 };

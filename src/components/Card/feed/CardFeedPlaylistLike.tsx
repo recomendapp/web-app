@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import { Link } from "@/lib/i18n/navigation";
 import MediaPoster from "@/components/Media/MediaPoster";
 import { useFormatter, useTranslations } from "next-intl";
@@ -8,14 +9,14 @@ import { CardUser } from "@/components/Card/CardUser";
 import { upperFirst } from "lodash";
 import { forwardRef } from "react";
 
-interface FeedItemPlaylistLikeProps extends React.HTMLAttributes<HTMLDivElement> {
+interface CardFeedPlaylistLikeProps extends React.HTMLAttributes<HTMLDivElement> {
 	author: Profile;
 	playlistLike: PlaylistLike;
 }
 
-export const FeedItemPlaylistLike = forwardRef<
+export const CardFeedPlaylistLike = forwardRef<
 	HTMLDivElement,
-	FeedItemPlaylistLikeProps
+	CardFeedPlaylistLikeProps
 >(({ author, playlistLike, ...props }, ref) => {
 	const format = useFormatter();
 	const t = useTranslations();
@@ -61,4 +62,4 @@ export const FeedItemPlaylistLike = forwardRef<
 	  </div>
 	);
 });
-FeedItemPlaylistLike.displayName = 'FeedItemPlaylistLike';
+CardFeedPlaylistLike.displayName = 'CardFeedPlaylistLike';

@@ -19,7 +19,7 @@ export async function HeaderMinimal({ className }: HeaderMinimalProps) {
   return (
     <header
       className={cn(
-        'sticky top-0 z-[1] bg-background flex justify-between items-center p-4 h-header w-screen',
+        'sticky top-0 z-1 bg-background flex justify-between items-center p-4 h-header w-screen',
         className
       )}
     >

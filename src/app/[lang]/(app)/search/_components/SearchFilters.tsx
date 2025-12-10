@@ -95,7 +95,7 @@ export default function SearchFilters() {
         {routes.map((route, index) => (
           <Button
             key={index}
-            variant={route.active ? 'accent-yellow' : 'secondary'}
+            variant={route.active ? 'default' : 'outline'}
             className={`rounded-md shrink-0`}
             onClick={() => selectSearchFilter(route)}
           >

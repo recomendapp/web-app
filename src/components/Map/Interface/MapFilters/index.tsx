@@ -19,9 +19,9 @@ export const MapFilters = () => {
 			<Popover>
 				<PopoverTrigger asChild>
 					<Button
-						variant="muted-background"
-						size="icon"
-						className="relative h-8 w-8 rounded-full"
+					variant="outline"
+					size="icon"
+					className="relative h-8 w-8 rounded-full"
 					>
 						<FilterIcon className="h-4 w-4"/>
 					</Button>

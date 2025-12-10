@@ -152,11 +152,7 @@ export default function ForgotPassword() {
           </Button>
           <p className="px-8 text-center text-sm text-muted-foreground">
             {t('return_to_login')}{' '}
-            <Button
-              variant={'link-accent-yellow'}
-              className='inline p-0' 
-              asChild
-            >
+            <Button variant={'link'} className='inline p-0 text-accent-yellow' asChild>
               <Link
                 href={{
                   pathname: '/auth/login',
@@ -194,7 +190,7 @@ export default function ForgotPassword() {
         </InputOTP>
         <p className="px-8 text-center text-sm text-muted-foreground">
           {common('form.error.not_received_code')}{' '}
-          <Button variant={"link-accent-yellow"} className='p-0' onClick={() => handleSubmit()} disabled={isLoading}>
+          <Button variant={"link"} className='p-0 text-accent-yellow' onClick={() => handleSubmit()} disabled={isLoading}>
             {common('form.resend_code')}
           </Button>
         </p>

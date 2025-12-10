@@ -1,4 +1,5 @@
-'use client';
+'use client'
+
 import { Fragment, useState } from 'react';
 import { Link } from "@/lib/i18n/navigation";
 import YoutubeEmbed from '@/components/utils/Youtube';
@@ -55,7 +56,7 @@ export default function TvSerieHeader({
     <div>
       <ContextMenuTvSeries tvSeries={serie}>
         <HeaderBox background={serie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${serie.backdrop_path}`, alt: serie.name ?? '', unoptimized: true } : undefined}>
-          <div className="flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
+          <div className="max-w-7xl flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
             {/* SERIE POSTER */}
             <MediaPoster
               className="w-[200px]"
@@ -77,9 +78,9 @@ export default function TvSerieHeader({
                     onClick={() => openModal(ModalUserActivityTvSeriesFollowersRating, { tvSeriesId: serie.id })}
                   /> : null}
                 </div>
-              {(serie?.videos && serie.videos.length > 0) ? (
+              {(serie?.trailers && serie.trailers.length > 0) ? (
                 <SerieTrailerButton
-                  videos={serie.videos}
+                  videos={serie.trailers}
                   className="absolute bottom-2 right-2"
                 />
               ) : null}
@@ -102,7 +103,6 @@ export default function TvSerieHeader({
                   <div className='text-base font-semibold text-muted-foreground'>{serie.original_name}</div>
                 )}
               </h1>
-
               <div className=" space-y-2">
                 <div>
                   {serie.created_by?.map((director, index: number) => (
@@ -129,17 +129,19 @@ export default function TvSerieHeader({
           </div>
         </HeaderBox>
       </ContextMenuTvSeries>
-      <div className="flex justify-between gap-2 px-4 pb-4">
-        <div className="flex gap-2 overflow-x-auto items-center">
-          <ButtonUserActivityTvSeriesRating tvSeriesId={serie.id} />
-          <ButtonUserActivityTvSeriesLike tvSeriesId={serie.id} />
-          <ButtonUserActivityTvSeriesWatch tvSeriesId={serie.id} />
-          <ButtonUserWatchlistTvSeries tvSeriesId={serie.id} />
-          <ButtonUserActivityTvSeriesWatchedDate tvSeriesId={serie.id} />
-        </div>
-        <div className="flex gap-2 items-center">
-          <ButtonPlaylistTvSeriesAdd tvSeriesId={serie.id} tvSeriesTitle={serie.name} />
-          <ButtonUserRecosTvSeriesSend tvSeriesId={serie.id} tvSeriesTitle={serie.name} />
+      <div className='flex flex-col items-center'>
+        <div className="max-w-7xl w-full flex justify-between gap-2 px-4 pb-4">
+          <div className="flex gap-2 overflow-x-auto items-center">
+            <ButtonUserActivityTvSeriesRating tvSeriesId={serie.id} />
+            <ButtonUserActivityTvSeriesLike tvSeriesId={serie.id} />
+            <ButtonUserActivityTvSeriesWatch tvSeriesId={serie.id} />
+            <ButtonUserWatchlistTvSeries tvSeriesId={serie.id} />
+            <ButtonUserActivityTvSeriesWatchedDate tvSeriesId={serie.id} />
+          </div>
+          <div className="flex gap-2 items-center">
+            <ButtonPlaylistTvSeriesAdd tvSeriesId={serie.id} tvSeriesTitle={serie.name} />
+            <ButtonUserRecosTvSeriesSend tvSeriesId={serie.id} tvSeriesTitle={serie.name} />
+          </div>
         </div>
       </div>
     </div>

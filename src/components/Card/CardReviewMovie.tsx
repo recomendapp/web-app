@@ -31,7 +31,7 @@ const CardReviewMovieDefault = React.forwardRef<
 		<Card
 			ref={ref}
 			className={cn(
-				"@container/review flex gap-2 p-1 hover:bg-muted-hover",
+				"@container/review flex-row gap-2 p-1 hover:bg-muted-hover",
 				className
 			)}
 			{...props}

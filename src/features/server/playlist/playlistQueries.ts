@@ -1,7 +1,7 @@
 import { cache } from "@/lib/utils/cache";
 import { cache as RCache } from "react";
 import { playlistKeys } from "./playlistKeys";
-import { createClient } from "@/lib/supabase/server-no-cookie";
+import { createAnonClient } from "@/lib/supabase/anon";
 import { createServerClient } from "@/lib/supabase/server";
 import { Playlist } from "@recomendapp/types";
 
@@ -16,7 +16,7 @@ export const getPlaylistsFeatured = cache(
 			sortOrder: 'asc' | 'desc';
 		}
 	) => {
-		const supabase = await createClient();
+		const supabase = createAnonClient();
 		let from = (filters.page - 1) * filters.perPage;
 		let to = from + filters.perPage - 1;
 		let request = supabase

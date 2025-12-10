@@ -14,7 +14,7 @@ export default function PersonHeader({
 }) {
   return (
     <HeaderBox background={background ? { src: background, alt: person.name ?? '', unoptimized: true } : undefined}>
-      <div className="flex flex-col w-full gap-4 items-center @2xl/header-box:flex-row">
+      <div className="max-w-7xl flex flex-col w-full gap-4 items-center @2xl/header-box:flex-row">
         {/* MOVIE POSTER */}
         <PersonPoster
           className="w-[280px]"

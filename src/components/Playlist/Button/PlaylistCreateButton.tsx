@@ -28,9 +28,9 @@ export function PlaylistCreateButton({
   return (
       <TooltipBox tooltip={upperFirst(t('common.messages.create_a_playlist'))}>
         <Button
-          variant={'ghost'}
+          variant={'outline'}
           size={'icon'}
-          className={cn("rounded-full shrink-0", className)}
+          className={cn(className)}
           onClick={() => openModal(PlaylistModal, { filmId })}
         >
           {icon ? <Plus /> : upperFirst(t('common.messages.create_a_playlist'))}

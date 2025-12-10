@@ -39,14 +39,14 @@ const ButtonUserActivityTvSeriesLike = React.forwardRef<
 		tvSeriesId: tvSeriesId,
 	});
 
-	const insertActivity = useUserActivityTvSeriesInsertMutation();
-	const updateActivity = useUserActivityTvSeriesUpdateMutation();
+	const { mutateAsync: insertActivity, isPending: isInsertPending } = useUserActivityTvSeriesInsertMutation();
+	const { mutateAsync: updateActivity, isPending: isUpdatePending } = useUserActivityTvSeriesUpdateMutation();
 
-	const handleLike = async (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleLike = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
 		if (!session?.user.id) return;
 		if (activity) {
-			await updateActivity.mutateAsync({
+			await updateActivity({
 				activityId: activity.id,
 				isLiked: true,
 			}, {
@@ -60,7 +60,7 @@ const ButtonUserActivityTvSeriesLike = React.forwardRef<
 				}
 			});
 		} else {
-			await insertActivity.mutateAsync({
+			await insertActivity({
 				userId: session?.user.id,
 				tvSeriesId: tvSeriesId,
 				isLiked: true,
@@ -75,12 +75,13 @@ const ButtonUserActivityTvSeriesLike = React.forwardRef<
 				}
 			});
 		}
-	};
-	const handleUnlike = async (e: React.MouseEvent<HTMLButtonElement>) => {
+	}, [activity, insertActivity, tvSeriesId, queryClient, session, stopPropagation, t, updateActivity]);
+
+	const handleUnlike = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
 		if (!session?.user.id) return;
 		if (!activity) return;
-		await updateActivity.mutateAsync({
+		await updateActivity({
 			activityId: activity.id,
 			isLiked: false,
 		}, {
@@ -93,7 +94,7 @@ const ButtonUserActivityTvSeriesLike = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	};
+	}, [activity, queryClient, session, stopPropagation, t, updateActivity]);
 
 	if (session == null) {
 		return (
@@ -101,7 +102,7 @@ const ButtonUserActivityTvSeriesLike = React.forwardRef<
 			<Button
 			ref={ref}
 			size={'icon'}
-			variant={'action'}
+			variant={'outline'}
 			className={cn("rounded-full", className)}
 			asChild
 			{...props}
@@ -119,10 +120,14 @@ const ButtonUserActivityTvSeriesLike = React.forwardRef<
 			<Button
 			ref={ref}
 			onClick={(e) => activity?.is_liked ? handleUnlike(e) : handleLike(e)}
-			disabled={isLoading || isError || activity === undefined || insertActivity.isPending || updateActivity.isPending}
+			disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
 			size="icon"
-			variant={'action'}
-			className={cn("rounded-full", className)}
+			variant={'outline'}
+			className={cn(
+				'rounded-full',
+				activity?.is_liked ? 'bg-accent-pink!' : '',
+				className
+			)}
 			{...props}
 			>
 				{(isLoading || activity === undefined) ? (
@@ -131,10 +136,7 @@ const ButtonUserActivityTvSeriesLike = React.forwardRef<
 				<AlertCircleIcon />
 				) : (
 				<Icons.like
-				className={`
-				transition hover:text-accent-pink
-				${activity?.is_liked && 'text-accent-pink fill-accent-pink'}
-				`}
+				className={`${activity?.is_liked ? 'fill-foreground' : ''}`}
 				/>
 				)}
 			</Button>

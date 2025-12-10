@@ -31,7 +31,7 @@ export default function ActivityIcon({
     <TooltipBox tooltip={tooltip}>
         <div
           className={cn(`
-            relative flex shadow-sm w-8 aspect-[3/2] rounded-sm bg-background border-2 justify-center items-center shrink-0
+            relative flex shadow-xs w-8 aspect-3/2 rounded-sm bg-background border-2 justify-center items-center shrink-0
             border-accent-yellow
             ${onClick && 'cursor-pointer'}
             ${variant === 'user' && 'border-accent-yellow'}

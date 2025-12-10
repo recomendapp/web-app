@@ -11,7 +11,7 @@ import { usePlaylistIsAllowedToEditQuery } from "@/features/client/playlist/play
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
-import { usePlaylistTvSeriesUpdateMutation } from "@/features/client/playlist/playlistMutations";
+import { usePlaylistTvSeriesUpdateMutation } from "@/api/client/mutations/playlistMutations";
 
 interface ModalPlaylistTvSeriesCommentProps extends ModalType {
 	playlistItem: PlaylistItemTvSeries;

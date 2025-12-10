@@ -1,32 +1,33 @@
-"use client";
+"use client"
+
 import { Link } from "@/lib/i18n/navigation";
 import MediaPoster from "@/components/Media/MediaPoster";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { useFormatter, useTranslations } from "next-intl";
-import { Profile, UserReviewTvSeriesLike } from "@recomendapp/types";
+import { Profile, UserReviewMovieLike } from "@recomendapp/types";
 import { CardUser } from "@/components/Card/CardUser";
+import { CardReviewMovie } from "@/components/Card/CardReviewMovie";
 import { forwardRef } from "react";
-import { CardReviewTvSeries } from "@/components/Card/CardReviewTvSeries";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
-interface FeedItemRevieTvSeriesLikeProps extends React.HTMLAttributes<HTMLDivElement> {
+interface CardFeedReviewMovieLikeProps extends React.HTMLAttributes<HTMLDivElement> {
 	author: Profile;
-	reviewLike: UserReviewTvSeriesLike;
+	reviewLike: UserReviewMovieLike;
 }
 
-export const FeedItemRevieTvSeriesLike = forwardRef<
+export const CardFeedReviewMovieLike = forwardRef<
 	HTMLDivElement,
-	FeedItemRevieTvSeriesLikeProps
+	CardFeedReviewMovieLikeProps
 >(({ author, reviewLike, ...props }, ref) => {
 	const format = useFormatter();
 	const t = useTranslations();
-	const { tv_series } = reviewLike.review?.activity || {};
+	const { movie } = reviewLike.review?.activity || {};
 	return (
 	  <div ref={ref} className="@container/feed-item flex gap-4 bg-muted rounded-xl p-2 group" {...props}>
 		<MediaPoster
 		className="w-20 @md/feed-item:w-24"
-		src={getTmdbImage({ path: tv_series?.poster_path, size: 'w342' })}
-		alt={tv_series?.name ?? ''}
+		src={getTmdbImage({ path: movie?.poster_path, size: 'w342' })}
+		alt={movie?.title ?? ''}
 		width={96}
 		height={144}
 		unoptimized
@@ -51,24 +52,24 @@ export const FeedItemRevieTvSeriesLike = forwardRef<
 					{format.relativeTime(new Date(reviewLike.created_at), new Date())}
 				</div>}
 			</div>
-			<Link href={tv_series?.url ?? ''} className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
-				<span className='font-bold'>{tv_series?.name}</span>
+			<Link href={movie?.url ?? ''} className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
+				<span className='font-bold'>{movie?.title}</span>
 				{/* DATE */}
-				{tv_series?.first_air_date && <sup>
-					<DateOnlyYearTooltip date={tv_series.first_air_date} className='text-xs @md/feed-item:text-sm font-medium'/>
+				{movie?.release_date && <sup>
+					<DateOnlyYearTooltip date={movie.release_date} className='text-xs @md/feed-item:text-sm font-medium'/>
 				</sup>}
 			</Link>
 			{reviewLike.review && (
-				<CardReviewTvSeries
+				<CardReviewMovie
 				className="bg-background"
 				review={reviewLike.review}
 				activity={reviewLike.review.activity!}
 				author={reviewLike.review.activity?.user!}
-				url={`${tv_series?.url}/review/${reviewLike.review.id}`}
+				url={`${movie?.url}/review/${reviewLike.review.id}`}
 				/>
 			)}
 		</div>
 	  </div>
 	);
 });
-FeedItemRevieTvSeriesLike.displayName = 'FeedItemRevieTvSeriesLike';
+CardFeedReviewMovieLike.displayName = 'CardFeedReviewMovieLike';

@@ -40,7 +40,7 @@ export const useMediaReviewsMovieInfiniteQuery = ({
 	movieId: number;
 	filters: {
 		perPage: number;
-		sortBy: 'updated_at';
+		sortBy: 'updated_at' | 'created_at';
 		sortOrder: 'asc' | 'desc';
 	};
 }) => {
@@ -69,6 +69,9 @@ export const useMediaReviewsMovieInfiniteQuery = ({
 						case 'updated_at':
 							request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
 							break;
+						case 'created_at':
+							request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
+							break;
 						default:
 							break;
 					}
@@ -93,7 +96,7 @@ export const useMediaReviewsTvSeriesInfiniteQuery = ({
 	tvSeriesId: number;
 	filters: {
 		perPage: number;
-		sortBy: 'updated_at';
+		sortBy: 'updated_at' | 'created_at';
 		sortOrder: 'asc' | 'desc';
 	};
 }) => {
@@ -121,6 +124,9 @@ export const useMediaReviewsTvSeriesInfiniteQuery = ({
 					switch (filters.sortBy) {
 						case 'updated_at':
 							request = request.order('updated_at', { ascending: filters.sortOrder === 'asc' });
+							break;
+						case 'created_at':
+							request = request.order('created_at', { ascending: filters.sortOrder === 'asc' });
 							break;
 						default:
 							break;

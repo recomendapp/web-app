@@ -1,77 +1,85 @@
-'use client';
+'use client'
 
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { Skeleton } from '@/components/ui/skeleton';
-
 import { cn } from '@/lib/utils';
 import { useUserFollowProfileQuery } from '@/features/client/user/userQueries';
 import { useUserFollowProfileInsertMutation, useUserUnfollowProfileDeleteMutation } from '@/features/client/user/userMutations';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { useCallback } from 'react';
+import { useModal } from '@/context/modal-context';
 
 interface UserFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   profileId: string;
 }
 
-export function ProfileFollowButton({
+export const ProfileFollowButton = ({
   className,
   profileId,
-}: UserFollowButtonProps) {
-  const common = useTranslations('common');
+}: UserFollowButtonProps) => {
+  const t = useTranslations();
   const { session } = useAuth();
+  const { createConfirmModal } = useModal();
 
   const {
     data: isFollow,
-    isLoading: loading,
+    isLoading,
   } = useUserFollowProfileQuery({
     userId: session?.user.id,
     followeeId: profileId,
   });
 
-  const insertFollow = useUserFollowProfileInsertMutation();
-  const deleteFollowerMutation = useUserUnfollowProfileDeleteMutation();
+  const { mutateAsync: insertFollow } = useUserFollowProfileInsertMutation();
+  const { mutateAsync: deleteFollow } = useUserUnfollowProfileDeleteMutation();
 
-  const followUser = async () => {
-    session?.user.id &&
-      (await insertFollow.mutateAsync({
-        userId: session?.user.id,
-        followeeId: profileId,
-      }, {
-        onError: (error) => {
-          toast.error(upperFirst(common('messages.an_error_occurred')));
-        }
-      }));
-  }
+  const followUser = useCallback(async () => {
+    if (!session?.user.id) return;
+    await insertFollow({
+      userId: session?.user.id,
+      followeeId: profileId,
+    }, {
+      onError: (error) => {
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
+      }
+    });
+  }, [insertFollow, profileId, session, t]);
 
-  const unfollowUser = async () => {
-    session?.user.id &&
-      (await deleteFollowerMutation.mutateAsync({
-        userId: session?.user.id,
-        followeeId: profileId,
-      }, {
-        onError: (error) => {
-          toast.error(upperFirst(common('messages.an_error_occurred')));
-        }
-      }));
-  }
+  const unfollowUser = useCallback(async () => {
+    if (!session?.user.id) return;
+    createConfirmModal({
+      title: upperFirst(t('common.messages.are_u_sure')),
+      confirmLabel: upperFirst(t('common.messages.unfollow')),
+      onConfirm: async () => {
+        await deleteFollow({
+          userId: session?.user.id,
+          followeeId: profileId,
+        }, {
+          onError: (error) => {
+            toast.error(upperFirst(t('common.messages.an_error_occurred')));
+          }
+        });
+      },
+    });
+  }, [deleteFollow, profileId, session, t, createConfirmModal]);
 
   if (!session || session.user.id == profileId) return null;
 
   return (
     <div className={cn('flex items-center', className)}>
-      {loading ? (
-        <Skeleton className="h-10 w-16 rounded-full" />
+      {isLoading ? (
+        <Skeleton className="h-10 w-20 rounded-full" />
       ) : (
         <Button
-          variant={'accent-yellow'}
-          onClick={() => (isFollow ? unfollowUser() : followUser())}
-          className="rounded-full py-0"
+        variant={isFollow ? 'outline' : 'default'}
+        onClick={isFollow ? unfollowUser : followUser}
+        className="rounded-full"
         >
           {isFollow ? (
-            isFollow.is_pending ? upperFirst(common('messages.request_sent')) : upperFirst(common('messages.followed'))
-          ) : upperFirst(common('messages.follow'))}
+            isFollow.is_pending ? upperFirst(t('common.messages.request_sent')) : upperFirst(t('common.messages.followed'))
+          ) : upperFirst(t('common.messages.follow'))}
         </Button>
       )}
     </div>

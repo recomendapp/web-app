@@ -23,17 +23,22 @@ const ButtonPlaylistMovieAdd = React.forwardRef<
 	ButtonPlaylistMovieAddProps
 >(({ movieId, stopPropagation = true, movieTitle, className, ...props }, ref) => {
 	const { user } = useAuth();
-	const t = useTranslations('common');
+	const t = useTranslations();
 	const pathname = usePathname();
 	const { openModal } = useModal();
 
+	const handleClick = React.useCallback((e: React.MouseEvent) => {
+		stopPropagation && e.stopPropagation();
+		openModal(ModalPlaylistMovieAdd, { movieId, movieTitle: movieTitle! })
+	}, [stopPropagation, openModal, movieId, movieTitle]);
+
 	if (user === null) {
 		return (
-		  <TooltipBox tooltip={upperFirst(t('messages.please_login'))}>
+		  <TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
 			ref={ref}
 			size="icon"
-			variant={'action'}
+			variant={'outline'}
 			className={cn("rounded-full", className)}
 			asChild
 			{...props}
@@ -47,17 +52,14 @@ const ButtonPlaylistMovieAdd = React.forwardRef<
 	}
 
 	return (
-	<TooltipBox tooltip={upperFirst(t('messages.add_to_playlist'))}>
+	<TooltipBox tooltip={upperFirst(t('common.messages.add_to_playlist'))}>
 		<Button
 		ref={ref}
 		disabled={user === undefined}
 		size="icon"
-		variant={'action'}
+		variant={'outline'}
 		className={cn("rounded-full", className)}
-		onClick={(e) => {
-			stopPropagation && e.stopPropagation();
-			openModal(ModalPlaylistMovieAdd, { movieId, movieTitle: movieTitle! })
-		}}
+		onClick={handleClick}
 		{...props}
 		>
 		{user === undefined ? <Icons.spinner className="animate-spin" /> : <Icons.addPlaylist />}

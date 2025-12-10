@@ -46,15 +46,15 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 		movieId: movieId,
 	});
 
-	const insertActivity = useUserActivityMovieInsertMutation();
-	const updateActivity = useUserActivityMovieUpdateMutation();
+	const { mutateAsync: insertActivity, isPending: isInsertPending } = useUserActivityMovieInsertMutation();
+	const { mutateAsync: updateActivity, isPending: isUpdatePending } = useUserActivityMovieUpdateMutation();
 	
 
-	const handleRate = async (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleRate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
 		if (!session?.user.id) return;
 		if (activity) {
-			await updateActivity.mutateAsync({
+			await updateActivity({
 				activityId: activity.id,
 				rating: ratingValue,
 			}, {
@@ -63,7 +63,7 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 				}
 			});
 		} else {
-			await insertActivity.mutateAsync({
+			await insertActivity({
 				userId: session?.user.id,
 				movieId: movieId,
 				rating: ratingValue,
@@ -73,13 +73,13 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 				}
 			});
 		}
-	  };
-	const handleUnrate = async (e: React.MouseEvent<HTMLButtonElement>) => {
+	}, [activity, insertActivity, movieId, ratingValue, session, stopPropagation, t, updateActivity]);
+	const handleUnrate = React.useCallback(async (e: React.MouseEvent<HTMLButtonElement>) => {
 		stopPropagation && e.stopPropagation();
 		if (activity?.review) {
 			return toast.error(t('components.media.actions.rating.remove_rating.has_review'));
 		}
-		await updateActivity.mutateAsync({
+		await updateActivity({
 		  activityId: activity!.id!,
 		  rating: null,
 		}, {
@@ -87,7 +87,7 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	  };
+	}, [activity, updateActivity, stopPropagation, t]);
 
 	React.useEffect(() => {
 		activity?.rating && setRatingValue(activity?.rating);
@@ -98,8 +98,9 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 		<TooltipBox tooltip={upperFirst(t('common.messages.please_login'))}>
 			<Button
 			ref={ref}
-			variant={'rating'}
-			className={cn('', className)}
+			size={'icon'}
+			variant={'outline'}
+			className={cn('rounded-full', className)}
 			asChild
 			{...props}
 			>
@@ -117,8 +118,13 @@ const ButtonUserActivityMovieRating = React.forwardRef<
 			<DialogTrigger asChild>
 				<Button
 				ref={ref}
-				disabled={isLoading || isError || activity === undefined || insertActivity.isPending || updateActivity.isPending}
-				variant={activity?.rating ? 'rating-enabled' : 'rating'}
+				disabled={isLoading || isError || activity === undefined || isInsertPending || isUpdatePending}
+				variant={'outline'}
+				size={activity?.rating ? 'default' : 'icon'}
+				className={cn(
+					activity?.rating ? 'bg-background! border-accent-yellow! text-accent-yellow! border-2' : 'rounded-full',
+					className
+				)}
 				{...props}
 				>
 					{(isLoading || activity === undefined) ? (

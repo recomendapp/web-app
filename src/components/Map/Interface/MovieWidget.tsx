@@ -125,7 +125,7 @@ export const MovieWidget = () => {
 									<DateOnlyYearTooltip date={movie.release_date ?? ''} className=' text-xs font-medium'/>
 								</sup>
 								{movie.original_title !== movie.title && (
-									<div className='text-xs !ml-0 font-semibold text-muted-foreground line-clamp-1'>{movie.original_title}</div>
+									<div className='text-xs ml-0! font-semibold text-muted-foreground line-clamp-1'>{movie.original_title}</div>
 								)}
 							</div>
 							<div className=" space-y-2">
