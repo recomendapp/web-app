@@ -2,7 +2,9 @@ import { defineRouting } from 'next-intl/routing';
 import { AlternateURLs } from 'next/dist/lib/metadata/types/alternative-urls-types';
 import { siteConfig } from '@/config/site';
 import { defaultSupportedLocale, supportedLocales } from '@/translations/locales';
- 
+
+export const localeCookieName = 'LOCALE';
+
 export const routing = defineRouting({
   // A list of all locales that are supported
   locales: supportedLocales,
@@ -10,6 +12,9 @@ export const routing = defineRouting({
   defaultLocale: defaultSupportedLocale,
   // Prefix for all locale-aware routes
   localePrefix: 'as-needed',
+  localeCookie: {
+    name: localeCookieName,
+  }
 });
 
 export const seoLocales = (currentLocale: string, endpoint: string): AlternateURLs => {

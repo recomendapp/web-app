@@ -3,6 +3,7 @@ import createIntlMiddleware from 'next-intl/middleware';
 import { routing } from './lib/i18n/routing';
 import { siteConfig } from './config/site';
 import { getSupabaseClaims } from './lib/supabase/jwt';
+import { ensureLocaleCookie } from './lib/i18n/ensure-locale-cookie';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -58,6 +59,8 @@ export async function proxy(request: NextRequest) {
       new URL(`/${locale}/auth/login?redirect=${redirectTo}`, request.url)
     );
   }
+
+  ensureLocaleCookie(request, response, locale);
   
   return (response);
 }
