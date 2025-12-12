@@ -31,6 +31,7 @@ export function LoginPasswordForm({
   }), [common]);
 
   const onSubmit = useCallback(async (event: React.SyntheticEvent) => {
+    event?.preventDefault();
     try {
       setIsLoading(true);
       const emailForm = (event.target as HTMLFormElement).email.value;

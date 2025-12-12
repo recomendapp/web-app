@@ -15,7 +15,7 @@ import { Images } from '@/config/images';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { Link, useRouter } from "@/lib/i18n/navigation";
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { useLocale, useTranslations } from 'next-intl';
 import * as z from 'zod';
@@ -151,7 +151,7 @@ export default function Signup() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [usernameAvailability.isAvailable, common]);
 	
-	const handleSubmit = async (data: SignupFormValues) => {
+	const handleSubmit = useCallback(async (data: SignupFormValues) => {
 		try {
 			setIsLoading(true);
 			if (turnstileStatus !== 'success') {
@@ -185,9 +185,9 @@ export default function Signup() {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, [signup, t, common, locale, turnstileStatus]);
 
-	const resendOtp = async () => {
+	const resendOtp = useCallback(async () => {
 		try {
 			setIsLoading(true);
 			await loginWithOtp(form.getValues('email'), redirectTo);
@@ -207,9 +207,9 @@ export default function Signup() {
 		} finally {
 			setIsLoading(false);
 		}
-	};
+	}, [loginWithOtp, redirectTo, form, common]);
 
-	const handleVerifyOtp = async (otp: string) => {
+	const handleVerifyOtp = useCallback(async (otp: string) => {
 		try {
 		  setIsLoading(true);
 		  const { error } = await supabase.auth.verifyOtp({
@@ -236,7 +236,7 @@ export default function Signup() {
 		} finally {
 		  setIsLoading(false);
 		}
-	};
+	}, [supabase, router, redirectTo, form, common]);
 	
 	return (
 	<div

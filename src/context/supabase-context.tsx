@@ -17,7 +17,7 @@ export const SupabaseProvider = ({
 }) => {
 	const locale = useLocale();
 	const supabase = useMemo(() => {
-		return createBrowserClient<Database>(
+		const client = createBrowserClient<Database>(
 			SUPABASE_URL,
 			SUPABASE_ANON_KEY,
 			{
@@ -28,6 +28,10 @@ export const SupabaseProvider = ({
 				},
 			},
 		);
+
+		(client.auth as any).suppressGetSessionWarning = true;
+
+		return client;
 	}, [locale]);
 
 	return (

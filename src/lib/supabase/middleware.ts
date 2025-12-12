@@ -10,7 +10,7 @@ export const createMiddlewareClient = ({
   request: NextRequest;
   response: NextResponse;
 }) => {
-  return createServerClient<Database>(
+  const client = createServerClient<Database>(
     SUPABASE_URL,
     SUPABASE_ANON_KEY,
     {
@@ -27,4 +27,8 @@ export const createMiddlewareClient = ({
       },
     }
   );
+
+  (client.auth as any).suppressGetSessionWarning = true;
+
+  return client;
 };

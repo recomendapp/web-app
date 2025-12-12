@@ -9,7 +9,7 @@ import { getLocale } from 'next-intl/server';
 export const createServerClient = async () => {
   const cookieStore = await cookies();
   const locale = await getLocale();
-  return createServerClientSupabase<Database>(
+  const client = createServerClientSupabase<Database>(
     SUPABASE_URL,
     SUPABASE_ANON_KEY,
     {
@@ -36,4 +36,8 @@ export const createServerClient = async () => {
       }
     },
   );
+
+  (client.auth as any).suppressGetSessionWarning = true;
+
+  return client;
 };
