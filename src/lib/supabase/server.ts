@@ -5,8 +5,9 @@ import {
 import { Database } from '@recomendapp/types';
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from '../env';
 import { getLocale } from 'next-intl/server';
+import { cache } from 'react';
 
-export const createServerClient = async () => {
+export const createServerClient = cache(async () => {
   const cookieStore = await cookies();
   const locale = await getLocale();
   const client = createServerClientSupabase<Database>(
@@ -40,4 +41,4 @@ export const createServerClient = async () => {
   (client.auth as any).suppressGetSessionWarning = true;
 
   return client;
-};
+});

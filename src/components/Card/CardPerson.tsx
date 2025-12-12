@@ -1,4 +1,5 @@
-'use client';
+'use client'
+
 import * as React from "react"
 import { cn } from "@/lib/utils";
 import { Card } from "../ui/card";
@@ -7,8 +8,8 @@ import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { useRouter } from "@/lib/i18n/navigation";
 import { Button } from "../ui/button";
 import { BadgeMedia } from "../Badge/BadgeMedia";
-import { DateOnlyYearTooltip } from "../utils/Date";
 import { WithLink } from "../utils/WithLink";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 
 interface CardPersonProps
 	extends React.ComponentProps<typeof Card> {
@@ -38,16 +39,12 @@ const CardPersonDefault = React.forwardRef<
 			className={cn('relative h-full shrink-0 overflow-hidden aspect-square rounded-full', posterClassName)}
 			>
 				<ImageWithFallback
-					src={person.profile_url ?? ''}
+					src={getTmdbImage({ path: person.profile_path, size: 'w342' })}
 					alt={person.name ?? ''}
 					fill
 					className="object-cover"
 					type="person"
-					sizes={`
-					(max-width: 640px) 96px,
-					(max-width: 1024px) 120px,
-					150px
-					`}
+					unoptimized
 				/>
 			</div>
 			<div className='px-2 py-1 space-y-1'>
@@ -76,16 +73,12 @@ const CardPersonRow = React.forwardRef<
 		>
 			<div className={cn("relative w-24 aspect-2/3 rounded-md overflow-hidden", posterClassName)}>
 				<ImageWithFallback
-					src={person.profile_url ?? ''}
-					alt={person.name ?? ''}
-					fill
-					className="object-cover"
-					type={'person'}
-					sizes={`
-					(max-width: 640px) 96px,
-					(max-width: 1024px) 120px,
-					150px
-					`}
+				src={getTmdbImage({ path: person.profile_path, size: 'w342' })}
+				alt={person.name ?? ''}
+				fill
+				className="object-cover"
+				type={'person'}
+				unoptimized
 				/>
 			</div>
 			<div className="flex items-center gap-4 justify-between w-full">
