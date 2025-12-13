@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 import { MovieCreateReview } from './_components/MovieCreateReview';
 import { notFound } from 'next/navigation';
 import { SupportedLocale } from '@/translations/locales';
+import { MediaMovie } from '@recomendapp/types';
 
 export async function generateMetadata(
   props: {
@@ -18,12 +19,15 @@ export async function generateMetadata(
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id: movieId } = getIdFromSlug(params.film_id);
-  const movie = await getMovie(params.lang, movieId);
-  if (!movie) return { title: upperFirst(t('common.messages.film_not_found')) };
-  return {
-    title: t('pages.review.create.metadata.title', { title: movie.title! }),
-    description: t('pages.review.create.metadata.description', { title: movie.title! }),
-  };
+  try {
+    const movie = await getMovie(params.lang, movieId);
+    return {
+      title: t('pages.review.create.metadata.title', { title: movie.title! }),
+      description: t('pages.review.create.metadata.description', { title: movie.title! }),
+    };
+  } catch {
+    return { title: upperFirst(t('common.messages.film_not_found')) };
+  }
 }
 
 export default async function CreateReview(
@@ -36,7 +40,11 @@ export default async function CreateReview(
 ) {
   const params = await props.params;
   const { id: movieId } = getIdFromSlug(params.film_id);
-  const movie = await getMovie(params.lang, movieId);
-  if (!movie) return notFound();
+  let movie: MediaMovie;
+  try {
+    movie = await getMovie(params.lang, movieId);
+  } catch {
+    return notFound();
+  }
   return <MovieCreateReview movie={movie} slug={params.film_id} />;
 }

@@ -3,6 +3,7 @@ import MovieHeader from './_components/MovieHeader';
 import MovieNavbar from './_components/MovieNavbar';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getMovie, getMovieUserActivitiesFollowerAverageRating } from '@/features/server/media/mediaQueries';
+import { MediaMovie } from '@recomendapp/types';
 
 export default async function MovieLayout(
   props: {
@@ -19,8 +20,13 @@ export default async function MovieLayout(
       children
   } = props;
   const { id: movieId } = getIdFromSlug(params.film_id);
-  const movie = await getMovie(params.lang, movieId);
-  if (!movie) notFound();
+
+  let movie: MediaMovie;
+  try {
+    movie = await getMovie(params.lang, movieId);
+  } catch {
+    return notFound();
+  }
   const followersAvgRating = await getMovieUserActivitiesFollowerAverageRating({
     movieId: movieId,
   })

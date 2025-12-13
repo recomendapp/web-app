@@ -27,24 +27,27 @@ export async function generateMetadata(
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id } = getIdFromSlug(params.person_id);
-  const person = await getPerson(params.lang, id);
-  if (!person) return { title: upperFirst(t('common.messages.person_not_found')) };
-  return {
-	title: t('pages.person.tv_series.metadata.title', { name: person.name! }),
-	description: truncate(t('pages.person.tv_series.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
-	alternates: seoLocales(params.lang, `/person/${person.slug}/tv-series`),
-	openGraph: {
-      siteName: siteConfig.name,
-      title: `${t('pages.person.tv_series.metadata.title', { name: person.name! })} • ${siteConfig.name}`,
-      description: truncate(t('pages.person.tv_series.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
-      url: `${siteConfig.url}/${params.lang}/person/${person.slug}/tv-series`,
-      images: person.profile_url ? [
-        { url: person.profile_url },
-      ] : undefined,
-      type: 'profile',
-      locale: params.lang,
-    }
-  };
+  try {
+	  const person = await getPerson(params.lang, id);
+	  return {
+		title: t('pages.person.tv_series.metadata.title', { name: person.name! }),
+		description: truncate(t('pages.person.tv_series.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
+		alternates: seoLocales(params.lang, `/person/${person.slug}/tv-series`),
+		openGraph: {
+		  siteName: siteConfig.name,
+		  title: `${t('pages.person.tv_series.metadata.title', { name: person.name! })} • ${siteConfig.name}`,
+		  description: truncate(t('pages.person.tv_series.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
+		  url: `${siteConfig.url}/${params.lang}/person/${person.slug}/tv-series`,
+		  images: person.profile_url ? [
+			{ url: person.profile_url },
+		  ] : undefined,
+		  type: 'profile',
+		  locale: params.lang,
+		}
+	  };
+  } catch {
+	return { title: upperFirst(t('common.messages.person_not_found')) };
+  }
 }
 
 export default async function TvSeriesPage(
@@ -75,8 +78,12 @@ export default async function TvSeriesPage(
 	const job = getValidateJob(searchParams.job);
 	const t = await getTranslations({ locale: params.lang as SupportedLocale });
 	const { id } = getIdFromSlug(params.person_id);
-	const person = await getPerson(params.lang, id);
-	if (!person) return notFound();
+	let person: Awaited<ReturnType<typeof getPerson>>;
+	try {
+		person = await getPerson(params.lang, id);
+	} catch {
+		return notFound();
+	}
 	const { data: series, error, count } = await getPersonTvSeries(
 		params.lang,
 		id,

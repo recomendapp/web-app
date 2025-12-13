@@ -21,6 +21,9 @@ services:
         NEXT_PUBLIC_TMDB_IMAGE_BASE_URL: ${NEXT_PUBLIC_TMDB_IMAGE_BASE_URL}
         NEXT_PUBLIC_JUSTWATCH_API_KEY: ${NEXT_PUBLIC_JUSTWATCH_API_KEY}
         NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+    environment:
+      NODE_OPTIONS: "--inspect=0.0.0.0:9229"
     ports:
       - "3000:3000"
+      - "9229:9229"
     restart: unless-stopped

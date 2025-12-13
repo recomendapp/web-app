@@ -17,34 +17,37 @@ import { CardMovie } from '@/components/Card/CardMovie';
 import { SupportedLocale } from '@/translations/locales';
 
 export async function generateMetadata(
-  props: {
-	params: Promise<{
-	  lang: string;
-	  person_id: string;
-	}>;
-  }
+	props: {
+		params: Promise<{
+			lang: string;
+			person_id: string;
+		}>;
+	}
 ): Promise<Metadata> {
-  const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
-  const { id } = getIdFromSlug(params.person_id);
-  const person = await getPerson(params.lang, id);
-  if (!person) return { title: upperFirst(t('common.messages.person_not_found')) };
-  return {
-	title: t('pages.person.films.metadata.title', { name: person.name! }),
-	description: truncate(t('pages.person.films.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
-	alternates: seoLocales(params.lang, `/person/${person.slug}/films`),
-	openGraph: {
-      siteName: siteConfig.name,
-      title: `${t('pages.person.films.metadata.title', { name: person.name! })} • ${siteConfig.name}`,
-      description: truncate(t('pages.person.films.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
-      url: `${siteConfig.url}/${params.lang}/person/${person.slug}/films`,
-      images: person.profile_url ? [
-        { url: person.profile_url },
-      ] : undefined,
-      type: 'profile',
-      locale: params.lang,
-    }
-  };
+	const params = await props.params;
+	const t = await getTranslations({ locale: params.lang as SupportedLocale });
+	const { id } = getIdFromSlug(params.person_id);
+	try {
+		const person = await getPerson(params.lang, id);
+		return {
+			title: t('pages.person.films.metadata.title', { name: person.name! }),
+			description: truncate(t('pages.person.films.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
+			alternates: seoLocales(params.lang, `/person/${person.slug}/films`),
+			openGraph: {
+			siteName: siteConfig.name,
+			title: `${t('pages.person.films.metadata.title', { name: person.name! })} • ${siteConfig.name}`,
+			description: truncate(t('pages.person.films.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
+			url: `${siteConfig.url}/${params.lang}/person/${person.slug}/films`,
+			images: person.profile_url ? [
+				{ url: person.profile_url },
+			] : undefined,
+			type: 'profile',
+			locale: params.lang,
+			}
+		};
+  	} catch {
+		return { title: upperFirst(t('common.messages.person_not_found')) };
+	}
 }
 
 export default async function FilmsPage(
@@ -75,8 +78,12 @@ export default async function FilmsPage(
 	const job = getValidateJob(searchParams.job);
 	const t = await getTranslations({ locale: params.lang as SupportedLocale });
 	const { id } = getIdFromSlug(params.person_id);
-	const person = await getPerson(params.lang, id);
-	if (!person) return notFound();
+	let person: Awaited<ReturnType<typeof getPerson>>;
+	try {
+		person = await getPerson(params.lang, id);
+	} catch {
+		return notFound();
+	}
 	const { data: movies, error, count } = await getPersonFilms(
 		params.lang,
 		id,

@@ -9,6 +9,7 @@ import { siteConfig } from '@/config/site';
 import { seoLocales } from '@/lib/i18n/routing';
 import { TVSeries, WithContext } from 'schema-dts';
 import { SupportedLocale } from '@/translations/locales';
+import { MediaTvSeries } from '@recomendapp/types';
 
 export async function generateMetadata(
   props: {
@@ -21,28 +22,10 @@ export async function generateMetadata(
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
-  const serie = await getTvSeries(params.lang, serieId);
-  if (!serie) return { title: upperFirst(t('common.messages.tv_series_not_found')) };
-  return {
-    title: t('pages.tv_series.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() }),
-    description: truncate(
-      serie.created_by
-        ? t('pages.tv_series.metadata.description', {
-          title: serie.name!,
-          creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.created_by.map((creator) => creator.name ?? '')),
-          year: new Date(String(serie.first_air_date)).getFullYear(),
-          overview: serie.overview!,
-        }) : t('pages.tv_series.metadata.description_no_creator', {
-          title: serie.name!,
-          year: new Date(String(serie.first_air_date)).getFullYear(),
-          overview: serie.overview!,
-        }),
-      { length: siteConfig.seo.description.limit }
-    ),
-    alternates: seoLocales(params.lang, `/tv-series/${serie.slug}`),
-    openGraph: {
-      siteName: siteConfig.name,
-      title: `${t('pages.tv_series.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
+  try {
+    const serie = await getTvSeries(params.lang, serieId);
+    return {
+      title: t('pages.tv_series.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() }),
       description: truncate(
         serie.created_by
           ? t('pages.tv_series.metadata.description', {
@@ -57,14 +40,35 @@ export async function generateMetadata(
           }),
         { length: siteConfig.seo.description.limit }
       ),
-      url: `${siteConfig.url}/${params.lang}/tv-series/${serie.slug}`,
-      images: serie.poster_url ? [
-        { url: serie.poster_url }
-      ] : undefined,
-      type: 'video.tv_show',
-      locale: params.lang,
-    },
-  };
+      alternates: seoLocales(params.lang, `/tv-series/${serie.slug}`),
+      openGraph: {
+        siteName: siteConfig.name,
+        title: `${t('pages.tv_series.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,
+        description: truncate(
+          serie.created_by
+            ? t('pages.tv_series.metadata.description', {
+              title: serie.name!,
+              creators: new Intl.ListFormat(params.lang, { style: 'long', type: 'conjunction' }).format(serie.created_by.map((creator) => creator.name ?? '')),
+              year: new Date(String(serie.first_air_date)).getFullYear(),
+              overview: serie.overview!,
+            }) : t('pages.tv_series.metadata.description_no_creator', {
+              title: serie.name!,
+              year: new Date(String(serie.first_air_date)).getFullYear(),
+              overview: serie.overview!,
+            }),
+          { length: siteConfig.seo.description.limit }
+        ),
+        url: `${siteConfig.url}/${params.lang}/tv-series/${serie.slug}`,
+        images: serie.poster_url ? [
+          { url: serie.poster_url }
+        ] : undefined,
+        type: 'video.tv_show',
+        locale: params.lang,
+      },
+    };
+  } catch {
+    return { title: upperFirst(t('common.messages.tv_series_not_found')) };
+  }
 }
 
 export default async function TvSeriesPage(
@@ -77,8 +81,12 @@ export default async function TvSeriesPage(
 ) {
   const params = await props.params;
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
-  const serie = await getTvSeries(params.lang, serieId);
-  if (!serie) notFound();
+  let serie: MediaTvSeries;
+  try {
+    serie = await getTvSeries(params.lang, serieId);
+  } catch {
+    return notFound();
+  }
   const jsonLd: WithContext<TVSeries> = {
     '@context': 'https://schema.org',
     '@type': 'TVSeries',

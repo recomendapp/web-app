@@ -16,27 +16,36 @@ import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 import { SupportedLocale } from '@/translations/locales';
 import { ApiProvider } from './api-context';
+import { checkMaintenance } from '@/features/server/utils';
 
-export default async function Provider({
+export const Providers = async ({
   children,
   locale,
 }: {
   children: React.ReactNode;
   locale: SupportedLocale;
-}) {
+}) => {
   const supabase = await createServerClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  const { data: is_maintenance } = await supabase.rpc('is_maintenance').single();
-  const isMaintenanceMode = is_maintenance && process.env.NODE_ENV !== 'development';
+  const [
+    sessionRes,
+    isMaintenanceMode,
+    cookiesStore,
+    device,
+  ] = await Promise.all([
+    supabase.auth.getSession(),
+    checkMaintenance(),
+    cookies(),
+    getServerDevice(),
+  ]);
+  const session = sessionRes.data.session;
   // UI
-  const cookiesStore = await cookies();
   const layout = cookiesStore.get("ui:layout");
   const sidebarOpen = cookiesStore.get("ui-sidebar:open");
   const rightPanelOpen = cookiesStore.get("ui-right-panel:open");
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
-  const device = await getServerDevice();
+
   return (
-    <NextIntlClientProvider>
+    <NextIntlClientProvider locale={locale}>
       <SupabaseProvider>
         <ReactQueryProvider>
           <AuthProvider session={session}>
@@ -92,9 +101,4 @@ const MaintenancePage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-const Fake: React.FC = () => {
-  console.log('FAKE RENDER');
-  return null;
 };

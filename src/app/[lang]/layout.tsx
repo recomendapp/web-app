@@ -3,9 +3,8 @@ import { Metadata, Viewport } from 'next';
 import { siteConfig } from '@/config/site';
 import { fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
-import Providers from '@/context/Providers';
+import { Providers } from '@/context/Providers';
 import Script from 'next/script';
-import { getLangDir } from 'rtl-detect';
 import { routing, seoLocales } from '@/lib/i18n/routing';
 import { SupportedLocale } from '@/translations/locales';
 

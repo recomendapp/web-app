@@ -8,8 +8,6 @@ import { cache as reactCache } from "react";
 export const MEDIA_REVALIDATE_TIME = 60 * 60 * 24; // 24 hours
 
 /* -------------------------------------------------------------------------- */
-
-/* -------------------------------------------------------------------------- */
 /*                                    MOVIE                                   */
 /* -------------------------------------------------------------------------- */
 export const getMovie = cache(
@@ -25,7 +23,7 @@ export const getMovie = cache(
 				)
 			`)
 			.eq('id', id)
-			.maybeSingle()
+			.single()
 			.overrideTypes<MediaMovie, { merge: true }>();
 		if (error) throw error;
 		return film;
@@ -41,6 +39,9 @@ export const getMovieUserActivitiesFollowerAverageRating = reactCache(async ({
 	movieId: number;
 }) => {
 	const supabase = await createServerClient();
+	const { data: { session } } = await supabase.auth.getSession();
+	if (!session) return null;
+
 	const { data, error } = await supabase
 		.from('user_activities_movie_follower_average_rating')
 		.select(`*`)
@@ -70,14 +71,13 @@ export const getTvSeries = cache(
 				seasons:media_tv_series_seasons(*)
 			`)
 			.eq('id', id)
-			.maybeSingle()
+			.single()
 			.overrideTypes<MediaTvSeries, { merge: true }>();
 		if (error) throw error;
-		if (!data) return data;
-		const specials = data?.seasons?.filter(season => season.season_number === 0) || [];
-		const regularSeasons = data?.seasons?.filter(season => season.season_number !== 0) || [];
+		const specials = data.seasons?.filter(season => season.season_number === 0) || [];
+		const regularSeasons = data.seasons?.filter(season => season.season_number !== 0) || [];
 		const tvSeries: MediaTvSeries = {
-			...data!,
+			...data,
 			seasons: regularSeasons.sort((a, b) => a.season_number! - b.season_number!),
 			specials: specials.sort((a, b) => a.season_number! - b.season_number!)
 		};
@@ -94,6 +94,9 @@ export const getTvSeriesUserActivitiesFollowerAverageRating = reactCache(async (
 	tvSeriesId: number;
 }) => {
 	const supabase = await createServerClient();
+	const { data: { session } } = await supabase.auth.getSession();
+	if (!session) return null;
+
 	const { data, error } = await supabase
 		.from('user_activities_tv_series_follower_average_rating')
 		.select(`*`)
@@ -125,7 +128,7 @@ export const getTvSeason = cache(
 				season_number: seasonNumber,
 			})
 			.order('episode_number', { referencedTable: 'episodes', ascending: true })
-			.maybeSingle()
+			.single()
 			.overrideTypes<MediaTvSeriesSeason, { merge: false }>();
 		if (error) throw error;
 		return data;
@@ -162,7 +165,7 @@ export const getPerson = cache(
 			.order('last_appearance_date', { referencedTable: 'tv_series', ascending: false })
 			.limit(10, { foreignTable: 'movies' })
 			.limit(10, { foreignTable: 'tv_series' })
-			.maybeSingle();
+			.single();
 		if (error) throw error;
 		return person;
 	}, {

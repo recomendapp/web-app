@@ -8,6 +8,7 @@ import { seoLocales } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { MovieReviews } from './_components/MovieReviews';
 import { SupportedLocale } from '@/translations/locales';
+import { MediaMovie } from '@recomendapp/types';
 
 export async function generateMetadata(
   props: {
@@ -20,34 +21,37 @@ export async function generateMetadata(
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id: movieId} = getIdFromSlug(params.film_id);
-  const movie = await getMovie(params.lang, movieId);
-  if (!movie) return { title: upperFirst(t('common.messages.film_not_found')) };
-  return {
-    title: t('pages.film.reviews.metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() }),
-    description: truncate(
-      t('pages.film.reviews.metadata.description', {
-        title: movie.title!,
-      }),
-      { length: siteConfig.seo.description.limit }
-    ),
-    alternates: seoLocales(params.lang, `/film/${movie.slug}/reviews`),
-    openGraph: {
-      siteName: siteConfig.name,
-      title: `${t('pages.film.reviews.metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() })} • ${siteConfig.name}`,
+  try {
+    const movie = await getMovie(params.lang, movieId);
+    return {
+      title: t('pages.film.reviews.metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() }),
       description: truncate(
         t('pages.film.reviews.metadata.description', {
           title: movie.title!,
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      url: `${siteConfig.url}/${params.lang}/film/${movie.slug}/reviews`,
-      images: movie.poster_url ? [
-        { url: movie.poster_url },
-      ] : undefined,
-      type: 'video.movie',
-      locale: params.lang,
-    }
-  };
+      alternates: seoLocales(params.lang, `/film/${movie.slug}/reviews`),
+      openGraph: {
+        siteName: siteConfig.name,
+        title: `${t('pages.film.reviews.metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() })} • ${siteConfig.name}`,
+        description: truncate(
+          t('pages.film.reviews.metadata.description', {
+            title: movie.title!,
+          }),
+          { length: siteConfig.seo.description.limit }
+        ),
+        url: `${siteConfig.url}/${params.lang}/film/${movie.slug}/reviews`,
+        images: movie.poster_url ? [
+          { url: movie.poster_url },
+        ] : undefined,
+        type: 'video.movie',
+        locale: params.lang,
+      }
+    };
+  } catch {
+    return { title: upperFirst(t('common.messages.film_not_found')) };
+  }
 }
 
 export default async function MovieReviewsPage(
@@ -60,7 +64,11 @@ export default async function MovieReviewsPage(
 ) {
   const params = await props.params;
   const { id: movieId } = getIdFromSlug(params.film_id);
-  const movie = await getMovie(params.lang, movieId);
-  if (!movie) notFound();
+  let movie: MediaMovie;
+  try {
+    movie = await getMovie(params.lang, movieId);
+  } catch {
+    return notFound();
+  }
   return <MovieReviews movie={movie} />;
 }

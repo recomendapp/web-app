@@ -21,24 +21,27 @@ export async function generateMetadata(
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id } = getIdFromSlug(params.person_id);
-  const person = await getPerson(params.lang, id);
-  if (!person) return { title: upperFirst(t('common.messages.person_not_found')) };
-  return {
-    title: t('pages.person.metadata.title', { name: person.name!, department: person.known_for_department! }),
-    description: person.biography ? truncate(person.biography, { length: siteConfig.seo.description.limit }) : undefined,
-    alternates: seoLocales(params.lang, `/person/${person.slug}`),
-    openGraph: {
-      siteName: siteConfig.name,
-      title: `${person.name} • ${person.known_for_department} • ${siteConfig.name}`,
+  try {
+    const person = await getPerson(params.lang, id);
+    return {
+      title: t('pages.person.metadata.title', { name: person.name!, department: person.known_for_department! }),
       description: person.biography ? truncate(person.biography, { length: siteConfig.seo.description.limit }) : undefined,
-      url: `${siteConfig.url}/${params.lang}/person/${person.slug}`,
-      images: person.profile_url ? [
-        { url: person.profile_url },
-      ] : undefined,
-      type: 'profile',
-      locale: params.lang,
-    }
-  };
+      alternates: seoLocales(params.lang, `/person/${person.slug}`),
+      openGraph: {
+        siteName: siteConfig.name,
+        title: `${person.name} • ${person.known_for_department} • ${siteConfig.name}`,
+        description: person.biography ? truncate(person.biography, { length: siteConfig.seo.description.limit }) : undefined,
+        url: `${siteConfig.url}/${params.lang}/person/${person.slug}`,
+        images: person.profile_url ? [
+          { url: person.profile_url },
+        ] : undefined,
+        type: 'profile',
+        locale: params.lang,
+      }
+    };
+  } catch {
+    return { title: upperFirst(t('common.messages.person_not_found')) };
+  }
 }
 
 export default async function Person(
@@ -51,12 +54,15 @@ export default async function Person(
 ) {
   const params = await props.params;
   const { id } = getIdFromSlug(params.person_id);
-  const person = await getPerson(params.lang, id);
-  if (!person) notFound();
+  let person: Awaited<ReturnType<typeof getPerson>>;
+  try {
+    person = await getPerson(params.lang, id);
+  } catch {
+    return notFound();
+  }
   return (
     <div className='flex flex-col items-center'>
       <div className='max-w-7xl w-full'>
-        {/* <WidgetPersonMostRated personId={id} lang={params.lang} /> */}
         <WidgetPersonFilms personSlug={params.person_id} credits={person.movies} lang={params.lang as SupportedLocale} />
         <WidgetPersonTvSeries personSlug={params.person_id} credits={person.tv_series} lang={params.lang as SupportedLocale} />
       </div>

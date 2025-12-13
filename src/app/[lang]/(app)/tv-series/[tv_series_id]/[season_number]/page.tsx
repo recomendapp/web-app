@@ -10,6 +10,7 @@ import { Metadata } from "next";
 import { TVSeason, WithContext } from "schema-dts";
 import { seoLocales } from "@/lib/i18n/routing";
 import { SupportedLocale } from "@/translations/locales";
+import { MediaTvSeriesSeason } from "@recomendapp/types";
 
 export async function generateMetadata(
   props: {
@@ -23,21 +24,10 @@ export async function generateMetadata(
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang as SupportedLocale });
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
-  const season = await getTvSeason(params.lang, serieId, Number(params.season_number));
-  if (!season) return { title: upperFirst(t('common.messages.tv_season_not_found')) };
-  return {
-    title: t('pages.tv_series.seasons.season.metadata.title', { title: season.serie?.name!, number: season.season_number! }),
-    description: truncate(
-      t('pages.tv_series.seasons.season.metadata.description', {
-        title: season.serie?.name!,
-        number: season.season_number!,
-      }),
-      { length: siteConfig.seo.description.limit }
-    ),
-    alternates: seoLocales(params.lang, `/tv-series/${params.tv_series_id}/${params.season_number}`),
-    openGraph: {
-      siteName: siteConfig.name,
-      title: `${t('pages.tv_series.seasons.season.metadata.title', { title: season.serie?.name!, number: season.season_number! })} • ${siteConfig.name}`,
+  try {
+    const season = await getTvSeason(params.lang, serieId, Number(params.season_number));
+    return {
+      title: t('pages.tv_series.seasons.season.metadata.title', { title: season.serie?.name!, number: season.season_number! }),
       description: truncate(
         t('pages.tv_series.seasons.season.metadata.description', {
           title: season.serie?.name!,
@@ -45,14 +35,28 @@ export async function generateMetadata(
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      url: `${siteConfig.url}/${params.lang}/tv-series/${params.tv_series_id}/${params.season_number}`,
-      images: season.poster_url ? [
-        { url: season.poster_url }
-      ] : undefined,
-      type: 'video.episode',
-      locale: params.lang,
-    },
-  };
+      alternates: seoLocales(params.lang, `/tv-series/${params.tv_series_id}/${params.season_number}`),
+      openGraph: {
+        siteName: siteConfig.name,
+        title: `${t('pages.tv_series.seasons.season.metadata.title', { title: season.serie?.name!, number: season.season_number! })} • ${siteConfig.name}`,
+        description: truncate(
+          t('pages.tv_series.seasons.season.metadata.description', {
+            title: season.serie?.name!,
+            number: season.season_number!,
+          }),
+          { length: siteConfig.seo.description.limit }
+        ),
+        url: `${siteConfig.url}/${params.lang}/tv-series/${params.tv_series_id}/${params.season_number}`,
+        images: season.poster_url ? [
+          { url: season.poster_url }
+        ] : undefined,
+        type: 'video.episode',
+        locale: params.lang,
+      },
+    };
+  } catch {
+    return { title: upperFirst(t('common.messages.tv_season_not_found')) };
+  }
 }
 
 export default async function TvSeriesSeason(
@@ -70,30 +74,18 @@ export default async function TvSeriesSeason(
   if (isNaN(seasonNumber)) {
     return redirect(`/${params.lang}/tv-series/${params.tv_series_id}`);
   }
-  const season = await getTvSeason(params.lang, seriesId, seasonNumber);
-  if (!season) return redirect(`/${params.lang}/tv-series/${params.tv_series_id}`);
+  let season: MediaTvSeriesSeason;
+  try {
+    season = await getTvSeason(params.lang, seriesId, seasonNumber);
+  } catch {
+    return redirect(`/${params.lang}/tv-series/${params.tv_series_id}`);
+  }
   const jsonLd: WithContext<TVSeason> = {
     '@context': 'https://schema.org',
     '@type': 'TVSeason',
     name: season.name ?? undefined,
     image: season.poster_url ?? undefined,
     seasonNumber: season.season_number ?? undefined,
-    // description: season.extra_data.overview,
-    // datePublished: season.date ?? undefined,
-    // dateModified: new Date().toISOString(),
-    // director: serie.main_credit
-    //   ?.map(director => ({
-    //     '@type': 'Person',
-    //     name: director.title ?? undefined,
-    //     image: director.avatar_url ?? undefined,
-    //   })),
-    // actor: serie.cast
-    //   ?.map((actor) => ({
-    //     '@type': 'Person',
-    //     name: actor.person?.name ?? undefined,
-    //     image: actor.person?.avatar_url ?? undefined,
-    //   })),
-    // genre: serie.genres?.map((genre) => genre.name),
     aggregateRating: season.vote_average ? {
       '@type': 'AggregateRating',
       ratingValue: season.vote_average ?? undefined,
