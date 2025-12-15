@@ -1,14 +1,9 @@
 import { Database } from '@recomendapp/types';
-import { createClient as createClientSupabase, SupabaseClient } from '@supabase/supabase-js';
+import { createClient as createClientSupabase } from '@supabase/supabase-js';
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from '../env';
+import { cache } from 'react';
 
-const clientCache = new Map<string, SupabaseClient<Database>>();
-
-export const createAnonClient = (locale: string = 'default') => {
-    if (clientCache.has(locale)) {
-        return clientCache.get(locale)!;
-    }
-
+export const createAnonClient = cache((locale: string = 'default') => {
     const newClient = createClientSupabase<Database>(
         SUPABASE_URL,
         SUPABASE_ANON_KEY,
@@ -26,7 +21,5 @@ export const createAnonClient = (locale: string = 'default') => {
         }
     );
 
-    clientCache.set(locale, newClient);
-
     return newClient;
-};
+});
