@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils";
 import { CalendarDaysIcon } from "lucide-react";
 import { useUserActivityMovieUpdateMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { fr, enUS } from 'date-fns/locale';
+import { useFormatter, useT } from "@/lib/i18n/client";
 
 interface ButtonUserActivityMovieWatchedDateProps
 	extends React.ComponentProps<typeof Button> {
@@ -24,9 +24,8 @@ const ButtonUserActivityMovieWatchedDate = React.forwardRef<
 	ButtonUserActivityMovieWatchedDateProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
 	const { session } = useAuth();
-	const locale = useLocale();
-	const format = useFormatter();
-	const t = useTranslations();
+	const formatter = useFormatter();
+	const { t, i18n } = useT();
 	const {
 		data: activity,
 		isLoading,
@@ -64,7 +63,7 @@ const ButtonUserActivityMovieWatchedDate = React.forwardRef<
             <CalendarDaysIcon />
             <div className="hidden sm:block">
               {activity.watched_date ? (
-                format.dateTime(new Date(activity.watched_date), {
+                formatter.dateTime(new Date(activity.watched_date), {
                   month: 'long',
                   year: 'numeric',
                   day: 'numeric',
@@ -78,7 +77,7 @@ const ButtonUserActivityMovieWatchedDate = React.forwardRef<
       </TooltipBox>
       <PopoverContent className="w-auto p-0 flex flex-col justify-center">
         <Calendar
-          locale={locale == 'fr-FR' ? fr : enUS}
+          locale={i18n.language == 'fr-FR' ? fr : enUS}
           mode="single"
           selected={new Date(activity.watched_date ?? '')}
           onSelect={async (date) => date && await handleUpdateDate(date)}

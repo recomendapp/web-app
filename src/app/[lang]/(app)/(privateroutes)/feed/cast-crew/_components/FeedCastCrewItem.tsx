@@ -3,7 +3,6 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Link } from "@/lib/i18n/navigation";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
-import { useFormatter, useTranslations } from "next-intl";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
 import { UserAvatar } from "@/components/User/UserAvatar";
 import { UserFeedCastCrew } from "@recomendapp/types";
@@ -11,6 +10,7 @@ import { upperFirst } from "lodash";
 import { ContextMenuMovie } from "@/components/ContextMenu/ContextMenuMovie";
 import { getMediaDetails } from "@/utils/get-media-details";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { useFormatter, useT } from "@/lib/i18n/client";
 
 interface FeedCastCrewItemProps
 	extends React.ComponentProps<typeof Card> {
@@ -21,8 +21,8 @@ const FeedCastCrewItemDefault = React.forwardRef<
 	HTMLDivElement,
 	FeedCastCrewItemProps
 >(({ className, activity, ...props }, ref) => {
-	const format = useFormatter();
-	const t = useTranslations();
+	const formatter = useFormatter();
+	const { t } = useT();
 	const details = getMediaDetails({ type: 'movie', media: activity.movie! })
 	return (
 		<Card
@@ -54,19 +54,19 @@ const FeedCastCrewItemDefault = React.forwardRef<
 							{activity?.person?.name ? <UserAvatar className="w-8 h-8 rounded-md" avatarUrl={activity?.person?.profile_url ?? ''} username={activity?.person?.name} /> : null}
 						</Link>
 						<p className="text-muted-foreground line-clamp-2">
-							{t.rich('pages.feed.cast_and_crew.new_activity', {
+							{/* {t.rich('pages.feed.cast_and_crew.new_activity', {
 								name: activity?.person?.name!,
 								roles: activity?.jobs?.length ? activity.jobs.join(', ').toLowerCase() : t('common.messages.unknown'),
 								film: activity?.movie?.title!,
 								linkPerson: (chunk) => <Link href={activity?.person?.url ?? ''} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
 								linkFilm: (chunk) => <Link href={activity?.movie?.url ?? ''} className="text-foreground hover:underline underline-offset-2 hover:text-accent-pink">{chunk}</Link>,
 								important: (chunk) => <span className="text-foreground">{chunk}</span>
-							})}
+							})} */}
 						</p>
 					</div>
-					{activity?.movie?.release_date ? <div className='hidden @md/feed-item:block text-sm text-muted-foreground'>
+					{/* {activity?.movie?.release_date ? <div className='hidden @md/feed-item:block text-sm text-muted-foreground'>
 						{format.relativeTime(new Date(activity?.movie.release_date ?? ''), new Date())}
-					</div> : null}
+					</div> : null} */}
 				</div>
 				{activity.movie && <Link href={activity?.movie?.url ?? ''} className="space-y-2">
 					<div className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">

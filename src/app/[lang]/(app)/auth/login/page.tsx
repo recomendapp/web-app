@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { LoginPasswordForm } from './_components/LoginPasswordForm';
 import { Icons } from '@/config/icons';
@@ -20,13 +20,12 @@ import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { RectangleEllipsisIcon } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { useT } from '@/lib/i18n/client';
 
 export default function Login() {
   const { loginOAuth2 } = useAuth();
-  const t = useTranslations('pages.auth.login');
-  const common = useTranslations('common');
+  const { t } = useT();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('redirect');
@@ -37,7 +36,7 @@ export default function Login() {
       setIsLoading(true);
       await loginOAuth2(provider, redirectTo);
     } catch (error) {
-      toast.error(upperFirst(common('messages.an_error_occurred')));
+      toast.error(upperFirst(t('common.messages.an_error_occurred')));
     } finally {
       setIsLoading(false);
     }
@@ -57,9 +56,9 @@ export default function Login() {
         <CardHeader className='gap-2'>
           <CardTitle className='inline-flex gap-2 items-center justify-center'>
             <Icons.site.icon className='fill-accent-yellow w-8' />
-            {t('label')}
+            {t('pages.auth.login.label')}
           </CardTitle>
-          <CardDescription className='text-center'>{t('description')}</CardDescription>
+          <CardDescription className='text-center'>{t('pages.auth.login.description')}</CardDescription>
         </CardHeader>
         <CardContent className='grid gap-4'>
           <LoginPasswordForm redirectTo={redirectTo} />
@@ -69,7 +68,7 @@ export default function Login() {
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-muted px-2 text-muted-foreground">
-                {t('or_continue_with')}
+                {t('pages.auth.login.or_continue_with')}
               </span>
             </div>
           </div>
@@ -104,10 +103,10 @@ export default function Login() {
             ))}
           </div>
           <p className="px-8 text-center text-sm text-muted-foreground">
-            {t('no_account_yet')}{' '}
+            {t('pages.auth.login.no_account_yet')}{' '}
             <Button variant={'link'} className='inline p-0 text-accent-yellow' asChild>
               <Link href={{ pathname: '/auth/signup', query: redirectTo ? { redirect: redirectTo } : undefined }}>
-              {upperFirst(common('messages.signup'))}
+              {upperFirst(t('common.messages.signup'))}
               </Link>
             </Button>
           </p>

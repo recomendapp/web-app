@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Link } from "@/lib/i18n/navigation";
 import { Button } from "../ui/button";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { CardFeedActivityMovie } from "../Card/feed/CardFeedActivityMovie";
 import { CardFeedActivityTvSeries } from "../Card/feed/CardFeedActivityTvSeries";
@@ -10,13 +9,14 @@ import { CardFeedReviewMovieLike } from "../Card/feed/CardFeedReviewMovieLike";
 import { CardFeedReviewTvSeriesLike } from "../Card/feed/CardFeedReviewTvSeriesLike";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useUserMyFeedInfiniteOptions } from "@/api/client/options/userOptions";
+import { useT } from "@/lib/i18n/client";
 
 const WIDGET_USER_FEED_LIMIT = 4;
 
 export const WidgetUserFeed = ({
 	className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const {
 		data: feed,
 		isLoading,

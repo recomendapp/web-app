@@ -3,9 +3,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ImageObject, useRandomImage } from "@/hooks/use-random-image";
 import { UserWatchlistType } from "@recomendapp/types";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useUIStore } from "@/stores/useUIStore";
+import { useT } from "@/lib/i18n/client";
 
 interface WatchlistHeaderProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -21,7 +21,7 @@ export function WatchlistHeader({
   backdrops,
   skeleton,
 } : WatchlistHeaderProps) {
-  const t = useTranslations();
+  const { t } = useT();
   const setTab = useUIStore((state) => state.setWatchlistTab);
   const backdrop = useRandomImage(backdrops || []);
 

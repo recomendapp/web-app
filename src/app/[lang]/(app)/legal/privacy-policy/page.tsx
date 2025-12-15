@@ -1,17 +1,9 @@
 import { siteConfig } from "@/config/site";
-import { SupportedLocale } from "@/translations/locales";
+import { getT } from "@/lib/i18n";
 import { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
 
-export async function generateMetadata(
-  	props: {
-		params: Promise<{
-		lang: string;
-		}>;
-    }
-): Promise<Metadata> {
-	const params = await props.params;
-	const t = await getTranslations({ locale: params.lang as SupportedLocale });
+export async function generateMetadata(): Promise<Metadata> {
+	const { t } = await getT();
 	return {
 		title: t('pages.legal.privacy_policy.metadata.title'),
 		description: t('pages.legal.privacy_policy.metadata.description', { app: siteConfig.name }),
@@ -23,7 +15,6 @@ const PrivacyPolicyPage = () => {
 	<div>
 	  <h1>Privacy Policy</h1>
 	  <p>This is the privacy policy for our application.</p>
-	  {/* Add more content as needed */}
 	</div>
   	);
 };

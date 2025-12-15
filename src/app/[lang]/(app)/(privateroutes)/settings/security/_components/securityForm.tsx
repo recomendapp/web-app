@@ -1,9 +1,8 @@
-'use client';
+'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -17,34 +16,33 @@ import {
 import { Input } from '@/components/ui/input';
 import toast from 'react-hot-toast';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { useT } from '@/lib/i18n/client';
 
 export function SecurityForm() {
   const supabase = useSupabaseClient();
-  const t = useTranslations('pages.settings');
-  const common = useTranslations('common');
+  const { t } = useT();
   const profileFormSchema = z.object({
     newpassword: z
       .string()
       .min(8, {
-        message: t('security.new_password.form.min_length'),
+        message: t('pages.settings.security.new_password.form.min_length'),
       })
       .regex(/[A-Z]/, {
-        message: t('security.new_password.form.uppercase'),
+        message: t('pages.settings.security.new_password.form.uppercase'),
       })
       .regex(/[a-z]/, {
-        message: t('security.new_password.form.lowercase'),
+        message: t('pages.settings.security.new_password.form.lowercase'),
       })
       .regex(/[0-9]/, {
-        message: t('security.new_password.form.number'),
+        message: t('pages.settings.security.new_password.form.number'),
       })
       .regex(/[\W_]/, {
-        message: t('security.new_password.form.special'),
+        message: t('pages.settings.security.new_password.form.special'),
       }),
     confirmnewpassword: z.string(),
   }).refine((data) => data.newpassword === data.confirmnewpassword, {
-    message: t('security.confirm_password.form.match'),
+    message: t('pages.settings.security.confirm_password.form.match'),
     path: ['confirmnewpassword'],
   });
 
@@ -67,10 +65,10 @@ export function SecurityForm() {
         password: data.newpassword,
       });
       if (error) throw error;
-      toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
+      toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
       form.reset();
     } catch (error) {
-      toast.error(upperFirst(common('messages.an_error_occurred')));
+      toast.error(upperFirst(t('common.messages.an_error_occurred')));
     }
   }
 
@@ -82,12 +80,12 @@ export function SecurityForm() {
           name="newpassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('security.new_password.label')}</FormLabel>
+              <FormLabel>{t('pages.settings.security.new_password.label')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoComplete="new-password"
-                  placeholder={t('security.new_password.placeholder')}
+                  placeholder={t('pages.settings.security.new_password.placeholder')}
                   {...field}
                 />
               </FormControl>
@@ -101,12 +99,12 @@ export function SecurityForm() {
           name="confirmnewpassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('security.confirm_password.label')}</FormLabel>
+              <FormLabel>{t('pages.settings.security.confirm_password.label')}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
                   autoComplete="new-password"
-                  placeholder={t('security.confirm_password.placeholder')}
+                  placeholder={t('pages.settings.security.confirm_password.placeholder')}
                   {...field}
                 />
               </FormControl>
@@ -115,7 +113,7 @@ export function SecurityForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">{upperFirst(common('messages.save'))}</Button>
+        <Button type="submit">{upperFirst(t('common.messages.save'))}</Button>
       </form>
     </Form>
   );

@@ -7,7 +7,6 @@ import { Link, usePathname } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { upperFirst } from "lodash";
 import { BookmarkIcon, HeartIcon, SendIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { useEffect, useMemo } from "react";
 import { useInView } from "react-intersection-observer";
 import { useUI } from "@/context/ui-context";
@@ -16,6 +15,7 @@ import { useModal } from "@/context/modal-context";
 import { PlaylistModal } from "@/components/Modals/playlists/PlaylistModal";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useUserPlaylistsInfiniteOptions } from "@/api/client/options/userOptions";
+import { useT } from "@/lib/i18n/client";
 
 const SidebarCollectionContainerIcon = ({
 	className,
@@ -48,7 +48,7 @@ export const SidebarLeftRoutes = () => {
 	const { session } = useAuth();
 	const { open } = useSidebar();
 	const { isMobile } = useUI();
-	const t = useTranslations('common');
+	const { t } = useT();
 	const pathname = usePathname();
 	const { openModal } = useModal();
 	const { ref, inView } = useInView();
@@ -57,25 +57,25 @@ export const SidebarLeftRoutes = () => {
 		() => [
 		  {
 			icon: Icons.home,
-			label: upperFirst(t('messages.home')),
+			label: upperFirst(t('common.messages.home')),
 			active: pathname === '/',
 			href: '/',
 		  },
 		  {
 			icon: Icons.explore,
-			label: upperFirst(t('messages.explore')),
+			label: upperFirst(t('common.messages.explore')),
 			active: pathname === '/explore',
 			href: '/explore',
 		  },
 		  {
 			icon: Icons.feed,
-			label: upperFirst(t('messages.feed')),
+			label: upperFirst(t('common.messages.feed')),
 			active: pathname.startsWith('/feed'),
 			href: '/feed',
 		  },
 		  {
 			icon: Icons.search,
-			label: upperFirst(t('messages.search')),
+			label: upperFirst(t('common.messages.search')),
 			active: pathname.startsWith('/search') || pathname.startsWith('/movie'),
 			href: '/search',
 		  },
@@ -88,7 +88,7 @@ export const SidebarLeftRoutes = () => {
 			icon: <SendIcon fill="#fff" className="w-2/5 h-2/5" />,
 			bgFrom: '#FBE773',
 			bgTo: '#F18E43',
-			label: upperFirst(t('messages.my_recos')),
+			label: upperFirst(t('common.messages.my_recos')),
 			active: pathname.startsWith('/collection/my-recos'),
 			href: '/collection/my-recos',
 		},
@@ -96,7 +96,7 @@ export const SidebarLeftRoutes = () => {
 			icon: <BookmarkIcon fill="#fff" className="w-2/5 h-2/5" />,
 			bgFrom: '#39BAED',
 			bgTo: '#32509e',
-			label: upperFirst(t('messages.watchlist')),
+			label: upperFirst(t('common.messages.watchlist')),
 			active: pathname.startsWith('/collection/watchlist'),
 			href: '/collection/watchlist',
 		},
@@ -104,7 +104,7 @@ export const SidebarLeftRoutes = () => {
 			icon: <HeartIcon fill="#fff" className="w-2/5 h-2/5" />,
 			bgFrom: '#e6619b',
 			bgTo: '#e84749',
-			label: upperFirst(t('messages.heart_pick', { count: 0 })),
+			label: upperFirst(t('common.messages.heart_pick', { count: 0 })),
 			active: pathname.startsWith('/collection/heart-picks'),
 			href: '/collection/heart-picks',
 		},
@@ -113,28 +113,28 @@ export const SidebarLeftRoutes = () => {
 	const unloggedRoutes = useMemo(() => [
 		{
 			icon: Icons.shop,
-			label: upperFirst(t('messages.shop')),
+			label: upperFirst(t('common.messages.shop')),
 			active: false,
 			href: 'https://shop.recomend.app',
 			target: '_blank',
 		},
 		{
 			icon: Icons.help,
-			label: upperFirst(t('messages.help')),
+			label: upperFirst(t('common.messages.help')),
 			active: false,
 			href: 'https://help.recomend.app',
 			target: '_blank',
 		  },
 		  {
 			icon: Icons.about,
-			label: upperFirst(t('messages.about')),
+			label: upperFirst(t('common.messages.about')),
 			active: pathname.startsWith('/about'),
 			href: '/about',
 			target: undefined,
 		  },
 		  {
 			icon: Icons.legal,
-			label: upperFirst(t('messages.legal')),
+			label: upperFirst(t('common.messages.legal')),
 			active: pathname.startsWith('/legal'),
 			href: '/legal/terms-of-use',
 			target: undefined,
@@ -169,7 +169,7 @@ export const SidebarLeftRoutes = () => {
 	return (
 		<>
 		<SidebarGroup>
-			<SidebarGroupLabel>{upperFirst(t('messages.navigation'))}</SidebarGroupLabel>
+			<SidebarGroupLabel>{upperFirst(t('common.messages.navigation'))}</SidebarGroupLabel>
 			<nav>
 			<SidebarMenu>
 				{/* className={`${!sidebarOpen ? "items-center" : ""}`} */}
@@ -193,17 +193,17 @@ export const SidebarLeftRoutes = () => {
 			{session ? (
 			<SidebarMenu className="h-full">
 				<SidebarMenuItem>
-					<SidebarMenuButton tooltip={upperFirst(t('messages.library'))} isActive={pathname === '/collection'} asChild>
+					<SidebarMenuButton tooltip={upperFirst(t('common.messages.library'))} isActive={pathname === '/collection'} asChild>
 						<Link href={"/collection"}>
 							<Icons.Library />
 							<span>
-								{upperFirst(t('messages.library'))}
+								{upperFirst(t('common.messages.library'))}
 							</span>
 						</Link>
 					</SidebarMenuButton>
 					<SidebarMenuAction onClick={() => openModal(PlaylistModal, {})}>
 						<Icons.add />
-						<span className="sr-only">{upperFirst(t('messages.create_a_playlist'))}</span>
+						<span className="sr-only">{upperFirst(t('common.messages.create_a_playlist'))}</span>
 					</SidebarMenuAction>
 				</SidebarMenuItem>
 				<ScrollArea className="overflow-y-auto">
@@ -263,10 +263,10 @@ export const SidebarLeftRoutes = () => {
 													<p className="line-clamp-1">{playlist.title}</p>
 													<p className='text-muted-foreground line-clamp-1'>
 														{playlist.type === 'movie' ? (
-															t('messages.film_count', { count: playlist.items_count ?? 0 })
+															t('common.messages.film_count', { count: playlist.items_count ?? 0 })
 														) : playlist.type === 'tv_series' ? (
-															t('messages.tv_series_count', { count: playlist.items_count ?? 0 })
-														) : t('messages.item_count', { count: playlist.items_count ?? 0 })}
+															t('common.messages.tv_series_count', { count: playlist.items_count ?? 0 })
+														) : t('common.messages.item_count', { count: playlist.items_count ?? 0 })}
 													</p>
 												</div>
 											</Link>
@@ -281,7 +281,7 @@ export const SidebarLeftRoutes = () => {
 			</SidebarMenu>
 			) : (
 			<>
-				<SidebarGroupLabel>{upperFirst(t('messages.see_more'))}</SidebarGroupLabel>
+				<SidebarGroupLabel>{upperFirst(t('common.messages.see_more'))}</SidebarGroupLabel>
 				<SidebarMenu>
 					{unloggedRoutes.map((route, i) => (
 						<SidebarMenuItem key={i}>

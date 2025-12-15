@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import * as React from 'react';
 import {
@@ -44,11 +44,11 @@ import { MouseSensor, TouchSensor } from '@/lib/dnd-kit/CustomSensor';
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Playlist, PlaylistItemMovie } from '@recomendapp/types';
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { DataTableToolbar } from './component/data-table-toolbar';
 import { usePlaylistMovieUpdateMutation } from '@/api/client/mutations/playlistMutations';
 import { useAuth } from '@/context/auth-context';
+import { useT } from '@/lib/i18n/client';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -67,7 +67,7 @@ export default function PlaylistMovieTable({
   playlistItems,
   setPlaylistItems,
 }: DataTableProps) {
-  const common = useTranslations('common');
+  const { t } = useT();
   const { session } = useAuth();
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
 	playlistId: playlist?.id,
@@ -177,7 +177,7 @@ export default function PlaylistMovieTable({
           const newIndex = items.indexOf(over.id);
           return arrayMove(data, newIndex, oldIndex);
         });
-        toast.error(upperFirst(common('messages.an_error_occurred')));
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     }
 
@@ -238,7 +238,7 @@ const TableContainer = ({
   table: TableType<PlaylistItemMovie>;
   items: UniqueIdentifier[];
 }) => {
-  const common = useTranslations('common');
+  const { t } = useT();
   return (
   <Table>
       <TableHeader>
@@ -270,7 +270,7 @@ const TableContainer = ({
               colSpan={table.getAllColumns().length}
               className="h-24 text-center"
             >
-            {upperFirst(common('messages.no_results'))}
+            {upperFirst(t('common.messages.no_results'))}
             </TableCell>
           </TableRow>
         )}

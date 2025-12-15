@@ -2,13 +2,12 @@ import { notFound } from 'next/navigation';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { WidgetPersonFilms } from './_components/WidgetPersonFilms';
 import { getPerson } from '@/features/server/media/mediaQueries';
-import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
-import { seoLocales } from '@/lib/i18n/routing';
 import { WidgetPersonTvSeries } from './_components/WidgetPersonTvSeries';
 import { SupportedLocale } from '@/translations/locales';
+import { getT } from '@/lib/i18n';
 
 export async function generateMetadata(
   props: {
@@ -19,14 +18,14 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
+  const { t } = await getT();
   const { id } = getIdFromSlug(params.person_id);
   try {
     const person = await getPerson(params.lang, id);
     return {
       title: t('pages.person.metadata.title', { name: person.name!, department: person.known_for_department! }),
       description: person.biography ? truncate(person.biography, { length: siteConfig.seo.description.limit }) : undefined,
-      alternates: seoLocales(params.lang, `/person/${person.slug}`),
+      // alternates: seoLocales(params.lang, `/person/${person.slug}`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${person.name} • ${person.known_for_department} • ${siteConfig.name}`,

@@ -2,10 +2,10 @@ import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuTrigger } from "../ui/context-menu";
 import { useModal } from "@/context/modal-context";
 import { Fragment, useMemo } from "react";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { UserWatchlistTvSeries } from "@recomendapp/types";
 import { ModalUserWatchlistTvSeriesComment } from "../Modals/watchlist/ModalUserWatchlistTvSeriesComment";
+import { useT } from "@/lib/i18n/client";
 
 export const ContextMenuWatchlistTvSeries = ({
 	children,
@@ -15,7 +15,7 @@ export const ContextMenuWatchlistTvSeries = ({
 	watchlistItem?: UserWatchlistTvSeries | null,
 }) => {
 	const { openModal } = useModal();
-	const t = useTranslations();
+	const { t } = useT();
 	const items = useMemo(() => [
 		[
 			{
@@ -24,7 +24,7 @@ export const ContextMenuWatchlistTvSeries = ({
 				label: watchlistItem?.comment ? upperFirst(t('common.messages.edit_comment', { count: 1 })) : upperFirst(t('common.messages.add_comment', { count: 1 })),
 			}
 		]
-	], [watchlistItem, t]);
+	], [watchlistItem, t, openModal]);
 	if (!watchlistItem) return children;
 	return (
 		<ContextMenu>

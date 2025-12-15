@@ -3,10 +3,10 @@
 import { cn } from '@/lib/utils';
 import { Profile } from '@recomendapp/types';
 import { upperFirst } from 'lodash';
-import { useTranslations } from 'next-intl';
 import { Link } from "@/lib/i18n/navigation";
 import { usePathname } from '@/lib/i18n/navigation';
 import { useMemo } from 'react';
+import { useT } from '@/lib/i18n/client';
 
 export const ProfileNavbar = ({
   profile,
@@ -15,7 +15,7 @@ export const ProfileNavbar = ({
   profile: Profile;
   className?: string;
 }) => {
-  const t = useTranslations();
+  const { t } = useT();
   const pathname = usePathname();
   const profileRoutes = useMemo(
     () => [

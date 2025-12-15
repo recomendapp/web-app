@@ -6,15 +6,15 @@ import ReviewViewer from "@/components/Review/ReviewViewer";
 import { HeaderBox } from "@/components/Box/HeaderBox";
 import { CardTvSeries } from "@/components/Card/CardTvSeries";
 import { TMDB_IMAGE_BASE_URL } from "@/lib/tmdb/tmdb";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useT } from "@/lib/i18n/client";
 
 export const TvSeriesReview = ({
 	reviewServer,
 } : {
 	reviewServer: UserReviewTvSeries;
 }) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const {
 		data: review
 	} = useUserReviewTvSeriesQuery({

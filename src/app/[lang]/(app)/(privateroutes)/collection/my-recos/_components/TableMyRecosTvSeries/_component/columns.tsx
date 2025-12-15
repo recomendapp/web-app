@@ -1,15 +1,16 @@
-'use client';
+'use client'
+
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTableRowActions } from './data-table-row-actions';
 import { UserRecosTvSeriesAggregated } from '@recomendapp/types';
-import { useTranslations } from 'next-intl';
 import { Item } from './item';
 import { capitalize, upperFirst } from 'lodash';
 import { TableColumnHeader } from '@/components/tables/TableColumnHeader';
 import Senders from './senders';
+import { useT } from '@/lib/i18n/client';
 
 export const Columns = (): ColumnDef<UserRecosTvSeriesAggregated>[] => {
-  const t = useTranslations();
+  const { t } = useT();
   return [
     {
       id: 'item',

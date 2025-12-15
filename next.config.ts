@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import createNextIntlPlugin from "next-intl/plugin";
 
 const withPWA = require('@ducanh2912/next-pwa').default({
   dest: 'public',
@@ -8,12 +7,11 @@ const withPWA = require('@ducanh2912/next-pwa').default({
   disable: process.env.NODE_ENV === 'development',
 });
 
-const withNextIntl = createNextIntlPlugin('./src/lib/i18n/request.ts');
-
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
   output: 'standalone',
+  turbopack: {},
   images: {
     // unoptimized: true, // Issue: https://github.com/vercel/next.js/issues/54482
     remotePatterns: [
@@ -59,4 +57,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPWA(withNextIntl(nextConfig));
+export default withPWA(nextConfig);

@@ -17,8 +17,8 @@ import useDebounce from '@/hooks/use-debounce';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
 import toast from 'react-hot-toast';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { useT } from '@/lib/i18n/client';
 
 
 export const PlaylistGuestView = ({
@@ -30,7 +30,7 @@ export const PlaylistGuestView = ({
   playlistId: number,
   setView: (view: 'guests' | 'add') => void
 }) => {
-  const t = useTranslations();
+  const { t } = useT();
   return (
     <>
       <ModalHeader className='px-4 pb-4 pt-5'>
@@ -59,7 +59,7 @@ export const PlaylistGuestAddView = ({
   playlistGuest: PlaylistGuest[],
   setView: (view: 'guests' | 'add') => void
 }) => {
-  const t = useTranslations();
+  const { t } = useT();
   const { user: authUser } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState<Profile[]>([]);
   const [search, setSearch] = useState<string>('');
@@ -221,7 +221,7 @@ export function ModalPlaylistGuest({
   playlistId,
   ...props
 } : PlaylistGuestModalProps) {
-  const t = useTranslations();
+  const { t } = useT();
   const { data: playlistGuest, isError } = usePlaylistGuestsQuery(playlistId);
   const { user } = useAuth();
   const { closeModal } = useModal();

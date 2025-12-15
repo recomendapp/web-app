@@ -1,12 +1,12 @@
 'use client';
 
 import { Separator } from "@/components/ui/separator";
-import { useTranslations } from "next-intl";
 import { Importer } from "../../../../../../components/Settings/Data/Importer/Importer";
 import { Exporter } from "@/components/Settings/Data/Exporter/Exporter";
+import { useT } from "@/lib/i18n/client";
 
 export default function SettingsDataPage() {
-  const t = useTranslations('pages.settings');
+  const { t } = useT();
   return (
     <div className="space-y-6">
       <div>

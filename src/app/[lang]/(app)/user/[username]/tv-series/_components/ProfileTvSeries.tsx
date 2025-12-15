@@ -11,7 +11,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useSearchParams } from 'next/navigation';
 import { z } from "zod";
@@ -23,6 +22,7 @@ import { Icons } from '@/config/icons';
 import { Spinner } from '@/components/ui/spinner';
 import { LayoutGridIcon, ListIcon } from 'lucide-react';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
+import { useT } from '@/lib/i18n/client';
 
 const DISPLAY = ["grid", "row"] as const;
 type SortBy = "watched_date" | "rating";
@@ -53,7 +53,7 @@ export default function ProfileTvSeries({
 } : {
   userId: string,
 }) {
-  const t = useTranslations();
+  const { t } = useT();
   const searchParams = useSearchParams();
   const display = getValidatedDisplay(searchParams.get('display'));
   const sortBy = getValidatedSortBy(searchParams.get('sort_by'));

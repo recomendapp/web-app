@@ -4,12 +4,13 @@ import {
 } from '@supabase/ssr';
 import { Database } from '@recomendapp/types';
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from '../env';
-import { getLocale } from 'next-intl/server';
 import { cache } from 'react';
+import { getT } from '../i18n';
+import { fallbackLng } from '../i18n/settings';
 
 export const createServerClient = cache(async () => {
+  const { i18n } = await getT();
   const cookieStore = await cookies();
-  const locale = await getLocale();
   const client = createServerClientSupabase<Database>(
     SUPABASE_URL,
     SUPABASE_ANON_KEY,
@@ -32,7 +33,7 @@ export const createServerClient = cache(async () => {
       },
       global: {
         headers: {
-          'language': locale,
+          'language': i18n.resolvedLanguage || fallbackLng,
         }
       }
     },

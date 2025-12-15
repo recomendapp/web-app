@@ -1,18 +1,10 @@
 import { siteConfig } from '@/config/site';
-import { SupportedLocale } from '@/translations/locales';
+import { getT } from '@/lib/i18n';
 import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{
-      lang: string;
-    }>;
-  }
-): Promise<Metadata> {
-  const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
   return {
     title: upperFirst(t('common.messages.signup')),
     description: t('pages.auth.signup.metadata.description', { app: siteConfig.name }),

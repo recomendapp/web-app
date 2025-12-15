@@ -7,7 +7,6 @@ import { siteConfig } from "@/config/site";
 import { FacebookIcon, FacebookShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterShareButton, WhatsappIcon, WhatsappShareButton, XIcon } from "react-share";
 import { MediaType } from "@recomendapp/types";
 import { ButtonCopy } from "@/components/utils/ButtonCopy";
-import { useLocale, useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useUI } from "@/context/ui-context";
 import { useMemo, useState } from "react";
@@ -16,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { ShareController } from "@/components/ShareController/ShareController";
 import { Separator } from "@/components/ui/separator";
+import { useT } from "@/lib/i18n/client";
 
 interface ModalShareProps<T> extends ModalType {
 	title?: string | null;
@@ -26,12 +26,11 @@ interface ModalShareProps<T> extends ModalType {
 
 export const ModalShare = <T,>({ title, type, path, shareController, ...props }: ModalShareProps<T>) => {
 	const { closeModal } = useModal();
-	const locale = useLocale();
+	const { t, i18n } = useT();
 	const { device } = useUI();
-	const common = useTranslations('common');
 	const url = useMemo(() => (
-		`${location.origin}/${locale}${path}`
-	), [path, locale]);
+		`${location.origin}/${i18n.resolvedLanguage}${path}`
+	), [path, i18n.resolvedLanguage]);
 	const sharedData: ShareData = useMemo(() => ({
 		title: title ?? '',
 		url,
@@ -64,7 +63,7 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 				}
 				console.error(err);
 			}
-			toast.error(upperFirst(common('messages.an_error_occurred')));
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		}
 	};
 
@@ -72,10 +71,10 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
 			<ModalHeader>
 				<ModalTitle className="line-clamp-2">
-					{common.rich('messages.share_title', {
+					{/* {common.rich('messages.share_title', {
 						title: title ?? '',
 						strong: (chunks) => <strong>{chunks}</strong>,
-					})}
+					})} */}
 				</ModalTitle>
 			</ModalHeader>
 			<ModalBody className="space-y-2">
@@ -89,7 +88,7 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 							disabled={!canShareController}
 							onClick={() => onShare(sharedControllerData)}
 							>
-								{upperFirst(common('messages.share'))}
+								{upperFirst(t('common.messages.share'))}
 							</Button>
 							<Separator />
 						</>
@@ -108,13 +107,13 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 							URL.revokeObjectURL(url);
 						}}
 						>
-							{upperFirst(common('messages.download'))}
+							{upperFirst(t('common.messages.download'))}
 						</Button>
 					)}
 				</div>
 				<div>
 					<h3 className="text-lg font-semibold mb-2">
-						{upperFirst(common('messages.via'))}
+						{upperFirst(t('common.messages.via'))}
 					</h3>
 					<div className="flex gap-2">
 						<TwitterShareButton
@@ -151,7 +150,7 @@ export const ModalShare = <T,>({ title, type, path, shareController, ...props }:
 					</div>
 				</div>
 				<div>
-					<h3 className="text-lg font-semibold mb-2">{upperFirst(common('messages.link'))}</h3>
+					<h3 className="text-lg font-semibold mb-2">{upperFirst(t('common.messages.link'))}</h3>
 					<div className="flex space-x-2">
 						<Input value={url} readOnly />
 						<ButtonCopy text={url} />

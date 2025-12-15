@@ -5,7 +5,6 @@ import { WithLink } from "../utils/WithLink";
 import { useModal } from "@/context/modal-context";
 import { Fragment, useMemo } from "react";
 import { ModalShare } from "../Modals/Share/ModalShare";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
 import { PlaylistModal } from "../Modals/playlists/PlaylistModal";
@@ -13,6 +12,7 @@ import { ModalPlaylistGuest } from "../Modals/playlists/ModalPlaylistGuest/Modal
 import { usePlaylistDeleteMutation } from "@/api/client/mutations/playlistMutations";
 import toast from "react-hot-toast";
 import { usePathname, useRouter } from "@/lib/i18n/navigation";
+import { useT } from "@/lib/i18n/client";
 
 interface Item {
 	icon: React.ElementType;
@@ -35,7 +35,7 @@ export const ContextMenuPlaylist = ({
 	const pathname = usePathname();
 	const { openModal, createConfirmModal } = useModal();
 	const playlistDeleteMutation = usePlaylistDeleteMutation()
-	const t = useTranslations();
+	const { t } = useT();
 	const items = useMemo((): Item[][] => {
 		return [
 		[
@@ -84,10 +84,10 @@ export const ContextMenuPlaylist = ({
 					onClick: () => {
 						createConfirmModal({
 							title: upperFirst(t('common.messages.are_u_sure')),
-							description: t.rich('pages.playlist.actions.delete.description', {
-								title: playlist.title,
-								important: (chunk) => <b>{chunk}</b>,
-							}),
+							// description: t.rich('pages.playlist.actions.delete.description', {
+							// 	title: playlist.title,
+							// 	important: (chunk) => <b>{chunk}</b>,
+							// }),
 							onConfirm: async () => {
 								await playlistDeleteMutation.mutateAsync(
 									{ playlistId: playlist.id, userId: session.user.id },

@@ -1,9 +1,8 @@
-'use client';
+'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -17,13 +16,12 @@ import {
 import toast from 'react-hot-toast';
 import { useNotifications } from '@/context/notifications-context';
 import { Switch } from '@/components/ui/switch';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { useT } from '@/lib/i18n/client';
 
 export function NotificationsForm() {
 	const { permission } = useNotifications();
-  const t = useTranslations('pages.settings');
-  const common = useTranslations('common');
+  const { t } = useT();
 	const notificationsFormSchema = z.object({
 		pushNotifications: z.boolean(),
 	});
@@ -46,9 +44,9 @@ export function NotificationsForm() {
       data.pushNotifications ?
         await permission.enableNotifications() :
         permission.disableNotifications();
-		  toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
+		  toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
     } catch (error) {
-    	toast.error(upperFirst(common('messages.an_error_occurred')));
+    	toast.error(upperFirst(t('common.messages.an_error_occurred')));
       form.reset();
     }
   }
@@ -56,14 +54,14 @@ export function NotificationsForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <h2>{t('notifications.push_notifications.label')}</h2>
+        <h2>{t('pages.settings.notifications.push_notifications.label')}</h2>
 		    {permission.permission === 'default' ? (
           <FormField
             control={form.control}
             name="pushNotifications"
             render={({ field }) => (
               <FormItem className='space-y-0 flex flex-row items-center gap-2'>
-                <FormLabel>{t('notifications.push_notifications.form.enable')}</FormLabel>
+                <FormLabel>{t('pages.settings.notifications.push_notifications.form.enable')}</FormLabel>
                 <FormControl>
                   <Switch
                   checked={field.value}
@@ -76,13 +74,13 @@ export function NotificationsForm() {
             )}
           />
         ) : (
-          <p className='text-muted-foreground'>{t('notifications.push_notifications.already_granted')}</p>
+          <p className='text-muted-foreground'>{t('pages.settings.notifications.push_notifications.already_granted')}</p>
         )}
         <Button
         type="submit"
         disabled={form.formState.isSubmitting || (permission.permission === 'granted' || permission.permission === 'denied')}
         >
-          {upperFirst(common('messages.save'))}
+          {upperFirst(t('common.messages.save'))}
         </Button>
       </form>
     </Form>

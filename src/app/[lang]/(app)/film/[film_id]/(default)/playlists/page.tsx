@@ -1,12 +1,10 @@
 import { siteConfig } from '@/config/site';
 import { getMovie } from '@/features/server/media/mediaQueries';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
-import { seoLocales } from '@/lib/i18n/routing';
 import { truncate, upperFirst } from 'lodash';
 import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
 import { MoviePlaylists } from './_components/MoviePlaylists';
-import { SupportedLocale } from '@/translations/locales';
+import { getT } from '@/lib/i18n';
 
 export async function generateMetadata(
   props: {
@@ -17,7 +15,7 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
+  const { t } = await getT();
   const { id: movieId} = getIdFromSlug(params.film_id);
   try {
     const movie = await getMovie(params.lang, movieId);
@@ -29,7 +27,7 @@ export async function generateMetadata(
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: seoLocales(params.lang, `/film/${movie.slug}/playlists`),
+      // alternates: seoLocales(params.lang, `/film/${movie.slug}/playlists`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${t('pages.film.playlists.metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() })} • ${siteConfig.name}`,

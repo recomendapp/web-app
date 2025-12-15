@@ -4,10 +4,10 @@ import { CakeIcon, MapPin, PersonStandingIcon } from "lucide-react";
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useModal } from "@/context/modal-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
-import { useFormatter, useTranslations } from "next-intl";
 import { TbGrave } from "react-icons/tb";
 import { MediaPerson } from "@recomendapp/types";
 import { upperFirst } from "lodash";
+import { useFormatter, useT } from "@/lib/i18n/client";
 
 interface PersonAboutModalProps extends ModalType {
 	person?: MediaPerson;
@@ -17,9 +17,9 @@ export const PersonAboutModal = ({
 	person,
 	...props
   } : PersonAboutModalProps) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const { closeModal } = useModal();
-	const format = useFormatter();
+	const formatter = useFormatter();
 	if (!person) return null;
 	return (
 		<Modal
@@ -60,10 +60,10 @@ export const PersonAboutModal = ({
 								</div>
 							</TooltipBox>
 							<span className="">
-								{format.dateTime(
+								{/* {format.dateTime(
 								new Date(person?.birthday),
 								{ dateStyle: 'long' }
-								)}
+								)} */}
 								{!person.deathday && ` (${t('common.messages.age_years', { count: new Date().getFullYear() - new Date(person?.birthday).getFullYear() })})`}
 							</span>
 							</div>
@@ -77,10 +77,10 @@ export const PersonAboutModal = ({
 								</div>
 							</TooltipBox>
 							<span className="">
-								{format.dateTime(
+								{/* {format.dateTime(
 								new Date(person?.deathday),
 								{ dateStyle: 'long' }
-								)}
+								)} */}
 								{person.birthday && ` (${t('common.messages.age_years', { count: new Date(person?.deathday).getFullYear() - new Date(person?.birthday).getFullYear() })})`}
 							</span>
 							</div>

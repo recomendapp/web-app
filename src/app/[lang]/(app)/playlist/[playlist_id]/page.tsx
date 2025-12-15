@@ -1,12 +1,10 @@
 import { notFound } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
-import { seoLocales } from '@/lib/i18n/routing';
 import { getPlaylist } from '@/features/server/playlist/playlistQueries';
 import { Playlist } from './_components/Playlist';
-import { SupportedLocale } from '@/translations/locales';
+import { getT } from '@/lib/i18n';
 
 export async function generateMetadata(
     props: {
@@ -14,7 +12,7 @@ export async function generateMetadata(
     }
 ): Promise<Metadata> {
     const params = await props.params;
-    const t = await getTranslations({ locale: params.lang as SupportedLocale });
+    const { t } = await getT();
     const playlist = await getPlaylist(params.playlist_id);
     if (!playlist) return {
 		title: upperFirst(t('common.messages.playlist_not_found')),
@@ -22,7 +20,7 @@ export async function generateMetadata(
     return {
 		title: t('pages.playlist.metadata.title', { title: playlist.title, username: playlist.user?.username! }),
 		description: truncate(t('pages.playlist.metadata.description', { username: playlist.user?.username!, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
-        alternates: seoLocales(params.lang, `/playlist/${playlist.id}`),
+        // alternates: seoLocales(params.lang, `/playlist/${playlist.id}`),
         openGraph: {
             siteName: siteConfig.name,
             title: `${t('pages.playlist.metadata.title', { title: playlist.title, username: playlist.user?.username! })} • ${siteConfig.name}`,

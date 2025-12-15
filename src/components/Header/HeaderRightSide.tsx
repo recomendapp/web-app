@@ -6,15 +6,15 @@ import { Link } from "@/lib/i18n/navigation";
 import { SocialButton } from './components/SocialButton';
 import { NotificationsButton } from '../notifications/NotificationsButton';
 import { useAuth } from '@/context/auth-context';
-import { useTranslations } from 'next-intl';
 import { useNotifications } from '@/context/notifications-context';
 import { upperFirst } from 'lodash';
 import { ButtonGroup } from '../ui/button-group';
+import { useT } from '@/lib/i18n/client';
 
 export default function HeaderRightSide() {
   const { session } = useAuth();
   const { state } = useNotifications();
-  const t = useTranslations();
+  const { t } = useT();
   return (
     <ButtonGroup>
       {session ? (

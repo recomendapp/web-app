@@ -1,8 +1,8 @@
-'use client';
+'use client'
+
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTableRowActions } from './data-table-row-actions';
 import { UserRecosMovieAggregated } from '@recomendapp/types';
-import { useTranslations } from 'next-intl';
 import { Item } from './item';
 import { capitalize, upperFirst } from 'lodash';
 import { TableColumnHeader } from '@/components/tables/TableColumnHeader';
@@ -10,9 +10,10 @@ import { DateOnlyYearTooltip } from '@/components/utils/Date';
 import { Icons } from '@/config/icons';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import Senders from './senders';
+import { useT } from '@/lib/i18n/client';
 
 export const Columns = (): ColumnDef<UserRecosMovieAggregated>[] => {
-  const t = useTranslations();
+  const { t } = useT();
   return [
     {
       id: 'item',

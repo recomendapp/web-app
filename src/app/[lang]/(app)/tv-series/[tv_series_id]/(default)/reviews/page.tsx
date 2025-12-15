@@ -2,13 +2,11 @@ import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getTvSeries } from '@/features/server/media/mediaQueries';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
-import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
-import { seoLocales } from '@/lib/i18n/routing';
 import { TvSeriesReviews } from './_components/TvSeriesReviews';
 import { notFound } from 'next/navigation';
-import { SupportedLocale } from '@/translations/locales';
 import { MediaTvSeries } from '@recomendapp/types';
+import { getT } from '@/lib/i18n';
 
 export async function generateMetadata(
   props: {
@@ -19,7 +17,7 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
+  const { t } = await getT();
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
   try {
     const serie = await getTvSeries(params.lang, serieId);
@@ -31,7 +29,7 @@ export async function generateMetadata(
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: seoLocales(params.lang, `/tv-series/${serie.slug}/reviews`),
+      // alternates: seoLocales(params.lang, `/tv-series/${serie.slug}/reviews`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${t('pages.tv_series.reviews.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,

@@ -10,10 +10,10 @@ import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
 import { useUserActivityTvSeriesInsertMutation, useUserActivityTvSeriesUpdateMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useQueryClient } from "@tanstack/react-query";
 import { userKeys } from "@/features/client/user/userKeys";
+import { useT } from "@/lib/i18n/client";
 
 interface ButtonUserActivityTvSeriesLikeProps
 	extends React.ComponentProps<typeof Button> {
@@ -26,7 +26,7 @@ const ButtonUserActivityTvSeriesLike = React.forwardRef<
 	ButtonUserActivityTvSeriesLikeProps
 >(({ tvSeriesId, stopPropagation = true, className, ...props }, ref) => {
 	const { session } = useAuth();
-	const t = useTranslations();
+	const { t } = useT();
 	const pathname = usePathname();
 	const queryClient = useQueryClient();
 

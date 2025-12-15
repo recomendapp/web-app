@@ -4,9 +4,9 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
 import { MediaTvSeries } from '@recomendapp/types';
-import { getTranslations } from 'next-intl/server';
 import { CardTvSeries } from "@/components/Card/CardTvSeries";
 import { SupportedLocale } from "@/translations/locales";
+import { getT } from "@/lib/i18n";
 
 export default async function SearchTvSeriesSmall({
   tvSeries,
@@ -19,7 +19,7 @@ export default async function SearchTvSeriesSmall({
   locale: SupportedLocale;
   className?: string;
 }) {
-  const t = await getTranslations({ locale: locale });
+  const { t } = await getT();
   if (!tvSeries || tvSeries.length === 0) return null;
   return (
     <div className={cn('flex flex-col gap-2', className)}>

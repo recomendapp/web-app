@@ -17,7 +17,6 @@ import toast from 'react-hot-toast';
 import { MediaMovie, MediaTvSeries, UserReview } from '@recomendapp/types';
 import { cn } from '@/lib/utils';
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { useEditor } from '@/components/tiptap/Tiptap';
 import { upperFirst } from 'lodash';
 import { useModal } from '@/context/modal-context';
@@ -41,6 +40,7 @@ import { CardTvSeries } from '../Card/CardTvSeries';
 import ButtonUserActivityMovieRating from '../buttons/ButtonUserActivityMovieRating';
 import ButtonUserActivityTvSeriesRating from '../buttons/ButtonUserActivityTvSeriesRating';
 import { Spinner } from '../ui/spinner';
+import { useT } from '@/lib/i18n/client';
 
 const MAX_TITLE_LENGTH = 50;
 const MAX_BODY_LENGTH = 5000;
@@ -87,7 +87,7 @@ export default function ReviewForm({
 	movie,
 	tvSeries,
 } : ReviewFormProps) {
-	const t = useTranslations();
+	const { t } = useT();
 	const { createConfirmModal } = useModal();
 
 	// Editor
@@ -128,8 +128,8 @@ export default function ReviewForm({
 			computeState
 		]
 	);
-	const now = useNow({ updateInterval: 1000 * 10 });
-	const format = useFormatter();
+	// const now = useNow({ updateInterval: 1000 * 10 });
+	// const format = useFormatter();
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleUpdateReview = useCallback(async () => {
@@ -339,7 +339,7 @@ const Toolbar = ({ editor, editorState }: { editor: Editor | null, editorState: 
 };
 
 const LinkAction = ({ editor }: { editor: Editor | null }) => {
-	const t = useTranslations()
+	const { t } = useT();
 	const [open, setOpen] = useState(false);
 
 	const saveLink = useCallback((e: FormEvent<HTMLFormElement>) => {

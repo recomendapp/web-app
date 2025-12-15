@@ -6,16 +6,16 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { MediaMovie, MediaPerson } from "@recomendapp/types";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/navigation";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { useT } from "@/lib/i18n/client";
 
 export default function MovieDetails({
   movie,
 }: {
   movie: MediaMovie;
 }) {
-  const t = useTranslations();
+  const { t } = useT();
   if (!movie) return null;
 
   return (
@@ -45,7 +45,7 @@ const MovieCast = ({
 } : {
 	movie: MediaMovie
 }) => {
-  const t = useTranslations();
+  const { t } = useT();
 	return (
 		<div>
 			<h2 className="text-lg font-medium">{upperFirst(t('common.messages.cast'))}</h2>

@@ -1,9 +1,9 @@
+import { useT } from "@/lib/i18n/client";
 import { upperFirst } from "lodash";
 import { LockIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
 
 export const ProfilePrivateAccountCard = () => {
-  const t = useTranslations();
+  const { t } = useT();
 	return (
 		<div className='flex gap-4 justify-center items-center px-4 py-8 border-y-2'>
       <LockIcon />

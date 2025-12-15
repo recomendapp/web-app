@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { Table } from '@tanstack/react-table';
@@ -11,8 +11,8 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { ChevronDown, ChevronUp, Filter } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { capitalize } from 'lodash';
+import { useT } from '@/lib/i18n/client';
 
 interface TableSortOptionsProps<TData> {
   table: Table<TData>;
@@ -21,7 +21,7 @@ interface TableSortOptionsProps<TData> {
 export function TableSortOptions<TData>({
   table,
 }: TableSortOptionsProps<TData>) {
-  const t = useTranslations();
+  const { t } = useT();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

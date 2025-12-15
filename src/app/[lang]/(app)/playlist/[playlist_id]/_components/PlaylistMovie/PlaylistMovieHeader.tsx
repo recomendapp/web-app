@@ -3,16 +3,15 @@ import { CardUser } from "@/components/Card/CardUser";
 import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylist";
 import { PlaylistModal } from "@/components/Modals/playlists/PlaylistModal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Skeleton } from "@/components/ui/skeleton";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { useAuth } from "@/context/auth-context";
 import { useModal } from "@/context/modal-context";
-import { ImageObject, useRandomImage } from "@/hooks/use-random-image";
+import { useRandomImage } from "@/hooks/use-random-image";
+import { useT } from "@/lib/i18n/client";
 import { TMDB_IMAGE_BASE_URL } from "@/lib/tmdb/tmdb";
 import { ConvertHoursMinutes } from "@/lib/utils";
 import { Playlist } from "@recomendapp/types";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
 
 interface PlaylistMovieHeaderProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -31,7 +30,7 @@ export function PlaylistMovieHeader({
   skeleton,
 } : PlaylistMovieHeaderProps) {
   const { session } = useAuth();
-  const t = useTranslations();
+  const { t } = useT();
   const { openModal, createModal } = useModal();
   const backdrop = useRandomImage(
     backdrops?.map(src => ({ src, alt: playlist.title })) || []

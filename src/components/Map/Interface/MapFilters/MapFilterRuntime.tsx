@@ -6,10 +6,10 @@ import { useEffect, useState } from "react"
 import useDebounce from "@/hooks/use-debounce"
 import { TooltipBox } from "@/components/Box/TooltipBox"
 import { RotateCcwIcon } from "lucide-react"
-import { useFormatter } from "next-intl"
+import { useFormatter } from "@/lib/i18n/client"
 
 export const MapFilterRuntime = () => {
-	const format = useFormatter();
+	const formatter = useFormatter();
 	const {
 		filters
 	} = useMap();
@@ -40,7 +40,7 @@ export const MapFilterRuntime = () => {
 				value={value}
 				max={filters.runtime.defaultValue[1]}
 				step={15}
-				formatLabel={(value) => format.dateTime((value - 60) * 60 * 1000, { hour: 'numeric', minute: 'numeric' })}
+				// formatLabel={(value) => format.dateTime((value - 60) * 60 * 1000, { hour: 'numeric', minute: 'numeric' })}
 				onValueChange={(value) => {
 					setValue(value)
 				}}

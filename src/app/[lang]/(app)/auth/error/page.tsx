@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Icons } from '@/config/icons';
 import { Images } from '@/config/images';
@@ -15,11 +15,11 @@ import {
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { useTranslations } from 'next-intl';
+import { useT } from '@/lib/i18n/client';
 
 export default function AuthError() {
   const searchParams = useSearchParams();
-  const t = useTranslations('pages.auth.error');
+  const { t } = useT();
   const errorMsg = searchParams.get('error');
   const bgImage = useRandomImage(Images.auth.error.background);
   return (
@@ -36,9 +36,9 @@ export default function AuthError() {
         <CardHeader className='gap-2'>
           <CardTitle className='inline-flex gap-2 items-center justify-center'>
             <Icons.site.icon className='fill-accent-yellow w-8' />
-            {t('label')}
+            {t('pages.auth.error.label')}
           </CardTitle>
-          <CardDescription>{t('description')}</CardDescription>
+          <CardDescription>{t('pages.auth.error.description')}</CardDescription>
         </CardHeader>
         <CardContent className='grid gap-4'>
           <Alert>
@@ -47,7 +47,7 @@ export default function AuthError() {
         </CardContent>
         <CardFooter>
           <Button className='w-full' asChild>
-            <Link href="/auth/login">{t('return_to_login')}</Link>
+            <Link href="/auth/login">{t('pages.auth.error.return_to_login')}</Link>
           </Button>
         </CardFooter>
       </Card>

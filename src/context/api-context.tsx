@@ -1,9 +1,9 @@
 'use client'
 
 import createClient from "@recomendapp/api-js";
-import { useLocale } from "next-intl";
 import { createContext, use, useMemo } from "react";
 import { useAuth } from "./auth-context";
+import { useT } from "@/lib/i18n/client";
 
 const ApiContext = createContext<ReturnType<typeof createClient> | undefined>(undefined);
 
@@ -12,14 +12,14 @@ export const ApiProvider = ({
 } : {
 	children: React.ReactNode;
 }) => {
-	const locale = useLocale();
+	const { i18n } = useT();
 	const { session } = useAuth();
 	const api = useMemo(() => {
 		return createClient({
 			token: session?.access_token,
-			language: locale,
+			language: i18n.resolvedLanguage,
 		});
-	}, [session, locale]);
+	}, [session, i18n.resolvedLanguage]);
 	return (
 		<ApiContext.Provider value={api}>
 			{children}

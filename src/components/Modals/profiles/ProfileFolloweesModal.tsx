@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,7 +12,7 @@ import useDebounce from '@/hooks/use-debounce';
 import { Link } from "@/lib/i18n/navigation";
 import { useUserFolloweesInfiniteQuery } from '@/features/client/user/userQueries';
 import { upperFirst } from 'lodash';
-import { useTranslations } from 'next-intl';
+import { useT } from '@/lib/i18n/client';
 
 
 export function ProfileFolloweesModal({
@@ -20,7 +20,7 @@ export function ProfileFolloweesModal({
 } : {
 	userId: string;
 }) {
-	const t = useTranslations();
+	const { t } = useT();
 	const [ search, setSearch ] = useState<null | string>(null);
 	const debouncedSearch = useDebounce(search);
 	const { ref, inView } = useInView();

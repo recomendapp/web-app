@@ -3,13 +3,13 @@ import { PlaylistItemTvSeries } from '@recomendapp/types';
 import { MessageSquarePlusIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useAuth } from '@/context/auth-context';
 import ModalPlaylistTvSeriesComment from '@/components/Modals/playlists/ModalPlaylistTvSeriesComment';
+import { useT } from '@/lib/i18n/client';
 
 export function DataComment({ playlistItem }: { playlistItem: PlaylistItemTvSeries }) {
-  const t = useTranslations();
+  const { t } = useT();
   const { session } = useAuth();
   const { openModal } = useModal();
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({

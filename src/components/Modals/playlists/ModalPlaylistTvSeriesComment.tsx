@@ -8,10 +8,10 @@ import { useModal } from "@/context/modal-context";
 import { PlaylistItemTvSeries } from "@recomendapp/types";
 import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { usePlaylistIsAllowedToEditQuery } from "@/features/client/playlist/playlistQueries";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
 import { usePlaylistTvSeriesUpdateMutation } from "@/api/client/mutations/playlistMutations";
+import { useT } from "@/lib/i18n/client";
 
 interface ModalPlaylistTvSeriesCommentProps extends ModalType {
 	playlistItem: PlaylistItemTvSeries;
@@ -21,7 +21,7 @@ const ModalPlaylistTvSeriesComment = ({
 	playlistItem,
 	...props
 } : ModalPlaylistTvSeriesCommentProps) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const { session } = useAuth();
 	const { closeModal } = useModal();
 	const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({

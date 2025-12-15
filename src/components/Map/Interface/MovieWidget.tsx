@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { useMap } from "../../../context/map-context"
 import { TriangleAlert, XIcon } from "lucide-react";
 import MediaPoster from "@/components/Media/MediaPoster";
-import { useLocale } from "next-intl";
 import Loader from "@/components/Loader";
 import { MovieTrailerButton } from "@/app/[lang]/(app)/film/[film_id]/(default)/_components/MovieHeader";
 import { Link } from "@/lib/i18n/navigation";
@@ -25,15 +24,12 @@ export const MovieWidget = () => {
 		setSelectedMovie,
 	} = useMap();
 
-	const locale = useLocale();
-
 	const {
 		data: movie,
 		isLoading,
 		isError,
 	} = useMediaMovieDetailsQuery({
 		id: selectedMovie?.movie.id,
-		locale: locale as string,
 	});
 
 	if (!selectedMovie?.movie.id) return null;
@@ -82,9 +78,9 @@ export const MovieWidget = () => {
 								/> : null}
 							</div>
 							)}
-							{movie?.videos?.length > 0 && (
+							{movie.trailers && movie.trailers.length > 0 && (
 								<MovieTrailerButton
-									videos={movie.videos}
+									videos={movie.trailers}
 									className="absolute bottom-2 right-2"
 								/>
 							)}

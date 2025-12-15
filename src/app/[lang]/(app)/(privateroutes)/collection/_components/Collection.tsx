@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { PlaylistCreateButton } from '@/components/Playlist/Button/PlaylistCreateButton';
 import { Link } from "@/lib/i18n/navigation";
 import { Bookmark, Heart, Send } from 'lucide-react';
@@ -14,13 +14,13 @@ import { UserPlaylistsSaved } from './UserPlaylistsSaved';
 import CollectionIcon from '@/components/Collection/CollectionIcon';
 import { useUI } from '@/context/ui-context';
 import HeaderRightSide from '@/components/Header/HeaderRightSide';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { UserPlaylists } from './UserPlaylists';
+import { useT } from '@/lib/i18n/client';
 
 const Collection = () => {
   const { device } = useUI();
-  const t = useTranslations('common');
+  const { t } = useT();
   const collectionRoutes = useMemo(
 	() => [
 	  {
@@ -29,7 +29,7 @@ const Collection = () => {
 			<Send fill="#fff" className="w-2/5 h-2/5" />
 		  </CollectionIcon>
 		),
-		label: upperFirst(t('messages.my_recos')),
+		label: upperFirst(t('common.messages.my_recos')),
 		href: '/collection/my-recos',
 	  },
 	  {
@@ -38,7 +38,7 @@ const Collection = () => {
 			<Bookmark fill="#fff" className="w-2/5 h-2/5" />
 		  </CollectionIcon>
 		),
-		label: upperFirst(t('messages.watchlist')),
+		label: upperFirst(t('common.messages.watchlist')),
 		href: '/collection/watchlist',
 	  },
 	  {
@@ -47,7 +47,7 @@ const Collection = () => {
 			<Heart fill="#fff" className="w-2/5 h-2/5" />
 		  </CollectionIcon>
 		),
-		label: upperFirst(t('messages.heart_pick', { count: 2 })),
+		label: upperFirst(t('common.messages.heart_pick', { count: 2 })),
 		href: '/collection/heart-picks',
 	  },
 	],

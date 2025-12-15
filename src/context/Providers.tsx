@@ -1,7 +1,6 @@
 import { ReactQueryProvider } from '@/context/react-query-context';
 import { AuthProvider } from '@/context/auth-context';
 import { MapContext } from '@/context/map-context';
-import { NextIntlClientProvider } from 'next-intl';
 import { SupabaseProvider } from '@/context/supabase-context';
 import { NotificationsProvider } from '@/context/notifications-context';
 import { cookies } from 'next/headers';
@@ -14,16 +13,13 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { ModalProvider } from './modal-context';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
-import { SupportedLocale } from '@/translations/locales';
 import { ApiProvider } from './api-context';
 import { checkMaintenance } from '@/features/server/utils';
 
 export const Providers = async ({
   children,
-  locale,
 }: {
   children: React.ReactNode;
-  locale: SupportedLocale;
 }) => {
   const supabase = await createServerClient();
   const [
@@ -45,50 +41,48 @@ export const Providers = async ({
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
   return (
-    <NextIntlClientProvider locale={locale}>
-      <SupabaseProvider>
-        <ReactQueryProvider>
-          <AuthProvider session={session}>
-            <ApiProvider>
-              <NotificationsProvider>
-                <MapContext>
-                  <ThemeProvider attribute={'class'} defaultTheme='dark' enableSystem>
-                    <UIProvider
-                    defaultLayout={defaultLayout}
-                    cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
-                    cookieRightPanelOpen={rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined}
-                    device={device}
-                    >
-                      <TooltipProvider delayDuration={100}>
-                        <ModalProvider>
-                          <NextTopLoader
-                            showSpinner={false}
-                            easing="ease"
-                            color="#FFE974"
-                            height={2}
-                          />
-                          <Toaster
-                            position="top-center"
-                            toastOptions={{
-                              style: {
-                                borderRadius: '10px',
-                                background: '#333',
-                                color: '#fff',
-                              },
-                            }}
-                          />
-                          {isMaintenanceMode ? <MaintenancePage /> : children}
-                        </ModalProvider>
-                      </TooltipProvider>
-                    </UIProvider>
-                  </ThemeProvider>
-                </MapContext> 
-              </NotificationsProvider>
-            </ApiProvider>
-          </AuthProvider>
-        </ReactQueryProvider>
-      </SupabaseProvider>
-    </NextIntlClientProvider>
+    <SupabaseProvider>
+      <ReactQueryProvider>
+        <AuthProvider session={session}>
+          <ApiProvider>
+            <NotificationsProvider>
+              <MapContext>
+                <ThemeProvider attribute={'class'} defaultTheme='dark' enableSystem>
+                  <UIProvider
+                  defaultLayout={defaultLayout}
+                  cookieSidebarOpen={sidebarOpen ? JSON.parse(sidebarOpen.value) : undefined}
+                  cookieRightPanelOpen={rightPanelOpen ? JSON.parse(rightPanelOpen.value) : undefined}
+                  device={device}
+                  >
+                    <TooltipProvider delayDuration={100}>
+                      <ModalProvider>
+                        <NextTopLoader
+                          showSpinner={false}
+                          easing="ease"
+                          color="#FFE974"
+                          height={2}
+                        />
+                        <Toaster
+                          position="top-center"
+                          toastOptions={{
+                            style: {
+                              borderRadius: '10px',
+                              background: '#333',
+                              color: '#fff',
+                            },
+                          }}
+                        />
+                        {isMaintenanceMode ? <MaintenancePage /> : children}
+                      </ModalProvider>
+                    </TooltipProvider>
+                  </UIProvider>
+                </ThemeProvider>
+              </MapContext> 
+            </NotificationsProvider>
+          </ApiProvider>
+        </AuthProvider>
+      </ReactQueryProvider>
+    </SupabaseProvider>
   );
 };
 

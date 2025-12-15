@@ -6,10 +6,7 @@ import { MediaMovie, MediaTvSeries, UserReviewMovie, UserReviewTvSeries } from '
 import { cn } from '@/lib/utils';
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { CardUser } from '@/components/Card/CardUser';
-import { useTranslations } from 'next-intl';
 import { useEditor } from '@/components/tiptap/Tiptap';
-import { CardMovie } from '../Card/CardMovie';
-import { CardTvSeries } from '../Card/CardTvSeries';
 import { ButtonGroup } from '../ui/button-group';
 import { ReviewMovieSettings } from './ReviewMovieSettings';
 import { ReviewTvSeriesSettings } from './ReviewTvSeriesSettings';
@@ -41,7 +38,6 @@ export default function ReviewViewer({
 	movie,
 	tvSeries,
 } : ReviewViewerProps) {
-	const t = useTranslations();
 	const editor = useEditor({
 		editable: false,
 		content: review.body,

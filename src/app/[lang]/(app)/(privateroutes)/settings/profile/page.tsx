@@ -1,17 +1,18 @@
-'use client';
+'use client'
+
 import { Separator } from '@/components/ui/separator';
 import { ProfileForm } from '@/app/[lang]/(app)/(privateroutes)/settings/profile/_components/profileForm';
-import { useTranslations } from 'next-intl';
+import { useT } from '@/lib/i18n/client';
 // import { FavoriteMovies } from '@/components/Settings/UserSettingsProfile/FavoriteFilms/FavoriteMovies';
 
 export default function SettingsProfilePage() {
-  const t = useTranslations('pages.settings');
+  const { t } = useT();
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">{t('profile.label')}</h3>
+        <h3 className="text-lg font-medium">{t('pages.settings.profile.label')}</h3>
         <p className="text-sm text-muted-foreground text-justify">
-          {t('profile.description')}
+          {t('pages.settings.profile.description')}
         </p>
       </div>
       <Separator />

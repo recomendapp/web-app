@@ -22,16 +22,15 @@ import { Icons } from '@/config/icons';
 import { useEffect, useState } from 'react';
 import compressPicture from '@/lib/utils/compressPicture';
 import Loader from '@/components/Loader';
-import { useTranslations } from 'next-intl';
 import { useMutation } from '@tanstack/react-query';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { upperFirst } from 'lodash';
 import { v4 as uuidv4 } from "uuid";
+import { useT } from '@/lib/i18n/client';
 
 export function ProfileForm() {
   const supabase = useSupabaseClient();
-  const t = useTranslations('pages.settings');
-  const common = useTranslations('common');
+  const { t } = useT();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
 
@@ -61,22 +60,22 @@ export function ProfileForm() {
     full_name: z
       .string()
       .min(1, {
-        message: t('profile.full_name.form.min_length'),
+        message: t('pages.settings.profile.full_name.form.min_length'),
       })
       .max(30, {
-        message: t('profile.full_name.form.max_length'),
+        message: t('pages.settings.profile.full_name.form.max_length'),
       })
       .regex(/^(?!\s+$)[a-zA-Z0-9\s\S]*$/),
     bio: z
       .string()
       .max(150, {
-        message: t('profile.bio.form.max_length'),
+        message: t('pages.settings.profile.bio.form.max_length'),
       })
       .optional(),
     website: z
       .string()
       .url({
-        message: t('profile.url.form.invalid'),
+        message: t('pages.settings.profile.url.form.invalid'),
       })
       .or(z.literal(''))
       .optional(),
@@ -126,9 +125,9 @@ export function ProfileForm() {
         await updateProfile(userPayload);
       }
 
-      toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
+      toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
     } catch (error: any) {
-      toast.error(upperFirst(common('messages.an_error_occurred')));
+      toast.error(upperFirst(t('common.messages.an_error_occurred')));
       // toast.error(error.message);
     } finally {
       setLoading(false);
@@ -140,9 +139,9 @@ export function ProfileForm() {
       await updateProfile({
         avatar_url: null,
       });
-      toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
+      toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
     } catch (error) {
-      toast.error(upperFirst(common('messages.an_error_occurred')));
+      toast.error(upperFirst(t('common.messages.an_error_occurred')));
     } finally {
       setLoading(false);
     }
@@ -183,7 +182,7 @@ export function ProfileForm() {
           />
           {user.avatar_url && (
             <Button type='button' variant={'destructive'} onClick={deleteAvatar}>
-              {t('profile.avatar.delete')}
+              {t('pages.settings.profile.avatar.delete')}
             </Button>
           )}
         </div>
@@ -193,14 +192,14 @@ export function ProfileForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex justify-between gap-4">
-                <p>{t('profile.full_name.label')}</p>
+                <p>{t('pages.settings.profile.full_name.label')}</p>
                 <p className="">{field?.value?.length ?? 0} / 50</p>
               </FormLabel>
               <FormControl>
-                <Input placeholder={t('profile.full_name.placeholder')} {...field} />
+                <Input placeholder={t('pages.settings.profile.full_name.placeholder')} {...field} />
               </FormControl>
               <FormDescription className="text-justify">
-                {t('profile.full_name.description')}
+                {t('pages.settings.profile.full_name.description')}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -212,12 +211,12 @@ export function ProfileForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex justify-between gap-4">
-                <p>{t('profile.bio.label')}</p>
+                <p>{t('pages.settings.profile.bio.label')}</p>
                 <p>{field?.value?.length ?? 0} / 150</p>
               </FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={t('profile.bio.placeholder')}
+                  placeholder={t('pages.settings.profile.bio.placeholder')}
                   className="resize-none h-32"
                   {...field}
                 />
@@ -230,7 +229,7 @@ export function ProfileForm() {
           name={'website'}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('profile.url.label')}</FormLabel>
+              <FormLabel>{t('pages.settings.profile.url.label')}</FormLabel>
               <FormControl>
                 <Input
                   type="text"
@@ -245,7 +244,7 @@ export function ProfileForm() {
         />
         <Button type="submit" disabled={loading}>
           {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          {upperFirst(common('messages.save'))}
+          {upperFirst(t('common.messages.save'))}
         </Button>
       </form>
     </Form>

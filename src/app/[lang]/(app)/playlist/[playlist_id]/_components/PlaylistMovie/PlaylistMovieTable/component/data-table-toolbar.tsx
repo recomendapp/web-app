@@ -1,4 +1,5 @@
-'use client';
+'use client'
+
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
@@ -8,13 +9,13 @@ import { Playlist } from '@recomendapp/types';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import PlaylistActionSave from '@/components/Playlist/actions/PlaylistActionSave';
 import { TableViewOptions } from '@/components/tables/TableViewOptions';
 import { TableSortOptions } from '@/components/tables/TableSortOptions';
 import { ModalPlaylistMovieQuickAdd } from '@/components/Modals/playlists/ModalPlaylistMovieQuickAdd';
+import { useT } from '@/lib/i18n/client';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -25,7 +26,7 @@ export function DataTableToolbar<TData>({
   table,
   playlist,
 }: DataTableToolbarProps<TData>) {
-  const t = useTranslations();
+  const { t } = useT();
   const { session } = useAuth();
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
     playlistId: playlist?.id,

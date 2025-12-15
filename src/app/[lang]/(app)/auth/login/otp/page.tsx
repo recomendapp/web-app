@@ -15,11 +15,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { useRandomImage } from '@/hooks/use-random-image';
 import { LoginOtpForm } from './_components/LoginOtpForm';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { useT } from '@/lib/i18n/client';
 
 export default function Login() {
-  const t = useTranslations();
+  const { t } = useT();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get('pages.auth.login.redirect');
   const bgImage = useRandomImage(Images.auth.login.background);

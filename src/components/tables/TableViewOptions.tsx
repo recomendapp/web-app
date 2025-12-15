@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { MixerHorizontalIcon } from '@radix-ui/react-icons';
@@ -11,8 +11,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import { useTranslations } from 'next-intl';
 import { capitalize } from 'lodash';
+import { useT } from '@/lib/i18n/client';
 
 interface TableViewOptionsProps<TData> {
   table: Table<TData>;
@@ -21,7 +21,7 @@ interface TableViewOptionsProps<TData> {
 export function TableViewOptions<TData>({
   table,
 }: TableViewOptionsProps<TData>) {
-  const t = useTranslations();
+  const { t } = useT();
   return (
 	<DropdownMenu>
 	  <DropdownMenuTrigger asChild>

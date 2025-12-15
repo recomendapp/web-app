@@ -7,9 +7,9 @@ import { Icons } from "@/config/icons";
 import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from "@/lib/utils";
 import { useModal } from "@/context/modal-context";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ModalPlaylistTvSeriesAdd } from "../Modals/playlists/ModalPlaylistTvSeriesAdd";
+import { useT } from "@/lib/i18n/client";
 
 interface ButtonPlaylistTvSeriesAddProps
 	extends React.ComponentProps<typeof Button> {
@@ -23,7 +23,7 @@ const ButtonPlaylistTvSeriesAdd = React.forwardRef<
 	ButtonPlaylistTvSeriesAddProps
 >(({ tvSeriesId, stopPropagation = true, tvSeriesTitle, className, ...props }, ref) => {
 	const { user } = useAuth();
-	const t = useTranslations();
+	const { t } = useT();
 	const pathname = usePathname();
 	const { openModal } = useModal();
 

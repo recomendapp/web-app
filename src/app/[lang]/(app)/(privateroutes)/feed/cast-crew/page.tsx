@@ -7,13 +7,13 @@ import Loader from "@/components/Loader";
 import { useUserFeedCastCrewInfiniteQuery } from "@/features/client/user/userQueries";
 import { FeedCastCrewItem } from "./_components/FeedCastCrewItem";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
 import { useRouter } from "@/lib/i18n/navigation";
+import { useT } from "@/lib/i18n/client";
 
 export default function FeedPersons() {
 	const { session, customerInfo } = useAuth();
 	const router = useRouter();
-	const t = useTranslations();
+	const { t } = useT();
 
 	const { ref, inView } = useInView();
 

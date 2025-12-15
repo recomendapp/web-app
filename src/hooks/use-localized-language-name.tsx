@@ -1,10 +1,12 @@
-import { useLocale } from "next-intl";
 import getUnicodeFlagIcon from 'country-flag-icons/unicode'
 import { capitalize } from "lodash";
 import { SupportedLocale } from "@/translations/locales";
+import { useT } from '@/lib/i18n/client';
+import { fallbackLng } from '@/lib/i18n/settings';
 
 export const useLocalizedLanguageName = (locales: SupportedLocale[]) => {
-	const currentLocale = useLocale();
+	const { i18n: { resolvedLanguage } } = useT();
+	const currentLocale = resolvedLanguage || fallbackLng
 	
 	const iso6391 = new Intl.DisplayNames([currentLocale], { type: 'language' });
 	const iso31661 = new Intl.DisplayNames([currentLocale], { type: 'region' });

@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils';
 import { ProfileFolloweesModal } from '@/components/Modals/profiles/ProfileFolloweesModal';
 import { useModal } from '@/context/modal-context';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useCallback } from 'react';
+import { useT } from '@/lib/i18n/client';
 
 interface ProfileFolloweesButtonProps {
   userId: string;
@@ -20,7 +20,7 @@ export const ProfileFolloweesButton = ({
 	className,
   disabled = false,
 } : ProfileFolloweesButtonProps) => {
-  const t = useTranslations();
+  const { t } = useT();
   const { createModal } = useModal();
 
   const handleOpenFolloweesModal = useCallback(() => {

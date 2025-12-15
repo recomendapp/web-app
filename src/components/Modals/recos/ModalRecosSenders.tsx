@@ -5,8 +5,8 @@ import { UserRecosAggregated } from "@recomendapp/types";
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useModal } from "@/context/modal-context";
 import { CardUser } from "@/components/Card/CardUser";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useT } from "@/lib/i18n/client";
 
 interface ModalRecosSendersProps extends ModalType {
 	comments: UserRecosAggregated['senders'];
@@ -16,7 +16,7 @@ export const ModalRecosSenders = ({
 	comments,
 	...props
   } : ModalRecosSendersProps) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const { closeModal } = useModal();
 	return (
 		<Modal

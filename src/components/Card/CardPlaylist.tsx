@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
@@ -6,8 +6,8 @@ import { ImageWithFallback } from '../utils/ImageWithFallback';
 import { Link } from "@/lib/i18n/navigation";
 import { Playlist } from '@recomendapp/types';
 import React from 'react';
-import { useTranslations } from 'next-intl';
 import { ContextMenuPlaylist } from '../ContextMenu/ContextMenuPlaylist';
+import { useT } from '@/lib/i18n/client';
 
 interface CardPlaylistProps
 	extends React.HTMLAttributes<HTMLDivElement> {
@@ -21,7 +21,7 @@ const CardPlaylistDefault = React.forwardRef<
 	HTMLDivElement,
 	Omit<CardPlaylistProps, "variant">
 >(({ className, playlist, showItemCount, showByUser = true, children, ...props }, ref) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const renderItemsCount = () => {
 		switch (playlist.type) {
 			case 'movie':

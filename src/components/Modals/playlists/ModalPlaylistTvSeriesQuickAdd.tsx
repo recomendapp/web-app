@@ -1,4 +1,5 @@
-'use client';
+'use client'
+
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
@@ -13,7 +14,6 @@ import { Icons } from '@/config/icons';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
 import { useTmdbSearchTvSeriesInfiniteQuery } from '@/features/client/tmdb/tmdbQueries';
-import { useLocale, useTranslations } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
@@ -21,6 +21,7 @@ import { usePlaylistTvSeriesMultiInsertMutation } from '@/api/client/mutations/p
 import { upperFirst } from 'lodash';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { useT } from '@/lib/i18n/client';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -33,8 +34,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
 	...props
 } : ModalPlaylistTvSeriesQuickAddProps) {
 	const { session } = useAuth();
-	const t = useTranslations();
-	const locale = useLocale();
+	const { t, i18n } = useT();
 	const { closeModal } = useModal();
 	const [selectedTvSeries, setSelectedTvSeries] = useState<MediaTvSeries[]>([]);
 	const [comment, setComment] = useState<string>('');
@@ -51,7 +51,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
 		hasNextPage,
 	} = useTmdbSearchTvSeriesInfiniteQuery({
 		query: searchQuery,
-		locale: locale,
+		locale: i18n.resolvedLanguage,
 	})
 
 	const insertTvSeriesMultiple = usePlaylistTvSeriesMultiInsertMutation({
@@ -92,10 +92,10 @@ export function ModalPlaylistTvSeriesQuickAdd({
 			<ModalHeader className='px-4 pb-4 pt-5'>
 				<ModalTitle>{upperFirst(t('common.messages.add_to_playlist'))}</ModalTitle>
 				<ModalDescription>
-					{t.rich('common.messages.add_one_or_more_tv_series_to', {
+					{/* {t.rich('common.messages.add_one_or_more_tv_series_to', {
 						title: playlist.title,
 						important: (chunks) => <strong>{chunks}</strong>,
-					})}
+					})} */}
 				</ModalDescription>
 			</ModalHeader>
 			<ModalBody className='p-0! border-t bg-popover text-popover-foreground'>
@@ -139,10 +139,10 @@ export function ModalPlaylistTvSeriesQuickAdd({
 						</p>
 					) : (searchQuery && !isLoading) ? (
 						<p className='p-4 text-center text-muted-foreground'>
-							{t.rich('common.messages.no_results_for', {
+							{/* {t.rich('common.messages.no_results_for', {
 								query: searchQuery,
 								strong: (chunks) => <strong>{chunks}</strong>,
-							})}
+							})} */}
 						</p>
 					) : !isLoading ? (
 						<p className='p-4 text-center text-muted-foreground'>
@@ -168,7 +168,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
 					{selectedTvSeries.map((tvSeriesItem) => (
 						<div
 						key={tvSeriesItem.id}
-						className={`w-[40px] shadow-2xl cursor-not-allowed`}
+						className={`w-10 shadow-2xl cursor-not-allowed`}
 						onClick={() => setSelectedTvSeries((prev) => prev.filter(
 							(selectedTvSeries) => selectedTvSeries.id !== tvSeriesItem.id
 						))}

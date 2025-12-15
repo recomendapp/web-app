@@ -28,7 +28,6 @@ import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Database, MediaTvSeries } from '@recomendapp/types';
 import { useModal } from '@/context/modal-context';
 import { upperFirst } from 'lodash';
-import { useLocale, useTranslations } from 'next-intl';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 import ButtonUserWatchlistTvSeries from '@/components/buttons/ButtonUserWatchlistTvSeries';
@@ -41,6 +40,7 @@ import ButtonUserRecosTvSeriesSend from '@/components/buttons/ButtonUserRecosTvS
 import ButtonPlaylistTvSeriesAdd from '@/components/buttons/ButtonPlaylistTvSeriesAdd';
 import { ModalUserActivityTvSeriesFollowersRating } from '@/components/Modals/activities/ModalUserActivityTvSeriesFollowersRating';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { useT } from '@/lib/i18n/client';
 
 export default function TvSerieHeader({
   serie,
@@ -50,7 +50,7 @@ export default function TvSerieHeader({
   followersAvgRating?: number | null;
 }) {
   const { openModal } = useModal();
-  const common = useTranslations('common');
+  const { t } = useT();
   if (!serie) return null;
   return (
     <div>
@@ -89,7 +89,7 @@ export default function TvSerieHeader({
             <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
               {/* TYPE & GENRES */}
               <div>
-                <span className='text-accent-yellow'>{upperFirst(common('messages.tv_series', { count: 1 }))}</span>
+                <span className='text-accent-yellow'>{upperFirst(t('common.messages.tv_series', { count: 1 }))}</span>
                 {serie.genres ? <Genres genres={serie.genres} className="before:content-['_|_']" /> : null}
               </div>
               {/* TITLE */}
@@ -118,10 +118,10 @@ export default function TvSerieHeader({
                         </Button>
                       </span>
                     </Fragment>
-                  )) ?? <span className="text-muted-foreground italic">{upperFirst(common('messages.unknown'))}</span>}
+                  )) ?? <span className="text-muted-foreground italic">{upperFirst(t('common.messages.unknown'))}</span>}
                   {/* NUMBER OF SEASONS */}
                   <span className="before:content-['_•_']">
-                    {common('messages.tv_season_count', { count: serie.number_of_seasons! })}
+                    {t('common.messages.tv_season_count', { count: serie.number_of_seasons! })}
                   </span>
                 </div>
               </div>
@@ -214,8 +214,8 @@ const Genres = ({
   }[];
   className?: string;
 }) => {
-  const locale = useLocale();
-  const formattedGenres = new Intl.ListFormat(locale, {
+  const { i18n } = useT();
+  const formattedGenres = new Intl.ListFormat(i18n.resolvedLanguage, {
     style: 'narrow',
     type: 'conjunction',
   }).formatToParts(genres.map((genre) => genre.name));

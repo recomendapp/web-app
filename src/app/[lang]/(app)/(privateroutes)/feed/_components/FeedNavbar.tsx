@@ -3,29 +3,29 @@
 import { useAuth } from "@/context/auth-context";
 import { title } from "@/utils/custom-lodash";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/navigation";
 import { usePathname } from '@/lib/i18n/navigation';
 import { useMemo } from "react";
+import { useT } from "@/lib/i18n/client";
 
 export const FeedNavbar = () => {
 	const { customerInfo } = useAuth();
-	const common = useTranslations('common');
+	const { t } = useT();
 	const pathname = usePathname();
 	const routes = useMemo(() => [
 		{
-			label: upperFirst(common('messages.community')),
+			label: upperFirst(t('common.messages.community')),
 			active: pathname === '/feed',
 			href: `/feed`,
 			disabled: false,
 		},
 		{
-			label: title(common('messages.cast_and_crew')),
+			label: title(t('common.messages.cast_and_crew')),
 			active: pathname === '/feed/cast-crew',
 			href: customerInfo?.entitlements.active['premium'] ? `/feed/cast-crew` : '/upgrade',
 			disabled: !customerInfo?.entitlements.active['premium'],
 		},
-	], [pathname, common, customerInfo]);
+	], [pathname, t, customerInfo]);
 
 	return (
 		<div className="inline-flex h-10 items-center justify-center bg-muted p-1 text-muted-foreground w-full max-w-xl rounded-md mb-4">

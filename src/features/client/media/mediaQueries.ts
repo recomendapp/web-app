@@ -5,10 +5,8 @@ import { mediaKeys } from "./mediaKeys";
 /* --------------------------------- DETAILS -------------------------------- */
 export const useMediaMovieDetailsQuery = ({
 	id,
-	locale,
 } : {
 	id?: number;
-	locale: string;
 }) => {
 	const supabase = useSupabaseClient();
 	return useQuery({
@@ -16,18 +14,14 @@ export const useMediaMovieDetailsQuery = ({
 		queryFn: async () => {
 			if (!id) throw Error('No id or type provided');
 			const { data, error } = await supabase
-				.from('media_movie')
-				.select(`
-					*,
-					videos:tmdb_movie_videos(*)	
-				`)
+				.from('media_movie_full')
+				.select(`*`)
 				.eq('id', id)
-				.eq('videos.iso_639_1', locale)
 				.single();
 			if (error) throw error;
 			return data;
 		},
-		enabled: !!id && !!locale,
+		enabled: !!id,
 	});
 };
 /* -------------------------------------------------------------------------- */

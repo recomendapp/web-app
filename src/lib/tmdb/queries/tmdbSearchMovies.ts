@@ -1,6 +1,6 @@
 "use server"
 
-import { routing } from "@/lib/i18n/routing";
+import { fallbackLng } from "@/lib/i18n/settings";
 import { createServerClient } from "@/lib/supabase/server";
 import { MediaMovie } from "@recomendapp/types";
 import { z } from "zod";
@@ -20,7 +20,7 @@ const searchMovieSchema = z
 			.optional(),
 	})
 
-export const tmdbSearchMovies = async (query: string, language = routing.defaultLocale, page = 1): Promise<MediaMovie[]> => {
+export const tmdbSearchMovies = async (query: string, language = fallbackLng, page = 1): Promise<MediaMovie[]> => {
 	const supabase = await createServerClient();
 	const verifiedField = searchMovieSchema.safeParse({ query, language, page });
 	if (!verifiedField.success) {

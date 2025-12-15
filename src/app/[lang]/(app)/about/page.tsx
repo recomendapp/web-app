@@ -1,21 +1,13 @@
 import Marquee from "react-fast-marquee";
-import { getTranslations } from 'next-intl/server';
 import { Link } from "@/lib/i18n/navigation";
 import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
-import { SupportedLocale } from "@/translations/locales";
+import { getT } from "@/lib/i18n";
 
-export const generateMetadata = async (
-  props: {
-    params: Promise<{
-      lang: string;
-    }>;
-    }
-): Promise<Metadata> => {
-  const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'common' });
+export const generateMetadata = async (): Promise<Metadata> => {
+  const { t } = await getT();
   return {
-    title: upperFirst(t('messages.about')),
+    title: upperFirst(t('common.messages.about')),
   };
 }
 
@@ -27,7 +19,7 @@ const About = async (
   }
 ) => {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'pages.about' });
+  const { t } = await getT();
 
   const resources = [
     {
@@ -103,53 +95,53 @@ const About = async (
         <Marquee pauseOnHover className='bg-accent-blue py-1 uppercase z-0'>
             {Array.from({ length: 3 }).map((_, index) => (
               <p key={index} className='mr-8 font-bold text-accent-blue-foreground'>
-                {t('about.marquee')}
+                {t('pages.about.about.marquee')}
               </p>
             ))}
           </Marquee>
         <div className="px-4 flex flex-col gap-4 max-w-xl">
           <h2 className="text-center font-semibold text-3xl text-accent-yellow">
-            {t('about.label')}
+            {t('pages.about.about.label')}
           </h2>
           <p>
-            {t.rich('about.intro', {
+            {/* {t.rich('about.intro', {
               strong: (chunks) => <strong>{chunks}</strong>,
-            })}
+            })} */}
           </p>
           <ul className="text-center space-y-2">
-            <li>{t('about.slogan.1')}</li>
-            <li>{t('about.slogan.2')}</li>
-            <li>{t('about.slogan.3')}</li>
-            <li>{t('about.slogan.4')}</li>
+            <li>{t('pages.about.about.slogan.1')}</li>
+            <li>{t('pages.about.about.slogan.2')}</li>
+            <li>{t('pages.about.about.slogan.3')}</li>
+            <li>{t('pages.about.about.slogan.4')}</li>
           </ul>
-          <p>{t('about.last')}</p>
+          <p>{t('pages.about.about.last')}</p>
         </div>
       </section>
       {/* TEAM */}
       <section id="team" className="w-full flex flex-col gap-4 px-4 max-w-xl">
         <h2 className="text-center font-semibold text-3xl text-accent-yellow">
-          {t('team.label')}
+          {t('pages.about.team.label')}
         </h2>
-        <p>{t('team.intro')}</p>
+        <p>{t('pages.about.team.intro')}</p>
         {/* MEMBERS */}
         <div className="w-full space-y-4">
           {/* LOUP */}
           <div className="bg-muted rounded-md p-4 w-full">
             <h3 className=" text-lg font-semibold">
-              {t('team.members.loup.name')}
+              {t('pages.about.team.members.loup.name')}
             </h3>
-            <p>{t('team.members.loup.description')}</p>
+            <p>{t('pages.about.team.members.loup.description')}</p>
           </div>
           {/* YOANN */}
           <div className="bg-muted rounded-md p-4 w-full">
             <h3 className=" text-lg font-semibold">
-              {t('team.members.yoann.name')}
+              {t('pages.about.team.members.yoann.name')}
             </h3>
-            <p>{t('team.members.yoann.description')}</p>
+            <p>{t('pages.about.team.members.yoann.description')}</p>
           </div>
         </div>
         <p>
-          {t.rich('team.last', {
+          {/* {t.rich('team.last', {
             link: (chunks) => (
               <Link
                 href="https://discord.gg/z4fXr39xPr"
@@ -159,7 +151,7 @@ const About = async (
                 {chunks}
               </Link>
             ),
-          })}
+          })} */}
         </p>
       </section>
       {/* PRICING */}
@@ -168,11 +160,11 @@ const About = async (
         className="w-full flex flex-col gap-4 px-4 max-w-xl"
       >
         <h2 className="text-center font-semibold text-3xl text-accent-yellow">
-          {t('pricing.label')}
+          {t('pages.about.pricing.label')}
         </h2>
-        <p>{t('pricing.intro')}</p>
+        <p>{t('pages.about.pricing.intro')}</p>
         <p className="text-xs italic text-muted-foreground">
-          {t('pricing.subdescription')}
+          {t('pages.about.pricing.subdescription')}
         </p>
       </section>
       {/* BUSINESS MODEL */}
@@ -181,11 +173,11 @@ const About = async (
         className="w-full flex flex-col gap-4 px-4 max-w-xl"
       >
         <h2 className="text-center font-semibold text-3xl text-accent-yellow">
-          {t('businessmodel.label')}
+          {t('pages.about.businessmodel.label')}
         </h2>
-        <p>{t('businessmodel.paragraph.1')}</p>
-        <p>{t('businessmodel.paragraph.2')}</p>
-        <p>{t('businessmodel.paragraph.3')}</p>
+        <p>{t('pages.about.businessmodel.paragraph.1')}</p>
+        <p>{t('pages.about.businessmodel.paragraph.2')}</p>
+        <p>{t('pages.about.businessmodel.paragraph.3')}</p>
       </section>
       {/* ROADMAP */}
       <section
@@ -193,7 +185,7 @@ const About = async (
         className="w-full flex flex-col gap-4 px-4 max-w-xl"
       >
         <h2 className="text-center font-semibold text-3xl text-accent-yellow">
-          {t('roadmap.label')}
+          {t('pages.about.roadmap.label')}
         </h2>
         <div className="bg-muted p-4 rounded-md text-muted-foreground text-center">
           Coming soon...
@@ -202,10 +194,10 @@ const About = async (
       {/* DATA */}
       <section id="data" className="w-full flex flex-col gap-4 px-4 max-w-xl">
         <h2 className="text-center font-semibold text-3xl text-accent-yellow">
-          {t('data.label')}
+          {t('pages.about.data.label')}
         </h2>
         <p>
-          {t.rich('data.paragraph.1', {
+          {/* {t.rich('data.paragraph.1', {
             link: (chunks) => (
               <Link
                 href="https://www.themoviedb.org/"
@@ -215,10 +207,10 @@ const About = async (
                 {chunks}
               </Link>
             ),
-          })}
+          })} */}
         </p>
         <p>
-          {t.rich('data.paragraph.2', {
+          {/* {t.rich('data.paragraph.2', {
             link: (chunks) => (
               <Link
                 href="https://www.themoviedb.org/"
@@ -228,7 +220,7 @@ const About = async (
                 {chunks}
               </Link>
             ),
-          })}
+          })} */}
         </p>
       </section>
       {/* RESOURCES */}
@@ -237,9 +229,9 @@ const About = async (
         className="w-full flex flex-col gap-4 px-4 max-w-xl"
       >
         <h2 className="text-center font-semibold text-3xl text-accent-yellow">
-          {t('resources.label')}
+          {t('pages.about.resources.label')}
         </h2>
-        <p>{t('resources.intro')}</p>
+        <p>{t('pages.about.resources.intro')}</p>
         <ul className="space-y-2 list-disc">
           {resources.map((resource, index) => (
             <li key={index}>
@@ -260,10 +252,10 @@ const About = async (
         className="w-full flex flex-col gap-4 px-4 max-w-xl"
       >
         <h2 className="text-center font-semibold text-3xl text-accent-yellow">
-          {t('contact-support.label')}
+          {t('pages.about.contact-support.label')}
         </h2>
         <p>
-          {t.rich('contact-support.help-center', {
+          {/* {t.rich('contact-support.help-center', {
             link: (chunks) => (
               <Link
                 href="https://help.recomend.app/"
@@ -273,10 +265,10 @@ const About = async (
                 {chunks}
               </Link>
             ),
-          })}
+          })} */}
         </p>
         <p>
-          {t.rich('contact-support.technical-support', {
+          {/* {t.rich('contact-support.technical-support', {
             email: (chunks) => (
               <Link
                 href="mailto:help@recomend.app"
@@ -285,10 +277,10 @@ const About = async (
                 help@recomend.app
               </Link>
             ),
-          })}
+          })} */}
         </p>
         <p>
-          {t.rich('contact-support.suggest-a-feature', {
+          {/* {t.rich('contact-support.suggest-a-feature', {
             email: (chunks) => (
               <Link
                 href="mailto:ideas@recomend.app"
@@ -297,10 +289,10 @@ const About = async (
                 ideas@recomend.app
               </Link>
             ),
-          })}
+          })} */}
         </p>
         <p>
-          {t.rich('contact-support.contact-us', {
+          {/* {t.rich('contact-support.contact-us', {
             email: (chunks) => (
               <Link
                 href="mailto:hello@recomend.app"
@@ -309,7 +301,7 @@ const About = async (
                 hello@recomend.app
               </Link>
             ),
-          })}
+          })} */}
         </p>
       </section>
       {/* QUOTE */}
@@ -335,15 +327,15 @@ const About = async (
 
           <div className="relative">
             <p className="text-center">
-              <em>{t('quote.quote')}</em>
+              <em>{t('pages.about.quote.quote')}</em>
             </p>
             <p className="sm:text-sm text-right text-accent-yellow">
-              {t('quote.author')}, {t('quote.date')}
+              {t('pages.about.quote.author')}, {t('pages.about.quote.date')}
             </p>
           </div>
         </blockquote>
         <p className="text-xs italic text-muted-foreground">
-          {t('quote.subdescription')}
+          {t('pages.about.quote.subdescription')}
         </p>
       </section>
     </div>

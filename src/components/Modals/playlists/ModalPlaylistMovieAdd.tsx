@@ -18,10 +18,10 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Label } from '@/components/ui/label';
 import { useQueryClient } from '@tanstack/react-query';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { usePlaylistMovieAddToQuery } from '@/features/client/playlist/playlistQueries';
 import { playlistKeys } from '@/features/client/playlist/playlistKeys';
+import { useT } from '@/lib/i18n/client';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -36,7 +36,7 @@ export function ModalPlaylistMovieAdd({
 	...props
 } : ModalPlaylistMovieAddProps) {
 	const { session } = useAuth();
-	const t = useTranslations();
+	const { t } = useT();
 	const queryClient = useQueryClient();
 	const { closeModal } = useModal();
 	const [selectedPlaylists, setSelectedPlaylists] = useState<Playlist[]>([]);
@@ -117,10 +117,10 @@ export function ModalPlaylistMovieAdd({
 			<ModalHeader className='px-4 pb-4 pt-5'>
 				<ModalTitle>{upperFirst(t('common.messages.add_to_playlist'))}</ModalTitle>
 				<ModalDescription>
-					{t.rich('common.messages.add_to_one_or_more_playlists', {
+					{/* {t.rich('common.messages.add_to_one_or_more_playlists', {
 						title: movieTitle,
 						strong: (chunks) => <strong>{chunks}</strong>,
-					})}
+					})} */}
 				</ModalDescription>
 			</ModalHeader>
 			<ModalBody className='p-0! overflow-hidden'>
@@ -198,7 +198,7 @@ export function ModalPlaylistMovieAdd({
 									}}
 								>
 									<div className="flex items-center">
-										<div className={`w-[40px] shadow-2xl shrink-0`}>
+										<div className={`w-10 shadow-2xl shrink-0`}>
 											<AspectRatio ratio={1 / 1}>
 												<ImageWithFallback
 													src={playlist?.poster_url ?? ''}
@@ -253,7 +253,7 @@ export function ModalPlaylistMovieAdd({
 					{selectedPlaylists.map((playlist) => (
 						<div
 						key={playlist?.id}
-						className={`w-[40px] shadow-2xl cursor-not-allowed`}
+						className={`w-10 shadow-2xl cursor-not-allowed`}
 						onClick={() => setSelectedPlaylists((prev) => prev.filter(
 							(selectPlaylist) => selectPlaylist?.id !== playlist?.id
 						))}

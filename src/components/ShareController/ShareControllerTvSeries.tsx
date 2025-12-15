@@ -1,21 +1,22 @@
-"use client";
+"use client"
+
 import { ShareControllerProps } from "./ShareController";
 import { MediaTvSeries } from "@recomendapp/types";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Icons } from "@/config/icons";
 import toast from "react-hot-toast";
 import { domToBlob } from "modern-screenshot";
+import { useT } from "@/lib/i18n/client";
 
 interface ShareControllerTvSeriesProps extends ShareControllerProps {
 	tvSeries: MediaTvSeries;
 }
 
 export const ShareControllerTvSeries: React.FC<ShareControllerTvSeriesProps> = ({ tvSeries, onFileReady }) => {
-	const t = useTranslations();
+	const { t } = useT();
 
 	const captureRef = useRef<HTMLDivElement>(null);
 	const directorsText = useMemo(() => tvSeries.created_by?.map(d => d.name!).join(', '), [tvSeries.created_by]);

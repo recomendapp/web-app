@@ -1,16 +1,15 @@
 import { notFound } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { getReviewTvSeries } from '@/features/server/reviews';
 import { TvSeriesReview } from './_components/TvSeriesReview';
 import { Review, WithContext } from 'schema-dts';
 import { siteConfig } from '@/config/site';
-import { seoLocales } from '@/lib/i18n/routing';
 import { SupportedLocale } from '@/translations/locales';
 import { generateJSON } from '@tiptap/html';
 import { EDITOR_EXTENSIONS } from '@/components/tiptap/TiptapExtensions';
 import { generateText } from '@tiptap/core';
+import { getT } from '@/lib/i18n';
 
 export async function generateMetadata(
   props: {
@@ -21,7 +20,7 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
+  const { t } = await getT();
   const review = await getReviewTvSeries(params.review_id, params.lang);
   if (!review) return { title: upperFirst(t('common.messages.review_not_found')) };
   const tiptapJson = generateJSON(review.body, EDITOR_EXTENSIONS);
@@ -29,7 +28,7 @@ export async function generateMetadata(
   return {
     title: t('pages.review.metadata.title', { title: review.activity?.tv_series?.name!, username: review.activity?.user?.username! }),
     description: truncate(rawText, { length: siteConfig.seo.description.limit }),
-    alternates: seoLocales(params.lang, `/review/${review.id}`),
+    // alternates: seoLocales(params.lang, `/review/${review.id}`),
     openGraph: {
       siteName: siteConfig.name,
       title: t('pages.review.metadata.title', { title: review.activity?.tv_series?.name!, username: review.activity?.user?.username! }),
@@ -48,7 +47,7 @@ export default async function ReviewPage(
   props: {
     params: Promise<{
       lang: string;
-        review_id: number;
+      review_id: number;
     }>;
   }
 ) {
@@ -57,7 +56,7 @@ export default async function ReviewPage(
   if (!review) notFound();
   const tiptapJson = generateJSON(review.body, EDITOR_EXTENSIONS);
   const rawText = generateText(tiptapJson, EDITOR_EXTENSIONS);
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
+  const { t } = await getT();
   const { tv_series } = review.activity || {};
   const jsonLd: WithContext<Review> = {
     '@context': 'https://schema.org',

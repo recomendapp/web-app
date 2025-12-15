@@ -2,10 +2,9 @@ import { useUI } from '@/context/ui-context';
 import { Button } from '@/components/ui/button';
 import { RightPanelSocial } from '@/components/sidebar/right-panel/RightPanelSocial';
 import { Icons } from '@/config/icons';
-import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
-import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
+import { useT } from '@/lib/i18n/client';
 
 /**
  * Social button
@@ -19,7 +18,7 @@ export const SocialButton = ({
 	onClick,
 	...props
 } : React.ComponentProps<typeof Button>) => {
-	const common = useTranslations('common');
+	const { t } = useT();
 	const {
 		toggleRightPanelContent,
 	} = useUI();
@@ -31,7 +30,7 @@ export const SocialButton = ({
 	return (
 		<Button variant={variant} size={size} onClick={handleOnClick} {...props}>
 			<Icons.users />
-			<span className="sr-only">{upperFirst(common('messages.open_social_panel'))}</span>
+			<span className="sr-only">{upperFirst(t('common.messages.open_social_panel'))}</span>
 		</Button>
 	);
 }

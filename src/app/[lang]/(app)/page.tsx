@@ -1,8 +1,7 @@
-'use client';
+'use client'
 
 import { useAuth } from "@/context/auth-context";
 import { siteConfig } from "@/config/site";
-import { useNow, useTranslations } from "next-intl";
 import { useUI } from "@/context/ui-context";
 import HeaderRightSide from "@/components/Header/HeaderRightSide";
 import { WidgetRecomendShowcase } from "@/components/widgets/WidgetRecomendShowcase";
@@ -16,11 +15,13 @@ import { WidgetMostRecommended } from "@/components/widgets/WidgetMostRecommende
 import { WidgetUserRecos } from "@/components/widgets/WidgetUserRecos";
 import { WidgetUserWatchlist } from "@/components/widgets/WidgetUserWatchlist";
 import { useMemo } from "react";
+import { useT } from "@/lib/i18n/client";
+import { useNow } from "@/hooks/use-noew";
 
 export default function Home() {
 	const { session, user, customerInfo } = useAuth();
 	const { device } = useUI();
-	const t = useTranslations();
+	const { t } = useT();
 	const now = useNow({ updateInterval: 1000 * 60 });
 	const getTimeOfDay = useMemo((): string => {
 		const hour = now.getHours();

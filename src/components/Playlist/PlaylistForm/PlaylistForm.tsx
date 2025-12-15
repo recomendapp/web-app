@@ -1,4 +1,5 @@
-'use client';
+'use client'
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -37,11 +38,11 @@ import { useAuth } from '@/context/auth-context';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { usePlaylistDeleteMutation, usePlaylistInsertMutation, usePlaylistUpdateMutation } from '@/api/client/mutations/playlistMutations';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { v4 as uuidv4 } from "uuid";
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
+import { useT } from '@/lib/i18n/client';
 
 interface PlaylistFormProps extends React.HTMLAttributes<HTMLDivElement> {
   success: () => void;
@@ -56,7 +57,7 @@ export function PlaylistForm({
 }: PlaylistFormProps) {
   const supabase = useSupabaseClient();
   const { session } = useAuth();
-  const t = useTranslations();
+  const { t } = useT();
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(false);

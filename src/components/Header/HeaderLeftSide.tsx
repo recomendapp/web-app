@@ -6,13 +6,13 @@ import { cn } from '@/lib/utils';
 import { SidebarTrigger } from '../ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { upperFirst } from 'lodash';
-import { useTranslations } from 'next-intl';
 import { Icons } from '@/config/icons';
 import {
   ButtonGroup,
 } from "@/components/ui/button-group"
 import { useModal } from '@/context/modal-context';
 import { PlaylistModal } from '../Modals/playlists/PlaylistModal';
+import { useT } from '@/lib/i18n/client';
 
 export default function HeaderLeftSide({
   className,
@@ -21,7 +21,7 @@ export default function HeaderLeftSide({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const common = useTranslations('common');
+  const { t } = useT();
   return (
     // <div className={cn("flex items-center gap-4 w-full", className)}>
       <ButtonGroup className='w-full'>
@@ -29,13 +29,13 @@ export default function HeaderLeftSide({
           <SidebarTrigger className='md:hidden'/>
         </ButtonGroup>
         <ButtonGroup>
-          <Button variant="outline" size="icon" aria-label={upperFirst(common('messages.backward'))} onClick={router.back}>
+          <Button variant="outline" size="icon" aria-label={upperFirst(t('common.messages.backward'))} onClick={router.back}>
             <Icons.chevronLeft />
-            <span className="sr-only">{upperFirst(common('messages.backward'))}</span>
+            <span className="sr-only">{upperFirst(t('common.messages.backward'))}</span>
           </Button>
-          <Button variant="outline" size="icon" aria-label={upperFirst(common('messages.forward'))} onClick={router.forward}>
+          <Button variant="outline" size="icon" aria-label={upperFirst(t('common.messages.forward'))} onClick={router.forward}>
             <Icons.chevronRight />
-            <span className="sr-only">{upperFirst(common('messages.forward'))}</span>
+            <span className="sr-only">{upperFirst(t('common.messages.forward'))}</span>
           </Button>
         </ButtonGroup>
         <SearchBar />
@@ -46,7 +46,7 @@ export default function HeaderLeftSide({
 }
 
 const ButtonPlaylistCreate = () => {
-  const t = useTranslations();
+  const { t } = useT();
   const { openModal } = useModal();
   return (
     <Button variant="outline" size="icon" aria-label={upperFirst(t('common.messages.create_a_playlist'))} onClick={() => openModal(PlaylistModal, {})}>

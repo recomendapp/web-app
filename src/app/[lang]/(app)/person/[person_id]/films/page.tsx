@@ -1,6 +1,5 @@
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getPerson, getPersonFilms } from '@/features/server/media/mediaQueries';
-import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { Pagination } from './_components/Pagination';
 import { Icons } from '@/config/icons';
@@ -9,12 +8,11 @@ import { Button } from '@/components/ui/button';
 import { Filters } from './_components/Filters';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
-import { seoLocales } from '@/lib/i18n/routing';
 import { notFound, redirect } from 'next/navigation';
 import { ActiveFilters } from './_components/ActiveFilters';
 import { getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage, getValidatePerPage } from './_components/constants';
 import { CardMovie } from '@/components/Card/CardMovie';
-import { SupportedLocale } from '@/translations/locales';
+import { getT } from '@/lib/i18n';
 
 export async function generateMetadata(
 	props: {
@@ -25,14 +23,14 @@ export async function generateMetadata(
 	}
 ): Promise<Metadata> {
 	const params = await props.params;
-	const t = await getTranslations({ locale: params.lang as SupportedLocale });
+	const { t } = await getT();
 	const { id } = getIdFromSlug(params.person_id);
 	try {
 		const person = await getPerson(params.lang, id);
 		return {
 			title: t('pages.person.films.metadata.title', { name: person.name! }),
 			description: truncate(t('pages.person.films.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
-			alternates: seoLocales(params.lang, `/person/${person.slug}/films`),
+			// alternates: seoLocales(params.lang, `/person/${person.slug}/films`),
 			openGraph: {
 			siteName: siteConfig.name,
 			title: `${t('pages.person.films.metadata.title', { name: person.name! })} • ${siteConfig.name}`,
@@ -76,7 +74,7 @@ export default async function FilmsPage(
 	const display = getValidatedDisplay(searchParams.display);
 	const department = getValidateDepartment(searchParams.department);
 	const job = getValidateJob(searchParams.job);
-	const t = await getTranslations({ locale: params.lang as SupportedLocale });
+	const { t } = await getT();
 	const { id } = getIdFromSlug(params.person_id);
 	let person: Awaited<ReturnType<typeof getPerson>>;
 	try {

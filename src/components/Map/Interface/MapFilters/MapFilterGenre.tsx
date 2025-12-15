@@ -5,11 +5,11 @@ import { useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { RotateCcwIcon } from "lucide-react"
 import { TooltipBox } from "@/components/Box/TooltipBox"
-import { useTranslations } from "next-intl"
 import { upperFirst } from "lodash"
+import { useT } from "@/lib/i18n/client"
 
 export const MapFilterGenre = () => {
-	const t = useTranslations();
+	const { t } = useT();
 	const {
 		data,
 		filters

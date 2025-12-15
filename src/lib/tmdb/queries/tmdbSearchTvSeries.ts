@@ -1,6 +1,6 @@
 "use server"
 
-import { routing } from "@/lib/i18n/routing";
+import { fallbackLng } from "@/lib/i18n/settings";
 import { createServerClient } from "@/lib/supabase/server";
 import { MediaTvSeries } from "@recomendapp/types";
 import { z } from "zod";
@@ -20,7 +20,7 @@ const searchSeriesSchema = z
 			.optional(),
 	})
 
-export const tmdbSearchTvSeries = async (query: string, language = routing.defaultLocale, page = 1): Promise<MediaTvSeries[]> => {
+export const tmdbSearchTvSeries = async (query: string, language = fallbackLng, page = 1): Promise<MediaTvSeries[]> => {
 	const supabase = await createServerClient();
 	const verifiedField = searchSeriesSchema.safeParse({ query, language, page });
 	if (!verifiedField.success) {

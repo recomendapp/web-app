@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Icons } from '@/config/icons';
 import { Button } from '@/components/ui/button';
@@ -13,9 +13,9 @@ import { useSupabaseClient } from '@/context/supabase-context';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { ArrowLeftIcon } from 'lucide-react';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useTranslations } from 'next-intl';
 import { useRouter } from '@/lib/i18n/navigation';
 import { upperFirst } from 'lodash';
+import { useT } from '@/lib/i18n/client';
 
 export function LoginOtpForm({
   className,
@@ -23,8 +23,7 @@ export function LoginOtpForm({
   ...props
 } : React.HTMLAttributes<HTMLDivElement> & { redirectTo: string | null }) {
   const supabase = useSupabaseClient();
-  const t = useTranslations('pages.auth.login');
-  const common = useTranslations('common');
+  const { t } = useT();
   const router = useRouter();
   const { loginWithOtp } = useAuth();
   const [email, setEmail] = useState<string>('');
@@ -36,7 +35,7 @@ export function LoginOtpForm({
   const emailSchema = z
   .string()
   .email({
-    message: common('form.email.error.invalid'),
+    message: t('common.form.email.error.invalid'),
   });
 
   const handleSubmit = async (event?: React.SyntheticEvent) => {
@@ -45,7 +44,7 @@ export function LoginOtpForm({
       setIsLoading(true);
       emailSchema.parse(email);
       await loginWithOtp(email, redirectTo);
-      toast.success(common('form.code_sent'));
+      toast.success(t('common.form.code_sent'));
       setShowOtp(true);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -55,13 +54,13 @@ export function LoginOtpForm({
       } else if (error instanceof AuthError) {
         switch (error.status) {
           case 500:
-            toast.error(t('otp.form.no_user_found'));
+            toast.error(t('pages.auth.login.otp.form.no_user_found'));
             break;
           default:
             toast.error(error.message);
         }
       } else {
-        toast.error(upperFirst(common('messages.an_error_occurred')));
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     } finally {
       setIsLoading(false);
@@ -77,20 +76,20 @@ export function LoginOtpForm({
         type: 'email',
       });
       if (error) throw error;
-      toast.success(t('otp.form.success'));
+      toast.success(t('pages.auth.login.otp.form.success'));
       router.push(redirectTo || '/');
       router.refresh();
     } catch (error) {
       if (error instanceof AuthError) {
         switch (error.status) {
           case 400:
-            toast.error(common('form.error.invalid_code'));
+            toast.error(t('common.form.error.invalid_code'));
             break;
           default:
             toast.error(error.message);
         }
       } else {
-        toast.error(upperFirst(common('messages.an_error_occurred')));
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     } finally {
       setIsLoading(false);
@@ -104,10 +103,10 @@ export function LoginOtpForm({
           <Button variant={"ghost"} onClick={() => setShowOtp(false)}>
             <ArrowLeftIcon className='w-6' />
           </Button>
-          {t('otp.confirm_form.label')}
+          {t('pages.auth.login.otp.confirm_form.label')}
         </CardTitle>
         <CardDescription>
-          {t('otp.confirm_form.description', { email: email })}
+          {t('pages.auth.login.otp.confirm_form.description', { email: email })}
         </CardDescription>
       </CardHeader>
       <CardContent className='p-0 grid gap-2 justify-items-center'>
@@ -119,9 +118,9 @@ export function LoginOtpForm({
           </InputOTPGroup>
         </InputOTP>
         <p className="px-8 text-center text-sm text-muted-foreground">
-          {common('form.error.not_received_code')}{' '}
+          {t('common.form.error.not_received_code')}{' '}
           <Button variant={"link"} className='p-0' onClick={() => handleSubmit()} disabled={isLoading}>
-            {common('form.resend_code')}
+            {t('common.form.resend_code')}
           </Button>
         </p>
       </CardContent>
@@ -133,12 +132,12 @@ export function LoginOtpForm({
       <div className="grid gap-2">
         <div className="grid gap-1">
           <Label htmlFor="email">
-            {common('form.email.label')}
+            {t('common.form.email.label')}
           </Label>
           <Input
             id="email"
             type="email"
-            placeholder={common('form.email.placeholder')}
+            placeholder={t('common.form.email.placeholder')}
             autoCapitalize="none"
             autoComplete="email"
             autoCorrect="off"
@@ -149,7 +148,7 @@ export function LoginOtpForm({
         </div>
         <Button disabled={isLoading}>
           {isLoading ? (<Icons.loader />) : null}
-          {t('otp.form.submit')}
+          {t('pages.auth.login.otp.form.submit')}
         </Button>
       </div>
     </form>

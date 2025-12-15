@@ -1,20 +1,20 @@
-'use client';
+'use client'
 
 import Loader from '@/components/Loader';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/context/auth-context';
 import { Sparkles } from 'lucide-react';
-import { useFormatter, useTranslations } from 'next-intl';
 import { Link } from "@/lib/i18n/navigation";
 import { useMemo } from 'react';
 import { upperFirst } from 'lodash';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Icons } from '@/config/icons';
+import { useFormatter, useT } from '@/lib/i18n/client';
 
 export default function SettingsAccountPage() {
   const { customerInfo } = useAuth();
-  const t = useTranslations();
+  const { t } = useT();
   const formatter = useFormatter();
 
   const activeSubscriptions = useMemo(() => {

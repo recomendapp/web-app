@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/env";
 import { Database } from "@recomendapp/types";
 import { createBrowserClient } from "@supabase/ssr";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { createContext, use, useMemo } from "react";
-import { defaultSupportedLocale } from "@/translations/locales";
-import { useLocale } from "next-intl";
+import { useT } from "@/lib/i18n/client";
+import { fallbackLng } from "@/lib/i18n/settings";
 
 const SupabaseContext = createContext<SupabaseClient<Database> | undefined>(undefined);
 
@@ -15,7 +15,7 @@ export const SupabaseProvider = ({
 } : {
 	children: React.ReactNode;
 }) => {
-	const locale = useLocale();
+	const { i18n } = useT();
 	const supabase = useMemo(() => {
 		const client = createBrowserClient<Database>(
 			SUPABASE_URL,
@@ -23,7 +23,7 @@ export const SupabaseProvider = ({
 			{
 				global: {
 					headers: {
-						'language': locale ?? defaultSupportedLocale,
+						'language': i18n.resolvedLanguage ?? fallbackLng,
 					}
 				},
 			},
@@ -32,7 +32,7 @@ export const SupabaseProvider = ({
 		(client.auth as any).suppressGetSessionWarning = true;
 
 		return client;
-	}, [locale]);
+	}, [i18n.resolvedLanguage]);
 
 	return (
 		<SupabaseContext.Provider value={supabase}>

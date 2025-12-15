@@ -8,8 +8,8 @@ import { useModal } from "@/context/modal-context";
 import { UserWatchlistTvSeries } from "@recomendapp/types";
 import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useUserWatchlistTvSeriesUpdateMutation } from "@/features/client/user/userMutations";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useT } from "@/lib/i18n/client";
 
 interface ModalUserWatchlistTvSeriesCommentProps extends ModalType {
 	watchlistItem: UserWatchlistTvSeries;
@@ -20,7 +20,7 @@ const ModalUserWatchlistTvSeriesComment = ({
 	...props
 } : ModalUserWatchlistTvSeriesCommentProps) => {
 	const { closeModal } = useModal();
-	const common = useTranslations('common');
+	const { t } = useT();
 	const [comment, setComment] = useState<string>(watchlistItem?.comment ?? '');
 	const updateWatchlistTvSeries = useUserWatchlistTvSeriesUpdateMutation();
 
@@ -34,7 +34,7 @@ const ModalUserWatchlistTvSeriesComment = ({
 			return;
 		}
 		if (!watchlistItem?.id) {
-			toast.error(upperFirst(common('messages.an_error_occurred')));
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
 		await updateWatchlistTvSeries.mutateAsync({
@@ -42,11 +42,11 @@ const ModalUserWatchlistTvSeriesComment = ({
 			comment: comment,
 		}, {
 			onSuccess: () => {
-				toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
+				toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
 				closeModal(props.id);
 			},
 			onError: () => {
-				toast.error(upperFirst(common('messages.an_error_occurred')));
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
 	}
@@ -54,7 +54,7 @@ const ModalUserWatchlistTvSeriesComment = ({
 	return (
 		<Modal open={props.open} onOpenChange={(open) => !open && closeModal(props.id)}>
 			<ModalHeader>
-				<ModalTitle>{upperFirst(common('messages.comment', { count: 1 }))}</ModalTitle>
+				<ModalTitle>{upperFirst(t('common.messages.comment', { count: 1 }))}</ModalTitle>
 			</ModalHeader>
 			<ModalBody>
 				<Textarea
@@ -66,11 +66,11 @@ const ModalUserWatchlistTvSeriesComment = ({
 				maxLength={180}
 				disabled={updateWatchlistTvSeries.isPending}
 				className="col-span-3 resize-none h-48"
-				placeholder={upperFirst(common('messages.add_comment', { count: 1 }))}
+				placeholder={upperFirst(t('common.messages.add_comment', { count: 1 }))}
 				/>
 			</ModalBody>
 			<ModalFooter>
-				<Button type="submit" onClick={onSubmit}>{upperFirst(common('messages.save'))}</Button>
+				<Button type="submit" onClick={onSubmit}>{upperFirst(t('common.messages.save'))}</Button>
 			</ModalFooter>
 		</Modal>
 	);

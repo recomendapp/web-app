@@ -1,10 +1,9 @@
 import { Metadata } from 'next';
 import { Map } from '@/components/Map/Map';
-import { getTranslations } from 'next-intl/server';
 import { truncate } from 'lodash';
 import { siteConfig } from '@/config/site';
-import { seoLocales } from '@/lib/i18n/routing';
 import { SupportedLocale } from '@/translations/locales';
+import { getT } from '@/lib/i18n';
 
 export async function generateMetadata(
   props: {
@@ -14,11 +13,11 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
+  const { t } = await getT();
   return {
     title: t('pages.explore.metadata.title'),
     description: truncate(t('pages.explore.metadata.description'), { length: siteConfig.seo.description.limit }),
-    alternates: seoLocales(params.lang, '/explore'),
+    // alternates: seoLocales(params.lang, '/explore'),
     openGraph: {
       siteName: siteConfig.name,
       title: `${t('pages.explore.metadata.title')} • ${siteConfig.name}`,

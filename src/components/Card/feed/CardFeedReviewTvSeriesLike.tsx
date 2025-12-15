@@ -3,12 +3,12 @@
 import { Link } from "@/lib/i18n/navigation";
 import MediaPoster from "@/components/Media/MediaPoster";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
-import { useFormatter, useTranslations } from "next-intl";
 import { Profile, UserReviewTvSeriesLike } from "@recomendapp/types";
 import { CardUser } from "@/components/Card/CardUser";
 import { forwardRef } from "react";
 import { CardReviewTvSeries } from "@/components/Card/CardReviewTvSeries";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { useFormatter, useT } from "@/lib/i18n/client";
 
 interface CardFeedReviewTvSeriesLikeProps extends React.HTMLAttributes<HTMLDivElement> {
 	author: Profile;
@@ -19,8 +19,8 @@ export const CardFeedReviewTvSeriesLike = forwardRef<
 	HTMLDivElement,
 	CardFeedReviewTvSeriesLikeProps
 >(({ author, reviewLike, ...props }, ref) => {
-	const format = useFormatter();
-	const t = useTranslations();
+	const { t } = useT();
+	const formatter = useFormatter();	
 	const { tv_series } = reviewLike.review?.activity || {};
 	return (
 	  <div ref={ref} className="@container/feed-item flex gap-4 bg-muted rounded-xl p-2 group" {...props}>
@@ -39,18 +39,18 @@ export const CardFeedReviewTvSeriesLike = forwardRef<
 				<div className="flex items-center gap-1">
 					<CardUser user={author} variant="icon" />
 					<p className="text-sm @md/feed-item:text-base text-muted-foreground">
-						{t.rich('common.messages.user_liked_review', {
+						{/* {t.rich('common.messages.user_liked_review', {
 							name: () => (
 								<Link href={`/@${author.username}`} className="text-foreground hover:underline">
 									{author.username}
 								</Link>
 							)
-						})}
+						})} */}
 					</p>
 				</div>
-				{reviewLike.created_at && <div className='hidden @md/feed-item:block text-sm text-muted-foreground opacity-0 group-hover:opacity-100 duration-500'>
-					{format.relativeTime(new Date(reviewLike.created_at), new Date())}
-				</div>}
+				{/* {reviewLike.created_at && <div className='hidden @md/feed-item:block text-sm text-muted-foreground opacity-0 group-hover:opacity-100 duration-500'>
+					{formatter.relativeTime(new Date(reviewLike.created_at), new Date())}
+				</div>} */}
 			</div>
 			<Link href={tv_series?.url ?? ''} className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
 				<span className='font-bold'>{tv_series?.name}</span>

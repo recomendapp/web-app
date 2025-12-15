@@ -1,6 +1,6 @@
-import { useFormatter } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '../Box/TooltipBox';
+import { useFormatter } from '@/lib/i18n/client';
 
 export function DateOnlyYearTooltip({
   date,

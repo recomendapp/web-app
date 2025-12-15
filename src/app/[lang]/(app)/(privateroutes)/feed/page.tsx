@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import Loader from "@/components/Loader";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
 import { CardFeedActivityMovie } from "@/components/Card/feed/CardFeedActivityMovie";
 import { CardFeedActivityTvSeries } from "@/components/Card/feed/CardFeedActivityTvSeries";
 import { CardFeedPlaylistLike } from "@/components/Card/feed/CardFeedPlaylistLike";
@@ -12,9 +11,10 @@ import { CardFeedReviewMovieLike } from "@/components/Card/feed/CardFeedReviewMo
 import { CardFeedReviewTvSeriesLike } from "@/components/Card/feed/CardFeedReviewTvSeriesLike";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useUserMyFeedInfiniteOptions } from "@/api/client/options/userOptions";
+import { useT } from "@/lib/i18n/client";
 
 export default function Feed() {
-  const t = useTranslations();
+  const { t } = useT();
 
   const { ref, inView } = useInView();
 

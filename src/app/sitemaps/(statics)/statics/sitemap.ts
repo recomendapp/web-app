@@ -1,5 +1,4 @@
 import { siteConfig } from '@/config/site'
-import { sitemapLocales } from '@/lib/i18n/routing'
 import type { MetadataRoute } from 'next'
  
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -10,7 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily',
       priority: 1,
       alternates: {
-        languages: sitemapLocales('/')
+        // languages: sitemapLocales('/')
       }
     },
     {
@@ -19,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
       alternates: {
-        languages: sitemapLocales('/about')
+        // languages: sitemapLocales('/about')
       }
     },
     {
@@ -28,7 +27,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
       alternates: {
-        languages: sitemapLocales('/explore')
+        // languages: sitemapLocales('/explore')
       }
     },
     {
@@ -37,7 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.8,
       alternates: {
-        languages: sitemapLocales('/upgrade')
+        // languages: sitemapLocales('/upgrade')
       }
     },
     // Legal pages
@@ -47,7 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.5,
       alternates: {
-        languages: sitemapLocales('/legal/terms-of-use')
+        // languages: sitemapLocales('/legal/terms-of-use')
       }
     },
     {
@@ -56,7 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.5,
       alternates: {
-        languages: sitemapLocales('/legal/privacy-policy')
+        // languages: sitemapLocales('/legal/privacy-policy')
       }
     },
   ]

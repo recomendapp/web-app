@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Link } from "@/lib/i18n/navigation";
 import { Column, Row, Table } from '@tanstack/react-table';
@@ -13,7 +13,6 @@ import {
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import toast from 'react-hot-toast';
 import { UserWatchlistMovie } from '@recomendapp/types';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
@@ -23,6 +22,7 @@ import { useUserWatchlistMovieDeleteMutation } from "@/features/client/user/user
 import { ShareControllerMovie } from "@/components/ShareController/ShareControllerMovie";
 import { ModalUserRecosMovieSend } from "@/components/Modals/recos/ModalUserRecosMovieSend";
 import { ModalUserWatchlistMovieComment } from "@/components/Modals/watchlist/ModalUserWatchlistMovieComment";
+import { useT } from "@/lib/i18n/client";
 
 interface DataTableRowActionsProps {
   table: Table<UserWatchlistMovie>;
@@ -37,7 +37,7 @@ export function DataTableRowActions({
   column,
   data,
 }: DataTableRowActionsProps) {
-  const t = useTranslations();
+  const { t } = useT();
   const { openModal, createConfirmModal } = useModal();
   const deleteWatchlistMovie = useUserWatchlistMovieDeleteMutation();
 
@@ -103,10 +103,10 @@ export function DataTableRowActions({
           <DropdownMenuItem
             onClick={async () => createConfirmModal({
               title: upperFirst(t('pages.collection.watchlist.modal.delete_confirm.title')),
-              description: t.rich('pages.collection.watchlist.modal.delete_confirm.description', {
-                title: data?.movie?.title!,
-                important: (chunk) => <b>{chunk}</b>,
-              }),
+              // description: t.rich('pages.collection.watchlist.modal.delete_confirm.description', {
+              //   title: data?.movie?.title!,
+              //   important: (chunk) => <b>{chunk}</b>,
+              // }),
               onConfirm: handleUnwatchlist,
             })}
           >

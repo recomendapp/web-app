@@ -3,11 +3,11 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { MediaPerson } from '@recomendapp/types';
-import { getTranslations } from 'next-intl/server';
 import { title } from '@/utils/custom-lodash';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { SupportedLocale } from "@/translations/locales";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { getT } from "@/lib/i18n";
 
 export default async function SearchCrewCastSmall({
   persons,
@@ -20,7 +20,7 @@ export default async function SearchCrewCastSmall({
   locale: SupportedLocale;
   className?: string;
 }) {
-  const t = await getTranslations({ locale: locale });
+  const { t } = await getT();
   if (!persons || persons.length === 0) return null;
   return (
     <div className={cn('@container/search-widget flex flex-col gap-2', className)}>

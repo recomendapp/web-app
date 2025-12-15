@@ -1,8 +1,8 @@
+import { getT } from '@/lib/i18n';
 import { upperFirst } from 'lodash';
-import { getTranslations } from 'next-intl/server';
 
 export default async function NotFound() {
-  const t = await getTranslations();
+  const { t } = await getT();
   return (
     <div
       className="bg-white w-full h-full flex justify-center items-center"

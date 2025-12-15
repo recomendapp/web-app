@@ -1,20 +1,12 @@
 import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
 import Collection from './_components/Collection';
-import { SupportedLocale } from '@/translations/locales';
+import { getT } from '@/lib/i18n';
 
-export async function generateMetadata(
-  props: {
-      params: Promise<{
-        lang: string;
-      }>;
-    }
-): Promise<Metadata> {
-  const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'common' });
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
   return {
-    title: upperFirst(t('messages.library')),
+    title: upperFirst(t('common.messages.library')),
     robots: {
       index: false,
       follow: false,

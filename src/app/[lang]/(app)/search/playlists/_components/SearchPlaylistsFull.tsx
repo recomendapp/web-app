@@ -1,17 +1,18 @@
-'use client';
+'use client'
+
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useSearchPlaylistsInfiniteQuery } from '@/features/client/search/searchQueries';
-import { useTranslations } from 'next-intl';
+import { useT } from '@/lib/i18n/client';
 
 export default function SearchPlaylistsFull({
   query,
 }: {
   query: string | undefined;
 }) {
-  const t = useTranslations('common')
+  const { t } = useT();
   const { ref, inView } = useInView();
   const {
     data: playlists,
@@ -32,10 +33,10 @@ export default function SearchPlaylistsFull({
   if (!loading && !playlists?.pages[0]?.length) {
     return (
       <p className='text-muted-foreground'>
-        {t.rich('messages.no_results_for', {
+        {/* {t.rich('messages.no_results_for', {
           query: query || '',
           strong: (chunks) => <strong>{chunks}</strong>,
-        })}
+        })} */}
       </p>
     );
   }

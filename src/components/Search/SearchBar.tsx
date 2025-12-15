@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import React, { useEffect, useState, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -6,13 +6,13 @@ import { BiSearch } from 'react-icons/bi';
 import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
 import { Input } from "@/components/ui/input"
 import { Icons } from '@/config/icons';
+import { useT } from '@/lib/i18n/client';
 
 interface SearchBarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -20,7 +20,7 @@ export default function SearchBar({ className }: SearchBarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const t = useTranslations();
+  const { t } = useT();
   const q = searchParams.get('q');
   const [searchQuery, setSearchQuery] = useState(q ?? '');
   const [isSearching, setIsSearching] = useState(false);

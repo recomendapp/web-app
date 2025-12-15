@@ -7,14 +7,14 @@ import { HeaderBox } from "@/components/Box/HeaderBox";
 import { TMDB_IMAGE_BASE_URL } from "@/lib/tmdb/tmdb";
 import { CardMovie } from "@/components/Card/CardMovie";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
+import { useT } from "@/lib/i18n/client";
 
 export const MovieReview = ({
 	reviewServer,
 } : {
 	reviewServer: UserReviewMovie;
 }) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const {
 		data: review
 	} = useUserReviewMovieQuery({

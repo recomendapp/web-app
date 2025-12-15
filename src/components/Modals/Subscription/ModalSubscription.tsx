@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useModal } from '@/context/modal-context';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
@@ -6,7 +6,6 @@ import { Card } from '@/components/ui/card';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Icons } from '@/config/icons';
 import { formatPrice } from '@/components/ui/format-price';
-import { useLocale, useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import { upperFirst } from 'lodash';
@@ -14,6 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { calculateSave } from '@/utils/calculate-save';
 import { Offering, Package } from '@revenuecat/purchases-js';
 import { Spinner } from '@/components/ui/spinner';
+import { useT } from '@/lib/i18n/client';
 
 
 interface ModalSubscriptionProps extends ModalType {
@@ -28,8 +28,7 @@ export function ModalSubscription({
 	onPurchase,
 	...props
 } : ModalSubscriptionProps) {
-	const t = useTranslations();
-	const locale = useLocale();
+	const { t, i18n } = useT();
 	const { closeModal } = useModal();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [selectedPlan, setSelectedPlan] = useState<Package | undefined>(preselectedPlan || undefined);
@@ -87,7 +86,7 @@ export function ModalSubscription({
 							${selectedPlan?.identifier === plan.identifier ? 'text-foreground' : 'text-muted-foreground'}
 						`}
 						>
-							<span className='text-2xl font-bold'>{formatPrice({ unit_amount: plan.webBillingProduct.price.amountMicros! / 10_000, currency: plan.webBillingProduct.price.currency }, locale)}</span>
+							{/* <span className='text-2xl font-bold'>{formatPrice({ unit_amount: plan.webBillingProduct.price.amountMicros! / 10_000, currency: plan.webBillingProduct.price.currency }, i18n.resolvedLanguage)}</span> */}
 							<span className="pl-2 text-base font-medium">/ {t(`common.messages.${interval}`)}</span>
 						</div>
 						{index > 0 ? (

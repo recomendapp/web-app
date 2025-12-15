@@ -17,7 +17,7 @@ import { Label } from '@/components/ui/label';
 import { useUserRecosTvSeriesInsertMutation } from '@/features/client/user/userMutations';
 import { useUserRecosTvSeriesSendQuery } from '@/features/client/user/userQueries';
 import { upperFirst } from 'lodash';
-import { useTranslations } from 'next-intl';
+import { useT } from '@/lib/i18n/client';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -31,7 +31,7 @@ export function ModalUserRecosTvSeriesSend({
 	tvSeriesTitle,
 	...props
 } : ModalUserRecosTvSeriesSendProps) {
-	const t = useTranslations();
+	const { t } = useT();
 	const { session } = useAuth();
 	const { closeModal } = useModal();
 	const [selectedUsers, setSelectedUsers] = useState<Profile[]>([]);
@@ -80,10 +80,10 @@ export function ModalUserRecosTvSeriesSend({
 			<ModalHeader className='px-4 pb-4 pt-5'>
 				<ModalTitle>{upperFirst(t('common.messages.send_to_friend'))}</ModalTitle>
 				<ModalDescription>
-					{t.rich('common.messages.recommend_to_friend_to_discover', {
+					{/* {t.rich('common.messages.recommend_to_friend_to_discover', {
 						title: tvSeriesTitle,
 						strong: (chunks) => <strong>{chunks}</strong>,
-					})}
+					})} */}
 				</ModalDescription>
 			</ModalHeader>
 			<ModalBody className='p-0! overflow-hidden'>

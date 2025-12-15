@@ -5,8 +5,7 @@ import { fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import { Providers } from '@/context/Providers';
 import Script from 'next/script';
-import { routing, seoLocales } from '@/lib/i18n/routing';
-import { SupportedLocale } from '@/translations/locales';
+import { languages } from '@/lib/i18n/settings';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -25,7 +24,7 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL(siteConfig.url),
   description: siteConfig.description,
-  alternates: seoLocales(routing.defaultLocale, ''),
+  // alternates: seoLocales(routing.defaultLocale, ''),
   manifest: '/manifest.webmanifest',
   icons: {
     apple: '/assets/icons/ios/512.png',
@@ -56,6 +55,10 @@ export const metadata: Metadata = {
   }
 };
 
+export async function generateStaticParams() {
+  return languages.map((lng) => ({ lng }));
+}
+
 export default async function LangLayout({
   children,
   params
@@ -79,7 +82,7 @@ export default async function LangLayout({
         />
       )}
       <body className={cn('font-sans antialiased', fontSans.variable)}>
-        <Providers locale={lang as SupportedLocale}>{children}</Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

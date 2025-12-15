@@ -2,12 +2,9 @@ import { siteConfig } from '@/config/site';
 import { getTvSeries } from '@/features/server/media/mediaQueries';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { TvSeriesPlaylists } from './_components/TvSeriesPlaylists';
 import { truncate, upperFirst } from 'lodash';
-import { seoLocales } from '@/lib/i18n/routing';
-import { getTranslations } from 'next-intl/server';
-import { SupportedLocale } from '@/translations/locales';
+import { getT } from '@/lib/i18n';
 
 export async function generateMetadata(
   props: {
@@ -18,7 +15,7 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
+  const { t } = await getT();
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
   try {
     const serie = await getTvSeries(params.lang, serieId);
@@ -30,7 +27,7 @@ export async function generateMetadata(
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: seoLocales(params.lang, `/tv-series/${serie.slug}/playlists`),
+      // alternates: seoLocales(params.lang, `/tv-series/${serie.slug}/playlists`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${t('pages.tv_series.playlists.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,

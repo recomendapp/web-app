@@ -3,13 +3,13 @@ import { PlaylistItemMovie } from '@recomendapp/types';
 import { MessageSquarePlusIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useAuth } from '@/context/auth-context';
 import ModalPlaylistMovieComment from '@/components/Modals/playlists/ModalPlaylistMovieComment';
+import { useT } from '@/lib/i18n/client';
 
 export function DataComment({ playlistItem }: { playlistItem: PlaylistItemMovie }) {
-  const t = useTranslations();
+  const { t } = useT();
   const { session } = useAuth();
   const { openModal } = useModal();
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({

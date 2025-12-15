@@ -14,13 +14,13 @@ import {
 import { Link, useRouter } from "@/lib/i18n/navigation";
 import { useAuth } from '@/context/auth-context';
 import { UserAvatar } from './UserAvatar';
-import { useTranslations } from 'next-intl';
 import { useCallback, useMemo } from 'react';
 import { Icons } from '@/config/icons';
 import { upperFirst } from 'lodash';
 import { cn } from '@/lib/utils';
 import { Spinner } from '../ui/spinner';
 import toast from 'react-hot-toast';
+import { useT } from '@/lib/i18n/client';
 
 type Route = {
   icon: React.ElementType;
@@ -39,7 +39,7 @@ export function UserNav({
 }) {
   const router = useRouter();
   const { user, customerInfo, logout } = useAuth();
-  const t = useTranslations();
+  const { t } = useT();
 
   const routes = useMemo((): Route[] => [
     {

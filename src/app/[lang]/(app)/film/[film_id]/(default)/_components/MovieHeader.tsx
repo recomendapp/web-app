@@ -28,7 +28,6 @@ import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Database, MediaMovie } from '@recomendapp/types';
 import { useModal } from '@/context/modal-context';
-import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
 import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
@@ -42,6 +41,7 @@ import ButtonUserRecosMovieSend from '@/components/buttons/ButtonUserRecosMovieS
 import ButtonPlaylistMovieAdd from '@/components/buttons/ButtonPlaylistMovieAdd';
 import { ModalUserActivityMovieFollowersRating } from '@/components/Modals/activities/ModalUserActivityMovieFollowersRating';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { useT } from '@/lib/i18n/client';
 
 export default function MovieHeader({
   movie,
@@ -51,7 +51,7 @@ export default function MovieHeader({
   followersAvgRating?: number | null;
 }) {
   const { openModal } = useModal();
-  const t = useTranslations();
+  const { t } = useT();
   return (
     <div>
       <ContextMenuMovie movie={movie}>
@@ -210,8 +210,8 @@ const Genres = ({
   }[];
   className?: string;
 }) => {
-  const locale = useLocale();
-  const formattedGenres = new Intl.ListFormat(locale, {
+  const { i18n } = useT();
+  const formattedGenres = new Intl.ListFormat(i18n.resolvedLanguage, {
     style: 'narrow',
     type: 'conjunction',
   }).formatToParts(genres.map((genre) => genre.name));

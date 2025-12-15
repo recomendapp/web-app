@@ -1,12 +1,11 @@
 import { Link } from "@/lib/i18n/navigation";
-import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
 import { MediaMovie } from '@recomendapp/types';
-import { getTranslations } from 'next-intl/server';
 import { CardMovie } from "@/components/Card/CardMovie";
 import { SupportedLocale } from "@/translations/locales";
+import { getT } from "@/lib/i18n";
 
 export default async function SearchFilmsSmall({
   movies,
@@ -19,7 +18,7 @@ export default async function SearchFilmsSmall({
   locale: SupportedLocale;
   className?: string;
 }) {
-  const t = await getTranslations({ locale: locale });
+  const { t } = await getT();
   if (!movies || movies.length === 0) return null;
   return (
     <div className={cn('flex flex-col gap-2', className)}>

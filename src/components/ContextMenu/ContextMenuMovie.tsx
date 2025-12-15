@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import { MediaMovie } from "@recomendapp/types"
 import { Icons } from "@/config/icons";
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuTrigger } from "../ui/context-menu";
@@ -6,13 +7,13 @@ import { WithLink } from "../utils/WithLink";
 import { useModal } from "@/context/modal-context";
 import { Fragment, useMemo } from "react";
 import { ModalShare } from "../Modals/Share/ModalShare";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
 import { createShareController } from "../ShareController/ShareController";
 import { ShareControllerMovie } from "../ShareController/ShareControllerMovie";
 import { ModalUserRecosMovieSend } from "../Modals/recos/ModalUserRecosMovieSend";
 import { ModalPlaylistMovieAdd } from "../Modals/playlists/ModalPlaylistMovieAdd";
+import { useT } from "@/lib/i18n/client";
 
 interface Item {
 	icon: React.ElementType;
@@ -35,7 +36,7 @@ export const ContextMenuMovie = ({
 }) => {
 	const { session } = useAuth();
 	const { openModal } = useModal();
-	const t = useTranslations();
+	const { t } = useT();
 	const items: Item[][] = useMemo(() => {
 		return [
 		additionalItemsTop,

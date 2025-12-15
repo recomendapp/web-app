@@ -17,7 +17,7 @@ import { usePlaylistGuestsDeleteMutation } from "@/api/client/mutations/playlist
 import toast from "react-hot-toast"
 import { useModal } from "@/context/modal-context"
 import { upperFirst } from "lodash"
-import { useTranslations } from "next-intl"
+import { useT } from "@/lib/i18n/client"
 
 export const PlaylistGuestTable = ({
 	guests,
@@ -28,7 +28,7 @@ export const PlaylistGuestTable = ({
 	playlistId: number,
 	setView: (view: 'guests' | 'add') => void
 }) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const { createConfirmModal } = useModal()
 	const [sorting, setSorting] = useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])

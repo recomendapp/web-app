@@ -4,12 +4,13 @@ import { Card } from "../ui/card";
 import { Profile, UserActivityMovie, UserReviewMovie,  } from "@recomendapp/types";
 import { WithLink } from "../utils/WithLink";
 import { CardUser } from "./CardUser";
-import { useFormatter, useNow } from "next-intl";
 import { generateText } from "@tiptap/react";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import ButtonUserReviewMovieLike from "../buttons/ButtonUserReviewMovieLike";
 import { generateJSON } from "@tiptap/html";
 import { EDITOR_EXTENSIONS } from "../tiptap/TiptapExtensions";
+import { useNow } from "@/hooks/use-noew";
+import { useFormatter } from "@/lib/i18n/client";
 
 interface CardReviewMovieProps
 	extends React.ComponentProps<typeof Card> {
@@ -26,7 +27,7 @@ const CardReviewMovieDefault = React.forwardRef<
 	Omit<CardReviewMovieProps, "variant" | "url">
 >(({ className, review, activity, author, linked, children, ...props }, ref) => {
 	const now = useNow({ updateInterval: 1000 * 10 });
-	const format = useFormatter();
+	const formatter = useFormatter();
 	return (
 		<Card
 			ref={ref}
@@ -47,7 +48,7 @@ const CardReviewMovieDefault = React.forwardRef<
 				<div className="w-full flex justify-between items-center gap-2">
 					<CardUser variant="inline" user={author} />
 					<div className='text-sm text-muted-foreground'>
-					{format.relativeTime(new Date(review?.created_at ?? ''), now)}
+					{/* {format.relativeTime(new Date(review?.created_at ?? ''), now)} */}
 					</div>
 				</div>
 				{review?.title ? (

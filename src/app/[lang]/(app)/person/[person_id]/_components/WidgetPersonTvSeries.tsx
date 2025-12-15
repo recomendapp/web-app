@@ -1,12 +1,12 @@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { upperFirst } from 'lodash';
-import { getTranslations } from 'next-intl/server';
 import { Link } from "@/lib/i18n/navigation";
-import { Button, buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { MediaTvSeriesAggregateCredits } from '@recomendapp/types';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
 import { SupportedLocale } from '@/translations/locales';
 import { cn } from '@/lib/utils';
+import { getT } from '@/lib/i18n';
 
 interface WidgetPersonTvSeriesProps extends React.HTMLAttributes<HTMLDivElement> {
   personSlug: string;
@@ -19,7 +19,7 @@ export async function WidgetPersonTvSeries({
 	credits,
   lang,
 } : WidgetPersonTvSeriesProps) {
-  const t = await getTranslations({ locale: lang });
+  const { t } = await getT();
   if (!credits || credits.length === 0) return null;
   return (
     <div className="flex flex-col gap-2">

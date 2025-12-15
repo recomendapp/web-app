@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
 import { useUserActivityTvSeriesDeleteMutation, useUserActivityTvSeriesInsertMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useModal } from "@/context/modal-context";
+import { useT } from "@/lib/i18n/client";
 
 interface ButtonUserActivityTvSeriesWatchProps
 	extends React.ComponentProps<typeof Button> {
@@ -26,7 +26,7 @@ const ButtonUserActivityTvSeriesWatch = React.forwardRef<
 >(({ tvSeriesId, stopPropagation = true, className, ...props }, ref) => {
 	const { session } = useAuth();
   	const { createConfirmModal } = useModal();
-	const t = useTranslations();
+	const { t } = useT();
 	const pathname = usePathname();
 	const {
 		data: activity,

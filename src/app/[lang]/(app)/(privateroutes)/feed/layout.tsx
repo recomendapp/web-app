@@ -1,21 +1,13 @@
 import { ReactNode } from 'react';
 import { FeedNavbar } from './_components/FeedNavbar';
-import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { Metadata } from 'next';
-import { SupportedLocale } from '@/translations/locales';
+import { getT } from '@/lib/i18n';
 
-export async function generateMetadata(
-  props: {
-      params: Promise<{
-        lang: string;
-      }>;
-    }
-): Promise<Metadata> {
-  const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'common' });
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
   return {
-    title: upperFirst(t('messages.feed')),
+    title: upperFirst(t('common.messages.feed')),
     robots: {
       index: false,
       follow: false,

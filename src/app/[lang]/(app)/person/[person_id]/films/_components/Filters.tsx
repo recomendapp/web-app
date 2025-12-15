@@ -5,7 +5,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useRouter } from "@/lib/i18n/navigation";
 import { upperFirst } from "lodash";
 import { LayoutGridIcon, ListIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import {
   Popover,
@@ -19,6 +18,7 @@ import { Database } from "@recomendapp/types";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { useCallback, useMemo } from "react";
 import { TooltipBox } from "@/components/Box/TooltipBox";
+import { useT } from "@/lib/i18n/client";
 
 
 export const Filters = ({
@@ -38,7 +38,7 @@ export const Filters = ({
 	department?: string;
 	job?: string;
 }) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const hasActiveFilters = useMemo(() => {

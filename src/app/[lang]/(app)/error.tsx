@@ -14,8 +14,8 @@ import { Icons } from "@/config/icons";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { ButtonCopy } from "@/components/utils/ButtonCopy";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useT } from "@/lib/i18n/client";
 export default function Error({
 	error,
 	reset,
@@ -23,7 +23,7 @@ export default function Error({
 	error: Error & { digest?: string },
 	reset: () => void,
 }) {
-	const t = useTranslations();
+	const { t } = useT();
 	const bgImage = useRandomImage(Images.auth.error.background);
 	return (
 		<div

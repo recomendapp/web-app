@@ -3,15 +3,14 @@ import { CardUser } from "@/components/Card/CardUser";
 import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylist";
 import { PlaylistModal } from "@/components/Modals/playlists/PlaylistModal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Skeleton } from "@/components/ui/skeleton";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { useAuth } from "@/context/auth-context";
 import { useModal } from "@/context/modal-context";
 import { useRandomImage } from "@/hooks/use-random-image";
+import { useT } from "@/lib/i18n/client";
 import { TMDB_IMAGE_BASE_URL } from "@/lib/tmdb/tmdb";
 import { Playlist } from "@recomendapp/types";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
 
 interface PlaylistTvSeriesHeaderProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,7 +27,7 @@ export function PlaylistTvSeriesHeader({
   skeleton,
 } : PlaylistTvSeriesHeaderProps) {
   const { session } = useAuth();
-  const t = useTranslations();
+  const { t } = useT();
   const { openModal, createModal } = useModal();
   const backdrop = useRandomImage(
     backdrops?.map(src => ({ src, alt: playlist.title })) || []

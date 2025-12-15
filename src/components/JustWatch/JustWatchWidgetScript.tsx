@@ -3,10 +3,10 @@ import * as React from 'react'
 import { Icons } from "@/config/icons"
 import { cn } from "@/lib/utils"
 import { upperFirst } from "lodash"
-import { useLocale, useTranslations } from "next-intl"
 import { Link } from "@/lib/i18n/navigation"
 import { ImageWithFallback } from "../utils/ImageWithFallback"
 import { useModal } from "@/context/modal-context"
+import { useT } from '@/lib/i18n/client'
 
 export function JustWatchWidget({
 	id,
@@ -28,8 +28,7 @@ export function JustWatchWidget({
 	className?: string,
 }) {
 	const { createModal } = useModal();
-	const locale = useLocale();
-	const common = useTranslations('common');
+	const { i18n, t } = useT();
 
 	const loadJustWatchScript = React.useCallback(() => {
 		// Check if the script is already present
@@ -78,11 +77,11 @@ export function JustWatchWidget({
 				onClick={() => {
 					createModal({
 						header:  {
-							title: upperFirst(common('messages.watch_film_title', { title: title! })),
-							description: common.rich('messages.watch_film_streaming_or_download', {
-								title: title!,
-								important: (chunk) => <b>{chunk}</b>,
-							}),
+							title: upperFirst(t('common.messages.watch_film_title', { title: title! })),
+							// description: common.rich('messages.watch_film_streaming_or_download', {
+							// 	title: title!,
+							// 	important: (chunk) => <b>{chunk}</b>,
+							// }),
 						},
 						content: <>
 							<div data-jw-widget
@@ -91,7 +90,7 @@ export function JustWatchWidget({
 								data-id={id}
 								data-id-type={idType}
 								data-theme={'light'}
-								data-language={locale}
+								data-language={i18n.resolvedLanguage}
 								data-scale="0.8"
 							/>
 							<div className="text-right">
@@ -115,9 +114,9 @@ export function JustWatchWidget({
 				}}
 			>
 				{type === 'movie'
-					? upperFirst(common('messages.see_film'))
+					? upperFirst(t('common.messages.see_film'))
 					: type === 'show'
-					? upperFirst(common('messages.see_tv_series'))
+					? upperFirst(t('common.messages.see_tv_series'))
 					: type === 'season'}
 				<Icons.eye size={15} className="inline-block ml-1 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
 			</div>
@@ -129,7 +128,7 @@ export function JustWatchWidget({
 					data-id-type={idType}
 					data-max-offers={maxOffer}
 					data-theme={'light'}
-					data-language={locale}
+					data-language={i18n.resolvedLanguage}
 					data-scale="0.8"
 				/>
 				<div className="text-right">

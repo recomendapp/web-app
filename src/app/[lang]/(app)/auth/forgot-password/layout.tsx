@@ -1,19 +1,11 @@
-import { SupportedLocale } from '@/translations/locales';
+import { getT } from '@/lib/i18n';
 import { Metadata } from 'next';
-import { getTranslations } from 'next-intl/server';
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{
-      lang: string;
-    }>;
-  }
-): Promise<Metadata> {
-  const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'pages.auth.forgot_password' });
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
   return {
-    title: t('metadata.title'),
-    description: t('metadata.description'),
+    title: t('pages.auth.forgot_password.metadata.title'),
+    description: t('pages.auth.forgot_password.metadata.description'),
   };
 }
 

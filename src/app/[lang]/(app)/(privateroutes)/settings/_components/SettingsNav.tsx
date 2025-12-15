@@ -1,46 +1,45 @@
-'use client';
+'use client'
 
 import { Link } from "@/lib/i18n/navigation";
 import { usePathname } from '@/lib/i18n/navigation';
-
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
-import { useTranslations } from 'next-intl';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { useT } from "@/lib/i18n/client";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {}
 
 export function SettingsNav({ className, ...props }: SidebarNavProps) {
-  const t = useTranslations('pages.settings');
+  const { t } = useT();
   const pathname = usePathname();
 
   const settingsNavItems = [
     {
-      title: t('profile.label'),
+      title: t('pages.settings.profile.label'),
       href: '/settings/profile',
     },
     {
-      title: t('account.label'),
+      title: t('pages.settings.account.label'),
       href: '/settings/account',
     },
     {
-      title: t('appearance.label'),
+      title: t('pages.settings.appearance.label'),
       href: '/settings/appearance',
     },
     {
-      title: t('subscription.label'),
+      title: t('pages.settings.subscription.label'),
       href: '/settings/subscription',
     },
     {
-      title: t('security.label'),
+      title: t('pages.settings.security.label'),
       href: '/settings/security',
     },
     {
-      title: t('notifications.label'),
+      title: t('pages.settings.notifications.label'),
       href: '/settings/notifications',
     },
     {
-      title: t('data.label'),
+      title: t('pages.settings.data.label'),
       href: '/settings/data',
     },
   ];

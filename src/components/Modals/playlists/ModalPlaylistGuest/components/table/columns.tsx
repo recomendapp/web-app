@@ -8,12 +8,12 @@ import { PlaylistGuest } from "@recomendapp/types"
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { ColumnDef } from "@tanstack/react-table"
 import { upperFirst } from "lodash"
-import { useTranslations } from "next-intl"
 import { useState } from "react"
 import toast from "react-hot-toast"
+import { useT } from "@/lib/i18n/client"
 
 export const Columns = (): ColumnDef<PlaylistGuest>[] => {
-	const t = useTranslations();
+	const { t } = useT();
 	return [
 		{
 		id: "select",
@@ -87,7 +87,7 @@ const EditSwitch = ({
 	playlistId?: number;
 	editSate?: boolean;
 }) => {
-	const t = useTranslations()
+	const { t } = useT();
 	const { customerInfo } = useAuth()
 	const updatePlaylistGuest = usePlaylistGuestUpdateMutation()
 	const [edit, setEdit] = useState(editSate);

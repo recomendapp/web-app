@@ -5,12 +5,10 @@ import TvSeasonDetails from "./_components/TvSeasonDetails";
 import { getIdFromSlug } from "@/utils/get-id-from-slug";
 import { siteConfig } from "@/config/site";
 import { truncate, upperFirst } from "lodash";
-import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 import { TVSeason, WithContext } from "schema-dts";
-import { seoLocales } from "@/lib/i18n/routing";
-import { SupportedLocale } from "@/translations/locales";
 import { MediaTvSeriesSeason } from "@recomendapp/types";
+import { getT } from "@/lib/i18n";
 
 export async function generateMetadata(
   props: {
@@ -22,7 +20,7 @@ export async function generateMetadata(
   }
 ): Promise<Metadata> {
   const params = await props.params;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
+  const { t } = await getT();
   const { id: serieId } = getIdFromSlug(params.tv_series_id);
   try {
     const season = await getTvSeason(params.lang, serieId, Number(params.season_number));
@@ -35,7 +33,7 @@ export async function generateMetadata(
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: seoLocales(params.lang, `/tv-series/${params.tv_series_id}/${params.season_number}`),
+      // alternates: seoLocales(params.lang, `/tv-series/${params.tv_series_id}/${params.season_number}`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${t('pages.tv_series.seasons.season.metadata.title', { title: season.serie?.name!, number: season.season_number! })} • ${siteConfig.name}`,

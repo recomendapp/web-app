@@ -1,6 +1,6 @@
 'use client'
 import { Link } from "@/lib/i18n/navigation";
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
@@ -10,8 +10,8 @@ import { MediaPerson } from '@recomendapp/types';
 import { upperFirst } from 'lodash';
 import { MultiResult } from "@/lib/tmdb/tmdbQueries";
 import { getMediaDetails } from "@/utils/get-media-details";
-import { useTranslations } from "next-intl";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { useT } from "@/lib/i18n/client";
 
 export default function SearchBestResult({
   result,
@@ -20,7 +20,7 @@ export default function SearchBestResult({
   result: MultiResult | null;
   className?: string;
 }) {
-  const t = useTranslations();
+  const { t } = useT();
   const details = useMemo(() => {
 		switch (result?.type) {
 			case 'movie':

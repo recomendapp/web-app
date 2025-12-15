@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { MediaType } from "@recomendapp/types";
 import { useUserPlaylistSavedQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
@@ -11,8 +10,8 @@ import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
 import { useUserPlaylistSavedDeleteMutation, useUserPlaylistSavedInsertMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useT } from "@/lib/i18n/client";
 
 interface PlaylistActionSaveProps
 	extends React.ComponentProps<typeof Button> {
@@ -25,7 +24,7 @@ const PlaylistActionSave = React.forwardRef<
 	PlaylistActionSaveProps
 >(({ playlistId, stopPropagation = true, ...props }, ref) => {
 	const { session } = useAuth();
-	const t = useTranslations();
+	const { t } = useT();
 	const pathname = usePathname();
 
 	const {

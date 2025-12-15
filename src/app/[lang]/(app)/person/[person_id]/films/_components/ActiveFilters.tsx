@@ -2,11 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/lib/i18n/navigation";
-import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { upperFirst } from "lodash";
 import { Icons } from "@/config/icons";
+import { useT } from "@/lib/i18n/client";
 
 export const ActiveFilters = ({
 	department,
@@ -15,7 +15,7 @@ export const ActiveFilters = ({
 	department?: string;
 	job?: string;
 }) => {
-	const common = useTranslations('common');
+	const { t } = useT();
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const handleChange = (entries: { [key: string]: string | null }) => {
@@ -47,7 +47,7 @@ export const ActiveFilters = ({
 						{upperFirst(department)}
 					</span>
 					<span className="text-muted-foreground max-w-0 group-hover:max-w-[100px] ml-0 group-hover:ml-2 overflow-hidden group-hover:opacity-100 opacity-0 transition-all duration-500">
-						{upperFirst(common('messages.department', { count: 1 }))}
+						{upperFirst(t('common.messages.department', { count: 1 }))}
 					</span>
 				</Button>
 			)}
@@ -64,7 +64,7 @@ export const ActiveFilters = ({
 						{upperFirst(job)}
 					</span>
 					<span className="text-muted-foreground max-w-0 group-hover:max-w-[100px] ml-0 group-hover:ml-2 overflow-hidden group-hover:opacity-100 opacity-0 transition-all duration-500">
-						{upperFirst(common('messages.job', { count: 1 }))}
+						{upperFirst(t('common.messages.job', { count: 1 }))}
 					</span>
 				</Button>
 			)}
@@ -77,7 +77,7 @@ export const ActiveFilters = ({
 			>
 				<Icons.X />
 				<span>
-					{upperFirst(common('messages.reset'))}
+					{upperFirst(t('common.messages.reset'))}
 				</span>
 			</Button>
 		</div>

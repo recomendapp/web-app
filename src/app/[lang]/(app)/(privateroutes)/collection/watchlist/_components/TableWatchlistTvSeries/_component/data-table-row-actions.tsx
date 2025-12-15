@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Link } from "@/lib/i18n/navigation";
 import { Column, Row, Table } from '@tanstack/react-table';
@@ -13,7 +13,6 @@ import {
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import toast from 'react-hot-toast';
 import { UserWatchlistTvSeries } from '@recomendapp/types';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
@@ -23,6 +22,7 @@ import { useUserWatchlistTvSeriesDeleteMutation } from "@/features/client/user/u
 import { ModalUserWatchlistTvSeriesComment } from "@/components/Modals/watchlist/ModalUserWatchlistTvSeriesComment";
 import { ModalUserRecosTvSeriesSend } from "@/components/Modals/recos/ModalUserRecosTvSeriesSend";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
+import { useT } from "@/lib/i18n/client";
 
 interface DataTableRowActionsProps {
   table: Table<UserWatchlistTvSeries>;
@@ -37,7 +37,7 @@ export function DataTableRowActions({
   column,
   data,
 }: DataTableRowActionsProps) {
-  const t = useTranslations();
+  const { t } = useT();
   const { openModal, createConfirmModal } = useModal();
   const deleteWatchlistTvSeries = useUserWatchlistTvSeriesDeleteMutation();
 
@@ -103,10 +103,10 @@ export function DataTableRowActions({
           <DropdownMenuItem
             onClick={async () => createConfirmModal({
               title: upperFirst(t('pages.collection.watchlist.modal.delete_confirm.title')),
-              description: t.rich('pages.collection.watchlist.modal.delete_confirm.description', {
-                title: data?.tv_series?.name!,
-                important: (chunk) => <b>{chunk}</b>,
-              }),
+              // description: t.rich('pages.collection.watchlist.modal.delete_confirm.description', {
+              //   title: data?.tv_series?.name!,
+              //   important: (chunk) => <b>{chunk}</b>,
+              // }),
               onConfirm: handleUnwatchlist,
             })}
           >

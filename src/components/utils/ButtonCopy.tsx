@@ -3,8 +3,8 @@ import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import { Icons } from '@/config/icons';
 import { upperFirst } from 'lodash';
-import { useTranslations } from 'next-intl';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
+import { useT } from '@/lib/i18n/client';
 
 interface ButtonCopyProps extends React.ComponentPropsWithRef<typeof Button> {
 	text: string;
@@ -14,7 +14,7 @@ const ButtonCopy = React.forwardRef<
 	HTMLButtonElement,
 	ButtonCopyProps
 >(({ text, className, ...props }, ref) => {
-	const common = useTranslations('common');
+	const { t } = useT();
 	const [copied, setCopied] = React.useState(false);
 	const timeout = React.useRef<NodeJS.Timeout | null>(null);
 	const copyToClipboard = useCopyToClipboard();
@@ -42,7 +42,7 @@ const ButtonCopy = React.forwardRef<
 		onClick={handleCopy}
 		{...props}
 		>
-			<span className='sr-only'>{upperFirst(common('messages.copy_link'))}</span>
+			<span className='sr-only'>{upperFirst(t('common.messages.copy_link'))}</span>
 			{copied ? <Icons.copyDone /> : <Icons.copy />}
 		</Button>
 	)

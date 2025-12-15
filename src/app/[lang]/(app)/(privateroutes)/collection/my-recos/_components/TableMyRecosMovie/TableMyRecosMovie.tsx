@@ -1,4 +1,5 @@
-'use client';
+'use client'
+
 import * as React from 'react';
 import {
 	ColumnFiltersState,
@@ -25,10 +26,10 @@ import {
 import { Columns } from './_component/columns';
 import { useMediaQuery } from 'react-responsive';
 import { UserRecosMovieAggregated } from '@recomendapp/types';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { cn } from '@/lib/utils';
 import { TableToolbar } from '@/components/tables/TableToolbar';
+import { useT } from '@/lib/i18n/client';
 
 declare module '@tanstack/react-table' {
 	interface ColumnMeta<TData extends RowData, TValue> {
@@ -41,7 +42,7 @@ interface DataTableProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function TableMyRecosMovie({ data,className, ...props }: DataTableProps) {
-	const t = useTranslations();
+	const { t } = useT();
 	const [rowSelection, setRowSelection] = React.useState({});
 	const [columnVisibility, setColumnVisibility] =
 		React.useState<VisibilityState>({});

@@ -1,4 +1,5 @@
-'use client';
+'use client'
+
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
@@ -13,7 +14,6 @@ import { Icons } from '@/config/icons';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
 import { useTmdbSearchMoviesInfiniteQuery } from '@/features/client/tmdb/tmdbQueries';
-import { useLocale, useTranslations } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
@@ -21,6 +21,7 @@ import { usePlaylistMovieMultiInsertMutation } from '@/api/client/mutations/play
 import { upperFirst } from 'lodash';
 import { CardMovie } from '@/components/Card/CardMovie';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { useT } from '@/lib/i18n/client';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -33,8 +34,7 @@ export function ModalPlaylistMovieQuickAdd({
 	...props
 } : ModalPlaylistMovieQuickAddProps) {
 	const { session } = useAuth();
-	const t = useTranslations();
-	const locale = useLocale();
+	const { t, i18n } = useT();
 	const { closeModal } = useModal();
 	const [selectMovies, setSelectedMovies] = useState<MediaMovie[]>([]);
 	const [comment, setComment] = useState<string>('');
@@ -51,7 +51,7 @@ export function ModalPlaylistMovieQuickAdd({
 		hasNextPage,
 	} = useTmdbSearchMoviesInfiniteQuery({
 		query: searchQuery,
-		locale: locale,
+		locale: i18n.resolvedLanguage,
 	})
 
 	const insertMovieMultiple = usePlaylistMovieMultiInsertMutation({
@@ -92,10 +92,10 @@ export function ModalPlaylistMovieQuickAdd({
 			<ModalHeader className='px-4 pb-4 pt-5'>
 				<ModalTitle>{upperFirst(t('common.messages.add_to_playlist'))}</ModalTitle>
 				<ModalDescription>
-					{t.rich('common.messages.add_one_or_more_films_to', {
+					{/* {t.rich('common.messages.add_one_or_more_films_to', {
 						title: playlist.title,
 						important: (chunks) => <strong>{chunks}</strong>,
-					})}
+					})} */}
 				</ModalDescription>
 			</ModalHeader>
 			<ModalBody className='p-0! border-t bg-popover text-popover-foreground'>
@@ -139,10 +139,10 @@ export function ModalPlaylistMovieQuickAdd({
 						</p>
 					) : (searchQuery && !isLoading) ? (
 						<p className='p-4 text-center text-muted-foreground'>
-							{t.rich('common.messages.no_results_for', {
+							{/* {t.rich('common.messages.no_results_for', {
 								query: searchQuery,
 								strong: (chunks) => <strong>{chunks}</strong>,
-							})}
+							})} */}
 						</p>
 					) : !isLoading ? (
 						<p className='p-4 text-center text-muted-foreground'>

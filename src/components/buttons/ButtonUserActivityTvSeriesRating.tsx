@@ -10,7 +10,6 @@ import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
 import { useUserActivityTvSeriesInsertMutation, useUserActivityTvSeriesUpdateMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import {
 	Dialog,
@@ -21,6 +20,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
   } from '@/components/ui/dialog';
+import { useT } from "@/lib/i18n/client";
 
 interface ButtonUserActivityTvSeriesRatingProps
 	extends React.ComponentProps<typeof Button> {
@@ -33,7 +33,7 @@ const ButtonUserActivityTvSeriesRating = React.forwardRef<
 	ButtonUserActivityTvSeriesRatingProps
 >(({ tvSeriesId, stopPropagation = true, className, ...props }, ref) => {
 	const { session } = useAuth();
-	const t = useTranslations();
+	const { t } = useT();
 	const pathname = usePathname();
 	const [ratingValue, setRatingValue] = React.useState(5);
 

@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
 import { useUserWatchlistMovieDeleteMutation, useUserWatchlistMovieInsertMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ContextMenuWatchlistMovie } from "../ContextMenu/ContextMenuWatchlistMovie";
+import { useT } from "@/lib/i18n/client";
 
 interface ButtonUserWatchlistMovieProps
 	extends React.ComponentProps<typeof Button> {
@@ -25,7 +25,7 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 	ButtonUserWatchlistMovieProps
 >(({ movieId, stopPropagation = true, className, ...props }, ref) => {
 	const { session } = useAuth();
-	const t = useTranslations();
+	const { t } = useT();
 	const pathname = usePathname();
 
 	const {

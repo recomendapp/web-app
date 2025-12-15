@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
 import { useUserReviewTvSeriesLikeDeleteMutation, useUserReviewTvSeriesLikeInsertMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useT } from "@/lib/i18n/client";
 
 interface ButtonUserReviewTvSeriesLikeProps
 	extends React.ComponentProps<typeof Button> {
@@ -24,7 +24,7 @@ const ButtonUserReviewTvSeriesLike = React.forwardRef<
 	ButtonUserReviewTvSeriesLikeProps
 >(({ reviewId, reviewLikesCount, className, ...props }, ref) => {
 	const { session } = useAuth();
-	const t = useTranslations();
+	const { t } = useT();
 	const pathname = usePathname();
 	const {
 		data: like,

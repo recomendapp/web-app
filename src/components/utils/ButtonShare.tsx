@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
+import { useT } from '@/lib/i18n/client';
 import { capitalize } from 'lodash';
 import { Share2 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 
 export default function ButtonShare({
   url,
@@ -13,7 +13,7 @@ export default function ButtonShare({
   icon?: boolean;
   className?: string;
 }) {
-  const common = useTranslations('common');
+  const { t } = useT();
   const copyToClipboard = useCopyToClipboard();
   if (icon) {
     return (
@@ -23,5 +23,5 @@ export default function ButtonShare({
     );
   }
 
-  return <p onClick={() => copyToClipboard(url)}>{capitalize(common('messages.share'))}</p>;
+  return <p onClick={() => copyToClipboard(url)}>{capitalize(t('common.messages.share'))}</p>;
 }

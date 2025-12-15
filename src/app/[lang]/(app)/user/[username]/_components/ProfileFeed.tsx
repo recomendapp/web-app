@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Profile } from '@recomendapp/types';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useUserFeedInfiniteOptions } from '@/api/client/options/userOptions';
@@ -13,9 +12,10 @@ import { CardFeedActivityTvSeries } from '@/components/Card/feed/CardFeedActivit
 import { CardFeedPlaylistLike } from '@/components/Card/feed/CardFeedPlaylistLike';
 import { CardFeedReviewMovieLike } from '@/components/Card/feed/CardFeedReviewMovieLike';
 import { CardFeedReviewTvSeriesLike } from '@/components/Card/feed/CardFeedReviewTvSeriesLike';
+import { useT } from '@/lib/i18n/client';
 
 export const ProfileFeed = ({ profile }: { profile: Profile }) => {
-  const t = useTranslations();
+  const { t } = useT();
   const { ref, inView } = useInView();
 
   const {

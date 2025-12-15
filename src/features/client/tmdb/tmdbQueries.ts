@@ -11,7 +11,7 @@ export const useTmdbSearchMoviesInfiniteQuery = ({
 	filters,
 } : {
 	query?: string | null;
-	locale?: SupportedLocale;
+	locale?: string;
 	filters?: {
 		resultsPerPage?: number;
 	}
@@ -43,7 +43,7 @@ export const useTmdbSearchTvSeriesInfiniteQuery = ({
 	filters,
 } : {
 	query?: string | null;
-	locale?: SupportedLocale;
+	locale?: string;
 	filters?: {
 		resultsPerPage?: number;
 	}

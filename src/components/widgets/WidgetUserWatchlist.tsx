@@ -1,21 +1,21 @@
-'use client';
+'use client'
 
 import { Link } from "@/lib/i18n/navigation";
 import { useAuth } from '@/context/auth-context';
 import { useUserWatchlistQuery } from '@/features/client/user/userQueries';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from "lodash";
 import { CardMovie } from "../Card/CardMovie";
 import { MediaMovie, MediaTvSeries } from "@recomendapp/types";
 import { CardTvSeries } from "../Card/CardTvSeries";
+import { useT } from "@/lib/i18n/client";
 
 export const WidgetUserWatchlist = ({
   className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
   const { session } = useAuth();
-  const t = useTranslations('common');
+  const { t } = useT();
 
   const { data: watchlist } = useUserWatchlistQuery({
     userId: session?.user.id,
@@ -33,7 +33,7 @@ export const WidgetUserWatchlist = ({
   <div className={cn('@container/widget-user-watchlist space-y-2', className)}>
     <Button variant={'link'} className="p-0 w-fit font-semibold text-xl" asChild>
 			<Link href={'/collection/watchlist'}>
-        {upperFirst(t('messages.to_watch'))}
+        {upperFirst(t('common.messages.to_watch'))}
 			</Link>
 		</Button>
     <div className='grid grid-cols-2 @2xl/widget-user-watchlist:grid-cols-3 gap-4'>

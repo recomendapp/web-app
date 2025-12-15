@@ -1,27 +1,27 @@
-'use client';
+'use client'
 
 import { Link } from "@/lib/i18n/navigation";
 import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
-import { useTranslations } from 'next-intl';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { upperFirst } from "lodash";
 import { useMemo } from "react";
+import { useT } from "@/lib/i18n/client";
 
 interface LegalNavProps extends React.HTMLAttributes<HTMLElement> {}
 
 export function LegalNav({ className, ...props }: LegalNavProps) {
-  const t = useTranslations('common.messages');
+  const { t } = useT();
   const pathname = usePathname();
 
   const legalNavItems = useMemo(() => [
     {
-		title: upperFirst(t('terms_of_use')),
+		title: upperFirst(t('common.messages.terms_of_use')),
 		href: '/legal/terms-of-use',
     },
 	{
-		title: upperFirst(t('privacy_policy')),
+		title: upperFirst(t('common.messages.privacy_policy')),
 		href: '/legal/privacy-policy',
 	}
   ], [t]);

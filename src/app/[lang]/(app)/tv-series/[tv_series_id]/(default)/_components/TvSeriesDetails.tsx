@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { JustWatchWidget } from "@/components/JustWatch/JustWatchWidgetScript";
 import { Card } from "@/components/ui/card";
@@ -6,11 +6,10 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { MediaTvSeries, MediaPerson, MediaTvSeriesPerson } from "@recomendapp/types";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
 import { Link } from "@/lib/i18n/navigation";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
-import { Separator } from "@/components/ui/separator";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { useT } from "@/lib/i18n/client";
 
 export default function TvSerieDetails({
   slug,
@@ -19,7 +18,7 @@ export default function TvSerieDetails({
   slug: string;
   serie: MediaTvSeries;
 }) {
-  const t = useTranslations();
+  const { t } = useT();
   if (!serie) return null;
   return (
     <div className="@container/movie-details flex flex-col gap-4">
@@ -128,7 +127,7 @@ const SerieCast = ({
 } : {
 	tvSeries: MediaTvSeries
 }) => {
-  const t = useTranslations();
+  const { t } = useT();
 	return (
 		<div>
 			<h2 className="text-lg font-medium">{upperFirst(t('common.messages.cast'))}</h2>

@@ -20,7 +20,6 @@ import { TooltipBox } from "../Box/TooltipBox";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 import { useAuth } from "@/context/auth-context";
-import { useTranslations } from "next-intl";
 import { useWidgetMostRecommendedQuery } from "@/features/client/widget/widgetQueries";
 import { BadgeMedia } from "../Badge/BadgeMedia";
 import Image from "next/image";
@@ -32,6 +31,7 @@ import { Database } from "@recomendapp/types";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { ContextMenuMovie } from "../ContextMenu/ContextMenuMovie";
 import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
+import { useT } from "@/lib/i18n/client";
 
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -96,7 +96,7 @@ const Item = ({
 }: ItemProps) => {
 	const { session } = useAuth();
 	const { openModal } = useModal();
-	const t = useTranslations('common');
+	const { t } = useT();
 	const details = useMemo(() => {
 		switch (item.type) {
 			case 'movie':
@@ -136,7 +136,7 @@ const Item = ({
 					)}
 					<CardHeader className="flex flex-row justify-between items-center gap-2 text-xl font-semibold leading-none tracking-tight ">
 						<h3 className="text-xl">
-							{upperFirst(t('messages.most_recommended', { count: 0 }))}
+							{upperFirst(t('common.messages.most_recommended', { count: 0 }))}
 						</h3>
 						<div className="flex flex-col items-end gap-2">
 							<div># {index + 1}</div>

@@ -1,20 +1,20 @@
 import { cn } from "@/lib/utils"
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { siteConfig } from "@/config/site";
-import { useTranslations } from "next-intl";
+import { useT } from "@/lib/i18n/client";
 
 export const WidgetRecomendShowcase = ({
 	className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
-	const t = useTranslations();
+	const { t } = useT();
 	if (!siteConfig.features.length) return null;
 	return (
 		<div className={cn('@container/widget-recomend-showcase space-y-4', className)}>
 			<h2 className="text-xl font-semibold">
-				{t.rich('common.messages.what_is_title', {
+				{/* {t.rich('common.messages.what_is_title', {
 					title: siteConfig.name,
 					strong: (chunks) => <strong className="text-accent-yellow">{chunks}</strong>,
-				})}
+				})} */}
 			</h2>
 			<div
 			className={`grid grid-cols-1 gap-4

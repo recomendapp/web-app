@@ -9,7 +9,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useInView } from 'react-intersection-observer';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { z } from "zod";
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -24,6 +23,7 @@ import { MediaMovie } from '@recomendapp/types';
 import { CardReviewMovie } from '@/components/Card/CardReviewMovie';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
+import { useT } from '@/lib/i18n/client';
 
 type SortBy =  "updated_at" | "created_at";
 const DEFAULT_PER_PAGE = 20;
@@ -50,7 +50,7 @@ interface MovieReviewsProps {
 export const MovieReviews = ({
 	movie,
 } : MovieReviewsProps) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const searchParams = useSearchParams();
 	const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
 	const sortOrder = getValidatedSortOrder(searchParams.get('sort_order'));
@@ -149,7 +149,7 @@ const MyReviewButton = ({
  } : {
 	movie: MediaMovie;
 }) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const { session } = useAuth();
 	const {
 	  data: activity,

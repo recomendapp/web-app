@@ -1,16 +1,16 @@
-'use client';
+'use client'
+
 import { Separator } from '@/components/ui/separator';
-import { SecurityForm } from '@/app/[lang]/(app)/(privateroutes)/settings/security/_components/securityForm';
-import { siteConfig } from '@/config/site';
-import { useTranslations } from 'next-intl';
+import { SecurityForm } from './_components/securityForm';
+import { useT } from '@/lib/i18n/client';
 
 export default function SettingsSecurityPage() {
-  const t = useTranslations('pages.settings');
+  const { t } = useT();
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">{t('security.label')}</h3>
-        <p className="text-sm text-muted-foreground text-justify">{t('security.description')}</p>
+        <h3 className="text-lg font-medium">{t('pages.settings.security.label')}</h3>
+        <p className="text-sm text-muted-foreground text-justify">{t('pages.settings.security.description')}</p>
       </div>
       <Separator />
       <SecurityForm />

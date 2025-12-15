@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import createIntlMiddleware from 'next-intl/middleware';
-import { routing } from './lib/i18n/routing';
 import { siteConfig } from './config/site';
 import { getSupabaseClaims } from './lib/supabase/jwt';
-import { ensureLocaleCookie } from './lib/i18n/ensure-locale-cookie';
-
-const intlMiddleware = createIntlMiddleware(routing);
+import { i18nMiddleware } from './lib/i18n/middleware';
 
 export async function proxy(request: NextRequest) {
-  const response = intlMiddleware(request);
+  const start = performance.now();
+  const response = i18nMiddleware(request);
 
   const [, locale, ...rest] = new URL(
     response.headers.get('x-middleware-rewrite') || request.url
@@ -59,10 +56,10 @@ export async function proxy(request: NextRequest) {
       new URL(`/${locale}/auth/login?redirect=${redirectTo}`, request.url)
     );
   }
-
-  ensureLocaleCookie(request, response, locale);
   
-  return (response);
+  const duration = performance.now() - start;
+  console.log(`[i18nMiddleware] ${request.nextUrl.pathname} - ${duration.toFixed(2)}ms`);
+  return response;
 }
 
 export const config = {

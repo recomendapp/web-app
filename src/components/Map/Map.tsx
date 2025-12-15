@@ -1,15 +1,15 @@
-'use client';
+'use client'
 
-import React, { useState, useRef, useMemo } from 'react';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { useState, useMemo } from 'react';
 import { useMap } from '@/context/map-context';
 import { Interface } from './Interface';
 import { Icons } from '../../config/icons';
 import MapContainer, { Layer, Source } from 'react-map-gl/maplibre';
-import 'maplibre-gl/dist/maplibre-gl.css';
-import { useLocale } from 'next-intl';
+import { useT } from '@/lib/i18n/client';
 
 export function Map() {
-  const locale = useLocale();
+  const { i18n } = useT();
   const {
     mapInitialized,
     setMapInitialized,
@@ -73,7 +73,7 @@ export function Map() {
         onClick={(e) => {
           const isMoviesLayer = e.features?.find((feature) => feature.layer.id === 'movies');
           if (isMoviesLayer) {
-            const parsedLocaleData = JSON.parse(isMoviesLayer.properties[locale === 'fr-FR' ? 'fr-FR' : 'en-US']); // TODO: Use local when supported all languages
+            const parsedLocaleData = JSON.parse(isMoviesLayer.properties[i18n.language === 'fr-FR' ? 'fr-FR' : 'en-US']); // TODO: Use local when supported all languages
             setSelectedMovie({
               movie: {
                 id: isMoviesLayer.properties.id,
@@ -102,14 +102,14 @@ export function Map() {
         onLoad={() => {
           setMapInitialized(true);
         }}
-        locale={{ language: locale }}
+        locale={{ language: i18n.language }}
       >
           <Source id="movies" type="geojson" data={data.moviesDataset}>
             <Layer
               id="movies"
               type="symbol"
               layout={{
-                'text-field': ['get', 'title', ['get', locale === 'fr-FR' ? 'fr-FR' : 'en-US']], // TODO: Use local when supported all languages
+                'text-field': ['get', 'title', ['get', i18n.language === 'fr-FR' ? 'fr-FR' : 'en-US']], // TODO: Use local when supported all languages
                 'text-font': ['Open Sans Bold'],
                 'text-size': [
                   "interpolate",

@@ -3,7 +3,6 @@
 import { Link } from "@/lib/i18n/navigation";
 import MediaPoster from "@/components/Media/MediaPoster";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
-import { useFormatter, useTranslations } from "next-intl";
 import { Profile, UserActivityTvSeries } from "@recomendapp/types";
 import { cn } from "@/lib/utils";
 import { CardUser } from "@/components/Card/CardUser";
@@ -13,6 +12,7 @@ import { upperFirst } from "lodash";
 import { CardReviewTvSeries } from "@/components/Card/CardReviewTvSeries";
 import { forwardRef } from "react";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { useFormatter, useT } from "@/lib/i18n/client";
 
 const FeedActivity = ({
 	author,
@@ -23,14 +23,14 @@ const FeedActivity = ({
 	activity: UserActivityTvSeries;
 	className?: string;
 }) => {
-	const t = useTranslations('pages.feed.actions');
+	const { t } = useT();
   
 	return (
 	  <div className={cn("space-x-2", className)}>
 		{activity?.review ? (
 		  <>
 			<span>
-			  {t.rich('reviewed', {
+			  {/* {t.rich('pages.feed.actions.reviewed', {
 				name: () => (
 				  <Link href={`/@${author.username}`} className="text-foreground hover:underline">
 					{author.username}
@@ -39,50 +39,50 @@ const FeedActivity = ({
 				movie: () => (
 					<></>
 				),
-			  })}
+			  })} */}
 			</span>
 		  </>
 		) : (
 		  <>
 			{activity?.is_liked && activity?.rating ? (
 			  <span>
-				{t.rich('rated_liked', {
+				{/* {t.rich('pages.feed.actions.rated_liked', {
 				  name: () => (
 					<Link href={`/@${author.username}`} className="text-foreground hover:underline">
 					  {author.username}
 					</Link>
 				  ),
-				})}
+				})} */}
 			  </span>
 			) : activity?.is_liked && !activity?.rating ? (
 			  <span>
-				{t.rich('liked', {
+				{/* {t.rich('pages.feed.actions.liked', {
 				  name: () => (
 					<Link href={`/@${author.username}`} className="text-foreground hover:underline">
 					  {author.username}
 					</Link>
 				  ),
-				})}
+				})} */}
 			  </span>
 			) : !activity?.is_liked && activity?.rating ? (
 			  <span>
-				{t.rich('rated', {
+				{/* {t.rich('pages.feed.actions.rated', {
 				  name: () => (
 					<Link href={`/@${author.username}`} className="text-foreground hover:underline">
 					  {author.username}
 					</Link>
 				  ),
-				})}
+				})} */}
 			  </span>
 			) : (
 			  <span>
-				{t.rich('watched', {
+				{/* {t.rich('pages.feed.actions.watched', {
 				  name: () => (
 					<Link href={`/@${author.username}`} className="text-foreground hover:underline">
 					  {author.username}
 					</Link>
 				  ),
-				})}
+				})} */}
 			  </span>
 			)}
 		  	{activity?.rating && (
@@ -112,8 +112,8 @@ export const CardFeedActivityTvSeries = forwardRef<
 	HTMLDivElement,
 	CardFeedActivityTvSeriesProps
 >(({ author, activity, ...props }, ref) => {
-	const format = useFormatter();
-	const t = useTranslations();
+	const formatter = useFormatter();
+	const { t } = useT();
 
 	return (
 	  <div ref={ref} className="@container/feed-item flex gap-4 bg-muted rounded-xl p-2 group" {...props}>
@@ -133,9 +133,9 @@ export const CardFeedActivityTvSeries = forwardRef<
 					<CardUser user={author} variant="icon" />
 					<FeedActivity author={author} activity={activity} className="text-sm @md/feed-item:text-base text-muted-foreground"/>
 				</div>
-				{activity.watched_date && <div className='hidden @md/feed-item:block text-sm text-muted-foreground opacity-0 group-hover:opacity-100 duration-500'>
+				{/* {activity.watched_date && <div className='hidden @md/feed-item:block text-sm text-muted-foreground opacity-0 group-hover:opacity-100 duration-500'>
 					{format.relativeTime(new Date(activity.watched_date), new Date())}
-				</div>}
+				</div>} */}
 			</div>
 			<Link href={activity.tv_series?.url ?? ''} className="text-md @md/feed-item:text-xl space-x-1 line-clamp-2">
 				<span className='font-bold'>{activity.tv_series?.name}</span>

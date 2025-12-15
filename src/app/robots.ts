@@ -1,11 +1,11 @@
 import { siteConfig } from '@/config/site'
-import { routing } from '@/lib/i18n/routing';
+import { fallbackLng, languages } from '@/lib/i18n/settings'
 import type { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
-  const disallow = routing.locales.flatMap(lang => {
+  const disallow = languages.flatMap(lang => {
     return siteConfig.routes.authRoutes.flatMap(route => {
-      const base = lang === routing.defaultLocale ? route : `/${lang}${route}`
+      const base = lang === fallbackLng ? route : `/${lang}${route}`
 
       return [
         `${base}`,

@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
@@ -7,8 +7,8 @@ import { useModal } from '@/context/modal-context';
 import { PlaylistModal } from '@/components/Modals/playlists/PlaylistModal';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { cn } from '@/lib/utils';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { useT } from '@/lib/i18n/client';
 
 export function PlaylistCreateButton({
   className,
@@ -20,7 +20,7 @@ export function PlaylistCreateButton({
   filmId?: string;
 }) {
   const { user } = useAuth();
-  const t = useTranslations();
+  const { t } = useT();
   const { openModal } = useModal();
 
   if (!user) return null;

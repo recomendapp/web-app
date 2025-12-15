@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Link } from "@/lib/i18n/navigation";
 import { Column, Row, Table } from '@tanstack/react-table';
@@ -13,7 +13,6 @@ import {
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import toast from 'react-hot-toast';
 import { PlaylistItemMovie } from '@recomendapp/types';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
@@ -26,6 +25,7 @@ import { ModalPlaylistMovieAdd } from "@/components/Modals/playlists/ModalPlayli
 import { ModalUserRecosMovieSend } from "@/components/Modals/recos/ModalUserRecosMovieSend";
 import { usePlaylistMovieDeleteMutation } from "@/api/client/mutations/playlistMutations";
 import ModaPlaylistMovieComment from "@/components/Modals/playlists/ModalPlaylistMovieComment";
+import { useT } from "@/lib/i18n/client";
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItemMovie>;
@@ -41,7 +41,7 @@ export function DataTableRowActions({
   data,
 }: DataTableRowActionsProps) {
   const { session } = useAuth();
-  const t = useTranslations();
+  const { t } = useT();
   const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
     playlistId: row.original.playlist_id,
     userId: session?.user.id
@@ -126,10 +126,10 @@ export function DataTableRowActions({
             <DropdownMenuItem
               onClick={() => createConfirmModal({
                 title: upperFirst(t('common.messages.are_u_sure')),
-                description: t.rich('pages.playlist.modal.delete_item_confirm.description', {
-                  title: data.movie?.title!,
-                  important: (chunk) => <b>{chunk}</b>,
-                }),
+                // description: t.rich('pages.playlist.modal.delete_item_confirm.description', {
+                //   title: data.movie?.title!,
+                //   important: (chunk) => <b>{chunk}</b>,
+                // }),
                 onConfirm: handleDeleteItem,
               })}
             >

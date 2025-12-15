@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/select';
 import { useInView } from 'react-intersection-observer';
 import { z } from "zod";
-import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMediaPlaylistsMovieInfiniteQuery } from '@/features/client/media/mediaQueries';
 import { upperFirst } from 'lodash';
@@ -20,6 +19,7 @@ import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useT } from '@/lib/i18n/client';
 
 type SortBy = "created_at" | "updated_at" | "likes_count";
 const DEFAULT_PER_PAGE = 20;
@@ -46,7 +46,7 @@ interface MoviePlaylistsProps {
 export function MoviePlaylists({
   movieId,
 } : MoviePlaylistsProps) {
-  const t = useTranslations();
+  const { t } = useT();
   const searchParams = useSearchParams();
   const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
   const sortOrder = getValidatedSortOrder(searchParams.get('sort_order'));

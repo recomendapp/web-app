@@ -3,11 +3,10 @@ import { Icons } from "@/config/icons"
 import { useUI } from "@/context/ui-context";
 import { RightPanelNotifications } from "../sidebar/right-panel/RightPanelNotifications";
 import { useCounts } from "@novu/react";
-import { CircleIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useCallback } from "react";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n/client";
 
 export const NotificationsButton = ({
 	variant = 'outline',
@@ -16,7 +15,7 @@ export const NotificationsButton = ({
 	className,
 	...props
 } : React.ComponentProps<typeof Button>) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const { counts } = useCounts({ filters: [{ read: false }] });
 	const {
 		toggleRightPanelContent,

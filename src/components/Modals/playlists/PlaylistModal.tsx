@@ -9,8 +9,8 @@ import { UserCogIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { ModalPlaylistGuest } from './ModalPlaylistGuest/ModalPlaylistGuest';
 import { PlaylistForm } from '@/components/Playlist/PlaylistForm/PlaylistForm';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
+import { useT } from '@/lib/i18n/client';
 
 interface PlaylistModalProps extends ModalType {
   playlist?: Playlist;
@@ -22,7 +22,7 @@ export function PlaylistModal({
   playlist,
   ...props
 } : PlaylistModalProps) {
-  const t = useTranslations();
+  const { t } = useT();
   const { user } = useAuth();
   const { openModal, closeModal } = useModal();
 

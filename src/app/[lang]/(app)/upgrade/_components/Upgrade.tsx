@@ -18,13 +18,13 @@ import { title } from "@/utils/custom-lodash";
 import { useRandomImage } from "@/hooks/use-random-image";
 import { cn } from "@/lib/utils";
 import { upperFirst } from "lodash";
-import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/lib/i18n/navigation";
 import { Fragment, useCallback, useMemo, useState } from "react";
 import { useOffering } from "@/lib/revenuecat";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Offering, Package } from "@revenuecat/purchases-js";
 import toast from "react-hot-toast";
+import { useT } from "@/lib/i18n/client";
 
 interface PlanFeature {
 	type: string;
@@ -46,7 +46,7 @@ const GetStarted = ({
 	onPurchase?: () => void | Promise<void>;
 }) => {
 	const { session, customerInfo } = useAuth();
-	const t = useTranslations();
+	const { t } = useT();
 	if (!offering) {
 		return (
 			<Button className='w-full' disabled>
@@ -92,9 +92,8 @@ export const Upgrade = () => {
 	} = useOffering();
 	const pathname = usePathname();
 	const router = useRouter();
-	const locale = useLocale();
 	const { openModal } = useModal();
-	const t = useTranslations();
+	const { t, i18n } = useT();
 	const bgImage = useRandomImage(Images.upgrade.background);
 	const [billingInterval, setBillingInterval] = useState<'annual' | 'monthly'>('monthly');
 
@@ -187,20 +186,20 @@ export const Upgrade = () => {
 							unit_amount: 0,
 							currency: offering?.monthly?.webBillingProduct.price.currency,
 						},
-						locale
+						i18n.language
 					),
 					premium: formatPrice(
 						{
 							unit_amount: billingInterval === 'annual' ? offering?.annual?.webBillingProduct.price.amountMicros! / 10_000 : offering?.monthly?.webBillingProduct.price.amountMicros! / 10_000,
 							currency: offering?.monthly?.webBillingProduct.price.currency,
 						},
-						locale
+						i18n.language
 					),
 					className: 'text-3xl font-bold',
 				}
 			]
 		}
-	], [t, billingInterval, offering, locale]);
+	], [t, billingInterval, offering, i18n.language]);
 
 	const handlePurchase = useCallback(async (plan: Package) => {
 		if (!session) {
@@ -233,7 +232,7 @@ export const Upgrade = () => {
 				</h1>
 				{!isOfferingLoading ? (
 					<h2>
-					{upperFirst(t('pages.upgrade.header.subtitle', { price: `${formatPrice({ unit_amount: offering?.monthly?.webBillingProduct.price.amountMicros! / 10_000, currency: offering?.monthly?.webBillingProduct.price.currency }, locale)}` }))}
+					{/* {upperFirst(t('pages.upgrade.header.subtitle', { price: `${formatPrice({ unit_amount: offering?.monthly?.webBillingProduct.price.amountMicros! / 10_000, currency: offering?.monthly?.webBillingProduct.price.currency }, locale)}` }))} */}
 					</h2>
 				) : <Skeleton className="h-6 w-3/4" />}
 				<div className='flex gap-4 max-w-xs'>

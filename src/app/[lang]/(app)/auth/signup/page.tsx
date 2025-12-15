@@ -17,7 +17,6 @@ import { Link, useRouter } from "@/lib/i18n/navigation";
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { useSupabaseClient } from '@/context/supabase-context';
-import { useLocale, useTranslations } from 'next-intl';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -32,6 +31,7 @@ import { useUsernameAvailability } from '@/hooks/use-username-availability';
 import { InputPassword } from '@/components/ui/input-password';
 import { Turnstile } from "next-turnstile";
 import { upperFirst } from 'lodash';
+import { useT } from '@/lib/i18n/client';
 
 const USERNAME_MIN_LENGTH = 3;
 const USERNAME_MAX_LENGTH = 15;
@@ -42,10 +42,7 @@ const PASSWORD_MIN_LENGTH = 8;
 export default function Signup() {
 	const supabase = useSupabaseClient();
 	const { signup, loginWithOtp } = useAuth();
-	const t = useTranslations('pages.auth.signup');
-	const common = useTranslations('common');
-
-	const locale = useLocale();
+	const { t, i18n } = useT();
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const redirectTo = searchParams.get('redirect');
@@ -56,60 +53,60 @@ export default function Signup() {
 	/* ------------------------------- FORM SCHEMA ------------------------------ */
 	const signupSchema = z.object({
 		email: z.string().email({
-		message: common('form.email.error.invalid'),
+		message: t('common.form.email.error.invalid'),
 		}),
 		username: z
 		.string()
 		.min(USERNAME_MIN_LENGTH, {
-			message: common('form.length.char_min', { count: USERNAME_MIN_LENGTH }),
+			message: t('common.form.length.char_min', { count: USERNAME_MIN_LENGTH }),
 		})
 		.max(USERNAME_MAX_LENGTH, {
-			message: common('form.length.char_max', { count: USERNAME_MAX_LENGTH }),
+			message: t('common.form.length.char_max', { count: USERNAME_MAX_LENGTH }),
 		})
 		.regex(/^[^\W]/, {
-			message: common('form.username.schema.first_char'),
+			message: t('common.form.username.schema.first_char'),
 		})
 		.regex(/^(?!.*\.\.)/, {
-			message: common('form.username.schema.double_dot'),
+			message: t('common.form.username.schema.double_dot'),
 		})
 		.regex(/^(?!.*\.$)/, {
-			message: common('form.username.schema.ends_with_dot'),
+			message: t('common.form.username.schema.ends_with_dot'),
 		})
 		.regex(/^[\w.]+$/, {
-			message: common('form.username.schema.format'),
+			message: t('common.form.username.schema.format'),
 		}),
 		full_name: z
 		.string()
 		.min(FULL_NAME_MIN_LENGTH, {
-			message: common('form.length.char_min', { count: FULL_NAME_MIN_LENGTH }),
+			message: t('common.form.length.char_min', { count: FULL_NAME_MIN_LENGTH }),
 		})
 		.max(FULL_NAME_MAX_LENGTH, {
-			message: common('form.length.char_max', { count: FULL_NAME_MAX_LENGTH }),
+			message: t('common.form.length.char_max', { count: FULL_NAME_MAX_LENGTH }),
 		})
 		.regex(/^[a-zA-Z0-9\s\S]*$/, {
-			message: common('form.full_name.schema.format'),
+			message: t('common.form.full_name.schema.format'),
 		}),
 		password: z
 		.string()
 		.min(PASSWORD_MIN_LENGTH, {
-			message: common('form.length.char_min', { count: PASSWORD_MIN_LENGTH }),
+			message: t('common.form.length.char_min', { count: PASSWORD_MIN_LENGTH }),
 		})
 		.regex(/[A-Z]/, {
-			message: common('form.password.schema.uppercase'),
+			message: t('common.form.password.schema.uppercase'),
 		})
 		.regex(/[a-z]/, {
-			message: common('form.password.schema.lowercase'),
+			message: t('common.form.password.schema.lowercase'),
 		})
 		.regex(/[0-9]/, {
-			message: common('form.password.schema.number'),
+			message: t('common.form.password.schema.number'),
 		})
 		.regex(/[\W_]/, {
-			message: common('form.password.schema.special'),
+			message: t('common.form.password.schema.special'),
 		}),
 		confirm_password: z
 		.string()
 	}).refine(data => data.password === data.confirm_password, {
-		message: common('form.password.schema.match'),
+		message: t('common.form.password.schema.match'),
 		path: ['confirm_password'],
 	});
 
@@ -145,17 +142,17 @@ export default function Signup() {
 	useEffect(() => {
 		if (usernameAvailability.isAvailable === false) {
 			form.setError('username', {
-				message: common('form.username.schema.unavailable'),
+				message: t('common.form.username.schema.unavailable'),
 			});
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [usernameAvailability.isAvailable, common]);
+	}, [usernameAvailability.isAvailable, t]);
 	
 	const handleSubmit = useCallback(async (data: SignupFormValues) => {
 		try {
 			setIsLoading(true);
 			if (turnstileStatus !== 'success') {
-				toast.error(common('form.error.turnstile'));
+				toast.error(t('common.form.error.turnstile'));
 				return;
 			}
 			await signup({
@@ -163,51 +160,51 @@ export default function Signup() {
 				name: data.full_name,
 				username: data.username,
 				password: data.password,
-				language: locale,
+				language: i18n.language,
 			});
-			toast.success(t('form.success', { email: data.email }));
+			toast.success(t('pages.auth.signup.form.success', { email: data.email }));
 			setShowOtp(true);
 		} catch (error) {
 			if (error instanceof AuthError) {
 				switch (error.status) {
 					case 422:
-						toast.error(common('form.email.error.unavailable'));
+						toast.error(t('common.form.email.error.unavailable'));
 						break;
 					case 500:
-						toast.error(common('form.username.schema.unavailable'));
+						toast.error(t('common.form.username.schema.unavailable'));
 						break;
 					default:
 						toast.error(error.message);
 				}
 			} else {
-				toast.error(upperFirst(common('messages.an_error_occurred')));
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		} finally {
 			setIsLoading(false);
 		}
-	}, [signup, t, common, locale, turnstileStatus]);
+	}, [signup, t, i18n.resolvedLanguage, turnstileStatus]);
 
 	const resendOtp = useCallback(async () => {
 		try {
 			setIsLoading(true);
 			await loginWithOtp(form.getValues('email'), redirectTo);
-			toast.success(common('form.code_sent'));
+			toast.success(t('common.form.code_sent'));
 		} catch (error) {
 			if (error instanceof AuthError) {
 				switch (error.status) {
 					case 429:
-						toast.error(common('form.error.too_many_attempts'));
+						toast.error(t('common.form.error.too_many_attempts'));
 						break;
 					default:
 						toast.error(error.message);
 				}
 			} else {
-				toast.error(upperFirst(common('messages.an_error_occurred')));
+				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		} finally {
 			setIsLoading(false);
 		}
-	}, [loginWithOtp, redirectTo, form, common]);
+	}, [loginWithOtp, redirectTo, form, t]);
 
 	const handleVerifyOtp = useCallback(async (otp: string) => {
 		try {
@@ -218,25 +215,25 @@ export default function Signup() {
 			type: 'email',
 		  });
 		  if (error) throw error;
-		  toast.success(common('form.email.verified'));
+		  toast.success(t('common.form.email.verified'));
 		  router.push(redirectTo || '/');
 		  router.refresh();
 		} catch (error) {
 		  if (error instanceof AuthError) {
 			switch (error.status) {
 			  case 403:
-				toast.error(common('form.error.invalid_code'));
+				toast.error(t('common.form.error.invalid_code'));
 				break
 			  default:
 				toast.error(error.message);
 			}
 		  } else {
-			toast.error(upperFirst(common('messages.an_error_occurred')));
+			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		} finally {
 		  setIsLoading(false);
 		}
-	}, [supabase, router, redirectTo, form, common]);
+	}, [supabase, router, redirectTo, form, t]);
 	
 	return (
 	<div
@@ -255,9 +252,9 @@ export default function Signup() {
 					<CardHeader className='gap-2'>
 					<CardTitle className='inline-flex gap-2 items-center justify-center'>
 						<Icons.site.icon className='fill-accent-yellow w-8' />
-						{upperFirst(common('messages.signup'))}
+						{upperFirst(t('common.messages.signup'))}
 					</CardTitle>
-					<CardDescription className='text-center'>{t('description')}</CardDescription>
+					<CardDescription className='text-center'>{t('pages.auth.signup.description')}</CardDescription>
 					</CardHeader>
 					<CardContent className='grid gap-2'>
 						<FormField
@@ -265,12 +262,12 @@ export default function Signup() {
 						name="email"
 						render={({ field }) => (
 						<FormItem>
-							<FormLabel>{common('form.email.label')}</FormLabel>
+							<FormLabel>{t('common.form.email.label')}</FormLabel>
 							<FormControl>
 								<Input
 								autoComplete="email"
 								disabled={isLoading}
-								placeholder={common('form.email.placeholder')}
+								placeholder={t('common.form.email.placeholder')}
 								{...field}
 								/>
 							</FormControl>
@@ -284,7 +281,7 @@ export default function Signup() {
 						render={({ field }) => (
 							<FormItem>
 							<FormLabel className='w-full flex justify-between gap-2'>
-							{common('form.username.label')}
+							{t('common.form.username.label')}
 							<span className='text-xs text-destructive'>{(field?.value && field?.value?.length > USERNAME_MAX_LENGTH) ? `${field.value.length} / ${USERNAME_MAX_LENGTH}` : ''}</span>
 							</FormLabel>
 								<FormControl>
@@ -292,7 +289,7 @@ export default function Signup() {
 										<Input
 										autoComplete="username"
 										disabled={isLoading}
-										placeholder={common('form.username.placeholder')}
+										placeholder={t('common.form.username.placeholder')}
 										className={usernameAvailability.isLoading ? 'pr-8' : ''}
 										{...field}
 										/>
@@ -314,14 +311,14 @@ export default function Signup() {
 						render={({ field }) => (
 							<FormItem>
 							<FormLabel className="w-full flex justify-between gap-2">
-							{common('form.full_name.label')}
+							{t('common.form.full_name.label')}
 							<span className='text-xs text-destructive'>{(field?.value && field?.value?.length > FULL_NAME_MAX_LENGTH) ? `${field.value.length} / ${FULL_NAME_MAX_LENGTH}` : ''}</span>
 							</FormLabel>
 							<FormControl>
 								<Input
 								autoComplete="given-name"
 								disabled={isLoading}
-								placeholder={common('form.full_name.placeholder')}
+								placeholder={t('common.form.full_name.placeholder')}
 								{...field}
 								/>
 							</FormControl>
@@ -335,13 +332,13 @@ export default function Signup() {
 						name="password"
 						render={({ field }) => (
 							<FormItem>
-							<FormLabel>{common('form.password.label')}</FormLabel>
+							<FormLabel>{t('common.form.password.label')}</FormLabel>
 							<FormControl>
 								<InputPassword
 								disabled={isLoading}
 								type="password"
 								autoComplete="new-password"
-								placeholder={common('form.password.placeholder')}
+								placeholder={t('common.form.password.placeholder')}
 								{...field}
 								/>
 							</FormControl>
@@ -355,13 +352,13 @@ export default function Signup() {
 						name="confirm_password"
 						render={({ field }) => (
 							<FormItem>
-							<FormLabel>{common('form.password.confirm.label')}</FormLabel>
+							<FormLabel>{t('common.form.password.confirm.label')}</FormLabel>
 							<FormControl>
 								<InputPassword
 								disabled={isLoading}
 								type="password"
 								autoComplete="new-password"
-								placeholder={common('form.password.confirm.placeholder')}
+								placeholder={t('common.form.password.confirm.placeholder')}
 								{...field}
 								/>
 							</FormControl>
@@ -375,7 +372,7 @@ export default function Signup() {
 							siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
 							retry="auto"
 							refreshExpired="auto"
-							language={locale}
+							language={i18n.resolvedLanguage}
 							sandbox={process.env.NODE_ENV === "development"}
 							onError={() => {
 								setTurnstileStatus("error");
@@ -407,13 +404,13 @@ export default function Signup() {
 						disabled={isLoading || turnstileStatus !== 'success' || !form.formState.isValid}
 						>
 							{isLoading ? (<Icons.loader />) : null}
-							{upperFirst(common('messages.signup'))}
+							{upperFirst(t('common.messages.signup'))}
 						</Button>
 						<p className="px-8 text-center text-sm text-muted-foreground">
-							{t('return_to_login')}{' '}
+							{t('pages.auth.signup.return_to_login')}{' '}
 							<Button variant={'link'} className='text-accent-yellow inline p-0' asChild>
 								<Link href={{ pathname: '/auth/login', query: redirectTo ? { redirect: redirectTo } : undefined }}>
-								{upperFirst(common('messages.login'))}
+								{upperFirst(t('common.messages.login'))}
 								</Link>
 							</Button>
 						</p>
@@ -426,9 +423,9 @@ export default function Signup() {
 			<CardHeader className='gap-2'>
 				<CardTitle className='inline-flex gap-2 items-center justify-center'>
 					<Icons.site.icon className='fill-accent-yellow w-8' />
-					{t('confirm_form.label')}
+					{t('pages.auth.signup.confirm_form.label')}
 				</CardTitle>
-				<CardDescription>{t('confirm_form.description', { email: form.getValues('email') })}</CardDescription>
+				<CardDescription>{t('pages.auth.signup.confirm_form.description', { email: form.getValues('email') })}</CardDescription>
 			</CardHeader>
 			<CardContent className='grid gap-2 justify-items-center'>
 				<InputOTP disabled={isLoading} maxLength={numberOfDigits} onChange={(e) => e.length === numberOfDigits && handleVerifyOtp(e)}>
@@ -441,9 +438,9 @@ export default function Signup() {
 			</CardContent>
 			<CardFooter>
 				<p className="px-8 text-center text-sm text-muted-foreground">
-					{common('form.error.not_received_code')}{' '}
+					{t('common.form.error.not_received_code')}{' '}
 					<Button variant='link' className='text-accent-yellow p-0' disabled={isLoading} onClick={resendOtp}>
-					{common('form.resend_code')}
+					{t('common.form.resend_code')}
 					</Button>
 				</p>
 			</CardFooter>

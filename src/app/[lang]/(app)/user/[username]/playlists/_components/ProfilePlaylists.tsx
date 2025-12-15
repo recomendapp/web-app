@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { z } from "zod";
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
@@ -21,6 +20,7 @@ import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/config/icons';
+import { useT } from '@/lib/i18n/client';
 
 const DISPLAY = ["grid", "row"] as const;
 type SortBy = "updated_at";
@@ -51,7 +51,7 @@ interface UserPlaylistsProps {
 }
 
 export default function ProfilePlaylists({ userId }: UserPlaylistsProps) {
-  const t = useTranslations();
+  const { t } = useT();
   const searchParams = useSearchParams();
   const display = getValidatedDisplay(searchParams.get('display'));
   const sortBy = getValidatedOrder(searchParams.get('sort_by'));

@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Link } from "@/lib/i18n/navigation";
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
@@ -6,9 +6,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { upperFirst } from 'lodash';
-import { useTranslations } from 'next-intl';
 import { CardPlaylist } from "@/components/Card/CardPlaylist";
 import { useSearchPlaylistsInfiniteQuery } from "@/features/client/search/searchQueries";
+import { useT } from "@/lib/i18n/client";
 
 export default function SearchPlaylistsSmall({
   query,
@@ -17,7 +17,7 @@ export default function SearchPlaylistsSmall({
   query: string | undefined;
   className?: string;
 }) {
-  const common = useTranslations('common');
+  const { t } = useT();
 
   const {
     data: playlists,
@@ -40,7 +40,7 @@ export default function SearchPlaylistsSmall({
           className="text-2xl font-bold justify-start p-0"
           asChild
           >
-            <Link href={`/search/playlists?q=${query}`}>{upperFirst(common('messages.playlist', { count: 2}))}</Link>
+            <Link href={`/search/playlists?q=${query}`}>{upperFirst(t('common.messages.playlist', { count: 2}))}</Link>
           </Button>
         )}
       <ScrollArea className="pb-4">

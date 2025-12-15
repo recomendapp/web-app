@@ -1,20 +1,12 @@
-import { SupportedLocale } from "@/translations/locales";
+import { getT } from "@/lib/i18n";
 import { upperFirst } from "lodash";
 import { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
 import { ReactNode } from "react";
 
-export async function generateMetadata(
-    props: {
-        params: Promise<{
-          lang: string;
-        }>;
-    }
-): Promise<Metadata> {
-    const params = await props.params;
-    const t = await getTranslations({ locale: params.lang as SupportedLocale, namespace: 'common' });
+export async function generateMetadata(): Promise<Metadata> {
+    const { t } = await getT();
     return {
-	  title: upperFirst(t('messages.my_recos')),
+	  title: upperFirst(t('common.messages.my_recos')),
 	};
 }
 

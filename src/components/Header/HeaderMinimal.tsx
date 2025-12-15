@@ -4,14 +4,14 @@ import { Link } from "@/lib/i18n/navigation";
 import { UserNav } from '@/components/User/UserNav';
 import { createServerClient } from '@/lib/supabase/server';
 import { Icons } from '@/config/icons';
-import { getTranslations } from 'next-intl/server';
+import { getT } from '@/lib/i18n';
 
 interface HeaderMinimalProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export async function HeaderMinimal({ className }: HeaderMinimalProps) {
   const supabase = await createServerClient();
-  const t = await getTranslations();
-
+  const { t } = await getT();
+ 
   const {
     data: { session },
   } = await supabase.auth.getSession();

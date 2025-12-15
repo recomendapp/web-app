@@ -1,17 +1,18 @@
-'use client';
+'use client'
+
 import { Separator } from '@/components/ui/separator';
 import { AccountForm } from '@/app/[lang]/(app)/(privateroutes)/settings/account/_components/accountForm';
-import { useTranslations } from 'next-intl';
 import AccountDelete from './_components/accountDelete';
+import { useT } from '@/lib/i18n/client';
 
 export default function SettingsAccountPage() {
-  const t = useTranslations('pages.settings');
+  const { t } = useT();
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">{t('account.label')}</h3>
+        <h3 className="text-lg font-medium">{t('pages.settings.account.label')}</h3>
         <p className="text-sm text-muted-foreground">
-          {t('account.description')}
+          {t('pages.settings.account.description')}
         </p>
       </div>
       <Separator />

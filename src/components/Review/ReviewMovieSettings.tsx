@@ -9,13 +9,13 @@ import { useAuth } from '@/context/auth-context';
 import { LucideIcon, MoreVertical } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { MediaMovie, Profile, UserReviewMovie } from '@recomendapp/types';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
 import { useUserReviewMovieDeleteMutation } from '@/features/client/user/userMutations';
 import { useCallback, useMemo } from 'react';
+import { useT } from '@/lib/i18n/client';
 
 type OptionItem = {
 	variant?: 'destructive';
@@ -36,7 +36,7 @@ export function ReviewMovieSettings({
 	author: Profile;
 }) {
 	const { session } = useAuth();
-	const t = useTranslations();
+	const { t } = useT();
 	const { createConfirmModal } = useModal();
 	const pathname = usePathname();
 	const router = useRouter();

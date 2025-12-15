@@ -3,16 +3,16 @@
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { CardUser } from '@/components/Card/CardUser';
-import { useTranslations } from 'next-intl';
 import { useSearchUsersInfiniteQuery } from '@/features/client/search/searchQueries';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useT } from '@/lib/i18n/client';
 
 export default function SearchUsersFull({
   query,
 }: {
   query: string | undefined;
 }) {
-  const t = useTranslations('common');
+  const { t } = useT();
   const { ref, inView } = useInView();
 
   const {
@@ -52,10 +52,10 @@ export default function SearchUsersFull({
   if (!loading && !users?.pages[0]?.length) {
     return (
       <p className='text-muted-foreground'>
-        {t.rich('messages.no_results_for', {
+        {/* {t.rich('messages.no_results_for', {
           query: query || '',
           strong: (chunks) => <strong>{chunks}</strong>,
-        })}
+        })} */}
       </p>
     )
   }

@@ -4,9 +4,9 @@ import { CheckedState } from "@radix-ui/react-checkbox";
 import { createContext, use, useMemo, useState } from "react";
 import moviesDataset from "@/components/Map/Data/movies.json"
 import genresDataset from "@/components/Map/Data/genres.json"
-import { useLocale } from "next-intl";
 import { PaddingOptions } from "maplibre-gl";
 import { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
+import { useT } from "@/lib/i18n/client";
 
 interface MapContextProps {
 	mapInitialized: boolean;
@@ -106,7 +106,7 @@ export const MapContext = ({
 } : {
 	children: React.ReactNode
 }) => {
-	const locale = useLocale();
+	const { i18n } = useT();
 	/* Map */
 	const [mapInitialized, setMapInitialized] = useState(false);
 	/* Data */
@@ -114,8 +114,8 @@ export const MapContext = ({
 		const movies = moviesDataset.features.map(({ properties: movie, geometry }) => {
 			return {
 				id: movie.id,
-				title: locale === 'fr-FR' ? movie["fr-FR"].title : movie["en-US"].title,
-				poster_path: locale === 'fr-FR' ? movie["fr-FR"].poster_path : movie["en-US"].poster_path,
+				title: i18n.resolvedLanguage === 'fr-FR' ? movie["fr-FR"].title : movie["en-US"].title,
+				poster_path: i18n.resolvedLanguage === 'fr-FR' ? movie["fr-FR"].poster_path : movie["en-US"].poster_path,
 				genres: movie.genres,
 				directors: movie.directors,
 				release_date: movie.release_date,
@@ -134,7 +134,7 @@ export const MapContext = ({
 		const genres = genresDataset.map((genre) => {
 			return {
 				id: genre.id,
-				name: locale === 'fr-FR' ? genre["fr-FR"] : genre["en-US"],
+				name: i18n.resolvedLanguage === 'fr-FR' ? genre["fr-FR"] : genre["en-US"],
 			}
 		}).sort((a, b) => a.name.localeCompare(b.name));
 		return {
@@ -142,7 +142,7 @@ export const MapContext = ({
 			movies,
 			genres,
 		}
-	}, [locale]);
+	}, [i18n.resolvedLanguage]);
 	/* Movie */
 	const [selectedMovie, setSelectedMovie] = useState<{
 		movie: {

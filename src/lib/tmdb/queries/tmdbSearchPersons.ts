@@ -1,6 +1,6 @@
 "use server"
 
-import { routing } from "@/lib/i18n/routing";
+import { fallbackLng } from "@/lib/i18n/settings";
 import { createServerClient } from "@/lib/supabase/server";
 import { z } from "zod";
 
@@ -19,7 +19,7 @@ const searchPersonsSchema = z
 			.optional(),
 	})
 
-export const tmdbSearchPersons = async (query: string, language = routing.defaultLocale, page = 1) => {
+export const tmdbSearchPersons = async (query: string, language = fallbackLng, page = 1) => {
 	const supabase = await createServerClient();
 	const verifiedField = searchPersonsSchema.safeParse({ query, language, page });
 	if (!verifiedField.success) {

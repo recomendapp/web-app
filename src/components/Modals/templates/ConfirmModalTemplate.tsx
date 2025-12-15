@@ -1,8 +1,8 @@
 import { ModalType } from "@/components/Modals/Modal";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useModal } from "@/context/modal-context";
+import { useT } from "@/lib/i18n/client";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
 
 export interface ConfirmModalTemplateProps extends ModalType {
 	title: React.ReactNode;
@@ -22,7 +22,7 @@ export const ConfirmModalTemplate = ({
 	onCancel,
 	...props
 } : ConfirmModalTemplateProps) => {
-	const common = useTranslations('common');
+	const { t } = useT();
 	const { closeModal } = useModal();
 	const handleCancel = () => {
 		onCancel && onCancel();
@@ -32,8 +32,8 @@ export const ConfirmModalTemplate = ({
 		onConfirm && onConfirm();
 		closeModal(props.id);
 	}
-	const cancelLabelText = cancelLabel || upperFirst(common('messages.cancel'));
-	const confirmLabelText = confirmLabel || upperFirst(common('messages.confirm'));
+	const cancelLabelText = cancelLabel || upperFirst(t('common.messages.cancel'));
+	const confirmLabelText = confirmLabel || upperFirst(t('common.messages.confirm'));
 	return (
 		<AlertDialog
 			open={props.open}

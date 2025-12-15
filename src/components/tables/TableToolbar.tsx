@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { TableViewOptions } from './TableViewOptions';
 import { TableSortOptions } from './TableSortOptions';
+import { useT } from '@/lib/i18n/client';
 
 interface TableToolbarProps<TData> {
   table: Table<TData>;
@@ -18,7 +18,7 @@ export function TableToolbar<TData>({
   table,
   searchPlaceholder,
 }: TableToolbarProps<TData>) {
-  const t = useTranslations();
+  const { t } = useT();
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (

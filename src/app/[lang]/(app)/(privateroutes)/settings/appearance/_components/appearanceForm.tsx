@@ -1,9 +1,8 @@
-'use client';
+'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -16,7 +15,6 @@ import {
 } from '@/components/ui/form';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { cn } from '@/lib/utils';
-import { useLocale, useTranslations } from 'next-intl';
 import {
   Command,
   CommandEmpty,
@@ -39,15 +37,21 @@ import { ChevronsUpDown } from 'lucide-react';
 import { upperFirst } from 'lodash';
 import { supportedLocales } from '@/translations/locales';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
+import { useT } from '@/lib/i18n/client';
+import { languages } from '@/lib/i18n/settings';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
     required_error: 'Please select a theme.',
   }),
-  language: z.enum([...supportedLocales], {
+  // language: z.enum([...supportedLocales], {
+  //   invalid_type_error: 'Select a language',
+  //   required_error: 'Please select a language.',
+  // }),
+  language: z.string({
     invalid_type_error: 'Select a language',
     required_error: 'Please select a language.',
-  }),
+  })
 });
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
@@ -56,9 +60,7 @@ type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
 export function AppearanceForm() {
   const supabase = useSupabaseClient();
-  const t = useTranslations('pages.settings');
-  const common = useTranslations('common');
-  const locale = useLocale();
+  const { t, i18n } = useT();
   const [loading, setLoading] = useState(false);
   const { setTheme, theme } = useTheme();
   const router = useRouter();
@@ -83,9 +85,9 @@ export function AppearanceForm() {
   });
 
   const defaultValues = useMemo(() => ({
-    language: locale,
+    language: i18n.language,
     theme: theme as 'light' | 'dark' | undefined,
-  }), [locale, theme]);
+  }), [i18n.language, theme]);
 
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
@@ -104,21 +106,21 @@ export function AppearanceForm() {
       if (data.theme != theme) {
         setTheme(data.theme);
       }
-      if (locale != data.language)
+      if (i18n.language != data.language)
       {
         await updateProfile({ language: data.language });
-        router.replace(
-          {
-            pathname: pathname,
-          },
-          {
-            locale: data.language
-          }
-        );
+        // router.replace(
+        //   {
+        //     pathname: pathname,
+        //   },
+        //   {
+        //     locale: data.language
+        //   }
+        // );
       }
-      toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
+      toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
     } catch (error) {
-      toast.error(upperFirst(common('messages.an_error_occurred')));
+      toast.error(upperFirst(t('common.messages.an_error_occurred')));
     } finally {
       setLoading(false);
     }
@@ -134,7 +136,7 @@ export function AppearanceForm() {
           name="language"
           render={({ field }) => (
             <FormItem className='flex flex-col'>
-              <FormLabel>{t('appearance.language.label')}</FormLabel>
+              <FormLabel>{t('pages.settings.appearance.language.label')}</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -152,7 +154,7 @@ export function AppearanceForm() {
                           const locale = locales.find((locale) => locale.language === field.value);
                           return `${locale?.flag} ${locale?.iso_639_1} (${locale?.iso_3166_1})`;
                         })()
-                      ) : t('appearance.language.placeholder')}
+                      ) : t('pages.settings.appearance.language.placeholder')}
                       </span>
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -160,9 +162,9 @@ export function AppearanceForm() {
                 </PopoverTrigger>
                 <PopoverContent align='start' className='max-w-xs p-0'>
                   <Command>
-                    <CommandInput placeholder={t('appearance.language.placeholder')} />
+                    <CommandInput placeholder={t('pages.settings.appearance.language.placeholder')} />
                     <CommandList>
-                      <CommandEmpty>{t('appearance.language.not_found')}</CommandEmpty>
+                      <CommandEmpty>{t('pages.settings.appearance.language.not_found')}</CommandEmpty>
                       <CommandGroup>
                         {locales.map((locale, i) => (
                           <CommandItem
@@ -187,7 +189,7 @@ export function AppearanceForm() {
                 </PopoverContent>
               </Popover>
               <FormDescription>
-                {t('appearance.language.description')}
+                {t('pages.settings.appearance.language.description')}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -198,9 +200,9 @@ export function AppearanceForm() {
           name="theme"
           render={({ field }) => (
             <FormItem className="space-y-1">
-              <FormLabel>{t('appearance.theme.label')}</FormLabel>
+              <FormLabel>{t('pages.settings.appearance.theme.label')}</FormLabel>
               <FormDescription>
-                {t('appearance.theme.description')}
+                {t('pages.settings.appearance.theme.description')}
               </FormDescription>
               <FormMessage />
               <RadioGroup
@@ -230,7 +232,7 @@ export function AppearanceForm() {
                       </div>
                     </div>
                     <span className="block w-full p-2 text-center font-normal">
-                      {t('appearance.theme.options.light')}
+                      {t('pages.settings.appearance.theme.options.light')}
                     </span>
                   </FormLabel>
                 </FormItem>
@@ -256,7 +258,7 @@ export function AppearanceForm() {
                       </div>
                     </div>
                     <span className="block w-full p-2 text-center font-normal">
-                      {t('appearance.theme.options.dark')}
+                      {t('pages.settings.appearance.theme.options.dark')}
                     </span>
                   </FormLabel>
                 </FormItem>
@@ -266,7 +268,7 @@ export function AppearanceForm() {
         />
         <Button type="submit" disabled={loading}>
           {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          {upperFirst(common('messages.save'))}
+          {upperFirst(t('common.messages.save'))}
         </Button>
       </form>
     </Form>

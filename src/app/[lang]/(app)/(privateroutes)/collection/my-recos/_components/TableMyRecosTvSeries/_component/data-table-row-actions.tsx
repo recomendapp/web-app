@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Link } from "@/lib/i18n/navigation";
 import { Column, Row, Table } from '@tanstack/react-table';
@@ -13,7 +13,6 @@ import {
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import toast from 'react-hot-toast';
 import { UserRecosTvSeriesAggregated } from '@recomendapp/types';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
@@ -24,6 +23,7 @@ import { useAuth } from "@/context/auth-context";
 import { ModalRecosSenders } from "@/components/Modals/recos/ModalRecosSenders";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
 import { ModalUserRecosTvSeriesSend } from "@/components/Modals/recos/ModalUserRecosTvSeriesSend";
+import { useT } from "@/lib/i18n/client";
 
 interface DataTableRowActionsProps {
   table: Table<UserRecosTvSeriesAggregated>;
@@ -39,7 +39,7 @@ export function DataTableRowActions({
   data,
 }: DataTableRowActionsProps) {
   const { session } = useAuth();
-  const t = useTranslations();
+  const { t } = useT();
   const { openModal, createConfirmModal } = useModal();
   const deleteReco = useUserRecosTvSeriesDeleteMutation();
   const completeReco = useUserRecosTvSeriesCompleteMutation();
@@ -97,10 +97,10 @@ export function DataTableRowActions({
           <DropdownMenuItem
             onClick={() => createConfirmModal({
               title: upperFirst(t('pages.collection.my_recos.modal.complete_confirm.title')),
-              description: t.rich('pages.collection.my_recos.modal.complete_confirm.description', {
-                title: data.tv_series?.name!,
-                important: (chunk) => <b>{chunk}</b>,
-              }),
+              // description: t.rich('pages.collection.my_recos.modal.complete_confirm.description', {
+              //   title: data.tv_series?.name!,
+              //   important: (chunk) => <b>{chunk}</b>,
+              // }),
               onConfirm: handleCompleteReco,
             })}
           >
@@ -143,10 +143,10 @@ export function DataTableRowActions({
           <DropdownMenuItem
             onClick={async () => createConfirmModal({
               title: upperFirst(t('pages.collection.my_recos.modal.delete_confirm.title')),
-              description: t.rich('pages.collection.my_recos.modal.delete_confirm.description', {
-                title: data.tv_series?.name!,
-                important: (chunk) => <b>{chunk}</b>,
-              }),
+              // description: t.rich('pages.collection.my_recos.modal.delete_confirm.description', {
+              //   title: data.tv_series?.name!,
+              //   important: (chunk) => <b>{chunk}</b>,
+              // }),
               onConfirm: handleDeleteReco,
             })}
           >

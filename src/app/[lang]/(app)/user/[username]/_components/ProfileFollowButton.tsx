@@ -7,10 +7,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { useUserFollowProfileQuery } from '@/features/client/user/userQueries';
 import { useUserFollowProfileInsertMutation, useUserUnfollowProfileDeleteMutation } from '@/features/client/user/userMutations';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useCallback } from 'react';
 import { useModal } from '@/context/modal-context';
+import { useT } from '@/lib/i18n/client';
 
 interface UserFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   profileId: string;
@@ -20,7 +20,7 @@ export const ProfileFollowButton = ({
   className,
   profileId,
 }: UserFollowButtonProps) => {
-  const t = useTranslations();
+  const { t } = useT();
   const { session } = useAuth();
   const { createConfirmModal } = useModal();
 

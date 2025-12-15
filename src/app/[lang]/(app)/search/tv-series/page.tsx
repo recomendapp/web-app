@@ -1,4 +1,3 @@
-import { getTranslations } from 'next-intl/server';
 import { upperFirst } from 'lodash';
 import { getSearchTvSeries } from '@/features/server/search/searchQueries';
 import { z } from "zod";
@@ -13,10 +12,9 @@ import {
 } from "@/components/ui/pagination"
 import { cn } from '@/lib/utils';
 import { generatePaginationNumbers } from '@/utils/generate-pagination-numbers';
-import { redirect } from '@/lib/i18n/navigation';
 import { Metadata } from 'next';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
-import { SupportedLocale } from '@/translations/locales';
+import { getT } from '@/lib/i18n';
 
 export async function generateMetadata(
   props: {
@@ -30,7 +28,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
+  const { t } = await getT();
   return {
     title: `${searchParams.q} - ${upperFirst(t('common.messages.tv_series', { count: 2 }))}`,
   };
@@ -55,8 +53,8 @@ export default async function SearchTvSeries(
 ) {
   const params = await props.params;
   const searchParams = await props.searchParams;
-  if (!searchParams?.q) redirect({ href: '/search', locale: params.lang as SupportedLocale });
-  const t = await getTranslations({ locale: params.lang as SupportedLocale });
+  // if (!searchParams?.q) redirect({ href: '/search', locale: params.lang as SupportedLocale });
+  const { t } = await getT();
   const page = getValidatePage(Number(searchParams.page));
 
   const { results, total_results } = await getSearchTvSeries(
@@ -70,10 +68,10 @@ export default async function SearchTvSeries(
   if (!results || total_results === 0 || results.length === 0) {
     return (
       <p className='text-muted-foreground'>
-        {t.rich('common.messages.no_results_for', {
+        {/* {t.rich('common.messages.no_results_for', {
           query: searchParams.q || '',
           strong: (chunks) => <strong>{chunks}</strong>,
-        })}
+        })} */}
       </p>
     )
   }

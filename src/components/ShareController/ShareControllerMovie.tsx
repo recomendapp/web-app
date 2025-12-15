@@ -1,21 +1,22 @@
-"use client";
+"use client"
+
 import { ShareControllerProps } from "./ShareController";
 import { MediaMovie } from "@recomendapp/types";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { ImageWithFallback } from "../utils/ImageWithFallback";
 import { Icons } from "@/config/icons";
 import toast from "react-hot-toast";
 import { domToBlob } from "modern-screenshot";
+import { useT } from "@/lib/i18n/client";
 
 interface ShareControllerMovieProps extends ShareControllerProps {
 	movie: MediaMovie;
 }
 
 export const ShareControllerMovie: React.FC<ShareControllerMovieProps> = ({ movie, onFileReady }) => {
-	const t = useTranslations();
+	const { t } = useT();
 
 	const captureRef = useRef<HTMLDivElement>(null);
 	const directorsText = useMemo(() => movie.directors?.map(d => d.name!).join(', '), [movie.directors]);

@@ -9,13 +9,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useInView } from 'react-intersection-observer';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { z } from "zod";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useMediaReviewsTvSeriesInfiniteQuery } from '@/features/client/media/mediaQueries';
 import { Icons } from '@/config/icons';
-import { ArrowDownNarrowWideIcon, ArrowUpNarrowWideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
 import { useUserActivityTvSeriesQuery } from '@/features/client/user/userQueries';
@@ -25,6 +23,7 @@ import { MediaTvSeries } from '@recomendapp/types';
 import { CardReviewTvSeries } from '@/components/Card/CardReviewTvSeries';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
+import { useT } from '@/lib/i18n/client';
 
 type SortBy = "updated_at" | "created_at";
 const DEFAULT_PER_PAGE = 20;
@@ -51,7 +50,7 @@ interface TvSeriesReviewsProps {
 export const TvSeriesReviews = ({
 	tvSeries,
 } : TvSeriesReviewsProps) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const searchParams = useSearchParams();
 	const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
 	const sortOrder = getValidatedSortOrder(searchParams.get('sort_order'));
@@ -150,7 +149,7 @@ const MyReviewButton = ({
  } : {
 	tvSeries: MediaTvSeries;
 }) => {
-	const t = useTranslations();
+	const { t } = useT();
 	const { session } = useAuth();
 	const {
 	  data: activity,

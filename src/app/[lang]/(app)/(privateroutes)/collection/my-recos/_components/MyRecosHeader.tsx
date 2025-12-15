@@ -3,9 +3,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ImageObject, useRandomImage } from "@/hooks/use-random-image";
 import { UserRecosType } from "@recomendapp/types";
 import { upperFirst } from "lodash";
-import { useTranslations } from "next-intl";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useUIStore } from "@/stores/useUIStore";
+import { useT } from "@/lib/i18n/client";
 
 interface MyRecosHeaderProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -21,7 +21,7 @@ export function MyRecosHeader({
   backdrops,
   skeleton,
 } : MyRecosHeaderProps) {
-  const t = useTranslations();
+  const { t } = useT();
   const setTab = useUIStore((state) => state.setMyRecosTab);
   const backdrop = useRandomImage(backdrops || []);
 

@@ -8,9 +8,9 @@ import { cn } from '@/lib/utils';
 import { useUserFollowPersonQuery } from '@/features/client/user/userQueries';
 import { useUserFollowPersonInsertMutation, useUserUnfollowPersonDeleteMutation } from '@/features/client/user/userMutations';
 import { upperFirst } from 'lodash';
-import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
 import { useModal } from '@/context/modal-context';
+import { useT } from '@/lib/i18n/client';
 
 interface PersonFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   personId: number;
@@ -21,7 +21,7 @@ export function PersonFollowButton({
   personId,
 }: PersonFollowButtonProps) {
   const { session } = useAuth();
-  const t = useTranslations();
+  const { t } = useT();
   const { createConfirmModal } = useModal();
 
   const {
@@ -31,7 +31,7 @@ export function PersonFollowButton({
     personId: personId,
     userId: session?.user.id,
   });
-  const { mutateAsync: insertFollow} = useUserFollowPersonInsertMutation();
+  const { mutateAsync: insertFollow } = useUserFollowPersonInsertMutation();
   const { mutateAsync: deleteFollow } = useUserUnfollowPersonDeleteMutation();
 
   const followPerson = useCallback(async () => {

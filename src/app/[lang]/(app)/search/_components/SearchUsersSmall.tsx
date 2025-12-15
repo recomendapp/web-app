@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Link } from "@/lib/i18n/navigation";
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
@@ -6,9 +6,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { upperFirst } from 'lodash';
-import { useTranslations } from 'next-intl';
 import { CardUser } from "@/components/Card/CardUser";
 import { useSearchUsersInfiniteQuery } from "@/features/client/search/searchQueries";
+import { useT } from "@/lib/i18n/client";
 
 export default function SearchUsersSmall({
   query,
@@ -17,7 +17,7 @@ export default function SearchUsersSmall({
   query: string | undefined;
   className?: string;
 }) {
-  const common = useTranslations('common');
+  const { t } = useT();
   const {
 		data: users,
 		isLoading,
@@ -39,7 +39,7 @@ export default function SearchUsersSmall({
           className="text-2xl font-bold justify-start p-0"
           asChild
           >
-            <Link href={`/search/users?q=${query}`}>{upperFirst(common('messages.user', { count: 2}))}</Link>
+            <Link href={`/search/users?q=${query}`}>{upperFirst(t('common.messages.user', { count: 2}))}</Link>
           </Button>
         )}
       {/* USERS CONTAINER */}

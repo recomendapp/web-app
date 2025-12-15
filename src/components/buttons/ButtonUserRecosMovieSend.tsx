@@ -7,9 +7,9 @@ import { Icons } from "@/config/icons";
 import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from "@/lib/utils";
 import { useModal } from "@/context/modal-context";
-import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ModalUserRecosMovieSend } from "../Modals/recos/ModalUserRecosMovieSend";
+import { useT } from "@/lib/i18n/client";
 
 interface ButtonUserRecosMovieSendProps
 	extends React.ComponentProps<typeof Button> {
@@ -23,7 +23,7 @@ const ButtonUserRecosMovieSend = React.forwardRef<
 	ButtonUserRecosMovieSendProps
 >(({ movieId, stopPropagation = true, movieTitle, className, ...props }, ref) => {
 	const { user } = useAuth();
-	const t = useTranslations();
+	const { t } = useT();
 	const pathname = usePathname();
 	const { openModal } = useModal();
 

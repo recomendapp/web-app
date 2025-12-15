@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Link } from "@/lib/i18n/navigation";
 import { Column, Row, Table } from '@tanstack/react-table';
@@ -13,7 +13,6 @@ import {
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import toast from 'react-hot-toast';
 import { UserActivityMovie } from '@recomendapp/types';
-import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
@@ -22,6 +21,7 @@ import { createShareController } from "@/components/ShareController/ShareControl
 import { useUserActivityMovieUpdateMutation } from "@/features/client/user/userMutations";
 import { ShareControllerMovie } from "@/components/ShareController/ShareControllerMovie";
 import { ModalUserRecosMovieSend } from "@/components/Modals/recos/ModalUserRecosMovieSend";
+import { useT } from "@/lib/i18n/client";
 
 interface DataTableRowActionsProps {
   table: Table<UserActivityMovie>;
@@ -36,7 +36,7 @@ export function DataTableRowActions({
   column,
   data,
 }: DataTableRowActionsProps) {
-  const t = useTranslations();
+  const { t } = useT();
   const { openModal, createConfirmModal } = useModal();
   const updateActivityMovie = useUserActivityMovieUpdateMutation();
 
@@ -97,10 +97,10 @@ export function DataTableRowActions({
           <DropdownMenuItem
             onClick={async () => createConfirmModal({
               title: upperFirst(t('pages.collection.heart_picks.modal.delete_confirm.label')),
-              description: t.rich('pages.collection.heart_picks.modal.delete_confirm.description', {
-                title: data.movie?.title!,
-                important: (chunk) => <b>{chunk}</b>,
-              }),
+              // description: t.rich('pages.collection.heart_picks.modal.delete_confirm.description', {
+              //   title: data.movie?.title!,
+              //   important: (chunk) => <b>{chunk}</b>,
+              // }),
               onConfirm: handleUnlike,
             })}
           >
