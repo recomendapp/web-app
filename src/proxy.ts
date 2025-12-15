@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { siteConfig } from './config/site';
 import { getSupabaseClaims } from './lib/supabase/jwt';
-import { i18nMiddleware } from './lib/i18n/middleware';
+import { i18nRouter } from 'next-i18n-router';
+import { i18nConfig } from './lib/i18n/routing';
 
 export async function proxy(request: NextRequest) {
   const start = performance.now();
-  const response = i18nMiddleware(request);
+  const response = i18nRouter(request, i18nConfig);
 
   const [, locale, ...rest] = new URL(
     response.headers.get('x-middleware-rewrite') || request.url

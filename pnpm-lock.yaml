@@ -275,6 +275,9 @@ importers:
       next:
         specifier: 16.0.10
         version: 16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.3))(react@19.2.3)
+      next-i18n-router:
+        specifier: ^5.5.5
+        version: 5.5.5(next@16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.3))(react@19.2.3))
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.0(react@19.2.3))(react@19.2.3)
@@ -1220,6 +1223,9 @@ packages:
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+
+  '@formatjs/intl-localematcher@0.6.2':
+    resolution: {integrity: sha512-XOMO2Hupl0wdd172Y06h6kLpBz6Dv+J4okPLl4LPtzbr8f66WbIoy4ev98EBuZ6ZK4h5ydTN6XneT4QVpD7cdA==}
 
   '@grpc/grpc-js@1.9.15':
     resolution: {integrity: sha512-nqE7Hc0AzI+euzUwDAy0aY5hCp10r734gMGRdU+qOPX0XSceI2ULrcXB5U2xSc5VkWwalCj4M7GzCAygZl2KoQ==}
@@ -4706,6 +4712,11 @@ packages:
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
+  next-i18n-router@5.5.5:
+    resolution: {integrity: sha512-soJD/JdC1Wew3LZqzFC3+9rdo4QT4cX6Xej4dSU/ObBFXhLHonMMBoa2nXsMHXPIcfdnSUDBTc6B2hrby4nzsg==}
+    peerDependencies:
+      next: ^13 || ^14 || ^15 || ^16
+
   next-themes@0.4.6:
     resolution: {integrity: sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==}
     peerDependencies:
@@ -7128,6 +7139,10 @@ snapshots:
       react-dom: 19.2.0(react@19.2.3)
 
   '@floating-ui/utils@0.2.10': {}
+
+  '@formatjs/intl-localematcher@0.6.2':
+    dependencies:
+      tslib: 2.8.1
 
   '@grpc/grpc-js@1.9.15':
     dependencies:
@@ -10976,6 +10991,12 @@ snapshots:
   negotiator@1.0.0: {}
 
   neo-async@2.6.2: {}
+
+  next-i18n-router@5.5.5(next@16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.3))(react@19.2.3)):
+    dependencies:
+      '@formatjs/intl-localematcher': 0.6.2
+      negotiator: 1.0.0
+      next: 16.0.10(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.3))(react@19.2.3)
 
   next-themes@0.4.6(react-dom@19.2.0(react@19.2.3))(react@19.2.3):
     dependencies:
