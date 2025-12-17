@@ -17,18 +17,14 @@ export const routing = defineRouting({
   }
 });
 
-export const seoLocales = (currentLocale: string, endpoint: string): AlternateURLs => {
+export const generateAlternates = (currentLocale: string, endpoint: string): AlternateURLs => {
   const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
   const localePrefix = currentLocale === routing.defaultLocale ? '' : `/${currentLocale}`;
   return {
     canonical: `${siteConfig.url}${localePrefix}${normalizedEndpoint}`,
-    languages: Object.fromEntries([
-      ['x-default', `${siteConfig.url}${normalizedEndpoint}`],
-      ...routing.locales.map((locale) => {
-        const prefix = locale === routing.defaultLocale ? '' : `/${locale}`;
-        return [locale, `${siteConfig.url}${prefix}${normalizedEndpoint}`];
-      }),
-    ]),
+    languages: {
+      'x-default': `${siteConfig.url}${normalizedEndpoint}`,
+    }
   };
 };
 

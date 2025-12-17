@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import { MovieReview } from './_components/MovieReview';
 import { Review, WithContext } from 'schema-dts';
 import { siteConfig } from '@/config/site';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { SupportedLocale } from '@/translations/locales';
 import { generateText } from '@tiptap/core';
 import { generateJSON } from '@tiptap/html';
@@ -30,12 +30,12 @@ export async function generateMetadata(
     return {
       title: t('pages.review.metadata.title', { title: review.user_activities_movie.media_movie.title!, username: review.user_activities_movie.profile.username! }),
       description: truncate(rawText, { length: siteConfig.seo.description.limit }),
-      alternates: seoLocales(params.lang, `/review/${review.id}`),
+      alternates: generateAlternates(params.lang, `/film/${review.user_activities_movie.media_movie.slug || review.user_activities_movie.media_movie.id}/review/${review.id}`),
       openGraph: {
         siteName: siteConfig.name,
         title: t('pages.review.metadata.title', { title: review.user_activities_movie.media_movie.title!, username: review.user_activities_movie.profile.username! }),
         description: truncate(rawText, { length: siteConfig.seo.description.limit }),
-        url: `${siteConfig.url}/${params.lang}/review/${params.review_id}`,
+        url: `${siteConfig.url}/${params.lang}/film/${review.user_activities_movie.media_movie.slug || review.user_activities_movie.media_movie.id}/review/${params.review_id}`,
         images: review.user_activities_movie.media_movie.poster_path ? [
           { url: getTmdbImage({ path: review.user_activities_movie.media_movie.poster_path, size: 'w500' }) },
         ] : undefined,

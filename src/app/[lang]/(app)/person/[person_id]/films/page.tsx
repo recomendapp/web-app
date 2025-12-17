@@ -5,7 +5,7 @@ import { Pagination } from './_components/Pagination';
 import { Filters } from './_components/Filters';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { notFound } from 'next/navigation';
 import { ActiveFilters } from './_components/ActiveFilters';
 import { DEFAULT_PER_PAGE, getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage } from './_components/constants';
@@ -30,7 +30,7 @@ export async function generateMetadata(
 		return {
 			title: t('pages.person.films.metadata.title', { name: person.name! }),
 			description: truncate(t('pages.person.films.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
-			alternates: seoLocales(params.lang, `/person/${person.slug}/films`),
+			alternates: generateAlternates(params.lang, `/person/${person.slug}/films`),
 			openGraph: {
 			siteName: siteConfig.name,
 			title: `${t('pages.person.films.metadata.title', { name: person.name! })} • ${siteConfig.name}`,

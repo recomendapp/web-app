@@ -5,7 +5,7 @@ import { truncate, upperFirst } from "lodash";
 import { getTranslations } from "next-intl/server";
 import { Metadata } from "next";
 import { TVSeason, WithContext } from "schema-dts";
-import { seoLocales } from "@/lib/i18n/routing";
+import { generateAlternates } from "@/lib/i18n/routing";
 import { SupportedLocale } from "@/translations/locales";
 import { getTvSeason } from "@/api/server/medias";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
@@ -36,7 +36,7 @@ export async function generateMetadata(
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: seoLocales(params.lang, `/tv-series/${params.tv_series_id}/${params.season_number}`),
+      alternates: generateAlternates(params.lang, `/tv-series/${params.tv_series_id}/${params.season_number}`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${t('pages.tv_series.seasons.season.metadata.title', { title: season.media_tv_series?.name!, number: season.season_number! })} • ${siteConfig.name}`,

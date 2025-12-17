@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { Playlist } from './_components/Playlist';
 import { SupportedLocale } from '@/translations/locales';
 import { getPlaylist } from '@/api/server/playlists';
@@ -20,7 +20,7 @@ export async function generateMetadata(
     return {
 		title: t('pages.playlist.metadata.title', { title: playlist.title, username: playlist.user?.username! }),
 		description: truncate(t('pages.playlist.metadata.description', { username: playlist.user?.username!, app: siteConfig.name }), { length: siteConfig.seo.description.limit }),
-        alternates: seoLocales(params.lang, `/playlist/${playlist.id}`),
+        alternates: generateAlternates(params.lang, `/playlist/${playlist.id}`),
         openGraph: {
             siteName: siteConfig.name,
             title: `${t('pages.playlist.metadata.title', { title: playlist.title, username: playlist.user?.username! })} • ${siteConfig.name}`,

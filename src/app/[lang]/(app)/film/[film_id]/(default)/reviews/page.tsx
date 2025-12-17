@@ -3,7 +3,7 @@ import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { truncate, upperFirst } from 'lodash';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { MovieReviews } from './_components/MovieReviews';
 import { SupportedLocale } from '@/translations/locales';
@@ -32,7 +32,7 @@ export async function generateMetadata(
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: seoLocales(params.lang, `/film/${movie.slug}/reviews`),
+      alternates: generateAlternates(params.lang, `/film/${movie.slug}/reviews`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${t('pages.film.reviews.metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() })} • ${siteConfig.name}`,

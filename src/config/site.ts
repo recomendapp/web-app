@@ -4,8 +4,6 @@ import { getURL } from '@/lib/utils';
 
 export const siteConfig = {
   name: 'Recomend',
-  tagline: 'An other way to discover cinema',
-  description: 'Recomend is a social network for cinema lovers. Discover, share and explore movies and series with your friends.',
   url: getURL(),
   seo: {
     description: {

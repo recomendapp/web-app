@@ -2,7 +2,7 @@ import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { DEFAULT_PER_PAGE, getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage } from './_components/constants';
@@ -30,7 +30,7 @@ export async function generateMetadata(
 	  return {
 		title: t('pages.person.tv_series.metadata.title', { name: person.name! }),
 		description: truncate(t('pages.person.tv_series.metadata.description', { name: person.name! }), { length: siteConfig.seo.description.limit }),
-		alternates: seoLocales(params.lang, `/person/${person.slug}/tv-series`),
+		alternates: generateAlternates(params.lang, `/person/${person.slug}/tv-series`),
 		openGraph: {
 		  siteName: siteConfig.name,
 		  title: `${t('pages.person.tv_series.metadata.title', { name: person.name! })} • ${siteConfig.name}`,

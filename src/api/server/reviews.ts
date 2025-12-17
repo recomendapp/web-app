@@ -17,11 +17,13 @@ export const getReviewMovieSeo = cache(async (id: number, lang: string) => {
 				id,
 				rating,
 				media_movie(
+					id,
 					title,
 					poster_path,
 					overview,
 					vote_average,
-					vote_count
+					vote_count,
+					slug
 				),
 				profile(
 					username
@@ -48,11 +50,13 @@ export const getReviewTvSeriesSeo = cache(async (id: number, lang: string) => {
 				id,
 				rating,
 				media_tv_series(
+					id,
 					name,
 					poster_path,
 					overview,
 					vote_average,
-					vote_count
+					vote_count,
+					slug
 				),
 				profile(
 					username

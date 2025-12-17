@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { SupportedLocale } from '@/translations/locales';
 import { ProfileFeed } from './_components/ProfileFeed';
@@ -22,7 +22,7 @@ export async function generateMetadata(
   return {
     title: upperFirst(t('pages.user.metadata.title', { full_name: profile.full_name!, username: profile.username! })),
     description: truncate(upperFirst(t('pages.user.metadata.description', { username: profile.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
-    alternates: seoLocales(params.lang, `/@${profile.username}`),
+    alternates: generateAlternates(params.lang, `/@${profile.username}`),
     openGraph: {
       siteName: siteConfig.name,
       title: `${upperFirst(t('pages.user.metadata.title', { full_name: profile.full_name!, username: profile.username! }))} • ${siteConfig.name}`,

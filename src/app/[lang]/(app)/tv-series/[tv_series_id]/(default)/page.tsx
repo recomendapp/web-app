@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { TVSeries, WithContext } from 'schema-dts';
 import { SupportedLocale } from '@/translations/locales';
 import { getTvSeries } from '@/api/server/medias';
@@ -43,7 +43,7 @@ export async function generateMetadata(
           }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: seoLocales(params.lang, `/tv-series/${tvSeries.slug}`),
+      alternates: generateAlternates(params.lang, `/tv-series/${tvSeries.slug}`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${t('pages.tv_series.metadata.title', { title: tvSeries.name!, year: new Date(String(tvSeries.first_air_date)).getFullYear() })} • ${siteConfig.name}`,

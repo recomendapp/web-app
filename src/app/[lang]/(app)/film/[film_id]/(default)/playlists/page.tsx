@@ -1,6 +1,6 @@
 import { siteConfig } from '@/config/site';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { truncate, upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
@@ -32,7 +32,7 @@ export async function generateMetadata(
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: seoLocales(params.lang, `/film/${movie.slug}/playlists`),
+      alternates: generateAlternates(params.lang, `/film/${movie.slug}/playlists`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${t('pages.film.playlists.metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() })} • ${siteConfig.name}`,

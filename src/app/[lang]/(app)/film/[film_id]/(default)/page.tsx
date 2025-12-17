@@ -4,7 +4,7 @@ import { truncate, upperFirst } from 'lodash';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { Movie, WithContext } from 'schema-dts';
 import { toISO8601Duration } from '@/lib/utils';
 import { SupportedLocale } from '@/translations/locales';
@@ -43,7 +43,7 @@ export async function generateMetadata(
           }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: seoLocales(params.lang, `/film/${movie.slug}`),
+      alternates: generateAlternates(params.lang, `/film/${movie.slug}`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${t('pages.film.metadata.title', { title: movie.title!, year: new Date(String(movie.release_date)).getFullYear() })} • ${siteConfig.name}`,

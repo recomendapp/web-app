@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { SupportedLocale } from '@/translations/locales';
 import { getPerson } from '@/api/server/medias';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
@@ -28,7 +28,7 @@ export async function generateMetadata(
     return {
       title: t('pages.person.metadata.title', { name: person.name!, department: person.known_for_department! }),
       description: person.biography ? truncate(person.biography, { length: siteConfig.seo.description.limit }) : undefined,
-      alternates: seoLocales(params.lang, `/person/${person.slug}`),
+      alternates: generateAlternates(params.lang, `/person/${person.slug}`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${person.name} • ${person.known_for_department} • ${siteConfig.name}`,

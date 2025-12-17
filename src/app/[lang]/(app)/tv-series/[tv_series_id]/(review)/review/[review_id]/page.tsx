@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import { TvSeriesReview } from './_components/TvSeriesReview';
 import { Review, WithContext } from 'schema-dts';
 import { siteConfig } from '@/config/site';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { SupportedLocale } from '@/translations/locales';
 import { generateJSON } from '@tiptap/html';
 import { EDITOR_EXTENSIONS } from '@/components/tiptap/TiptapExtensions';
@@ -30,12 +30,12 @@ export async function generateMetadata(
     return {
       title: t('pages.review.metadata.title', { title: review.user_activities_tv_series.media_tv_series.name!, username: review.user_activities_tv_series.profile.username! }),
       description: truncate(rawText, { length: siteConfig.seo.description.limit }),
-      alternates: seoLocales(params.lang, `/review/${review.id}`),
+      alternates: generateAlternates(params.lang, `/tv-series/${review.user_activities_tv_series.media_tv_series.slug || review.user_activities_tv_series.media_tv_series.id}/review/${review.id}`),
       openGraph: {
         siteName: siteConfig.name,
         title: t('pages.review.metadata.title', { title: review.user_activities_tv_series.media_tv_series.name!, username: review.user_activities_tv_series.profile.username! }),
         description: truncate(rawText, { length: siteConfig.seo.description.limit }),
-        url: `${siteConfig.url}/${params.lang}/review/${params.review_id}`,
+        url: `${siteConfig.url}/${params.lang}/tv-series/${review.user_activities_tv_series.media_tv_series.slug || review.user_activities_tv_series.media_tv_series.id}/review/${params.review_id}`,
         images: review.user_activities_tv_series.media_tv_series.poster_path ? [
           { url: getTmdbImage({ path: review.user_activities_tv_series.media_tv_series.poster_path, size: 'w500' }) },
         ] : undefined,

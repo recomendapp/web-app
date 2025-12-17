@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { TvSeriesReviews } from './_components/TvSeriesReviews';
 import { notFound } from 'next/navigation';
 import { SupportedLocale } from '@/translations/locales';
@@ -32,7 +32,7 @@ export async function generateMetadata(
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: seoLocales(params.lang, `/tv-series/${serie.slug}/reviews`),
+      alternates: generateAlternates(params.lang, `/tv-series/${serie.slug}/reviews`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${t('pages.tv_series.reviews.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,

@@ -3,7 +3,7 @@ import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { Metadata } from 'next';
 import { TvSeriesPlaylists } from './_components/TvSeriesPlaylists';
 import { truncate, upperFirst } from 'lodash';
-import { seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { SupportedLocale } from '@/translations/locales';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
@@ -32,7 +32,7 @@ export async function generateMetadata(
         }),
         { length: siteConfig.seo.description.limit }
       ),
-      alternates: seoLocales(params.lang, `/tv-series/${serie.slug}/playlists`),
+      alternates: generateAlternates(params.lang, `/tv-series/${serie.slug}/playlists`),
       openGraph: {
         siteName: siteConfig.name,
         title: `${t('pages.tv_series.playlists.metadata.title', { title: serie.name!, year: new Date(String(serie.first_air_date)).getFullYear() })} • ${siteConfig.name}`,

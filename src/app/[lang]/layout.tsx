@@ -5,8 +5,9 @@ import { fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import { Providers } from '@/context/Providers';
 import Script from 'next/script';
-import { routing, seoLocales } from '@/lib/i18n/routing';
+import { generateAlternates } from '@/lib/i18n/routing';
 import { SupportedLocale } from '@/translations/locales';
+import { getTranslations } from 'next-intl/server';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -18,43 +19,52 @@ export const viewport: Viewport = {
   ],
 };
 
-export const metadata: Metadata = {
-  title: {
-    default: `${siteConfig.name} • ${siteConfig.tagline}`,
-    template: `%s • ${siteConfig.name}`,
-  },
-  metadataBase: new URL(siteConfig.url),
-  description: siteConfig.description,
-  alternates: seoLocales(routing.defaultLocale, ''),
-  manifest: '/manifest.webmanifest',
-  icons: {
-    apple: '/assets/icons/ios/512.png',
-  },
-  appleWebApp: {
-    title: siteConfig.name,
-    statusBarStyle: 'default',
-    startupImage: [
-      '/assets/icons/ios/512.png',
-      {
-        url: '/assets/icons/ios/512.png',
-        media: '(device-width: 768px) and (device-height: 1024px)',
-      },
-    ],
-  },
-  openGraph: {
-    siteName: siteConfig.name,
-    title: `${siteConfig.name} • ${siteConfig.tagline}`,
-    description: siteConfig.description,
-    images: [
-    ],
-    type: 'website',
-    url: siteConfig.url,
-  },
-  twitter: {
-    site: `@${siteConfig.socials.twitter.username}`,
-    creator: `@${siteConfig.by.twitter}`,
-  }
-};
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const t = await getTranslations();
+  
+  return {
+    title: {
+      default: `${siteConfig.name} • ${t('site.tagline')}`,
+      template: `%s • ${siteConfig.name}`,
+    },
+    metadataBase: new URL(siteConfig.url),
+    description: t('site.description', { app: siteConfig.name }),
+    alternates: generateAlternates(lang, '/'),
+    manifest: '/manifest.webmanifest',
+    icons: {
+      apple: '/assets/icons/ios/512.png',
+    },
+    appleWebApp: {
+      title: siteConfig.name,
+      statusBarStyle: 'default',
+      startupImage: [
+        '/assets/icons/ios/512.png',
+        {
+          url: '/assets/icons/ios/512.png',
+          media: '(device-width: 768px) and (device-height: 1024px)',
+        },
+      ],
+    },
+    openGraph: {
+      siteName: siteConfig.name,
+      title: `${siteConfig.name} • ${t('site.tagline')}`,
+      description: t('site.description', { app: siteConfig.name }),
+      images: [
+      ],
+      type: 'website',
+      url: siteConfig.url,
+    },
+    twitter: {
+      site: `@${siteConfig.socials.twitter.username}`,
+      creator: `@${siteConfig.by.twitter}`,
+    },
+  };
+}
 
 export default async function LangLayout({
   children,
