@@ -1,6 +1,5 @@
-import { Playlist, PlaylistItemTvSeries } from "@recomendapp/types";
+import { Database, PlaylistItemTvSeries } from "@recomendapp/types";
 import { PlaylistTvSeriesHeader } from "./PlaylistTvSeriesHeader";
-import { usePlaylistIsAllowedToEditQuery, usePlaylistItemsTvSeriesQuery } from "@/features/client/playlist/playlistQueries";
 import { useEffect, useMemo, useState } from "react";
 import PlaylistTvSeriesTable from "./PlaylistTvSeriesTable/PlaylistTvSeriesTable";
 import useDebounce from "@/hooks/use-debounce";
@@ -8,14 +7,14 @@ import { RealtimeChannel } from "@supabase/supabase-js";
 import { useAuth } from "@/context/auth-context";
 import { useSupabaseClient } from "@/context/supabase-context";
 import { usePlaylistItemsTvSeriesRealtimeMutation } from "@/api/client/mutations/playlistMutations";
-
-interface PlaylistTvSeriesProps extends React.ComponentProps<'div'> {
-	playlist: Playlist;
-}
+import { useQuery } from "@tanstack/react-query";
+import { usePlaylistIsAllowedToEditOptions, usePlaylistTvSeriesItemsOptions } from "@/api/client/options/playlistOptions";
 
 export const PlaylistTvSeries = ({
 	playlist,
-} : PlaylistTvSeriesProps) => {
+} : {
+	playlist: Database['public']['Tables']['playlists']['Row'] & { user: Database['public']['Views']['profile']['Row'] };
+}) => {
 	const { session } = useAuth();
 	const supabase = useSupabaseClient();
 	// Queries
@@ -23,13 +22,13 @@ export const PlaylistTvSeries = ({
 		data: items,
 		isLoading,
 		refetch,
-	} = usePlaylistItemsTvSeriesQuery({
+	} = useQuery(usePlaylistTvSeriesItemsOptions({
 		playlistId: playlist.id
-	});
-	const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
+	}));
+	const { data: isAllowedToEdit } = useQuery(usePlaylistIsAllowedToEditOptions({
 		playlistId: playlist.id,
 		userId: session?.user.id,
-	});
+	}));
 	
 	// Mutations
 	const playlistItemsRealtime = usePlaylistItemsTvSeriesRealtimeMutation({

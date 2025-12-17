@@ -32,7 +32,7 @@ export function AppLayout({
 		className="min-h-screen"
 		>
 			<SidebarLeft />
-			<SidebarInset className={`@container/main ${device === "mobile" ? "pb-navbar md:pb-0" : ""}`}>
+			<SidebarInset className={`@container/main ${device === "mobile" ? "pb-(--navbar-height) md:pb-0" : ""}`}>
 				<Header className={`${device === "mobile" ? "hidden" : ""}`} />
 				{children}
 			</SidebarInset>

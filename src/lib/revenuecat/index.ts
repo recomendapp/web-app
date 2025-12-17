@@ -2,8 +2,6 @@ import { useAuth } from "@/context/auth-context";
 import { ErrorCode, Offering, Package, Purchases } from "@revenuecat/purchases-js";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-export const REVENUECAT_API_KEY = process.env.NEXT_PUBLIC_REVENUECAT_API_KEY!;
-
 export const webReset = () => {
 	// Remove all styles from the html and body tags after completing RevenueCat purchase
 	// this is needed as during the purchase process, the body tag is styled with styles which

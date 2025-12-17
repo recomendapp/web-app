@@ -9,7 +9,7 @@ import { CaretSortIcon } from "@radix-ui/react-icons"
 import { ColumnDef } from "@tanstack/react-table"
 import { upperFirst } from "lodash"
 import { useTranslations } from "next-intl"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import toast from "react-hot-toast"
 
 export const Columns = (): ColumnDef<PlaylistGuest>[] => {
@@ -83,20 +83,21 @@ const EditSwitch = ({
 	playlistId,
 	editSate,
 }: {
-	id?: number;
-	playlistId?: number;
+	id: number;
+	playlistId: number;
 	editSate?: boolean;
 }) => {
 	const t = useTranslations()
 	const { customerInfo } = useAuth()
-	const updatePlaylistGuest = usePlaylistGuestUpdateMutation()
+	const { mutateAsync: updatePlaylistGuest } = usePlaylistGuestUpdateMutation({
+		playlistId: playlistId
+	})
 	const [edit, setEdit] = useState(editSate);
 
-	const handleEdit = (value: boolean) => {
+	const handleEdit = useCallback(async (value: boolean) => {
 		if (!playlistId || !id) return null;
-		updatePlaylistGuest.mutate({
-			id: id,
-			playlistId: playlistId,
+		await updatePlaylistGuest({
+			guestId: id,
 			edit: value,
 		}, {
 			onSuccess: () => {
@@ -107,7 +108,7 @@ const EditSwitch = ({
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		})
-	}
+	}, [id, playlistId, t, updatePlaylistGuest]);
 	return (
 	<Switch
 		checked={edit}

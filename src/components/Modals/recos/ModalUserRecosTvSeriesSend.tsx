@@ -1,10 +1,10 @@
-'use client';
+'use client'
 
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import { useModal } from '@/context/modal-context';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -14,10 +14,11 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Icons } from '@/config/icons';
 import { UserAvatar } from '@/components/User/UserAvatar';
 import { Label } from '@/components/ui/label';
-import { useUserRecosTvSeriesInsertMutation } from '@/features/client/user/userMutations';
-import { useUserRecosTvSeriesSendQuery } from '@/features/client/user/userQueries';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
+import { useQuery } from '@tanstack/react-query';
+import { useUserRecosTvSeriesSendOptions } from '@/api/client/options/userOptions';
+import { useUserRecosTvSeriesInsertMutation } from '@/api/client/mutations/userMutations';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -39,15 +40,15 @@ export function ModalUserRecosTvSeriesSend({
 	const {
 		data: friends,
 		isLoading,
-	} = useUserRecosTvSeriesSendQuery({
+	} = useQuery(useUserRecosTvSeriesSendOptions({
 		userId: session?.user.id,
 		tvSeriesId: tvSeriesId,
-	});
-	const sendTvSeries = useUserRecosTvSeriesInsertMutation();
+	}));
+	const { mutateAsync: sendTvSeries, isPending } = useUserRecosTvSeriesInsertMutation();
 
-	function submit() {
+	const handleSubmit = useCallback(async () => {
 		if (!session || !tvSeriesId) return;
-		sendTvSeries.mutate({
+		await sendTvSeries({
 			senderId: session.user.id,
 			tvSeriesId: tvSeriesId,
 			receivers: selectedUsers,
@@ -69,7 +70,7 @@ export function ModalUserRecosTvSeriesSend({
 				}
 			}
 		});
-	}
+	}, [session, tvSeriesId, selectedUsers, comment, sendTvSeries, t, closeModal, props.id]);
 
 	return (
 		<Modal
@@ -171,10 +172,10 @@ export function ModalUserRecosTvSeriesSend({
 				</p>
 				)}
 				<Button
-				disabled={!selectedUsers.length || sendTvSeries.isPending}
-				onClick={submit}
+				disabled={!selectedUsers.length || isPending}
+				onClick={handleSubmit}
 				>
-				{sendTvSeries.isPending && <Icons.loader className="mr-2" />}
+				{isPending && <Icons.loader className="mr-2" />}
 				{upperFirst(t('common.messages.send'))}
 				</Button>
 			</ModalFooter>

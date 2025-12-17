@@ -10,7 +10,7 @@ import { upperFirst } from 'lodash';
 import { useCallback } from 'react';
 
 interface ProfileFollowersButtonProps {
-  userId: string;
+  userId?: string;
   className?: string;
   disabled?: boolean;
 }
@@ -24,6 +24,7 @@ export const ProfileFollowersButton = ({
   const { createModal } = useModal();
 
   const handleOpenFollowersModal = useCallback(() => {
+    if (!userId) return;
     createModal({
       header: {
         title: upperFirst(t('common.messages.follower', { count: 2 })),
@@ -38,7 +39,7 @@ export const ProfileFollowersButton = ({
         variant={'outline'}
         onClick={handleOpenFollowersModal}
         className={cn(className)}
-        disabled={disabled}
+        disabled={disabled || !userId}
         >
         {t('common.messages.follower', { count: 2 })}
         </Button>

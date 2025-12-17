@@ -1,7 +1,6 @@
 'use client'
 
 import { cn } from '@/lib/utils';
-import { Profile } from '@recomendapp/types';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { Link } from "@/lib/i18n/navigation";
@@ -9,10 +8,10 @@ import { usePathname } from '@/lib/i18n/navigation';
 import { useMemo } from 'react';
 
 export const ProfileNavbar = ({
-  profile,
+  username,
   className,
 }: {
-  profile: Profile;
+  username: string;
   className?: string;
 }) => {
   const t = useTranslations();
@@ -21,26 +20,26 @@ export const ProfileNavbar = ({
     () => [
       {
         label: upperFirst(t('common.messages.profile')),
-        active: pathname === `/@${profile?.username}`,
-        href: `/@${profile?.username}`,
+        active: pathname === `/@${username}`,
+        href: `/@${username}`,
       },
       {
         label: upperFirst(t('common.messages.film', { count: 2 })),
-        active: pathname === `/@${profile?.username}/films`,
-        href: `/@${profile?.username}/films`,
+        active: pathname === `/@${username}/films`,
+        href: `/@${username}/films`,
       },
       {
         label: upperFirst(t('common.messages.tv_series', { count: 2 })),
-        active: pathname === `/@${profile?.username}/tv-series`,
-        href: `/@${profile?.username}/tv-series`,
+        active: pathname === `/@${username}/tv-series`,
+        href: `/@${username}/tv-series`,
       },
       {
         label: upperFirst(t('common.messages.playlist', { count: 2 })),
-        active: pathname === `/@${profile?.username}/playlists`,
-        href: `/@${profile?.username}/playlists`,
+        active: pathname === `/@${username}/playlists`,
+        href: `/@${username}/playlists`,
       },
     ],
-    [pathname, profile, t]
+    [pathname, username, t]
   );
   return (
     <div

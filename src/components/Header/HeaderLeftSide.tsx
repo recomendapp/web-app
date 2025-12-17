@@ -23,25 +23,23 @@ export default function HeaderLeftSide({
   const pathname = usePathname();
   const common = useTranslations('common');
   return (
-    // <div className={cn("flex items-center gap-4 w-full", className)}>
-      <ButtonGroup className='w-full'>
-        <ButtonGroup>
-          <SidebarTrigger className='md:hidden'/>
-        </ButtonGroup>
-        <ButtonGroup>
-          <Button variant="outline" size="icon" aria-label={upperFirst(common('messages.backward'))} onClick={router.back}>
-            <Icons.chevronLeft />
-            <span className="sr-only">{upperFirst(common('messages.backward'))}</span>
-          </Button>
-          <Button variant="outline" size="icon" aria-label={upperFirst(common('messages.forward'))} onClick={router.forward}>
-            <Icons.chevronRight />
-            <span className="sr-only">{upperFirst(common('messages.forward'))}</span>
-          </Button>
-        </ButtonGroup>
-        <SearchBar />
-        {pathname == '/collection' && <ButtonPlaylistCreate />}
+    <ButtonGroup className='w-full'>
+      <ButtonGroup>
+        <SidebarTrigger className='md:hidden'/>
       </ButtonGroup>
-    // </div>
+      <ButtonGroup>
+        <Button variant="outline" size="icon" aria-label={upperFirst(common('messages.backward'))} onClick={router.back}>
+          <Icons.chevronLeft />
+          <span className="sr-only">{upperFirst(common('messages.backward'))}</span>
+        </Button>
+        <Button variant="outline" size="icon" aria-label={upperFirst(common('messages.forward'))} onClick={router.forward}>
+          <Icons.chevronRight />
+          <span className="sr-only">{upperFirst(common('messages.forward'))}</span>
+        </Button>
+      </ButtonGroup>
+      <SearchBar />
+      {pathname == '/collection' && <ButtonGroup><ButtonPlaylistCreate /></ButtonGroup>}
+    </ButtonGroup>
   );
 }
 

@@ -20,12 +20,13 @@ import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
 import { useAuth } from "@/context/auth-context";
-import { usePlaylistIsAllowedToEditQuery } from "@/features/client/playlist/playlistQueries";
 import { ShareControllerMovie } from "@/components/ShareController/ShareControllerMovie";
 import { ModalPlaylistMovieAdd } from "@/components/Modals/playlists/ModalPlaylistMovieAdd";
 import { ModalUserRecosMovieSend } from "@/components/Modals/recos/ModalUserRecosMovieSend";
 import { usePlaylistMovieDeleteMutation } from "@/api/client/mutations/playlistMutations";
 import ModaPlaylistMovieComment from "@/components/Modals/playlists/ModalPlaylistMovieComment";
+import { useQuery } from "@tanstack/react-query";
+import { usePlaylistIsAllowedToEditOptions } from "@/api/client/options/playlistOptions";
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItemMovie>;
@@ -42,14 +43,16 @@ export function DataTableRowActions({
 }: DataTableRowActionsProps) {
   const { session } = useAuth();
   const t = useTranslations();
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
+  const { data: isAllowedToEdit } = useQuery(usePlaylistIsAllowedToEditOptions({
     playlistId: row.original.playlist_id,
     userId: session?.user.id
-  });
+  }));
   const { openModal, createConfirmModal } = useModal();
 
   // Mutations
-  const deletePlaylistItem = usePlaylistMovieDeleteMutation();
+  const deletePlaylistItem = usePlaylistMovieDeleteMutation({
+    playlistId: row.original.playlist_id
+  });
 
   // Handlers
   const handleDeleteItem = async () => {

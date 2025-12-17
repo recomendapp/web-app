@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
-import { getMovie } from '@/features/server/media/mediaQueries';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { truncate, upperFirst } from 'lodash';
@@ -8,7 +7,9 @@ import { seoLocales } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { MovieReviews } from './_components/MovieReviews';
 import { SupportedLocale } from '@/translations/locales';
-import { MediaMovie } from '@recomendapp/types';
+import { getMovie } from '@/api/server/medias';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { Database } from '@recomendapp/types';
 
 export async function generateMetadata(
   props: {
@@ -42,8 +43,8 @@ export async function generateMetadata(
           { length: siteConfig.seo.description.limit }
         ),
         url: `${siteConfig.url}/${params.lang}/film/${movie.slug}/reviews`,
-        images: movie.poster_url ? [
-          { url: movie.poster_url },
+        images: movie.poster_path ? [
+          { url: getTmdbImage({ path: movie.poster_path, size: 'w500' }) },
         ] : undefined,
         type: 'video.movie',
         locale: params.lang,
@@ -64,7 +65,7 @@ export default async function MovieReviewsPage(
 ) {
   const params = await props.params;
   const { id: movieId } = getIdFromSlug(params.film_id);
-  let movie: MediaMovie;
+  let movie: Database['public']['Views']['media_movie_full']['Row'];
   try {
     movie = await getMovie(params.lang, movieId);
   } catch {

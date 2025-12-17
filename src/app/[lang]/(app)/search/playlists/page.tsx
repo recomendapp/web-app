@@ -1,7 +1,7 @@
-import { redirect } from '@/lib/i18n/navigation';
-import SearchPlaylistsFull from './_components/SearchPlaylistsFull';
+import { SearchPlaylists } from './_components/SearchPlaylists';
 import { Metadata } from 'next';
-import { SupportedLocale } from '@/translations/locales';
+import { getTranslations } from 'next-intl/server';
+import { upperFirst } from 'lodash';
 
 export async function generateMetadata(
   props: {
@@ -10,24 +10,18 @@ export async function generateMetadata(
     }>;
   }
 ): Promise<Metadata> {
+  const t = await getTranslations();
   const searchParams = await props.searchParams;
+  if (!searchParams?.q) {
+    return {
+      title: upperFirst(t('common.messages.playlist', { count: 2 })),
+    };
+  }
   return {
-    title: `${searchParams.q} - Playlists`,
+    title: `${searchParams.q} - ${upperFirst(t('common.messages.playlist', { count: 2 }))}`,
   };
 }
 
-export default async function SearchFilms(
-  props: {
-    params: Promise<{
-      lang: string;
-    }>;
-    searchParams?: Promise<{
-      q: string;
-    }>;
-  }
-) {
-  const params = await props.params;
-  const searchParams = await props.searchParams;
-  if (!searchParams?.q) redirect({ href: '/search', locale: params.lang as SupportedLocale });
-  return <SearchPlaylistsFull query={searchParams?.q} />;
+export default async function SearchPlaylistsPage() {
+  return <SearchPlaylists />;
 }

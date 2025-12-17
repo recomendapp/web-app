@@ -1,10 +1,11 @@
-import { getProfile } from '@/features/server/users';
 import { notFound } from 'next/navigation';
+import { getProfile } from '@/api/server/users';
+import { createServerClient } from '@/lib/supabase/server';
 import { ProfileHeader } from './_components/ProfileHeader';
 import { ProfileNavbar } from './_components/ProfileNavbar';
 import { ProfilePrivateAccountCard } from './_components/ProfilePrivateAccountCard';
 
-export default async function UserLayout(
+export default async function Layout(
   props: {
     params: Promise<{
       lang: string,
@@ -14,15 +15,17 @@ export default async function UserLayout(
   }
 ) {
   const params = await props.params;
-  const user = await getProfile(params.username);
-  if (!user) notFound();
+  const supabase = await createServerClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  const profile = await getProfile(params.username);
+  if (!profile) return notFound();
   return (
     <>
-      <ProfileHeader profile={user} />
-      {user.visible ? (
+      <ProfileHeader profile={profile} session={session} />
+      {profile.visible ? (
         <div className="flex flex-col items-center p-4 gap-2">
-          <ProfileNavbar profile={user} className='max-w-7xl'/>
-          <div className="w-full max-w-7xl">
+          <div className='max-w-7xl w-full space-y-4'>
+            <ProfileNavbar username={profile.username} />
             {props.children}
           </div>
         </div>
@@ -30,5 +33,5 @@ export default async function UserLayout(
         <ProfilePrivateAccountCard />
       )}
     </>
-  );
+    )
 }

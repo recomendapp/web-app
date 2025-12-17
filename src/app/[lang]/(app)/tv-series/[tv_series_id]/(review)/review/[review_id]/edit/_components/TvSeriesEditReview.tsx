@@ -1,19 +1,20 @@
 'use client'
 
-import { MediaTvSeries } from '@recomendapp/types';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from "@/lib/i18n/navigation";
-import { useUserActivityTvSeriesQuery, useUserReviewTvSeriesQuery } from '@/features/client/user/userQueries';
 import ReviewForm from '@/components/Review/ReviewForm';
-import { useUserReviewTvSeriesUpsertMutation } from '@/features/client/user/userMutations';
 import { Spinner } from '@/components/ui/spinner';
 import { useCallback, useEffect } from 'react';
+import { Database } from '@recomendapp/types';
+import { useUserActivityTvSeriesOptions, useUserReviewTvSeriesOptions } from '@/api/client/options/userOptions';
+import { useQuery } from '@tanstack/react-query';
+import { useUserReviewTvSeriesUpsertMutation } from '@/api/client/mutations/userMutations';
 
 export const TvSeriesEditReview = ({
-	reviewId,
 	tvSeries,
+	reviewId,
 }: {
-	tvSeries: MediaTvSeries;
+	tvSeries: Database['public']['Views']['media_tv_series']['Row'];
 	reviewId: number;
 }) => {
 	const { session } = useAuth();
@@ -21,16 +22,16 @@ export const TvSeriesEditReview = ({
 
 	const {
 		data: activity,
-	} = useUserActivityTvSeriesQuery({
+	} = useQuery(useUserActivityTvSeriesOptions({
 		tvSeriesId: tvSeries.id,
 		userId: session?.user.id,
-	});
+	}));
 	const {
 		data: review,
 		isLoading,
-	} = useUserReviewTvSeriesQuery({
+	} = useQuery(useUserReviewTvSeriesOptions({
 		reviewId: reviewId,
-	});
+	}));
 	const { mutateAsync: upsertReview } = useUserReviewTvSeriesUpsertMutation({
 		tvSeriesId: tvSeries.id,
 	});

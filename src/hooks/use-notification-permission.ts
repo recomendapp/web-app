@@ -119,7 +119,7 @@ const useNotificationPermission = () => {
 		if (process.env.NODE_ENV !== 'development') {
 			saveToken();
 		}
-	}, [token, session?.user?.id]);
+	}, [token, session,  supabase]);
 
 
 	return {

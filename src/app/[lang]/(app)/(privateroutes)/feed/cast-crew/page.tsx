@@ -4,14 +4,16 @@ import { useAuth } from "@/context/auth-context";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import Loader from "@/components/Loader";
-import { useUserFeedCastCrewInfiniteQuery } from "@/features/client/user/userQueries";
 import { FeedCastCrewItem } from "./_components/FeedCastCrewItem";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/lib/i18n/navigation";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useUserMyFeedCastCrewOptions } from "@/api/client/options/userOptions";
+import { UserFeedCastCrew } from "@recomendapp/types";
 
 export default function FeedPersons() {
-	const { session, customerInfo } = useAuth();
+	const { customerInfo } = useAuth();
 	const router = useRouter();
 	const t = useTranslations();
 
@@ -22,9 +24,9 @@ export default function FeedPersons() {
 		isLoading,
 		fetchNextPage,
 		hasNextPage,
-	} = useUserFeedCastCrewInfiniteQuery({
-		userId: customerInfo?.entitlements.active['premium'] ? session?.user.id : undefined,
-	});
+	} = useInfiniteQuery(useUserMyFeedCastCrewOptions({
+		enabled: !!customerInfo?.entitlements.active['premium'],
+	}));
 
 	useEffect(() => {
 		if (inView && hasNextPage)
@@ -32,7 +34,7 @@ export default function FeedPersons() {
 	}, [inView, hasNextPage, feed, fetchNextPage]);
 
 	useEffect(() => {
-		if (!customerInfo?.entitlements.active['premium']) {
+		if (customerInfo && !customerInfo.entitlements.active['premium']) {
 			router.replace('/upgrade');
 		}
 	}, [customerInfo]);
@@ -54,7 +56,7 @@ export default function FeedPersons() {
 							<FeedCastCrewItem
 							key={index}
 							ref={(i === feed.pages.length - 1) && (index === page.length - 1) ? ref : undefined }
-							activity={activity}
+							activity={activity as UserFeedCastCrew}
 							/>
 						))
 					))}

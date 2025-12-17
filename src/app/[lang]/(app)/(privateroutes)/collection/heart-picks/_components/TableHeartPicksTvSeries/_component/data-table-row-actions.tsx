@@ -19,9 +19,10 @@ import { Icons } from '@/config/icons';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
-import { useUserActivityTvSeriesUpdateMutation } from "@/features/client/user/userMutations";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
 import { ModalUserRecosTvSeriesSend } from "@/components/Modals/recos/ModalUserRecosTvSeriesSend";
+import { useUserActivityTvSeriesUpdateMutation } from "@/api/client/mutations/userMutations";
+import { useCallback } from "react";
 
 interface DataTableRowActionsProps {
   table: Table<UserActivityTvSeries>;
@@ -38,11 +39,11 @@ export function DataTableRowActions({
 }: DataTableRowActionsProps) {
   const t = useTranslations();
   const { openModal, createConfirmModal } = useModal();
-  const updateActivityMovie = useUserActivityTvSeriesUpdateMutation();
+  const { mutateAsync: updateActivityTvSeries } = useUserActivityTvSeriesUpdateMutation();
 
-  const handleUnlike = async () => {
+  const handleUnlike = useCallback(async () => {
     if (!data) return;
-    await updateActivityMovie.mutateAsync({
+    await updateActivityTvSeries({
       activityId: data.id,
       isLiked: false,
     }, {
@@ -53,7 +54,7 @@ export function DataTableRowActions({
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }
+  }, [data, updateActivityTvSeries, t]);
 
   return (
     <div className="flex items-center justify-end">
@@ -68,7 +69,7 @@ export function DataTableRowActions({
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end" className="w-[160px]">
+        <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuItem
           onClick={() => openModal(ModalUserRecosTvSeriesSend, { tvSeriesId: data.tv_series_id!, tvSeriesTitle: data.tv_series?.name! })}
           >

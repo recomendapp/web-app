@@ -7,11 +7,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { useModal } from "@/context/modal-context";
 import { PlaylistItemMovie } from "@recomendapp/types";
 import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle, ModalType } from "../Modal";
-import { usePlaylistIsAllowedToEditQuery } from "@/features/client/playlist/playlistQueries";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useAuth } from "@/context/auth-context";
 import { usePlaylistMovieUpdateMutation } from "@/api/client/mutations/playlistMutations";
+import { useQuery } from "@tanstack/react-query";
+import { usePlaylistIsAllowedToEditOptions } from "@/api/client/options/playlistOptions";
 
 interface ModalPlaylistMovieCommentProps extends ModalType {
 	playlistItem: PlaylistItemMovie;
@@ -24,10 +25,10 @@ const ModalPlaylistMovieComment = ({
 	const t = useTranslations();
 	const { session } = useAuth();
 	const { closeModal } = useModal();
-	const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
+	const { data: isAllowedToEdit } = useQuery(usePlaylistIsAllowedToEditOptions({
 		playlistId: playlistItem.playlist_id,
 		userId: session?.user.id
-	});
+	}));
 
 	// Mutations
 	const updatePlaylistItem = usePlaylistMovieUpdateMutation();

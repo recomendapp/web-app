@@ -1,0 +1,66 @@
+'use server'
+
+import { createServerClient } from "@/lib/supabase/server";
+import { cache } from "react";
+
+export const getReviewMovieSeo = cache(async (id: number, lang: string) => {
+	const supabase = await createServerClient();
+	const { data: review, error } = await supabase
+		.from('user_reviews_movie')
+		.select(`
+			id,
+			title,
+			body,
+			created_at,
+			updated_at,
+			user_activities_movie(
+				id,
+				rating,
+				media_movie(
+					title,
+					poster_path,
+					overview,
+					vote_average,
+					vote_count
+				),
+				profile(
+					username
+				)
+			)
+		`)
+		.eq('id', id)
+		.single()
+	if (error) throw error;
+	return review;
+});
+
+export const getReviewTvSeriesSeo = cache(async (id: number, lang: string) => {
+	const supabase = await createServerClient();
+	const { data: review, error } = await supabase
+		.from('user_reviews_tv_series')
+		.select(`
+			id,
+			title,
+			body,
+			created_at,
+			updated_at,
+			user_activities_tv_series(
+				id,
+				rating,
+				media_tv_series(
+					name,
+					poster_path,
+					overview,
+					vote_average,
+					vote_count
+				),
+				profile(
+					username
+				)
+			)
+		`)
+		.eq('id', id)
+		.single()
+	if (error) throw error;
+	return review;
+});

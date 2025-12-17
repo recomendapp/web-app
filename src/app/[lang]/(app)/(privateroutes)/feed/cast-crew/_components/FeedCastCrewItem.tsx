@@ -28,7 +28,7 @@ const FeedCastCrewItemDefault = React.forwardRef<
 		<Card
 		ref={ref}
 		className={cn(
-			"@container/feed-item flex gap-4 p-2",
+			"@container/feed-item flex flex-row gap-4 p-2",
 			className
 		)}
 		{...props}

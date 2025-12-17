@@ -5,8 +5,8 @@ import { Metadata } from 'next';
 import { seoLocales } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { SupportedLocale } from '@/translations/locales';
-import { getProfile } from '@/features/server/users';
 import { ProfileFeed } from './_components/ProfileFeed';
+import { getProfile } from '@/api/server/users';
 
 export async function generateMetadata(
   props: {
@@ -15,21 +15,21 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang as SupportedLocale });
-  const user = await getProfile(params.username);
-  if (!user) return {
+  const profile = await getProfile(params.username);
+  if (!profile) return {
       title: upperFirst(t('common.messages.user_not_found')),
   };
   return {
-    title: upperFirst(t('pages.user.metadata.title', { full_name: user.full_name!, username: user.username! })),
-    description: truncate(upperFirst(t('pages.user.metadata.description', { username: user.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
-    alternates: seoLocales(params.lang, `/@${user.username}`),
+    title: upperFirst(t('pages.user.metadata.title', { full_name: profile.full_name!, username: profile.username! })),
+    description: truncate(upperFirst(t('pages.user.metadata.description', { username: profile.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
+    alternates: seoLocales(params.lang, `/@${profile.username}`),
     openGraph: {
       siteName: siteConfig.name,
-      title: `${upperFirst(t('pages.user.metadata.title', { full_name: user.full_name!, username: user.username! }))} • ${siteConfig.name}`,
-      description: truncate(upperFirst(t('pages.user.metadata.description', { username: user.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
-      url: `${siteConfig.url}/${params.lang}/@${user.username}`,
-      images: user.avatar_url ? [
-        { url: user.avatar_url },
+      title: `${upperFirst(t('pages.user.metadata.title', { full_name: profile.full_name!, username: profile.username! }))} • ${siteConfig.name}`,
+      description: truncate(upperFirst(t('pages.user.metadata.description', { username: profile.username!, app: siteConfig.name })), { length: siteConfig.seo.description.limit }),
+      url: `${siteConfig.url}/${params.lang}/@${profile.username}`,
+      images: profile.avatar_url ? [
+        { url: profile.avatar_url },
       ] : undefined,
       type: 'profile',
       locale: params.lang,
@@ -43,9 +43,9 @@ export default async function UserPage(
   }
 ) {
   const params = await props.params;
-  const user = await getProfile(params.username);
-  if (!user) return notFound();
+  const profile = await getProfile(params.username);
+  if (!profile) return notFound();
   return (
-    <ProfileFeed profile={user} />
+    <ProfileFeed profileId={profile.id} />
   );
 }

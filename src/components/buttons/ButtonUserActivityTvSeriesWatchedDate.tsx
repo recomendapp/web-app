@@ -1,17 +1,18 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { useUserActivityTvSeriesQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { cn } from "@/lib/utils";
 import { CalendarDaysIcon } from "lucide-react";
-import { useUserActivityTvSeriesUpdateMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { fr, enUS } from 'date-fns/locale';
+import { useUserActivityTvSeriesOptions } from "@/api/client/options/userOptions";
+import { useQuery } from "@tanstack/react-query";
+import { useUserActivityTvSeriesUpdateMutation } from "@/api/client/mutations/userMutations";
 
 interface ButtonUserActivityTvSeriesWatchedDateProps
 	extends React.ComponentProps<typeof Button> {
@@ -31,10 +32,10 @@ const ButtonUserActivityTvSeriesWatchedDate = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useUserActivityTvSeriesQuery({
+	} = useQuery(useUserActivityTvSeriesOptions({
 		userId: session?.user.id,
 		tvSeriesId: tvSeriesId,
-	});
+	}));
 	const { mutateAsync: updateDate, isPending: isUpdatePending } = useUserActivityTvSeriesUpdateMutation();
 
 	const handleUpdateDate = React.useCallback(async (date: Date) => {

@@ -3,7 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -26,19 +25,18 @@ import {
   CommandList,
 } from "@/components/ui/command"
 import { useTheme } from 'next-themes';
-import { useMutation } from '@tanstack/react-query';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Icons } from '@/config/icons';
 import Loader from '@/components/Loader';
-import { useSupabaseClient } from '@/context/supabase-context';
 import { useLocalizedLanguageName } from '@/hooks/use-localized-language-name';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ChevronsUpDown } from 'lucide-react';
 import { upperFirst } from 'lodash';
 import { supportedLocales } from '@/translations/locales';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
+import { useUserUpdateMutation } from '@/api/client/mutations/userMutations';
 
 const appearanceFormSchema = z.object({
   theme: z.enum(['light', 'dark'], {
@@ -52,35 +50,16 @@ const appearanceFormSchema = z.object({
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
-// This can come from your database or API.
-
 export function AppearanceForm() {
-  const supabase = useSupabaseClient();
-  const t = useTranslations('pages.settings');
-  const common = useTranslations('common');
+  const t = useTranslations();
   const locale = useLocale();
-  const [loading, setLoading] = useState(false);
   const { setTheme, theme } = useTheme();
   const router = useRouter();
   const pathname = usePathname();
-  const { user, loading: userLoading } = useAuth();
+  const { user } = useAuth();
   const locales = useLocalizedLanguageName([...supportedLocales]);
 
-  const { mutateAsync: updateProfile } = useMutation({
-    mutationFn: async (payload: any) => {
-      if (!user?.id) throw new Error('No user id');
-      const {
-        data,
-        error
-      } = await supabase
-        .from('user')
-        .update(payload)
-        .eq('id', user?.id)
-        .select('*');
-      if (error) throw error;
-      return data;
-    }
-  });
+  const { mutateAsync: updateProfile, isPending } = useUserUpdateMutation();
 
   const defaultValues = useMemo(() => ({
     language: locale,
@@ -97,44 +76,43 @@ export function AppearanceForm() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValues]);
 
-
-  async function onSubmit(data: AppearanceFormValues) {
-    try {
-      setLoading(true);
-      if (data.theme != theme) {
-        setTheme(data.theme);
-      }
-      if (locale != data.language)
-      {
-        await updateProfile({ language: data.language });
-        router.replace(
-          {
-            pathname: pathname,
-          },
-          {
-            locale: data.language
-          }
-        );
-      }
-      toast.success(upperFirst(common('messages.saved', { gender: 'male', count: 1 })));
-    } catch (error) {
-      toast.error(upperFirst(common('messages.an_error_occurred')));
-    } finally {
-      setLoading(false);
+  const handleSubmit = useCallback(async (data: AppearanceFormValues) => {
+    if (data.theme !== theme) {
+      setTheme(data.theme);
     }
-  }
+    if (data.language !== locale) {
+      await updateProfile({
+        language: data.language,
+      }, {
+        onSuccess: () => {
+          router.replace(
+            {
+              pathname: pathname,
+            },
+            {
+              locale: data.language,
+            }
+          );
+          toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+        },
+        onError: () => {
+          toast.error(upperFirst(t('common.messages.an_error_occurred')));
+        },
+      });
+    }
+  }, [locale, pathname, router, t, theme, updateProfile, setTheme]);
 
   if (!user) return <Loader />;
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="language"
           render={({ field }) => (
             <FormItem className='flex flex-col'>
-              <FormLabel>{t('appearance.language.label')}</FormLabel>
+              <FormLabel>{t('pages.settings.appearance.language.label')}</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -152,7 +130,7 @@ export function AppearanceForm() {
                           const locale = locales.find((locale) => locale.language === field.value);
                           return `${locale?.flag} ${locale?.iso_639_1} (${locale?.iso_3166_1})`;
                         })()
-                      ) : t('appearance.language.placeholder')}
+                      ) : t('pages.settings.appearance.language.placeholder')}
                       </span>
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -160,9 +138,9 @@ export function AppearanceForm() {
                 </PopoverTrigger>
                 <PopoverContent align='start' className='max-w-xs p-0'>
                   <Command>
-                    <CommandInput placeholder={t('appearance.language.placeholder')} />
+                    <CommandInput placeholder={t('pages.settings.appearance.language.placeholder')} />
                     <CommandList>
-                      <CommandEmpty>{t('appearance.language.not_found')}</CommandEmpty>
+                      <CommandEmpty>{t('pages.settings.appearance.language.not_found')}</CommandEmpty>
                       <CommandGroup>
                         {locales.map((locale, i) => (
                           <CommandItem
@@ -187,7 +165,7 @@ export function AppearanceForm() {
                 </PopoverContent>
               </Popover>
               <FormDescription>
-                {t('appearance.language.description')}
+                {t('pages.settings.appearance.language.description')}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -198,9 +176,9 @@ export function AppearanceForm() {
           name="theme"
           render={({ field }) => (
             <FormItem className="space-y-1">
-              <FormLabel>{t('appearance.theme.label')}</FormLabel>
+              <FormLabel>{t('pages.settings.appearance.theme.label')}</FormLabel>
               <FormDescription>
-                {t('appearance.theme.description')}
+                {t('pages.settings.appearance.theme.description')}
               </FormDescription>
               <FormMessage />
               <RadioGroup
@@ -216,7 +194,7 @@ export function AppearanceForm() {
                     <div className="items-center rounded-md border-2 border-muted p-1 hover:border-accent">
                       <div className="space-y-2 rounded-sm bg-[#ecedef] p-2">
                         <div className="space-y-2 rounded-md bg-white p-2 shadow-xs">
-                          <div className="h-2 w-[80px] rounded-lg bg-[#ecedef]" />
+                          <div className="h-2 w-20 rounded-lg bg-[#ecedef]" />
                           <div className="h-2 w-[100px] rounded-lg bg-[#ecedef]" />
                         </div>
                         <div className="flex items-center space-x-2 rounded-md bg-white p-2 shadow-xs">
@@ -230,7 +208,7 @@ export function AppearanceForm() {
                       </div>
                     </div>
                     <span className="block w-full p-2 text-center font-normal">
-                      {t('appearance.theme.options.light')}
+                      {t('pages.settings.appearance.theme.options.light')}
                     </span>
                   </FormLabel>
                 </FormItem>
@@ -242,7 +220,7 @@ export function AppearanceForm() {
                     <div className="items-center rounded-md border-2 border-muted bg-popover p-1 hover:bg-accent hover:text-accent-foreground">
                       <div className="space-y-2 rounded-sm bg-background-border p-2">
                         <div className="space-y-2 rounded-md bg-background p-2 shadow-xs">
-                          <div className="h-2 w-[80px] rounded-lg bg-muted" />
+                          <div className="h-2 w-20 rounded-lg bg-muted" />
                           <div className="h-2 w-[100px] rounded-lg bg-muted" />
                         </div>
                         <div className="flex items-center space-x-2 rounded-md bg-background p-2 shadow-xs">
@@ -256,7 +234,7 @@ export function AppearanceForm() {
                       </div>
                     </div>
                     <span className="block w-full p-2 text-center font-normal">
-                      {t('appearance.theme.options.dark')}
+                      {t('pages.settings.appearance.theme.options.dark')}
                     </span>
                   </FormLabel>
                 </FormItem>
@@ -264,9 +242,9 @@ export function AppearanceForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={loading}>
-          {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-          {upperFirst(common('messages.save'))}
+        <Button type="submit" disabled={isPending}>
+          {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+          {upperFirst(t('common.messages.save'))}
         </Button>
       </form>
     </Form>

@@ -1,20 +1,20 @@
-'use client';
+'use client'
 
 import { useUIStore } from '@/stores/useUIStore';
 import { useAuth } from '@/context/auth-context';
-import { useUserWatchlistMoviesQuery, useUserWatchlistTvSeriesQuery } from '@/features/client/user/userQueries';
 import { WatchlistHeader } from './_components/WatchlistHeader';
 import { ImageObject } from '@/hooks/use-random-image';
 import { TableWatchlistMovie } from './_components/TableWatchlistMovie/TableWatchlistMovie';
 import { TableWatchlistTvSeries } from './_components/TableWatchlistTvSeries/TableWatchlistTvSeries';
-
+import { useQuery } from '@tanstack/react-query';
+import { useUserWatchlistMoviesOptions, useUserWatchlistTvSeriesOptions } from '@/api/client/options/userOptions';
 
 export default function Watchlist() {
   const tab = useUIStore((state) => state.watchlistTab);
   const { session } = useAuth();
 
-  const { data: watchlistMovies, isLoading: watchlistMoviesIsLoading } = useUserWatchlistMoviesQuery({ userId: tab === 'movie' ? session?.user.id : undefined });
-  const { data: watchlistTvSeries, isLoading: watchlistTvSeriesIsLoading } = useUserWatchlistTvSeriesQuery({ userId: tab === 'tv_series' ? session?.user.id : undefined });
+  const { data: watchlistMovies, isLoading: watchlistMoviesIsLoading } = useQuery(useUserWatchlistMoviesOptions({ userId: tab === 'movie' ? session?.user.id : undefined }));
+  const { data: watchlistTvSeries, isLoading: watchlistTvSeriesIsLoading } = useQuery(useUserWatchlistTvSeriesOptions({ userId: tab === 'tv_series' ? session?.user.id : undefined }));
 
   const data = tab === 'movie' ? watchlistMovies : watchlistTvSeries;
   const isLoading = tab === 'movie'

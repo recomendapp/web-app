@@ -1,6 +1,6 @@
 import { PlaylistGuest } from "@recomendapp/types"
-import { ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table"
-import { useState } from "react"
+import { ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getSortedRowModel, SortingState, useReactTable, VisibilityState } from "@tanstack/react-table"
+import { useCallback, useState } from "react"
 import { Columns } from "./columns"
 import {
 	Table,
@@ -11,13 +11,14 @@ import {
 	TableRow,
   } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Icons } from "@/config/icons"
 import { usePlaylistGuestsDeleteMutation } from "@/api/client/mutations/playlistMutations"
 import toast from "react-hot-toast"
 import { useModal } from "@/context/modal-context"
 import { upperFirst } from "lodash"
 import { useTranslations } from "next-intl"
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 
 export const PlaylistGuestTable = ({
 	guests,
@@ -34,14 +35,15 @@ export const PlaylistGuestTable = ({
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 	const [rowSelection, setRowSelection] = useState({})
-	const deletePlaylistGuests = usePlaylistGuestsDeleteMutation()
+	const { mutateAsync: deletePlaylistGuests, isPending } = usePlaylistGuestsDeleteMutation({
+		playlistId: playlistId
+	})
 	const table = useReactTable({
 		data: guests,
 		columns: Columns(),
 		onSortingChange: setSorting,
 		onColumnFiltersChange: setColumnFilters,
 		getCoreRowModel: getCoreRowModel(),
-		getPaginationRowModel: getPaginationRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		onColumnVisibilityChange: setColumnVisibility,
@@ -54,11 +56,11 @@ export const PlaylistGuestTable = ({
 		},
 	})
 
-	const handleDelete = () => {
+	const handleDelete = useCallback(async () => {
 		const selectedRows = table.getFilteredSelectedRowModel().rows
 		const ids = selectedRows.map((row) => row.original?.id as number)
 		if (!ids.length) toast.error(upperFirst(t('common.messages.no_selected_users')))
-		deletePlaylistGuests.mutate({
+		await deletePlaylistGuests({
 			ids: ids,
 			playlistId: playlistId
 		}, {
@@ -70,82 +72,88 @@ export const PlaylistGuestTable = ({
 				toast.error(upperFirst(t('common.messages.an_error_occurred')))
 			}
 		})
-	}
+	}, [deletePlaylistGuests, playlistId, setRowSelection, table, t])
 
 
 	return (
 		<>
-		<div className="mb-4 flex items-center gap-4">
-			<Input
-				placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))}
-				value={(table.getColumn("user")?.getFilterValue() as string) ?? ""}
-				onChange={(event) =>
-				table.getColumn("user")?.setFilterValue(event.target.value)
-				}
-				className="max-w-sm"
-			/>
-			<Button
-			variant={"outline"}
-			onClick={() => setView("add")}
-			>
-				<Icons.add className="mr-2 h-4 w-4" />
-				{upperFirst(t('common.messages.add'))}
-			</Button>
+		<div className="px-4 mb-4">
+			<InputGroup>
+				<InputGroupAddon>
+					<Icons.search />
+				</InputGroupAddon>
+				<InputGroupInput
+					value={(table.getColumn("user")?.getFilterValue() as string) ?? ""}
+					onChange={(event) =>
+						table.getColumn("user")?.setFilterValue(event.target.value)
+					}
+					placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))}
+				/>
+				<InputGroupAddon align="inline-end">
+					<InputGroupButton variant={'outline'} onClick={() => setView("add")}>
+						<Icons.add className="mr-2 h-4 w-4" />
+						{upperFirst(t('common.messages.add'))}
+					</InputGroupButton>
+				</InputGroupAddon>
+			</InputGroup>
 		</div>
-		<Table className="bg-popover">
-			<TableHeader>
-				{table.getHeaderGroups().map((headerGroup) => (
-				<TableRow key={headerGroup.id}>
-					{headerGroup.headers.map((header) => {
-					return (
-						<TableHead
-						key={header.id}
-						className="[&:has([role=checkbox])]:pl-3"
-						>
-						{header.isPlaceholder
-							? null
-							: flexRender(
-								header.column.columnDef.header,
-								header.getContext()
-							)}
-						</TableHead>
-					)
-					})}
-				</TableRow>
-				))}
-			</TableHeader>
-			<TableBody>
-				{table.getRowModel().rows?.length ? (
-				table.getRowModel().rows.map((row) => (
-					<TableRow
-					key={row.id}
-					data-state={row.getIsSelected() && "selected"}
-					>
-					{row.getVisibleCells().map((cell) => (
-						<TableCell
-						key={cell.id}
-						className="[&:has([role=checkbox])]:pl-3"
-						>
-						{flexRender(
-							cell.column.columnDef.cell,
-							cell.getContext()
-						)}
-						</TableCell>
-					))}
+		<ScrollArea className="h-[40vh]">
+			<Table className="bg-popover relative " containerClassName="overflow-clip">
+				<TableHeader className="sticky top-0 bg-popover z-1">
+					{table.getHeaderGroups().map((headerGroup) => (
+					<TableRow key={headerGroup.id}>
+						{headerGroup.headers.map((header) => {
+						return (
+							<TableHead
+							key={header.id}
+							className="[&:has([role=checkbox])]:pl-3"
+							>
+							{header.isPlaceholder
+								? null
+								: flexRender(
+									header.column.columnDef.header,
+									header.getContext()
+								)}
+							</TableHead>
+						)
+						})}
 					</TableRow>
-				))
-				) : (
-				<TableRow>
-					<TableCell
-					colSpan={table.getAllColumns().length}
-					className="h-24 text-center"
-					>
-						{upperFirst(t('common.messages.no_results'))}
-					</TableCell>
-				</TableRow>
-				)}
-			</TableBody>
-		</Table>
+					))}
+				</TableHeader>
+				<TableBody>
+					{table.getRowModel().rows?.length ? (
+					table.getRowModel().rows.map((row) => (
+						<TableRow
+						key={row.id}
+						data-state={row.getIsSelected() && "selected"}
+						>
+						{row.getVisibleCells().map((cell) => (
+							<TableCell
+							key={cell.id}
+							className="[&:has([role=checkbox])]:pl-3"
+							>
+							{flexRender(
+								cell.column.columnDef.cell,
+								cell.getContext()
+							)}
+							</TableCell>
+						))}
+						</TableRow>
+					))
+					) : (
+					<TableRow>
+						<TableCell
+						colSpan={table.getAllColumns().length}
+						className="h-24 text-center"
+						>
+							{upperFirst(t('common.messages.no_results'))}
+						</TableCell>
+					</TableRow>
+					)}
+				</TableBody>
+			</Table>
+			<ScrollBar />
+		</ScrollArea>
 		<div className=" p-4 flex items-center justify-end space-x-2">
           <p className="flex-1 text-sm text-muted-foreground">
 			{t('common.messages.selection_count', {
@@ -165,7 +173,7 @@ export const PlaylistGuestTable = ({
 						title: upperFirst(t('common.messages.are_u_sure')),
 						onConfirm: handleDelete
 					})}
-					disabled={deletePlaylistGuests.isPending}
+					disabled={isPending}
 				>
 					<Icons.delete className="h-4 w-4" />
 					<span className="sr-only">{upperFirst(t('common.messages.delete'))}</span>

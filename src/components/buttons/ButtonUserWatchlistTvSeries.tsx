@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { useUserActivityTvSeriesQuery, useUserWatchlistTvSeriesItemQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { Link } from "@/lib/i18n/navigation";
@@ -8,11 +7,13 @@ import { Icons } from "@/config/icons";
 import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
-import { useUserWatchlistTvSeriesDeleteMutation, useUserWatchlistTvSeriesInsertMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ContextMenuWatchlistTvSeries } from "../ContextMenu/ContextMenuWatchlistTvSeries";
+import { useQuery } from "@tanstack/react-query";
+import { useUserWatchlistTvSeriesItemOptions } from "@/api/client/options/userOptions";
+import { useUserWatchlistTvSeriesDeleteMutation, useUserWatchlistTvSeriesInsertMutation } from "@/api/client/mutations/userMutations";
 
 interface ButtonUserWatchlistTvSeriesProps
 	extends React.ComponentProps<typeof Button> {
@@ -29,20 +30,13 @@ const ButtonUserWatchlistTvSeries = React.forwardRef<
 	const pathname = usePathname();
 
 	const {
-		data: activity,
-	} = useUserActivityTvSeriesQuery({
-		userId: session?.user.id,
-		tvSeriesId: tvSeriesId,
-	});
-
-	const {
 		data: watchlist,
 		isLoading,
 		isError,
-	} = useUserWatchlistTvSeriesItemQuery({
+	} = useQuery(useUserWatchlistTvSeriesItemOptions({
 		tvSeriesId: tvSeriesId,
 		userId: session?.user.id,
-	});
+	}));
 	const { mutateAsync: insertWatchlist, isPending: isInsertPending } = useUserWatchlistTvSeriesInsertMutation();
 	const { mutateAsync: deleteWatchlist, isPending: isDeletePending } = useUserWatchlistTvSeriesDeleteMutation();
 

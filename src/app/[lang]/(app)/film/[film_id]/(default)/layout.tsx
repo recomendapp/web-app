@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation';
-import MovieHeader from './_components/MovieHeader';
-import MovieNavbar from './_components/MovieNavbar';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
-import { getMovie, getMovieUserActivitiesFollowerAverageRating } from '@/features/server/media/mediaQueries';
-import { MediaMovie } from '@recomendapp/types';
+import { getMovie } from '@/api/server/medias';
+import { Database } from '@recomendapp/types';
+import { MovieHeader } from './_components/MovieHeader';
+import { MovieNavbar } from './_components/MovieNavbar';
 
-export default async function MovieLayout(
+export default async function Layout(
   props: {
       children: React.ReactNode;
       params: Promise<{
@@ -21,24 +21,23 @@ export default async function MovieLayout(
   } = props;
   const { id: movieId } = getIdFromSlug(params.film_id);
 
-  let movie: MediaMovie;
+  let movie: Database['public']['Views']['media_movie']['Row'];
   try {
     movie = await getMovie(params.lang, movieId);
   } catch {
     return notFound();
   }
-  const followersAvgRating = await getMovieUserActivitiesFollowerAverageRating({
-    movieId: movieId,
-  })
   return (
   <>
-    <MovieHeader movie={movie} followersAvgRating={followersAvgRating?.follower_avg_rating} />
-    <div className="px-4 pb-4 flex flex-col items-center">
+    <MovieHeader movie={movie} />
+      {movie && (
+      <div className="px-4 pb-4 flex flex-col items-center">
         <div className='max-w-7xl w-full'>
-          <MovieNavbar movieSlug={params.film_id} />
-          {children}
+        <MovieNavbar movieSlug={movie.slug || movie.id.toString()} />
+        {children}
         </div>
-    </div>
+      </div>
+      )}
   </>
-	);
+  );
 };

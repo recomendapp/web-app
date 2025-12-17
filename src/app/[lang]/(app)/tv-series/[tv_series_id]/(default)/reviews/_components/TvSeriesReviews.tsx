@@ -13,18 +13,18 @@ import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { z } from "zod";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMediaReviewsTvSeriesInfiniteQuery } from '@/features/client/media/mediaQueries';
 import { Icons } from '@/config/icons';
-import { ArrowDownNarrowWideIcon, ArrowUpNarrowWideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth-context';
-import { useUserActivityTvSeriesQuery } from '@/features/client/user/userQueries';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Link, usePathname } from '@/lib/i18n/navigation';
-import { MediaTvSeries } from '@recomendapp/types';
+import { Link } from '@/lib/i18n/navigation';
+import { Database, MediaTvSeries } from '@recomendapp/types';
 import { CardReviewTvSeries } from '@/components/Card/CardReviewTvSeries';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useMediaTvSeriesReviewsOptions } from '@/api/client/options/mediaOptions';
+import { useUserActivityTvSeriesOptions } from '@/api/client/options/userOptions';
 
 type SortBy = "updated_at" | "created_at";
 const DEFAULT_PER_PAGE = 20;
@@ -44,13 +44,11 @@ const getValidatePerPage = (perPage?: number | null): number => {
   return perPageSchema.safeParse(perPage).success ? perPage! : DEFAULT_PER_PAGE;
 }
 
-interface TvSeriesReviewsProps {
-	tvSeries: MediaTvSeries;
-}
-
 export const TvSeriesReviews = ({
 	tvSeries,
-} : TvSeriesReviewsProps) => {
+} : {
+	tvSeries: Database['public']['Views']['media_tv_series_full']['Row'];
+}) => {
 	const t = useTranslations();
 	const searchParams = useSearchParams();
 	const sortBy = getValidatedSortBy(searchParams.get('sort_by'));
@@ -58,20 +56,21 @@ export const TvSeriesReviews = ({
 	const perPage = getValidatePerPage(Number(searchParams.get('per_page')));
 	const router = useRouter();
 	const { ref, inView } = useInView();
+	// Requests
 	const {
 		data: reviews,
 		isLoading,
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useMediaReviewsTvSeriesInfiniteQuery({
+	} = useInfiniteQuery(useMediaTvSeriesReviewsOptions({
 		tvSeriesId: tvSeries.id,
 		filters: {
 			sortBy: sortBy,
 			sortOrder: sortOrder,
 			perPage: perPage,
 		},
-	});
+	}));
 
 	const sortOptions = useMemo((): { value: SortBy, label: string }[] => [
 		{ value: "updated_at", label: upperFirst(t('common.messages.date_updated')) },
@@ -87,6 +86,8 @@ export const TvSeriesReviews = ({
 	useEffect(() => {
 		if (inView && hasNextPage) fetchNextPage();
 	}, [inView, hasNextPage, fetchNextPage]);
+
+	if (!tvSeries) return null;
 
 	return (
 	<div className="w-full h-full flex flex-col items-center gap-4">
@@ -127,11 +128,11 @@ export const TvSeriesReviews = ({
 				return (
 					<CardReviewTvSeries
 					ref={(i === reviews.pages?.length - 1) && (index === page?.length - 1) ? ref : undefined }
-					key={review?.id ?? index}
+					key={review.id ?? index}
 					review={review}
-					activity={review?.activity}
-					author={review?.activity?.user}
-					url={`/tv-series/${tvSeries.slug}/review/${review?.id}`}
+					activity={review.user_activities_tv_series}
+					author={review.user_activities_tv_series.profile}
+					url={`/tv-series/${tvSeries.slug || tvSeries.id}/review/${review?.id}`}
 					/>
 				)
 				})
@@ -155,10 +156,10 @@ const MyReviewButton = ({
 	const {
 	  data: activity,
 	  isLoading,  
-	} = useUserActivityTvSeriesQuery({
+	} = useQuery(useUserActivityTvSeriesOptions({
 		tvSeriesId: tvSeries.id,
 		userId: session?.user.id,
-	});
+	}));
 
 	if (!session) return;
 

@@ -14,8 +14,8 @@ import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
-import { useUserReviewTvSeriesDeleteMutation } from '@/features/client/user/userMutations';
 import { useCallback, useMemo } from 'react';
+import { useUserReviewTvSeriesDeleteMutation } from '@/api/client/mutations/userMutations';
 
 type OptionItem = {
 	variant?: 'destructive';
@@ -40,7 +40,7 @@ export function ReviewTvSeriesSettings({
 	const { createConfirmModal } = useModal();
 	const pathname = usePathname();
 	const router = useRouter();
-	const { mutateAsync: deleteReview} = useUserReviewTvSeriesDeleteMutation({
+	const { mutateAsync: deleteReview } = useUserReviewTvSeriesDeleteMutation({
 		userId: session?.user.id,
 		tvSeriesId,
 	});

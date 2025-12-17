@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Profile } from '@recomendapp/types';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -14,7 +13,11 @@ import { CardFeedPlaylistLike } from '@/components/Card/feed/CardFeedPlaylistLik
 import { CardFeedReviewMovieLike } from '@/components/Card/feed/CardFeedReviewMovieLike';
 import { CardFeedReviewTvSeriesLike } from '@/components/Card/feed/CardFeedReviewTvSeriesLike';
 
-export const ProfileFeed = ({ profile }: { profile: Profile }) => {
+export const ProfileFeed = ({
+  profileId,
+}: {
+  profileId: string;
+}) => {
   const t = useTranslations();
   const { ref, inView } = useInView();
 
@@ -25,7 +28,7 @@ export const ProfileFeed = ({ profile }: { profile: Profile }) => {
     isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery(useUserFeedInfiniteOptions({
-    userId: profile.id,
+    userId: profileId,
   }));
 
   useEffect(() => {

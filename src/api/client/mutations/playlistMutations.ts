@@ -1,10 +1,13 @@
 import { useSupabaseClient } from '@/context/supabase-context';
-import { Playlist, PlaylistGuest, PlaylistItemMovie, PlaylistItemTvSeries, PlaylistType } from '@recomendapp/types';
+import { Database, Playlist, PlaylistItemMovie, PlaylistItemTvSeries } from '@recomendapp/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { playlistKeys } from '../../../features/client/playlist/playlistKeys';
-import { mediaKeys } from '../../../features/client/media/mediaKeys';
 import { useUserPlaylistsInfiniteOptions } from '../options/userOptions';
 import { useAuth } from '@/context/auth-context';
+import { mediaKeys } from '../keys/mediaKeys';
+import { playlistKeys } from '../keys/playlistKeys';
+import { usePlaylistDetailsOptions, usePlaylistGuestsOptions, usePlaylistMovieItemsOptions, usePlaylistTvSeriesItemsOptions } from '../options/playlistOptions';
+import { v4 } from 'uuid';
+import compressPicture from '@/lib/utils/compressPicture';
 
 export const usePlaylistInsertMutation = () => {
 	const { session } = useAuth();
@@ -12,23 +15,22 @@ export const usePlaylistInsertMutation = () => {
 	const queryClient = useQueryClient();
 	const userPlaylistsOptions = useUserPlaylistsInfiniteOptions({
 		userId: session?.user.id,
+		filters: {
+			sortBy: 'updated_at',
+			sortOrder: 'desc',
+		}
 	});
 	return useMutation({
 		mutationFn: async ({
 			title,
 			type,
-			userId,
 			description,
 			private: isPrivate,
-			poster_url,
-		} : {
-			title: string;
-			type: PlaylistType;
-			userId: string;
-			description?: string | null;
-			private?: boolean;
-			poster_url?: string | null;
-		}) => {
+			poster,
+		} : Pick<Database['public']['Tables']['playlists']['Insert'], 'title' | 'type' | 'description' | 'private'> & { poster?: File | null }) => {
+			if (!session) throw Error('No session found');
+
+			let poster_url: string | null | undefined = poster === null ? null : undefined;
 			const { data, error } = await supabase
 				.from('playlists')
 				.insert({
@@ -37,37 +39,85 @@ export const usePlaylistInsertMutation = () => {
 					description,
 					private: isPrivate,
 					poster_url,
-					user_id: userId,
+					user_id: session.user.id,
 				})
-				.select(`*`)
+				.select('*, user:profile(*)')
 				.single();
 			if (error) throw error;
-			return data;
+
+			if (poster) {
+				const fileExt = poster.name.split('.').pop();
+				const filePath = `${data.id}.${v4()}.${fileExt}`;
+				const posterCompressed = await compressPicture(poster, filePath, 400, 400);
+				const { data: uploadData, error: uploadError } = await supabase.storage
+					.from('playlist_posters')
+					.upload(filePath, posterCompressed, {
+						upsert: true
+					});
+				if (uploadError) throw uploadError;
+				if (!uploadData) throw new Error('No data returned from upload');
+				const { data: { publicUrl } } = supabase.storage
+					.from('playlist_posters')
+					.getPublicUrl(uploadData.path);
+				poster_url = publicUrl;
+
+				const { error: updateError } = await supabase
+					.from('playlists')
+					.update({ poster_url })
+					.eq('id', data.id);
+				if (updateError) throw updateError;
+			}
+
+			return {
+				...data,
+				poster_url: poster_url ?? data.poster_url,
+			};
 		},
 		onSuccess: (data) => {
+			queryClient.setQueryData(playlistKeys.details({ playlistId: data.id }), data);
 			queryClient.invalidateQueries({
 				queryKey: userPlaylistsOptions.queryKey
 			});
-			// Maybe update cache manually to avoid a new query
 		}
 	});
 };
+
 export const usePlaylistUpdateMutation = () => {
+	const { session } = useAuth();
 	const supabase = useSupabaseClient();
+	const queryClient = useQueryClient();
+	const userPlaylistsOptions = useUserPlaylistsInfiniteOptions({
+		userId: session?.user.id,
+		filters: {
+			sortBy: 'updated_at',
+			sortOrder: 'desc',
+		}
+	});
 	return useMutation({
 		mutationFn: async ({
-			playlistId,
+			id,
 			title,
 			description,
 			private: isPrivate,
-			poster_url,
-		} : {
-			playlistId: number;
-			title?: string;
-			description?: string | null;
-			private?: boolean;
-			poster_url?: string | null;
-		}) => {
+			poster,
+		} : Partial<Pick<Database['public']['Tables']['playlists']['Row'], 'title' | 'description' | 'private'> & { poster: File | null }> & { id: number }) => {
+			let poster_url: string | null | undefined = poster === null ? null : undefined;
+			if (poster) {
+				const fileExt = poster.name.split('.').pop();
+				const filePath = `${id}.${v4()}.${fileExt}`;
+				const posterCompressed = await compressPicture(poster, filePath, 400, 400);
+				const { data: uploadData, error: uploadError } = await supabase.storage
+					.from('playlist_posters')
+					.upload(filePath, posterCompressed, {
+						upsert: true
+					});
+				if (uploadError) throw uploadError;
+				if (!uploadData) throw new Error('No data returned from upload');
+				const { data: { publicUrl } } = supabase.storage
+					.from('playlist_posters')
+					.getPublicUrl(uploadData.path);
+				poster_url = publicUrl;
+			}
 			const { data, error } = await supabase
 				.from('playlists')
 				.update({
@@ -76,20 +126,31 @@ export const usePlaylistUpdateMutation = () => {
 					private: isPrivate,
 					poster_url,
 				})
-				.eq('id', playlistId)
-				.select(`*`)
+				.eq('id', id)
+				.select('*, user:profile(*)')
 				.single();
 			if (error) throw error;
 			return data;
 		},
+		onSuccess: (data) => {
+			queryClient.setQueryData(playlistKeys.details({ playlistId: data.id }), data);
+			queryClient.invalidateQueries({
+				queryKey: userPlaylistsOptions.queryKey
+			});
+		}
 	});
 };
+
 export const usePlaylistDeleteMutation = () => {
 	const { session } = useAuth();
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
 	const userPlaylistsOptions = useUserPlaylistsInfiniteOptions({
 		userId: session?.user.id,
+		filters: {
+			sortBy: 'updated_at',
+			sortOrder: 'desc',
+		}
 	});
 	return useMutation({
 		mutationFn: async ({
@@ -100,17 +161,17 @@ export const usePlaylistDeleteMutation = () => {
 			userId?: string;
 		}) => {
 			if (!userId) throw Error('User id is missing');
-			const { error } = await supabase
+			const { data, error } = await supabase
 				.from('playlists')
 				.delete()
 				.eq('id', playlistId)
+				.select()
+				.single();
 			if (error) throw error;
-			return {
-				playlistId,
-				userId,
-			};
+			return data;
 		},
-		onSuccess: ({ userId }) => {
+		onSuccess: (data) => {
+			queryClient.setQueryData(playlistKeys.details({ playlistId: data.id }), null);
 			queryClient.invalidateQueries({
 				queryKey: userPlaylistsOptions.queryKey
 			});
@@ -126,6 +187,7 @@ export const usePlaylistItemsMovieRealtimeMutation = ({
 }) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const options = usePlaylistMovieItemsOptions({ playlistId });
 	return useMutation({
 		mutationFn: async ({
 			event,
@@ -137,7 +199,7 @@ export const usePlaylistItemsMovieRealtimeMutation = ({
 				new: PlaylistItemMovie;
 			}
 		}) => {
-			const newPlaylistItems = [...queryClient.getQueryData<PlaylistItemMovie[]>(playlistKeys.items(playlistId)) || []];
+			const newPlaylistItems = [...queryClient.getQueryData(options.queryKey) || []];
 			if (!newPlaylistItems.length) throw new Error('playlist items is undefined');
 			switch (event) {
 				case 'INSERT':
@@ -203,11 +265,11 @@ export const usePlaylistItemsMovieRealtimeMutation = ({
 			return newPlaylistItems;
 		},
 		onSuccess: (newPlaylistItems) => {
-			newPlaylistItems && queryClient.setQueryData(playlistKeys.items(playlistId), newPlaylistItems);
+			newPlaylistItems && queryClient.setQueryData(options.queryKey, newPlaylistItems);
 		},
 		onError: (error) => {
 			queryClient.invalidateQueries({
-				queryKey: playlistKeys.items(playlistId),
+				queryKey: options.queryKey,
 			});
 		}
 	});
@@ -219,6 +281,7 @@ export const usePlaylistItemsTvSeriesRealtimeMutation = ({
 }) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const options = usePlaylistTvSeriesItemsOptions({ playlistId });
 	return useMutation({
 		mutationFn: async ({
 			event,
@@ -230,7 +293,7 @@ export const usePlaylistItemsTvSeriesRealtimeMutation = ({
 				new: PlaylistItemTvSeries;
 			}
 		}) => {
-			const newPlaylistItems = [...queryClient.getQueryData<PlaylistItemTvSeries[]>(playlistKeys.items(playlistId)) || []];
+			const newPlaylistItems = [...queryClient.getQueryData(options.queryKey) || []];
 			if (!newPlaylistItems.length) throw new Error('playlist items is undefined');
 			switch (event) {
 				case 'INSERT':
@@ -296,11 +359,11 @@ export const usePlaylistItemsTvSeriesRealtimeMutation = ({
 			return newPlaylistItems;
 		},
 		onSuccess: (newPlaylistItems) => {
-			newPlaylistItems && queryClient.setQueryData(playlistKeys.items(playlistId), newPlaylistItems);
+			newPlaylistItems && queryClient.setQueryData(options.queryKey, newPlaylistItems);
 		},
 		onError: (error) => {
 			queryClient.invalidateQueries({
-				queryKey: playlistKeys.items(playlistId),
+				queryKey: options.queryKey,
 			});
 		}
 	});
@@ -353,22 +416,25 @@ export const usePlaylistMovieInsertMutation = ({
 			// });
 
 			queryClient.invalidateQueries({
-				queryKey: mediaKeys.playlists({
-					id: movieId,
-					type: 'movie',
+				queryKey: mediaKeys.moviePlaylists({
+					movieId: movieId,
 				}),
 			});
-		},
-		meta: {
-			invalidates: [
-				playlistKeys.addTo({ id: movieId, type: 'movie' }),
-			]
+
+			queryClient.invalidateQueries({
+				queryKey: playlistKeys.addTo({ itemId: movieId, type: 'movie' }),
+			})
 		}
 	});
 };
-export const usePlaylistMovieDeleteMutation = () => {
+export const usePlaylistMovieDeleteMutation = ({
+	playlistId
+} : {
+	playlistId: number;
+}) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const playlistDetailsOptions = usePlaylistDetailsOptions({ playlistId: playlistId });
 	return useMutation({
 		mutationFn: async ({
 			itemId,
@@ -386,20 +452,19 @@ export const usePlaylistMovieDeleteMutation = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({
-				queryKey: playlistKeys.addTo({ id: data.id, type: 'movie' }),
+				queryKey: playlistKeys.addTo({ itemId: data.id, type: 'movie' }),
 			});
 			queryClient.invalidateQueries({
-				queryKey: mediaKeys.playlists({
-					id: data.movie_id,
-					type: 'movie',
+				queryKey: mediaKeys.moviePlaylists({
+					movieId: data.movie_id,
 				}),
 			});
-			queryClient.setQueryData(playlistKeys.detail(data.playlist_id), (data: Playlist) => {
-				if (!data) return null;
+			queryClient.setQueryData(playlistDetailsOptions.queryKey, (oldData) => {
+				if (!oldData) return oldData;
 				return {
-					...data,
-					items_count: data.items_count - 1,
-				};
+					...oldData,
+					items_count: oldData.items_count - 1,
+				}
 			});
 		},
 	});
@@ -472,22 +537,25 @@ export const usePlaylistTvSeriesInsertMutation = ({
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({
-				queryKey: mediaKeys.playlists({
-					id: tvSeriesId,
-					type: 'tv_series',
+				queryKey: mediaKeys.tvSeriesPlaylists({
+					tvSeriesId: tvSeriesId,
 				}),
 			});
-		},
-		meta: {
-			invalidates: [
-				playlistKeys.addTo({ id: tvSeriesId, type: 'tv_series' }),
-			]
+
+			queryClient.invalidateQueries({
+				queryKey: playlistKeys.addTo({ itemId: tvSeriesId, type: 'tv_series' }),
+			})
 		}
 	});
 };
-export const usePlaylistTvSeriesDeleteMutation = () => {
+export const usePlaylistTvSeriesDeleteMutation = ({
+	playlistId
+} : {
+	playlistId: number;
+}) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const playlistDetailsOptions = usePlaylistDetailsOptions({ playlistId: playlistId });
 	return useMutation({
 		mutationFn: async ({
 			itemId,
@@ -505,20 +573,19 @@ export const usePlaylistTvSeriesDeleteMutation = () => {
 		},
 		onSuccess: (data) => {
 			queryClient.invalidateQueries({
-				queryKey: playlistKeys.addTo({ id: data.id, type: 'tv_series' }),
+				queryKey: playlistKeys.addTo({ itemId: data.id, type: 'tv_series' }),
 			});
 			queryClient.invalidateQueries({
-				queryKey: mediaKeys.playlists({
-					id: data.tv_series_id,
-					type: 'tv_series',
+				queryKey: mediaKeys.tvSeriesPlaylists({
+					tvSeriesId: data.tv_series_id,
 				}),
 			});
-			queryClient.setQueryData(playlistKeys.detail(data.playlist_id), (data: Playlist) => {
-				if (!data) return null;
+			queryClient.setQueryData(playlistDetailsOptions.queryKey, (oldData) => {
+				if (!oldData) return oldData;
 				return {
-					...data,
-					items_count: data.items_count - 1,
-				};
+					...oldData,
+					items_count: oldData.items_count - 1,
+				}
 			});
 		},
 	});
@@ -558,6 +625,7 @@ export const usePlaylistMovieMultiInsertMutation = ({
 }) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const playlistDetailsOptions = usePlaylistDetailsOptions({ playlistId: playlistId });
 	return useMutation({
 		mutationFn: async ({
 			userId,
@@ -585,8 +653,8 @@ export const usePlaylistMovieMultiInsertMutation = ({
 			return data;
 		},
 		onSuccess: (data) => {
-			queryClient.setQueryData(playlistKeys.detail(playlistId), (oldData: Playlist) => {
-				if (!oldData) return null;
+			queryClient.setQueryData(playlistDetailsOptions.queryKey, (oldData) => {
+				if (!oldData) return oldData;
 				return {
 					...oldData,
 					items_count: oldData.items_count + data.length,
@@ -602,6 +670,7 @@ export const usePlaylistTvSeriesMultiInsertMutation = ({
 }) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const playlistDetailsOptions = usePlaylistDetailsOptions({ playlistId: playlistId });
 	return useMutation({
 		mutationFn: async ({
 			userId,
@@ -629,8 +698,8 @@ export const usePlaylistTvSeriesMultiInsertMutation = ({
 			return data;
 		},
 		onSuccess: (data) => {
-			queryClient.setQueryData(playlistKeys.detail(playlistId), (oldData: Playlist) => {
-				if (!oldData) return null;
+			queryClient.setQueryData(playlistDetailsOptions.queryKey, (oldData) => {
+				if (!oldData) return oldData;
 				return {
 					...oldData,
 					items_count: oldData.items_count + data.length,
@@ -640,17 +709,20 @@ export const usePlaylistTvSeriesMultiInsertMutation = ({
 	});
 };
 /* --------------------------------- GUESTS --------------------------------- */
-export const usePlaylistGuestUpdateMutation = () => {
+export const usePlaylistGuestUpdateMutation = ({
+	playlistId,
+} : {
+	playlistId: number;
+}) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const playlistGuestsOptions = usePlaylistGuestsOptions({ playlistId });
 	return useMutation({
 		mutationFn: async ({
-			id,
-			playlistId,
+			guestId,
 			edit,
 		} : {
-			id: number;
-			playlistId: number;
+			guestId: number;
 			edit: boolean;
 		}) => {
 			const { data, error } = await supabase
@@ -658,18 +730,20 @@ export const usePlaylistGuestUpdateMutation = () => {
 				.update({
 					edit,
 				})
-				.eq('id', id)
+				.eq('id', guestId)
+				.select('*')
+				.single();
 			if (error) throw error;
-			return { id, playlistId, edit };
+			return data;
 		},
-		onSuccess: ({ id, playlistId, edit }) => {
-			queryClient.setQueryData(playlistKeys.guests(playlistId), (data: PlaylistGuest[]) => {
-				if (!data) return null;
-				return data.map((guest) => {
-					if (guest?.id === id) {
+		onSuccess: (data) => {
+			queryClient.setQueryData(playlistGuestsOptions.queryKey, (oldData) => {
+				if (!oldData) return oldData;
+				return oldData.map((guest) => {
+					if (guest?.id === data.id) {
 						return {
 							...guest,
-							edit,
+							edit: data.edit,
 						};
 					}
 					return guest;
@@ -679,9 +753,14 @@ export const usePlaylistGuestUpdateMutation = () => {
 	});
 };
 
-export const usePlaylistGuestsDeleteMutation = () => {
+export const usePlaylistGuestsDeleteMutation = ({
+	playlistId,
+} : {
+	playlistId: number;
+}) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const playlistGuestsOptions = usePlaylistGuestsOptions({ playlistId });
 	return useMutation({
 		mutationFn: async ({
 			ids,
@@ -690,25 +769,31 @@ export const usePlaylistGuestsDeleteMutation = () => {
 			ids: number[];
 			playlistId: number;
 		}) => {
-			const { error } = await supabase
+			const { data, error } = await supabase
 				.from('playlist_guests')
 				.delete()
 				.in('id', ids)
+				.select('id')
 			if (error) throw error;
-			return { ids, playlistId };
+			return data;
 		},
-		onSuccess: ({ ids, playlistId }) => {
-			queryClient.setQueryData(playlistKeys.guests(playlistId), (data: PlaylistGuest[]) => {
-				if (!data) return null;
-				return data.filter((guest) => !ids.includes(guest?.id as number));
+		onSuccess: (data) => {
+			queryClient.setQueryData(playlistGuestsOptions.queryKey, (oldData) => {
+				if (!oldData) return oldData;
+				return oldData.filter((guest) => !data.find((deleted) => deleted.id === guest?.id));
 			});
 		}
 	});
 };
 
-export const usePlaylistGuestsInsertMutation = () => {
+export const usePlaylistGuestsInsertMutation = ({
+	playlistId,
+} : {
+	playlistId: number;
+}) => {
 	const supabase = useSupabaseClient();
 	const queryClient = useQueryClient();
+	const playlistGuestsOptions = usePlaylistGuestsOptions({ playlistId });
 	return useMutation({
 		mutationFn: async ({
 			playlistId,
@@ -730,15 +815,13 @@ export const usePlaylistGuestsInsertMutation = () => {
 					user:profile(*)
 				`)
 			if (error) throw error;
-			return { playlistId, data };
+			return data;
 		},
-		onSuccess: ({ playlistId, data }) => {
-			queryClient.setQueryData(playlistKeys.guests(playlistId), (oldData: PlaylistGuest[]) => {
+		onSuccess: (data) => {
+			queryClient.setQueryData(playlistGuestsOptions.queryKey, (oldData) => {
+				if (!oldData) return data;
 				return [...oldData, ...data];
 			});
-			// queryClient.invalidateQueries({
-			// 	queryKey: playlistKeys.guests(playlistId),
-			// });
 		}
 	});
 };

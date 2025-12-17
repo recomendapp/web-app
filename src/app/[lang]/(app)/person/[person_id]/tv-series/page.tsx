@@ -1,20 +1,18 @@
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
-import { getPerson, getPersonTvSeries } from '@/features/server/media/mediaQueries';
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { siteConfig } from '@/config/site';
 import { seoLocales } from '@/lib/i18n/routing';
 import { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
-import { Icons } from '@/config/icons';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage, getValidatePerPage } from './_components/constants';
-import { CardTvSeries } from '@/components/Card/CardTvSeries';
+import { notFound } from 'next/navigation';
+import { DEFAULT_PER_PAGE, getValidatedDisplay, getValidateDepartment, getValidatedSortBy, getValidatedSortOrder, getValidateJob, getValidatePage } from './_components/constants';
 import { SupportedLocale } from '@/translations/locales';
 import { Filters } from './_components/Filters';
 import { Pagination } from './_components/Pagination';
 import { ActiveFilters } from './_components/ActiveFilters';
+import { getPerson, getPersonTvSeriesPagination } from '@/api/server/medias';
+import { redirect } from '@/lib/i18n/navigation';
+import { PersonTvSeries } from './_components/PersonTvSeries';
 
 export async function generateMetadata(
   props: {
@@ -53,7 +51,7 @@ export async function generateMetadata(
 export default async function TvSeriesPage(
 	props: {
 		params: Promise<{
-			lang: string;
+			lang: SupportedLocale;
 			person_id: string;
 		}>;
 		searchParams: Promise<{
@@ -68,15 +66,6 @@ export default async function TvSeriesPage(
 	}
 ) {
 	const params = await props.params;
-	const searchParams = await props.searchParams;
-	const sortBy = getValidatedSortBy(searchParams.sort_by);
-	const sortOrder = getValidatedSortOrder(searchParams.sort_order);
-	const page = getValidatePage(Number(searchParams.page));
-	const perPage = getValidatePerPage(Number(searchParams.per_page));
-	const display = getValidatedDisplay(searchParams.display);
-	const department = getValidateDepartment(searchParams.department);
-	const job = getValidateJob(searchParams.job);
-	const t = await getTranslations({ locale: params.lang as SupportedLocale });
 	const { id } = getIdFromSlug(params.person_id);
 	let person: Awaited<ReturnType<typeof getPerson>>;
 	try {
@@ -84,39 +73,25 @@ export default async function TvSeriesPage(
 	} catch {
 		return notFound();
 	}
-	const { data: series, error, count } = await getPersonTvSeries(
-		params.lang,
+	const searchParams = await props.searchParams;
+	const sortBy = getValidatedSortBy(searchParams.sort_by);
+	const sortOrder = getValidatedSortOrder(searchParams.sort_order);
+	const page = getValidatePage(Number(searchParams.page));
+	const display = getValidatedDisplay(searchParams.display);
+	const department = getValidateDepartment(person.media_person_jobs, searchParams.department);
+		const job = getValidateJob(person.media_person_jobs, department, searchParams.job);
+	const pagination = await getPersonTvSeriesPagination(
 		id,
 		{
-			sortBy: sortBy,
-			sortOrder: sortOrder,
 			page: page,
-			perPage: perPage,
+			perPage: DEFAULT_PER_PAGE,
 			department: department,
 			job: job,
 		}
 	);
 
-	if (error) {
-		return (
-			<div className='flex flex-col items-center justify-center h-full gap-2'>
-				<div className='flex items-center'>
-					<Icons.error className='mr-1'/>
-					{upperFirst(t('common.messages.wrong_arguments'))}
-				</div>
-				<Button asChild>
-					<Link href={`/person/${params.person_id}/tv-series`}>
-						Reset
-					</Link>
-				</Button>
-			</div>
-		)
-	}
-
-	if (!series.length) {
-		if (department || job) {
-			return redirect(`/person/${params.person_id}/tv-series`);
-		}
+	if (page > pagination.totalPages) {
+		return redirect({ href: `/person/${person.slug || person.id}/tv-series`, locale: params.lang });
 	}
 
 	return (
@@ -126,7 +101,7 @@ export default async function TvSeriesPage(
 				<div className='flex flex-col @3xl/person-films:flex-row @3xl/person-films:justify-between items-center gap-2'>
 					<Filters
 					knownForDepartment={person.known_for_department!}
-					jobs={person.jobs}
+					jobs={person.media_person_jobs}
 					sortBy={sortBy}
 					sortOrder={sortOrder}
 					display={display}
@@ -135,8 +110,8 @@ export default async function TvSeriesPage(
 					/>
 					<Pagination
 					page={page}
-					perPage={perPage}
-					total={count ?? 0}
+					perPage={pagination.perPage}
+					total={pagination.totalResults ?? 0}
 					searchParams={new URLSearchParams(searchParams as Record<string, string>)}
 					className='@md/person-tv-series:mx-0 @md/person-tv-series:w-fit'
 					/>
@@ -146,28 +121,22 @@ export default async function TvSeriesPage(
 				job={job}
 				/>
 			</div>
-			<div
-			className={` gap-2
-				${
-					display == 'row'
-					? 'flex flex-col'
-					: 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 2xl:grid-cols-10'
-				}
-			`}
-			>
-				{series.map((credits, index) => (
-					<CardTvSeries
-					key={index}
-					variant={display === 'grid' ? 'poster' : 'row'}
-					tvSeries={credits.tv_series!}
-					className='w-full'
-					/>
-				))}
-			</div>
+			<PersonTvSeries
+			personId={person.id}
+			display={display}
+			filters={{
+				page: page,
+				perPage: pagination.perPage,
+				sortBy: sortBy,
+				sortOrder: sortOrder,
+				department: department,
+				job: job,
+			}}
+			/>
 			<Pagination
 			page={page}
-			perPage={perPage}
-			total={count ?? 0}
+			perPage={pagination.perPage}
+			total={pagination.totalResults}
 			searchParams={new URLSearchParams(searchParams as Record<string, string>)}
 			/>
 		</div>

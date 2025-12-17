@@ -2,20 +2,21 @@ import { useModal } from '@/context/modal-context';
 import { PlaylistItemMovie } from '@recomendapp/types';
 import { MessageSquarePlusIcon } from 'lucide-react';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useAuth } from '@/context/auth-context';
 import ModalPlaylistMovieComment from '@/components/Modals/playlists/ModalPlaylistMovieComment';
+import { useQuery } from '@tanstack/react-query';
+import { usePlaylistIsAllowedToEditOptions } from '@/api/client/options/playlistOptions';
 
 export function DataComment({ playlistItem }: { playlistItem: PlaylistItemMovie }) {
   const t = useTranslations();
   const { session } = useAuth();
   const { openModal } = useModal();
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
+  const { data: isAllowedToEdit } = useQuery(usePlaylistIsAllowedToEditOptions({
     playlistId: playlistItem.playlist_id,
     userId: session?.user.id
-  });
+  }));
   return (
     <>
       <p

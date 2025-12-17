@@ -2,15 +2,17 @@ import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { truncate, upperFirst } from 'lodash';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
-import { getMovie } from '@/features/server/media/mediaQueries';
 import { siteConfig } from '@/config/site';
 import { Metadata } from 'next';
 import { seoLocales } from '@/lib/i18n/routing';
-import MovieDetails from './_components/MovieDetails';
 import { Movie, WithContext } from 'schema-dts';
 import { toISO8601Duration } from '@/lib/utils';
 import { SupportedLocale } from '@/translations/locales';
-import { MediaMovie } from '@recomendapp/types';
+import { getMovie } from '@/api/server/medias';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { Database } from '@recomendapp/types';
+import { JustWatchWidget } from '@/components/JustWatch/JustWatchWidgetScript';
+import { MovieCasting } from './_components/MovieCasting';
 
 export async function generateMetadata(
   props: {
@@ -60,8 +62,8 @@ export async function generateMetadata(
           { length: siteConfig.seo.description.limit }
         ),
         url: `${siteConfig.url}/${params.lang}/film/${movie.slug}`,
-        images: movie.poster_url ? [
-          { url: movie.poster_url },
+        images: movie.poster_path ? [
+          { url: getTmdbImage({ path: movie.poster_path, size: 'w500' }) },
         ] : undefined,
         type: 'video.movie',
         locale: params.lang,
@@ -81,8 +83,9 @@ export default async function MoviePage(
   }
 ) {
   const params = await props.params;
+  const t = await getTranslations();
   const { id: movieId } = getIdFromSlug(params.film_id);
-  let movie: MediaMovie;
+  let movie: Database['public']['Views']['media_movie_full']['Row'];
   try {
     movie = await getMovie(params.lang, movieId);
   } catch {
@@ -92,7 +95,7 @@ export default async function MoviePage(
     '@context': 'https://schema.org',
     '@type': 'Movie',
     name: movie.title ?? undefined,
-    image: movie.poster_url ?? undefined,
+    image: movie.poster_path ? getTmdbImage({ path: movie.poster_path, size: 'w500' }) : undefined,
     description: movie.overview ?? undefined,
     datePublished: movie.release_date ?? undefined,
     dateModified: new Date().toISOString(),
@@ -101,15 +104,8 @@ export default async function MoviePage(
       ?.map(director => ({
         '@type': 'Person',
         name: director.name ?? undefined,
-        image: director.profile_url ?? undefined,
+        image: director.profile_path ? getTmdbImage({ path: director.profile_path, size: 'w500' }) : undefined,
       })),
-    actor: movie.cast
-      ?.map((actor) => ({
-        '@type': 'Person',
-        name: actor.person?.name ?? undefined,
-        image: actor.person?.profile_url ?? undefined,
-      })),
-    genre: movie.genres?.map((genre) => genre.name),
     aggregateRating: movie.vote_average ? {
       '@type': 'AggregateRating',
       ratingValue: movie.vote_average,
@@ -121,7 +117,26 @@ export default async function MoviePage(
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <MovieDetails movie={movie} />
+      <div className="@container/movie-details flex flex-col gap-4">
+        <div className="flex flex-col @4xl/movie-details:flex-row gap-4 justify-between">
+          <div>
+            <h2 className="text-lg font-medium">{upperFirst(t('common.messages.overview'))}</h2>
+            <div className="text-justify text-muted-foreground">
+              {movie.overview ?? upperFirst(t('common.messages.no_overview'))}
+            </div>
+          </div>
+          <JustWatchWidget
+            id={movie.id}
+            title={movie.title ?? ''}
+            type="movie"
+            className="min-w-[20%]"
+          />
+        </div>
+        <div>
+			    <h2 className="text-lg font-medium">{upperFirst(t('common.messages.cast'))}</h2>
+          <MovieCasting movie={movie} />
+        </div>
+      </div>
     </>
   );
 }

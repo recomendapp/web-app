@@ -1,4 +1,5 @@
-'use client';
+'use client'
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -17,9 +18,8 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import toast from 'react-hot-toast';
 import { Textarea } from '@/components/ui/textarea';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import PlaylistFormPictureUpload from './PlaylistFormPictureUpload';
-import compressPicture from '@/lib/utils/compressPicture';
 import { Icons } from '@/config/icons';
 import {
   AlertDialog,
@@ -59,13 +59,12 @@ export function PlaylistForm({
   const t = useTranslations();
   const router = useRouter();
   const pathname = usePathname();
-  const [loading, setLoading] = useState(false);
   const [newPoster, setNewPoster] = useState<File>();
 
   // Mutations
-  const insertPlaylistMutation = usePlaylistInsertMutation();
-  const deletePlaylistMutation = usePlaylistDeleteMutation();
-  const updatePlaylistMutation = usePlaylistUpdateMutation();
+  const { mutateAsync: insertPlaylistMutation, isPending: insertPending } = usePlaylistInsertMutation();
+  const { mutateAsync: updatePlaylistMutation, isPending: updatePending } = usePlaylistUpdateMutation();
+  const { mutateAsync: deletePlaylistMutation, isPending: deletePending } = usePlaylistDeleteMutation();
 
   // Form
   const typeOptions = [
@@ -93,139 +92,86 @@ export function PlaylistForm({
     type: z.enum(['movie', 'tv_series']),
     private: z.boolean(),
   });
-  type CreatePlaylistFormValues = z.infer<typeof CreatePlaylistFormSchema>;
-  const defaultValues: Partial<CreatePlaylistFormValues> = {
+  type PlaylistFormValues = z.infer<typeof CreatePlaylistFormSchema>;
+  const defaultValues: Partial<PlaylistFormValues> = {
     title: playlist?.title ?? '',
     description: playlist?.description ?? '',
     private: playlist?.private ?? false,
     type: playlist?.type ?? 'movie',
   };
-  const form = useForm<CreatePlaylistFormValues>({
+  const form = useForm<PlaylistFormValues>({
     resolver: zodResolver(CreatePlaylistFormSchema),
     defaultValues,
     mode: 'onChange',
   });
 
   // Handlers
-  const handleCreatePlaylist = async (data: CreatePlaylistFormValues) => {
-    try {
-      setLoading(true);
-      if (!session?.user.id) throw Error('Missing user id');
-      const newPlaylist = await insertPlaylistMutation.mutateAsync({
-        userId: session?.user.id,
-        title: data.title ?? '',
-        description: data.description?.trim() || null,
-        private: data.private,
-        type: data.type,
-      });
-      // if (filmId) {
-      //   await insertPlaylistItemMutation({
-      //     variables: {
-      //       playlist_id:
-      //         createOutput?.insertIntoplaylistCollection?.records[0]?.id,
-      //       movie_id: filmId,
-      //       user_id: userId,
-      //       rank: String(1),
-      //     },
-      //   });
-      // }
-      if (newPoster) {
-        if (!newPlaylist.id) throw Error('Playlist id not found');
-        const newPosterUrl = await uploadPoster(newPoster, newPlaylist.id);
-        await updatePlaylistMutation.mutateAsync({
-          playlistId: newPlaylist.id,
-          poster_url: newPosterUrl,
-        });
+  const handleInsert = useCallback(async (data: PlaylistFormValues) => {
+    if (!session) return;
+    await insertPlaylistMutation({
+      title: data.title.replace(/\s+/g, ' ').trim(),
+      description: data.description?.trim() || null,
+      private: data.private,
+      type: data.type,
+      poster: newPoster
+    }, {
+      onSuccess: async () => {
+        toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+        success();
+      },
+      onError: () => {
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
-      toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
-      success();
-    } catch (error) {
-      toast.error(upperFirst(t('common.messages.an_error_occurred')));
-    } finally {
-      setLoading(false);
-    }
-  };
-  const handleUpdatePlaylist = async (data: CreatePlaylistFormValues) => {
-    try {
-      setLoading(true);
-      if (!playlist?.id ) throw Error('Missing activity id');
-      const payload = {
-        title: data.title.replace(/\s+/g, ' ').trim(),
-        description: data.description?.trim() || null,
-        private: data.private,
-        poster_url: playlist?.poster_url,
-      };
-      if (newPoster) {
-        const newPosterUrl = await uploadPoster(newPoster, playlist?.id);
-        payload.poster_url = newPosterUrl;
+    });
+  }, [newPoster, insertPlaylistMutation, session, success, t]);
+
+  const handleUpdate = useCallback(async (data: PlaylistFormValues) => {
+    if (!session || !playlist) return;
+    await updatePlaylistMutation({
+      id: playlist.id,
+      title: data.title.replace(/\s+/g, ' ').trim(),
+      description: data.description?.trim() || null,
+      private: data.private,
+      poster: newPoster
+    }, {
+      onSuccess: async () => {
+        toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
+        success();
+      },
+      onError: () => {
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
-      await updatePlaylistMutation.mutateAsync({
-        playlistId: playlist.id,
-        ...payload,
-      });
-      toast.success(upperFirst(t('common.messages.saved', { gender: 'male', count: 1 })));
-      success();
-    } catch (error) {
-      toast.error(upperFirst(t('common.messages.an_error_occurred')));
-    } finally {
-      setLoading(false);
-    }
-  };
-  const handleDeletePlaylist = async () => {
-    try {
-      setLoading(true);
-      if (!playlist?.id) throw Error('Missing activity id');
-      await deletePlaylistMutation.mutateAsync({
-        playlistId: playlist.id,
-        userId: session?.user.id
-      }, {
-        onSuccess: () => {
-          if (pathname.startsWith(`/playlist/${playlist.id}`)) router.push('/');
-          toast.success(upperFirst(t('common.messages.deleted')));
-          success();
-        },
-        onError: () => {
-          toast.error(upperFirst(t('common.messages.an_error_occurred')));
-        }
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-  const uploadPoster = async (file: File, playlistId: number) => {
-    try {
-      const fileExt = file.name.split('.').pop();
-      const filePath = `${playlistId}.${uuidv4()}.${fileExt}`;
-      const posterCompressed = await compressPicture(file, filePath, 400, 400);
-      let { data, error } = await supabase.storage
-        .from('playlist_posters')
-        .upload(filePath, posterCompressed, {
-          upsert: true,
-        });
-      if (error) throw error;
-      if (!data) throw new Error('No data returned from upload');
-      const { data: { publicUrl } } = supabase.storage
-        .from('playlist_posters')
-        .getPublicUrl(data.path);
-      return publicUrl;
-    } catch (error) {
-      throw error;
-    }
-  };
+    });
+  }, [newPoster, updatePlaylistMutation, playlist, session, success, t]);
+
+  const handleDeletePlaylist = useCallback(async () => {
+    if (!playlist) return;
+    await deletePlaylistMutation({
+      playlistId: playlist.id,
+      userId: session?.user.id
+    }, {
+      onSuccess: () => {
+        if (pathname.startsWith(`/playlist/${playlist.id}`)) router.push('/');
+        toast.success(upperFirst(t('common.messages.deleted')));
+        success();
+      },
+      onError: () => {
+        toast.error(upperFirst(t('common.messages.an_error_occurred')));
+      }
+    });
+  }, [deletePlaylistMutation, playlist, router, pathname, session, success, t]);
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(
-          playlist ? handleUpdatePlaylist : handleCreatePlaylist
-        )}
+        onSubmit={form.handleSubmit(playlist ? handleUpdate : handleInsert)}
         className=" space-y-8 h-full flex flex-col justify-between"
       >
         <div className="flex flex-col gap-4 md:grid  md:grid-cols-2 w-full">
           <div className=" w-1/2 md:w-full">
             <PlaylistFormPictureUpload
               playlist={playlist}
-              loading={loading}
+              loading={insertPending || updatePending || deletePending}
               newPoster={newPoster}
               setNewPoster={setNewPoster}
             />
@@ -340,8 +286,8 @@ export function PlaylistForm({
               </AlertDialogContent>
             </AlertDialog>
           )}
-          <Button disabled={loading} type="submit">
-            {loading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+          <Button disabled={insertPending || updatePending || deletePending} type="submit">
+            {(insertPending || updatePending || deletePending) && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
             {playlist ? upperFirst(t('common.messages.save')) : upperFirst(t('common.messages.create'))}
           </Button>
         </DialogFooter>

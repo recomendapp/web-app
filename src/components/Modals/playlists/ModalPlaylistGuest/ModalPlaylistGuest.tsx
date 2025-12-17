@@ -4,8 +4,7 @@ import { useAuth } from '@/context/auth-context';
 import { useModal } from '@/context/modal-context';
 import { PlaylistGuest, Profile } from '@recomendapp/types';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../../Modal';
-import { usePlaylistGuestsQuery, usePlaylistGuestsSearchInfiniteQuery } from '@/features/client/playlist/playlistQueries';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { PlaylistGuestTable } from './components/table/table';
 import { Button } from '@/components/ui/button';
 import { ArrowLeftIcon, Check } from 'lucide-react';
@@ -14,12 +13,14 @@ import { Icons } from '@/config/icons';
 import { usePlaylistGuestsInsertMutation } from '@/api/client/mutations/playlistMutations';
 import { InputSearch } from '@/components/ui/input-search';
 import useDebounce from '@/hooks/use-debounce';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
 import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { usePlaylistGuestsAddOptions, usePlaylistGuestsOptions } from '@/api/client/options/playlistOptions';
+import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 
 export const PlaylistGuestView = ({
   playlistGuest,
@@ -60,7 +61,7 @@ export const PlaylistGuestAddView = ({
   setView: (view: 'guests' | 'add') => void
 }) => {
   const t = useTranslations();
-  const { user: authUser } = useAuth();
+  const { session } = useAuth();
   const [selectedUsers, setSelectedUsers] = useState<Profile[]>([]);
   const [search, setSearch] = useState<string>('');
   const searchQuery = useDebounce(search, 500);
@@ -73,17 +74,19 @@ export const PlaylistGuestAddView = ({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = usePlaylistGuestsSearchInfiniteQuery({
-    playlistId,
+	} = useInfiniteQuery(usePlaylistGuestsAddOptions({
+    playlistId: playlistId,
     filters: {
-      search: searchQuery,
-      alreadyAdded: playlistGuest.map((guest) => guest?.user_id as string).concat(authUser?.id as string)
+      query: searchQuery,
+      exclude: playlistGuest.map((guest) => guest?.user_id as string).concat(session?.user.id as string)
     }
+  }));
+  const { mutateAsync: addUsers, isPending } = usePlaylistGuestsInsertMutation({
+    playlistId: playlistId
   });
-  const addUsers = usePlaylistGuestsInsertMutation();
   
-  const handleAddGuest = () => {
-    addUsers.mutate({
+  const handleAddGuest = useCallback(async () => {
+    await addUsers({
       playlistId,
       userIds: selectedUsers.map((user) => user?.id as string)
     }, {
@@ -96,7 +99,7 @@ export const PlaylistGuestAddView = ({
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }
+  }, [addUsers, playlistId, selectedUsers, setView, t]);
 
   useEffect(() => {
 		if (inView && hasNextPage) {
@@ -122,22 +125,28 @@ export const PlaylistGuestAddView = ({
           {upperFirst(t('common.messages.add_guests_to_your_playlist'))}
         </ModalDescription>
       </ModalHeader>
-      <ModalBody className='p-0! border-t bg-popover text-popover-foreground'>
-        <InputSearch
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))}
-				/>
-        <ScrollArea className={`h-[40vh]`}>
+      <ModalBody>
+        <div className="px-4 mb-4">
+          <InputGroup>
+            <InputGroupAddon>
+              <Icons.search />
+            </InputGroupAddon>
+            <InputGroupInput
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={upperFirst(t('common.messages.search_user', { count: 1 }))}
+            />
+          </InputGroup>
+        </div>
+        <ScrollArea className={`h-[40vh] bg-popover`}>
 					<div className='p-2 grid justify-items-center'>
-					{(users?.pages && users?.pages[0].length > 0) ? (
-						users?.pages.map((page, i) => (
-							page.map((user, index) => (
+					{(users?.pages[0] && users?.pages[0].pagination.total_results > 0) ? (
+						users.pages.map((page, i) => (
+							page.data.map((user, index) => (
 								<div
 								key={index}
 								className='w-full flex cursor-pointer items-center justify-between py-1.5 px-2 hover:bg-accent rounded-sm'
 								onClick={() => {
-                  // check if user.id is in selectedUsers
 									if (selectedUsers.some((selectedUser) => selectedUser?.id === user?.id)) {
 										return setSelectedUsers((prev) => prev.filter(
 											(selectUser) => selectUser?.id !== user?.id
@@ -145,7 +154,7 @@ export const PlaylistGuestAddView = ({
 									}
 									return setSelectedUsers((prev) => [...prev, user]);
 								}}
-								{...(i === users.pages.length - 1 && index === page.length - 1
+								{...(i === users.pages.length - 1 && index === page.data.length - 1
 									? { ref: ref }
 									: {})}
 								>
@@ -183,29 +192,33 @@ export const PlaylistGuestAddView = ({
       </ModalBody>
       <ModalFooter className="flex items-center p-4 sm:justify-between">
 				{selectedUsers.length > 0 ? (
-				<div className="flex -space-x-2 overflow-hidden">
-					{selectedUsers.map((friend) => (
-					<UserAvatar
-						key={friend?.id}
-						avatarUrl={friend?.avatar_url}
-            username={friend?.username!}
-						className='cursor-not-allowed'
-						onClick={() => setSelectedUsers((prev) => prev.filter(
-							(selectedUser) => selectedUser?.id !== friend?.id
-						))}
-					/>
-					))}
-				</div>
+				<ScrollArea className='w-full'>
+          <div className="flex -space-x-2">
+            {selectedUsers.map((friend) => (
+              <UserAvatar
+                key={friend?.id}
+                avatarUrl={friend?.avatar_url}
+                username={friend?.username!}
+                className='cursor-not-allowed'
+                onClick={() => setSelectedUsers((prev) => prev.filter(
+                  (selectedUser) => selectedUser?.id !== friend?.id
+                ))}
+              />
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+				</ScrollArea>
 				) : (
 				<p className="text-sm text-muted-foreground">
 					{upperFirst(t('common.messages.select_users_to_add_to_playlist'))}
 				</p>
 				)}
 				<Button
-				disabled={!selectedUsers.length || addUsers.isPending}
+				disabled={!selectedUsers.length || isPending}
 				onClick={handleAddGuest}
+        className='shrink-0'
 				>
-				{addUsers.isPending && <Icons.loader className="mr-2" />}	
+				{isPending && <Icons.loader className="mr-2" />}	
 				{upperFirst(t('common.messages.send'))}
 				</Button>
 			</ModalFooter>
@@ -222,12 +235,12 @@ export function ModalPlaylistGuest({
   ...props
 } : PlaylistGuestModalProps) {
   const t = useTranslations();
-  const { data: playlistGuest, isError } = usePlaylistGuestsQuery(playlistId);
-  const { user } = useAuth();
+  const { session } = useAuth();
+  const { data: playlistGuest, isError } = useQuery(usePlaylistGuestsOptions({ playlistId }));
   const { closeModal } = useModal();
   const [view, setView] = useState<'guests' | 'add'>('guests');
 
-  if (!user) return null;
+  if (!session) return null;
   return (
     <Modal
     open={props.open}

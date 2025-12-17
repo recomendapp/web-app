@@ -2,11 +2,11 @@ import { notFound } from 'next/navigation';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
-import { getTvSeries } from '@/features/server/media/mediaQueries';
 import { Metadata } from 'next';
 import { TvSeriesCreateReview } from './_components/TvSeriesCreateReview';
 import { SupportedLocale } from '@/translations/locales';
-import { MediaTvSeries } from '@recomendapp/types';
+import { getTvSeries } from '@/api/server/medias';
+import { Database } from '@recomendapp/types';
 
 export async function generateMetadata(
   props: {
@@ -39,12 +39,12 @@ export default async function CreateReview(
   }
 ) {
   const params = await props.params;
-  const { id: serieId } = getIdFromSlug(params.tv_series_id);
-  let serie: MediaTvSeries;
+  const { id: tvSeriesId } = getIdFromSlug(params.tv_series_id);
+  let serie: Database['public']['Views']['media_tv_series']['Row'];
   try {
-    serie = await getTvSeries(params.lang, serieId);
+    serie = await getTvSeries(params.lang, tvSeriesId);
   } catch {
     return notFound();
   }
-  return <TvSeriesCreateReview tvSeries={serie} slug={params.tv_series_id} />;
+  return <TvSeriesCreateReview tvSeries={serie} />;
 }

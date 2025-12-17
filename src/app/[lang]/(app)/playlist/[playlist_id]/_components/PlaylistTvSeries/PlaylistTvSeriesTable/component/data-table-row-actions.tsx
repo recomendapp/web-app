@@ -20,12 +20,13 @@ import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
 import { useAuth } from "@/context/auth-context";
-import { usePlaylistIsAllowedToEditQuery } from "@/features/client/playlist/playlistQueries";
 import { ModalPlaylistTvSeriesAdd } from "@/components/Modals/playlists/ModalPlaylistTvSeriesAdd";
 import { ModalUserRecosTvSeriesSend } from "@/components/Modals/recos/ModalUserRecosTvSeriesSend";
 import { usePlaylistTvSeriesDeleteMutation } from "@/api/client/mutations/playlistMutations";
 import ModalPlaylistTvSeriesComment from "@/components/Modals/playlists/ModalPlaylistTvSeriesComment";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
+import { useQuery } from "@tanstack/react-query";
+import { usePlaylistIsAllowedToEditOptions } from "@/api/client/options/playlistOptions";
 
 interface DataTableRowActionsProps {
   table: Table<PlaylistItemTvSeries>;
@@ -42,14 +43,16 @@ export function DataTableRowActions({
 }: DataTableRowActionsProps) {
   const { session } = useAuth();
   const t = useTranslations();
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
+  const { data: isAllowedToEdit } = useQuery(usePlaylistIsAllowedToEditOptions({
     playlistId: row.original.playlist_id,
     userId: session?.user.id
-  });
+  }));
   const { openModal, createConfirmModal } = useModal();
 
   // Mutations
-  const deletePlaylistItem = usePlaylistTvSeriesDeleteMutation();
+  const deletePlaylistItem = usePlaylistTvSeriesDeleteMutation({
+    playlistId: row.original.playlist_id
+  });
 
   // Handlers
   const handleDeleteItem = async () => {

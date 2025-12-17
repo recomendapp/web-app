@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
-import { getProfile } from '@/features/server/users';
 import ProfileFilms from './_components/ProfileFilms';
+import { getProfile } from '@/api/server/users';
 
 export default async function Films(
   props: {
@@ -8,7 +8,7 @@ export default async function Films(
   }
 ) {
   const params = await props.params;
-  const user = await getProfile(params.username);
-  if (!user?.id) return notFound();
-  return <ProfileFilms userId={user?.id} />;
+  const profile = await getProfile(params.username);
+  if (!profile) return notFound();
+  return <ProfileFilms userId={profile.id} />;
 }

@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -10,10 +10,10 @@ import { useInView } from 'react-intersection-observer';
 import { Search } from 'lucide-react';
 import useDebounce from '@/hooks/use-debounce';
 import { Link } from "@/lib/i18n/navigation";
-import { useUserFolloweesInfiniteQuery } from '@/features/client/user/userQueries';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
-
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useUserFolloweesOptions } from '@/api/client/options/userOptions';
 
 export function ProfileFolloweesModal({
 	userId,
@@ -30,12 +30,9 @@ export function ProfileFolloweesModal({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useUserFolloweesInfiniteQuery({
+	} = useInfiniteQuery(useUserFolloweesOptions({
 		userId: userId,
-		filters: {
-			search: debouncedSearch,
-		}
-	});
+	}));
 
 	useEffect(() => {
 		if (inView && hasNextPage) {
@@ -68,7 +65,7 @@ export function ProfileFolloweesModal({
 									? { ref: ref }
 									: {})}
 					>
-							<Avatar className="h-[40px] w-[40px] shadow-2xl">
+							<Avatar className="h-10 w-10 shadow-2xl">
 								<AvatarImage
 									src={followee?.avatar_url ?? ''}
 									alt={followee?.username!}

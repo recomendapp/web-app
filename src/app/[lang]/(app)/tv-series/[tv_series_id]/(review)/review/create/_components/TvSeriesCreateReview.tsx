@@ -1,20 +1,19 @@
 'use client'
 
-import { MediaTvSeries } from '@recomendapp/types';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from "@/lib/i18n/navigation";
-import { useUserActivityTvSeriesQuery } from '@/features/client/user/userQueries';
-import { useUserReviewTvSeriesUpsertMutation } from '@/features/client/user/userMutations';
 import ReviewForm from '@/components/Review/ReviewForm';
 import { useCallback, useEffect } from 'react';
 import { Spinner } from '@/components/ui/spinner';
+import { Database } from '@recomendapp/types';
+import { useQuery } from '@tanstack/react-query';
+import { useUserActivityTvSeriesOptions } from '@/api/client/options/userOptions';
+import { useUserReviewTvSeriesUpsertMutation } from '@/api/client/mutations/userMutations';
 
 export const TvSeriesCreateReview = ({
 	tvSeries,
-	slug,
 }: {
-	tvSeries: MediaTvSeries;
-	slug: string;
+	tvSeries: Database['public']['Views']['media_tv_series']['Row'];
 }) => {
 	const { session } = useAuth();
 	const router = useRouter();
@@ -22,31 +21,31 @@ export const TvSeriesCreateReview = ({
 	const {
 		data: activity,
 		isLoading,
-	} = useUserActivityTvSeriesQuery({
+	} = useQuery(useUserActivityTvSeriesOptions({
 		tvSeriesId: tvSeries.id,
 		userId: session?.user.id,
-	});
-	const upsertReview = useUserReviewTvSeriesUpsertMutation({
+	}));
+	const { mutateAsync: upsertReview } = useUserReviewTvSeriesUpsertMutation({
 		tvSeriesId: tvSeries.id,
 	});
 
 	const handleSubmit = useCallback(async (data: { title?: string; body: string }) => {
 		if (!activity) return;
-		await upsertReview.mutateAsync(data, {
+		await upsertReview(data, {
 			onSuccess: (review) => {
-				router.replace(`/tv-series/${slug}/review/${review.id}`);
+				router.replace(`/tv-series/${tvSeries.slug || tvSeries.id}/review/${review.id}`);
 			},
 			onError: (error) => {
 				throw error;
 			}
 		});
-	}, [activity, upsertReview, router, slug]);
+	}, [activity, upsertReview, router, tvSeries]);
 	
 	useEffect(() => {
 		if (activity?.review) {
-			router.replace(`/tv-series/${slug}/review/${activity.review.id}`);
+			router.replace(`/tv-series/${tvSeries.slug || tvSeries.id}/review/${activity.review.id}`);
 		}
-	}, [activity, router, slug]);
+	}, [activity, router, tvSeries]);
 
 	if (isLoading ||activity?.review) {
 		return (

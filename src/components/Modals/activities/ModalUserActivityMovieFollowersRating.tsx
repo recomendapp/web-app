@@ -3,8 +3,6 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Modal, ModalBody, ModalHeader, ModalTitle, ModalType } from "../Modal";
 import { useModal } from "@/context/modal-context";
-import { useUserActivityMovieFollowersRatingQuery } from "@/features/client/user/userQueries";
-import { useAuth } from "@/context/auth-context";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 import {
@@ -18,6 +16,8 @@ import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
 import { CardUser } from "@/components/Card/CardUser";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
+import { useQuery } from "@tanstack/react-query";
+import { useMediaMovieFollowersAvgRatingsOptions } from "@/api/client/options/mediaOptions";
 
 const chartConfig = {
 	count: {
@@ -34,17 +34,15 @@ export const ModalUserActivityMovieFollowersRating = ({
 	movieId,
 	...props
   } : ModalUserActivityMovieFollowersRatingProps) => {
-	const { session } = useAuth();
 	const t = useTranslations();
 	const { closeModal } = useModal();
 	const {
 		data: followersRating,
 		isLoading,
 		isError,
-	} = useUserActivityMovieFollowersRatingQuery({
+	} = useQuery(useMediaMovieFollowersAvgRatingsOptions({
 		movieId: movieId,
-		userId: session?.user.id,
-	});
+	}));
 
 	if (followersRating === null) {
 		closeModal(props.id);

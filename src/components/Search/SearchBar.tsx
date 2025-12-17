@@ -1,8 +1,7 @@
-'use client';
+'use client'
 
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { BiSearch } from 'react-icons/bi';
 import useDebounce from '@/hooks/use-debounce';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
@@ -23,25 +22,16 @@ export default function SearchBar({ className }: SearchBarProps) {
   const t = useTranslations();
   const q = searchParams.get('q');
   const [searchQuery, setSearchQuery] = useState(q ?? '');
-  const [isSearching, setIsSearching] = useState(false);
-  const searchbarRef = useRef<HTMLDivElement>(null);
 
   const debouncedSearchTerm = useDebounce(searchQuery);
 
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    setSearchQuery(event.target.elements.searchTerm.value);
-  };
-
-  const handleOnFocus = (event: any) => {
-    setIsSearching(true);
-  };
-  const handleOutFocus = (event: any) => {
-    setIsSearching(false);
-  };
-
   useEffect(() => {
-    if (!debouncedSearchTerm) return;
+    if (!debouncedSearchTerm) {
+      if (pathname.startsWith('/search')) {
+        router.push(pathname);
+      }
+      return;
+    }
     const params = new URLSearchParams(searchParams);
     params.set('q', searchQuery);
     if (!pathname.startsWith('/search')) {
@@ -58,8 +48,6 @@ export default function SearchBar({ className }: SearchBarProps) {
       placeholder={t('pages.search.placeholder')}
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
-      onFocus={handleOnFocus}
-      onBlur={handleOutFocus}
       className={cn("w-full", className)}
       autoFocus={pathname.startsWith('/search')}
       />
@@ -68,35 +56,5 @@ export default function SearchBar({ className }: SearchBarProps) {
         <span className="sr-only">{upperFirst(t('common.messages.search'))}</span>
       </Button>
     </ButtonGroup>
-  )
-
-  return (
-    <div
-      ref={searchbarRef}
-      className={cn('pointer-events-auto w-full h-full lg:max-w-lg', className)}
-    >
-      <form
-        onSubmit={handleSubmit}
-        className={` w-full h-full flex items-center rounded-full bg-muted text-foreground border border-solid border-transparent ${
-          isSearching && 'border-white'
-        }`}
-      >
-        <button className="py-3 px-4">
-          <BiSearch size={20} />
-          <span className="sr-only">{upperFirst(t('common.messages.search'))}</span>
-        </button>
-        <input
-          name="searchTerm"
-          type="search"
-          placeholder={t('pages.search.placeholder')}
-          className="w-full bg-transparent pr-4 focus:outline-hidden focus:outline-offset-2"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          onFocus={handleOnFocus}
-          onBlur={handleOutFocus}
-          autoFocus
-        />
-      </form>
-    </div>
   );
 }

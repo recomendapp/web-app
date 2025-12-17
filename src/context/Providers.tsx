@@ -16,7 +16,7 @@ import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 import { SupportedLocale } from '@/translations/locales';
 import { ApiProvider } from './api-context';
-import { checkMaintenance } from '@/features/server/utils';
+import { checkMaintenance } from '@/api/server/utils';
 
 export const Providers = async ({
   children,

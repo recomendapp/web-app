@@ -12,15 +12,15 @@ import { useInView } from 'react-intersection-observer';
 import { z } from "zod";
 import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMediaPlaylistsTvSeriesInfiniteQuery } from '@/features/client/media/mediaQueries';
 import { upperFirst } from 'lodash';
 import { Button } from '@/components/ui/button';
-import { ArrowDownNarrowWideIcon, ArrowUpNarrowWideIcon } from 'lucide-react';
 import { Icons } from '@/config/icons';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useMediaTvSeriesPlaylistsOptions } from '@/api/client/options/mediaOptions';
 
 type SortBy = "created_at" | "updated_at" | "likes_count";
 const DEFAULT_PER_PAGE = 20;
@@ -61,14 +61,14 @@ export function TvSeriesPlaylists({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useMediaPlaylistsTvSeriesInfiniteQuery({
+  } = useInfiniteQuery(useMediaTvSeriesPlaylistsOptions({
     tvSeriesId: tvSeriesId,
     filters: {
       sortBy: sortBy,
       sortOrder: sortOrder,
       perPage: perPage,
     }
-  })
+  }));
 
   const sortOptions = useMemo((): { value: SortBy, label: string }[] => [
     { value: "updated_at", label: upperFirst(t('common.messages.date_updated')) },
@@ -130,7 +130,7 @@ export function TvSeriesPlaylists({
           )}
         </div>
       ) : (
-        <p className="text-muted-foreground text-center font-semibold">{upperFirst(t('common.messages.no_playlists'))}</p>
+        <p className="text-muted-foreground text-center">{upperFirst(t('common.messages.no_playlists'))}</p>
       )}
       {isFetchingNextPage ? <Icons.loader /> : null}
     </div>

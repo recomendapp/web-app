@@ -8,7 +8,6 @@ import { MovieTrailerButton } from "@/app/[lang]/(app)/film/[film_id]/(default)/
 import { Link } from "@/lib/i18n/navigation";
 import { RuntimeTooltip } from "@/components/utils/RuntimeTooltip";
 import { DateOnlyYearTooltip } from "@/components/utils/Date";
-import { useMediaMovieDetailsQuery } from "@/features/client/media/mediaQueries";
 import { IconMediaRating } from "@/components/Media/icons/IconMediaRating";
 import ButtonUserWatchlistMovie from "@/components/buttons/ButtonUserWatchlistMovie";
 import ButtonUserActivityMovieLike from "@/components/buttons/ButtonUserActivityMovieLike";
@@ -18,6 +17,8 @@ import ButtonUserActivityMovieWatchedDate from "@/components/buttons/ButtonUserA
 import ButtonUserRecosMovieSend from "@/components/buttons/ButtonUserRecosMovieSend";
 import ButtonPlaylistMovieAdd from "@/components/buttons/ButtonPlaylistMovieAdd";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { useMediaMovieDetailsOptions } from "@/api/client/options/mediaOptions";
+import { useQuery } from "@tanstack/react-query";
 
 export const MovieWidget = () => {
 	const {
@@ -31,10 +32,9 @@ export const MovieWidget = () => {
 		data: movie,
 		isLoading,
 		isError,
-	} = useMediaMovieDetailsQuery({
+	} = useQuery(useMediaMovieDetailsOptions({
 		id: selectedMovie?.movie.id,
-		locale: locale as string,
-	});
+	}));
 
 	if (!selectedMovie?.movie.id) return null;
 
@@ -82,9 +82,9 @@ export const MovieWidget = () => {
 								/> : null}
 							</div>
 							)}
-							{movie?.videos?.length > 0 && (
+							{movie.trailers && movie.trailers.length > 0 && (
 								<MovieTrailerButton
-									videos={movie.videos}
+									videos={movie.trailers}
 									className="absolute bottom-2 right-2"
 								/>
 							)}

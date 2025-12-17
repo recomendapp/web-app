@@ -12,7 +12,6 @@ import { useInView } from 'react-intersection-observer';
 import { z } from "zod";
 import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useMediaPlaylistsMovieInfiniteQuery } from '@/features/client/media/mediaQueries';
 import { upperFirst } from 'lodash';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/config/icons';
@@ -20,6 +19,8 @@ import { CardPlaylist } from '@/components/Card/CardPlaylist';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useMediaMoviePlaylistsOptions } from '@/api/client/options/mediaOptions';
 
 type SortBy = "created_at" | "updated_at" | "likes_count";
 const DEFAULT_PER_PAGE = 20;
@@ -60,14 +61,14 @@ export function MoviePlaylists({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useMediaPlaylistsMovieInfiniteQuery({
+  } = useInfiniteQuery(useMediaMoviePlaylistsOptions({
     movieId: movieId,
     filters: {
       sortBy: sortBy,
       sortOrder: sortOrder,
       perPage: perPage,
     }
-  })
+  }));
 
   const sortOptions = useMemo((): { value: SortBy, label: string }[] => [
     { value: "updated_at", label: upperFirst(t('common.messages.date_updated')) },
@@ -129,7 +130,7 @@ export function MoviePlaylists({
           )}
         </div>
       ) : (
-        <p className="text-muted-foreground text-center font-semibold">{upperFirst(t('common.messages.no_playlists'))}</p>
+        <p className="text-muted-foreground text-center">{upperFirst(t('common.messages.no_playlists'))}</p>
       )}
       {isFetchingNextPage ? <Icons.loader /> : null}
     </div>

@@ -4,8 +4,8 @@ import { CustomerInfo, LogLevel, Purchases } from "@revenuecat/purchases-js";
 import { Session } from "@supabase/supabase-js";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
-import { REVENUECAT_API_KEY } from ".";
-import { authKeys } from "@/features/client/auth/authKeys";
+import { authKeys } from "@/api/client/keys/authKeys";
+import { REVENUECAT_API_KEY } from "../env";
 
 export const useRevenueCat = (session: Session | null | undefined) => {
   const queryClient = useQueryClient();

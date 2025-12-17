@@ -3,8 +3,9 @@ import { Fragment, useEffect } from 'react';
 import Loader from '@/components/Loader';
 import { useInView } from 'react-intersection-observer';
 import { CardPlaylist } from '@/components/Card/CardPlaylist';
-import { useUserPlaylistsSavedInfiniteQuery } from '@/features/client/user/userQueries';
 import { Playlist } from '@recomendapp/types'
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useUserPlaylistsSavedOptions } from '@/api/client/options/userOptions';
 
 export function UserPlaylistsSaved({
   sidebarExpanded,
@@ -22,9 +23,9 @@ export function UserPlaylistsSaved({
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage,
-  } = useUserPlaylistsSavedInfiniteQuery({
+  } = useInfiniteQuery(useUserPlaylistsSavedOptions({
     userId: session?.user.id,
-  })
+  }));
 
   useEffect(() => {
     if (inView && hasNextPage) {

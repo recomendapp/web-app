@@ -25,12 +25,10 @@ import MediaPoster from '@/components/Media/MediaPoster';
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { Database, MediaTvSeries } from '@recomendapp/types';
-import { useModal } from '@/context/modal-context';
+import { Database } from '@recomendapp/types';
 import { upperFirst } from 'lodash';
 import { useLocale, useTranslations } from 'next-intl';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
-import { TMDB_IMAGE_BASE_URL } from '@/lib/tmdb/tmdb';
 import ButtonUserWatchlistTvSeries from '@/components/buttons/ButtonUserWatchlistTvSeries';
 import ButtonUserActivityTvSeriesLike from '@/components/buttons/ButtonUserActivityTvSeriesLike';
 import ButtonUserActivityTvSeriesRating from '@/components/buttons/ButtonUserActivityTvSeriesRating';
@@ -39,48 +37,38 @@ import ButtonUserActivityTvSeriesWatchedDate from '@/components/buttons/ButtonUs
 import { ContextMenuTvSeries } from '@/components/ContextMenu/ContextMenuTvSeries';
 import ButtonUserRecosTvSeriesSend from '@/components/buttons/ButtonUserRecosTvSeriesSend';
 import ButtonPlaylistTvSeriesAdd from '@/components/buttons/ButtonPlaylistTvSeriesAdd';
-import { ModalUserActivityTvSeriesFollowersRating } from '@/components/Modals/activities/ModalUserActivityTvSeriesFollowersRating';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import ButtonFollowersAvgRatingTvSeries from '@/components/buttons/ButtonFollowersAvgRatingTvSeries';
 
-export default function TvSerieHeader({
-  serie,
-  followersAvgRating,
+export const TvSeriesHeader = ({
+  tvSeries,
 }: {
-  serie: MediaTvSeries;
-  followersAvgRating?: number | null;
-}) {
-  const { openModal } = useModal();
-  const common = useTranslations('common');
-  if (!serie) return null;
+  tvSeries: Database['public']['Views']['media_tv_series_full']['Row'];
+}) => {
+  const t = useTranslations();
   return (
     <div>
-      <ContextMenuTvSeries tvSeries={serie}>
-        <HeaderBox background={serie.backdrop_path ? { src: `${TMDB_IMAGE_BASE_URL}/w1280${serie.backdrop_path}`, alt: serie.name ?? '', unoptimized: true } : undefined}>
+      <ContextMenuTvSeries tvSeries={tvSeries}>
+        <HeaderBox background={tvSeries.backdrop_path ? { src: getTmdbImage({ path: tvSeries.backdrop_path, size: 'w1280' }), alt: tvSeries.name ?? '', unoptimized: true } : undefined}>
           <div className="max-w-7xl flex flex-col w-full gap-4 items-center @xl/header-box:flex-row">
-            {/* SERIE POSTER */}
             <MediaPoster
               className="w-[200px]"
-              src={getTmdbImage({ path: serie?.poster_path, size: 'w1280' })}
-              alt={serie.name ?? ''}
+              src={getTmdbImage({ path: tvSeries?.poster_path, size: 'w1280' })}
+              alt={tvSeries.name ?? ''}
               fill
               unoptimized
             >
                 <div className='absolute flex flex-col gap-2 top-2 right-2 w-12'>
-                  {serie.vote_average ? <IconMediaRating
-                    rating={serie.vote_average}
+                  {tvSeries.vote_average ? <IconMediaRating
+                    rating={tvSeries.vote_average}
                     variant="general"
                     className="w-full"
                   /> : null}
-                  {followersAvgRating ? <IconMediaRating
-                    rating={followersAvgRating}
-                    variant="follower"
-                    className="w-full cursor-pointer"
-                    onClick={() => openModal(ModalUserActivityTvSeriesFollowersRating, { tvSeriesId: serie.id })}
-                  /> : null}
+                  <ButtonFollowersAvgRatingTvSeries tvSeriesId={tvSeries.id} />
                 </div>
-              {(serie?.trailers && serie.trailers.length > 0) ? (
+              {(tvSeries?.trailers && tvSeries.trailers.length > 0) ? (
                 <SerieTrailerButton
-                  videos={serie.trailers}
+                  videos={tvSeries.trailers}
                   className="absolute bottom-2 right-2"
                 />
               ) : null}
@@ -89,23 +77,23 @@ export default function TvSerieHeader({
             <div className="flex flex-col justify-between gap-2 w-full h-full py-4">
               {/* TYPE & GENRES */}
               <div>
-                <span className='text-accent-yellow'>{upperFirst(common('messages.tv_series', { count: 1 }))}</span>
-                {serie.genres ? <Genres genres={serie.genres} className="before:content-['_|_']" /> : null}
+                <span className='text-accent-yellow'>{upperFirst(t('common.messages.tv_series', { count: 1 }))}</span>
+                {tvSeries.genres ? <Genres genres={tvSeries.genres} className="before:content-['_|_']" /> : null}
               </div>
               {/* TITLE */}
               <h1 className="text-clamp space-x-1">
-                <span className='font-bold select-text'>{serie.name}</span>
+                <span className='font-bold select-text'>{tvSeries.name}</span>
                 {/* DATE */}
                 <sup>
-                  <DateOnlyYearTooltip date={serie.first_air_date ?? ''} className=' text-base font-medium'/>
+                  <DateOnlyYearTooltip date={tvSeries.first_air_date ?? ''} className=' text-base font-medium'/>
                 </sup>
-                {serie.original_name !== serie.name && (
-                  <div className='text-base font-semibold text-muted-foreground'>{serie.original_name}</div>
+                {tvSeries.original_name !== tvSeries.name && (
+                  <div className='text-base font-semibold text-muted-foreground'>{tvSeries.original_name}</div>
                 )}
               </h1>
               <div className=" space-y-2">
                 <div>
-                  {serie.created_by?.map((director, index: number) => (
+                  {tvSeries.created_by?.map((director, index: number) => (
                     <Fragment key={index}>
                       {index > 0 && <span>, </span>}
                       <span key={index}>
@@ -118,10 +106,9 @@ export default function TvSerieHeader({
                         </Button>
                       </span>
                     </Fragment>
-                  )) ?? <span className="text-muted-foreground italic">{upperFirst(common('messages.unknown'))}</span>}
-                  {/* NUMBER OF SEASONS */}
+                  )) ?? <span className="text-muted-foreground italic">{upperFirst(t('common.messages.unknown'))}</span>}
                   <span className="before:content-['_•_']">
-                    {common('messages.tv_season_count', { count: serie.number_of_seasons! })}
+                    {t('common.messages.tv_season_count', { count: tvSeries.number_of_seasons! })}
                   </span>
                 </div>
               </div>
@@ -132,15 +119,15 @@ export default function TvSerieHeader({
       <div className='flex flex-col items-center'>
         <div className="max-w-7xl w-full flex justify-between gap-2 px-4 pb-4">
           <div className="flex gap-2 overflow-x-auto items-center">
-            <ButtonUserActivityTvSeriesRating tvSeriesId={serie.id} />
-            <ButtonUserActivityTvSeriesLike tvSeriesId={serie.id} />
-            <ButtonUserActivityTvSeriesWatch tvSeriesId={serie.id} />
-            <ButtonUserWatchlistTvSeries tvSeriesId={serie.id} />
-            <ButtonUserActivityTvSeriesWatchedDate tvSeriesId={serie.id} />
+            <ButtonUserActivityTvSeriesRating tvSeriesId={tvSeries.id} />
+            <ButtonUserActivityTvSeriesLike tvSeriesId={tvSeries.id} />
+            <ButtonUserActivityTvSeriesWatch tvSeriesId={tvSeries.id} />
+            <ButtonUserWatchlistTvSeries tvSeriesId={tvSeries.id} />
+            <ButtonUserActivityTvSeriesWatchedDate tvSeriesId={tvSeries.id} />
           </div>
           <div className="flex gap-2 items-center">
-            <ButtonPlaylistTvSeriesAdd tvSeriesId={serie.id} tvSeriesTitle={serie.name} />
-            <ButtonUserRecosTvSeriesSend tvSeriesId={serie.id} tvSeriesTitle={serie.name} />
+            <ButtonPlaylistTvSeriesAdd tvSeriesId={tvSeries.id} tvSeriesTitle={tvSeries.name} />
+            <ButtonUserRecosTvSeriesSend tvSeriesId={tvSeries.id} tvSeriesTitle={tvSeries.name} />
           </div>
         </div>
       </div>
@@ -148,13 +135,13 @@ export default function TvSerieHeader({
   );
 }
 
-export function SerieTrailerButton({
+export const SerieTrailerButton = ({
   videos,
   className,
 } : {
   videos: Database['public']['Tables']['tmdb_tv_series_videos']['Row'][];
   className?: string;
-}) {
+}) => {
   const [selectedTrailer, setSelectedTailer] = useState<string>(
     videos[0].key ?? ''
   );

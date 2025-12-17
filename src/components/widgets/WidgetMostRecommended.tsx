@@ -21,7 +21,6 @@ import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 import { useAuth } from "@/context/auth-context";
 import { useTranslations } from "next-intl";
-import { useWidgetMostRecommendedQuery } from "@/features/client/widget/widgetQueries";
 import { BadgeMedia } from "../Badge/BadgeMedia";
 import Image from "next/image";
 import { upperFirst } from "lodash";
@@ -32,6 +31,8 @@ import { Database } from "@recomendapp/types";
 import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { ContextMenuMovie } from "../ContextMenu/ContextMenuMovie";
 import { ContextMenuTvSeries } from "../ContextMenu/ContextMenuTvSeries";
+import { useQuery } from "@tanstack/react-query";
+import { useWidgetMostRecommendedOptions } from "@/api/client/options/widgetOptions";
 
 
 interface WidgetMostRecommendedProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -43,7 +44,13 @@ export const WidgetMostRecommended = ({
 		data,
 		isLoading,
 		isError
-	} = useWidgetMostRecommendedQuery();
+	} = useQuery(useWidgetMostRecommendedOptions({
+		filters: {
+			limit: 10,
+			sortBy: 'recommendation_count',
+			sortOrder: 'desc',
+		}
+	}));
 	const [isPlaying, setIsPlaying] = useState(true);
 	const autoplay = useRef(
 		Autoplay({

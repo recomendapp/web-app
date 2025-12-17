@@ -141,7 +141,7 @@ export default function ProfilePlaylists({ userId }: UserPlaylistsProps) {
           )}
         </div>
       ) : (
-        <p className="text-center font-semibold">{upperFirst(t('common.messages.no_playlists'))}</p>
+        <p className="text-center text-muted-foreground">{upperFirst(t('common.messages.no_playlists'))}</p>
       )}
     </div>
   );

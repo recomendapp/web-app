@@ -1,10 +1,10 @@
-'use client';
+'use client'
 
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import { useModal } from '@/context/modal-context';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Check } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -14,10 +14,11 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Icons } from '@/config/icons';
 import { UserAvatar } from '@/components/User/UserAvatar';
 import { Label } from '@/components/ui/label';
-import { useUserRecosMovieInsertMutation } from '@/features/client/user/userMutations';
-import { useUserRecosMovieSendQuery } from '@/features/client/user/userQueries';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
+import { useQuery } from '@tanstack/react-query';
+import { useUserRecosMovieSendOptions } from '@/api/client/options/userOptions';
+import { useUserRecosMovieInsertMutation } from '@/api/client/mutations/userMutations';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -39,15 +40,15 @@ export function ModalUserRecosMovieSend({
 	const {
 		data: friends,
 		isLoading,
-	} = useUserRecosMovieSendQuery({
+	} = useQuery(useUserRecosMovieSendOptions({
 		userId: session?.user.id,
 		movieId: movieId,
-	});
-	const sendMovie = useUserRecosMovieInsertMutation();
+	}));
+	const { mutateAsync: sendMovie, isPending } = useUserRecosMovieInsertMutation();
 
-	function submit() {
+	const handleSubmit = useCallback(async () => {
 		if (!session || !movieId) return;
-		sendMovie.mutate({
+		await sendMovie({
 			senderId: session.user.id,
 			movieId: movieId,
 			receivers: selectedUsers,
@@ -69,7 +70,7 @@ export function ModalUserRecosMovieSend({
 				}
 			}
 		});
-	}
+	}, [session, movieId, selectedUsers, comment, sendMovie, t, closeModal, props.id]);
 
 	return (
 		<Modal
@@ -171,10 +172,10 @@ export function ModalUserRecosMovieSend({
 				</p>
 				)}
 				<Button
-				disabled={!selectedUsers.length || sendMovie.isPending}
-				onClick={submit}
+				disabled={!selectedUsers.length || isPending}
+				onClick={handleSubmit}
 				>
-				{sendMovie.isPending && <Icons.loader className="mr-2" />}	
+				{isPending && <Icons.loader className="mr-2" />}	
 				{upperFirst(t('common.messages.send'))}
 				</Button>
 			</ModalFooter>

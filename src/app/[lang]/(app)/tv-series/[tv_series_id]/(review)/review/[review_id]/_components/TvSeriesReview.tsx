@@ -1,26 +1,25 @@
 'use client'
 
-import { UserReviewTvSeries } from "@recomendapp/types";
-import { useUserReviewTvSeriesQuery } from "@/features/client/user/userQueries";
 import ReviewViewer from "@/components/Review/ReviewViewer";
 import { HeaderBox } from "@/components/Box/HeaderBox";
 import { CardTvSeries } from "@/components/Card/CardTvSeries";
 import { TMDB_IMAGE_BASE_URL } from "@/lib/tmdb/tmdb";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useQuery } from "@tanstack/react-query";
+import { useUserReviewTvSeriesOptions } from "@/api/client/options/userOptions";
 
 export const TvSeriesReview = ({
-	reviewServer,
+	reviewId,
 } : {
-	reviewServer: UserReviewTvSeries;
+	reviewId: number;
 }) => {
 	const t = useTranslations();
 	const {
 		data: review
-	} = useUserReviewTvSeriesQuery({
-		reviewId: reviewServer.id,
-		initialData: reviewServer,
-	});
+	} = useQuery(useUserReviewTvSeriesOptions({
+		reviewId: reviewId,
+	}));
 	
 	if (!review) return null;
 	

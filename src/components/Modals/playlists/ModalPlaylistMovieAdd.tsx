@@ -1,27 +1,27 @@
-'use client';
+'use client'
+
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import { useModal } from '@/context/modal-context';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Check } from 'lucide-react';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Playlist, PlaylistSource } from '@recomendapp/types';
+import { Database } from '@recomendapp/types';
 import { Badge } from '@/components/ui/badge';
 import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitle, ModalType } from '../Modal';
 import { usePlaylistInsertMutation, usePlaylistMovieInsertMutation } from '@/api/client/mutations/playlistMutations';
 import { Icons } from '@/config/icons';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { Label } from '@/components/ui/label';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { TooltipBox } from '@/components/Box/TooltipBox';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
-import { usePlaylistMovieAddToQuery } from '@/features/client/playlist/playlistQueries';
-import { playlistKeys } from '@/features/client/playlist/playlistKeys';
+import { usePlaylistMovieAddToOptions } from '@/api/client/options/playlistOptions';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -39,29 +39,30 @@ export function ModalPlaylistMovieAdd({
 	const t = useTranslations();
 	const queryClient = useQueryClient();
 	const { closeModal } = useModal();
-	const [selectedPlaylists, setSelectedPlaylists] = useState<Playlist[]>([]);
+	const [selectedPlaylists, setSelectedPlaylists] = useState<Database['public']['Tables']['playlists']['Row'][]>([]);
 	const [comment, setComment] = useState<string>('');
-	const [source, setSource] = useState<PlaylistSource>('personal');
+	const [source, setSource] = useState<'personal' | 'shared'>('personal');
 	const [createPlaylist, setCreatePlaylist] = useState<boolean>(false);
 	const [createPlaylistName, setCreatePlaylistName] = useState<string>('');
-	const {
-		data: playlists,
-		isLoading,
-	} = usePlaylistMovieAddToQuery({
+	const addToSourceOptions = usePlaylistMovieAddToOptions({
 		movieId: movieId,
 		userId: session?.user.id,
 		source: source,
 	});
+	const {
+		data: playlists,
+		isLoading,
+	} = useQuery(addToSourceOptions);
 
-	const addMovieToPlaylist = usePlaylistMovieInsertMutation({
+	// Mutations
+	const { mutateAsync: addMovieToPlaylist, isPending } = usePlaylistMovieInsertMutation({
 		movieId: movieId,
 	});
+	const { mutateAsync: insertPlaylist } = usePlaylistInsertMutation()
 
-	const insertPlaylist = usePlaylistInsertMutation()
-
-	function submit() {
+	const handleSubmit = useCallback(async () => {
 		if (!session) return;
-		addMovieToPlaylist.mutate({
+		await addMovieToPlaylist({
 			playlists: selectedPlaylists,
 			movieId: movieId,
 			userId: session.user.id,
@@ -75,28 +76,19 @@ export function ModalPlaylistMovieAdd({
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}
+	}, [addMovieToPlaylist, comment, closeModal, props.id, selectedPlaylists, session, t, movieId]);
 
-	function handleCreatePlaylist() {
-		if (!session) return;
+
+	const handleCreatePlaylist = useCallback(async () => {
 		if (!createPlaylistName || !createPlaylistName.length) return
-		insertPlaylist.mutate({
+		await insertPlaylist({
 			title: createPlaylistName,
 			type: 'movie',
-			userId: session.user.id,
 		}, {
 			onSuccess: (playlist) => {
-				// Update the cache
-				queryClient.setQueryData(playlistKeys.addToSource({
-					id: movieId,
-					type: 'movie',
-					source: 'personal',
-				}), (prev: { playlist: Playlist; already_added: boolean }[] | undefined) => {
-					if (!prev) return [{ playlist, already_added: false }];
-					return [
-						{ playlist, already_added: false },
-						...prev,
-					];
+				queryClient.setQueryData(addToSourceOptions.queryKey, (oldData) => {
+					if (!oldData) return oldData;
+					return [...oldData, { playlist, already_added: false }];
 				});
 				setSelectedPlaylists((prev) => [...prev, playlist]);
 				setCreatePlaylist(false);
@@ -106,7 +98,7 @@ export function ModalPlaylistMovieAdd({
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}
+	}, [createPlaylistName, insertPlaylist, queryClient, addToSourceOptions.queryKey, t]);
 
 	return (
 		<Modal
@@ -198,7 +190,7 @@ export function ModalPlaylistMovieAdd({
 									}}
 								>
 									<div className="flex items-center">
-										<div className={`w-[40px] shadow-2xl shrink-0`}>
+										<div className={`w-10 shadow-2xl shrink-0`}>
 											<AspectRatio ratio={1 / 1}>
 												<ImageWithFallback
 													src={playlist?.poster_url ?? ''}
@@ -253,7 +245,7 @@ export function ModalPlaylistMovieAdd({
 					{selectedPlaylists.map((playlist) => (
 						<div
 						key={playlist?.id}
-						className={`w-[40px] shadow-2xl cursor-not-allowed`}
+						className={`w-10 shadow-2xl cursor-not-allowed`}
 						onClick={() => setSelectedPlaylists((prev) => prev.filter(
 							(selectPlaylist) => selectPlaylist?.id !== playlist?.id
 						))}
@@ -276,10 +268,10 @@ export function ModalPlaylistMovieAdd({
 					</p>
 				)}
 				<Button
-				disabled={!selectedPlaylists.length || addMovieToPlaylist.isPending}
-				onClick={submit}
+				disabled={!selectedPlaylists.length || isPending}
+				onClick={handleSubmit}
 				>
-				{addMovieToPlaylist.isPending && <Icons.loader className="mr-2" />}
+				{isPending && <Icons.loader className="mr-2" />}
 				{upperFirst(t('common.messages.add'))}
 				</Button>
 			</ModalFooter>

@@ -5,12 +5,13 @@ import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-import { useUserFollowProfileQuery } from '@/features/client/user/userQueries';
-import { useUserFollowProfileInsertMutation, useUserUnfollowProfileDeleteMutation } from '@/features/client/user/userMutations';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { useCallback } from 'react';
 import { useModal } from '@/context/modal-context';
+import { useQuery } from '@tanstack/react-query';
+import { useUserFollowProfileOptions } from '@/api/client/options/userOptions';
+import { useUserFollowProfileInsertMutation, useUserUnfollowProfileDeleteMutation } from '@/api/client/mutations/userMutations';
 
 interface UserFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   profileId: string;
@@ -27,10 +28,10 @@ export const ProfileFollowButton = ({
   const {
     data: isFollow,
     isLoading,
-  } = useUserFollowProfileQuery({
+  } = useQuery(useUserFollowProfileOptions({
     userId: session?.user.id,
-    followeeId: profileId,
-  });
+    profileId: profileId,
+  }));
 
   const { mutateAsync: insertFollow } = useUserFollowProfileInsertMutation();
   const { mutateAsync: deleteFollow } = useUserUnfollowProfileDeleteMutation();

@@ -1,18 +1,19 @@
 'use client';
 import { HeartPicksHeader } from './_components/HeartPicksHeader';
 import { useAuth } from '@/context/auth-context';
-import { useUserHeartPicksMovieQuery, useUserHeartPicksTvSeriesQuery } from '@/features/client/user/userQueries';
 import { useUIStore } from '@/stores/useUIStore';
 import { TableHeartPicksMovie } from './_components/TableHeartPicksMovie/TableHeartPicksMovie';
 import { ImageObject } from '@/hooks/use-random-image';
 import { TableHeartPicksTvSeries } from './_components/TableHeartPicksTvSeries/TableHeartPicksTvSeries';
+import { useQuery } from '@tanstack/react-query';
+import { useUserHeartPicksMovieOptions, useUserHeartPicksTvSeriesOptions } from '@/api/client/options/userOptions';
 
 export default function HeartPicks() {
   const tab = useUIStore((state) => state.heartPickTab);
   const { session } = useAuth();
 
-  const { data: heartPicksMovie, isLoading: heartPicksMovieIsLoading } = useUserHeartPicksMovieQuery({ userId: tab === 'movie' ? session?.user.id : undefined });
-  const { data: heartPicksTvSeries, isLoading: heartPicksTvSeriesIsLoading } = useUserHeartPicksTvSeriesQuery({ userId: tab === 'tv_series' ? session?.user.id : undefined });
+  const { data: heartPicksMovie, isLoading: heartPicksMovieIsLoading } = useQuery(useUserHeartPicksMovieOptions({ userId: tab === 'movie' ? session?.user.id : undefined }));
+  const { data: heartPicksTvSeries, isLoading: heartPicksTvSeriesIsLoading } = useQuery(useUserHeartPicksTvSeriesOptions({ userId: tab === 'tv_series' ? session?.user.id : undefined }));
 
   const data = tab === 'movie' ? heartPicksMovie : heartPicksTvSeries;
   const isLoading = tab === 'movie'

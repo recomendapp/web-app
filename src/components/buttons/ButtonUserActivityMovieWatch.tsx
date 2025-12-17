@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { useUserActivityMovieQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { Link } from "@/lib/i18n/navigation";
@@ -8,11 +7,13 @@ import { Icons } from "@/config/icons";
 import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
-import { useUserActivityMovieDeleteMutation, useUserActivityMovieInsertMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { useModal } from "@/context/modal-context";
+import { useUserActivityMovieOptions } from "@/api/client/options/userOptions";
+import { useQuery } from "@tanstack/react-query";
+import { useUserActivityMovieDeleteMutation, useUserActivityMovieInsertMutation } from "@/api/client/mutations/userMutations";
 
 interface ButtonUserActivityMovieWatchProps
 	extends React.ComponentProps<typeof Button> {
@@ -32,10 +33,10 @@ const ButtonUserActivityMovieWatch = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useUserActivityMovieQuery({
+	} = useQuery(useUserActivityMovieOptions({
 		userId: session?.user.id,
 		movieId: movieId,
-	});
+	}));
 	const { mutateAsync: insertActivity, isPending: isInsertPending } = useUserActivityMovieInsertMutation();
 	const { mutateAsync: deleteActivity, isPending: isDeletePending } = useUserActivityMovieDeleteMutation();
 

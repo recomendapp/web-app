@@ -1,13 +1,15 @@
 import { siteConfig } from '@/config/site';
-import { getTvSeries } from '@/features/server/media/mediaQueries';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { TvSeriesPlaylists } from './_components/TvSeriesPlaylists';
 import { truncate, upperFirst } from 'lodash';
 import { seoLocales } from '@/lib/i18n/routing';
 import { getTranslations } from 'next-intl/server';
 import { SupportedLocale } from '@/translations/locales';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { Database } from '@recomendapp/types';
+import { notFound } from 'next/navigation';
+import { getTvSeries } from '@/api/server/medias';
 
 export async function generateMetadata(
   props: {
@@ -41,8 +43,8 @@ export async function generateMetadata(
           { length: siteConfig.seo.description.limit }
         ),
         url: `${siteConfig.url}/${params.lang}/tv-series/${serie.slug}/playlists`,
-        images: serie.poster_url ? [
-          { url: serie.poster_url }
+        images: serie.poster_path ? [
+          { url: getTmdbImage({ path: serie.poster_path, size: 'w500' }) }
         ] : undefined,
         type: 'video.tv_show',
         locale: params.lang,
@@ -63,5 +65,11 @@ export default async function Reviews(
 ) {
   const params = await props.params;
   const { id: seriesId } = getIdFromSlug(params.tv_series_id);
+  let tvSeries: Database['public']['Views']['media_tv_series_full']['Row'];
+  try {
+    tvSeries = await getTvSeries(params.lang, seriesId);
+  } catch {
+    return notFound();
+  }
   return <TvSeriesPlaylists tvSeriesId={seriesId} />;
 }

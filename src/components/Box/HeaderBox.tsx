@@ -41,7 +41,8 @@ export const HeaderBox: React.FC<BoxProps> = ({
       )}
       <div
         className={cn(
-          '@xl/header-box:h-[clamp(340px,30vh,400px)] w-full h-full flex p-4 relative transition-colors duration-300 bg-linear-to-t from-background to-[#00000050]',
+          '@xl/header-box:h-[max(340px,30vh)]',
+          'w-full h-full flex p-4 relative transition-colors duration-300 bg-linear-to-t from-background to-[#00000050]',
           'justify-center',
           className
         )}

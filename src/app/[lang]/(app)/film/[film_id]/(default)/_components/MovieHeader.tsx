@@ -26,8 +26,7 @@ import { HeaderBox } from '@/components/Box/HeaderBox';
 import { RuntimeTooltip } from '@/components/utils/RuntimeTooltip';
 import { cn } from '@/lib/utils';
 import { TooltipBox } from '@/components/Box/TooltipBox';
-import { Database, MediaMovie } from '@recomendapp/types';
-import { useModal } from '@/context/modal-context';
+import { Database } from '@recomendapp/types';
 import { useLocale, useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { IconMediaRating } from '@/components/Media/icons/IconMediaRating';
@@ -40,17 +39,14 @@ import ButtonUserActivityMovieWatchedDate from '@/components/buttons/ButtonUserA
 import { ContextMenuMovie } from '@/components/ContextMenu/ContextMenuMovie';
 import ButtonUserRecosMovieSend from '@/components/buttons/ButtonUserRecosMovieSend';
 import ButtonPlaylistMovieAdd from '@/components/buttons/ButtonPlaylistMovieAdd';
-import { ModalUserActivityMovieFollowersRating } from '@/components/Modals/activities/ModalUserActivityMovieFollowersRating';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import ButtonFollowersAvgRatingMovie from '@/components/buttons/ButtonFollowersAvgRatingMovie';
 
-export default function MovieHeader({
+export const MovieHeader = ({
   movie,
-  followersAvgRating,
 }: {
-  movie: MediaMovie;
-  followersAvgRating?: number | null;
-}) {
-  const { openModal } = useModal();
+  movie: Database['public']['Views']['media_movie_full']['Row'];
+}) => {
   const t = useTranslations();
   return (
     <div>
@@ -71,12 +67,7 @@ export default function MovieHeader({
                   variant="general"
                   className="w-full"
                 /> : null}
-                {followersAvgRating ? <IconMediaRating
-                  rating={followersAvgRating}
-                  variant="follower"
-                  className="w-full cursor-pointer"
-                  onClick={() => openModal(ModalUserActivityMovieFollowersRating, { movieId: movie.id })}
-                /> : null}
+                <ButtonFollowersAvgRatingMovie movieId={movie.id} />
               </div>
               {(movie?.trailers && movie.trailers.length > 0) ? (
                 <MovieTrailerButton
@@ -144,13 +135,13 @@ export default function MovieHeader({
   );
 }
 
-export function MovieTrailerButton({
+export const MovieTrailerButton = ({
   videos,
   className,
 } : {
   videos: Database['public']['Tables']['tmdb_movie_videos']['Row'][];
   className?: string;
-}) {
+}) => {
   const [selectedTrailer, setSelectedTailer] = useState<string>(
     videos[0].key ?? ''
   );

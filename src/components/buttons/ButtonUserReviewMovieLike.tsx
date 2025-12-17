@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { useUserReviewMovieLikeQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { Link } from "@/lib/i18n/navigation";
@@ -8,10 +7,12 @@ import { Icons } from "@/config/icons";
 import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
-import { useUserReviewMovieLikeDeleteMutation, useUserReviewMovieLikeInsertMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useUserReviewMovieLikeDeleteMutation, useUserReviewMovieLikeInsertMutation } from "@/api/client/mutations/userMutations";
+import { useUserReviewMovieLikeOptions } from "@/api/client/options/userOptions";
+import { useQuery } from "@tanstack/react-query";
 
 interface ButtonUserReviewMovieLikeProps
 	extends React.ComponentProps<typeof Button> {
@@ -30,10 +31,10 @@ const ButtonUserReviewMovieLike = React.forwardRef<
 		data: like,
 		isLoading,
 		isError,
-	} = useUserReviewMovieLikeQuery({
+	} = useQuery(useUserReviewMovieLikeOptions({
 		reviewId: reviewId,
 		userId: session?.user.id,
-	});
+	}));
 	const [likeCount, setLikeCount] = React.useState(reviewLikesCount ?? undefined);
 	const { mutateAsync: insertLike, isPending: isInsertPending } = useUserReviewMovieLikeInsertMutation();
 	const { mutateAsync: deleteLike, isPending: isDeletePending } = useUserReviewMovieLikeDeleteMutation();

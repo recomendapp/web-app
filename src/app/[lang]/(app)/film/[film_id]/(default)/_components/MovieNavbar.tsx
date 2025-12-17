@@ -8,31 +8,31 @@ import { useMemo } from 'react';
 
 const type = 'film';
 
-export default function MovieNavbar({
+export const MovieNavbar = ({
   movieSlug,
 }: {
   movieSlug: string;
-}) {
-  const common = useTranslations('common');
+}) => {
+  const t = useTranslations();
   const pathname = usePathname();
   const regex = `^/${type}/${movieSlug}(-[a-z0-9-]*)?`;
   const routes = useMemo(() => [
     {
-      label: upperFirst(common('messages.details')),
+      label: upperFirst(t('common.messages.details')),
       active: pathname.match(new RegExp(regex + '$')),
       href: `/${type}/${movieSlug}`,
     },
     {
-      label: upperFirst(common('messages.review', { count: 2 })),
+      label: upperFirst(t('common.messages.review', { count: 2 })),
       active: pathname.match(new RegExp(regex + '/reviews')),
       href: `/${type}/${movieSlug}/reviews`,
     },
     {
-      label: upperFirst(common('messages.playlist', { count: 2 })),
+      label: upperFirst(t('common.messages.playlist', { count: 2 })),
       active: pathname.match(new RegExp(regex + '/playlists')),
       href: `/${type}/${movieSlug}/playlists`,
     },
-  ], [common, pathname, regex, movieSlug]);
+  ], [t, pathname, regex, movieSlug]);
 
   return (
     <div className="inline-flex h-10 items-center justify-center bg-muted p-1 text-muted-foreground w-full rounded-md mb-4">

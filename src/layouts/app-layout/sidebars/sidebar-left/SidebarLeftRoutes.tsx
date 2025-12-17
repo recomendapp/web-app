@@ -149,6 +149,10 @@ export const SidebarLeftRoutes = () => {
 		hasNextPage,
 	} = useInfiniteQuery(useUserPlaylistsInfiniteOptions({
 		userId: session?.user.id,
+		filters: {
+			sortBy: 'updated_at',
+			sortOrder: 'desc',
+		}
 	}));
 
 	// Fix for sidebar issue with mobile and desktop using different open state

@@ -19,10 +19,11 @@ import { Icons } from '@/config/icons';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
-import { useUserWatchlistMovieDeleteMutation } from "@/features/client/user/userMutations";
 import { ShareControllerMovie } from "@/components/ShareController/ShareControllerMovie";
 import { ModalUserRecosMovieSend } from "@/components/Modals/recos/ModalUserRecosMovieSend";
 import { ModalUserWatchlistMovieComment } from "@/components/Modals/watchlist/ModalUserWatchlistMovieComment";
+import { useUserWatchlistMovieDeleteMutation } from "@/api/client/mutations/userMutations";
+import { useCallback } from "react";
 
 interface DataTableRowActionsProps {
   table: Table<UserWatchlistMovie>;
@@ -39,11 +40,11 @@ export function DataTableRowActions({
 }: DataTableRowActionsProps) {
   const t = useTranslations();
   const { openModal, createConfirmModal } = useModal();
-  const deleteWatchlistMovie = useUserWatchlistMovieDeleteMutation();
+  const { mutateAsync: deleteWatchlistMovie } = useUserWatchlistMovieDeleteMutation();
 
-  const handleUnwatchlist = async () => {
+  const handleUnwatchlist = useCallback(async () => {
     if (!data) return;
-    await deleteWatchlistMovie.mutateAsync({
+    await deleteWatchlistMovie({
       watchlistId: data.id,
     }, {
       onSuccess: () => {
@@ -53,7 +54,7 @@ export function DataTableRowActions({
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }
+  }, [data, deleteWatchlistMovie, t]);
 
   return (
     <div className="flex items-center justify-end">
@@ -68,7 +69,7 @@ export function DataTableRowActions({
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end" className="w-[160px]">
+        <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuItem
           onClick={() => openModal(ModalUserRecosMovieSend, { movieId: data.movie_id!, movieTitle: data.movie?.title! })}
           >

@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { useUserActivityMovieQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { Link } from "@/lib/i18n/navigation";
@@ -8,12 +7,13 @@ import { Icons } from "@/config/icons";
 import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
-import { useUserActivityMovieInsertMutation, useUserActivityMovieUpdateMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
-import { useQueryClient } from "@tanstack/react-query";
-import { userKeys } from "@/features/client/user/userKeys";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useUserActivityMovieOptions } from "@/api/client/options/userOptions";
+import { userKeys } from "@/api/client/keys/userKeys";
+import { useUserActivityMovieInsertMutation, useUserActivityMovieUpdateMutation } from "@/api/client/mutations/userMutations";
 
 interface ButtonUserActivityMovieLikeProps
 	extends React.ComponentProps<typeof Button> {
@@ -34,10 +34,10 @@ const ButtonUserActivityMovieLike = React.forwardRef<
 		data: activity,
 		isLoading,
 		isError,
-	} = useUserActivityMovieQuery({
+	} = useQuery(useUserActivityMovieOptions({
 		userId: session?.user.id,
 		movieId: movieId,
-	});
+	}));
 
 	const { mutateAsync: insertActivity, isPending: isInsertPending } = useUserActivityMovieInsertMutation();
 	const { mutateAsync: updateActivity, isPending: isUpdatePending } = useUserActivityMovieUpdateMutation();

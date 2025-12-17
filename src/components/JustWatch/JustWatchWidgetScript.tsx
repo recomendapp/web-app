@@ -72,7 +72,7 @@ export function JustWatchWidget({
 	},[id, resetAndReloadWidget]);
 
 	return (
-		<div className={cn('', className)}>
+		<div className={cn('overflow-hidden relative', className)}>
 			<div
 				className="clickable group text-lg font-medium"
 				onClick={() => {

@@ -1,9 +1,10 @@
-'use client';
+'use client'
+
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import { useModal } from '@/context/modal-context';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
@@ -12,8 +13,7 @@ import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitl
 import { Icons } from '@/config/icons';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
-import { useTmdbSearchMoviesInfiniteQuery } from '@/features/client/tmdb/tmdbQueries';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
@@ -21,6 +21,8 @@ import { usePlaylistMovieMultiInsertMutation } from '@/api/client/mutations/play
 import { upperFirst } from 'lodash';
 import { CardMovie } from '@/components/Card/CardMovie';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSearchMoviesOptions } from '@/api/client/options/searchOptions';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -34,12 +36,11 @@ export function ModalPlaylistMovieQuickAdd({
 } : ModalPlaylistMovieQuickAddProps) {
 	const { session } = useAuth();
 	const t = useTranslations();
-	const locale = useLocale();
 	const { closeModal } = useModal();
 	const [selectMovies, setSelectedMovies] = useState<MediaMovie[]>([]);
 	const [comment, setComment] = useState<string>('');
 	const [search, setSearch] = useState<string>('');
-	const searchQuery = useDebounce(search, 500);
+	const searchQuery = useDebounce(search);
 	const { ref, inView } = useInView();
 
 	const {
@@ -49,12 +50,11 @@ export function ModalPlaylistMovieQuickAdd({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useTmdbSearchMoviesInfiniteQuery({
+	} = useInfiniteQuery(useSearchMoviesOptions({
 		query: searchQuery,
-		locale: locale,
-	})
+	}));
 
-	const insertMovieMultiple = usePlaylistMovieMultiInsertMutation({
+	const { mutateAsync: insertMovieMultiple, isPending } = usePlaylistMovieMultiInsertMutation({
 		playlistId: playlist.id,
 	});
 
@@ -64,11 +64,11 @@ export function ModalPlaylistMovieQuickAdd({
 		}
 	}, [inView, hasNextPage, fetchNextPage]);
 
-	function submit() {
+	const handleSubmit = useCallback(async () => {
 		if (!session?.user.id) return;
 		const ids = selectMovies.map((movie) => movie.id);
 		if (ids.length === 0) return;
-		insertMovieMultiple.mutate({
+		await insertMovieMultiple({
 			userId: session.user.id,
 			movieIds: ids,
 			comment: comment,
@@ -81,7 +81,7 @@ export function ModalPlaylistMovieQuickAdd({
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}
+	}, [session, selectMovies, comment, insertMovieMultiple, t, closeModal, props.id]);
 
 	return (
 		<Modal
@@ -106,13 +106,13 @@ export function ModalPlaylistMovieQuickAdd({
 				/>
 				<ScrollArea className={`h-[40vh]`}>
 					<div className='p-2 flex flex-col gap-1'>
-					{(movies?.pages && movies.pages[0].length > 0) ? (
+					{(movies?.pages && movies.pages[0].data.length > 0) ? (
 						movies.pages.map((page, i) => (
-							page.map((movie, index) => (
+							page.data.map((movie, index) => (
 								<CardMovie
 								key={index}
 								variant='row'
-								movie={movie}
+								movie={movie as MediaMovie}
 								className={`
 									border-none bg-transparent hover:cursor-pointer
 									${selectMovies.some((selectedMovie) => selectedMovie.id === movie.id) ? 'bg-muted-hover' : ''}
@@ -125,9 +125,9 @@ export function ModalPlaylistMovieQuickAdd({
 											(selectedMovie) => selectedMovie.id !== movie.id
 										))
 									}
-									return setSelectedMovies((prev) => [...prev, movie]);
+									return setSelectedMovies((prev) => [...prev, movie as MediaMovie]);
 								}}
-								{...(i === movies.pages.length - 1 && index === page.length - 1
+								{...(i === movies.pages.length - 1 && index === page.data.length - 1
 										? { ref: ref }
 										: {})}
 								/>
@@ -192,10 +192,10 @@ export function ModalPlaylistMovieQuickAdd({
 					</p>
 				)}
 				<Button
-				disabled={!selectMovies.length || insertMovieMultiple.isPending}
-				onClick={submit}
+				disabled={!selectMovies.length || isPending}
+				onClick={handleSubmit}
 				>
-				{insertMovieMultiple.isPending && <Icons.loader className="mr-2" />}
+				{isPending && <Icons.loader className="mr-2" />}
 				{upperFirst(t('common.messages.add'))}
 				</Button>
 			</ModalFooter>

@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 // UI
@@ -22,7 +22,7 @@ export default function SearchFilters() {
     getInitialFilter()
   );
 
-  const routes: Route[] = [
+  const routes = useMemo<Route[]>(() => [
     {
       label: 'Tout',
       filter: '',
@@ -35,8 +35,8 @@ export default function SearchFilters() {
     },
     {
       label: 'Séries',
-      filter: 'tv_series',
-      active: searchFilter === 'tv_series'
+      filter: 'tv-series',
+      active: searchFilter === 'tv-series'
     },
     {
       label: 'Playlists',
@@ -53,7 +53,7 @@ export default function SearchFilters() {
       filter: 'crew-cast',
       active: searchFilter === 'crew-cast'
     }
-  ]
+  ], [searchFilter]);
 
   function selectSearchFilter(route: Route) {
     const segments = pathname.split('/');
@@ -75,7 +75,7 @@ export default function SearchFilters() {
     const segments = pathname.split('/');
     if (segments.length > 2) {
       const filter = segments[2];
-      if (['films', 'tv_series', 'playlists', 'users', 'crew-cast'].includes(filter)) {
+      if (['films', 'tv-series', 'playlists', 'users', 'crew-cast'].includes(filter)) {
         return filter;
       }
     }
@@ -87,7 +87,7 @@ export default function SearchFilters() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  if (!searchQuery) return null;
+  if (!searchQuery && !searchFilter) return null;
 
   return (
     <ScrollArea>

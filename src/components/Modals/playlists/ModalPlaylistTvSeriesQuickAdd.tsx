@@ -1,9 +1,10 @@
-'use client';
+'use client'
+
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import { useModal } from '@/context/modal-context';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { ImageWithFallback } from '@/components/utils/ImageWithFallback';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
@@ -12,8 +13,7 @@ import { Modal, ModalBody, ModalDescription, ModalFooter, ModalHeader, ModalTitl
 import { Icons } from '@/config/icons';
 import { Label } from '@/components/ui/label';
 import useDebounce from '@/hooks/use-debounce';
-import { useTmdbSearchTvSeriesInfiniteQuery } from '@/features/client/tmdb/tmdbQueries';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { InputSearch } from '@/components/ui/input-search';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useInView } from 'react-intersection-observer';
@@ -21,6 +21,8 @@ import { usePlaylistTvSeriesMultiInsertMutation } from '@/api/client/mutations/p
 import { upperFirst } from 'lodash';
 import { CardTvSeries } from '@/components/Card/CardTvSeries';
 import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSearchTvSeriesOptions } from '@/api/client/options/searchOptions';
 
 const COMMENT_MAX_LENGTH = 180;
 
@@ -34,12 +36,11 @@ export function ModalPlaylistTvSeriesQuickAdd({
 } : ModalPlaylistTvSeriesQuickAddProps) {
 	const { session } = useAuth();
 	const t = useTranslations();
-	const locale = useLocale();
 	const { closeModal } = useModal();
 	const [selectedTvSeries, setSelectedTvSeries] = useState<MediaTvSeries[]>([]);
 	const [comment, setComment] = useState<string>('');
 	const [search, setSearch] = useState<string>('');
-	const searchQuery = useDebounce(search, 500);
+	const searchQuery = useDebounce(search);
 	const { ref, inView } = useInView();
 
 	const {
@@ -49,12 +50,11 @@ export function ModalPlaylistTvSeriesQuickAdd({
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useTmdbSearchTvSeriesInfiniteQuery({
+	} = useInfiniteQuery(useSearchTvSeriesOptions({
 		query: searchQuery,
-		locale: locale,
-	})
+	}));
 
-	const insertTvSeriesMultiple = usePlaylistTvSeriesMultiInsertMutation({
+	const { mutateAsync: insertTvSeriesMultiple, isPending } = usePlaylistTvSeriesMultiInsertMutation({
 		playlistId: playlist.id,
 	});
 
@@ -64,11 +64,11 @@ export function ModalPlaylistTvSeriesQuickAdd({
 		}
 	}, [inView, hasNextPage, fetchNextPage]);
 
-	function submit() {
+	const handleSubmit = useCallback(async () =>{
 		if (!session?.user.id) return;
 		const ids = selectedTvSeries.map((tvSeries) => tvSeries.id);
 		if (ids.length === 0) return;
-		insertTvSeriesMultiple.mutate({
+		await insertTvSeriesMultiple({
 			userId: session.user.id,
 			tvSeriesIds: ids,
 			comment: comment,
@@ -81,7 +81,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
 				toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			}
 		});
-	}
+	}, [session, selectedTvSeries, comment, insertTvSeriesMultiple, t, closeModal, props.id]);
 
 	return (
 		<Modal
@@ -106,9 +106,9 @@ export function ModalPlaylistTvSeriesQuickAdd({
 				/>
 				<ScrollArea className={`h-[40vh]`}>
 					<div className='p-2 flex flex-col gap-1'>
-					{(tvSeries?.pages && tvSeries.pages[0].length > 0) ? (
+					{(tvSeries?.pages && tvSeries.pages[0].data.length > 0) ? (
 						tvSeries.pages.map((page, i) => (
-							page.map((tvSeriesItem, index) => (
+							page.data.map((tvSeriesItem, index) => (
 								<CardTvSeries
 								key={index}
 								variant='row'
@@ -127,7 +127,7 @@ export function ModalPlaylistTvSeriesQuickAdd({
 									}
 									return setSelectedTvSeries((prev) => [...prev, tvSeriesItem]);
 								}}
-								{...(i === tvSeries.pages.length - 1 && index === page.length - 1
+								{...(i === tvSeries.pages.length - 1 && index === page.data.length - 1
 										? { ref: ref }
 										: {})}
 								/>
@@ -192,10 +192,10 @@ export function ModalPlaylistTvSeriesQuickAdd({
 					</p>
 				)}
 				<Button
-				disabled={!selectedTvSeries.length || insertTvSeriesMultiple.isPending}
-				onClick={submit}
+				disabled={!selectedTvSeries.length || isPending}
+				onClick={handleSubmit}
 				>
-				{insertTvSeriesMultiple.isPending && <Icons.loader className="mr-2" />}
+				{isPending && <Icons.loader className="mr-2" />}
 				{upperFirst(t('common.messages.add'))}
 				</Button>
 			</ModalFooter>

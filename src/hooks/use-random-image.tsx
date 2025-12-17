@@ -1,19 +1,16 @@
-import { DependencyList, useMemo } from "react";
+import { useMemo } from "react";
 
 export type ImageObject = {
   src: string;
   alt?: string;
 };
 
-export function useRandomImage(images: ImageObject[], deps: DependencyList = []): ImageObject | null {
-  const randomer = (min: number, max: number) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
-
+export function useRandomImage(images: ImageObject[]): ImageObject | null {
   const image = useMemo(() => {
     if (!images.length) return null;
-    return images[randomer(0, images.length - 1)];
-  }, [images, ...deps]);
+    const index = Math.floor(Math.random() * images.length);
+    return images[index];
+  }, [images]);
 
   return image;
 }

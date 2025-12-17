@@ -3,12 +3,11 @@ import { CardUser } from "@/components/Card/CardUser";
 import { ContextMenuPlaylist } from "@/components/ContextMenu/ContextMenuPlaylist";
 import { PlaylistModal } from "@/components/Modals/playlists/PlaylistModal";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Skeleton } from "@/components/ui/skeleton";
 import { ImageWithFallback } from "@/components/utils/ImageWithFallback";
 import { useAuth } from "@/context/auth-context";
 import { useModal } from "@/context/modal-context";
 import { useRandomImage } from "@/hooks/use-random-image";
-import { TMDB_IMAGE_BASE_URL } from "@/lib/tmdb/tmdb";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
 import { Playlist } from "@recomendapp/types";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
@@ -43,7 +42,7 @@ export function PlaylistTvSeriesHeader({
 
   return (
   <ContextMenuPlaylist playlist={playlist}>
-    <HeaderBox background={!skeleton ? { src: backdrop?.src ? `${TMDB_IMAGE_BASE_URL}/w1280${backdrop?.src}`  : 'https://media.giphy.com/media/Ic0IOSkS23UAw/giphy.gif', alt: 'Likes Header Background', unoptimized: true } : undefined} className="flex-col items-center">
+    <HeaderBox background={(!skeleton && backdrop?.src) ? { src: getTmdbImage({ path: backdrop.src, size: 'w1280' }), alt: 'Likes Header Background', unoptimized: true } : undefined} className="flex-col items-center">
       <div className="flex flex-col w-full gap-4 items-center md:flex-row">
         <div
           className="w-[250px] shadow-md cursor-pointer shrink-0 aspect-square"

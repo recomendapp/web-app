@@ -151,7 +151,7 @@ export default function ProfileTvSeries({
           )}
         </div>
       ) : (
-        <p className="text-center font-semibold">{upperFirst(t('common.messages.no_activity'))}</p>
+        <p className="text-center text-muted-foreground">{upperFirst(t('common.messages.no_activity'))}</p>
       )}
     </div>
   );

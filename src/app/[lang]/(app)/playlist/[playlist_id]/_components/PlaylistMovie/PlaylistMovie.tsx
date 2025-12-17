@@ -1,6 +1,5 @@
-import { Playlist, PlaylistItemMovie } from "@recomendapp/types";
+import { Database, PlaylistItemMovie } from "@recomendapp/types";
 import { PlaylistMovieHeader } from "./PlaylistMovieHeader";
-import { usePlaylistIsAllowedToEditQuery, usePlaylistItemsMovieQuery } from "@/features/client/playlist/playlistQueries";
 import { useEffect, useMemo, useState } from "react";
 import PlaylistMovieTable from "./PlaylistMovieTable/PlaylistMovieTable";
 import useDebounce from "@/hooks/use-debounce";
@@ -8,14 +7,14 @@ import { RealtimeChannel } from "@supabase/supabase-js";
 import { useAuth } from "@/context/auth-context";
 import { useSupabaseClient } from "@/context/supabase-context";
 import { usePlaylistItemsMovieRealtimeMutation } from "@/api/client/mutations/playlistMutations";
-
-interface PlaylistMovieProps extends React.ComponentProps<'div'> {
-	playlist: Playlist;
-}
+import { useQuery } from "@tanstack/react-query";
+import { usePlaylistIsAllowedToEditOptions, usePlaylistMovieItemsOptions } from "@/api/client/options/playlistOptions";
 
 export const PlaylistMovie = ({
 	playlist,
-} : PlaylistMovieProps) => {
+} : {
+	playlist: Database['public']['Tables']['playlists']['Row'] & { user: Database['public']['Views']['profile']['Row'] };
+}) => {
 	const { session } = useAuth();
 	const supabase = useSupabaseClient();
 	// Queries
@@ -23,13 +22,13 @@ export const PlaylistMovie = ({
 		data: items,
 		isLoading,
 		refetch,
-	} = usePlaylistItemsMovieQuery({
+	} = useQuery(usePlaylistMovieItemsOptions({
 		playlistId: playlist.id
-	});
-	const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
+	}));
+	const { data: isAllowedToEdit } = useQuery(usePlaylistIsAllowedToEditOptions({
 		playlistId: playlist.id,
 		userId: session?.user.id,
-	});
+	}));
 	
 	// Mutations
 	const playlistItemsRealtime = usePlaylistItemsMovieRealtimeMutation({

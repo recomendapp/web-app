@@ -8,23 +8,24 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination"
 import { cn } from "@/lib/utils";
+import { useCallback, useMemo } from "react";
 
 export const Pagination = ({
 	page,
 	perPage,
 	total,
-	searchParams,
 	className,
+	searchParams,
 } : {
 	page: number;
 	perPage: number;
 	total: number;
-	searchParams: URLSearchParams;
 	className?: string;
+	searchParams: URLSearchParams;
 }) => {
-	const totalPages = Math.ceil(total / perPage);
-
-	const getPageNumbers = () => {
+	const totalPages = useMemo(() => Math.ceil(total / perPage), [total, perPage]);
+	
+	const pageNumbers = useMemo(() => {
 		const pages: (number | string)[] = [];
 	
 		// Add first page
@@ -41,16 +42,14 @@ export const Pagination = ({
 		if (page < totalPages - 1) pages.push(totalPages);
 	
 		return pages;
-	};
-	
-	const pageNumbers = getPageNumbers();
+	}, [page, totalPages]);
 
-	const generatePageLink = (pageNumber: number) => {
+	const generatePageLink = useCallback((pageNumber: number) => {
 		const params = new URLSearchParams(searchParams.toString());
 		params.set("page", pageNumber.toString());
 		return `?${params.toString()}`;
-	};
-
+	}, [searchParams]);
+	
 	return (
 		<PaginationComponent className={cn('', className)}>
 			<PaginationContent>

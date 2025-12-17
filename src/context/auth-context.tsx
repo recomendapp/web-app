@@ -3,11 +3,12 @@
 import { createContext, useState, useEffect, use, useMemo, useCallback } from 'react';
 import { Provider, Session } from '@supabase/supabase-js';
 import { User } from '@recomendapp/types';
-import { useUserQuery } from '@/features/client/user/userQueries';
 import { useSupabaseClient } from '@/context/supabase-context';
 import { CustomerInfo } from '@revenuecat/purchases-js';
 import { useRevenueCat } from '@/lib/revenuecat/useRevenueCat';
-import { useAuthCustomerInfo } from '@/features/client/auth/authQueries';
+import { useQuery } from '@tanstack/react-query';
+import { useUserOptions } from '@/api/client/options/userOptions';
+import { useAuthCustomerInfoOptions } from '@/api/client/options/authOptions';
 
 export interface UserState {
   user: User | null | undefined;
@@ -51,18 +52,17 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
   const {
     data: user,
     isLoading: userLoading,
-  } = useUserQuery({
+  } = useQuery(useUserOptions({
     userId: session?.user?.id,
-    enabled: session !== undefined,
-  });
+  }));
   const loading = useMemo(() => userLoading, [userLoading]);
   const { customerInfo: initCustomerInfo } = useRevenueCat(session);
   const {
     data: customerInfo,
-	} = useAuthCustomerInfo({
+	} = useQuery(useAuthCustomerInfoOptions({
     enabled: !!initCustomerInfo,
     initialData: initCustomerInfo,
-	});
+	}));
 
   const login = useCallback(async (email: string, password: string, redirectTo?: string | null) => {
     const { error } = await supabase.auth.signInWithPassword({

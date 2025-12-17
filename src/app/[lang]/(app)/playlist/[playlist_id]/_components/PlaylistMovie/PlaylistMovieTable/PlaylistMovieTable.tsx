@@ -43,12 +43,13 @@ import {
 import { MouseSensor, TouchSensor } from '@/lib/dnd-kit/CustomSensor';
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { Playlist, PlaylistItemMovie } from '@recomendapp/types';
-import { usePlaylistIsAllowedToEditQuery } from '@/features/client/playlist/playlistQueries';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { DataTableToolbar } from './component/data-table-toolbar';
 import { usePlaylistMovieUpdateMutation } from '@/api/client/mutations/playlistMutations';
 import { useAuth } from '@/context/auth-context';
+import { useQuery } from '@tanstack/react-query';
+import { usePlaylistIsAllowedToEditOptions } from '@/api/client/options/playlistOptions';
 
 declare module '@tanstack/react-table' {
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -69,10 +70,10 @@ export default function PlaylistMovieTable({
 }: DataTableProps) {
   const common = useTranslations('common');
   const { session } = useAuth();
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
-	playlistId: playlist?.id,
-	userId: session?.user.id
-  });
+  const { data: isAllowedToEdit } = useQuery(usePlaylistIsAllowedToEditOptions({
+    playlistId: playlist?.id,
+    userId: session?.user.id
+  }));
   // Mutations
   const updatePlaylistItem = usePlaylistMovieUpdateMutation();
 
@@ -285,10 +286,10 @@ const DraggableTableRow = ({
   row: Row<PlaylistItemMovie>;
 }) => {
   const { session } = useAuth();
-  const { data: isAllowedToEdit } = usePlaylistIsAllowedToEditQuery({
-	playlistId: row.original.playlist_id,
-	userId: session?.user.id
-  });
+  const { data: isAllowedToEdit } = useQuery(usePlaylistIsAllowedToEditOptions({
+    playlistId: row.original.playlist_id,
+    userId: session?.user.id
+  }));
   const {
     attributes,
     listeners,

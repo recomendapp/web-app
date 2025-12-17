@@ -5,12 +5,13 @@ import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-import { useUserFollowPersonQuery } from '@/features/client/user/userQueries';
-import { useUserFollowPersonInsertMutation, useUserUnfollowPersonDeleteMutation } from '@/features/client/user/userMutations';
 import { upperFirst } from 'lodash';
 import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
 import { useModal } from '@/context/modal-context';
+import { useQuery } from '@tanstack/react-query';
+import { useUserFollowPersonOptions } from '@/api/client/options/userOptions';
+import { useUserFollowPersonInsertMutation, useUserUnfollowPersonDeleteMutation } from '@/api/client/mutations/userMutations';
 
 interface PersonFollowButtonProps extends React.HTMLAttributes<HTMLDivElement> {
   personId: number;
@@ -27,10 +28,10 @@ export function PersonFollowButton({
   const {
     data: isFollow,
     isLoading,
-  } = useUserFollowPersonQuery({
-    personId: personId,
+  } = useQuery(useUserFollowPersonOptions({
     userId: session?.user.id,
-  });
+    personId: personId,
+  }));
   const { mutateAsync: insertFollow} = useUserFollowPersonInsertMutation();
   const { mutateAsync: deleteFollow } = useUserUnfollowPersonDeleteMutation();
 

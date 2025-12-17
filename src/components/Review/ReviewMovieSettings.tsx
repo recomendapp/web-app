@@ -14,8 +14,8 @@ import { upperFirst } from 'lodash';
 import { Icons } from '@/config/icons';
 import { useModal } from '@/context/modal-context';
 import { usePathname, useRouter } from '@/lib/i18n/navigation';
-import { useUserReviewMovieDeleteMutation } from '@/features/client/user/userMutations';
 import { useCallback, useMemo } from 'react';
+import { useUserReviewMovieDeleteMutation } from '@/api/client/mutations/userMutations';
 
 type OptionItem = {
 	variant?: 'destructive';

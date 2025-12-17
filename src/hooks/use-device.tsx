@@ -31,7 +31,7 @@ export function useDevice({
 
 		window.addEventListener('resize', handleResize);
 		return () => window.removeEventListener('resize', handleResize);
-	}, []);
+	}, [getDevice]);
 
 	return device;
 }

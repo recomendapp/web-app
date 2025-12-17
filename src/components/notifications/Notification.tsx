@@ -8,26 +8,21 @@ import { Button } from '../ui/button';
 import { Icons } from '@/config/icons';
 import { TooltipBox } from '../Box/TooltipBox';
 import { Skeleton } from '../ui/skeleton';
-import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from '@/features/client/user/userMutations';
 import { useAuth } from '@/context/auth-context';
 import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 import { upperFirst } from 'lodash';
 import { NotificationPayload } from '@recomendapp/types';
+import { useUserAcceptFollowerRequestMutation, useUserDeclineFollowerRequestMutation } from '@/api/client/mutations/userMutations';
 
 interface NotificationProps extends React.HTMLAttributes<HTMLDivElement | HTMLAnchorElement> {
 	notification: NotificationType;
 }
 
 const NotificationContent = ({ notification }: { notification: NotificationType }) => {
-	const { session } = useAuth();
 	const t = useTranslations('common');
-	const acceptRequest = useUserAcceptFollowerRequestMutation({
-		userId: session?.user.id,
-	});
-	const declineRequest = useUserDeclineFollowerRequestMutation({
-		userId: session?.user.id,
-	});
+	const { mutateAsync: acceptRequest } = useUserAcceptFollowerRequestMutation();
+	const { mutateAsync: declineRequest } = useUserDeclineFollowerRequestMutation();
 
 	const handleAction = useCallback(async ({
 		action,
@@ -40,7 +35,7 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 		switch (data.type) {
 			case 'follower_request':
 				if (action === 'primary') {
-					await acceptRequest.mutateAsync({
+					await acceptRequest({
 						requestId: data.id
 					}, {
 						onSuccess: () => {
@@ -51,7 +46,7 @@ const NotificationContent = ({ notification }: { notification: NotificationType 
 						}
 					});
 				} else {
-					await declineRequest.mutateAsync({
+					await declineRequest({
 						requestId: data.id
 					}, {
 						onSuccess: () => {

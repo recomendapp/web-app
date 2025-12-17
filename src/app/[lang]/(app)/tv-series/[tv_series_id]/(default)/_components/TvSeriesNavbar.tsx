@@ -8,32 +8,32 @@ import { useMemo } from 'react';
 
 const type = 'tv-series';
 
-export default function TvSerieNavbar({
+export const TvSeriesNavbar = ({
   serieId,
 }: {
   serieId: string;
-}) {
-  const common = useTranslations('common');
+}) =>{
+  const t = useTranslations();
   const pathname = usePathname();
 
   const regex = `^/${type}/${serieId}(-[a-z0-9-]*)?`;
   const routes = useMemo(() => [
     {
-      label: upperFirst(common('messages.details')),
+      label: upperFirst(t('common.messages.details')),
       active: pathname.match(new RegExp(regex + '$')),
       href: `/${type}/${serieId}`,
     },
     {
-      label: upperFirst(common('messages.review', { count: 2 })),
+      label: upperFirst(t('common.messages.review', { count: 2 })),
       active: pathname.match(new RegExp(regex + '/reviews')),
       href: `/${type}/${serieId}/reviews`,
     },
     {
-      label: upperFirst(common('messages.playlist', { count: 2 })),
+      label: upperFirst(t('common.messages.playlist', { count: 2 })),
       active: pathname.match(new RegExp(regex + '/playlists')),
       href: `/${type}/${serieId}/playlists`,
     },
-  ], [common, pathname, regex, serieId]);
+  ], [t, pathname, regex, serieId]);
 
   return (
     <div className="inline-flex h-10 items-center justify-center bg-muted p-1 text-muted-foreground w-full rounded-md mb-4">

@@ -2,11 +2,10 @@ import { notFound } from 'next/navigation';
 import { getIdFromSlug } from '@/utils/get-id-from-slug';
 import { upperFirst } from 'lodash';
 import { getTranslations } from 'next-intl/server';
-import { getTvSeries } from '@/features/server/media/mediaQueries';
 import { Metadata } from 'next';
 import { SupportedLocale } from '@/translations/locales';
 import { TvSeriesEditReview } from './_components/TvSeriesEditReview';
-import { MediaTvSeries } from '@recomendapp/types';
+import { getTvSeries } from '@/api/server/medias';
 
 export async function generateMetadata(
   props: {
@@ -40,10 +39,10 @@ export default async function EditReview(
   }
 ) {
   const params = await props.params;
-  const { id: serieId } = getIdFromSlug(params.tv_series_id);
-  let serie: MediaTvSeries;
+  const { id: tvSeriesId } = getIdFromSlug(params.tv_series_id);
+  let serie: Awaited<ReturnType<typeof getTvSeries>>;
   try {
-    serie = await getTvSeries(params.lang, serieId);
+    serie = await getTvSeries(params.lang, tvSeriesId);
   } catch {
     return notFound();
   }

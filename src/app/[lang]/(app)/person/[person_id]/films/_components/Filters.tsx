@@ -45,16 +45,23 @@ export const Filters = ({
 		return !!department || !!job;
 	}, [department, job]);
 
-	const handleChange = useCallback((entries: { [key: string]: string | null }) => {
+	const handleChange = useCallback((entries: { [key: string]: string | null }, resetPage = true) => {
 		const params = new URLSearchParams(searchParams.toString());
+
+		// if (resetPage) {
+		// 	params.delete('page');
+		// }
+
 		for (const [name, value] of Object.entries(entries)) {
-			if (!value) {
-				params.delete(name);
-			} else {
-				params.set(name, value);
-			}
+		if (!value) {
+			params.delete(name);
+		} else {
+			params.set(name, value);
 		}
+		}
+
 		router.push(`?${params.toString()}`);
+
 	}, [searchParams, router]);
 	return (
 	<ButtonGroup>

@@ -1,26 +1,25 @@
 'use client'
 
-import { UserReviewMovie } from "@recomendapp/types";
-import { useUserReviewMovieQuery } from "@/features/client/user/userQueries";
 import ReviewViewer from "@/components/Review/ReviewViewer";
 import { HeaderBox } from "@/components/Box/HeaderBox";
 import { TMDB_IMAGE_BASE_URL } from "@/lib/tmdb/tmdb";
 import { CardMovie } from "@/components/Card/CardMovie";
 import { upperFirst } from "lodash";
 import { useTranslations } from "next-intl";
+import { useQuery } from "@tanstack/react-query";
+import { useUserReviewMovieOptions } from "@/api/client/options/userOptions";
 
 export const MovieReview = ({
-	reviewServer,
-} : {
-	reviewServer: UserReviewMovie;
+	reviewId,
+}: {
+	reviewId: number;
 }) => {
 	const t = useTranslations();
 	const {
 		data: review
-	} = useUserReviewMovieQuery({
-		reviewId: reviewServer.id,
-		initialData: reviewServer,
-	});
+	} = useQuery(useUserReviewMovieOptions({
+		reviewId: reviewId,
+	}));
 
 	if (!review) return null;
 

@@ -1,19 +1,20 @@
-'use client';
+'use client'
 
 import { useUIStore } from '@/stores/useUIStore';
 import { useAuth } from '@/context/auth-context';
-import { useUserRecosMovieQuery, useUserRecosTvSeriesQuery } from '@/features/client/user/userQueries';
 import { MyRecosHeader } from './_components/MyRecosHeader';
 import { ImageObject } from '@/hooks/use-random-image';
 import { TableMyRecosMovie } from './_components/TableMyRecosMovie/TableMyRecosMovie';
 import { TableMyRecosTvSeries } from './_components/TableMyRecosTvSeries/TableMyRecosTvSeries';
+import { useQuery } from '@tanstack/react-query';
+import { useUserRecosMovieOptions, useUserRecosTvSeriesOptions } from '@/api/client/options/userOptions';
 
 export default function MyRecos() {
   const tab = useUIStore((state) => state.myRecosTab);
   const { session } = useAuth();
 
-  const { data: recosMovie, isLoading: recosMovieIsLoading } = useUserRecosMovieQuery({ userId: tab === 'movie' ? session?.user.id : undefined });
-  const { data: recosTvSeries, isLoading: recosTvSeriesIsLoading } = useUserRecosTvSeriesQuery({ userId: tab === 'tv_series' ? session?.user.id : undefined });
+  const { data: recosMovie, isLoading: recosMovieIsLoading } = useQuery(useUserRecosMovieOptions({ userId: tab === 'movie' ? session?.user.id : undefined }));
+  const { data: recosTvSeries, isLoading: recosTvSeriesIsLoading } = useQuery(useUserRecosTvSeriesOptions({ userId: tab === 'tv_series' ? session?.user.id : undefined }));
 
   const data = tab === 'movie' ? recosMovie : recosTvSeries;
   const isLoading = tab === 'movie'

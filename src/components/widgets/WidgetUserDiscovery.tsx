@@ -1,55 +1,65 @@
 import { cn } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { ScrollArea } from "../ui/scroll-area"
-import { Fragment, useState } from "react"
-import { useUserDiscoveryInfiniteQuery } from "@/features/client/user/userQueries"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue } from "../ui/select"
+import { Fragment, useMemo, useState } from "react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 import { CardUser } from "../Card/CardUser"
 import { useTranslations } from "next-intl"
 import { upperFirst } from "lodash"
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { useWidgetUserDiscoveryOptions } from "@/api/client/options/widgetOptions"
+import { ButtonGroup } from "../ui/button-group"
+import { TooltipBox } from "../Box/TooltipBox"
+import { Icons } from "@/config/icons"
 
 export const WidgetUserDiscovery = ({
 	className,
 } : React.HTMLAttributes<HTMLDivElement>) => {
-	const [order, setOrder] = useState<'created_at-desc' | 'created_at-asc' | 'popularity-desc' | 'popularity-asc'>('created_at-desc')
-	const t = useTranslations('common');
+	const t = useTranslations();
+	const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+	const [sortBy, setSortBy] = useState<'created_at' | 'followers_count'>('created_at');
 	const {
 		data: users,
 		isLoading,
 		fetchNextPage,
 		isFetchingNextPage,
 		hasNextPage,
-	} = useUserDiscoveryInfiniteQuery({
+	} = useInfiniteQuery(useWidgetUserDiscoveryOptions({
 		filters: {
-			resultsPerPage: 20,
-			order: order,
+			sortBy: sortBy,
+			sortOrder: sortOrder,
 		}
-	})
+	}));
+
+	const orderOptions = useMemo((): { value: 'created_at' | 'followers_count', label: string }[] => ([
+		{ value: 'created_at', label: upperFirst(t('common.messages.date_created')) },
+		{ value: 'followers_count', label: upperFirst(t('common.messages.popularity')) },
+	]), [t]);
+
 	if (!users || !users.pages[0].length) return null;
 	return (
 	<div className={cn('flex flex-col gap-4 overflow-hidden', className)}>
 		<div className="flex items-center justify-between">
-			<Button variant={'link'} className="p-0 w-fit font-semibold text-xl hover:text-primary hover:no-underline cursor-default">
-				{upperFirst(t('messages.discover_users'))}
+			<Button variant={'link'} className="p-0 w-fit font-semibold text-xl">
+				{upperFirst(t('common.messages.discover_users'))}
 			</Button>
-			<Select onValueChange={(value) => setOrder(value as any)} value={order}>
-				<SelectTrigger className="w-fit">
-				<SelectValue />
-				</SelectTrigger>
-				<SelectContent align="end">
-					<SelectGroup>
-						<SelectLabel>Création</SelectLabel>
-						<SelectItem value={'created_at-desc'}>Plus récents</SelectItem>
-						<SelectItem value={'created_at-asc'}>Plus anciens</SelectItem>
-					</SelectGroup>
-					<SelectSeparator />
-					<SelectGroup>
-						<SelectLabel>Popularité</SelectLabel>
-						<SelectItem value={'popularity-desc'}>Plus populaires</SelectItem>
-						<SelectItem value={'popularity-asc'}>Moins populaires</SelectItem>
-					</SelectGroup>
-				</SelectContent>
-			</Select>
+			<ButtonGroup>
+				<TooltipBox tooltip={upperFirst(sortOrder === 'asc' ? t('common.messages.order_asc') : t('common.messages.order_desc'))}>
+					<Button variant={'outline'} onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}>
+						{sortOrder === 'desc' ? <Icons.orderDesc /> : <Icons.orderAsc />}
+					</Button>
+				</TooltipBox>
+				<Select onValueChange={(value) => setSortBy(value as 'created_at' | 'followers_count')} value={sortBy}>
+					<SelectTrigger className="w-fit">
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent align="end">
+						{orderOptions.map((option) => (
+							<SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+			</ButtonGroup>
 
 		</div>
 		<ScrollArea className='h-full gap-2'>

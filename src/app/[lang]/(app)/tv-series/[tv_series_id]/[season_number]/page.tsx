@@ -1,7 +1,4 @@
-import TvSeasonHeader from "./_components/TvSeasonHeader";
 import { redirect } from "next/navigation";
-import { getTvSeason } from "@/features/server/media/mediaQueries";
-import TvSeasonDetails from "./_components/TvSeasonDetails";
 import { getIdFromSlug } from "@/utils/get-id-from-slug";
 import { siteConfig } from "@/config/site";
 import { truncate, upperFirst } from "lodash";
@@ -10,7 +7,11 @@ import { Metadata } from "next";
 import { TVSeason, WithContext } from "schema-dts";
 import { seoLocales } from "@/lib/i18n/routing";
 import { SupportedLocale } from "@/translations/locales";
-import { MediaTvSeriesSeason } from "@recomendapp/types";
+import { getTvSeason } from "@/api/server/medias";
+import { getTmdbImage } from "@/lib/tmdb/getTmdbImage";
+import { Database } from "@recomendapp/types";
+import { TvSeasonHeader } from "./_components/TvSeasonHeader";
+import { TvSeasonDetails } from "./_components/TvSeasonDetails";
 
 export async function generateMetadata(
   props: {
@@ -27,10 +28,10 @@ export async function generateMetadata(
   try {
     const season = await getTvSeason(params.lang, serieId, Number(params.season_number));
     return {
-      title: t('pages.tv_series.seasons.season.metadata.title', { title: season.serie?.name!, number: season.season_number! }),
+      title: t('pages.tv_series.seasons.season.metadata.title', { title: season.media_tv_series?.name!, number: season.season_number! }),
       description: truncate(
         t('pages.tv_series.seasons.season.metadata.description', {
-          title: season.serie?.name!,
+          title: season.media_tv_series?.name!,
           number: season.season_number!,
         }),
         { length: siteConfig.seo.description.limit }
@@ -38,17 +39,17 @@ export async function generateMetadata(
       alternates: seoLocales(params.lang, `/tv-series/${params.tv_series_id}/${params.season_number}`),
       openGraph: {
         siteName: siteConfig.name,
-        title: `${t('pages.tv_series.seasons.season.metadata.title', { title: season.serie?.name!, number: season.season_number! })} • ${siteConfig.name}`,
+        title: `${t('pages.tv_series.seasons.season.metadata.title', { title: season.media_tv_series?.name!, number: season.season_number! })} • ${siteConfig.name}`,
         description: truncate(
           t('pages.tv_series.seasons.season.metadata.description', {
-            title: season.serie?.name!,
+            title: season.media_tv_series?.name!,
             number: season.season_number!,
           }),
           { length: siteConfig.seo.description.limit }
         ),
         url: `${siteConfig.url}/${params.lang}/tv-series/${params.tv_series_id}/${params.season_number}`,
-        images: season.poster_url ? [
-          { url: season.poster_url }
+        images: season.poster_path ? [
+          { url: getTmdbImage({ path: season.poster_path, size: 'w500' }) }
         ] : undefined,
         type: 'video.episode',
         locale: params.lang,
@@ -69,14 +70,14 @@ export default async function TvSeriesSeason(
   }
 ) {
   const params = await props.params;
-  const { id: seriesId } = getIdFromSlug(params.tv_series_id);
+  const { id: tvSeriesId } = getIdFromSlug(params.tv_series_id);
   const seasonNumber = Number(params.season_number);
   if (isNaN(seasonNumber)) {
     return redirect(`/${params.lang}/tv-series/${params.tv_series_id}`);
   }
-  let season: MediaTvSeriesSeason;
+  let season: Database['public']['Views']['media_tv_series_seasons']['Row'];
   try {
-    season = await getTvSeason(params.lang, seriesId, seasonNumber);
+    season = await getTvSeason(params.lang, tvSeriesId, seasonNumber);
   } catch {
     return redirect(`/${params.lang}/tv-series/${params.tv_series_id}`);
   }
@@ -84,11 +85,11 @@ export default async function TvSeriesSeason(
     '@context': 'https://schema.org',
     '@type': 'TVSeason',
     name: season.name ?? undefined,
-    image: season.poster_url ?? undefined,
+    image: season.poster_path ? getTmdbImage({ path: season.poster_path, size: 'w500' }) : undefined,
     seasonNumber: season.season_number ?? undefined,
     aggregateRating: season.vote_average ? {
       '@type': 'AggregateRating',
-      ratingValue: season.vote_average ?? undefined,
+      ratingValue: season.vote_average,
       ratingCount: season.vote_count ?? 0,
       bestRating: 10,
       worstRating: 1,
@@ -97,10 +98,12 @@ export default async function TvSeriesSeason(
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <TvSeasonHeader season={season} urlSerie={`/tv-series/${params.tv_series_id}`} />
-      <div className="px-4 pb-4">
-        <TvSeasonDetails season={season} />
-      </div>
+      <TvSeasonHeader season={season} />
+      {season && (
+        <div className="flex flex-col items-center px-4 pb-4">
+          <TvSeasonDetails season={season} />
+        </div>
+      )}
     </>
   );
 };

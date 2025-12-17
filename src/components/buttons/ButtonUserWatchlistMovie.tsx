@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { useUserActivityMovieQuery, useUserWatchlistMovieItemQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { Link } from "@/lib/i18n/navigation";
@@ -8,11 +7,13 @@ import { Icons } from "@/config/icons";
 import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
-import { useUserWatchlistMovieDeleteMutation, useUserWatchlistMovieInsertMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
 import { ContextMenuWatchlistMovie } from "../ContextMenu/ContextMenuWatchlistMovie";
+import { useQuery } from "@tanstack/react-query";
+import { useUserWatchlistMovieItemOptions } from "@/api/client/options/userOptions";
+import { useUserWatchlistMovieDeleteMutation, useUserWatchlistMovieInsertMutation } from "@/api/client/mutations/userMutations";
 
 interface ButtonUserWatchlistMovieProps
 	extends React.ComponentProps<typeof Button> {
@@ -29,20 +30,13 @@ const ButtonUserWatchlistMovie = React.forwardRef<
 	const pathname = usePathname();
 
 	const {
-		data: activity,
-	} = useUserActivityMovieQuery({
-		userId: session?.user.id,
-		movieId: movieId,
-	});
-
-	const {
 		data: watchlist,
 		isLoading,
 		isError,
-	} = useUserWatchlistMovieItemQuery({
+	} = useQuery(useUserWatchlistMovieItemOptions({
 		movieId: movieId,
 		userId: session?.user.id,
-	});
+	}));
 
 	const { mutateAsync: insertWatchlist, isPending: isInsertPending } = useUserWatchlistMovieInsertMutation();
 	const { mutateAsync: deleteWatchlist, isPending: isDeletePending } = useUserWatchlistMovieDeleteMutation();

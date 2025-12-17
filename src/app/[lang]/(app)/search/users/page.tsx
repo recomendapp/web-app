@@ -1,8 +1,7 @@
-
-import { redirect } from '@/lib/i18n/navigation';
 import { Metadata } from 'next';
-import SearchUsersFull from './_components/SearchUsersFull';
-import { SupportedLocale } from '@/translations/locales';
+import { getTranslations } from 'next-intl/server';
+import { upperFirst } from 'lodash';
+import { SearchUsers } from './_components/SearchUsers';
 
 export async function generateMetadata(
   props: {
@@ -11,24 +10,18 @@ export async function generateMetadata(
     }>;
   }
 ): Promise<Metadata> {
+  const t = await getTranslations();
   const searchParams = await props.searchParams;
+  if (!searchParams?.q) {
+    return {
+      title: upperFirst(t('common.messages.user', { count: 2 })),
+    };
+  }
   return {
-    title: `${searchParams.q} - Utilisateurs`,
+    title: `${searchParams.q} - ${upperFirst(t('common.messages.user', { count: 2 }))}`,
   };
 }
 
-export default async function SearchFilms(
-  props: {
-    params: Promise<{
-      lang: string;
-    }>;
-    searchParams?: Promise<{
-      q: string;
-    }>;
-  }
-) {
-  const params = await props.params;
-  const searchParams = await props.searchParams;
-  if (!searchParams?.q) redirect({ href: '/search', locale: params.lang as SupportedLocale });
-  return <SearchUsersFull query={searchParams?.q} />;
+export default async function SearchUsersPage() {
+  return <SearchUsers />;
 }

@@ -20,23 +20,40 @@ export const getValidatedSortOrder = (order?: string | null): z.infer<typeof ord
 export const pageSchema = z.number().int().positive();
 export const getValidatePage = (page?: number | null): number => {
 	return pageSchema.safeParse(page).success ? page! : DEFAULT_PAGE;
-}
-export const perPageSchema = z.number().int().positive();
-export const getValidatePerPage = (perPage?: number | null): number => {
-	return perPageSchema.safeParse(perPage).success ? perPage! : DEFAULT_PER_PAGE;
-}
+};
 export const displaySchema = z.enum(DISPLAY);
 export const getValidatedDisplay = (display?: string | null): z.infer<typeof displaySchema> => {
   return displaySchema.safeParse(display).success ? display! as z.infer<typeof displaySchema> : DEFAULT_DISPLAY;
 };
-
 export const departmentSchema = z.string().optional();
-export const getValidateDepartment = (department?: string | null): string | undefined => {
-  if (department === null) return undefined;
-  return departmentSchema.safeParse(department).success ? department : undefined;
+export const getValidateDepartment = (
+  mediaJobs: { department: string }[],
+  department?: string | null
+): string | undefined => {
+  if (!department) return undefined;
+
+  const allowedDepartments = new Set(
+    mediaJobs.map(j => j.department)
+  );
+
+  return allowedDepartments.has(department) ? department : undefined;
 };
 export const jobSchema = z.string().optional();
-export const getValidateJob = (job?: string | null): string | undefined => {
-  if (job === null) return undefined;
-  return jobSchema.safeParse(job).success ? job : undefined;
+export const getValidateJob = (
+  mediaJobs: {
+    department: string;
+    jobs: string[] | null;
+  }[],
+  department?: string,
+  job?: string | null
+): string | undefined => {
+  if (!department || !job) return undefined;
+
+  const departmentEntry = mediaJobs.find(
+    d => d.department === department
+  );
+
+  if (!departmentEntry?.jobs) return undefined;
+
+  return departmentEntry.jobs.includes(job) ? job : undefined;
 };

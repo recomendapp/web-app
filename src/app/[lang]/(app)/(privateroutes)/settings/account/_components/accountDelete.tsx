@@ -1,10 +1,12 @@
+import { useUserDeleteRequestDeleteMutation, useUserDeleteRequestInsertMutation } from "@/api/client/mutations/userMutations";
+import { useUserDeleteRequestOptions } from "@/api/client/options/userOptions";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/auth-context";
 import { useModal } from "@/context/modal-context";
-import { useUserDeleteRequestDeleteMutation, useUserDeleteRequestInsertMutation } from "@/features/client/user/userMutations";
-import { useUserDeleteRequestQuery } from "@/features/client/user/userQueries";
+import { useQuery } from "@tanstack/react-query";
 import { upperFirst } from "lodash";
 import { useFormatter, useTranslations } from "next-intl";
+import { useCallback } from "react";
 import toast from "react-hot-toast";
 
 const DELETION_DELAY = 1000 * 60 * 60 * 24 * 30; // 30 days
@@ -18,18 +20,18 @@ const AccountDelete = () => {
 	const {
 		data,
 		isLoading,
-	} = useUserDeleteRequestQuery({
+	} = useQuery(useUserDeleteRequestOptions({
 		userId: session?.user.id,
-	});
+	}));
 	const loading = data === undefined || isLoading;
 
-	const insertRequestMutation = useUserDeleteRequestInsertMutation();
-	const deleteRequestMutation = useUserDeleteRequestDeleteMutation();
+	const { mutateAsync: insertRequestMutation } = useUserDeleteRequestInsertMutation();
+	const { mutateAsync: deleteRequestMutation } = useUserDeleteRequestDeleteMutation();
 
 	// Handlers
-	const handleInsertRequest = () => {
+	const handleInsertRequest = useCallback(async () => {
 		if (!session) return;
-		insertRequestMutation.mutate({
+		await insertRequestMutation({
 			userId: session.user.id,
 		}, {
 			onSuccess: () => {
@@ -39,10 +41,10 @@ const AccountDelete = () => {
 				toast.error(upperFirst(common('messages.an_error_occurred')));
 			}
 		});
-	};
-	const handleDeleteRequest = () => {
+	}, [insertRequestMutation, session, common]);
+	const handleDeleteRequest = useCallback(async () => {
 		if (!session) return;
-		deleteRequestMutation.mutate({
+		await deleteRequestMutation({
 			userId: session.user.id,
 		}, {
 			onSuccess: () => {
@@ -52,7 +54,7 @@ const AccountDelete = () => {
 				toast.error(upperFirst(common('messages.an_error_occurred')));
 			}
 		});
-	};
+	}, [deleteRequestMutation, session, common]);
 
 	if (loading) return null;
 	return (

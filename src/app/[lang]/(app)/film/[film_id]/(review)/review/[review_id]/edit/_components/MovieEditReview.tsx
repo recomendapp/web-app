@@ -1,19 +1,20 @@
 'use client'
 
-import { MediaMovie } from '@recomendapp/types';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from "@/lib/i18n/navigation";
-import { useUserActivityMovieQuery, useUserReviewMovieQuery } from '@/features/client/user/userQueries';
 import ReviewForm from '@/components/Review/ReviewForm';
-import { useUserReviewMovieUpsertMutation } from '@/features/client/user/userMutations';
 import { Spinner } from '@/components/ui/spinner';
 import { useCallback, useEffect } from 'react';
+import { Database } from '@recomendapp/types';
+import { useQuery } from '@tanstack/react-query';
+import { useUserActivityMovieOptions, useUserReviewMovieOptions } from '@/api/client/options/userOptions';
+import { useUserReviewMovieUpsertMutation } from '@/api/client/mutations/userMutations';
 
 export const MovieEditReview = ({
-	reviewId,
 	movie,
+	reviewId,
 }: {
-	movie: MediaMovie;
+	movie: Database['public']['Views']['media_movie']['Row'];
 	reviewId: number;
 }) => {
 	const { session } = useAuth();
@@ -21,16 +22,16 @@ export const MovieEditReview = ({
 
 	const {
 		data: activity,
-	} = useUserActivityMovieQuery({
+	} = useQuery(useUserActivityMovieOptions({
 		movieId: movie.id,
 		userId: session?.user.id,
-	});
+	}));
 	const {
 		data: review,
 		isLoading,
-	} = useUserReviewMovieQuery({
+	} = useQuery(useUserReviewMovieOptions({
 		reviewId: reviewId,
-	});
+	}));
 	const { mutateAsync: upsertReview } = useUserReviewMovieUpsertMutation({
 		movieId: movie.id,
 	});

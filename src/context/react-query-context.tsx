@@ -13,23 +13,23 @@ export const ReactQueryProvider = ({
 }) => {
   const queryClient = getQueryClient();
   return (
-    <QueryNormalizerProvider
-      queryClient={queryClient}
-      normalizerConfig={{
-        getNormalizationObjectKey: obj => {
-          if (obj.id && getType(obj)) {
-            return `${getType(obj)}:${obj.id}`
-          } else if (obj.id) {
-            return `${obj.id}`
-          }
-        },
-        devLogging: true,
-      }}
-    >
+    // <QueryNormalizerProvider
+    //   queryClient={queryClient}
+    //   normalizerConfig={{
+    //     getNormalizationObjectKey: obj => {
+    //       if (obj.id && getType(obj)) {
+    //         return `${getType(obj)}:${obj.id}`
+    //       } else if (obj.id) {
+    //         return `${obj.id}`
+    //       }
+    //     },
+    //     devLogging: true,
+    //   }}
+    // >
       <QueryClientProvider client={queryClient}>
         {children}
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
-    </QueryNormalizerProvider>
+    // </QueryNormalizerProvider>
   );
 };

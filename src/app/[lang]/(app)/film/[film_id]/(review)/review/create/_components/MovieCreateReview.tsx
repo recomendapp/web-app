@@ -1,21 +1,19 @@
 'use client'
 
-import { MediaMovie } from '@recomendapp/types';
 import { useAuth } from '@/context/auth-context';
 import { useRouter } from "@/lib/i18n/navigation";
-import { useUserActivityMovieQuery } from '@/features/client/user/userQueries';
 import ReviewForm from '@/components/Review/ReviewForm';
-import { useUserReviewMovieUpsertMutation } from '@/features/client/user/userMutations';
-import { userKeys } from '@/features/client/user/userKeys';
 import { Spinner } from '@/components/ui/spinner';
 import { useCallback, useEffect } from 'react';
+import { Database } from '@recomendapp/types';
+import { useUserActivityMovieOptions } from '@/api/client/options/userOptions';
+import { useQuery } from '@tanstack/react-query';
+import { useUserReviewMovieUpsertMutation } from '@/api/client/mutations/userMutations';
 
 export const MovieCreateReview = ({
 	movie,
-	slug,
 }: {
-	movie: MediaMovie;
-	slug: string;
+	movie: Database['public']['Views']['media_movie']['Row'];
 }) => {
 	const { session } = useAuth();
 	const router = useRouter();
@@ -23,10 +21,10 @@ export const MovieCreateReview = ({
 	const {
 		data: activity,
 		isLoading,
-	} = useUserActivityMovieQuery({
+	} = useQuery(useUserActivityMovieOptions({
 		movieId: movie.id,
 		userId: session?.user.id,
-	});
+	}));
 	const { mutateAsync: upsertReview } = useUserReviewMovieUpsertMutation({
 		movieId: movie.id,
 	});
@@ -35,21 +33,21 @@ export const MovieCreateReview = ({
 		if (!activity) return;
 		await upsertReview(data, {
 			onSuccess: (review) => {
-				router.replace(`/film/${slug}/review/${review.id}`);
+				router.replace(`/film/${movie.slug || movie.id}/review/${review.id}`);
 			},
 			onError: (error) => {
 				throw error;
 			}
 		});
-	}, [activity, upsertReview, router, slug]);
+	}, [activity, upsertReview, router, movie]);
 
 	useEffect(() => {
 		if (activity?.review) {
-			router.replace(`/film/${slug}/review/${activity.review.id}`);
+			router.replace(`/film/${movie.slug || movie.id}/review/${activity.review.id}`);
 		}
-	}, [activity, router, slug]);
+	}, [activity, router, movie]);
 
-	if (isLoading ||activity?.review) {
+	if (isLoading ||activity?.review || !movie) {
 		return (
 			<div className='flex items-center justify-center flex-1 p-4'>
 				<Spinner />

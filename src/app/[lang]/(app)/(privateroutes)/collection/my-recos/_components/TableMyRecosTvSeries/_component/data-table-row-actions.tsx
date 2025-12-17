@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { Link } from "@/lib/i18n/navigation";
 import { Column, Row, Table } from '@tanstack/react-table';
@@ -19,11 +19,12 @@ import { Icons } from '@/config/icons';
 import { ModalShare } from '@/components/Modals/Share/ModalShare';
 import { useModal } from '@/context/modal-context';
 import { createShareController } from "@/components/ShareController/ShareController";
-import { useUserRecosTvSeriesCompleteMutation, useUserRecosTvSeriesDeleteMutation } from "@/features/client/user/userMutations";
 import { useAuth } from "@/context/auth-context";
 import { ModalRecosSenders } from "@/components/Modals/recos/ModalRecosSenders";
 import { ShareControllerTvSeries } from "@/components/ShareController/ShareControllerTvSeries";
 import { ModalUserRecosTvSeriesSend } from "@/components/Modals/recos/ModalUserRecosTvSeriesSend";
+import { useUserRecosTvSeriesCompleteMutation, useUserRecosTvSeriesDeleteMutation } from "@/api/client/mutations/userMutations";
+import { useCallback } from "react";
 
 interface DataTableRowActionsProps {
   table: Table<UserRecosTvSeriesAggregated>;
@@ -41,15 +42,15 @@ export function DataTableRowActions({
   const { session } = useAuth();
   const t = useTranslations();
   const { openModal, createConfirmModal } = useModal();
-  const deleteReco = useUserRecosTvSeriesDeleteMutation();
-  const completeReco = useUserRecosTvSeriesCompleteMutation();
+  const { mutateAsync: mutateDeleteReco} = useUserRecosTvSeriesDeleteMutation();
+  const { mutateAsync: mutateCompleteReco } = useUserRecosTvSeriesCompleteMutation();
 
-  const handleDeleteReco = async () => {
+  const handleDeleteReco = useCallback(async () => {
     if (!session || !data?.tv_series_id) {
       toast.error(upperFirst(t('common.messages.an_error_occurred')));
       return;
     }
-    await deleteReco.mutateAsync({
+    await mutateDeleteReco({
       userId: session.user.id,
       tvSeriesId: data?.tv_series_id,
     }, {
@@ -60,14 +61,14 @@ export function DataTableRowActions({
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  };
+  }, [session, data.tv_series_id, mutateDeleteReco, t]);
 
-  const handleCompleteReco = async () => {
+  const handleCompleteReco = useCallback(async () => {
     if (!session || !data?.tv_series_id) {
       toast.error(upperFirst(t('common.messages.an_error_occurred')));
       return;
     }
-    await completeReco.mutateAsync({
+    await mutateCompleteReco({
       userId: session.user.id,
       tvSeriesId: data?.tv_series_id,
     }, {
@@ -78,7 +79,7 @@ export function DataTableRowActions({
         toast.error(upperFirst(t('common.messages.an_error_occurred')));
       }
     });
-  }
+  }, [session, data.tv_series_id, mutateCompleteReco, t]);
 
   return (
     <div className="flex items-center justify-end">
@@ -93,7 +94,7 @@ export function DataTableRowActions({
           </Button>
         </DropdownMenuTrigger>
 
-        <DropdownMenuContent align="end" className="w-[160px]">
+        <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuItem
             onClick={() => createConfirmModal({
               title: upperFirst(t('pages.collection.my_recos.modal.complete_confirm.title')),

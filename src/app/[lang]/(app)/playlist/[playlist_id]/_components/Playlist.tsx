@@ -1,22 +1,22 @@
-'use client';
-import { usePlaylistQuery } from "@/features/client/playlist/playlistQueries";
-import { Playlist as TPlaylist } from "@recomendapp/types";
+'use client'
+
+import { Database, Playlist as TPlaylist } from "@recomendapp/types";
 import { PlaylistMovie } from "./PlaylistMovie/PlaylistMovie";
 import { PlaylistTvSeries } from "./PlaylistTvSeries/PlaylistTvSeries";
-
-interface PlaylistProps extends React.ComponentProps<'div'> {
-	playlist: TPlaylist;
-}
+import { useQuery } from "@tanstack/react-query";
+import { usePlaylistDetailsOptions } from "@/api/client/options/playlistOptions";
 
 export const Playlist = ({
 	playlist: playlistProps,
-} : PlaylistProps) => {
+} : {
+	playlist: Database['public']['Tables']['playlists']['Row'] & { user: Database['public']['Views']['profile']['Row'] };
+}) => {
 	const {
 		data: playlist,
-	} = usePlaylistQuery({
+	} = useQuery(usePlaylistDetailsOptions({
 		playlistId: playlistProps.id,
 		initialData: playlistProps,
-	});
+	}));
 	if (!playlist) return null;
 	return (
 		<div className="h-full">

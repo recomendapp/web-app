@@ -1,19 +1,38 @@
-// ICONS
+'use client'
+
 import { HeaderBox } from '@/components/Box/HeaderBox';
 import PersonPoster from './PersonPoster';
 import { PersonFollowButton } from './PersonFollowButton';
 import { PersonAbout } from './PersonAbout';
-import { MediaPerson } from '@recomendapp/types';
+import { Database } from '@recomendapp/types';
+import { useQuery } from '@tanstack/react-query';
+import { useMediaPersonFilmsOptions } from '@/api/client/options/mediaOptions';
+import { DEFAULT_PER_PAGE, DEFAULT_SORT_BY, DEFAULT_SORT_ORDER } from '../films/_components/constants';
+import { useRandomImage } from '@/hooks/use-random-image';
+import { getTmdbImage } from '@/lib/tmdb/getTmdbImage';
 
-export default function PersonHeader({
+export const PersonHeader = ({
   person,
-  background,
 } : {
-  person: MediaPerson
-  background?: string | null
-}) {
+  person: Database['public']['Views']['media_person']['Row'];
+}) => {
+  const {
+    data
+  } = useQuery(useMediaPersonFilmsOptions({
+    personId: person.id,
+    filters: {
+      page: 1,
+      perPage: DEFAULT_PER_PAGE,
+      sortBy: DEFAULT_SORT_BY,
+      sortOrder: DEFAULT_SORT_ORDER,
+    }
+  }));
+  const randomBg = useRandomImage(data?.map(({ media_movie}) => ({
+      src: media_movie.backdrop_path ?? '',
+      alt: media_movie.title ?? `${person.slug}-backdrop`,
+  })) ?? []);
   return (
-    <HeaderBox background={background ? { src: background, alt: person.name ?? '', unoptimized: true } : undefined}>
+    <HeaderBox background={randomBg ? { src: getTmdbImage({ path: randomBg.src, size: 'w1280' }), alt: randomBg.alt || `${person.slug}-backdrop`, unoptimized: true } : undefined}>
       <div className="max-w-7xl flex flex-col w-full gap-4 items-center @2xl/header-box:flex-row">
         {/* MOVIE POSTER */}
         <PersonPoster

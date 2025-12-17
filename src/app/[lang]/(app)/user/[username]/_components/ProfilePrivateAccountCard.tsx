@@ -1,9 +1,9 @@
 import { upperFirst } from "lodash";
 import { LockIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
-export const ProfilePrivateAccountCard = () => {
-  const t = useTranslations();
+export const ProfilePrivateAccountCard = async () => {
+  const t = await getTranslations();
 	return (
 		<div className='flex gap-4 justify-center items-center px-4 py-8 border-y-2'>
       <LockIcon />

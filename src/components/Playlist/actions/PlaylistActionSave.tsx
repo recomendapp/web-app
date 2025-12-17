@@ -1,7 +1,5 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button";
-import { MediaType } from "@recomendapp/types";
-import { useUserPlaylistSavedQuery } from "@/features/client/user/userQueries";
 import { useAuth } from "@/context/auth-context";
 import { TooltipBox } from "@/components/Box/TooltipBox";
 import { Link } from "@/lib/i18n/navigation";
@@ -9,10 +7,12 @@ import { Icons } from "@/config/icons";
 import { usePathname } from '@/lib/i18n/navigation';
 import { cn } from "@/lib/utils";
 import { AlertCircleIcon } from "lucide-react";
-import { useUserPlaylistSavedDeleteMutation, useUserPlaylistSavedInsertMutation } from "@/features/client/user/userMutations";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { upperFirst } from "lodash";
+import { useQuery } from "@tanstack/react-query";
+import { useUserPlaylistSavedOptions } from "@/api/client/options/userOptions";
+import { useUserPlaylistSavedDeleteMutation, useUserPlaylistSavedInsertMutation } from "@/api/client/mutations/userMutations";
 
 interface PlaylistActionSaveProps
 	extends React.ComponentProps<typeof Button> {
@@ -32,21 +32,21 @@ const PlaylistActionSave = React.forwardRef<
 		data: saved,
 		isLoading,
 		isError,
-	} = useUserPlaylistSavedQuery({
+	} = useQuery(useUserPlaylistSavedOptions({
 		userId: session?.user.id,
 		playlistId: playlistId,
-	});
-	const insertPlaylistSaved = useUserPlaylistSavedInsertMutation();
-	const deletePlaylistSaved = useUserPlaylistSavedDeleteMutation();
+	}));
+	const { mutateAsync: insertPlaylistSaved, isPending: insertIsPending } = useUserPlaylistSavedInsertMutation();
+	const { mutateAsync: deletePlaylistSaved, isPending: deleteIsPending } = useUserPlaylistSavedDeleteMutation();
 
-	const handleWatchlist = async (e: React.MouseEvent) => {
+	const handleWatchlist = React.useCallback(async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (saved) return;
 		if (!session || !playlistId) {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
-		await insertPlaylistSaved.mutateAsync({
+		await insertPlaylistSaved({
 		  	userId: session.user.id,
 			playlistId: playlistId,
 		}, {
@@ -54,22 +54,22 @@ const PlaylistActionSave = React.forwardRef<
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		});
-	}
-	const handleUnwatchlist = async (e: React.MouseEvent) => {
+	}, [session, playlistId, insertPlaylistSaved, stopPropagation, t, saved]);
+	const handleUnwatchlist = React.useCallback(async (e: React.MouseEvent) => {
 		stopPropagation && e.stopPropagation();
 		if (!saved) return;
 		if (!saved.id) {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 			return;
 		}
-		await deletePlaylistSaved.mutateAsync({
+		await deletePlaylistSaved({
 		  savedId: saved.id,
 		}, {
 		  onError: () => {
 			toast.error(upperFirst(t('common.messages.an_error_occurred')));
 		  }
 		});
-	  }
+	}, [deletePlaylistSaved, saved, stopPropagation, t]);
 
 	if (session == null) {
 		return (
@@ -92,7 +92,7 @@ const PlaylistActionSave = React.forwardRef<
 		<TooltipBox tooltip={saved ? upperFirst(t('common.messages.delete')) : upperFirst(t('common.messages.save'))}>
 			<Button
 			onClick={async (e) => saved ? await handleUnwatchlist(e) : await handleWatchlist(e)}
-			disabled={isLoading || isError || saved === undefined || insertPlaylistSaved.isPending || deletePlaylistSaved.isPending}
+			disabled={isLoading || isError || saved === undefined || insertIsPending || deleteIsPending}
 			size="icon"
 			variant={'outline'}
 			{...props}
