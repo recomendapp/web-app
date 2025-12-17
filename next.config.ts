@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   reactCompiler: true,
   output: 'standalone',
+  // https://github.com/vercel/next.js/issues/79313#issuecomment-2892288965
+  htmlLimitedBots: /Googlebot|Bingbot|DuckDuckBot|YandexBot|Slurp|facebookexternalhit|Twitterbot|LinkedInBot|Slackbot/i,
   images: {
     // unoptimized: true, // Issue: https://github.com/vercel/next.js/issues/54482
     remotePatterns: [
