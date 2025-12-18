@@ -139,7 +139,15 @@ export const AuthProvider = ({ session: initialSession, children }: AuthProvider
 
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, updatedSession) => {
-      setSession(updatedSession);
+      setSession(prev => {
+        if (
+          prev?.access_token === updatedSession?.access_token &&
+          prev?.expires_at === updatedSession?.expires_at
+        ) {
+          return prev;
+        }
+        return updatedSession;
+      });
     });
 
     return () => {
