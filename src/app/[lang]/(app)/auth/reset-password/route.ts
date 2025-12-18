@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   try {
     const code = requestUrl.searchParams.get('code');
     if (!code) throw new Error('No code provided');
-    const supabase = await createServerClient();
+    const supabase = await createServerClient({ cookieStore: request.cookies });
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (error) throw error;
 

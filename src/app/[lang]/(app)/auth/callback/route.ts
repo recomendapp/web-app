@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     const redirect = requestUrl.searchParams.get('redirect');
     if (errorParam && !code) throw new Error(errorDescriptionParam || 'Something went wrong');
     if (!code) throw new Error('No code provided');
-    const supabase = await createServerClient();
+    const supabase = await createServerClient({ cookieStore: request.cookies });
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (error) throw error;
   

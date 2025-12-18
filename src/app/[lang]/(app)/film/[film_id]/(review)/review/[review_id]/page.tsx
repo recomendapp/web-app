@@ -24,7 +24,7 @@ export async function generateMetadata(
   const params = await props.params;
   const t = await getTranslations({ locale: params.lang as SupportedLocale });
   try {
-    const review = await getReviewMovieSeo(params.review_id, params.lang);
+    const review = await getReviewMovieSeo(params.review_id, params.lang as SupportedLocale);
     const tiptapJson = generateJSON(review.body, EDITOR_EXTENSIONS);
     const rawText = generateText(tiptapJson, EDITOR_EXTENSIONS);
     return {
@@ -52,13 +52,13 @@ export default async function ReviewPage(
   props: {
     params: Promise<{
       lang: string;
-        review_id: string;
+      review_id: string;
     }>;
   }
 ) {
   const params = await props.params;
   const reviewId = Number(params.review_id);
-  const review = await getReviewMovieSeo(reviewId, params.lang);
+  const review = await getReviewMovieSeo(reviewId, params.lang as SupportedLocale);
   if (!review) return notFound();
   const tiptapJson = generateJSON(review.body, EDITOR_EXTENSIONS);
   const rawText = generateText(tiptapJson, EDITOR_EXTENSIONS);

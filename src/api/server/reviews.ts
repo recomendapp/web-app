@@ -1,10 +1,11 @@
 'use server'
 
 import { createServerClient } from "@/lib/supabase/server";
+import { SupportedLocale } from "@/translations/locales";
 import { cache } from "react";
 
-export const getReviewMovieSeo = cache(async (id: number, lang: string) => {
-	const supabase = await createServerClient();
+export const getReviewMovieSeo = cache(async (id: number, lang: SupportedLocale) => {
+	const supabase = await createServerClient({ locale: lang });
 	const { data: review, error } = await supabase
 		.from('user_reviews_movie')
 		.select(`
@@ -36,8 +37,8 @@ export const getReviewMovieSeo = cache(async (id: number, lang: string) => {
 	return review;
 });
 
-export const getReviewTvSeriesSeo = cache(async (id: number, lang: string) => {
-	const supabase = await createServerClient();
+export const getReviewTvSeriesSeo = cache(async (id: number, lang: SupportedLocale) => {
+	const supabase = await createServerClient({ locale: lang });
 	const { data: review, error } = await supabase
 		.from('user_reviews_tv_series')
 		.select(`

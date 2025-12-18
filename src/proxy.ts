@@ -4,6 +4,7 @@ import { routing } from './lib/i18n/routing';
 import { siteConfig } from './config/site';
 import { getSupabaseClaims } from './lib/supabase/jwt';
 import { ensureLocaleCookie } from './lib/i18n/ensure-locale-cookie';
+import { SupportedLocale } from './translations/locales';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -25,7 +26,7 @@ export async function proxy(request: NextRequest) {
   // supabase.auth.getClaims(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
   // IMPORTANT: Don't remove getClaims()
-  const user = await getSupabaseClaims(request);
+  const user = await getSupabaseClaims(request, locale as SupportedLocale);
 
   /**
    * Redirect user if not logged in

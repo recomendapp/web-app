@@ -25,7 +25,7 @@ export const Providers = async ({
   children: React.ReactNode;
   locale: SupportedLocale;
 }) => {
-  const supabase = await createServerClient();
+  const supabase = await createServerClient({ locale: locale });
   const [
     sessionRes,
     isMaintenanceMode,

@@ -4,6 +4,7 @@ import { createServerClient } from '@/lib/supabase/server';
 import { ProfileHeader } from './_components/ProfileHeader';
 import { ProfileNavbar } from './_components/ProfileNavbar';
 import { ProfilePrivateAccountCard } from './_components/ProfilePrivateAccountCard';
+import { SupportedLocale } from '@/translations/locales';
 
 export default async function Layout(
   props: {
@@ -15,7 +16,7 @@ export default async function Layout(
   }
 ) {
   const params = await props.params;
-  const supabase = await createServerClient();
+  const supabase = await createServerClient({ locale: params.lang as SupportedLocale });
   const { data: { session } } = await supabase.auth.getSession();
   const profile = await getProfile(params.username);
   if (!profile) return notFound();
