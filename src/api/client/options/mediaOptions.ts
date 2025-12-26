@@ -24,6 +24,7 @@ export const useMediaMovieDetailsOptions = ({
 			return data;
 		},
 		enabled: !!id,
+		staleTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 }
 
@@ -49,6 +50,7 @@ export const useMediaTvSeriesDetailsOptions = ({
 			return data;
 		},
 		enabled: !!id,
+		staleTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 }
 
@@ -74,7 +76,8 @@ export const useMediaMovieCastingOptions = ({
 				.order('order', { ascending: true });
 			if (error) throw error;
 			return data;
-		}
+		},
+		staleTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 } 
 
@@ -129,6 +132,7 @@ export const useMediaMovieReviewsOptions = ({
 			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
 		},
 		enabled: !!movieId,
+		staleTime: 1000 * 60 * 60 // 1 hour
 	})
 }
 
@@ -183,6 +187,7 @@ export const useMediaMoviePlaylistsOptions = ({
 			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
 		},
 		enabled: !!movieId,
+		staleTime: 1000 * 60 * 60 // 1 hour
 	})
 }
 /* -------------------------------------------------------------------------- */
@@ -212,7 +217,8 @@ export const useMediaTvSeriesSeasonsOptions = ({
 				return a.season_number - b.season_number;
 			});
 			return data;
-		}
+		},
+		staleTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 }
 
@@ -238,7 +244,8 @@ export const useMediaTvSeasonEpisodesOptions = ({
 				.order('episode_number', { ascending: true });
 			if (error) throw error;
 			return data;
-		}
+		},
+		staleTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 }
 
@@ -262,7 +269,8 @@ export const useMediaTvSeriesCastingOptions = ({
 				.eq('serie_id', tvSeriesId)
 			if (error) throw error;
 			return data;
-		}
+		},
+		staleTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 }
 
@@ -317,6 +325,7 @@ export const useMediaTvSeriesReviewsOptions = ({
 			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
 		},
 		enabled: !!tvSeriesId,
+		staleTime: 1000 * 60 * 60 // 1 hour
 	})
 }
 
@@ -371,6 +380,7 @@ export const useMediaTvSeriesPlaylistsOptions = ({
 			return lastPage?.length == filters.perPage ? pages.length + 1 : undefined;
 		},
 		enabled: !!tvSeriesId,
+		staleTime: 1000 * 60 * 60 // 1 hour
 	})
 }
 
@@ -441,6 +451,7 @@ export const useMediaPersonFilmsOptions = ({
 			if (error) throw error;
 			return data;
 		},
+		staleTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 }
 
@@ -510,6 +521,7 @@ export const useMediaPersonTvSeriesOptions = ({
 			if (error) throw error;
 			return data;
 		},
+		staleTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 }
 /* -------------------------------------------------------------------------- */
@@ -536,6 +548,7 @@ export const useMediaMovieFollowersAvgRatingsOptions = ({
 			if (error) throw error;
 			return data;
 		},
+		staleTime: 1000 * 60 * 60 // 1 hour
 	});
 };
 export const useMediaTvSeriesFollowersRatingOptions = ({
@@ -559,6 +572,7 @@ export const useMediaTvSeriesFollowersRatingOptions = ({
 			if (error) throw error;
 			return data;
 		},
+		staleTime: 1000 * 60 * 60 // 1 hour
 	});
 };
 
@@ -581,7 +595,8 @@ export const useMediaMovieFollowersAvgRatingOptions = ({
 				.maybeSingle();
 			if (error) throw error;
 			return data;
-		}
+		},
+		staleTime: 1000 * 60 * 60 // 1 hour
 	})
 }
 
@@ -604,7 +619,8 @@ export const useMediaTvSeriesFollowersAvgRatingOptions = ({
 				.maybeSingle();
 			if (error) throw error;
 			return data;
-		}
+		},
+		staleTime: 1000 * 60 * 60 // 1 hour
 	})
 }
 /* -------------------------------------------------------------------------- */

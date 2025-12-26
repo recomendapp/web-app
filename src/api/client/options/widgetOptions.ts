@@ -40,6 +40,7 @@ export const useWidgetMostRecommendedOptions = ({
 			if (error) throw error;
 			return data;
 		},
+		staleTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 }
 
@@ -87,5 +88,6 @@ export const useWidgetUserDiscoveryOptions = ({
 		getNextPageParam: (lastPage, pages) => {
 			return lastPage?.length == PER_PAGE ? pages.length + 1 : undefined;
 		},
+		staleTime: 1000 * 60 * 60 * 24 // 24 hours
 	})
 }
