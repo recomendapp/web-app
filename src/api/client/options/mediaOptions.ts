@@ -267,6 +267,7 @@ export const useMediaTvSeriesCastingOptions = ({
 					media_person(*)
 				`)
 				.eq('serie_id', tvSeriesId)
+				.order('order', { ascending: true });
 			if (error) throw error;
 			return data;
 		},
