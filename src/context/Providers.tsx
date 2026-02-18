@@ -23,9 +23,9 @@ export const Providers = async ({
   locale,
 }: {
   children: React.ReactNode;
-  locale: SupportedLocale;
+  locale: string;
 }) => {
-  const supabase = await createServerClient({ locale: locale });
+  const supabase = await createServerClient({ locale: locale as SupportedLocale });
   const [
     sessionRes,
     isMaintenanceMode,
@@ -45,7 +45,7 @@ export const Providers = async ({
   const defaultLayout = layout ? JSON.parse(layout.value) : undefined;
 
   return (
-    <NextIntlClientProvider locale={locale}>
+    <NextIntlClientProvider locale={locale as SupportedLocale}>
       <SupabaseProvider>
         <ReactQueryProvider>
           <AuthProvider session={session}>

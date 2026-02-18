@@ -51,7 +51,7 @@ export async function generateMetadata(
 export default async function PersonFilmsPage(
 	props: {
 		params: Promise<{
-			lang: SupportedLocale;
+			lang: string;
 			person_id: string;
 		}>;
 		searchParams: Promise<{
@@ -92,7 +92,7 @@ export default async function PersonFilmsPage(
 
 
 	if (page > pagination.totalPages) {
-		return redirect({ href: `/person/${person.slug || person.id}/films`, locale: params.lang });
+		return redirect({ href: `/person/${person.slug || person.id}/films`, locale: params.lang as SupportedLocale });
 	}
 
 	return (

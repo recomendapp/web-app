@@ -51,7 +51,7 @@ export async function generateMetadata(
 export default async function TvSeriesPage(
 	props: {
 		params: Promise<{
-			lang: SupportedLocale;
+			lang: string;
 			person_id: string;
 		}>;
 		searchParams: Promise<{
@@ -91,7 +91,7 @@ export default async function TvSeriesPage(
 	);
 
 	if (page > pagination.totalPages) {
-		return redirect({ href: `/person/${person.slug || person.id}/tv-series`, locale: params.lang });
+		return redirect({ href: `/person/${person.slug || person.id}/tv-series`, locale: params.lang as SupportedLocale });
 	}
 
 	return (
